@@ -142,7 +142,7 @@ public class UserManager implements IUserManager {
 	@Transactional
 	public int deactivateUser(String sUserId,String sAdminId) throws QuadrigaStorageException {
 		//Find the ROLEDBID for Deactivated account
-		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		//Add the new role to the user.
 		int iResult = usermanagerDAO.deactivateUser(sUserId, sDeactiveRoleDBId, sAdminId);
@@ -171,7 +171,7 @@ public class UserManager implements IUserManager {
 	public void deleteUser(String delelteUser,String adminUser) throws QuadrigaStorageException
 	{
 		//Find the ROLEDBID for Deactivated account
-		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		usermanagerDAO.deleteUser(delelteUser, sDeactiveRoleDBId);
 
@@ -231,7 +231,7 @@ public class UserManager implements IUserManager {
 		int iResult=0;
 
 		//Find the deactivated role id and create a QuadrigaRole Object
-		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		//Find all the roles of the user
 		IUser user = null;
@@ -248,7 +248,7 @@ public class UserManager implements IUserManager {
 			{				
 				if(!role.getDBid().equals(sDeactiveRoleDBId))
 				{
-					quadrigaRole = rolemanager.getQuadrigaRole(role.getDBid());
+					quadrigaRole = rolemanager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, role.getDBid());
 					rolesList.add(quadrigaRole);
 				}
 			}
@@ -335,7 +335,7 @@ public class UserManager implements IUserManager {
 		//Check the status of the request
 		if(iUserStatus == SUCCESS)
 		{
-			String sAdminRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_ADMIN);
+			String sAdminRoleDBId = rolemanager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
 			List<IUser> listAdminUsers = userDeepMapper.getUsersByRoleId(sAdminRoleDBId);
 
 			//Ignore the user if the account is deactivated
@@ -347,7 +347,7 @@ public class UserManager implements IUserManager {
 
 					for(IQuadrigaRole role: roles)
 					{
-						quadrigaRole = rolemanager.getQuadrigaRole(role.getDBid());
+						quadrigaRole = rolemanager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, role.getDBid());
 						if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
 						{
 							//Continue to the next user as this user account is deactivated
@@ -402,12 +402,12 @@ public class UserManager implements IUserManager {
 			StringBuilder quadrigaRoles = new StringBuilder();
 			String role = null;
 			
-			role = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_ADMIN);
+			role = rolemanager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
 			quadrigaRoles.append(role);
-			role = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_USER_STANDARD);
+			role = rolemanager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_USER_STANDARD);
 			quadrigaRoles.append(",");
 			quadrigaRoles.append(role);
-			role = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_USER_COLLABORATOR);
+			role = rolemanager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_USER_COLLABORATOR);
 			quadrigaRoles.append(",");
 			quadrigaRoles.append(role);
 			

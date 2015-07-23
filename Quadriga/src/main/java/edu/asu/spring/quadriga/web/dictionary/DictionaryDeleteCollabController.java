@@ -25,7 +25,7 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
@@ -60,7 +60,7 @@ public class DictionaryDeleteCollabController {
 	ModifyCollaboratorFormFactory collaboratorFormFactory;
 
 	@Autowired
-	ICollaboratorRoleManager collaboratorRoleManager;
+	IQuadrigaRoleManager collaboratorRoleManager;
 
 
 	@InitBinder

@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionConceptFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
@@ -25,7 +25,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
@@ -47,13 +47,10 @@ public class ConceptCollectionDeepMapper implements
 	private ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
-	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	private IQuadrigaRoleFactory roleFactory;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
-	
-	@Autowired
-	private ICollaboratorRoleManager roleMapper;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	private IConceptCollectionCollaboratorFactory ccCollaboratorFactory;
@@ -129,11 +126,11 @@ public class ConceptCollectionDeepMapper implements
 			{
 				String roleName = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 				
-				ICollaboratorRole collaboratorRole = collaboratorRoleManager.getCollectionCollabRoleByDBId(roleName);
+				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleName);
 //						collaboratorRoleFactory.createCollaboratorRoleObject();
 //				collaboratorRole.setRoleDBid(roleName);
 //				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
-				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				roleManager.fillQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collaboratorRole);
 				
 				IConceptCollectionCollaborator ccCollaborator = userCCCollaboratorMap.get(userName);
 				
@@ -151,14 +148,11 @@ public class ConceptCollectionDeepMapper implements
 			{
 				String roleName = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 				// Prepare collaborator roles
-				ICollaboratorRole collaboratorRole = collaboratorRoleManager.getCollectionCollabRoleByDBId(roleName);
-						
-//						collaboratorRoleFactory.createCollaboratorRoleObject();
-//				collaboratorRole.setRoleDBid(roleName);
-//				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
-				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleName);
+
+				roleManager.fillQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collaboratorRole);
 				// Create a Collaborator Role list
-				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> collaboratorRoleList = new ArrayList<IQuadrigaRole>();
 				// Add collaborator role to the list
 				collaboratorRoleList.add(collaboratorRole);
 				// Create a Collaborator

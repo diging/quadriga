@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
@@ -37,7 +37,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
@@ -84,7 +84,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	private IConceptCollectionDeepMapper conceptCollectionDeepMapper;
 	
 	@Autowired
-	private ICollaboratorRoleManager roleMapper ;
+	private IQuadrigaRoleManager roleMapper ;
 	
 	@Autowired
 	private	IListWSManager wsManager;
@@ -356,10 +356,10 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			if (conceptCollectionCollaborators != null
 					&& conceptCollectionCollaborators.size() > 0) {
 				for (IConceptCollectionCollaborator conceptCollectionCollaborator : conceptCollectionCollaborators) {
-					for (ICollaboratorRole collaboratorRole : conceptCollectionCollaborator
+					for (IQuadrigaRole collaboratorRole : conceptCollectionCollaborator
 							.getCollaborator().getCollaboratorRoles()) {
 						roleMapper
-								.fillCollectionCollaboratorRole(collaboratorRole);
+								.fillQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collaboratorRole);
 					}
 				}
 			}

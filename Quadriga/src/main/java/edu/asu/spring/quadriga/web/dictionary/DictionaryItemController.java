@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.impl.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
@@ -52,7 +52,7 @@ public class DictionaryItemController {
 	IUserManager usermanager;
 	
 	@Autowired
-	ICollaboratorRoleManager collaboratorRoleManager;
+	IQuadrigaRoleManager collaboratorRoleManager;
 	
 	@Autowired
 	IRetrieveDictionaryManager retrieveDictionaryManager;
@@ -77,11 +77,11 @@ public class DictionaryItemController {
 		this.usermanager = usermanager;
 	}
 	
-	public ICollaboratorRoleManager getCollaboratorRoleManager() {
+	public IQuadrigaRoleManager getCollaboratorRoleManager() {
 		return collaboratorRoleManager;
 	}
 
-	public void setCollaboratorRoleManager(ICollaboratorRoleManager collaboratorRoleManager) {
+	public void setCollaboratorRoleManager(IQuadrigaRoleManager collaboratorRoleManager) {
 		this.collaboratorRoleManager = collaboratorRoleManager;
 	}
 	

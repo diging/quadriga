@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
@@ -28,14 +28,14 @@ public class ConceptCollectionCollaboratorDTOMapper extends DAOConnectionManager
 		try
 		{
 			String collabUser = collaborator.getUserObj().getUserName();
-			List<ICollaboratorRole> collaboratorRoles = collaborator.getCollaboratorRoles();
+			List<IQuadrigaRole> collaboratorRoles = collaborator.getCollaboratorRoles();
 			QuadrigaUserDTO userDTO = getUserDTO(collabUser);
 			
 			ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,conceptCollectionId);
-			for(ICollaboratorRole role : collaboratorRoles)
+			for(IQuadrigaRole role : collaboratorRoles)
 			{
 				ConceptCollectionCollaboratorDTO collaboratorDTO = new ConceptCollectionCollaboratorDTO();
-				ConceptCollectionCollaboratorDTOPK collaboratorKey = new ConceptCollectionCollaboratorDTOPK(conceptCollectionId,collabUser,role.getRoleDBid());
+				ConceptCollectionCollaboratorDTOPK collaboratorKey = new ConceptCollectionCollaboratorDTOPK(conceptCollectionId,collabUser,role.getDBid());
 				collaboratorDTO.setConceptCollectionDTO(conceptCollection);
 				collaboratorDTO.setQuadrigaUserDTO(userDTO);
 				collaboratorDTO.setConceptCollectionCollaboratorDTOPK(collaboratorKey);
@@ -49,7 +49,7 @@ public class ConceptCollectionCollaboratorDTOMapper extends DAOConnectionManager
 		}
 		catch(Exception ex)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(ex);
 		}
 	}
 

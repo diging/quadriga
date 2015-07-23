@@ -78,7 +78,7 @@ function onSubmit(){
 	<br>
 	<div class="ex1">
 	<h4>select access rights</h4>
-	<ul><form:checkboxes element="li" path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" /></ul>	
+	<ul><form:checkboxes element="li" path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="id" itemLabel="displayName" /></ul>	
 	<div class="rolesError"><form:errors path="collaboratorRoles" cssClass="ui-state-error-text"></form:errors></div>
 	</div>
 	

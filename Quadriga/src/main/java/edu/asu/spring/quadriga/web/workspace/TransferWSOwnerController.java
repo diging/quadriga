@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
@@ -38,7 +38,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class TransferWSOwnerController 
 {
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager collaboratorRoleManager;
 	
 	@Autowired
 	private UserValidator validator;
@@ -174,7 +174,7 @@ public class TransferWSOwnerController
 	        	newOwner = collaboratorUser.getUserName();
 	        	
 	        	//fetch the collaborator role
-	        	collaboratorRole = collaboratorRoleManager.getWSCollaboratorRoleById(RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN).getRoleDBid();
+	        	collaboratorRole = collaboratorRoleManager.getQuadrigaRoleById(IQuadrigaRoleManager.WORKSPACE_ROLES, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN).getDBid();
 				//call the method to transfer the ownership
 				workspaceManager.transferWSOwnerRequest(workspaceid, userName, newOwner, collaboratorRole);
 				
