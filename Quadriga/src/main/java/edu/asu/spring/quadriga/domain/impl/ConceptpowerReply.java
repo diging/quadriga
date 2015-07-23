@@ -169,7 +169,7 @@ public class ConceptpowerReply {
         @XmlElement(required = true, namespace="http://www.digitalhps.org/")
         protected String conceptList;
         @XmlElement(required = true, namespace="http://www.digitalhps.org/")
-        protected Object type;
+        protected String type;
 
         /**
          * Gets the value of the id property.
@@ -299,7 +299,7 @@ public class ConceptpowerReply {
          *     {@link Object }
          *     
          */
-        public Object getType() {
+        public String getType() {
             return type;
         }
 
@@ -311,7 +311,7 @@ public class ConceptpowerReply {
          *     {@link Object }
          *     
          */
-        public void setType(Object value) {
+        public void setType(String value) {
             this.type = value;
         }
 

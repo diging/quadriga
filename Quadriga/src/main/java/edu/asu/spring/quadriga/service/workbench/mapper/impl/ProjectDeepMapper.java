@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectFactory;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
@@ -48,7 +48,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 	private IProjectCollaboratorFactory projectCollaboratorFactory;
 	
 	@Autowired
-	private ICollaboratorRoleManager roleMapper;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	private IProjectConceptCollectionShallowMapper projectConceptCollectionShallowMapper;
@@ -63,11 +63,8 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 	private ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
-	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	private IQuadrigaRoleFactory roleFactory;
 	
-	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
-
 	/**
 	 * {@inheritDoc}
 	*/
@@ -247,10 +244,9 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			{
 				String roleName = projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole();
 				
-				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-				collaboratorRole.setRoleDBid(roleName);
-				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
-				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
+				collaboratorRole.setDBid(roleName);
+				roleManager.fillQuadrigaRole(IQuadrigaRoleManager.PROJECT_ROLES, collaboratorRole);
 				
 				IProjectCollaborator projectCollaborator =userProjectCollaboratorMap.get(userName);
 				
@@ -268,12 +264,11 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			{
 				String roleName = projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole();
 				// Prepare collaborator roles
-				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-				collaboratorRole.setRoleDBid(roleName);
-				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
-				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
+				collaboratorRole.setDBid(roleName);
+				roleManager.fillQuadrigaRole(IQuadrigaRoleManager.PROJECT_ROLES, collaboratorRole);
 				// Create a Collaborator Role list
-				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> collaboratorRoleList = new ArrayList<IQuadrigaRole>();
 				// Add collaborator role to the list
 				collaboratorRoleList.add(collaboratorRole);
 				// Create a Collaborator

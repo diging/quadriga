@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
@@ -82,11 +82,11 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
 
             if (userName != null) {
                 if (userName.equals(collaboratorName)) {
-                    List<ICollaboratorRole> collaboratorRoles = ccCollaborator
+                    List<IQuadrigaRole> collaboratorRoles = ccCollaborator
                             .getCollaborator().getCollaboratorRoles();
                     if (collaboratorRoles != null) {
-                        for (ICollaboratorRole collabRole : collaboratorRoles) {
-                            String collaboratorRoleId = collabRole.getRoleid();
+                        for (IQuadrigaRole collabRole : collaboratorRoles) {
+                            String collaboratorRoleId = collabRole.getId();
                             if (roles != null) {
                                 if (roles.contains(collaboratorRoleId)) {
                                     return true;

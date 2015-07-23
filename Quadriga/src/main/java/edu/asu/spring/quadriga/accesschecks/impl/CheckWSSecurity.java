@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -168,7 +168,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	public boolean chkCollabWorkspaceAccess(String userName,String workspaceId,String collaboratorRole) throws QuadrigaStorageException
 	{
 		List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
-		List<ICollaboratorRole> collaboratorRoles = null;
+		List<IQuadrigaRole> collaboratorRoles = null;
 		boolean chkAccess;
 
 		//initialize the local variable
@@ -188,9 +188,9 @@ public class CheckWSSecurity implements ICheckWSSecurity
 
 						if(collaboratorRoles != null){
 							//check if the collaborator is the supplied collaborator role
-							for(ICollaboratorRole role : collaboratorRoles)
+							for(IQuadrigaRole role : collaboratorRoles)
 							{
-								if(role.getRoleid() == collaboratorRole)
+								if(role.getId() == collaboratorRole)
 								{
 									chkAccess = true;
 									break;

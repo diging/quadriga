@@ -64,7 +64,7 @@ public class ConceptCollectionCollaboratorManagerDAO extends DAOConnectionManage
 		 }
 		 catch(Exception ex)
 		 {
-			 throw new QuadrigaStorageException();
+			 throw new QuadrigaStorageException(ex);
 		 }
 		
 	}

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
@@ -26,7 +26,7 @@ public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 	IDBConnectionRetrieveWSCollabManager dbConnect;
 
 	@Autowired
-	private ICollaboratorRoleManager roleMapper;
+	private IQuadrigaRoleManager roleManager;
 
 	@Autowired
 	private IWorkspaceDeepMapper workspaceDeepMapper;
@@ -42,8 +42,8 @@ public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 	public List<IWorkspaceCollaborator> getWorkspaceCollaborators(String workspaceId) throws QuadrigaStorageException
 	{
 		List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
-		ICollaboratorRole role;
-		List<ICollaboratorRole> roleList;
+		IQuadrigaRole role;
+		List<IQuadrigaRole> roleList;
 
 		IWorkSpace workspace =workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
 		//retrieve the collaborators associated with project
@@ -55,10 +55,10 @@ public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 		if(workspaceCollaboratorList != null){
 			for (IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList) 
 			{
-				roleList = new ArrayList<ICollaboratorRole>();
+				roleList = new ArrayList<IQuadrigaRole>();
 				if(workspaceCollaborator.getCollaborator()!=null && workspaceCollaborator.getCollaborator().getCollaboratorRoles() != null){
-					for (ICollaboratorRole collaboratorRole : workspaceCollaborator.getCollaborator().getCollaboratorRoles()) {
-						role = roleMapper.getWSCollaboratorRoleByDBId(collaboratorRole.getRoleDBid());
+					for (IQuadrigaRole collaboratorRole : workspaceCollaborator.getCollaborator().getCollaboratorRoles()) {
+						role = roleManager.getQuadrigaRole(IQuadrigaRoleManager.WORKSPACE_ROLES, collaboratorRole.getDBid());
 						roleList.add(role);
 					}
 				}

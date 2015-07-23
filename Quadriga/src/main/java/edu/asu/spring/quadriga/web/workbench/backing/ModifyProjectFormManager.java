@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Service
@@ -18,7 +18,7 @@ public class ModifyProjectFormManager
 		IRetrieveProjectManager retrieveProjectManager;
 		
 		@Autowired
-		private ICollaboratorRoleManager collaboratorRoleManager;
+		private IQuadrigaRoleManager collaboratorRoleManager;
 		
 		/**
 		 * Retrieve the projects associated with the given user
@@ -70,7 +70,7 @@ public class ModifyProjectFormManager
 			projectList = retrieveProjectManager.getProjectList(userName);
 			
 			//fetch the database id for the role
-			collaboratorRole = collaboratorRoleManager.getProjectCollaboratorRoleById(role).getRoleDBid();
+			collaboratorRole = collaboratorRoleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, role).getDBid();
 			
 			//fetch the project for which the user is Admin
 			collaboratorProjectList = retrieveProjectManager.getProjectListByCollaboratorRole(userName,

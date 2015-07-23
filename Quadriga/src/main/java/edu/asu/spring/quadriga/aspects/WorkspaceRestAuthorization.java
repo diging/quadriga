@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -53,7 +53,7 @@ public class WorkspaceRestAuthorization implements IAuthorization
 		String collaboratorRoleId;
 		IWorkSpace workspace;
 		List<IWorkspaceCollaborator> workspaceCollaboratorList= null;
-		List<ICollaboratorRole> collaboratorRoles = null;
+		List<IQuadrigaRole> collaboratorRoles = null;
 		ArrayList<String> roles;
 
 		haveAccess = false;
@@ -96,9 +96,9 @@ public class WorkspaceRestAuthorization implements IAuthorization
 									}
 
 									if(collaboratorRoles != null){
-										for(ICollaboratorRole collabRole : collaboratorRoles)
+										for(IQuadrigaRole collabRole : collaboratorRoles)
 										{
-											collaboratorRoleId = collabRole.getRoleid();
+											collaboratorRoleId = collabRole.getId();
 											if(roles.contains(collaboratorRoleId))
 											{
 												haveAccess = true;

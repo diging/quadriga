@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 
 /**
  * This class acts as a domain object to hold collaborator  to display 
@@ -16,7 +16,7 @@ public class ModifyCollaborator
 {
 	private String userName;
 	private String name;
-	private List<ICollaboratorRole> collaboratorRoles;
+	private List<IQuadrigaRole> collaboratorRoles;
 	
 	public ModifyCollaborator()
 	{
@@ -39,11 +39,11 @@ public class ModifyCollaborator
 		this.userName = userName;
 	}
 	
-	public List<ICollaboratorRole> getCollaboratorRoles() {
+	public List<IQuadrigaRole> getCollaboratorRoles() {
 		return collaboratorRoles;
 	}
 	
-	public void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles) {
+	public void setCollaboratorRoles(List<IQuadrigaRole> collaboratorRoles) {
 		this.collaboratorRoles = collaboratorRoles;
 	}
 }
