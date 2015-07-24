@@ -49,13 +49,13 @@ public class ProjectSecurityCheckerTest {
         Mockito.when(mockedManager.getNrOfOwnedProjects("user2")).thenReturn(0);
         Mockito.when(mockedManager.getNrOfOwnedProjects("user3")).thenReturn(1);
         Mockito.when(
-                mockedManager.nrOfProjectsCollaboratingOn("user1", "role1"))
+                mockedManager.getNrOfProjectsCollaboratingOn("user1", "role1"))
                 .thenReturn(3);
         Mockito.when(
-                mockedManager.nrOfProjectsCollaboratingOn("user2", "role1"))
+                mockedManager.getNrOfProjectsCollaboratingOn("user2", "role1"))
                 .thenReturn(0);
         Mockito.when(
-                mockedManager.nrOfProjectsCollaboratingOn("user3", "role1"))
+                mockedManager.getNrOfProjectsCollaboratingOn("user3", "role1"))
                 .thenReturn(1);
         Mockito.when(mockedManager.isUserEditorOfProject("user1", "project1")).thenReturn(1);
         Mockito.when(mockedManager.isUserEditorOfProject("user2", "project1")).thenReturn(0);

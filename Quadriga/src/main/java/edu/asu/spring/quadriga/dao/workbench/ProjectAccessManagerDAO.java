@@ -45,7 +45,7 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int nrOfProjectsCollaboratingOn(String userName,String collaboratorRole)
+	public int getNrOfProjectsCollaboratingOn(String userName,String collaboratorRole)
 	{
         Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectCollaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.projectCollaboratorDTOPK.collaboratoruser =:userName AND pc.projectCollaboratorDTOPK.collaboratorrole =:collaboratorRole");
 		query.setParameter("userName", userName);
@@ -70,28 +70,18 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean chkDuplicateProjUnixName(String unixName,String projectId)
+	public String getProjectIdByUnixName(String unixName)
 	{
-		boolean isDuplicate;
-		isDuplicate = false;
-		
 		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectDTO.findByUnixname");
 		query.setString("unixname", unixName);
 		
 		ProjectDTO project = (ProjectDTO) query.uniqueResult();
 		
-		if(project !=null)
-		{
-			if(project.getProjectid().equals(projectId))
-			{
-				isDuplicate = false;
-			}
-			else
-			{
-				isDuplicate = true;
-			}
+		if(project !=null) {
+			return project.getProjectid();
 		}
-		return isDuplicate;
+		
+		return null;
 	}
 	
 	/**

@@ -23,7 +23,7 @@ public interface IProjectAccessManager
 	 *         false - if the unix name is not associated to any project.
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract boolean chkDuplicateProjUnixName(String unixName, String projectId) throws QuadrigaStorageException;
+	public String getProjectIdByUnixName(String unixName) throws QuadrigaStorageException;
 
 	/**
 	 * This method checks if the given user is a collaborator for a project and has a particular collaborator role.
@@ -61,7 +61,7 @@ public interface IProjectAccessManager
 	 *         false - if the given user is not associated with any project with specified collaborator role.
 	 * @throws QuadrigaStorageException
 	 */
-	public int nrOfProjectsCollaboratingOn(String userName,
+	public int getNrOfProjectsCollaboratingOn(String userName,
 			String collaboratorRole) throws QuadrigaStorageException;
 
 }

@@ -27,7 +27,7 @@ public interface IProjectSecurityChecker {
 	public abstract boolean collaboratesOnAtLeastOneProject(String userName,
 			String collaboratorRole) throws QuadrigaStorageException;
 	
-	public abstract boolean chkDuplicateProjUnixName(String unixName, String projectId) 
+	public abstract boolean isUnixnameInUse(String unixName, String projectId) 
 			throws QuadrigaStorageException;
 
 

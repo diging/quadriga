@@ -89,7 +89,7 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
     @Transactional
     public boolean collaboratesOnAtLeastOneProject(String userName,
             String collaboratorRole) throws QuadrigaStorageException {
-        return accessManager.nrOfProjectsCollaboratingOn(userName,
+        return accessManager.getNrOfProjectsCollaboratingOn(userName,
                 collaboratorRole) > 0;
     }
 
@@ -196,22 +196,15 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
     @Transactional
     public boolean isEditor(String userName,
             String projectId) throws QuadrigaStorageException {
-        // check if the user is project owner
+        // check if the user is project editor
         return accessManager
                 .isUserEditorOfProject(userName, projectId) > 0;
     }
 
     @Override
     @Transactional
-    public boolean chkDuplicateProjUnixName(String unixName, String projectId)
+    public boolean isUnixnameInUse(String unixName, String projectId)
             throws QuadrigaStorageException {
-        boolean chkAccess;
-
-        // initialize chkAccess variable
-        chkAccess = false;
-
-        chkAccess = accessManager.chkDuplicateProjUnixName(unixName, projectId);
-
-        return chkAccess;
+       return accessManager.getProjectIdByUnixName(unixName) != null;
     }
 }

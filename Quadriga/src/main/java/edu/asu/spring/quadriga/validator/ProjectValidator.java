@@ -108,7 +108,7 @@ public class ProjectValidator implements Validator {
 		boolean isDuplicate;
 		
 		//Verifying if the Unix name already exists
-		isDuplicate = projectCheckSecurityManager.chkDuplicateProjUnixName(unixName,projectId);
+		isDuplicate = projectCheckSecurityManager.isUnixnameInUse(unixName,projectId);
 		if(isDuplicate)
 		{
 			err.rejectValue("unixName","projectUnixName.unique");
