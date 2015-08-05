@@ -30,8 +30,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -43,13 +42,10 @@ import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManag
 public class ModifyProjectCollaboratorController 
 {
 	@Autowired
-	private IRetrieveProjCollabManager retrieveProjManager;
+	private IProjectCollaboratorManager projectCollaboratorManager;
 	
 	@Autowired
 	private IModifyCollaboratorFormFactory collaboratorFactory;
-	
-	@Autowired
-	private IModifyProjCollabManager projectManager;
 	
 	@Autowired
 	private IRetrieveProjectManager projectDetailsManager;
@@ -179,7 +175,7 @@ public class ModifyProjectCollaboratorController
 						collabRoles.append(role.getDBid());
 					}
 					
-				    projectManager.updateCollaboratorRequest(projectid, collabUser, collabRoles.toString().substring(1), userName);
+					projectCollaboratorManager.updateCollaboratorRequest(projectid, collabUser, collabRoles.toString().substring(1), userName);
 					
 					model.getModelMap().put("success", 1);
 				}

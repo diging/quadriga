@@ -16,7 +16,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
 /**
@@ -31,7 +31,7 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 public class ModifyCollaboratorFormManager {
 
 	@Autowired
-	IRetrieveProjCollabManager projCollabManager;
+	IProjectCollaboratorManager projCollabManager;
 
 	@Autowired
 	IDictionaryManager dictManager;

@@ -24,8 +24,7 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -37,10 +36,7 @@ import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManag
 public class DeleteProjectCollaboratorController {
 	
 	@Autowired
-	private IModifyProjCollabManager modifyProjectCollabManager;
-
-	@Autowired
-	private IRetrieveProjCollabManager retrieveProjCollabManager;
+	private IProjectCollaboratorManager projectCollaboratorManager;
 	
 	@Autowired
 	private IUserFactory userFactory;
@@ -52,7 +48,7 @@ public class DeleteProjectCollaboratorController {
 	private IRetrieveProjectManager retrieveprojectManager;
 	
 	@Autowired
-	private IRetrieveProjCollabManager projectCollabManager;
+	private IProjectCollaboratorManager projectCollabManager;
 	
 	@Autowired
 	private CollaboratorFormDeleteValidator validator;
@@ -130,7 +126,7 @@ public class DeleteProjectCollaboratorController {
 			    userName = collaborator.getUserName();
 			    if(userName!=null)
 			    {
-				 modifyProjectCollabManager.deleteCollaboratorRequest(userName, projectId);
+			        projectCollaboratorManager.deleteCollaboratorRequest(userName, projectId);
 			    }
 			}
 			modelAndView.getModelMap().put("success", 1);

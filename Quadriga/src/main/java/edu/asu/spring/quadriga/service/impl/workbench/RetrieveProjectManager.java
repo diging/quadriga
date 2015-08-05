@@ -9,14 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
@@ -26,9 +24,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 {
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
-
-	@Autowired
-	private IDBConnectionRetrieveProjCollabManager databaseConnect;
 
 	@Autowired
 	private IProjectShallowMapper projectShallowMapper;	
@@ -41,7 +36,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	private IProjectSecurityChecker projectSecurity;
 
 	@Autowired
-	private IRetrieveProjCollabManager projectManager;
+	private IProjectCollaboratorManager projectManager;
 
 	/**
 	 * This method returns the list of projects associated with

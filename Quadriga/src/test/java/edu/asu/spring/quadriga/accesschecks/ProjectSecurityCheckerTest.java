@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 
 public class ProjectSecurityCheckerTest {
 
@@ -35,12 +35,12 @@ public class ProjectSecurityCheckerTest {
     private ProjectSecurityChecker securityChecker;
 
     @Mock
-    private IRetrieveProjCollabManager mockedProjectManager;
+    private IProjectCollaboratorManager mockedProjectManager;
 
     @Before
     public void init() throws QuadrigaStorageException {
         mockedManager = Mockito.mock(IProjectAccessManager.class);
-        mockedProjectManager = Mockito.mock(IRetrieveProjCollabManager.class);
+        mockedProjectManager = Mockito.mock(IProjectCollaboratorManager.class);
         MockitoAnnotations.initMocks(this);
 
         Mockito.when(mockedManager.getProjectOwner("project1")).thenReturn(

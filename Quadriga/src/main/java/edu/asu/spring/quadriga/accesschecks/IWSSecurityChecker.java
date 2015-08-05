@@ -5,7 +5,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IWSSecurityChecker {
 
-	public abstract boolean chkWorkspaceAccess(String userName, String projectId,
+	public abstract boolean hasAccessToWorkspace(String userName, String projectId,
 			String workspaceId) throws QuadrigaStorageException;
 
 	public abstract boolean hasPermissionToCreateWS(String userName, String projectId)

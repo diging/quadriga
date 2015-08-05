@@ -74,77 +74,30 @@ public class WSSecurityChecker implements IWSSecurityChecker
 	 */
 	@Override
 	@Transactional
-	public boolean chkWorkspaceAccess(String userName,String projectId,String workspaceId) throws QuadrigaStorageException
+	public boolean hasAccessToWorkspace(String userName,String projectId,String workspaceId) throws QuadrigaStorageException
 	{
 		//check if the user is a project owner
-		boolean chkAccess = projectSecurity.isProjectOwner(userName,projectId);
+		if (projectSecurity.isProjectOwner(userName,projectId)) {
+		    return true;
+		}
 
 		//check if the user is workspace owner
-		if(!chkAccess)
-		{
-			chkAccess = dbConnect.chkWorkspaceOwner(userName, workspaceId);
+		if (dbConnect.chkWorkspaceOwner(userName, workspaceId)) {
+		    return true;
 		}
 
 		//check if the user is a project collaborator having ADMIN role
-		if(!chkAccess)
-		{
-			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN);
+		if (projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN)) {
+		    return true;
 		}
 
 		//check if user is project collaborator having PROJECT_ADMIN role
-		if(!chkAccess)
-		{
-			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
+		if (projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)) {
+		    return true;
 		}
 
-		return chkAccess;
+		return false;
 	}
-
-//	/**
-//	 * This checks if the user has the specified collaborator role
-//	 * @param userName
-//	 * @param workspaceId
-//	 * @param collaboratorRole
-//	 * @return boolean - TRUE if the user role is same as supplied else FALSE
-//	 * @throws QuadrigaStorageException
-//	 * @author kiranbatna
-//	 */
-//	@Override
-//	@Transactional
-//	public boolean chkCollabWorkspaceAccess(String userName,String workspaceId,String collaboratorRole) throws QuadrigaStorageException
-//	{
-//		List<ICollaborator> collaboratorList;
-//		List<ICollaboratorRole> collaboratorRoles;
-//		boolean chkAccess;
-//		
-//		//initialize the local variable
-//		chkAccess = false;
-//		
-//		//fetch the collaborators associated with the workspace
-//		collaboratorList = workspaceManager.getWorkspaceCollaborators(workspaceId);
-//		
-//		for(ICollaborator collaborator : collaboratorList)
-//		{
-//			//check if the user is one of the collaborators
-//			if(collaborator.getUserObj().getUserName() == userName)
-//			{
-//				collaboratorRoles = collaborator.getCollaboratorRoles();
-//				
-//				//check if the collaborator is the supplied collaborator role
-//				for(ICollaboratorRole role : collaboratorRoles)
-//				{
-//					if(role.getRoleid() == collaboratorRole)
-//					{
-//						chkAccess = true;
-//						break;
-//					}
-//				}
-//				// break through the outer loop
-//				break;
-//			}
-//		}
-//		return chkAccess;
-//	}
 	
 	/**
 	 * This checks if the user has the specified collaborator role

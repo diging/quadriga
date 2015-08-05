@@ -8,9 +8,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.accesschecks.impl.WSSecurityChecker;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.web.login.RoleNames;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -19,12 +19,16 @@ public class CheckWSSecurityTest {
     @Mock
     private IProjectSecurityChecker projectSecurity;
     
+    @Mock
+    private IDBConnectionWSAccessManager dbConnect;
+    
     @InjectMocks
     private WSSecurityChecker securityChecker;
     
     @Before
     public void init() throws QuadrigaStorageException {
         projectSecurity = Mockito.mock(IProjectSecurityChecker.class);
+        dbConnect = Mockito.mock(IDBConnectionWSAccessManager.class);
         MockitoAnnotations.initMocks(this);
 
         // set default return values
@@ -39,6 +43,11 @@ public class CheckWSSecurityTest {
                 true);
         Mockito.when(projectSecurity.isUserCollaboratorOnProject("user3", "project1", RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR)).thenReturn(
                 true);
+        Mockito.when(projectSecurity.isUserCollaboratorOnProject("user4", "project1", RoleNames.ROLE_QUADRIGA_ADMIN)).thenReturn(
+                true);
+        
+        Mockito.when(dbConnect.chkWorkspaceOwner(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
+        Mockito.when(dbConnect.chkWorkspaceOwner("user2", "ws1")).thenReturn(true);
     }
     
     @Test
@@ -63,6 +72,31 @@ public class CheckWSSecurityTest {
     
     @Test
     public void testCanCreateWsUserIsAnythingElse() throws QuadrigaStorageException {
-        assertFalse(securityChecker.hasPermissionToCreateWS("user4", "project1"));
+        assertFalse(securityChecker.hasPermissionToCreateWS("userX", "project1"));
+    }
+    
+    @Test
+    public void testHasWSAccessUserIsProjectOwner() throws QuadrigaStorageException {
+        assertTrue(securityChecker.hasAccessToWorkspace("user1", "project1", "ws1"));
+    }
+    
+    @Test
+    public void testHasWSAccessUserIsWSOwner() throws QuadrigaStorageException {
+        assertTrue(securityChecker.hasAccessToWorkspace("user2", "project1", "ws1"));
+    }
+    
+    @Test
+    public void testHasWSAccessUserIsQuadrigaAdmin() throws QuadrigaStorageException {
+        assertTrue(securityChecker.hasAccessToWorkspace("user4", "project1", "ws1"));
+    }
+    
+    @Test
+    public void testHasWSAccessUserIsCollaborator() throws QuadrigaStorageException {
+        assertTrue(securityChecker.hasAccessToWorkspace("user2", "project1", "ws1"));
+    }
+    
+    @Test
+    public void testHasWSAccessUserIsSomethingElse() throws QuadrigaStorageException {
+        assertFalse(securityChecker.hasAccessToWorkspace("userX", "project1", "ws1"));
     }
 }

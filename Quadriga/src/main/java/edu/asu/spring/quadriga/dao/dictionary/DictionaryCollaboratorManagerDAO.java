@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workbench.ModifyProjectCollaboratorDAO;
+import edu.asu.spring.quadriga.dao.workbench.ProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryCollaboratorManager;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTOPK;
@@ -31,7 +31,7 @@ public class DictionaryCollaboratorManagerDAO extends DAOConnectionManager imple
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
 	
-	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectCollaboratorDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProjectCollaboratorDAO.class);
 	
 	/**
 	 * This method update the roles associated with the collaborator for dictionary

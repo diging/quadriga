@@ -40,8 +40,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -53,13 +52,7 @@ public class AddCollaboratorController {
 	IRetrieveProjectManager retrieveprojectManager;
 
 	@Autowired
-	IRetrieveProjCollabManager projectCollabManager;
-
-	@Autowired
-	IModifyProjCollabManager modifyProjectCollabManager;
-	
-	@Autowired
-	IRetrieveProjCollabManager retrieveProjCollabManager;
+	IProjectCollaboratorManager projectCollaboratorManager;
 
 	@Autowired 
 	IUserManager usermanager;
@@ -155,7 +148,7 @@ public class AddCollaboratorController {
 		
 		// retrieve the collaborators who are not associated with project
 		// TODO: getProjectNonCollaborators() method has not been changed for mapper 
-		List<IUser> nonCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
+		List<IUser> nonCollaboratingUsers = projectCollaboratorManager.getProjectNonCollaborators(projectid);
 
 		//remove the restricted user
 		Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
@@ -221,11 +214,11 @@ public class AddCollaboratorController {
 			{	
 				String userName;
 				userName = principal.getName();
-				modifyProjectCollabManager.addCollaboratorRequest(collaborator, projectid,userName);
+				projectCollaboratorManager.addCollaboratorRequest(collaborator, projectid,userName);
 				model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 			}
 			
-			List<IUser> nonCollaboratingUsers = retrieveProjCollabManager.getProjectNonCollaborators(projectid);
+			List<IUser> nonCollaboratingUsers = projectCollaboratorManager.getProjectNonCollaborators(projectid);
 			//remove the restricted user
 			Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
 			while(userIterator.hasNext())

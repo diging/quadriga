@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-
 import java.util.Iterator;
 
 import javax.annotation.Resource;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +17,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjCollabManager;
+import edu.asu.spring.quadriga.db.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
+import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
 @Repository
-public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implements
-		IDBConnectionModifyProjCollabManager 
+public class ProjectCollaboratorDAO extends DAOConnectionManager implements
+		IProjectCollaboratorDAO 
 {
 	
 	@Autowired
@@ -37,10 +39,13 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 	@Autowired
 	private ProjectCollaboratorDTOMapper projectMapper;
 	
+	@Autowired
+    private UserDTOMapper userMapper;
+    
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
 	
-	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectCollaboratorDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProjectCollaboratorDAO.class);
 	
 	/**
 	 * {@inheritDoc}
@@ -190,5 +195,57 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 			throw new QuadrigaStorageException();
 		}
 	}
+	
+	/**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ICollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
+    {
+
+        List<ICollaborator> collaborator = null;
+        
+        ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+        if(project.equals(null))
+        {
+            throw new QuadrigaStorageException();
+        }
+        
+            collaborator = projectMapper.getProjectCollaboratorList(project);
+        
+        return collaborator;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<IUser> getProjectNonCollaborators(String projectid) 
+    {
+        List<IUser> user = null;
+        IUser nonCollaborator = null;
+        
+        ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
+        
+        user = new ArrayList<IUser>();
+        Query query = sessionFactory.getCurrentSession().createQuery("SELECT user FROM QuadrigaUserDTO user WHERE user.username NOT IN " +
+                "(SELECT collaborator.projectCollaboratorDTOPK.collaboratoruser FROM ProjectCollaboratorDTO collaborator " +
+                "  WHERE collaborator.projectCollaboratorDTOPK.projectid =:projectid)");
+        query.setParameter("projectid", projectid);
+        
+        @SuppressWarnings("unchecked")
+        List<QuadrigaUserDTO> collaborator = query.list();
+        
+        for(QuadrigaUserDTO tempCollab : collaborator)
+        {
+            if(!project.getProjectowner().getUsername().equals(tempCollab.getUsername()))
+            {
+                nonCollaborator = userMapper.getUser(tempCollab);
+                user.add(nonCollaborator);
+            }
+        
+        }
+        return user;
+    }
 
 }
