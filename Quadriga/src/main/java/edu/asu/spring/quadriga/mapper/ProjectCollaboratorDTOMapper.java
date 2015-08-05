@@ -91,23 +91,22 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 	}
 	
 	/**
-	 * This method assigns a collaborator to the given project
+	 * This method adds a collaborator to the given project
 	 * @param project
 	 * @param collaborator
 	 * @param loggedInUser
 	 * @throws QuadrigaStorageException
 	 */
-	public void getProjectCollaboratorDAO(ProjectDTO project,ICollaborator collaborator,String loggedInUser) throws QuadrigaStorageException
+	public void addCollaboratorToProjectDTO(ProjectDTO project,ICollaborator collaborator,String loggedInUser) throws QuadrigaStorageException
 	{
 		try
 		{
 			String projectId = project.getProjectid();
-			List<ProjectCollaboratorDTO> projectCollaborator;
 			String collabUser = collaborator.getUserObj().getUserName();
 			List<IQuadrigaRole> collaboratorRoles = collaborator.getCollaboratorRoles();
 			QuadrigaUserDTO userDTO = getUserDTO(collabUser);
 			
-			projectCollaborator = project.getProjectCollaboratorDTOList();
+			List<ProjectCollaboratorDTO> projectCollaborators = project.getProjectCollaboratorDTOList();
 			
 			for(IQuadrigaRole role : collaboratorRoles)
 			{
@@ -120,9 +119,9 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 				collaboratorDTO.setCreateddate(new Date());
 				collaboratorDTO.setUpdatedby(loggedInUser);
 				collaboratorDTO.setUpdateddate(new Date());
-				projectCollaborator.add(collaboratorDTO);
+				projectCollaborators.add(collaboratorDTO);
 			}
-			project.setProjectCollaboratorDTOList(projectCollaborator);
+			project.setProjectCollaboratorDTOList(projectCollaborators);
 		}
 		catch(QuadrigaStorageException ex)
 		{

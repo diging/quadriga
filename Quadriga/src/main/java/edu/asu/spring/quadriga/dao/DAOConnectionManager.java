@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.dao;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.HibernateException;
@@ -114,15 +115,9 @@ public abstract class DAOConnectionManager {
 	 * @param users
 	 * @return ArrayList<String>
 	 */
-	public ArrayList<String> getList(String users)
+	public List<String> getList(String commaSeparatedList)
 	{
-		ArrayList<String> usersList = new ArrayList<String>();
-		String[] userValues = users.split(",");
-		for(String user : userValues)
-		{
-		   usersList.add(user);	
-		}
-		return usersList;
+		return Arrays.asList(commaSeparatedList.split(","));
 	}
 
 

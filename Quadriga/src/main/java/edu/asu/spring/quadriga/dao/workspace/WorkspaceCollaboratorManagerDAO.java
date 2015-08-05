@@ -142,17 +142,15 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 		WorkspaceCollaboratorDTO collaborator = null;
 		WorkspaceCollaboratorDTOPK collaboratorPK = null;
 		List<WorkspaceCollaboratorDTO> collaboratorList = null;
-		ArrayList<String> collaboratorRoles;
-		ArrayList<String> existingRoles;
 		String wsCollabRole;
 		String wsCollaborator;
 		
 		try
 		{
-			existingRoles = new ArrayList<String>();
+		    List<String> existingRoles = new ArrayList<String>();
 			workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
 			collaboratorList = workspace.getWorkspaceCollaboratorDTOList();
-			collaboratorRoles = getList(collaboratorRole);
+			List<String> collaboratorRoles = getList(collaboratorRole);
 			if(!workspace.equals(null))
 			{
 				//delete all the roles associated with the user
