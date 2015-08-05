@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
+import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Service
-public class CheckWSSecurity implements ICheckWSSecurity 
+public class WSSecurityChecker implements IWSSecurityChecker 
 {
 	@Autowired
 	private IProjectSecurityChecker projectSecurity;
@@ -38,32 +38,29 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	 */
 	@Override
 	@Transactional
-	public boolean chkCreateWSAccess(String userName,String projectId) throws QuadrigaStorageException
+	public boolean hasPermissionToCreateWS(String userName,String projectId) throws QuadrigaStorageException
 	{
-		boolean chkAccess;
-
 		//check if the user is a project owner
-		chkAccess = projectSecurity.isProjectOwner(userName,projectId);
+		if (projectSecurity.isProjectOwner(userName,projectId)) {
+		    return true;
+		}
 
 		//check if the user is a project collaborator and has a ADMIN role
-		if(!chkAccess)
-		{
-			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_COLLABORATOR_ADMIN);
+		if(projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_COLLABORATOR_ADMIN)) {
+			return true;
 		}
 
 		//check if the user is a project collaborator and has PROJECT_ADMIN role
-		if(!chkAccess)
-		{
-			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
+		if(projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)) {
+			return true;
 		}
 
 		//check if the user is a project collaborator and has CONTRIBUTOR role
-		if(!chkAccess)
-		{
-			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR);
+		if(projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR)) {
+			return true;
 		}
 
-		return chkAccess;
+		return false;
 	}
 
 	/**
@@ -79,13 +76,8 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	@Transactional
 	public boolean chkWorkspaceAccess(String userName,String projectId,String workspaceId) throws QuadrigaStorageException
 	{
-		boolean chkAccess;
-
-		//initialize the variable
-		chkAccess = false;
-
 		//check if the user is a project owner
-		chkAccess = projectSecurity.isProjectOwner(userName,projectId);
+		boolean chkAccess = projectSecurity.isProjectOwner(userName,projectId);
 
 		//check if the user is workspace owner
 		if(!chkAccess)

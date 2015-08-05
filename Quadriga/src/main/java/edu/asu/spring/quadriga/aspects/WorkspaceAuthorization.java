@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
+import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -34,7 +34,7 @@ public class WorkspaceAuthorization implements IAuthorization
 	private	IRetrieveWSCollabManager wsCollabManager;
 
 	@Autowired
-	private ICheckWSSecurity wsSecurityManager;
+	private IWSSecurityChecker wsSecurityManager;
 
 	@Autowired
 	private SessionFactory sessionFactory;

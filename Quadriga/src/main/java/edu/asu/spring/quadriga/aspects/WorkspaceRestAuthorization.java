@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
+import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -31,7 +31,7 @@ public class WorkspaceRestAuthorization implements IAuthorization
 	private	IRetrieveWSCollabManager wsCollabManager;
 
 	@Autowired
-	private ICheckWSSecurity wsSecurityManager;
+	private IWSSecurityChecker wsSecurityManager;
 
 	/**
 	 * This checks the access permissions for the logged in user for the 

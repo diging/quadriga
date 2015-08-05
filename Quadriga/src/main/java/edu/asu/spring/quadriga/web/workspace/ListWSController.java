@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
+import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
@@ -84,7 +84,7 @@ public class ListWSController
 	private	IRetrieveWSCollabManager wsCollabManager;
 
 	@Autowired
-	ICheckWSSecurity workspaceSecurity;
+	IWSSecurityChecker workspaceSecurity;
 
 	@Autowired
 	private IDspaceManager dspaceManager;

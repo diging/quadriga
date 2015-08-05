@@ -38,7 +38,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
+import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
@@ -89,7 +89,7 @@ public class DspaceRestController {
 	private IRestVelocityFactory restVelocityFactory;
 
 	@Autowired
-	private ICheckWSSecurity securityCheck;
+	private IWSSecurityChecker securityCheck;
 	
 	@Autowired
 	private IDspaceKeysFactory dspaceKeysFactory;

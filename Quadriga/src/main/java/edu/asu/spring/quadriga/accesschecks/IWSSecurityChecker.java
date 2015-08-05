@@ -3,12 +3,12 @@ package edu.asu.spring.quadriga.accesschecks;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface ICheckWSSecurity {
+public interface IWSSecurityChecker {
 
 	public abstract boolean chkWorkspaceAccess(String userName, String projectId,
 			String workspaceId) throws QuadrigaStorageException;
 
-	public abstract boolean chkCreateWSAccess(String userName, String projectId)
+	public abstract boolean hasPermissionToCreateWS(String userName, String projectId)
 			throws QuadrigaStorageException;
 
 	public abstract boolean chkCollabWorkspaceAccess(String userName, String workspaceId,

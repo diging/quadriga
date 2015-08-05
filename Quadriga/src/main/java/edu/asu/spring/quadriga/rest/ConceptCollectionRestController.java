@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
+import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
@@ -98,7 +98,7 @@ public class ConceptCollectionRestController {
 	private IConceptCollectionFactory collectionFactory;
 
 	@Autowired
-	private ICheckWSSecurity checkWSSecurity;
+	private IWSSecurityChecker checkWSSecurity;
 
 	@Autowired
 	private IConceptFactory conFact;
