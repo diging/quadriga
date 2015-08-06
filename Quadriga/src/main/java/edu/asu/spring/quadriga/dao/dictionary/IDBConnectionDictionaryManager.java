@@ -204,8 +204,6 @@ public interface IDBConnectionDictionaryManager {
 	
 	public abstract List<DictionaryDTO> getDictionaryDTOList(String userName) throws QuadrigaStorageException;
 	
-	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
-
 	/**
 	 * Get Dictionary ID name corresponding to a dictionary ID
 	 * @param dictionary id

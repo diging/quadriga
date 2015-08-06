@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -20,82 +20,28 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * data access object classes.
  * @author kbatna
  */
-public abstract class BaseDAO {
-
-	public final static int SUCCESS = 1;
-	public final static int FAILURE = 0;
+public abstract class BaseDAO<T> implements IBaseDAO<T>  {
 
 	@Autowired
 	protected SessionFactory sessionFactory;
 	
 	private static final Logger logger = LoggerFactory.getLogger(BaseDAO.class);
 	
-	/**
-	 * Establishes the test environment
-	 * @param sQuery
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
-	{
-		try
-		{
-			Session session = sessionFactory.getCurrentSession();
-			Query query = session.createSQLQuery(sQuery);
-			query.executeUpdate();
-			return SUCCESS;
-		}
-		catch(Exception ex)
-		{	
-			ex.printStackTrace();
-			throw new QuadrigaStorageException();
-		}
-	}
 	
-	/**
-	 * Establishes the test environment
-	 * @param sQuery
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	public int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException
-	{
-		try
-		{
-			if(sQuery != null && sQuery.length > 0)
-			{
-				for(String query : sQuery)
-				{
-					Query sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(query);
-					sqlQuery.executeUpdate();
-				}
-			}
-			return SUCCESS;
-		}
-		catch(Exception ex)
-		{	
-			ex.printStackTrace();
-			throw new QuadrigaStorageException();
-		}
-	}
-	/**
-	 * Generate an unique identifier for the database field
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	public String generateUniqueID()
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.dao.impl.IBaseDAO#generateUniqueID()
+     */
+	@Override
+    public String generateUniqueID()
 	{
 			return UUID.randomUUID().toString();
 	}
 	
-	/**
-	 * This method returns the User DAO object for the given userName
-	 * @param userName
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Batna
-	 */
-	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.dao.impl.IBaseDAO#getUserDTO(java.lang.String)
+     */
+	@Override
+    public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
 	{
 		QuadrigaUserDTO quadrigaUser = null;
 		try
@@ -110,15 +56,45 @@ public abstract class BaseDAO {
 		return quadrigaUser;
 	}
 	
-	/**
-	 * This methods splits the comma seperated string into a list
-	 * @param users
-	 * @return ArrayList<String>
-	 */
-	public List<String> getList(String commaSeparatedList)
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.dao.impl.IBaseDAO#getList(java.lang.String)
+     */
+	@Override
+    public List<String> getList(String commaSeparatedList)
 	{
 		return Arrays.asList(commaSeparatedList.split(","));
 	}
+	
+	@Override
+    public boolean updateDTO(T dto) {
+        try {
+            sessionFactory.getCurrentSession().update(dto);
+        } catch (HibernateException e) {
+            logger.error("Couldn't update dto.", e);
+            return false;
+        }
+        
+        return true;
+    }
+	
+	@Override
+    public boolean saveNewDTO(T dto) {
+	    try {
+	        sessionFactory.getCurrentSession().save(dto);
+	    } catch (HibernateException e) {
+            logger.error("Couldn't save dto.", e);
+            return false;
+        }
+	    return true;
+	}
 
-
+	@Override
+    public T getDTO(Class<T> clazz, String id) {
+	    try {
+	        return (T) sessionFactory.getCurrentSession().get(clazz, id);
+	    } catch(HibernateException e) {
+            logger.error("Retrieve workspace details method :",e);
+            return null;
+        }
+	}
 }

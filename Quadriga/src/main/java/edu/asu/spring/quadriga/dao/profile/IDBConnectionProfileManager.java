@@ -16,7 +16,4 @@ public interface IDBConnectionProfileManager {
 	
 	public abstract String retrieveServiceIdRequest(String profileid) throws QuadrigaStorageException;
 	
-	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
-
-
 }

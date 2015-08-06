@@ -62,7 +62,6 @@ public class WorkspaceAuthorization implements IAuthorization
 		String collaboratorName=null;
 		String collaboratorRoleId;
 		IWorkSpace workspace;
-		List<IWorkspaceCollaborator> workspaceCollaboratorList;
 		List<IQuadrigaRole> collaboratorRoles = null;
 		ArrayList<String> roles;
 
@@ -88,33 +87,34 @@ public class WorkspaceAuthorization implements IAuthorization
 					roles = getAccessRoleList(userRoles);
 
 
-					workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
-					for(IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList)
-					{
-						if(workspaceCollaborator.getCollaborator() !=null){
-							//check if he is a collaborator to the project
-							collaboratorName = workspaceCollaborator.getCollaborator().getUserObj().getUserName();
-
-						}
-						if(collaboratorName != null){
-							if(userName.equals(collaboratorName))
-							{
-								if(workspaceCollaborator.getCollaborator() !=null){
-									collaboratorRoles = workspaceCollaborator.getCollaborator().getCollaboratorRoles();
-								}
-								if(collaboratorRoles != null){
-									for(IQuadrigaRole collabRole : collaboratorRoles)
-									{
-										collaboratorRoleId = collabRole.getId();
-										if(roles.contains(collaboratorRoleId))
-										{
-											haveAccess = true;
-											return haveAccess;
-										}
-									}
-								}
-							}
-						}
+					List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
+					if (workspaceCollaboratorList != null) {
+    					for(IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList) {
+    						if(workspaceCollaborator.getCollaborator() !=null){
+    							//check if he is a collaborator to the project
+    							collaboratorName = workspaceCollaborator.getCollaborator().getUserObj().getUserName();
+    
+    						}
+    						if(collaboratorName != null){
+    							if(userName.equals(collaboratorName))
+    							{
+    								if(workspaceCollaborator.getCollaborator() !=null){
+    									collaboratorRoles = workspaceCollaborator.getCollaborator().getCollaboratorRoles();
+    								}
+    								if(collaboratorRoles != null){
+    									for(IQuadrigaRole collabRole : collaboratorRoles)
+    									{
+    										collaboratorRoleId = collabRole.getId();
+    										if(roles.contains(collaboratorRoleId))
+    										{
+    											haveAccess = true;
+    											return haveAccess;
+    										}
+    									}
+    								}
+    							}
+    						}
+    					}
 					}
 				}
 			}

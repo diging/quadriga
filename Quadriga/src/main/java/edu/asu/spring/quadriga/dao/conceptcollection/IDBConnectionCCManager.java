@@ -92,15 +92,6 @@ public interface IDBConnectionCCManager {
 		public abstract String updateItem(IConcept concept, String collectionId, String username) throws QuadrigaStorageException;
 		
 		/**
-		 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
-		 * 
-		 * @return Success - 1
-		 * @author satya swaroop boddu
-		 * @throws QuadrigaStorageException 
-		 */
-		public abstract int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException;
-		
-		/**
 		 * retrieves data from database to retrieve collaborators
 		 * 
 		 * @param collectionid

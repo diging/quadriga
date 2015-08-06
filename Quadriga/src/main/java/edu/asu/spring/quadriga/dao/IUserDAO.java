@@ -94,15 +94,6 @@ public interface IUserDAO
 	public abstract int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException;
 
 	/**
-	 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
-	 * 
-	 * @return Success - 1
-	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
-	 * @author Ram Kumar Kumaresan
-	 */
-	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
-
-	/**
 	 * This method returns the user object for the given username
 	 * @param userName
 	 * @return

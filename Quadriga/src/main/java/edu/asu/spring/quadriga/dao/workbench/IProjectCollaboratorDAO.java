@@ -28,14 +28,6 @@ public interface IProjectCollaboratorDAO
 	public abstract void deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException;
 
 	/**
-	 * This method executes the query utilized in setting up test environment
-	 * @param sQuery
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
-
-	/**
 	 * This method updates the roles of collaborator for a project
 	 * @param projectid
 	 * @param collabUser

@@ -5,10 +5,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionModifyWSManager;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 
 /**
@@ -24,11 +31,21 @@ public class ModifyWSManager implements IModifyWSManager
 	private IDBConnectionModifyWSManager dbConnect;
 
 	@Autowired
-	private IDBConnectionRetrieveProjectManager dbProjectManager;
-
-	@Autowired
 	private IEmailNotificationManager emailManager;
 
+	@Autowired
+	private IWorkspaceDAO workspaceDao;
+	
+	@Autowired
+	private IProjectDAO projectDao;
+	
+	@Autowired
+    private WorkspaceDTOMapper workspaceDTOMapper;
+
+	@Autowired
+    private ProjectDTOMapper projectMapper;
+
+	
 	/**
 	 * This inserts a workspace for a project into database.
 	 * @param     workspace
@@ -39,24 +56,15 @@ public class ModifyWSManager implements IModifyWSManager
 	 */
 	@Override
 	@Transactional
-	public void addWorkSpaceRequest(IWorkSpace workspace,String projectId) throws QuadrigaStorageException
-	{
-		//dbConnect.addWorkSpaceRequest(workspace,projectId);
-		
-		dbConnect.addWorkSpaceRequest(workspace, projectId);
-		
-		//Get project owner
-//		IProject project = dbProjectManager.getProjectDetails(projectId);
-		
-		//TODO: Remove email setup
-		/*project.getOwner().setEmail("ramkumar007@gmail.com");
+	public void addWorkspaceToProject(IWorkSpace workspace, String projectId) throws QuadrigaStorageException {
+	    ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
+	    WorkspaceDTO workspaceDTO = workspaceDTOMapper.getWorkspaceDTO(workspace);
+        workspaceDTO.setWorkspaceid(workspaceDao.generateUniqueID());
 
-		//Set email to owner that a new workspace has been added.
-		if(project.getOwner().getEmail() != null && !project.getOwner().getEmail().equals(""))
-			emailManager.sendNewWorkspaceAddedToProject(project, workspace);
-		else
-			logger.info("The project owner <<"+project.getOwner()+">> did not have an email address to the notification for new workspace addition");*/
-
+        ProjectWorkspaceDTO projectWorkspaceDTO = projectMapper.getProjectWorkspace(projectDto, workspaceDTO);
+        workspaceDTO.setProjectWorkspaceDTO(projectWorkspaceDTO);
+        workspaceDao.saveNewDTO(workspaceDTO);
+        projectDao.updateDTO(projectDto);
 	}
 
 	/**

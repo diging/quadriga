@@ -2,19 +2,16 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.Date;
 
-import javax.validation.constraints.AssertTrue;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runners.JUnit4;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import edu.asu.spring.quadriga.dao.impl.workspace.IWorkspaceDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.impl.workspace.ArchiveWSManager;
@@ -53,7 +50,8 @@ public class ArchiveWSManagerTest {
         
         Mockito.when(workspaceDao.getWorkspaceDTO("ws1")).thenReturn(wsDto1);
         Mockito.when(workspaceDao.getWorkspaceDTO("ws2")).thenReturn(wsDto2);
-        Mockito.when(workspaceDao.updateWorkspaceDTO(wsDto1)).thenReturn(true);
+        Mockito.when(workspaceDao.updateDTO(wsDto1)).thenReturn(true);
+        Mockito.when(workspaceDao.updateDTO(wsDto2)).thenReturn(true);
     }
     
     @Test

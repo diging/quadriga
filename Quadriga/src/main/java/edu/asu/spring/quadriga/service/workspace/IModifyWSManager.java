@@ -8,7 +8,7 @@ public interface IModifyWSManager {
 	public abstract String deleteWorkspaceRequest(String workspaceIdList)
 			throws QuadrigaStorageException;
 
-	public abstract void addWorkSpaceRequest(IWorkSpace workspace, String projectId)
+	public abstract void addWorkspaceToProject(IWorkSpace workspace, String projectId)
 			throws QuadrigaStorageException;
 
 	public abstract String updateWorkspaceRequest(IWorkSpace workspace)

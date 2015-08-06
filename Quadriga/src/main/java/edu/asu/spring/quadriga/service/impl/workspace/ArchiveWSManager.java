@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
  * Class implements {@link IArchiveWSManager} 
  * for archiving and deactivating workspace associated with project.
  * @implements IArchiveWSManager
- * @author Kiran Kumar Batna
+ * @author Julia Damerow, Kiran Kumar Batna
  */
 @Service
 public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager 
@@ -38,7 +38,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
     		wsDto.setIsarchived(true);
     		wsDto.setUpdatedby(wsUser);
     		wsDto.setUpdateddate(new Date());
-    		workspaceDao.updateWorkspaceDTO(wsDto);
+    		workspaceDao.updateDTO(wsDto);
 		}
 	}
 	
@@ -48,7 +48,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
 	 * @param   wsUser
 	 * @return  String - errmsg containing blank on success and error message on failure.
 	 * @throws  QuadrigaStorageException
-	 * @author  Kiran Kumar Batna
+	 * @author  Julia Damerow, Kiran Kumar Batna
 	 */
 	@Override
 	@Transactional
@@ -59,7 +59,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
             wsDto.setIsarchived(false);
             wsDto.setUpdatedby(wsUser);
             wsDto.setUpdateddate(new Date());
-            workspaceDao.updateWorkspaceDTO(wsDto);
+            workspaceDao.updateDTO(wsDto);
         }
 	}
 	
@@ -69,7 +69,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
 	 * @param   wsUser
 	 * @return  String - errmsg containing blank on success and error message on failure.
 	 * @throws  QuadrigaStorageException
-	 * @author  Kiran Kumar Batna
+	 * @author  Julia Damerow, Kiran Kumar Batna
 	 */
 	@Override
 	@Transactional
@@ -80,7 +80,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
             wsDto.setIsdeactivated(true);
             wsDto.setUpdatedby(wsUser);
             wsDto.setUpdateddate(new Date());
-            workspaceDao.updateWorkspaceDTO(wsDto);
+            workspaceDao.updateDTO(wsDto);
         }
 	}
 	
@@ -91,7 +91,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
 	 * @param   wsUser
 	 * @return  String - errmsg containing blank on success and error message on failure.
 	 * @throws  QuadrigaStorageException
-	 * @author  Kiran Kumar Batna
+	 * @author  Julia Damerow, Kiran Kumar Batna
 	 */
 	@Override
 	@Transactional
@@ -103,7 +103,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
             wsDto.setIsdeactivated(false);
             wsDto.setUpdatedby(wsUser);
             wsDto.setUpdateddate(new Date());
-            workspaceDao.updateWorkspaceDTO(wsDto);
+            workspaceDao.updateDTO(wsDto);
         }
 	}
 

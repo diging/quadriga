@@ -1,0 +1,46 @@
+package edu.asu.spring.quadriga.dao;
+
+import java.util.List;
+
+import org.hibernate.HibernateException;
+
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+
+public interface IBaseDAO<T> {
+
+    public final static int SUCCESS = 1;
+    public final static int FAILURE = 0;
+
+    /**
+     * Generate an unique identifier for the database field
+     * @throws QuadrigaStorageException
+     * @author Karthik Jayaraman
+     */
+    public abstract String generateUniqueID();
+
+    /**
+     * This method returns the User DAO object for the given userName
+     * @param userName
+     * @return
+     * @throws QuadrigaStorageException
+     * @author Kiran Batna
+     */
+    public abstract QuadrigaUserDTO getUserDTO(String userName)
+            throws QuadrigaStorageException;
+
+    /**
+     * This methods splits the comma seperated string into a list
+     * @param users
+     * @return ArrayList<String>
+     */
+    public abstract List<String> getList(String commaSeparatedList);
+
+    public abstract boolean updateDTO(T wsDto);
+
+    public abstract T getDTO(Class<T> clazz, String id);
+
+    public abstract boolean saveNewDTO(T dto);
+
+}
