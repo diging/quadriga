@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionArchiveWSManager;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 
@@ -15,29 +18,28 @@ import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
  * @author Kiran Kumar Batna
  */
 @Service
-public class ArchiveWSManager implements IArchiveWSManager 
+public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager 
 {
 
-	@Autowired
-	private IDBConnectionArchiveWSManager archiveWorkspaceManager;
-	
 	/**
 	 * This will archive the requested workspace.[archive = 1 is supplied to database]
 	 * @param   workspaceIdList - Comma separated workspace Id's.
 	 * @param   wsUser
 	 * @return  String - errmsg containing blank on success and error message on failure.
 	 * @throws  QuadrigaStorageException
-	 * @author  Kiran Kumar Batna
+	 * @author  Julia Damerow, Kiran Kumar Batna
 	 */
 	@Override
 	@Transactional
-	public void archiveWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
-	{
-		boolean archive;
-		
-		//assigning the archive parameter 1 species archive a workspace
-		archive = true;
-		archiveWorkspaceManager.archiveWorkspace(workspaceIdList, archive, wsUser);
+	public void archiveWorkspace(String workspaceIdList,String wsUser) {
+		List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
+		for (String id : wsIds) {
+    		WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(id.trim());
+    		wsDto.setIsarchived(true);
+    		wsDto.setUpdatedby(wsUser);
+    		wsDto.setUpdateddate(new Date());
+    		workspaceDao.updateWorkspaceDTO(wsDto);
+		}
 	}
 	
 	/**
@@ -50,12 +52,15 @@ public class ArchiveWSManager implements IArchiveWSManager
 	 */
 	@Override
 	@Transactional
-	public void unArchiveWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
-	{
-		boolean archive;
-		//assigning the archive parameter 0 species not to archive a workspace
-		archive = false;
-		archiveWorkspaceManager.archiveWorkspace(workspaceIdList, archive, wsUser);
+	public void unArchiveWorkspace(String workspaceIdList,String wsUser) {
+	    List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
+        for (String id : wsIds) {
+            WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(id.trim());
+            wsDto.setIsarchived(false);
+            wsDto.setUpdatedby(wsUser);
+            wsDto.setUpdateddate(new Date());
+            workspaceDao.updateWorkspaceDTO(wsDto);
+        }
 	}
 	
 	/**
@@ -68,13 +73,15 @@ public class ArchiveWSManager implements IArchiveWSManager
 	 */
 	@Override
 	@Transactional
-	public void deactivateWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
-	{
-		boolean deactivate;
-		
-		//assigning the deactivate variable.
-		deactivate = true;
-		archiveWorkspaceManager.deactivateWorkspace(workspaceIdList, deactivate, wsUser);
+	public void deactivateWorkspace(String workspaceIdList,String wsUser) {
+	    List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
+        for (String id : wsIds) {
+            WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(id.trim());
+            wsDto.setIsdeactivated(true);
+            wsDto.setUpdatedby(wsUser);
+            wsDto.setUpdateddate(new Date());
+            workspaceDao.updateWorkspaceDTO(wsDto);
+        }
 	}
 	
 	/**
@@ -90,10 +97,14 @@ public class ArchiveWSManager implements IArchiveWSManager
 	@Transactional
 	public void activateWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
 	{
-		boolean deactivate;
-		//assigning the deactivate variable.
-		deactivate = false;
-		archiveWorkspaceManager.deactivateWorkspace(workspaceIdList, deactivate, wsUser);
+	    List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
+        for (String id : wsIds) {
+            WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(id.trim());
+            wsDto.setIsdeactivated(false);
+            wsDto.setUpdatedby(wsUser);
+            wsDto.setUpdateddate(new Date());
+            workspaceDao.updateWorkspaceDTO(wsDto);
+        }
 	}
 
 }
