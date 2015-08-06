@@ -11,8 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.IUserManagerDAO;
-import edu.asu.spring.quadriga.db.IModifyUserRoles;
+import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -45,9 +44,6 @@ public class UserManager implements IUserManager {
 	private IQuadrigaRoleManager rolemanager;
 	
 	@Autowired
-	private IModifyUserRoles modifyUserRoleManager;
-
-	@Autowired
 	private IUserDeepMapper userDeepMapper;
 	
 	@Autowired
@@ -57,7 +53,7 @@ public class UserManager implements IUserManager {
 	private IEmailNotificationManager emailManager;
 	
 	@Autowired
-	private IUserManagerDAO usermanagerDAO;
+	private IUserDAO usermanagerDAO;
 
 	/**
 	 * @description : retrieve the user details from DBConectionManager and
@@ -374,12 +370,10 @@ public class UserManager implements IUserManager {
 	@Transactional
 	public void updateUserQuadrigaRoles(String userName,String quadrigaRoles, String loggedInUser) throws QuadrigaStorageException 
 	{
-		try
-		{
-		modifyUserRoleManager.updateUserQuadrigaRoles(userName, quadrigaRoles, loggedInUser);
+		try {
+		    usermanagerDAO.updateUserRoles(userName, quadrigaRoles, loggedInUser);
 		}
-		catch(Exception ex)
-		{
+		catch(Exception ex) {
 			throw new QuadrigaStorageException();
 		}
 	}

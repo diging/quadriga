@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
+import edu.asu.spring.quadriga.dao.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.jaxb.viaf.Item;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;

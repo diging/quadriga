@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.DAOConnectionManager;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.dao.impl.BaseDAO;
+import edu.asu.spring.quadriga.dao.workspace.IDBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
-public class WorkspaceCollaboratorDTOMapper extends DAOConnectionManager
+public class WorkspaceCollaboratorDTOMapper extends BaseDAO
 {
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;

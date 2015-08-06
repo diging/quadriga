@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker;
-import edu.asu.spring.quadriga.db.workbench.IProjectAccessManager;
+import edu.asu.spring.quadriga.dao.workbench.IProjectAccessManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;

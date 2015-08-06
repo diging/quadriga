@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
-import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
+import edu.asu.spring.quadriga.dao.IEditorDAO;
+import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factory.impl.networks.NetworkFactory;
 import edu.asu.spring.quadriga.domain.factory.networks.INetworkNodeInfoFactory;
@@ -25,10 +25,10 @@ import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 public class NetworkMapper implements INetworkMapper{
 	
 	@Autowired
-	private IDBConnectionNetworkManager dbconnect;
+	private INetworkDAO dbconnect;
 	
 	@Autowired
-	private IDBConnectionEditorManager editormanager;
+	private IEditorDAO editormanager;
 	
 	@Autowired
 	private NetworkFactory networkFactory;

@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
-import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
+import edu.asu.spring.quadriga.dao.IEditorDAO;
+import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factory.networks.INetworkFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -39,13 +39,13 @@ public class EditorManager implements IEditorManager {
 	private INetworkManager networkManager;
 
 	@Autowired
-	private IDBConnectionEditorManager dbConnect;
+	private IEditorDAO dbConnect;
 	
 	@Autowired
 	private INetworkMapper networkmapper;
 
 	@Autowired
-	private IDBConnectionNetworkManager dbnetworkManager;
+	private INetworkDAO dbnetworkManager;
 
 
 

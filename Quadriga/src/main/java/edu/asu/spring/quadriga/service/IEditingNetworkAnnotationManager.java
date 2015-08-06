@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
 
-import edu.asu.spring.quadriga.dao.NetworkManagerDAO;
+import edu.asu.spring.quadriga.dao.impl.NetworkDAO;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -36,7 +36,7 @@ public interface IEditingNetworkAnnotationManager {
 			throws QuadrigaStorageException;
 	
 	/**
-	 * This method calls {@link NetworkManagerDAO} to add an annotation to a relation in network.
+	 * This method calls {@link NetworkDAO} to add an annotation to a relation in network.
 	 * @param annotationText       Annotated text submitted by editor.
 	 * @param networkId            Id of the network for which the relation contains.
 	 * @param predicateId          Id of the predicate in the annotated relation.
@@ -55,7 +55,7 @@ public interface IEditingNetworkAnnotationManager {
 			throws QuadrigaStorageException;
 	
 	/**
-	 * This method calls the {@link NetworkManagerDAO} layer method  to retrieve
+	 * This method calls the {@link NetworkDAO} layer method  to retrieve
 	 * the annotations associated with the relation.
 	 * @param subjectId     Id of the subject in the annotated relation
 	 * @param objectId      Id of the object in the annotated relation.

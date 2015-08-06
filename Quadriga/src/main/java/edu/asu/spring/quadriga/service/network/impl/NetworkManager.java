@@ -45,8 +45,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.dao.DAOConnectionManager;
-import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
+import edu.asu.spring.quadriga.dao.INetworkDAO;
+import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
@@ -98,7 +98,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  */
 
 @Service
-public class NetworkManager extends DAOConnectionManager implements INetworkManager {
+public class NetworkManager extends BaseDAO implements INetworkManager {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkManager.class);
@@ -159,7 +159,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	private IProjectShallowMapper projectShallowMapper;
 
 	@Autowired
-	private IDBConnectionNetworkManager dbConnect;
+	private INetworkDAO dbConnect;
 
 	/**
 	 * 

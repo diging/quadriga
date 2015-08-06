@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
+import edu.asu.spring.quadriga.dao.IDspaceDAO;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
@@ -177,9 +177,9 @@ public interface IDspaceManager{
 
 	public abstract ICommunityManager getProxyCommunityManager();
 
-	public abstract void setDbconnectionManager(IDBConnectionDspaceManager dbconnectionManager);
+	public abstract void setDbconnectionManager(IDspaceDAO dbconnectionManager);
 
-	public abstract IDBConnectionDspaceManager getDbconnectionManager();
+	public abstract IDspaceDAO getDbconnectionManager();
 
 	public abstract void setDspaceProperties(Properties dspaceProperties);
 

@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.NetworkManagerDAO;
-import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
+import edu.asu.spring.quadriga.dao.IEditorDAO;
+import edu.asu.spring.quadriga.dao.impl.NetworkDAO;
 import edu.asu.spring.quadriga.domain.impl.networks.NetworkEdgeAnnotation;
 import edu.asu.spring.quadriga.domain.impl.networks.NetworkNodeAnnotation;
 import edu.asu.spring.quadriga.domain.impl.networks.NetworkRelationAnnotation;
@@ -35,7 +35,7 @@ import edu.asu.spring.quadriga.service.network.factory.INetworkRelationAnnotatio
 public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotationManager {
 
 	@Autowired
-	IDBConnectionEditorManager dbConnectionEditManager;
+	IEditorDAO dbConnectionEditManager;
 	
 	@Autowired
 	private NetworkDTOMapper networkMapper;
@@ -253,7 +253,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	
 	
 	/**
-	 * This method calls {@link NetworkManagerDAO} to add an annotation to a relation in network.
+	 * This method calls {@link NetworkDAO} to add an annotation to a relation in network.
 	 * @param annotationText       Annotated text submitted by editor.
 	 * @param networkId            Id of the network for which the relation contains.
 	 * @param predicateId          Id of the predicate in the annotated relation.
@@ -277,7 +277,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	
 	
 	/**
-	 * This method calls the {@link NetworkManagerDAO} layer method  to retrieve
+	 * This method calls the {@link NetworkDAO} layer method  to retrieve
 	 * the annotations associated with the relation.
 	 * @param subjectId     Id of the subject in the annotated relation
 	 * @param objectId      Id of the object in the annotated relation.

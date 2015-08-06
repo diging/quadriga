@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.DAOConnectionManager;
+import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
-public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
+public class ProjectCollaboratorDTOMapper extends BaseDAO {
 
 	@Autowired
     private IUserManager userManager;

@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.accesschecks.impl.WSSecurityChecker;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
+import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import static org.junit.Assert.assertFalse;

@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
+import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.dao.workbench.IDBConnectionProjectDictionary;
+import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;

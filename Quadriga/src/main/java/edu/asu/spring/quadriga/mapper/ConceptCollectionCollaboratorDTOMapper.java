@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.DAOConnectionManager;
+import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Service
-public class ConceptCollectionCollaboratorDTOMapper extends DAOConnectionManager
+public class ConceptCollectionCollaboratorDTOMapper extends BaseDAO
 {
 	@Autowired
 	private SessionFactory sessionFactory;

@@ -21,8 +21,8 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
+import edu.asu.spring.quadriga.dao.IDspaceDAO;
+import edu.asu.spring.quadriga.dao.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
@@ -59,7 +59,7 @@ public class DspaceManager implements IDspaceManager{
 	private ICommunityManager proxyCommunityManager;
 
 	@Autowired
-	private IDBConnectionDspaceManager dbconnectionManager;
+	private IDspaceDAO dbconnectionManager;
 
 	@Autowired
 	private IBitStreamFactory bitstreamFactory;
@@ -107,12 +107,12 @@ public class DspaceManager implements IDspaceManager{
 	}
 
 	@Override
-	public IDBConnectionDspaceManager getDbconnectionManager() {
+	public IDspaceDAO getDbconnectionManager() {
 		return dbconnectionManager;
 	}
 
 	@Override
-	public void setDbconnectionManager(IDBConnectionDspaceManager dbconnectionManager) {
+	public void setDbconnectionManager(IDspaceDAO dbconnectionManager) {
 		this.dbconnectionManager = dbconnectionManager;
 	}
 
