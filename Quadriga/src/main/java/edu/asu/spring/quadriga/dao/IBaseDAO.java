@@ -38,8 +38,6 @@ public interface IBaseDAO<T> {
 
     public abstract void updateDTO(T wsDto);
 
-    public abstract T getDTO(Class<T> clazz, String id);
-
     public abstract void saveNewDTO(T dto);
 
     public abstract void updateObject(Object obj);

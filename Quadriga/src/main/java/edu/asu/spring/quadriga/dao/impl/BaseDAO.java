@@ -74,8 +74,7 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>  {
 	    sessionFactory.getCurrentSession().delete(object);
 	}
 
-	@Override
-    public T getDTO(Class<T> clazz, String id) {
+	protected T getDTO(Class<T> clazz, String id) {
 	    try {
 	        return (T) sessionFactory.getCurrentSession().get(clazz, id);
 	    } catch(HibernateException e) {
