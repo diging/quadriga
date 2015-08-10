@@ -2,11 +2,13 @@ package edu.asu.spring.quadriga.dao.workbench;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IProjectCollaboratorDAO 
+public interface IProjectCollaboratorDAO extends IBaseDAO<ProjectCollaboratorDTO>
 {
 
 	/**

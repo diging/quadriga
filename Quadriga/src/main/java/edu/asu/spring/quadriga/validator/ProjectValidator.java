@@ -34,7 +34,7 @@ public class ProjectValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectName", "project_name.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "project_description.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectAccess", "project_projectAccess.required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(err, "unixName", "project_unixname.required");
+		//ValidationUtils.rejectIfEmptyOrWhitespace(err, "unixName", "project_unixname.required");
 		
 		Project project = (Project)obj;
 		
@@ -48,21 +48,16 @@ public class ProjectValidator implements Validator {
 			validateProjectAccessibility(projectAccess,err);
 		}
 		
-		if(err.getFieldError("unixName")==null)
-		{
-		//validate the regular expression
-		validateUnixNameExp(projUnixName,err);
+		if(err.getFieldError("unixName")==null) {
+    		//validate the regular expression
+    		validateUnixNameExp(projUnixName,err);
 		}
 		
 		
-		if(err.getFieldError("unixName")==null)
-		{
-			try
-			{
+		if(err.getFieldError("unixName")==null) {
+			try {
 				validateUnixName(projUnixName,projectId,err);
-			}
-			catch(QuadrigaStorageException e)
-			{
+			} catch(QuadrigaStorageException e) {
 				logger.error("Error", e);
 			}
 		}

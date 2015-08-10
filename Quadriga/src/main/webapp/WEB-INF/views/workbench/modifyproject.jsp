@@ -52,7 +52,7 @@ input {
 <article class="is-page-content">
 <div id="projectDiv">
 	<form:form commandName="project" method="POST"
-		action="/auth/workbench/modifyproject/${project.projectId}">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}">
 				<c:choose>
 			<c:when test="${success == '0'}">
 			<header>
@@ -85,7 +85,10 @@ input {
 				<td><form:errors path="unixName" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
-				<td><form:input path="projectId" type="hidden" /> </td>
+				<td>Public URL:
+				    <!--<form:input path="unixName" type="hidden" />-->
+				    <form:input path="projectId" type="hidden" /> 
+				</td>
 				<td><div id="UnixURL"></div></td>
 			</tr>
 			<tr>

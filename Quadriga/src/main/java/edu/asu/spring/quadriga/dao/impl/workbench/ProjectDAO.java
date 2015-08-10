@@ -13,4 +13,5 @@ public class ProjectDAO extends BaseDAO<ProjectDTO> implements IProjectDAO {
     public ProjectDTO getProjectDTO(String id) {
        return getDTO(ProjectDTO.class, id);
     }
+    
 }

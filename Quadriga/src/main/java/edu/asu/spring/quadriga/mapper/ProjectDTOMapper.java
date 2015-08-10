@@ -30,8 +30,7 @@ public class ProjectDTOMapper extends BaseMapper {
 	@Autowired
     private IUserManager userManager;
 	
-	public IProject getProject(ProjectDTO projectDTO)  throws QuadrigaStorageException
-	{
+	public IProject getProject(ProjectDTO projectDTO)  throws QuadrigaStorageException {
 		IProject project = new Project();
 		project.setProjectName(projectDTO.getProjectname());
 		project.setDescription(projectDTO.getDescription());
@@ -42,8 +41,7 @@ public class ProjectDTOMapper extends BaseMapper {
 		return project;
 	}
 	
-	public ProjectDTO getProjectDTO(IProject project, String userName)  throws QuadrigaStorageException
-	{
+	public ProjectDTO getProjectDTO(IProject project, String userName) {
 		QuadrigaUserDTO quadrigaUser = getUserDTO(userName);
 		ProjectDTO projectDTO = new ProjectDTO();
 		projectDTO.setProjectname(project.getProjectName());
@@ -55,8 +53,7 @@ public class ProjectDTOMapper extends BaseMapper {
 		projectDTO.setCreateddate(new Date());
 		projectDTO.setUpdatedby(project.getOwner().getUserName());
 		projectDTO.setUpdateddate(new Date());
-		if(project.getProjectAccess() != null)
-		{
+		if(project.getProjectAccess() != null) {
 			projectDTO.setAccessibility(project.getProjectAccess().name());
 		}
 		return projectDTO;

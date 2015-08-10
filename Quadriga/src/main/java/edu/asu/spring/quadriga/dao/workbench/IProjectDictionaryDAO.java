@@ -2,11 +2,12 @@ package edu.asu.spring.quadriga.dao.workbench;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionProjectDictionary {
+public interface IProjectDictionaryDAO extends IBaseDAO<ProjectDictionaryDTO> {
 
     /**
      * Adds given dictionary to the specified project

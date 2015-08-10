@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -41,5 +42,7 @@ public interface IBaseDAO<T> {
     public abstract void saveNewDTO(T dto);
 
     public abstract void updateObject(Object obj);
+
+    public abstract void deleteDTO(T dto);
 
 }

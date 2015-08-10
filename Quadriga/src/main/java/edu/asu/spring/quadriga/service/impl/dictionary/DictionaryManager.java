@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionProjectDictionary;
+import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -78,7 +78,7 @@ public class DictionaryManager implements IDictionaryManager {
 	private DictionaryItemFactory dictionaryItemsFactory;
 
 	@Autowired
-	private IDBConnectionProjectDictionary connectProjectDictionary;
+	private IProjectDictionaryDAO connectProjectDictionary;
 
 	@Autowired
 	private IRetrieveProjectManager retrieveProjectManager;

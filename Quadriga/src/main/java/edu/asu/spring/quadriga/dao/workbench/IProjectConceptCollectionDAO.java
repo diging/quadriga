@@ -2,10 +2,11 @@ package edu.asu.spring.quadriga.dao.workbench;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionProjectConceptColleciton {
+public interface IProjectConceptCollectionDAO extends IBaseDAO<ProjectConceptCollectionDTO> {
 
     /**
      * This method adds a concept collection to a project.

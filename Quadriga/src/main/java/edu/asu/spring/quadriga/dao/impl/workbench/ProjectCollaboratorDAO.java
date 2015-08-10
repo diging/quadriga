@@ -1,11 +1,10 @@
 package edu.asu.spring.quadriga.dao.impl.workbench;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Iterator;
 
 import javax.annotation.Resource;
 
@@ -30,7 +29,7 @@ import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
 @Repository
-public class ProjectCollaboratorDAO extends BaseDAO implements
+public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> implements
 		IProjectCollaboratorDAO 
 {
 	

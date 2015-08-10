@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -66,7 +67,8 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>  {
 	    sessionFactory.getCurrentSession().save(dto);
 	}
 	
-	protected void deleteDTO(T dto) {
+	@Override
+    public void deleteDTO(T dto) {
 	    sessionFactory.getCurrentSession().delete(dto);
 	}
 	
@@ -82,4 +84,13 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>  {
             return null;
         }
 	}
+	
+	protected T getDTO(Class<T> clazz, Serializable primKey) {
+        try {
+            return (T) sessionFactory.getCurrentSession().get(clazz, primKey);
+        } catch(HibernateException e) {
+            logger.error("Retrieve workspace details method :",e);
+            return null;
+        }
+    }
 }

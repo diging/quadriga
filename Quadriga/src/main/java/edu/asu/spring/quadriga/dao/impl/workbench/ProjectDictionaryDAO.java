@@ -10,7 +10,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionProjectDictionary;
+import edu.asu.spring.quadriga.dao.impl.BaseDAO;
+import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
@@ -26,7 +27,7 @@ import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
-public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary 
+public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implements IProjectDictionaryDAO 
 {
 	@Resource(name = "database_error_msgs")
 	private Properties messages;

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionProjectConceptColleciton;
+import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 public class ProjectConceptCollectionManager implements IProjectConceptCollectionManager {
 
 	@Autowired
-	private IDBConnectionProjectConceptColleciton dbConnect;
+	private IProjectConceptCollectionDAO dbConnect;
 	@Autowired
 	private IProjectConceptCollectionShallowMapper projCCShallowMapper;
 	

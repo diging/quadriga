@@ -133,7 +133,7 @@ public class ModifyProjectController
 		{
 			IUser user = userManager.getUser(principal.getName());
             project.setOwner(user);
-			projectManager.addProjectRequest(project,principal.getName());
+			projectManager.addNewProject(project,principal.getName());
 			model.getModelMap().put("success", 1);
 		}
 		return model;
@@ -193,7 +193,7 @@ public class ModifyProjectController
 		}
 		else
 		{
-			projectManager.updateProjectRequest(project.getProjectId(),project.getProjectName(),project.getDescription(),project.getProjectAccess().name(),project.getUnixName(),userName);
+			projectManager.updateProject(project.getProjectId(),project.getProjectName(),project.getDescription(),project.getProjectAccess().name(),project.getUnixName(),userName);
 			model.getModelMap().put("success", 1);
 		}
 		return model;
@@ -214,7 +214,7 @@ public class ModifyProjectController
 	{
 		IUser user = userManager.getUser(principal.getName());
 		String userName =user.getUserName();
-		projectManager.assignEditorToOwner(projectId, userName);
+		projectManager.assignEditorRole(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);
 
 		//retrieve all the workspaces associated with the project

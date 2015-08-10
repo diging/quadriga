@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionProjectDictionary;
+import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallo
 public class ProjectDictionaryManager implements IProjectDictionaryManager {
 
 	@Autowired
-	private IDBConnectionProjectDictionary dbConnect;
+	private IProjectDictionaryDAO dbConnect;
 	
 	@Autowired
 	private IProjectDictionaryShallowMapper projDictShallowMapper;

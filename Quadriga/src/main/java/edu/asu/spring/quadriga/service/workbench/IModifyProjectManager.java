@@ -1,13 +1,13 @@
 package edu.asu.spring.quadriga.service.workbench;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IModifyProjectManager {
 
-	public abstract void deleteProjectRequest(ArrayList<String> projectIdList)
+	public abstract void deleteProjectRequest(List<String> projectIdList)
 			throws QuadrigaStorageException;
 
 	/**
@@ -24,16 +24,16 @@ public interface IModifyProjectManager {
 			String oldOwner, String newOwner, String collabRole)
 			throws QuadrigaStorageException;
 
-	public abstract void assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException;
+	public abstract void assignEditorRole(String projectId, String owner) throws QuadrigaStorageException;
 
 	public abstract void deleteEditorToOwner(String projectId, String owner)
 			throws QuadrigaStorageException;
 
-	void updateProjectRequest(String projID, String projName, String projDesc,
+	void updateProject(String projID, String projName, String projDesc,
 			String projAccess, String unixName, String userName)
 			throws QuadrigaStorageException;
 
-	void addProjectRequest(IProject project, String userName)
+	void addNewProject(IProject project, String userName)
 			throws QuadrigaStorageException;
 
 }

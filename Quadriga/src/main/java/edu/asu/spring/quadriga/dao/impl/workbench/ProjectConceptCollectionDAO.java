@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionProjectConceptColleciton;
+import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
@@ -25,8 +25,7 @@ import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
-public class ProjectConceptCollectionDAO extends BaseDAO implements
-IDBConnectionProjectConceptColleciton 
+public class ProjectConceptCollectionDAO extends BaseDAO<ProjectConceptCollectionDTO> implements IProjectConceptCollectionDAO 
 {
 	
 	@Autowired
