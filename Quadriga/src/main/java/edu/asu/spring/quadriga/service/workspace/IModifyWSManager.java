@@ -5,22 +5,21 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IModifyWSManager {
 
-	public abstract String deleteWorkspaceRequest(String workspaceIdList)
+	public boolean deleteWorkspace(String workspaceIdList)
 			throws QuadrigaStorageException;
 
 	public abstract void addWorkspaceToProject(IWorkSpace workspace, String projectId)
 			throws QuadrigaStorageException;
 
-	public abstract String updateWorkspaceRequest(IWorkSpace workspace)
+	public void updateWorkspace(IWorkSpace workspace)
 			throws QuadrigaStorageException;
 
 	public abstract void transferWSOwnerRequest(String projectId, String oldOwner,
 			String newOwner, String collabRole) throws QuadrigaStorageException;
 
-	public abstract void assignEditorRoleToOwner(String workspaceId, String userName)
+	public abstract void assignEditorRole(String workspaceId, String userName)
 			throws QuadrigaStorageException;
 
-	public abstract String deleteEditorRoleToOwner(String workspaceId, String userName)
-			throws QuadrigaStorageException;
+	public boolean deleteEditorRole(String workspaceId, String userName);
 
 }

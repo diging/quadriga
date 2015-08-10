@@ -9,7 +9,7 @@ import edu.asu.spring.quadriga.dto.DspaceKeysDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Service
-public class DspaceDTOMapper {
+public class DspaceDTOMapper extends BaseMapper {
 	
 	@Autowired
 	private DspaceKeysFactory dsapceKeysFactory;

@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
  *
  */
 @Service
-public class UserDTOMapper{
+public class UserDTOMapper extends BaseMapper {
 
 	@Autowired
 	private UserFactory userFactory;	
@@ -39,16 +39,16 @@ public class UserDTOMapper{
 	 */
 	public IUser getUser(QuadrigaUserDTO userDTO)
 	{
-		IUser user = null;
-		if(userDTO != null)
-		{
-			user = userFactory.createUserObject();
-			user.setUserName(userDTO.getUsername());
-			user.setName(userDTO.getFullname());
-			user.setEmail(userDTO.getEmail());
-			user.setPassword(userDTO.getPasswd());
-			user.setQuadrigaRoles(listQuadrigaUserRoles(userDTO.getQuadrigarole()));
-		}
+	    if (userDTO == null) {
+	        return null;
+	    }
+	    
+		IUser user = userFactory.createUserObject();
+		user.setUserName(userDTO.getUsername());
+		user.setName(userDTO.getFullname());
+		user.setEmail(userDTO.getEmail());
+		user.setPassword(userDTO.getPasswd());
+		user.setQuadrigaRoles(listQuadrigaUserRoles(userDTO.getQuadrigarole()));	
 		return user;
 	}
 

@@ -34,7 +34,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
  * @author Ram Kumar Kumaresan
  */
 @Service
-public class NetworkDTOMapper {
+public class NetworkDTOMapper extends BaseMapper {
 
 	@Autowired
 	private INetworkNodeInfoFactory networkNodeInfoFactory;

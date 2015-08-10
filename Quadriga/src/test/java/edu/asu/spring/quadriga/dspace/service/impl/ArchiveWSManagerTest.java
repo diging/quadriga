@@ -50,8 +50,6 @@ public class ArchiveWSManagerTest {
         
         Mockito.when(workspaceDao.getWorkspaceDTO("ws1")).thenReturn(wsDto1);
         Mockito.when(workspaceDao.getWorkspaceDTO("ws2")).thenReturn(wsDto2);
-        Mockito.when(workspaceDao.updateDTO(wsDto1)).thenReturn(true);
-        Mockito.when(workspaceDao.updateDTO(wsDto2)).thenReturn(true);
     }
     
     @Test

@@ -164,7 +164,7 @@ public class ModifyWSController {
 				model.getModelMap().put("success", 0);
 				return model;
 			} else {
-				modifyWSManager.updateWorkspaceRequest(workspace);
+				modifyWSManager.updateWorkspace(workspace);
 				model.getModelMap().put("success", 1);
 				return model;
 			}
@@ -186,7 +186,7 @@ public class ModifyWSController {
 		IUser user = userManager.getUser(principal.getName());
 		String userName =user.getUserName();
 		String msg="";
-		modifyWSManager.assignEditorRoleToOwner(workspaceId, userName);
+		modifyWSManager.assignEditorRole(workspaceId, userName);
 		IWorkSpace workspace;
 		List<IWorkspaceCollaborator> collaboratorList;
 
@@ -263,7 +263,7 @@ public class ModifyWSController {
 	public String deleteEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException, RestException{
 		IUser user = userManager.getUser(principal.getName());
 		String userName =user.getUserName();
-		String msg=modifyWSManager.deleteEditorRoleToOwner(workspaceId, userName);
+		boolean success = modifyWSManager.deleteEditorRole(workspaceId, userName);
 		IWorkSpace workspace;
 		List<IWorkspaceCollaborator> collaboratorList;
 
@@ -309,12 +309,9 @@ public class ModifyWSController {
 		if (workspaceSecurity.checkWorkspaceProjectInheritOwnerEditorAccess(userName, workspaceId)){
 			model.addAttribute("projectinherit", 1);
 		}
-		if(msg.equals("")){
+		if(success){
 			model.addAttribute("DeleteEditorSuccess",1);
-		}else if(msg.equals("Owner already assigned as owner")){
-			model.addAttribute("DeleteEditorSuccess",2);
-		}else{
-			logger.error("Failure " +msg);
+		} else {
 			model.addAttribute("DeleteEditorSuccess",0);
 		}
 		return "auth/workbench/workspace/workspacedetails";

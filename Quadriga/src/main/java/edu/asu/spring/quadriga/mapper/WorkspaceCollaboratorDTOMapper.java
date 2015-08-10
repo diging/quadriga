@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -28,8 +27,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
-public class WorkspaceCollaboratorDTOMapper extends BaseDAO
-{
+public class WorkspaceCollaboratorDTOMapper extends BaseMapper {
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
 	
@@ -44,28 +42,19 @@ public class WorkspaceCollaboratorDTOMapper extends BaseDAO
 	
 	private static final Logger logger = LoggerFactory.getLogger(WorkspaceCollaboratorDTOMapper.class);
 	
-	public WorkspaceCollaboratorDTO getWorkspaceCollaboratorDTO(WorkspaceDTO workspace,String userName,String collaboratorRole) throws QuadrigaStorageException
-	{
+	public WorkspaceCollaboratorDTO getWorkspaceCollaboratorDTO(WorkspaceDTO workspace,String userName,String collaboratorRole) {
 		WorkspaceCollaboratorDTO collaborator = null;
 		WorkspaceCollaboratorDTOPK collaboratorKey = null;
-		try
-		{
-			collaboratorKey = new WorkspaceCollaboratorDTOPK(workspace.getWorkspaceid(),userName,collaboratorRole);
-			Date date = new Date();
-			collaborator = new WorkspaceCollaboratorDTO();
-			collaborator.setWorkspaceCollaboratorDTOPK(collaboratorKey);
-			collaborator.setWorkspaceDTO(workspace);
-			collaborator.setQuadrigaUserDTO(getUserDTO(userName));
-			collaborator.setCreatedby(userName);
-			collaborator.setCreateddate(date);
-			collaborator.setUpdatedby(userName);
-			collaborator.setUpdateddate(date);
-		}
-		catch(HibernateException ex)
-		{
-			logger.error("Retieving project collaborator :",ex);
-			throw new QuadrigaStorageException();
-		}
+		collaboratorKey = new WorkspaceCollaboratorDTOPK(workspace.getWorkspaceid(),userName,collaboratorRole);
+		Date date = new Date();
+		collaborator = new WorkspaceCollaboratorDTO();
+		collaborator.setWorkspaceCollaboratorDTOPK(collaboratorKey);
+		collaborator.setWorkspaceDTO(workspace);
+		collaborator.setQuadrigaUserDTO(getUserDTO(userName));
+		collaborator.setCreatedby(userName);
+		collaborator.setCreateddate(date);
+		collaborator.setUpdatedby(userName);
+		collaborator.setUpdateddate(date);
 		return collaborator;
 	}
 	

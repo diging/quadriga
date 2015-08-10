@@ -12,13 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDTO;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * This class contains the common methods used in 
  * data access object classes.
- * @author kbatna
+ * @author Julia Damerow, kbatna
  */
 public abstract class BaseDAO<T> implements IBaseDAO<T>  {
 
@@ -34,58 +32,46 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>  {
 	@Override
     public String generateUniqueID()
 	{
-			return UUID.randomUUID().toString();
+		return UUID.randomUUID().toString();
 	}
 	
 	/* (non-Javadoc)
      * @see edu.asu.spring.quadriga.dao.impl.IBaseDAO#getUserDTO(java.lang.String)
      */
 	@Override
-    public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
-	{
-		QuadrigaUserDTO quadrigaUser = null;
-		try
-		{
-			quadrigaUser = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
-		}
-		catch(HibernateException e)
-		{
-			logger.error("retrieving Quadriga user DTO :",e);
-        	throw new QuadrigaStorageException();
-		}
-		return quadrigaUser;
+    public QuadrigaUserDTO getUserDTO(String userName) {
+		return (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
 	}
 	
 	/* (non-Javadoc)
      * @see edu.asu.spring.quadriga.dao.impl.IBaseDAO#getList(java.lang.String)
      */
 	@Override
-    public List<String> getList(String commaSeparatedList)
-	{
+    public List<String> getList(String commaSeparatedList) {
 		return Arrays.asList(commaSeparatedList.split(","));
 	}
 	
 	@Override
-    public boolean updateDTO(T dto) {
-        try {
-            sessionFactory.getCurrentSession().update(dto);
-        } catch (HibernateException e) {
-            logger.error("Couldn't update dto.", e);
-            return false;
-        }
-        
-        return true;
+    public void updateDTO(T dto) {
+        sessionFactory.getCurrentSession().update(dto);
     }
 	
 	@Override
-    public boolean saveNewDTO(T dto) {
-	    try {
-	        sessionFactory.getCurrentSession().save(dto);
-	    } catch (HibernateException e) {
-            logger.error("Couldn't save dto.", e);
-            return false;
-        }
-	    return true;
+    public void updateObject(Object obj) {
+	    sessionFactory.getCurrentSession().update(obj);
+	}
+	
+	@Override
+    public void saveNewDTO(T dto) {
+	    sessionFactory.getCurrentSession().save(dto);
+	}
+	
+	protected void deleteDTO(T dto) {
+	    sessionFactory.getCurrentSession().delete(dto);
+	}
+	
+	protected void deleteObject(Object object) {
+	    sessionFactory.getCurrentSession().delete(object);
 	}
 
 	@Override

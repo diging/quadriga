@@ -27,8 +27,7 @@ public interface IBaseDAO<T> {
      * @throws QuadrigaStorageException
      * @author Kiran Batna
      */
-    public abstract QuadrigaUserDTO getUserDTO(String userName)
-            throws QuadrigaStorageException;
+    public abstract QuadrigaUserDTO getUserDTO(String userName);
 
     /**
      * This methods splits the comma seperated string into a list
@@ -37,10 +36,12 @@ public interface IBaseDAO<T> {
      */
     public abstract List<String> getList(String commaSeparatedList);
 
-    public abstract boolean updateDTO(T wsDto);
+    public abstract void updateDTO(T wsDto);
 
     public abstract T getDTO(Class<T> clazz, String id);
 
-    public abstract boolean saveNewDTO(T dto);
+    public abstract void saveNewDTO(T dto);
+
+    public abstract void updateObject(Object obj);
 
 }

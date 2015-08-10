@@ -1,20 +1,27 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceEditorDAO;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 
@@ -25,11 +32,9 @@ import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
  * @author Kiran Kumar Batna
  */
 @Service
+@Transactional(rollbackFor={Exception.class})
 public class ModifyWSManager implements IModifyWSManager 
 {
-	@Autowired
-	private IDBConnectionModifyWSManager dbConnect;
-
 	@Autowired
 	private IEmailNotificationManager emailManager;
 
@@ -40,7 +45,13 @@ public class ModifyWSManager implements IModifyWSManager
 	private IProjectDAO projectDao;
 	
 	@Autowired
+	private IWorkspaceEditorDAO workspaceEditorDao;
+	
+	@Autowired
     private WorkspaceDTOMapper workspaceDTOMapper;
+	
+	@Autowired
+	private WorkspaceCollaboratorDTOMapper collaboratorMapper;
 
 	@Autowired
     private ProjectDTOMapper projectMapper;
@@ -52,11 +63,10 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @param     projectId
 	 * @return    String errmsg - blank on success and error message on failure
 	 * @throws    QuadrigaStorageException
-	 * @author    kiranbatna
+	 * @author    Julia Damerow, kiranbatna
 	 */
 	@Override
-	@Transactional
-	public void addWorkspaceToProject(IWorkSpace workspace, String projectId) throws QuadrigaStorageException {
+	public void addWorkspaceToProject(IWorkSpace workspace, String projectId) {
 	    ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
 	    WorkspaceDTO workspaceDTO = workspaceDTOMapper.getWorkspaceDTO(workspace);
         workspaceDTO.setWorkspaceid(workspaceDao.generateUniqueID());
@@ -69,19 +79,18 @@ public class ModifyWSManager implements IModifyWSManager
 
 	/**
 	 * This method deletes the requested workspace.
-	 * @param   workspaceIdList
-	 * @return  String - errmsg blank on success and error message on failure
-	 * @throws  QuadrigaStorageException
-	 * @author  kiranbatna
+	 * @param   workspaceIdList - comma separated list of workspace ids to delete
+	 * @return  boolean - return true if delete was successful, otherwise false
+	 * @author  Julia Damerow, kiranbatna
 	 */
 	@Override
-	@Transactional
-	public String deleteWorkspaceRequest(String workspaceIdList) throws QuadrigaStorageException
-	{
-		String errmsg;
-
-		errmsg = dbConnect.deleteWorkspaceRequest(workspaceIdList);
-		return errmsg;
+	public boolean deleteWorkspace(String workspaceIdList) {
+		List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
+		boolean success = true;
+		for (String wsId : wsIds) {
+		  success = success && workspaceDao.deleteWorkspace(wsId);
+		}
+		return success;
 	}
 
 	/**
@@ -89,17 +98,19 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @param workspace
 	 * @return String - errmsg blank on success and error message on failure
 	 * @throws QuadrigaStorageException
-	 * @author kiranbatna
+	 * @author Julia Damerow, kiranbatna
 	 */
 	@Override
 	@Transactional
-	public String updateWorkspaceRequest(IWorkSpace workspace ) throws QuadrigaStorageException 
+	public void updateWorkspace(IWorkSpace workspace) throws QuadrigaStorageException 
 	{
-		String errmsg;
-
-		errmsg = dbConnect.updateWorkspaceRequest(workspace);
-
-		return errmsg;
+	    WorkspaceDTO workspaceDTO = workspaceDao.getWorkspaceDTO(workspace.getWorkspaceId());
+	    workspaceDTO.setWorkspacename(workspace.getWorkspaceName());
+        workspaceDTO.setDescription(workspace.getDescription());
+        workspaceDTO.setUpdateddate(new Date());
+        workspaceDTO.setUpdatedby(workspace.getOwner().getName());
+	    
+		workspaceDao.updateDTO(workspaceDTO);
 	}
 
 	/**
@@ -109,17 +120,38 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @param newOwner
 	 * @param collabRole
 	 * @throws QuadrigaStorageException
-	 * @author kiranbatna
+	 * @author kiranbatna, Julia Damerow
 	 */
 	@Override
 	@Transactional
-	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
-	{
-		dbConnect.transferWSOwnerRequest(workspaceId, oldOwner, newOwner, collabRole);
+	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) {
+	    WorkspaceDTO workspaceDTO = workspaceDao.getWorkspaceDTO(workspaceId);
+        //set the new workspace owner
+        workspaceDTO.setWorkspaceowner(workspaceDao.getUserDTO(newOwner));
+        workspaceDTO.setUpdatedby(oldOwner);
+        workspaceDTO.setUpdateddate(new Date());
+
+
+        //delete new owner from collaborators list
+        Iterator<WorkspaceCollaboratorDTO> workspaceCollaboratorIt = workspaceDTO.getWorkspaceCollaboratorDTOList().iterator();
+        WorkspaceCollaboratorDTO collaborator = null;
+        while(workspaceCollaboratorIt.hasNext()) {
+            collaborator = workspaceCollaboratorIt.next();
+            if(collaborator.getQuadrigaUserDTO().getUsername().equals(newOwner)) {
+                workspaceCollaboratorIt.remove();
+                break;
+            }
+        }
+
+        //add the current owner as a collaborator
+        collaborator = collaboratorMapper.getWorkspaceCollaboratorDTO(workspaceDTO, oldOwner, collabRole);
+        workspaceDTO.getWorkspaceCollaboratorDTOList().add(collaborator);
+
+        workspaceDao.updateDTO(workspaceDTO);
 	}
 
 	/**
-	 * Manager for Assigning editor roles to owner for workspace level
+	 * Method to assign the editor role to a user.
 	 * @param workspaceId
 	 * @param userName
 	 * @return
@@ -127,23 +159,29 @@ public class ModifyWSManager implements IModifyWSManager
 	 */
 	@Override
 	@Transactional
-	public void assignEditorRoleToOwner(String workspaceId,String userName) throws QuadrigaStorageException{
-		dbConnect.assignWorkspaceOwnerEditor(workspaceId, userName);
+	public void assignEditorRole(String workspaceId,String userName) throws QuadrigaStorageException{
+		WorkspaceDTO workspaceDto = workspaceDao.getWorkspaceDTO(workspaceId);
+		WorkspaceEditorDTO workspaceEditorDTO = workspaceDTOMapper.getWorkspaceEditor(workspaceDto, userName);
+		workspaceEditorDao.saveNewDTO(workspaceEditorDTO);
 	}
 
 	/**
 	 * Manager for Assigning editor roles to owner for workspace level
 	 * @param workspaceId
-	 * @param userName
-	 * @return
+	 * @param userName username of the user that should be deleted as editor
+	 * @return true if editor role was removed, otherwise false
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
-	public String deleteEditorRoleToOwner(String workspaceId,String userName) throws QuadrigaStorageException{
-
-		String msg =dbConnect.deleteWorkspaceOwnerEditor(workspaceId, userName);
-		return msg;
+	public boolean deleteEditorRole(String workspaceId,String userName) {
+	    WorkspaceEditorDTO workspaceEditorDTO = workspaceEditorDao.getWorkspaceEditorDTO(workspaceId, userName);
+        if(workspaceEditorDTO != null) {
+            workspaceEditorDao.deleteWorkspaceEditorDTO(workspaceEditorDTO);
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 }

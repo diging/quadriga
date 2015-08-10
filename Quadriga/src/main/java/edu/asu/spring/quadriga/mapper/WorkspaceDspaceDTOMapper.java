@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.domain.impl.dspace.BitStream;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
 
 @Service
-public class WorkspaceDspaceDTOMapper {
+public class WorkspaceDspaceDTOMapper extends BaseMapper {
 	
 	@Autowired
 	private DspaceKeysFactory dsapceKeysFactory;

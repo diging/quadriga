@@ -153,7 +153,7 @@ public class DeleteWSController
 					workspaceId.append(wsInternalId);
 				}
 			}
-			modifyWSManger.deleteWorkspaceRequest(workspaceId.toString().substring(1));
+			modifyWSManger.deleteWorkspace(workspaceId.toString().substring(1));
 			
 			//frame the model objects
 			model.getModelMap().put("success", 1);

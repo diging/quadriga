@@ -78,7 +78,7 @@ public class TransferWSOwnerController
 	 * @throws QuadrigaAccessException
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {} )})
-	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/transferworkspaceowner", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/workbench/workspace/transferworkspaceowner/{workspaceid}", method = RequestMethod.GET)
 	public ModelAndView transferWSOwnerRequestForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
@@ -98,21 +98,23 @@ public class TransferWSOwnerController
 		//retrieve the collaborators associated with the workspace
 		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
 
-			//adding the collaborator model
-			model.getModelMap().put("user", userFactory.createUserObject());
-			model.getModelMap().put("wsname", workspace.getWorkspaceName());
-			model.getModelMap().put("wsowner", workspace.getOwner().getUserName());
-			model.getModelMap().put("workspaceid", workspace.getWorkspaceId());
-			
-			//fetch the collaborators
-			for(IWorkspaceCollaborator collabuser : collaboratingUser)
-			{
-				userList.add(collabuser.getCollaborator().getUserObj());
-			}
-			
-			model.getModelMap().put("collaboratinguser", userList);
-			//create model attribute
-			model.getModelMap().put("success", 0);
+		//adding the collaborator model
+		model.getModelMap().put("user", userFactory.createUserObject());
+		model.getModelMap().put("wsname", workspace.getWorkspaceName());
+		model.getModelMap().put("wsowner", workspace.getOwner().getUserName());
+		model.getModelMap().put("workspaceid", workspace.getWorkspaceId());
+		
+		//fetch the collaborators
+		if (collaboratingUser != null) {
+    		for(IWorkspaceCollaborator collabuser : collaboratingUser)
+    		{
+    			userList.add(collabuser.getCollaborator().getUserObj());
+    		}
+		}
+		
+		model.getModelMap().put("collaboratinguser", userList);
+		//create model attribute
+		model.getModelMap().put("success", 0);
 		return model;
 	}
 	

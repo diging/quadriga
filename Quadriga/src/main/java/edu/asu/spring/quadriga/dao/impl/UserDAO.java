@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.mapper.UserDTOMapper;
  *
  */
 @Repository
-public class UserDAO extends BaseDAO implements IUserDAO
+public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO
 {
 
 	@Autowired
@@ -42,9 +42,6 @@ public class UserDAO extends BaseDAO implements IUserDAO
 	private Properties messages;
 
 	private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
-
-
-
 
 	/**
 	 * {@inheritDoc} 
@@ -371,28 +368,6 @@ public class UserDAO extends BaseDAO implements IUserDAO
 		{
 			logger.error("Error in deactivating user account: ",e);
 			throw new QuadrigaStorageException(e);
-		}
-	}
-	
-	/**
-	 * This method returns the User DAO object for the given userName
-	 * @param userName
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Batna
-	 */
-	@Override
-	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException {
-		try
-		{
-    		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
-    		query.setParameter("username", userName);
-    		return (QuadrigaUserDTO) query.uniqueResult();
-		}
-		catch(Exception e)
-		{
-			logger.error("getProjectOwner :",e);
-        	throw new QuadrigaStorageException(e);
 		}
 	}
 	

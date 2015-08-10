@@ -260,7 +260,7 @@
 			<div class="user">
 				Owned by: ${workspacedetails.owner.name}
 				<c:if test="${owner=='1'}">(<a
-						href="${pageContext.servletContext.contextPath}/auth/workspace/transferworkspaceowner/${workspaceid}">Change</a>)</c:if>
+						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/transferworkspaceowner/${workspaceid}">Change</a>)</c:if>
 			</div> <c:if test="${owner=='1' and editoraccess=='0' }">
 				<img
 					src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses-no.png"> You are not an Editor on this Workspace 

@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
@@ -21,7 +20,7 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
-public class DictionaryCollaboratorDTOMapper extends BaseDAO
+public class DictionaryCollaboratorDTOMapper extends BaseMapper
 {
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
