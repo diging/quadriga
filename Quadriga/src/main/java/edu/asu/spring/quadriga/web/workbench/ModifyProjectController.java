@@ -246,7 +246,7 @@ public class ModifyProjectController
 	{
 		IUser user = userManager.getUser(principal.getName());
 		String userName =user.getUserName();
-		projectManager.deleteEditorToOwner(projectId, userName);
+		projectManager.removeEditorRole(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);
 
 		//retrieve all the workspaces associated with the project

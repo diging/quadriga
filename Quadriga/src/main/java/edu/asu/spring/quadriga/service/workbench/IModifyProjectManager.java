@@ -26,7 +26,7 @@ public interface IModifyProjectManager {
 
 	public abstract void assignEditorRole(String projectId, String owner) throws QuadrigaStorageException;
 
-	public abstract void deleteEditorToOwner(String projectId, String owner)
+	public abstract void removeEditorRole(String projectId, String owner)
 			throws QuadrigaStorageException;
 
 	void updateProject(String projID, String projName, String projDesc,

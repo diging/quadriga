@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
@@ -34,7 +33,6 @@ import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 
 /**
  * This class add/update/delete a project
@@ -44,9 +42,6 @@ import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 public class ModifyProjectManager extends BaseManager implements IModifyProjectManager 
 {
 
-	@Autowired
-	private IDBConnectionModifyProjectManager dbConnect;
-	
 	@Autowired
 	private IUserManager userManager;
 	
@@ -197,8 +192,13 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
 	 */
 	@Override
 	@Transactional
-	public void deleteEditorToOwner(String projectId, String editor) throws QuadrigaStorageException{
-		dbConnect.deleteProjectOwnerEditor(projectId, editor);
+	public void removeEditorRole(String projectId, String editor) throws QuadrigaStorageException{
+	    ProjectEditorDTOPK projectEditorKey = new ProjectEditorDTOPK(projectId, editor);
+	    ProjectEditorDTO projectEditor = projectEditorDao.getProjectEditorDTO(projectEditorKey);
+
+        if(projectEditor != null) {
+            projectEditorDao.deleteDTO(projectEditor);
+        }
 	}
 	
 	/*

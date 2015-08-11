@@ -93,43 +93,6 @@
 				You are not collaborating on any workspace.
 			</c:if>
 			</div>
-			<!-- <div id = "tabs" class="tabs">
-			<ul>
-			  	  <li><a href="#asowner">Owner</a></li>
-	              <li><a href="#ascollaborator">Collaborator</a></li>
-			</ul>
-			<div id="asowner">
-						<c:if test="${not empty workspaceList}">
-    	              Project associates these workspaces:
-    		<ul class="style2 pagination1">
-								<c:forEach var="workspace" items="${workspaceList}">
-									<li><a
-										href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
-												value="${workspace.workspaceName}"></c:out></a> <br> <c:out
-											value="${workspace.description}"></c:out></li>
-								</c:forEach>
-							</ul>
-						</c:if>
-						<c:if test="${empty workspaceList}">
-			No workspaces are associated yet. You should create one!
-		</c:if>
-					</div>
-				<div id="ascollaborator">
-						<c:if test="${not empty collabworkspacelist}">
-    	              Project associates these workspaces:
-    		<ul class="style2 pagination1">
-								<c:forEach var="workspace" items="${collabworkspacelist}">
-									<li><a
-										href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
-												value="${workspace.name}"></c:out></a> <br> <c:out
-											value="${workspace.description}"></c:out></li>
-								</c:forEach>
-							</ul>
-						</c:if>
-						<c:if test="${empty collabworkspacelist}">
-			You are not collaborator to any workspace.
-		</c:if>
-					</div> -->
 			</div>
 			<c:choose>
 				<c:when test="${AssignEditorSuccess=='1'}">
