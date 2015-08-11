@@ -166,7 +166,7 @@ public class TransferProjectOwnerController
 			//fetch the new owner
 			newOwner = collaboratorUser.getUserName();
 
-			collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, RoleNames.ROLE_COLLABORATOR_ADMIN).getDBid();
+			collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN).getDBid();
 
 			//call the method to transfer the ownership
 			projectManager.transferProjectOwnerRequest(projectid, userName, newOwner,collaboratorRole);
