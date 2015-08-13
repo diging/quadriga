@@ -75,8 +75,8 @@
 			
 			<c:forEach var="workspace" items="${collabworkspacelist}">
 			<li  class="ws"><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
-					value="${workspace.name}"></c:out></a> (Collaborator)<br> <c:out
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
+					value="${workspace.workspaceName}"></c:out></a> (Collaborator)<br> <c:out
 					value="${workspace.description}"></c:out></li>
 			</c:forEach>
 			</ul>

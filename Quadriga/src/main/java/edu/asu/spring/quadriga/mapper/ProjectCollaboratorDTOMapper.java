@@ -77,12 +77,12 @@ public class ProjectCollaboratorDTOMapper extends BaseMapper {
 			String userName = projectCollaboratorDTO.getQuadrigaUserDTO().getUsername();
 			if(collabMap.containsKey(userName))
 			{
-				collabMap.get(userName).add(projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole());
+				collabMap.get(userName).add(projectCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole());
 			}
 			else
 			{
 				roleList = new ArrayList<String>();
-				roleList.add(projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole());
+				roleList.add(projectCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole());
 				collabMap.put(userName,roleList);
 			}
 		}
@@ -110,7 +110,7 @@ public class ProjectCollaboratorDTOMapper extends BaseMapper {
 			ProjectCollaboratorDTOPK collaboratorKey = new ProjectCollaboratorDTOPK(projectId,collabUser,role.getDBid());
 			collaboratorDTO.setProjectDTO(project);
 			collaboratorDTO.setQuadrigaUserDTO(userDTO);
-			collaboratorDTO.setProjectCollaboratorDTOPK(collaboratorKey);
+			collaboratorDTO.setCollaboratorDTOPK(collaboratorKey);
 			collaboratorDTO.setCreatedby(loggedInUser);
 			collaboratorDTO.setCreateddate(new Date());
 			collaboratorDTO.setUpdatedby(loggedInUser);
@@ -137,7 +137,7 @@ public class ProjectCollaboratorDTOMapper extends BaseMapper {
 			Date date = new Date();
 			collaborator = new ProjectCollaboratorDTO();
             collaborator.setProjectDTO(project);
-            collaborator.setProjectCollaboratorDTOPK(new ProjectCollaboratorDTOPK(project.getProjectid(),userName,collaboratorRole));
+            collaborator.setCollaboratorDTOPK(new ProjectCollaboratorDTOPK(project.getProjectid(),userName,collaboratorRole));
             collaborator.setQuadrigaUserDTO(getUserDTO(userName));
             collaborator.setCreatedby(userName);
             collaborator.setCreateddate(date);

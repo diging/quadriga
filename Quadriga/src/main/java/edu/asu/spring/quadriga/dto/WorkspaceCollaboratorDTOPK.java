@@ -4,7 +4,6 @@
  */
 package edu.asu.spring.quadriga.dto;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -15,18 +14,13 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class WorkspaceCollaboratorDTOPK implements Serializable 
+public class WorkspaceCollaboratorDTOPK extends CollaboratorDTOPK
 {
 	private static final long serialVersionUID = 1L;
+	
     @Basic(optional = false)
     @Column(name = "workspaceid")
     private String workspaceid;
-    @Basic(optional = false)
-    @Column(name = "collaboratoruser")
-    private String collaboratoruser;
-	@Basic(optional = false)
-    @Column(name = "collaboratorrole")
-    private String collaboratorrole;
 
     public WorkspaceCollaboratorDTOPK() {
     }
@@ -43,22 +37,6 @@ public class WorkspaceCollaboratorDTOPK implements Serializable
 
     public void setWorkspaceid(String workspaceid) {
         this.workspaceid = workspaceid;
-    }
-    
-    public String getCollaboratoruser() {
-		return collaboratoruser;
-	}
-
-	public void setCollaboratoruser(String collaboratoruser) {
-		this.collaboratoruser = collaboratoruser;
-	}
-
-    public String getCollaboratorrole() {
-        return collaboratorrole;
-    }
-
-    public void setCollaboratorrole(String collaboratorrole) {
-        this.collaboratorrole = collaboratorrole;
     }
 
     @Override

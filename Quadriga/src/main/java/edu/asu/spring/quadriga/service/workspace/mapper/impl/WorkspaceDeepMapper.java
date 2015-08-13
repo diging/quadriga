@@ -214,7 +214,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 
 			if(userWorkspaceCollaboratorMap.containsKey(userName))
 			{
-				String roleName = workspaceCollaboratorDTO.getWorkspaceCollaboratorDTOPK().getCollaboratorrole();
+				String roleName = workspaceCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole();
 
 				IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
 				collaboratorRole.setDBid(roleName);
@@ -234,7 +234,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			}
 			else
 			{
-				String roleName = workspaceCollaboratorDTO.getWorkspaceCollaboratorDTOPK().getCollaboratorrole();
+				String roleName = workspaceCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole();
 				// Prepare collaborator roles
 				IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
 				collaboratorRole.setDBid(roleName);

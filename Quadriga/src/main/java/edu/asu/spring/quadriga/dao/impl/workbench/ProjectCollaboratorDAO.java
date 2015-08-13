@@ -127,7 +127,7 @@ public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> impl
 		while(iterator.hasNext())
 		{
 		    ProjectCollaboratorDTO projectCollaborator = iterator.next();
-		    ProjectCollaboratorDTOPK collaboratorKey = projectCollaborator.getProjectCollaboratorDTOPK();
+		    ProjectCollaboratorDTOPK collaboratorKey = projectCollaborator.getCollaboratorDTOPK();
 		    String collaborator = projectCollaborator.getQuadrigaUserDTO().getUsername();
 		    String collabRole = collaboratorKey.getCollaboratorrole();
 			if(collaborator.equals(collabUser))
@@ -154,7 +154,7 @@ public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> impl
 				ProjectCollaboratorDTO projectCollaborator = new ProjectCollaboratorDTO();
 				ProjectCollaboratorDTOPK collaboratorKey = new ProjectCollaboratorDTOPK(projectid,collabUser,role);
 				projectCollaborator.setProjectDTO(project);
-				projectCollaborator.setProjectCollaboratorDTOPK(collaboratorKey);
+				projectCollaborator.setCollaboratorDTOPK(collaboratorKey);
 				projectCollaborator.setQuadrigaUserDTO(user);
 				projectCollaborator.setCreatedby(username);
 				projectCollaborator.setCreateddate(date);
@@ -208,8 +208,8 @@ public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> impl
         
         user = new ArrayList<IUser>();
         Query query = sessionFactory.getCurrentSession().createQuery("SELECT user FROM QuadrigaUserDTO user WHERE user.username NOT IN " +
-                "(SELECT collaborator.projectCollaboratorDTOPK.collaboratoruser FROM ProjectCollaboratorDTO collaborator " +
-                "  WHERE collaborator.projectCollaboratorDTOPK.projectid =:projectid)");
+                "(SELECT collaborator.collaboratorDTOPK.collaboratoruser FROM ProjectCollaboratorDTO collaborator " +
+                "  WHERE collaborator.collaboratorDTOPK.projectid =:projectid)");
         query.setParameter("projectid", projectid);
         
         @SuppressWarnings("unchecked")

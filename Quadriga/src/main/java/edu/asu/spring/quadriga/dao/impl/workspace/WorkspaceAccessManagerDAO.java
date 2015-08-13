@@ -188,9 +188,9 @@ public class WorkspaceAccessManagerDAO extends BaseDAO implements IDBConnectionW
 		try
 		{
 			isAssociated = false;
-			Query query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(w.workspaceCollaboratorDTOPK.workspaceid) FROM WorkspaceCollaboratorDTO w" +
-					" WHERE w.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser AND " +
-					" w.workspaceCollaboratorDTOPK.collaboratorrole = :collaboratorrole");
+			Query query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(w.collaboratorDTOPK.workspaceid) FROM WorkspaceCollaboratorDTO w" +
+					" WHERE w.collaboratorDTOPK.collaboratoruser = :collaboratoruser AND " +
+					" w.collaboratorDTOPK.collaboratorrole = :collaboratorrole");
 			query.setParameter("collaboratoruser", userName);
 			query.setParameter("collaboratorrole", role);
 			count = ((Long)query.iterate().next()).intValue();

@@ -4,7 +4,6 @@
  */
 package edu.asu.spring.quadriga.dto;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -15,20 +14,18 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class ProjectCollaboratorDTOPK implements Serializable {
-	private static final long serialVersionUID = 1L;
-	@Basic(optional = false)
+public class ProjectCollaboratorDTOPK extends CollaboratorDTOPK {
+	
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -5312712348021749534L;
+    
+    @Basic(optional = false)
     @Column(name = "projectid")
     private String projectid;
-    @Basic(optional = false)
-    @Column(name = "collaboratoruser")
-    private String collaboratoruser;
-    @Basic(optional = false)
-    @Column(name = "collaboratorrole")
-    private String collaboratorrole;
-
-    public ProjectCollaboratorDTOPK() {
-    }
+    
+	public ProjectCollaboratorDTOPK() { }
 
     public ProjectCollaboratorDTOPK(String projectid, String collaboratoruser, String collaboratorrole) {
         this.projectid = projectid;
@@ -44,22 +41,7 @@ public class ProjectCollaboratorDTOPK implements Serializable {
         this.projectid = projectid;
     }
 
-    public String getCollaboratoruser() {
-        return collaboratoruser;
-    }
-
-    public void setCollaboratoruser(String collaboratoruser) {
-        this.collaboratoruser = collaboratoruser;
-    }
-
-    public String getCollaboratorrole() {
-        return collaboratorrole;
-    }
-
-    public void setCollaboratorrole(String collaboratorrole) {
-        this.collaboratorrole = collaboratorrole;
-    }
-
+   
     @Override
     public int hashCode() {
         int hash = 0;

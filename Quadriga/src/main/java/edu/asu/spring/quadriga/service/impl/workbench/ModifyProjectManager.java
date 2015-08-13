@@ -36,7 +36,7 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 
 /**
  * This class add/update/delete a project
- * @author kbatna
+ * @author kbatna, Julia Damerow
  */
 @Service
 public class ModifyProjectManager extends BaseManager implements IModifyProjectManager 

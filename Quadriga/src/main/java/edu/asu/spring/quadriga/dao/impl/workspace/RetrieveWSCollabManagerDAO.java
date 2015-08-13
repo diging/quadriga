@@ -66,7 +66,7 @@ public class RetrieveWSCollabManagerDAO extends BaseDAO implements IDBConnection
 		List<ICollaborator> wrkspaceCollabList = new ArrayList<ICollaborator>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from WorkspaceCollaboratorDTO wrkspaceCollab where wrkspaceCollab.workspaceCollaboratorDTOPK.workspaceid =:id");
+			Query query = sessionFactory.getCurrentSession().createQuery("from WorkspaceCollaboratorDTO wrkspaceCollab where wrkspaceCollab.collaboratorDTOPK.workspaceid =:id");
 			query.setParameter("id", workspaceId);
 			@SuppressWarnings("unchecked")
 			List<WorkspaceCollaboratorDTO> wrkCollabList = query.list();

@@ -48,7 +48,7 @@ public class WorkspaceCollaboratorDTOMapper extends BaseMapper {
 		collaboratorKey = new WorkspaceCollaboratorDTOPK(workspace.getWorkspaceid(),userName,collaboratorRole);
 		Date date = new Date();
 		collaborator = new WorkspaceCollaboratorDTO();
-		collaborator.setWorkspaceCollaboratorDTOPK(collaboratorKey);
+		collaborator.setCollaboratorDTOPK(collaboratorKey);
 		collaborator.setWorkspaceDTO(workspace);
 		collaborator.setQuadrigaUserDTO(getUserDTO(userName));
 		collaborator.setCreatedby(userName);
@@ -78,12 +78,12 @@ public class WorkspaceCollaboratorDTOMapper extends BaseMapper {
 				WorkspaceCollaboratorDTO workCollabDTO = wrkCollabIterator.next();
 				if(userRoleMap.containsKey(workCollabDTO.getQuadrigaUserDTO().getUsername()))
 				{
-					String updatedRoleStr = userRoleMap.get(workCollabDTO.getQuadrigaUserDTO().getUsername()).concat(workCollabDTO.getWorkspaceCollaboratorDTOPK().getCollaboratorrole()+",");
+					String updatedRoleStr = userRoleMap.get(workCollabDTO.getQuadrigaUserDTO().getUsername()).concat(workCollabDTO.getCollaboratorDTOPK().getCollaboratorrole()+",");
 					userRoleMap.put(workCollabDTO.getQuadrigaUserDTO().getUsername(), updatedRoleStr);
 				}
 				else
 				{
-					userRoleMap.put(workCollabDTO.getQuadrigaUserDTO().getUsername(),workCollabDTO.getWorkspaceCollaboratorDTOPK().getCollaboratorrole()+",");
+					userRoleMap.put(workCollabDTO.getQuadrigaUserDTO().getUsername(),workCollabDTO.getCollaboratorDTOPK().getCollaboratorrole()+",");
 				}
 			}
 			

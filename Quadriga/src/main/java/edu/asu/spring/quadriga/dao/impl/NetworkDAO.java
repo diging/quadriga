@@ -480,14 +480,14 @@ public class NetworkDAO extends BaseDAO implements INetworkDAO, IEditorDAO {
 
 			String query1 = "Select n from NetworksDTO n where n.status = 'PENDING' and";
 			query1 += "((n.networkWorkspace.workspaceDTO.workspaceid in  " ;
-			query1 += "(select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
-					"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
-					"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1'))) OR ";
+			query1 += "(select distinct wc.collaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
+					"where wc.collaboratorDTOPK.collaboratoruser = :username and " +
+					"wc.collaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1'))) OR ";
 			query1 += "(n.networkWorkspace.workspaceDTO.workspaceid in  " ;
 			query1 += "(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
 					"where pw.projectWorkspaceDTOPK.projectid in " +
-					"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
-					"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
+					"(select distinct pc.collaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
+					"where pc.collaboratorDTOPK.collaboratoruser = :username and pc.collaboratorDTOPK.collaboratorrole in " +
 					"('collaborator_role4')))) OR ";
 			query1 += "(n.networkWorkspace.workspaceDTO.workspaceid in  " ;
 			query1 += "(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +

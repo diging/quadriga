@@ -47,7 +47,7 @@ public class ProjectAccessManagerDAO extends BaseDAO implements  IProjectAccessM
 	@Override
 	public int getNrOfProjectsCollaboratingOn(String userName,String collaboratorRole)
 	{
-        Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectCollaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.projectCollaboratorDTOPK.collaboratoruser =:userName AND pc.projectCollaboratorDTOPK.collaboratorrole =:collaboratorRole");
+        Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.collaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.collaboratorDTOPK.collaboratoruser =:userName AND pc.collaboratorDTOPK.collaboratorrole =:collaboratorRole");
 		query.setParameter("userName", userName);
 		query.setParameter("collaboratorRole", collaboratorRole);
 		return ((Number) query.iterate().next()).intValue();
@@ -59,7 +59,7 @@ public class ProjectAccessManagerDAO extends BaseDAO implements  IProjectAccessM
 	@Override
 	public boolean isCollaborator(String userName,String collaboratorRole,String projectId)
 	{
-		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectCollaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.projectCollaboratorDTOPK.collaboratoruser =:userName AND pc.projectCollaboratorDTOPK.collaboratorrole =:collaboratorRole AND pc.projectCollaboratorDTOPK.projectid =:projectId");
+		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.collaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.collaboratorDTOPK.collaboratoruser =:userName AND pc.collaboratorDTOPK.collaboratorrole =:collaboratorRole AND pc.collaboratorDTOPK.projectid =:projectId");
 		query.setParameter("userName", userName);
 		query.setParameter("collaboratorRole", collaboratorRole);
 		query.setParameter("projectId",projectId);

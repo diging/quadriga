@@ -242,7 +242,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			
 			if(userProjectCollaboratorMap.containsKey(userName))
 			{
-				String roleName = projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole();
+				String roleName = projectCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole();
 				
 				IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
 				collaboratorRole.setDBid(roleName);
@@ -262,7 +262,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			}
 			else
 			{
-				String roleName = projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole();
+				String roleName = projectCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole();
 				// Prepare collaborator roles
 				IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
 				collaboratorRole.setDBid(roleName);

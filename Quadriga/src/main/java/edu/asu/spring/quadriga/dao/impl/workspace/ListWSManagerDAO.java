@@ -301,7 +301,7 @@ public class ListWSManagerDAO extends BaseDAO implements IDBConnectionListWSMana
 			String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid" +
 		            " AND projWork.workspaceDTO.isdeactivated =:isdeactivated  AND projWork.workspaceDTO.isarchived = :isarchived" +
 					" AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN (" +
-					" SELECT wsc.workspaceCollaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.workspaceCollaboratorDTOPK.collaboratoruser =:username)))";
+					" SELECT wsc.collaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.collaboratorDTOPK.collaboratoruser =:username)))";
 			Query query = sessionFactory.getCurrentSession().createQuery(value);
 			query.setParameter("username", username);
 			query.setParameter("projectid", projectid);
@@ -336,7 +336,7 @@ public class ListWSManagerDAO extends BaseDAO implements IDBConnectionListWSMana
 			String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid" +
 		            " AND projWork.workspaceDTO.isdeactivated =:isdeactivated  AND projWork.workspaceDTO.isarchived = :isarchived" +
 					" AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN (" +
-					" SELECT wsc.workspaceCollaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.workspaceCollaboratorDTOPK.collaboratoruser =:username)))";
+					" SELECT wsc.collaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.collaboratorDTOPK.collaboratoruser =:username)))";
 			Query query = sessionFactory.getCurrentSession().createQuery(value);
 			query.setParameter("username", username);
 			query.setParameter("projectid", projectid);
@@ -365,7 +365,7 @@ public class ListWSManagerDAO extends BaseDAO implements IDBConnectionListWSMana
 			String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid" +
 		            " AND projWork.workspaceDTO.isdeactivated =:isdeactivated " +
 					" AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN (" +
-					" SELECT wsc.workspaceCollaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.workspaceCollaboratorDTOPK.collaboratoruser =:username)))";
+					" SELECT wsc.collaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.collaboratorDTOPK.collaboratoruser =:username)))";
 			Query query = sessionFactory.getCurrentSession().createQuery(value);
 			query.setParameter("username", username);
 			query.setParameter("projectid", projectid);
@@ -397,7 +397,7 @@ public class ListWSManagerDAO extends BaseDAO implements IDBConnectionListWSMana
 			String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid" +
 		            " AND projWork.workspaceDTO.isdeactivated =:isdeactivated " +
 					" AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN (" +
-					" SELECT wsc.workspaceCollaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.workspaceCollaboratorDTOPK.collaboratoruser =:username)))";
+					" SELECT wsc.collaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.collaboratorDTOPK.collaboratoruser =:username)))";
 			Query query = sessionFactory.getCurrentSession().createQuery(value);
 			query.setParameter("username", username);
 			query.setParameter("projectid", projectid);

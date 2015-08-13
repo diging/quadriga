@@ -28,40 +28,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkspaceCollaboratorDTO.findAll", query = "SELECT w FROM WorkspaceCollaboratorDTO w"),
-    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.workspaceCollaboratorDTOPK.workspaceid = :workspaceid"),
-    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByUsername", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser"),
-    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByCollaboratorrole", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.workspaceCollaboratorDTOPK.collaboratorrole = :collaboratorrole"),
+    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.collaboratorDTOPK.workspaceid = :workspaceid"),
+    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByUsername", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.collaboratorDTOPK.collaboratoruser = :collaboratoruser"),
+    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByCollaboratorrole", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.collaboratorDTOPK.collaboratorrole = :collaboratorrole"),
     })
-public class WorkspaceCollaboratorDTO implements Serializable {
+public class WorkspaceCollaboratorDTO extends CollaboratorDTO<WorkspaceCollaboratorDTOPK> {
+    
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected WorkspaceCollaboratorDTOPK workspaceCollaboratorDTOPK;
-    @Basic(optional = false)
-    @Column(name = "updatedby")
-    private String updatedby;
-    @Basic(optional = false)
-    @Column(name = "updateddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateddate;
-    @Basic(optional = false)
-    @Column(name = "createdby")
-    private String createdby;
-    @Basic(optional = false)
-    @Column(name = "createddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
     @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private WorkspaceDTO workspaceDTO;
-    @JoinColumn(name = "collaboratoruser", referencedColumnName = "username", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private QuadrigaUserDTO quadrigaUserDTO;
-
+   
     public WorkspaceCollaboratorDTO() {
     }
 
     public WorkspaceCollaboratorDTO(WorkspaceCollaboratorDTOPK workspaceCollaboratorDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.workspaceCollaboratorDTOPK = workspaceCollaboratorDTOPK;
+        this.collaboratorDTOPK = workspaceCollaboratorDTOPK;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;
@@ -69,50 +51,10 @@ public class WorkspaceCollaboratorDTO implements Serializable {
     }
 
     public WorkspaceCollaboratorDTO(String workspaceid, String username, String collaboratorrole,String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.workspaceCollaboratorDTOPK = new WorkspaceCollaboratorDTOPK(workspaceid, username, collaboratorrole);
+        this.collaboratorDTOPK = new WorkspaceCollaboratorDTOPK(workspaceid, username, collaboratorrole);
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;
-        this.createddate = createddate;
-    }
-
-    public WorkspaceCollaboratorDTOPK getWorkspaceCollaboratorDTOPK() {
-        return workspaceCollaboratorDTOPK;
-    }
-
-    public void setWorkspaceCollaboratorDTOPK(WorkspaceCollaboratorDTOPK workspaceCollaboratorDTOPK) {
-        this.workspaceCollaboratorDTOPK = workspaceCollaboratorDTOPK;
-    }
-
-    public String getUpdatedby() {
-        return updatedby;
-    }
-
-    public void setUpdatedby(String updatedby) {
-        this.updatedby = updatedby;
-    }
-
-    public Date getUpdateddate() {
-        return updateddate;
-    }
-
-    public void setUpdateddate(Date updateddate) {
-        this.updateddate = updateddate;
-    }
-
-    public String getCreatedby() {
-        return createdby;
-    }
-
-    public void setCreatedby(String createdby) {
-        this.createdby = createdby;
-    }
-
-    public Date getCreateddate() {
-        return createddate;
-    }
-
-    public void setCreateddate(Date createddate) {
         this.createddate = createddate;
     }
 
@@ -135,7 +77,7 @@ public class WorkspaceCollaboratorDTO implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (workspaceCollaboratorDTOPK != null ? workspaceCollaboratorDTOPK.hashCode() : 0);
+        hash += (collaboratorDTOPK != null ? collaboratorDTOPK.hashCode() : 0);
         return hash;
     }
 
@@ -145,7 +87,7 @@ public class WorkspaceCollaboratorDTO implements Serializable {
             return false;
         }
         WorkspaceCollaboratorDTO other = (WorkspaceCollaboratorDTO) object;
-        if ((this.workspaceCollaboratorDTOPK == null && other.workspaceCollaboratorDTOPK != null) || (this.workspaceCollaboratorDTOPK != null && !this.workspaceCollaboratorDTOPK.equals(other.workspaceCollaboratorDTOPK))) {
+        if ((this.collaboratorDTOPK == null && other.collaboratorDTOPK != null) || (this.collaboratorDTOPK != null && !this.collaboratorDTOPK.equals(other.collaboratorDTOPK))) {
             return false;
         }
         return true;

@@ -296,7 +296,7 @@ public class RetrieveProjectManagerDAO extends BaseDAO implements IDBConnectionR
 //		List<IProject> projectList = new ArrayList<IProject>();
 //		try
 //		{
-//			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser)");
+//			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.collaboratorDTOPK.collaboratoruser = :collaboratoruser)");
 //			query.setParameter("collaboratoruser", sUserName);
 //			List<ProjectDTO> projectDTOList = query.list();
 //
@@ -328,7 +328,7 @@ public class RetrieveProjectManagerDAO extends BaseDAO implements IDBConnectionR
 		List<ProjectDTO> projectDTOList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser)");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.collaboratorDTOPK.collaboratoruser = :collaboratoruser)");
 			query.setParameter("collaboratoruser", sUserName);
 			projectDTOList = query.list();
 

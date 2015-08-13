@@ -84,7 +84,7 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
 	    Iterator<WorkspaceCollaboratorDTO> iterator = collaboratorDtoList.iterator();
         while(iterator.hasNext()) {
             WorkspaceCollaboratorDTO wsCollabDto = iterator.next();
-            String userName = wsCollabDto.getWorkspaceCollaboratorDTOPK().getCollaboratoruser();
+            String userName = wsCollabDto.getCollaboratorDTOPK().getCollaboratoruser();
             if(collaborators.contains(userName)) {
                 iterator.remove();
                 wsCollabDao.deleteWorkspaceCollaboratorDTO(wsCollabDto);
@@ -111,14 +111,14 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
         while(iterator.hasNext())
         {
             WorkspaceCollaboratorDTO collaborator = iterator.next();
-            WorkspaceCollaboratorDTOPK collaboratorPK = collaborator.getWorkspaceCollaboratorDTOPK();
+            WorkspaceCollaboratorDTOPK collaboratorPK = collaborator.getCollaboratorDTOPK();
             
             String wsCollaborator = collaborator.getQuadrigaUserDTO().getUsername();
             String wsCollabRole = collaboratorPK.getCollaboratorrole();
             if(wsCollaborator.equals(collabUser)) {
                 if(!collaboratorRoles.contains(wsCollabRole)) {
                     iterator.remove();
-                    wsCollabDao.deleteWorkspaceCollaboratorDTO(collaborator);
+                    ///wsCollabDao.deleteWorkspaceCollaboratorDTO(collaborator);
                 } else {
                     existingRoles.add(wsCollabRole);
                 }
@@ -158,7 +158,7 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
         WorkspaceCollaboratorDTO workspaceCollaborator = new WorkspaceCollaboratorDTO();
         WorkspaceCollaboratorDTOPK collaboratorPK = new WorkspaceCollaboratorDTOPK(wsDTO.getWorkspaceid(), collaborator, role);
         workspaceCollaborator.setWorkspaceDTO(wsDTO);
-        workspaceCollaborator.setWorkspaceCollaboratorDTOPK(collaboratorPK);
+        workspaceCollaborator.setCollaboratorDTOPK(collaboratorPK);
         workspaceCollaborator.setQuadrigaUserDTO(workspaceDao.getUserDTO(collaborator));
         workspaceCollaborator.setCreatedby(userName);
         workspaceCollaborator.setCreateddate(new Date());
