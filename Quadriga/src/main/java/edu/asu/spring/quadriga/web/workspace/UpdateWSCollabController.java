@@ -202,7 +202,7 @@ public class UpdateWSCollabController
 				collabRoles = collabRoles.substring(1);
 				
 				//call the database to modify the record
-				wsModifyCollabManager.updateWorkspaceCollaborator(workspaceid, collabUser, collabRoles, userName);
+				wsModifyCollabManager.updateCollaborators(workspaceid, collabUser, collabRoles, userName);
 				
 				model.getModelMap().put("success", 1);
 			}

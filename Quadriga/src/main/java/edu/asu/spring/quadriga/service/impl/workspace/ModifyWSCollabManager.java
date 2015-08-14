@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -10,16 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dao.impl.workspace.WorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 
 @Service
-public class ModifyWSCollabManager implements IModifyWSCollabManager 
+public class ModifyWSCollabManager extends CollaboratorManager<WorkspaceCollaboratorDTO, WorkspaceCollaboratorDTOPK, WorkspaceDTO, WorkspaceDAO> implements IModifyWSCollabManager 
 {
 	
 	@Autowired
@@ -94,51 +96,6 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
         workspaceDao.updateDTO(wsDTO);
 	}
 	
-	@Override
-	@Transactional
-	public void updateWorkspaceCollaborator(String workspaceId,String collabUser,String collaboratorRole,String userName) throws QuadrigaStorageException
-	{
-	    WorkspaceDTO workspace = workspaceDao.getWorkspaceDTO(workspaceId);
-        if (workspace == null)
-            return;
-        
-        List<WorkspaceCollaboratorDTO> collaboratorDtoList = workspace.getWorkspaceCollaboratorDTOList();
-        List<String> collaboratorRoles = Arrays.asList(collaboratorRole.split(","));
-        List<String> existingRoles = new ArrayList<String>();
-        
-        //delete all the roles associated with the user
-        Iterator<WorkspaceCollaboratorDTO> iterator = collaboratorDtoList.iterator();
-        while(iterator.hasNext())
-        {
-            WorkspaceCollaboratorDTO collaborator = iterator.next();
-            WorkspaceCollaboratorDTOPK collaboratorPK = collaborator.getCollaboratorDTOPK();
-            
-            String wsCollaborator = collaborator.getQuadrigaUserDTO().getUsername();
-            String wsCollabRole = collaboratorPK.getCollaboratorrole();
-            if(wsCollaborator.equals(collabUser)) {
-                if(!collaboratorRoles.contains(wsCollabRole)) {
-                    iterator.remove();
-                    ///wsCollabDao.deleteWorkspaceCollaboratorDTO(collaborator);
-                } else {
-                    existingRoles.add(wsCollabRole);
-                }
-            }
-        }
-
-        //add the user with new roles
-        //create a collaboratorDTO with the given details
-        for(String value : collaboratorRoles)
-        {
-            if(!existingRoles.contains(value)) {
-                WorkspaceCollaboratorDTO collaborator = createWorkspaceCollaborator(
-                        collabUser, userName, workspace, value);
-                collaboratorDtoList.add(collaborator);
-            }
-        }
-        
-        workspaceDao.updateDTO(workspace);
-	}
-	
 	/*
 	 * Private Methods
 	 */
@@ -165,5 +122,21 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
         workspaceCollaborator.setUpdatedby(userName);
         workspaceCollaborator.setUpdateddate(new Date());
         return workspaceCollaborator;
+    }
+
+    @Override
+    public WorkspaceCollaboratorDTO createNewDTO() {
+        return new WorkspaceCollaboratorDTO();
+    }
+
+    @Override
+    public WorkspaceCollaboratorDTOPK createNewDTOPK(String id,
+            String collabUser, String role) {
+       return new WorkspaceCollaboratorDTOPK();
+    }
+
+    @Override
+    public IBaseDAO<WorkspaceDTO> getDao() {
+        return workspaceDao; 
     }
 }
