@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "WorkspaceDTO.findByIsarchived", query = "SELECT w FROM WorkspaceDTO w WHERE w.isarchived = :isarchived"),
     @NamedQuery(name = "WorkspaceDTO.findByIsdeactivated", query = "SELECT w FROM WorkspaceDTO w WHERE w.isdeactivated = :isdeactivated"),
     })
-public class WorkspaceDTO implements Serializable {
+public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, WorkspaceCollaboratorDTO> implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "workspacename")
@@ -283,5 +283,15 @@ public class WorkspaceDTO implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<WorkspaceCollaboratorDTO> getCollaboratorList() {
+        return workspaceCollaboratorDTOList;
+    }
+
+    @Override
+    public void setCollaboratorList(List<WorkspaceCollaboratorDTO> list) {
+        workspaceCollaboratorDTOList = list;
     }
 }

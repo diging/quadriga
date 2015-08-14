@@ -32,7 +32,7 @@ import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
 @Repository
-public class DictionaryManagerDAO extends BaseDAO implements IDBConnectionDictionaryManager
+public class DictionaryManagerDAO extends BaseDAO<DictionaryDTO> implements IDBConnectionDictionaryManager
 {
 
 	@Autowired
@@ -637,6 +637,11 @@ public class DictionaryManagerDAO extends BaseDAO implements IDBConnectionDictio
 		}
 		return collaborators;
 	}
+
+    @Override
+    public DictionaryDTO getDTO(String id) {
+        return getDTO(DictionaryDTO.class, id);
+    }
 
 	
 }

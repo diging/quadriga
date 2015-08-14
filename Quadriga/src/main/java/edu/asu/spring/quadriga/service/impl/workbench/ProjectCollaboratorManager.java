@@ -1,15 +1,13 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dao.impl.workbench.ProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -20,16 +18,16 @@ import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
+import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 
 //show collaborators for a project
 //show non collaborators for a project
 @Service
-public class ProjectCollaboratorManager implements IProjectCollaboratorManager 
+public class ProjectCollaboratorManager extends CollaboratorManager<ProjectCollaboratorDTO, ProjectCollaboratorDTOPK, ProjectDTO, ProjectDAO> implements IProjectCollaboratorManager 
 {
 
 	@Autowired
@@ -121,73 +119,19 @@ public class ProjectCollaboratorManager implements IProjectCollaboratorManager
         projectCollabDAO.deleteColloratorRequest(userName, projectid);
     }
     
-    /**
-     * This method updates the roles associated with the collaborator.
-     * @param projectid - project id
-     * @param collabUser - collaborator user name
-     * @param collaboratorRole - roles associated with the collaborator.
-     * @param userName - logged in user
-     * @throws QuadrigaStorageException
-     */
+
     @Override
-    @Transactional
-    public void updateCollaboratorRequest(String projectid,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
-    {
-//        ProjectDTO project = projectDao.getProjectDTO(projectid);
-//        if(project == null) {
-//            return;
-//        }
-//        
-//        List<ProjectCollaboratorDTO> collaboratorList = project.getProjectCollaboratorDTOList();
-//        List<String> newCollaboratorRoles = Arrays.asList(collaboratorRole.split(","));
-//        List<String> existingRoles = new ArrayList<String>();
-//        
-//        //remove the user roles which are not associated with the input selection
-//        Iterator<ProjectCollaboratorDTO> iterator = collaboratorList.iterator();
-//        while(iterator.hasNext()) {
-//            ProjectCollaboratorDTO projectCollaborator = iterator.next();
-//            ProjectCollaboratorDTOPK collaboratorKey = projectCollaborator.getCollaboratorDTOPK();
-//            String collaborator = projectCollaborator.getQuadrigaUserDTO().getUsername();
-//            String collabRole = collaboratorKey.getCollaboratorrole();
-//            if(collaborator.equals(collabUser)) {
-//                if(!newCollaboratorRoles.contains(collabRole)) {
-//                    iterator.remove();
-//                } else {
-//                    existingRoles.add(collabRole);
-//                }
-//            }
-//        }
-//        
-//        //add the new roles to the collaborator
-//        QuadrigaUserDTO user = projectDao.getUserDTO(collabUser);
-//        
-//        for(String role : newCollaboratorRoles) {
-//            if(!existingRoles.contains(role)) {
-//                Date date = new Date();
-//                ProjectCollaboratorDTO projectCollaborator = new ProjectCollaboratorDTO();
-//                ProjectCollaboratorDTOPK collaboratorKey = new ProjectCollaboratorDTOPK(projectid,collabUser,role);
-//                projectCollaborator.setProjectDTO(project);
-//                projectCollaborator.setProjectCollaboratorDTOPK(collaboratorKey);
-//                projectCollaborator.setQuadrigaUserDTO(user);
-//                projectCollaborator.setCreatedby(username);
-//                projectCollaborator.setCreateddate(date);
-//                projectCollaborator.setUpdatedby(username);
-//                projectCollaborator.setUpdateddate(date);
-//                collaboratorList.add(projectCollaborator);
-//            }
-//        }
-//        
-//        project.setProjectCollaboratorDTOList(collaboratorList);
-//        try {
-//            sessionFactory.getCurrentSession().update(project);
-//        }
-//        catch(Exception ex)
-//        {
-//            logger.error("Error while updating project collaborators",ex);
-//            throw new QuadrigaStorageException();
-//        }
-        
-        //
-        projectCollabDAO.updateCollaboratorRequest(projectid, collabUser, collaboratorRole, username);
+    public ProjectCollaboratorDTO createNewDTO() {
+        return new ProjectCollaboratorDTO();
+    }
+
+    @Override
+    public ProjectCollaboratorDTOPK createNewDTOPK(String id, String collabUser, String role) {
+        return new ProjectCollaboratorDTOPK(id, collabUser, role);
+    }
+
+    @Override
+    public IBaseDAO<ProjectDTO> getDao() {
+        return projectDao;
     }
 }

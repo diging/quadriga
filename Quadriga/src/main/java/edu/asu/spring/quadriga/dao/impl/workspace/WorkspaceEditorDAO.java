@@ -19,4 +19,9 @@ public class WorkspaceEditorDAO extends BaseDAO<WorkspaceEditorDTO> implements I
     public void deleteWorkspaceEditorDTO(WorkspaceEditorDTO wsEdDTO) {
         deleteDTO(wsEdDTO);
     }
+
+    @Override
+    public WorkspaceEditorDTO getDTO(String id) {
+        return getDTO(WorkspaceEditorDTO.class, id);
+    }
 }

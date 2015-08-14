@@ -14,4 +14,9 @@ public class ProjectEditorDAO extends BaseDAO<ProjectEditorDTO> implements IProj
     public ProjectEditorDTO getProjectEditorDTO(ProjectEditorDTOPK primaryKey) {
         return getDTO(ProjectEditorDTO.class, primaryKey);
     }
+
+    @Override
+    public ProjectEditorDTO getDTO(String id) {
+       return getDTO(ProjectEditorDTO.class, id);
+    }
 }

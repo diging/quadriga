@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DspaceDTOMapper;
 
 @Repository
-public class DspaceDAO extends BaseDAO implements IDspaceDAO {
+public class DspaceDAO extends BaseDAO<DspaceKeysDTO> implements IDspaceDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -190,5 +190,10 @@ public class DspaceDAO extends BaseDAO implements IDspaceDAO {
             throw new QuadrigaStorageException(e);
         }
         return SUCCESS;
+    }
+
+    @Override
+    public DspaceKeysDTO getDTO(String id) {
+        return getDTO(DspaceKeysDTO.class, id);
     }
 }

@@ -203,4 +203,9 @@ public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implemen
 		return projects;
 	}
 
+    @Override
+    public ProjectDictionaryDTO getDTO(String id) {
+        return getDTO(ProjectDictionaryDTO.class, id);
+    }
+
 }

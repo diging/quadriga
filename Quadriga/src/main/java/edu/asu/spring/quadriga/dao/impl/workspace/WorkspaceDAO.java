@@ -208,4 +208,9 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceDAO
         //set the workspace network mapping to null in workspace object
         wsDTO.setWorkspaceNetworkDTOList(null);
     }
+
+    @Override
+    public WorkspaceDTO getDTO(String id) {
+       return getDTO(WorkspaceDTO.class, id);
+    }
 }

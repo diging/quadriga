@@ -72,6 +72,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -98,7 +99,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  */
 
 @Service
-public class NetworkManager extends BaseDAO implements INetworkManager {
+public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkManager {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkManager.class);
@@ -1627,5 +1628,10 @@ public class NetworkManager extends BaseDAO implements INetworkManager {
 
 		return sourceReferenceUrl;
 	}
+
+    @Override
+    public NetworksDTO getDTO(String id) {
+        return getDTO(NetworksDTO.class, id);
+    }
 
 }

@@ -19,7 +19,7 @@ import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
 
 @Repository
-public class RetrieveDictionaryManagerDAO extends BaseDAO implements IDBConnectionRetrieveDictionaryManager
+public class RetrieveDictionaryManagerDAO extends BaseDAO<DictionaryDTO> implements IDBConnectionRetrieveDictionaryManager
 {
 
 	@Autowired
@@ -97,7 +97,9 @@ public class RetrieveDictionaryManagerDAO extends BaseDAO implements IDBConnecti
 		return dictionaryDTO;
 	}
 
-	
-	
+	@Override
+    public DictionaryDTO getDTO(String id) {
+        return getDTO(DictionaryDTO.class, id);
+    }
 	
 }

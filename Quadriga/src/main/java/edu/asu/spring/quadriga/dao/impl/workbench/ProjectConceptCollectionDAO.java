@@ -176,4 +176,9 @@ public class ProjectConceptCollectionDAO extends BaseDAO<ProjectConceptCollectio
 		}
 	}
 
+    @Override
+    public ProjectConceptCollectionDTO getDTO(String id) {
+        return getDTO(ProjectConceptCollectionDTO.class, id);
+    }
+
 }

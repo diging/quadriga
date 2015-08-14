@@ -420,4 +420,9 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO
 			throw new QuadrigaStorageException();
 		}
 	}
+
+    @Override
+    public QuadrigaUserDTO getDTO(String id) {
+       return getDTO(QuadrigaUserDTO.class, id);
+    }
 }

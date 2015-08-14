@@ -9,4 +9,9 @@ import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 @Service
 public class ProjectWorkspaceDAO extends BaseDAO<ProjectWorkspaceDTO> implements IProjectWorkspaceDAO {
 
+    @Override
+    public ProjectWorkspaceDTO getDTO(String id) {
+        return getDTO(ProjectWorkspaceDTO.class, id);
+    }
+
 }

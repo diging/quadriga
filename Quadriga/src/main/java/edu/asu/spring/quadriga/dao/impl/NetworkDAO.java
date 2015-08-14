@@ -53,7 +53,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  * 
  */
 @Repository
-public class NetworkDAO extends BaseDAO implements INetworkDAO, IEditorDAO {
+public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEditorDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -1100,5 +1100,12 @@ public class NetworkDAO extends BaseDAO implements INetworkDAO, IEditorDAO {
 		networkEdgeAnnotationsDTO.setAnnotationEdges(networkAnnotationsDTO);
 		return networkEdgeAnnotationsDTO;
 	}
+
+
+
+    @Override
+    public NetworksDTO getDTO(String id) {
+        return getDTO(NetworksDTO.class, id);
+    }
 
 }

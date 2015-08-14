@@ -47,7 +47,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
  *
  */
 @Repository
-public class CCManagerDAO extends BaseDAO implements IDBConnectionCCManager {
+public class CCManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBConnectionCCManager {
 
 	@Autowired
 	protected SessionFactory sessionFactory;
@@ -714,5 +714,10 @@ public class CCManagerDAO extends BaseDAO implements IDBConnectionCCManager {
 		}
 		return ccDTO;
 	}
+
+    @Override
+    public ConceptCollectionDTO getDTO(String id) {
+        return getDTO(ConceptCollectionDTO.class, id);
+    }
 
 }

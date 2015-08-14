@@ -12,7 +12,7 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectAccessManager;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 
 @Repository
-public class ProjectAccessManagerDAO extends BaseDAO implements  IProjectAccessManager 
+public class ProjectAccessManagerDAO extends BaseDAO<ProjectDTO> implements  IProjectAccessManager 
 {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -96,5 +96,10 @@ public class ProjectAccessManagerDAO extends BaseDAO implements  IProjectAccessM
 		
 		return ((Number) query.uniqueResult()).intValue();
 	}
+
+    @Override
+    public ProjectDTO getDTO(String id) {
+        return getDTO(ProjectDTO.class, id);
+    }
 
 }

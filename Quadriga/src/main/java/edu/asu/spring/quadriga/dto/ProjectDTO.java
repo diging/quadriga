@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProjectDTO.findByAccessibility", query = "SELECT p FROM ProjectDTO p WHERE p.accessibility = :accessibility"),
     })
 
-public class ProjectDTO implements Serializable 
+public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, ProjectCollaboratorDTO> implements Serializable 
 {
     private static final long serialVersionUID = 1L;
     
@@ -242,5 +242,15 @@ public class ProjectDTO implements Serializable
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<ProjectCollaboratorDTO> getCollaboratorList() {
+        return projectCollaboratorDTOList;
+    }
+
+    @Override
+    public void setCollaboratorList(List<ProjectCollaboratorDTO> list) {
+        projectCollaboratorDTOList = list;
     }
 }

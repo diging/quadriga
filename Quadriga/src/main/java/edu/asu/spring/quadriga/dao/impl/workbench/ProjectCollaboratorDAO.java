@@ -227,4 +227,9 @@ public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> impl
         return user;
     }
 
+    @Override
+    public ProjectCollaboratorDTO getDTO(String id) {
+        return getDTO(ProjectCollaboratorDTO.class, id);
+    }
+
 }

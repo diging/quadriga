@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
-public class WorkspaceAccessManagerDAO extends BaseDAO implements IDBConnectionWSAccessManager
+public class WorkspaceAccessManagerDAO extends BaseDAO<WorkspaceDTO> implements IDBConnectionWSAccessManager
 {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -209,5 +209,10 @@ public class WorkspaceAccessManagerDAO extends BaseDAO implements IDBConnectionW
 		}
 		return isAssociated;
 	}
+
+    @Override
+    public WorkspaceDTO getDTO(String id) {
+        return getDTO(WorkspaceDTO.class, id);
+    }
 
 }

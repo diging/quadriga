@@ -16,4 +16,9 @@ public class WorkspaceCollaboratorDAO extends BaseDAO<WorkspaceCollaboratorDTO> 
     public void deleteWorkspaceCollaboratorDTO(WorkspaceCollaboratorDTO wsCollabDto) {
         deleteDTO(wsCollabDto);
     }
+
+    @Override
+    public WorkspaceCollaboratorDTO getDTO(String id) {
+        return getDTO(WorkspaceCollaboratorDTO.class, id);
+    }
 }

@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ProjectCollaboratorDTO.findByCollaboratoruser", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.collaboratorDTOPK.collaboratoruser = :collaboratoruser"),
     @NamedQuery(name = "ProjectCollaboratorDTO.findByCollaboratorrole", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.collaboratorDTOPK.collaboratorrole = :collaboratorrole"),
     })
-public class ProjectCollaboratorDTO extends CollaboratorDTO<ProjectCollaboratorDTOPK> {
+public class ProjectCollaboratorDTO extends CollaboratorDTO<ProjectCollaboratorDTOPK, ProjectCollaboratorDTO> {
     private static final long serialVersionUID = 1L;
     
     @JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
@@ -79,5 +79,12 @@ public class ProjectCollaboratorDTO extends CollaboratorDTO<ProjectCollaboratorD
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void setRelatedDTO(
+            CollaboratingDTO<ProjectCollaboratorDTOPK, ProjectCollaboratorDTO> relatedDto) {
+        projectDTO = (ProjectDTO) relatedDto;
+        
     }
 }

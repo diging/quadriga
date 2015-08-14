@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Repository
-public class RetrieveWSCollabManagerDAO extends BaseDAO implements IDBConnectionRetrieveWSCollabManager {
+public class RetrieveWSCollabManagerDAO extends BaseDAO<WorkspaceCollaboratorDTO> implements IDBConnectionRetrieveWSCollabManager {
 
 	@Autowired
 	SessionFactory sessionFactory;
@@ -137,4 +137,9 @@ public class RetrieveWSCollabManagerDAO extends BaseDAO implements IDBConnection
 		}
 		return collaboratorRole;
 	}
+
+    @Override
+    public WorkspaceCollaboratorDTO getDTO(String id) {
+        return getDTO(WorkspaceCollaboratorDTO.class, id);
+    }
 }

@@ -93,4 +93,6 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>  {
             return null;
         }
     }
+	
+	public abstract T getDTO(String id);
 }

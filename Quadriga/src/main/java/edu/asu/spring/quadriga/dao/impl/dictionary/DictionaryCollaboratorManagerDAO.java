@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryCollaboratorDTOMapper;
 
 @Repository
-public class DictionaryCollaboratorManagerDAO extends BaseDAO implements IDBConnectionDictionaryCollaboratorManager
+public class DictionaryCollaboratorManagerDAO extends BaseDAO<DictionaryCollaboratorDTO> implements IDBConnectionDictionaryCollaboratorManager
 {
 	@Autowired
 	private DictionaryCollaboratorDTOMapper collaboratorMapper;
@@ -106,5 +106,10 @@ public class DictionaryCollaboratorManagerDAO extends BaseDAO implements IDBConn
 			throw new QuadrigaStorageException();
 		}
 	}
+
+    @Override
+    public DictionaryCollaboratorDTO getDTO(String id) {
+        return getDTO(DictionaryCollaboratorDTO.class, id);
+    }
 	
 }

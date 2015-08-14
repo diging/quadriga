@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
 
 @Repository
-public class WorkspaceDictionaryDAO extends BaseDAO implements IDBConnectionWorkspaceDictionary 
+public class WorkspaceDictionaryDAO extends BaseDAO<WorkspaceDictionaryDTO> implements IDBConnectionWorkspaceDictionary 
 {
 	
 	@Autowired
@@ -250,5 +250,10 @@ public class WorkspaceDictionaryDAO extends BaseDAO implements IDBConnectionWork
 		
 		return workspaces;
 	}
+
+    @Override
+    public WorkspaceDictionaryDTO getDTO(String id) {
+        return getDTO(WorkspaceDictionaryDTO.class, id);
+    }
 
 }

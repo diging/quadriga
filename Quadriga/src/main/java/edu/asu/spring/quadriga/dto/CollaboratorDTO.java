@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @MappedSuperclass
-public abstract class CollaboratorDTO<T> implements Serializable {
+public abstract class CollaboratorDTO<T extends CollaboratorDTOPK, V extends CollaboratorDTO<T, V>> implements Serializable {
 
     /**
      * 
@@ -92,4 +92,6 @@ public abstract class CollaboratorDTO<T> implements Serializable {
     public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
         this.quadrigaUserDTO = quadrigaUserDTO;
     }
+    
+    public abstract void setRelatedDTO(CollaboratingDTO<T, V> relatedDto);
 }

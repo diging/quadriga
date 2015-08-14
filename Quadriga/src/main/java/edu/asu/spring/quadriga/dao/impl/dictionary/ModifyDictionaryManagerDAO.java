@@ -19,7 +19,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryCollaboratorDTOMapper;
 
 @Repository
-public class ModifyDictionaryManagerDAO extends BaseDAO implements IDBConnectionModifyDictionaryManager
+public class ModifyDictionaryManagerDAO extends BaseDAO<DictionaryDTO> implements IDBConnectionModifyDictionaryManager
 {
 
 	@Autowired
@@ -94,5 +94,10 @@ public class ModifyDictionaryManagerDAO extends BaseDAO implements IDBConnection
 		}
 		
 	}
+
+    @Override
+    public DictionaryDTO getDTO(String id) {
+        return getDTO(DictionaryDTO.class, id);
+    }
 
 }

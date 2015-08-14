@@ -13,5 +13,10 @@ public class ProjectDAO extends BaseDAO<ProjectDTO> implements IProjectDAO {
     public ProjectDTO getProjectDTO(String id) {
        return getDTO(ProjectDTO.class, id);
     }
+
+    @Override
+    public ProjectDTO getDTO(String id) {
+        return getProjectDTO(id);
+    }
     
 }

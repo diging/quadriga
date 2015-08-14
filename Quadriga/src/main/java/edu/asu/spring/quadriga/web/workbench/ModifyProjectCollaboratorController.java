@@ -175,7 +175,7 @@ public class ModifyProjectCollaboratorController
 						collabRoles.append(role.getDBid());
 					}
 					
-					projectCollaboratorManager.updateCollaboratorRequest(projectid, collabUser, collabRoles.toString().substring(1), userName);
+					projectCollaboratorManager.updateCollaborators(projectid, collabUser, collabRoles.toString().substring(1), userName);
 					
 					model.getModelMap().put("success", 1);
 				}

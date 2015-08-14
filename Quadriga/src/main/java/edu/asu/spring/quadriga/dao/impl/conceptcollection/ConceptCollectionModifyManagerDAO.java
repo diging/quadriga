@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
-public class ConceptCollectionModifyManagerDAO extends BaseDAO implements IDBConnectionModifyCCManager
+public class ConceptCollectionModifyManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBConnectionModifyCCManager
 {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -108,5 +108,10 @@ public class ConceptCollectionModifyManagerDAO extends BaseDAO implements IDBCon
 		}
 		
 	}
+
+    @Override
+    public ConceptCollectionDTO getDTO(String id) {
+        return getDTO(ConceptCollectionDTO.class, id);
+    }
 
 }

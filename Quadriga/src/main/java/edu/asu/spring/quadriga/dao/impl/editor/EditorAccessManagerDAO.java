@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl.editor;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +103,10 @@ public class EditorAccessManagerDAO extends BaseDAO implements IDBConnectionEdit
 		
 		return isEditor;
 	}
+
+    @Override
+    public Object getDTO(String id) {
+        throw new NotImplementedException();
+    }
 
 }

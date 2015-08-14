@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
  *
  */
 @Repository
-public class ProfileManagerDAO extends BaseDAO implements
+public class ProfileManagerDAO extends BaseDAO<QuadrigaUserprofileDTO> implements
         IDBConnectionProfileManager {
     @Autowired
     private SessionFactory sessionFactory;
@@ -172,6 +172,11 @@ public class ProfileManagerDAO extends BaseDAO implements
             throw new QuadrigaStorageException("sorry");
         }
         return serviceid;
+    }
+
+    @Override
+    public QuadrigaUserprofileDTO getDTO(String id) {
+        return getDTO(QuadrigaUserprofileDTO.class, id);
     }
 
 }

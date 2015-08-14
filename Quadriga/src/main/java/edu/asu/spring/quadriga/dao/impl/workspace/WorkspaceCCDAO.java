@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceCC;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
@@ -23,7 +24,7 @@ import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
 
 @Repository
-public class WorkspaceCCDAO extends BaseDAO implements IDBConnectionWorkspaceCC {
+public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> implements IDBConnectionWorkspaceCC {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -274,6 +275,11 @@ public class WorkspaceCCDAO extends BaseDAO implements IDBConnectionWorkspaceCC 
 			throw new QuadrigaStorageException();
 		}
 	}
+
+    @Override
+    public WorkspaceConceptcollectionDTO getDTO(String id) {
+        return getDTO(WorkspaceConceptcollectionDTO.class, id);
+    }
 	
 	
 }

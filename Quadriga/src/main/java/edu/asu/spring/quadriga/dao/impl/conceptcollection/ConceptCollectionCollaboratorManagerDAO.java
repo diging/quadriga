@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionCollaboratorDTOMapper;
 
 @Repository
-public class ConceptCollectionCollaboratorManagerDAO extends BaseDAO implements IDBConnectionCCCollaboratorManager
+public class ConceptCollectionCollaboratorManagerDAO extends BaseDAO<ConceptCollectionCollaboratorDTO> implements IDBConnectionCCCollaboratorManager
 {
 
 	@Autowired
@@ -197,5 +197,10 @@ public class ConceptCollectionCollaboratorManagerDAO extends BaseDAO implements 
 		}
 		
 	}
+
+    @Override
+    public ConceptCollectionCollaboratorDTO getDTO(String id) {
+        return getDTO(ConceptCollectionCollaboratorDTO.class, id);
+    }
 
 }

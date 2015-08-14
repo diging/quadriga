@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Repository
-public class ListWSManagerDAO extends BaseDAO implements IDBConnectionListWSManager {
+public class ListWSManagerDAO extends BaseDAO<WorkspaceDTO> implements IDBConnectionListWSManager {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -638,6 +638,12 @@ public class ListWSManagerDAO extends BaseDAO implements IDBConnectionListWSMana
 		}
 		return networkList;
 	}
+
+
+    @Override
+    public WorkspaceDTO getDTO(String id) {
+        return getDTO(WorkspaceDTO.class, id);
+    }
 	
 	
 	

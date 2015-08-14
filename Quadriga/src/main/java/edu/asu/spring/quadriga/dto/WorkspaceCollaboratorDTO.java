@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WorkspaceCollaboratorDTO.findByUsername", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.collaboratorDTOPK.collaboratoruser = :collaboratoruser"),
     @NamedQuery(name = "WorkspaceCollaboratorDTO.findByCollaboratorrole", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.collaboratorDTOPK.collaboratorrole = :collaboratorrole"),
     })
-public class WorkspaceCollaboratorDTO extends CollaboratorDTO<WorkspaceCollaboratorDTOPK> {
+public class WorkspaceCollaboratorDTO extends CollaboratorDTO<WorkspaceCollaboratorDTOPK, WorkspaceCollaboratorDTO> {
     
     private static final long serialVersionUID = 1L;
     @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
@@ -91,5 +91,11 @@ public class WorkspaceCollaboratorDTO extends CollaboratorDTO<WorkspaceCollabora
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void setRelatedDTO(
+            CollaboratingDTO<WorkspaceCollaboratorDTOPK, WorkspaceCollaboratorDTO> relatedDto) {
+        workspaceDTO = (WorkspaceDTO) relatedDto;
     }
 }
