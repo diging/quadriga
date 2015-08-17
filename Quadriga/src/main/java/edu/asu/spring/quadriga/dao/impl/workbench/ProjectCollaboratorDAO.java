@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl.workbench;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -21,7 +20,6 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -103,74 +101,6 @@ public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> impl
 		catch(Exception ex)
 		{
 			logger.error("Error in deleting project collaborators",ex);
-			throw new QuadrigaStorageException();
-		}
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void updateCollaboratorRequest(String projectid,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException 
-	{
-		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
-	    if(project == null) {
-            throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
-        }
-	    
-	    List<ProjectCollaboratorDTO> collaboratorList = project.getProjectCollaboratorDTOList();
-	    List<String> newCollaboratorRoles = getList(collaboratorRole);
-	    List<String> existingRoles = new ArrayList<String>();
-		
-		//remove the user roles which are not associated with the input selection
-		Iterator<ProjectCollaboratorDTO> iterator = collaboratorList.iterator();
-		while(iterator.hasNext())
-		{
-		    ProjectCollaboratorDTO projectCollaborator = iterator.next();
-		    ProjectCollaboratorDTOPK collaboratorKey = projectCollaborator.getCollaboratorDTOPK();
-		    String collaborator = projectCollaborator.getQuadrigaUserDTO().getUsername();
-		    String collabRole = collaboratorKey.getCollaboratorrole();
-			if(collaborator.equals(collabUser))
-			{
-				if(!newCollaboratorRoles.contains(collabRole))
-				{
-					iterator.remove();
-				}
-				else
-				{
-					existingRoles.add(collabRole);
-				}
-			}
-		}
-		
-		//add the new roles to the collaborator
-		QuadrigaUserDTO user = getUserDTO(collabUser);
-		
-		for(String role : newCollaboratorRoles)
-		{
-			if(!existingRoles.contains(role))
-			{
-				Date date = new Date();
-				ProjectCollaboratorDTO projectCollaborator = new ProjectCollaboratorDTO();
-				ProjectCollaboratorDTOPK collaboratorKey = new ProjectCollaboratorDTOPK(projectid,collabUser,role);
-				projectCollaborator.setProjectDTO(project);
-				projectCollaborator.setCollaboratorDTOPK(collaboratorKey);
-				projectCollaborator.setQuadrigaUserDTO(user);
-				projectCollaborator.setCreatedby(username);
-				projectCollaborator.setCreateddate(date);
-				projectCollaborator.setUpdatedby(username);
-				projectCollaborator.setUpdateddate(date);
-				collaboratorList.add(projectCollaborator);
-			}
-		}
-		
-		project.setProjectCollaboratorDTOList(collaboratorList);
-		try {
-			sessionFactory.getCurrentSession().update(project);
-		}
-		catch(Exception ex)
-		{
-			logger.error("Error while updating project collaborators",ex);
 			throw new QuadrigaStorageException();
 		}
 	}

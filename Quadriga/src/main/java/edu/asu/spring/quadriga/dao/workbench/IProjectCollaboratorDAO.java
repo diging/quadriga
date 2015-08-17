@@ -29,16 +29,6 @@ public interface IProjectCollaboratorDAO extends IBaseDAO<ProjectCollaboratorDTO
 	 */
 	public abstract void deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException;
 
-	/**
-	 * This method updates the roles of collaborator for a project
-	 * @param projectid
-	 * @param collabUser
-	 * @param collaboratorRole
-	 * @param username
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract void updateCollaboratorRequest(String projectid, String collabUser,
-			String collaboratorRole, String username) throws QuadrigaStorageException;
 
 	/**
      * Retrieves all the user who are not associated with the project as collaborators.
