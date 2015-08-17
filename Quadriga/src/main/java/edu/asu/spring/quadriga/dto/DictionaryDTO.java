@@ -4,9 +4,9 @@
  */
 package edu.asu.spring.quadriga.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "DictionaryDTO.findById", query = "SELECT d FROM DictionaryDTO d WHERE d.dictionaryid = :dictionaryid"),
     @NamedQuery(name = "DictionaryDTO.findByAccessibility", query = "SELECT d FROM DictionaryDTO d WHERE d.accessibility = :accessibility"),
     })
-public class DictionaryDTO implements Serializable {
+public class DictionaryDTO extends CollaboratingDTO<DictionaryCollaboratorDTOPK, DictionaryCollaboratorDTO> {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "dictionaryname")
@@ -219,5 +219,15 @@ public class DictionaryDTO implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<DictionaryCollaboratorDTO> getCollaboratorList() {
+        return dictionaryCollaboratorDTOList;
+    }
+
+    @Override
+    public void setCollaboratorList(List<DictionaryCollaboratorDTO> list) {
+        dictionaryCollaboratorDTOList = list;
     }
 }

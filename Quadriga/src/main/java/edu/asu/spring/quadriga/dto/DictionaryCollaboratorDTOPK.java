@@ -4,7 +4,6 @@
  */
 package edu.asu.spring.quadriga.dto;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -15,19 +14,13 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class DictionaryCollaboratorDTOPK implements Serializable 
-{
+public class DictionaryCollaboratorDTOPK extends CollaboratorDTOPK {
 	private static final long serialVersionUID = 1L;
 	
     @Basic(optional = false)
     @Column(name = "dictionaryid")
     private String dictionaryid;
-	@Basic(optional = false)
-    @Column(name = "collaboratoruser")
-    private String collaboratoruser;
-    @Basic(optional = false)
-    @Column(name = "collaboratorrole")
-    private String collaboratorrole;
+	
 
     public DictionaryCollaboratorDTOPK() {
     }
@@ -46,21 +39,6 @@ public class DictionaryCollaboratorDTOPK implements Serializable
 		this.dictionaryid = dictionaryid;
 	}
 	
-    public String getCollaboratoruser() {
-        return collaboratoruser;
-    }
-
-    public void setCollaboratoruser(String collaboratoruser) {
-        this.collaboratoruser = collaboratoruser;
-    }
-
-    public String getCollaboratorrole() {
-        return collaboratorrole;
-    }
-
-    public void setCollaboratorrole(String collaboratorrole) {
-        this.collaboratorrole = collaboratorrole;
-    }
 
     @Override
     public int hashCode() {

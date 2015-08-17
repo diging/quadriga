@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.dao.dictionary;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
@@ -16,7 +17,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * 
  */
 
-public interface IDBConnectionDictionaryManager {
+public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 
 
 	/**

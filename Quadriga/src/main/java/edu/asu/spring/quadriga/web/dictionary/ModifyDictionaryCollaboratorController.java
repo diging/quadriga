@@ -187,7 +187,7 @@ public class ModifyDictionaryCollaboratorController
 						collabRoles.append(role.getDBid());
 					}
 					
-					dictionaryManager.updateCollaboratorRoles(dictionaryid, collabUser, collabRoles.toString().substring(1), userName);
+					dictionaryManager.updateCollaborators(dictionaryid, collabUser, collabRoles.toString().substring(1), userName);
 					
 					model.getModelMap().put("success", 1);
 				}

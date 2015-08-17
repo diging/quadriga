@@ -30,9 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ConceptCollectionCollaboratorDTO extends CollaboratorDTO<ConceptCollectionCollaboratorDTOPK, ConceptCollectionCollaboratorDTO> {
     private static final long serialVersionUID = 1L;
     
-//    @EmbeddedId
-//    protected ConceptCollectionCollaboratorDTOPK conceptCollectionCollaboratorDTOPK;
-    
     @JoinColumn(name = "conceptcollectionid", referencedColumnName = "conceptcollectionid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private ConceptCollectionDTO conceptCollectionDTO;

@@ -158,20 +158,22 @@ public class DictionaryCollaboratorController {
 
 		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionaryId);
 		//remove the restricted user
-		Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
-		while(userIterator.hasNext())
-		{
-			//fetch the quadriga roles and eliminate the restricted user
-			IUser user = userIterator.next();
-			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
-			for(IQuadrigaRole role : userQuadrigaRole)
-			{
-				if( (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) || (user.getUserName().equals(principal.getName())) )
-				{
-					userIterator.remove();
-					break;
-				}
-			}	
+		if (nonCollaboratingUsers != null) {
+		    Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
+    		while(userIterator.hasNext())
+    		{
+    			//fetch the quadriga roles and eliminate the restricted user
+    			IUser user = userIterator.next();
+    			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+    			for(IQuadrigaRole role : userQuadrigaRole)
+    			{
+    				if( (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) || (user.getUserName().equals(principal.getName())) )
+    				{
+    					userIterator.remove();
+    					break;
+    				}
+    			}	
+    		}
 		}
 		modelAndView.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
 

@@ -4,19 +4,14 @@
  */
 package edu.asu.spring.quadriga.dto;
 
-import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,31 +24,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DictionaryCollaboratorDTO.findAll", query = "SELECT d FROM DictionaryCollaboratorDTO d"),
-    @NamedQuery(name = "DictionaryCollaboratorDTO.findById", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.dictionaryCollaboratorDTOPK.dictionaryid = :dictionaryid"),
-    @NamedQuery(name = "DictionaryCollaboratorDTO.findByCollaboratoruser", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.dictionaryCollaboratorDTOPK.collaboratoruser = :collaboratoruser"),
-    @NamedQuery(name = "DictionaryCollaboratorDTO.findByCollaboratorrole", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.dictionaryCollaboratorDTOPK.collaboratorrole = :collaboratorrole"),
+    @NamedQuery(name = "DictionaryCollaboratorDTO.findById", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.collaboratorDTOPK.dictionaryid = :dictionaryid"),
+    @NamedQuery(name = "DictionaryCollaboratorDTO.findByCollaboratoruser", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.collaboratorDTOPK.collaboratoruser = :collaboratoruser"),
+    @NamedQuery(name = "DictionaryCollaboratorDTO.findByCollaboratorrole", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.collaboratorDTOPK.collaboratorrole = :collaboratorrole"),
     })
-public class DictionaryCollaboratorDTO implements Serializable {
+public class DictionaryCollaboratorDTO extends CollaboratorDTO<DictionaryCollaboratorDTOPK, DictionaryCollaboratorDTO> {
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected DictionaryCollaboratorDTOPK dictionaryCollaboratorDTOPK;
-    @Basic(optional = false)
-    @Column(name = "updatedby")
-    private String updatedby;
-    @Basic(optional = false)
-    @Column(name = "updateddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateddate;
-    @Basic(optional = false)
-    @Column(name = "createdby")
-    private String createdby;
-    @Basic(optional = false)
-    @Column(name = "createddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
-    @JoinColumn(name = "collaboratoruser", referencedColumnName = "username", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private QuadrigaUserDTO quadrigaUserDTO;
+    
     @JoinColumn(name = "dictionaryid", referencedColumnName = "dictionaryid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private DictionaryDTO dictionaryDTO;
@@ -62,11 +39,11 @@ public class DictionaryCollaboratorDTO implements Serializable {
     }
 
     public DictionaryCollaboratorDTO(DictionaryCollaboratorDTOPK dictionaryCollaboratorDTOPK) {
-        this.dictionaryCollaboratorDTOPK = dictionaryCollaboratorDTOPK;
+        this.collaboratorDTOPK = dictionaryCollaboratorDTOPK;
     }
 
     public DictionaryCollaboratorDTO(DictionaryCollaboratorDTOPK dictionaryCollaboratorDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.dictionaryCollaboratorDTOPK = dictionaryCollaboratorDTOPK;
+        this.collaboratorDTOPK = dictionaryCollaboratorDTOPK;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;
@@ -74,7 +51,7 @@ public class DictionaryCollaboratorDTO implements Serializable {
     }
 
     public DictionaryCollaboratorDTO(String dictionaryid, String collaboratoruser, String collaboratorrole,String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.dictionaryCollaboratorDTOPK = new DictionaryCollaboratorDTOPK(dictionaryid, collaboratoruser, collaboratorrole);
+        this.collaboratorDTOPK = new DictionaryCollaboratorDTOPK(dictionaryid, collaboratoruser, collaboratorrole);
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;
@@ -82,51 +59,11 @@ public class DictionaryCollaboratorDTO implements Serializable {
     }
 
     public DictionaryCollaboratorDTOPK getDictionaryCollaboratorDTOPK() {
-        return dictionaryCollaboratorDTOPK;
+        return collaboratorDTOPK;
     }
 
     public void setDictionaryCollaboratorDTOPK(DictionaryCollaboratorDTOPK dictionaryCollaboratorDTOPK) {
-        this.dictionaryCollaboratorDTOPK = dictionaryCollaboratorDTOPK;
-    }
-
-    public String getUpdatedby() {
-        return updatedby;
-    }
-
-    public void setUpdatedby(String updatedby) {
-        this.updatedby = updatedby;
-    }
-
-    public Date getUpdateddate() {
-        return updateddate;
-    }
-
-    public void setUpdateddate(Date updateddate) {
-        this.updateddate = updateddate;
-    }
-
-    public String getCreatedby() {
-        return createdby;
-    }
-
-    public void setCreatedby(String createdby) {
-        this.createdby = createdby;
-    }
-
-    public Date getCreateddate() {
-        return createddate;
-    }
-
-    public void setCreateddate(Date createddate) {
-        this.createddate = createddate;
-    }
-
-    public QuadrigaUserDTO getQuadrigaUserDTO() {
-        return quadrigaUserDTO;
-    }
-
-    public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
-        this.quadrigaUserDTO = quadrigaUserDTO;
+        this.collaboratorDTOPK = dictionaryCollaboratorDTOPK;
     }
 
     public DictionaryDTO getDictionaryDTO() {
@@ -140,7 +77,7 @@ public class DictionaryCollaboratorDTO implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (dictionaryCollaboratorDTOPK != null ? dictionaryCollaboratorDTOPK.hashCode() : 0);
+        hash += (collaboratorDTOPK != null ? collaboratorDTOPK.hashCode() : 0);
         return hash;
     }
 
@@ -150,9 +87,15 @@ public class DictionaryCollaboratorDTO implements Serializable {
             return false;
         }
         DictionaryCollaboratorDTO other = (DictionaryCollaboratorDTO) object;
-        if ((this.dictionaryCollaboratorDTOPK == null && other.dictionaryCollaboratorDTOPK != null) || (this.dictionaryCollaboratorDTOPK != null && !this.dictionaryCollaboratorDTOPK.equals(other.dictionaryCollaboratorDTOPK))) {
+        if ((this.collaboratorDTOPK == null && other.collaboratorDTOPK != null) || (this.collaboratorDTOPK != null && !this.collaboratorDTOPK.equals(other.collaboratorDTOPK))) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void setRelatedDTO(
+            CollaboratingDTO<DictionaryCollaboratorDTOPK, DictionaryCollaboratorDTO> relatedDto) {
+        dictionaryDTO = (DictionaryDTO) relatedDto;
     }
 }

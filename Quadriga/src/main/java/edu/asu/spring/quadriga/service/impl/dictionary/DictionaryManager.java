@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -72,7 +72,7 @@ public class DictionaryManager implements IDictionaryManager {
 			.getLogger(DictionaryManager.class);
 
 	@Autowired
-	private IDBConnectionDictionaryManager dbConnect;
+	private IDictionaryDAO dbConnect;
 
 	@Autowired
 	private DictionaryItemFactory dictionaryItemsFactory;

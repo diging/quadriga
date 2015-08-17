@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -32,7 +32,7 @@ import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
 @Repository
-public class DictionaryManagerDAO extends BaseDAO<DictionaryDTO> implements IDBConnectionDictionaryManager
+public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionaryDAO
 {
 
 	@Autowired
@@ -50,7 +50,7 @@ public class DictionaryManagerDAO extends BaseDAO<DictionaryDTO> implements IDBC
 	@Resource(name = "projectconstants")
 	private Properties messages;
 	
-	private static final Logger logger = LoggerFactory.getLogger(DictionaryManagerDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryDAO.class);
 
 	/**
 	 * Gets the dictionary of the user matched with his user name
@@ -269,7 +269,7 @@ public class DictionaryManagerDAO extends BaseDAO<DictionaryDTO> implements IDBC
 		List<IUser> nonCollabUsersList = new ArrayList<IUser>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select quadUser.username from QuadrigaUserDTO quadUser where quadUser.username NOT IN (Select dictCollab.quadrigaUserDTO.username from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.dictionaryid =:dictionaryid) AND quadUser.username NOT IN (Select dict.dictionaryowner.username from DictionaryDTO dict where dict.dictionaryid =:dictionaryid)");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select quadUser.username from QuadrigaUserDTO quadUser where quadUser.username NOT IN (Select dictCollab.quadrigaUserDTO.username from DictionaryCollaboratorDTO dictCollab where dictCollab.collaboratorDTOPK.dictionaryid =:dictionaryid) AND quadUser.username NOT IN (Select dict.dictionaryowner.username from DictionaryDTO dict where dict.dictionaryid =:dictionaryid)");
 			query.setParameter("dictionaryid", dictionaryid);
 			List<String> userNameList = query.list();
 			
@@ -331,7 +331,7 @@ public class DictionaryManagerDAO extends BaseDAO<DictionaryDTO> implements IDBC
 	public void deleteCollaborators(String dictionaryid, String userName) throws QuadrigaStorageException {
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.dictionaryid =:dictionaryid and dictCollab.dictionaryCollaboratorDTOPK.collaboratoruser =:collaboratoruser");
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryCollaboratorDTO dictCollab where dictCollab.collaboratorDTOPK.dictionaryid =:dictionaryid and dictCollab.collaboratorDTOPK.collaboratoruser =:collaboratoruser");
 			query.setParameter("dictionaryid", dictionaryid);
 			query.setParameter("collaboratoruser",userName);
 			int output = query.executeUpdate();

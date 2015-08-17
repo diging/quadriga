@@ -2,34 +2,42 @@ package edu.asu.spring.quadriga.service.impl.dictionary;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionDictionaryCollaboratorManager;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
+import edu.asu.spring.quadriga.dao.impl.dictionary.DictionaryDAO;
+import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTOPK;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
+import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 
 @Service
-public class DictionaryCollaboratorManager implements
-		IDictionaryCollaboratorManager 
-{
+public class DictionaryCollaboratorManager extends CollaboratorManager<DictionaryCollaboratorDTO, DictionaryCollaboratorDTOPK, DictionaryDTO, DictionaryDAO> implements
+		IDictionaryCollaboratorManager {
 	
 	@Autowired
 	private IDBConnectionDictionaryCollaboratorManager dbConnect;
 	
-	/**
-	 * This method updates the collaborator roles for dictionary collaborators
-	 * @param dictionaryId - dictionary id
-	 * @param collabUser - collaborator user name
-	 * @param collaboratorRole - collaborator role
-	 * @param username - logged in user name
-	 * @throws QuadrigaStorageException
-	 */
+	@Autowired
+	private IDictionaryDAO dictionaryDao;
+	
 	@Override
-	@Transactional
-	public void updateCollaboratorRoles(String dictionaryId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
-	{
-		dbConnect.updateCollaboratorRoles(dictionaryId, collabUser, collaboratorRole, username);
-	}
+    public DictionaryCollaboratorDTO createNewDTO() {
+        return new DictionaryCollaboratorDTO();
+    }
+
+    @Override
+    public DictionaryCollaboratorDTOPK createNewDTOPK(String id,
+            String collabUser, String role) {
+        return new DictionaryCollaboratorDTOPK(id, collabUser, role);
+    }
+
+    @Override
+    public IBaseDAO<DictionaryDTO> getDao() {
+        return dictionaryDao;
+    }
 	
 	
 
