@@ -8,8 +8,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IProjectCollaboratorDAO extends IBaseDAO<ProjectCollaboratorDTO>
-{
+public interface IProjectCollaboratorDAO extends IBaseDAO<ProjectCollaboratorDTO> {
 
 	/**
 	 * This method adds a collaborator  for a project
@@ -21,15 +20,6 @@ public interface IProjectCollaboratorDAO extends IBaseDAO<ProjectCollaboratorDTO
 	public abstract void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName)
 			throws QuadrigaStorageException;
 	
-	/**
-	 * This method deletes the collaborator for a project
-	 * @param userName
-	 * @param projectid
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract void deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException;
-
-
 	/**
      * Retrieves all the user who are not associated with the project as collaborators.
      * @param projectid

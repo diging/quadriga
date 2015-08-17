@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.dao.impl.conceptcollection;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -62,49 +61,6 @@ public class ConceptCollectionCollaboratorDAO extends BaseDAO<ConceptCollectionC
 		 {
 			 throw new QuadrigaStorageException(ex);
 		 }
-		
-	}
-
-	/**
-	 * This method deletes the collaborator associated with the 
-	 * given concept collection
-	 * @param : userName - logged in user
-	 * @param : collectionid - concept collection id
-	 * @throws : QuadrigaStorageException
-	 */
-	@Override
-	public void deleteCollaboratorRequest(String userName, String collectionid)
-			throws QuadrigaStorageException 
-	{
-		List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaborator = null;
-		List<String> collaborators = null;
-		try
-		{
-		   ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, collectionid);
-		   conceptCollectionCollaborator = conceptCollection.getConceptCollectionCollaboratorDTOList();   
-		   collaborators = getList(userName);
-
-		   if(conceptCollection !=null)
-		   {
-			   Iterator<ConceptCollectionCollaboratorDTO> iterator = conceptCollectionCollaborator.iterator();
-			   
-			   while(iterator.hasNext())
-			   {
-				   String collaborator = iterator.next().getQuadrigaUserDTO().getUsername();
-				   if(collaborators.contains(collaborator))
-				   {
-					   iterator.remove();
-				   }
-			   }
-			   conceptCollection.setConceptCollectionCollaboratorDTOList(conceptCollectionCollaborator);
-			   
-			   sessionFactory.getCurrentSession().update(conceptCollection);
-		   }
-		}
-		catch(Exception ex)
-		{
-			throw new QuadrigaStorageException();
-		}
 		
 	}
 

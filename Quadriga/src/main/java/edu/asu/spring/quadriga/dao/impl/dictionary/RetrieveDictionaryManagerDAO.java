@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;

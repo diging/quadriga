@@ -37,19 +37,7 @@ public class RetrieveWSCollabManagerDAO extends BaseDAO<WorkspaceCollaboratorDTO
 	private WorkspaceCollaboratorDTOMapper wsCollaboratorMapper;
 	
 	@Autowired
-	private ICollaboratorFactory collaboratorFactory;
-	
-	@Autowired
-    private IUserManager userManager;
-	
-	@Autowired
-	private IUserFactory userFactory;
-	
-	@Autowired
 	private IQuadrigaRoleManager roleManager;
-	
-	@Autowired
-	private IQuadrigaRoleFactory roleFactory;
 	
 	@Autowired
 	private UserDTOMapper userDTOMapper;

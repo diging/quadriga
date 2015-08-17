@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl.workbench;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -30,8 +29,7 @@ import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 @Repository
 @Transactional
 public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> implements
-		IProjectCollaboratorDAO 
-{
+		IProjectCollaboratorDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -65,44 +63,6 @@ public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> impl
 		catch(HibernateException ex)
 		{
 			logger.error("Adding project collaborator :",ex);
-			throw new QuadrigaStorageException();
-		}
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException
-	{
-		try
-		{
-			ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
-			if (project == null) {
-			    throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
-			}
-			
-		    List<ProjectCollaboratorDTO> projectCollaborators = project.getProjectCollaboratorDTOList();
-			if(projectCollaborators != null)
-			{
-				Iterator<ProjectCollaboratorDTO> iterator = projectCollaborators.iterator();
-				while(iterator.hasNext())
-				{
-					ProjectCollaboratorDTO projCollaborator = iterator.next();
-					String collaboratorUsername = projCollaborator.getQuadrigaUserDTO().getUsername();
-					if(userName.equals(collaboratorUsername))
-					{
-						iterator.remove();
-						sessionFactory.getCurrentSession().delete(projCollaborator);
-					}
-				}
-				sessionFactory.getCurrentSession().update(project);
-			}
-			
-		}
-		catch(Exception ex)
-		{
-			logger.error("Error in deleting project collaborators",ex);
 			throw new QuadrigaStorageException();
 		}
 	}

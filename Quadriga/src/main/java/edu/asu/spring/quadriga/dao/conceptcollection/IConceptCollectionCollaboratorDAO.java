@@ -17,14 +17,4 @@ public interface IConceptCollectionCollaboratorDAO extends IBaseDAO<ConceptColle
 	public abstract void addCollaboratorRequest(ICollaborator collaborator, String collectionid,
 			String userName) throws QuadrigaStorageException;
 
-	/**
-	 * This method deletes the collaborator associated with the 
-	 * given concept collection
-	 * @param : userName - logged in user
-	 * @param : collectionid - concept collection id
-	 * @throws : QuadrigaStorageException
-	 */
-	public abstract void deleteCollaboratorRequest(String userName, String collectionid)
-			throws QuadrigaStorageException;
-	
 }
