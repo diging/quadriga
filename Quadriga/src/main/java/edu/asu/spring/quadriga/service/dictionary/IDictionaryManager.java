@@ -167,17 +167,6 @@ public interface IDictionaryManager {
 	 */
 	public abstract void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser);
 	
-	
-	/**
-	 * this method used to delete collaborators in the current dictionary
-	 * 
-	 * @param dictionaryid
-	 * @param userName
-	 * @return
-	 */
-	public abstract void deleteCollaborator(String dictionaryid, String userName) throws QuadrigaStorageException;
-
-	
 	/**
 	 * Delete a dictinary
 	 * @param user

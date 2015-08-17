@@ -33,7 +33,7 @@ public interface IProjectCollaboratorManager {
 	public abstract void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName)
             throws QuadrigaStorageException;
     
-    public abstract void deleteCollaboratorRequest(String userName, String Projectid) throws QuadrigaStorageException;
+    public abstract void deleteCollaborators(String userName, String Projectid) throws QuadrigaStorageException;
 
     public abstract void updateCollaborators(String projectid, String collabUser,
             String collaboratorRole, String username) throws QuadrigaStorageException;

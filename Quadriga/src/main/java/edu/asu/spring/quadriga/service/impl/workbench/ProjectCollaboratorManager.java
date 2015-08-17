@@ -107,19 +107,6 @@ public class ProjectCollaboratorManager extends CollaboratorManager<ProjectColla
         
     }
 
-    /**
-     * This method deletes the collaborator associated with the project
-     * @param userName - collaborator user name
-     * @param projectid - project id
-     * @throws QuarigaStorageException
-     */
-    @Override
-    @Transactional
-    public void deleteCollaboratorRequest(String userName, String projectid) throws QuadrigaStorageException {
-        projectCollabDAO.deleteColloratorRequest(userName, projectid);
-    }
-    
-
     @Override
     public ProjectCollaboratorDTO createNewDTO() {
         return new ProjectCollaboratorDTO();
@@ -133,5 +120,10 @@ public class ProjectCollaboratorManager extends CollaboratorManager<ProjectColla
     @Override
     public IBaseDAO<ProjectDTO> getDao() {
         return projectDao;
+    }
+
+    @Override
+    public IBaseDAO<ProjectCollaboratorDTO> getCollaboratorDao() {
+        return projectCollabDAO;
     }
 }

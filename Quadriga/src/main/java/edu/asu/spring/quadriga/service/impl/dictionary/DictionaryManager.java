@@ -577,23 +577,6 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 	}
 
-
-	/**
-	 * this method used to delete collaborators in the current dictionary
-	 * 
-	 * @param dictionaryid
-	 * @param userName			current session user
-	 * @return List of users
-	 * @exception 	QuadrigaStorageException	
-	 */
-	@Override
-	@Transactional
-	public void deleteCollaborator(String dictionaryid, String userName) throws QuadrigaStorageException {
-
-		dbConnect.deleteCollaborators(dictionaryid, userName);
-
-	}
-
 	/**
 	 * This method retrieves the dictionary id for the given dictionary name
 	 * @param dictName - dictionary name

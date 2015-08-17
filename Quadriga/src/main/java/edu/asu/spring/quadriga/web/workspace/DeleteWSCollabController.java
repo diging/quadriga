@@ -107,7 +107,7 @@ public class DeleteWSCollabController
 		userName = userName.substring(1);
 		
 		//delete the collaborators
-		wsModifyCollabManager.deleteWorkspaceCollaborator(userName, workspaceid);
+		wsModifyCollabManager.deleteCollaborators(userName, workspaceid);
 		
 		//fetch all the collaborating users and their roles
 		collaboratingUser = wsRetrieveCollabManager.getWorkspaceCollaborators(workspaceid);

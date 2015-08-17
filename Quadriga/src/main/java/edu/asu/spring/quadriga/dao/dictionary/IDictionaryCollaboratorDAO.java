@@ -1,8 +1,10 @@
 package edu.asu.spring.quadriga.dao.dictionary;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionDictionaryCollaboratorManager {
+public interface IDictionaryCollaboratorDAO extends IBaseDAO<DictionaryCollaboratorDTO> {
 
 	/**
 	 * This method update the roles associated with the collaborator for dictionary

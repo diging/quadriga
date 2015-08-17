@@ -24,7 +24,7 @@ public class CCCollaboratorManager extends CollaboratorManager<ConceptCollection
 	
 	private static final Logger logger = LoggerFactory.getLogger(CCCollaboratorManager.class);
 	@Autowired
-	private IConceptCollectionCollaboratorDAO dbConnect;
+	private IConceptCollectionCollaboratorDAO ccCollaboratorDao;
 	
 	@Autowired
 	private IConceptCollectionDAO ccDao;
@@ -42,22 +42,7 @@ public class CCCollaboratorManager extends CollaboratorManager<ConceptCollection
 	public void addCollaborators(ICollaborator collaborator, String collectionid, String userName)
 			throws QuadrigaStorageException 
 	{
-		dbConnect.addCollaboratorRequest(collaborator, collectionid, userName);
-	}
-	
-	/**
-	 * This methods removes the association of collaborator to the concept collection.
-	 * @param userName - logged in user
-	 * @param collectionid - concept collection id
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public void deleteCollaborators(String userName, String collectionid) throws QuadrigaStorageException 
-	{
-		logger.info("USer role collaborator : "+userName);
-		
-		dbConnect.deleteCollaboratorRequest(userName, collectionid);
+		ccCollaboratorDao.addCollaboratorRequest(collaborator, collectionid, userName);
 	}
 	
 	@Override
@@ -74,5 +59,10 @@ public class CCCollaboratorManager extends CollaboratorManager<ConceptCollection
     @Override
     public IBaseDAO<ConceptCollectionDTO> getDao() {
         return ccDao;
+    }
+
+    @Override
+    public IBaseDAO<ConceptCollectionCollaboratorDTO> getCollaboratorDao() {
+        return ccCollaboratorDao;
     }
 }

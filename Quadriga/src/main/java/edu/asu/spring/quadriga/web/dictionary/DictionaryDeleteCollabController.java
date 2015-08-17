@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFacto
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
@@ -43,6 +44,9 @@ public class DictionaryDeleteCollabController {
 
 	@Autowired
 	IDictionaryManager dictionaryManager;
+	
+	@Autowired
+	private IDictionaryCollaboratorManager dictCollaboratorManager;
 
 	@Autowired
 	IRetrieveDictionaryManager retrieveDictionaryManager;
@@ -105,17 +109,13 @@ public class DictionaryDeleteCollabController {
 			modelAndView.getModelMap().put("dictionaryid", dictionaryId);
 			modelAndView.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 			modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
-		}
-
-		else
-		{
+		} else {
 			collaborators = collaboratorForm.getCollaborators();
 			for(ModifyCollaborator collaborator: collaborators)
 			{
 				userName = collaborator.getUserName();
-				if(userName!=null)
-				{
-					dictionaryManager.deleteCollaborator(dictionaryId, userName);
+				if(userName!=null) {
+				    dictCollaboratorManager.deleteCollaborators(userName, dictionaryId);
 				}
 			}
 			modelAndView.getModelMap().put("success", 1);
@@ -123,7 +123,7 @@ public class DictionaryDeleteCollabController {
 		}
 
 		return modelAndView;
-			}
+	}
 
 	/**
 	 * This method retrieves the collaborators associated with given workspace

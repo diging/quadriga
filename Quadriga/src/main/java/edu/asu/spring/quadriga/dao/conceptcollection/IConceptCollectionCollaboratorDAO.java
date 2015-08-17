@@ -1,9 +1,11 @@
 package edu.asu.spring.quadriga.dao.conceptcollection;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IConceptCollectionCollaboratorDAO {
+public interface IConceptCollectionCollaboratorDAO extends IBaseDAO<ConceptCollectionCollaboratorDTO> {
 
 	/**
 	 * This method adds the collaborator for given concept collection

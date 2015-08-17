@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionDictionaryCollaboratorManager;
+import edu.asu.spring.quadriga.dao.dictionary.IDictionaryCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.impl.workbench.ProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
@@ -23,8 +23,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryCollaboratorDTOMapper;
 
 @Repository
-public class DictionaryCollaboratorManagerDAO extends BaseDAO<DictionaryCollaboratorDTO> implements IDBConnectionDictionaryCollaboratorManager
-{
+public class DictionaryCollaboratorDAO extends BaseDAO<DictionaryCollaboratorDTO> implements IDictionaryCollaboratorDAO {
 	@Autowired
 	private DictionaryCollaboratorDTOMapper collaboratorMapper;
 

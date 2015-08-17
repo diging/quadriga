@@ -14,13 +14,14 @@ import edu.asu.spring.quadriga.dto.CollaboratingDTO;
 import edu.asu.spring.quadriga.dto.CollaboratorDTO;
 import edu.asu.spring.quadriga.dto.CollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T extends CollaboratorDTOPK,C extends CollaboratingDTO<T, V>,D extends BaseDAO<C>> {
     
     @Transactional
-    public void updateCollaborators(String dtoId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
-    {
+    public void updateCollaborators(String dtoId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException {
         IBaseDAO<C> dao = getDao();
         
         C dto = dao.getDTO(dtoId);
@@ -69,12 +70,41 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
         }
         
         dto.setCollaboratorList(collaboratorList);
-        dao.updateDTO(dto);
+        dao.updateDTO(dto);    
+    }
+    
+    @Transactional
+    public void deleteCollaborators(String collaboratorListAsString,String dtoId) throws QuadrigaStorageException {
+        IBaseDAO<C> dao = getDao();
+        IBaseDAO<V> collaboratorDao = getCollaboratorDao();
         
+        C dto = dao.getDTO(dtoId);
+        if(dto == null) {
+            return;
+        }
+        
+        List<V> collaboratorDtoList = dto.getCollaboratorList();
+        if (collaboratorDtoList == null)
+            return;
+        
+        List<String> collaborators = Arrays.asList(collaboratorListAsString.split(","));
+        
+        Iterator<V> iterator = collaboratorDtoList.iterator();
+        while(iterator.hasNext()) {
+            V collabDto = iterator.next();
+            String userName = collabDto.getCollaboratorDTOPK().getCollaboratoruser();
+            if(collaborators.contains(userName)) {
+                iterator.remove();
+                collaboratorDao.deleteDTO(collabDto);
+            }
+        }
+        
+        dao.updateDTO(dto);
     }
     
     public abstract V createNewDTO();
     public abstract T createNewDTOPK(String id, String collabUser, String role);
     
     public abstract IBaseDAO<C> getDao();
+    public abstract IBaseDAO<V> getCollaboratorDao();
 }

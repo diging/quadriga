@@ -62,40 +62,6 @@ public class ModifyWSCollabManager extends CollaboratorManager<WorkspaceCollabor
 	    
 	}
 	
-	/**
-	 * This method deletes the given collaborators from a workspace.
-	 * @param collaboratorListAsString - collaborator user name
-	 * @param workspaceid - associate workspace
-	 * @throws QuadrigaStorageException
-	 * @author kiranbatna, Julia Damerow
-	 */
-	@Override
-	@Transactional
-	public void deleteWorkspaceCollaborator(String collaboratorListAsString,String workspaceid) throws QuadrigaStorageException
-	{
-	    WorkspaceDTO wsDTO = workspaceDao.getWorkspaceDTO(workspaceid);
-        if (wsDTO == null)
-            return;
-        
-        List<WorkspaceCollaboratorDTO> collaboratorDtoList = wsDTO.getWorkspaceCollaboratorDTOList();
-        if (collaboratorDtoList == null)
-            return;
-        
-        List<String> collaborators = Arrays.asList(collaboratorListAsString.split(","));
-        
-	    Iterator<WorkspaceCollaboratorDTO> iterator = collaboratorDtoList.iterator();
-        while(iterator.hasNext()) {
-            WorkspaceCollaboratorDTO wsCollabDto = iterator.next();
-            String userName = wsCollabDto.getCollaboratorDTOPK().getCollaboratoruser();
-            if(collaborators.contains(userName)) {
-                iterator.remove();
-                wsCollabDao.deleteWorkspaceCollaboratorDTO(wsCollabDto);
-            }
-        }
-        
-        workspaceDao.updateDTO(wsDTO);
-	}
-	
 	/*
 	 * Private Methods
 	 */
@@ -138,5 +104,10 @@ public class ModifyWSCollabManager extends CollaboratorManager<WorkspaceCollabor
     @Override
     public IBaseDAO<WorkspaceDTO> getDao() {
         return workspaceDao; 
+    }
+
+    @Override
+    public IBaseDAO<WorkspaceCollaboratorDTO> getCollaboratorDao() {
+        return wsCollabDao;
     }
 }

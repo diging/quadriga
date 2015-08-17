@@ -126,7 +126,7 @@ public class DeleteProjectCollaboratorController {
 			    userName = collaborator.getUserName();
 			    if(userName!=null)
 			    {
-			        projectCollaboratorManager.deleteCollaboratorRequest(userName, projectId);
+			        projectCollaboratorManager.deleteCollaborators(userName, projectId);
 			    }
 			}
 			modelAndView.getModelMap().put("success", 1);
