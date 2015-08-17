@@ -64,7 +64,7 @@ public class ConceptCollectionModifyManagerDAO extends BaseDAO<ConceptCollection
 			//add the existing owner as collaborator admin role
 			collaborator = new ConceptCollectionCollaboratorDTO();
 			collaborator.setConceptCollectionDTO(conceptCollection);
-			collaborator.setConceptCollectionCollaboratorDTOPK(new ConceptCollectionCollaboratorDTOPK(collectionId,oldOwner,collabRole));
+			collaborator.setCollaboratorDTOPK(new ConceptCollectionCollaboratorDTOPK(collectionId,oldOwner,collabRole));
 			collaborator.setQuadrigaUserDTO(getUserDTO(oldOwner));
 			collaborator.setCreatedby(oldOwner);
 			collaborator.setCreateddate(date);

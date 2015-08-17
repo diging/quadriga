@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.dao.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -59,7 +59,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			.getLogger(ConceptCollectionManager.class);
 
 	@Autowired
-	private IDBConnectionCCManager dbConnect;
+	private IConceptCollectionDAO dbConnect;
 	
 	@Autowired
 	private IConceptFactory conceptFactory;

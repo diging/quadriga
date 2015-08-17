@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.dao.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -22,7 +22,7 @@ public class CollectionsValidator implements Validator {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CollectionsValidator.class);
 
 	@Autowired
-	private IDBConnectionCCManager dbConnect;
+	private IConceptCollectionDAO dbConnect;
 	@Override
 	public boolean supports(Class<?> arg0) {
 		return arg0.isAssignableFrom(ConceptCollection.class);

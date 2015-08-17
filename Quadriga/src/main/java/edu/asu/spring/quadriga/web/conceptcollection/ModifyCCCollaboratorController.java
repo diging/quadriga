@@ -204,7 +204,7 @@ public class ModifyCCCollaboratorController
 					//adding the logic to retrieve the user name of full name is empty
 					if(!collabUser.isEmpty())
 					{
-						collaboratorManager.updateCollaboratorRequest(collectionid, collabUser, collabRoles.toString().substring(1),
+						collaboratorManager.updateCollaborators(collectionid, collabUser, collabRoles.toString().substring(1),
                                 userName);
 					}
 					

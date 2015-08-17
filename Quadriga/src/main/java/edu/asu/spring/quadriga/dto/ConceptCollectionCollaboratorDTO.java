@@ -4,10 +4,8 @@
  */
 package edu.asu.spring.quadriga.dto;
 
-import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -15,8 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,30 +24,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConceptCollectionCollaboratorDTO.findAll", query = "SELECT c FROM ConceptCollectionCollaboratorDTO c"),
-    @NamedQuery(name = "ConceptCollectionCollaboratorDTO.findByCollectionid", query = "SELECT c FROM ConceptCollectionCollaboratorDTO c WHERE c.conceptCollectionCollaboratorDTOPK.conceptcollectionid = :conceptcollectionid"),
-    @NamedQuery(name = "ConceptCollectionCollaboratorDTO.findByCollaboratoruser", query = "SELECT c FROM ConceptCollectionCollaboratorDTO c WHERE c.conceptCollectionCollaboratorDTOPK.collaboratoruser = :collaboratoruser"),
+    @NamedQuery(name = "ConceptCollectionCollaboratorDTO.findByCollectionid", query = "SELECT c FROM ConceptCollectionCollaboratorDTO c WHERE c.collaboratorDTOPK.conceptcollectionid = :conceptcollectionid"),
+    @NamedQuery(name = "ConceptCollectionCollaboratorDTO.findByCollaboratoruser", query = "SELECT c FROM ConceptCollectionCollaboratorDTO c WHERE c.collaboratorDTOPK.collaboratoruser = :collaboratoruser"),
     })
-public class ConceptCollectionCollaboratorDTO implements Serializable {
+public class ConceptCollectionCollaboratorDTO extends CollaboratorDTO<ConceptCollectionCollaboratorDTOPK, ConceptCollectionCollaboratorDTO> {
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ConceptCollectionCollaboratorDTOPK conceptCollectionCollaboratorDTOPK;
-    @Basic(optional = false)
-    @Column(name = "updatedby")
-    private String updatedby;
-    @Basic(optional = false)
-    @Column(name = "updateddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateddate;
-    @Basic(optional = false)
-    @Column(name = "createdby")
-    private String createdby;
-    @Basic(optional = false)
-    @Column(name = "createddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
-    @JoinColumn(name = "collaboratoruser", referencedColumnName = "username", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private QuadrigaUserDTO quadrigaUserDTO;
+    
+//    @EmbeddedId
+//    protected ConceptCollectionCollaboratorDTOPK conceptCollectionCollaboratorDTOPK;
+    
     @JoinColumn(name = "conceptcollectionid", referencedColumnName = "conceptcollectionid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private ConceptCollectionDTO conceptCollectionDTO;
@@ -60,11 +41,11 @@ public class ConceptCollectionCollaboratorDTO implements Serializable {
     }
 
     public ConceptCollectionCollaboratorDTO(ConceptCollectionCollaboratorDTOPK conceptCollectionCollaboratorDTOPK) {
-        this.conceptCollectionCollaboratorDTOPK = conceptCollectionCollaboratorDTOPK;
+        this.collaboratorDTOPK = conceptCollectionCollaboratorDTOPK;
     }
 
     public ConceptCollectionCollaboratorDTO(ConceptCollectionCollaboratorDTOPK conceptCollectionCollaboratorDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.conceptCollectionCollaboratorDTOPK = conceptCollectionCollaboratorDTOPK;
+        this.collaboratorDTOPK = conceptCollectionCollaboratorDTOPK;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;
@@ -72,59 +53,8 @@ public class ConceptCollectionCollaboratorDTO implements Serializable {
     }
 
     public ConceptCollectionCollaboratorDTO(String conceptCollectionid, String collaboratoruser, String collaboratorrole) {
-        this.conceptCollectionCollaboratorDTOPK = new ConceptCollectionCollaboratorDTOPK(conceptCollectionid, collaboratoruser, collaboratorrole);
+        this.collaboratorDTOPK = new ConceptCollectionCollaboratorDTOPK(conceptCollectionid, collaboratoruser, collaboratorrole);
     }
-
-
-    public ConceptCollectionCollaboratorDTOPK getConceptCollectionCollaboratorDTOPK() {
-		return conceptCollectionCollaboratorDTOPK;
-	}
-
-	public void setConceptCollectionCollaboratorDTOPK(
-			ConceptCollectionCollaboratorDTOPK conceptCollectionCollaboratorDTOPK) {
-		this.conceptCollectionCollaboratorDTOPK = conceptCollectionCollaboratorDTOPK;
-	}
-
-	public String getUpdatedby() {
-        return updatedby;
-    }
-
-    public void setUpdatedby(String updatedby) {
-        this.updatedby = updatedby;
-    }
-
-    public Date getUpdateddate() {
-        return updateddate;
-    }
-
-    public void setUpdateddate(Date updateddate) {
-        this.updateddate = updateddate;
-    }
-
-    public String getCreatedby() {
-        return createdby;
-    }
-
-    public void setCreatedby(String createdby) {
-        this.createdby = createdby;
-    }
-
-    public Date getCreateddate() {
-        return createddate;
-    }
-
-    public void setCreateddate(Date createddate) {
-        this.createddate = createddate;
-    }
-
-    public QuadrigaUserDTO getQuadrigaUserDTO() {
-        return quadrigaUserDTO;
-    }
-
-    public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
-        this.quadrigaUserDTO = quadrigaUserDTO;
-    }
-
 
     public ConceptCollectionDTO getConceptCollectionDTO() {
 		return conceptCollectionDTO;
@@ -137,7 +67,7 @@ public class ConceptCollectionCollaboratorDTO implements Serializable {
 	@Override
     public int hashCode() {
         int hash = 0;
-        hash += (conceptCollectionCollaboratorDTOPK != null ? conceptCollectionCollaboratorDTOPK.hashCode() : 0);
+        hash += (collaboratorDTOPK != null ? collaboratorDTOPK.hashCode() : 0);
         return hash;
     }
 
@@ -147,9 +77,15 @@ public class ConceptCollectionCollaboratorDTO implements Serializable {
             return false;
         }
         ConceptCollectionCollaboratorDTO other = (ConceptCollectionCollaboratorDTO) object;
-        if ((this.conceptCollectionCollaboratorDTOPK == null && other.conceptCollectionCollaboratorDTOPK != null) || (this.conceptCollectionCollaboratorDTOPK != null && !this.conceptCollectionCollaboratorDTOPK.equals(other.conceptCollectionCollaboratorDTOPK))) {
+        if ((this.collaboratorDTOPK == null && other.collaboratorDTOPK != null) || (this.collaboratorDTOPK != null && !this.collaboratorDTOPK.equals(other.collaboratorDTOPK))) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void setRelatedDTO(
+            CollaboratingDTO<ConceptCollectionCollaboratorDTOPK, ConceptCollectionCollaboratorDTO> relatedDto) {
+        conceptCollectionDTO = (ConceptCollectionDTO) relatedDto;
     }
 }

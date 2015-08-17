@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.asu.spring.quadriga.dao.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -47,7 +47,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
  *
  */
 @Repository
-public class CCManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBConnectionCCManager {
+public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implements IConceptCollectionDAO {
 
 	@Autowired
 	protected SessionFactory sessionFactory;
@@ -70,38 +70,9 @@ public class CCManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBCo
 	@Autowired
 	private IQuadrigaRoleManager roleManager;
 	
-	private static final Logger logger = LoggerFactory.getLogger(CCManagerDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConceptCollectionDAO.class);
 	
-//	/**
-//	 * Queries the database and builds a list of concept collection objects owned by particular user
-//	 * @param Username
-//	 * @return List containing user objects of all collections of the user
-//	 * @throws QuadrigaStorageException 
-//	 * @author Karthik Jayaraman
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public List<IConceptCollection> getConceptsOwnedbyUser(String userName) throws QuadrigaStorageException 
-//	{
-//		List<IConceptCollection> conceptCollectionList = null;
-//		try
-//		{
-//			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionDTO concept where concept.collectionowner.username =:userName");
-//			query.setParameter("userName", userName);
-//			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
-//			
-//			if(conceptcollectionsDTOList != null && conceptcollectionsDTOList.size() > 0)
-//			{
-//				conceptCollectionList = conceptCollectionDTOMapper.getConceptCollectionList(conceptcollectionsDTOList);
-//			}
-//		}
-//		catch(Exception e)
-//		{
-//			logger.info("getConceptsOwnedbyUser method :"+e.getMessage());	
-//			throw new QuadrigaStorageException(e);
-//		}
-//		return conceptCollectionList;
-//	}
+
 	/**
 	 * Queries the database and builds a list of concept collection objects owned by particular user
 	 * @param Username
@@ -129,37 +100,6 @@ public class CCManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBCo
 		return conceptcollectionsDTOList;
 	}
 	
-//	
-//	/**
-//	 * Queries the database and builds a list of concept collection objects with the user as collaborator
-//	 * 
-//	 * @return List containing user objects of all collections of the user
-//	 * @throws QuadrigaStorageException 
-//	 * @author Karthik Jayaraman
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public List<IConceptCollection> getCollaboratedConceptsofUser(String userName) throws QuadrigaStorageException 
-//	{
-//		List<IConceptCollection> conceptCollectionList = null;
-//		try
-//		{
-//			Query query = sessionFactory.getCurrentSession().createQuery("Select conceptCollab.conceptCollectionDTO from ConceptCollectionCollaboratorDTO conceptCollab where conceptCollab.quadrigaUserDTO.username =:userName");
-//			query.setParameter("userName", userName);
-//			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
-//			
-//			if(conceptcollectionsDTOList != null && conceptcollectionsDTOList.size() > 0)
-//			{
-//				conceptCollectionList = conceptCollectionDTOMapper.getConceptCollectionList(conceptcollectionsDTOList);
-//			}
-//		}
-//		catch(Exception e)
-//		{
-//			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
-//			throw new QuadrigaStorageException(e);
-//		}
-//		return conceptCollectionList;
-//	}
 	/**
 	 * Queries the database and builds a list of concept collection objects with the user as collaborator
 	 * 
@@ -317,11 +257,11 @@ public class CCManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBCo
 				String roles= "";
 				if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
 				{
-					roles = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
+					roles = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole()+",");
 				}
 				else
 				{
-					roles = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",";
+					roles = ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole()+",";
 				}
 				
 				userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(), roles);
@@ -531,44 +471,7 @@ public class CCManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBCo
 	 * @return : String
 	 * @throws : QuadrigaStorageException
 	 */
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public String updateItem(IConcept concept, String collectionId,String username) throws QuadrigaStorageException {
-//		String errMsg = null;
-//		if(concept == null || collectionId==null || username==null ||  collectionId.isEmpty() || username.isEmpty())
-//		{
-//			logger.error("updateItem: input argument IConceptCollection is null");
-//			return null;
-//		}
-//		try
-//		{
-//			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionItemsDTO ccItems where ccItems.conceptCollectionDTO.conceptCollectionid =:collectionId and ccItems.conceptCollectionItemsDTOPK.item =:id");
-//			query.setParameter("id", concept.getId());
-//			query.setParameter("collectionId", collectionId);
-//			List<ConceptCollectionItemsDTO> ccItemsDTOList = query.list();
-//			
-//			if(ccItemsDTOList != null && ccItemsDTOList.size() > 0)
-//			{
-//				ConceptCollectionItemsDTO ccItemsDTO = ccItemsDTOList.get(0);
-//				ccItemsDTO.setLemma(concept.getLemma());
-//				ccItemsDTO.setPos(concept.getPos());
-//				ccItemsDTO.setDescription(concept.getDescription());
-//				ccItemsDTO.setUpdateddate(new Date());
-//				sessionFactory.getCurrentSession().update(ccItemsDTOList.get(0));
-//			}
-//			else
-//			{
-//				errMsg = "collection id is invalid.";
-//			}
-//		}
-//		catch(Exception e)
-//		{
-//			logger.info("deleteItems method :"+e.getMessage());	
-//			throw new QuadrigaStorageException(e);
-//		}
-//		return errMsg;
-//	}
-//	
+
 	public String updateItem(IConcept concept, String collectionId,String username) throws QuadrigaStorageException {
 		String errMsg = null;
 		if(concept == null || collectionId==null || username==null ||  collectionId.isEmpty() || username.isEmpty())
@@ -663,12 +566,12 @@ public class CCManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBCo
 					ConceptCollectionCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
 					if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
 					{
-						String updatedRoleStr = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
+						String updatedRoleStr = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole()+",");
 						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(), updatedRoleStr);
 					}
 					else
 					{
-						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
+						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole()+",");
 					}
 				}
 				

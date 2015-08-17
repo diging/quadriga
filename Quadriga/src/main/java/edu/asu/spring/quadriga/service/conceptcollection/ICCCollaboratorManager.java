@@ -11,7 +11,7 @@ public interface ICCCollaboratorManager {
 	public abstract void deleteCollaborators(String userName, String collectionid)
 			throws QuadrigaStorageException;
 
-	public abstract void updateCollaboratorRequest(String collectionId, String collabUser,
+	public abstract void updateCollaborators(String collectionId, String collabUser,
 			String collaboratorRole, String username) throws QuadrigaStorageException;
 
 }

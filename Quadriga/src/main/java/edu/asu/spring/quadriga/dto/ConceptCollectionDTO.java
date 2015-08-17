@@ -36,8 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ConceptCollectionDTO.findByCollectionname", query = "SELECT c FROM ConceptCollectionDTO c WHERE c.collectionname = :collectionname"),
     @NamedQuery(name = "ConceptCollectionDTO.findById", query = "SELECT c FROM ConceptCollectionDTO c WHERE c.conceptCollectionid = :conceptCollectionid"),
     })
-public class ConceptCollectionDTO implements Serializable {
+public class ConceptCollectionDTO extends CollaboratingDTO<ConceptCollectionCollaboratorDTOPK, ConceptCollectionCollaboratorDTO> implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Basic(optional = false)
     @Column(name = "collectionname")
     private String collectionname;
@@ -220,5 +221,15 @@ public class ConceptCollectionDTO implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<ConceptCollectionCollaboratorDTO> getCollaboratorList() {
+       return conceptCollectionCollaboratorDTOList;
+    }
+
+    @Override
+    public void setCollaboratorList(List<ConceptCollectionCollaboratorDTO> list) {
+        conceptCollectionCollaboratorDTOList = list;
     }
 }

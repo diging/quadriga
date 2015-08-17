@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.proxy.ConceptCollectionProxy;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
@@ -20,7 +20,7 @@ public class ConceptCollectionShallowMapper implements
 		IConceptCollectionShallowMapper {
 
 	@Autowired
-	private IDBConnectionCCManager dbConnect;
+	private IConceptCollectionDAO dbConnect;
 	
 	@Autowired
 	private IConceptCollectionManager ccManager;

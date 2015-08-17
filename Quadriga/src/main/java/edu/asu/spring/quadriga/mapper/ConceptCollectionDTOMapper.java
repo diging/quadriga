@@ -74,7 +74,7 @@ public class ConceptCollectionDTOMapper extends BaseMapper
 		collaboratorRoles = new ArrayList<IQuadrigaRole>();
 		
 		QuadrigaUserDTO userName = conceptCollectionCollaborator.getQuadrigaUserDTO();
-		String role = conceptCollectionCollaborator.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
+		String role = conceptCollectionCollaborator.getCollaboratorDTOPK().getCollaboratorrole();
 		
 		collaboratorRoles.add(roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, role));     
 		

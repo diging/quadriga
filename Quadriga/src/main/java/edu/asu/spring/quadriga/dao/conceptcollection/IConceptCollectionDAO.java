@@ -5,6 +5,7 @@ package edu.asu.spring.quadriga.dao.conceptcollection;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
@@ -18,7 +19,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author satyaswaroop
  *
  */
-public interface IDBConnectionCCManager {
+public interface IConceptCollectionDAO extends IBaseDAO<ConceptCollectionDTO> {
 		/**
 		 * Queries the database and builds a list of concept collection objects owned by particular user
 		 * 

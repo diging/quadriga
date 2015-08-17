@@ -37,7 +37,7 @@ public class ConceptCollectionCollaboratorDTOMapper extends BaseMapper
 				ConceptCollectionCollaboratorDTOPK collaboratorKey = new ConceptCollectionCollaboratorDTOPK(conceptCollectionId,collabUser,role.getDBid());
 				collaboratorDTO.setConceptCollectionDTO(conceptCollection);
 				collaboratorDTO.setQuadrigaUserDTO(userDTO);
-				collaboratorDTO.setConceptCollectionCollaboratorDTOPK(collaboratorKey);
+				collaboratorDTO.setCollaboratorDTOPK(collaboratorKey);
 				collaboratorDTO.setCreatedby(loggedInUser);
 				collaboratorDTO.setCreateddate(new Date());
 				collaboratorDTO.setUpdatedby(loggedInUser);

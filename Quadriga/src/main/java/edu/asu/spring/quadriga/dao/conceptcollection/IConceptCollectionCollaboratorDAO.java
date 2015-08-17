@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.dao.conceptcollection;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionCCCollaboratorManager {
+public interface IConceptCollectionCollaboratorDAO {
 
 	/**
 	 * This method adds the collaborator for given concept collection
@@ -24,16 +24,5 @@ public interface IDBConnectionCCCollaboratorManager {
 	 */
 	public abstract void deleteCollaboratorRequest(String userName, String collectionid)
 			throws QuadrigaStorageException;
-	/**
-	 * This method updates the collaborator roles for the given 
-	 * collaborator associated with the specified concept collection
-	 * @param : collectionId - concept collection id
-	 * @param : collabUser - collaborator user name
-	 * @param : collaboratorRole - selected roles for the collaborator
-	 * @param : username - logged in  user
-	 * @throws : QuadrigaStorageException
-	 */
-	public abstract void updateCollaboratorRequest(String collectionId, String collabUser,
-			String collaboratorRole, String username) throws QuadrigaStorageException;
-
+	
 }

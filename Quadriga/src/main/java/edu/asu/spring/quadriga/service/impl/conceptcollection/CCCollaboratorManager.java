@@ -6,18 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.conceptcollection.IDBConnectionCCCollaboratorManager;
+import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionCollaboratorDAO;
+import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
+import edu.asu.spring.quadriga.dao.impl.conceptcollection.ConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTOPK;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
+import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 
 @Service
-public class CCCollaboratorManager implements ICCCollaboratorManager 
+public class CCCollaboratorManager extends CollaboratorManager<ConceptCollectionCollaboratorDTO, ConceptCollectionCollaboratorDTOPK, ConceptCollectionDTO, ConceptCollectionDAO> implements ICCCollaboratorManager 
 {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CCCollaboratorManager.class);
 	@Autowired
-	private IDBConnectionCCCollaboratorManager dbConnect;
+	private IConceptCollectionCollaboratorDAO dbConnect;
+	
+	@Autowired
+	private IConceptCollectionDAO ccDao;
+	
 	
 	/**
 	 * This method associated a collaborator to concept collection
@@ -49,20 +60,19 @@ public class CCCollaboratorManager implements ICCCollaboratorManager
 		dbConnect.deleteCollaboratorRequest(userName, collectionid);
 	}
 	
-	/**
-	 * This method updated the roles of the collaborator
-	 * @param collectionId - concept collection id
-	 * @param collabUser - collaborator user
-	 * @param collaboratorRole - collaborator roles
-	 * @param username - logged in user name
-	 * @throws QuadrigaStorageException
-	 */
 	@Override
-	@Transactional
-	public void  updateCollaboratorRequest(String collectionId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
-	{
-		dbConnect.updateCollaboratorRequest(collectionId, collabUser, collaboratorRole, username);
-	}
+    public ConceptCollectionCollaboratorDTO createNewDTO() {
+        return new ConceptCollectionCollaboratorDTO();
+    }
 
+    @Override
+    public ConceptCollectionCollaboratorDTOPK createNewDTOPK(String id,
+            String collabUser, String role) {
+        return new ConceptCollectionCollaboratorDTOPK(id, collabUser, role);
+    }
 
+    @Override
+    public IBaseDAO<ConceptCollectionDTO> getDao() {
+        return ccDao;
+    }
 }

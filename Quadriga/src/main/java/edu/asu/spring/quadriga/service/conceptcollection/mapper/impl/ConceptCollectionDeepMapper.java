@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
@@ -35,7 +35,7 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMappe
 public class ConceptCollectionDeepMapper implements
 		IConceptCollectionDeepMapper {
 	@Autowired
-	private IDBConnectionCCManager dbConnect;
+	private IConceptCollectionDAO dbConnect;
 
 	@Autowired
 	private IConceptCollectionFactory ccFactory;
@@ -124,7 +124,7 @@ public class ConceptCollectionDeepMapper implements
 			
 			if(userCCCollaboratorMap.containsKey(userName))
 			{
-				String roleName = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
+				String roleName = ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole();
 				
 				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleName);
 //						collaboratorRoleFactory.createCollaboratorRoleObject();
@@ -146,7 +146,7 @@ public class ConceptCollectionDeepMapper implements
 			}
 			else
 			{
-				String roleName = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
+				String roleName = ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole();
 				// Prepare collaborator roles
 				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleName);
 
