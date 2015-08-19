@@ -1,8 +1,9 @@
 package edu.asu.spring.quadriga.service.dictionary;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.ICollaboratorManager;
 
-public interface IDictionaryCollaboratorManager {
+public interface IDictionaryCollaboratorManager extends ICollaboratorManager {
 
 	public abstract void updateCollaborators(String dictionaryId, String collabUser,
 			String collaboratorRole, String username) throws QuadrigaStorageException;

@@ -560,24 +560,6 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 
 	/**
-	 * this method used to add collaborators in the current dictionary
-	 * 
-	 * @param		dictionaryid
-	 * @return		List of users
-	 * @exception 	QuadrigaStorageException	
-	 */
-	@Override
-	@Transactional
-	public void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
-		try {
-			dbConnect.addCollaborators(collaborator, dictionaryid, userName, sessionUser);
-
-		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * This method retrieves the dictionary id for the given dictionary name
 	 * @param dictName - dictionary name
 	 * @return String - dictionary id associated with the given dictionary name

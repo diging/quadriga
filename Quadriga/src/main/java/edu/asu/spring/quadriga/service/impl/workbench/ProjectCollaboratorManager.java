@@ -10,7 +10,6 @@ import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dao.impl.workbench.ProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -90,30 +89,13 @@ public class ProjectCollaboratorManager extends CollaboratorManager<ProjectColla
 		return projectCollaboratorList;
 	}
 	
-	/**
-     * This method adds a collaborator for the project supplied.
-     * @param collaborator
-     * @param projectid
-     * @return String - error message blank on success and error on failure.
-     * @throws QuadrigaStorageException
-     * @author rohit pendbhaje
-     */
-    @Override
-    @Transactional
-    public void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
-    {
-        
-        projectCollabDAO.addCollaboratorRequest(collaborator, projectid, userName);
-        
-    }
-
-    @Override
-    public ProjectCollaboratorDTO createNewDTO() {
+	@Override
+    public ProjectCollaboratorDTO createNewCollaboratorDTO() {
         return new ProjectCollaboratorDTO();
     }
 
     @Override
-    public ProjectCollaboratorDTOPK createNewDTOPK(String id, String collabUser, String role) {
+    public ProjectCollaboratorDTOPK createNewCollaboratorDTOPK(String id, String collabUser, String role) {
         return new ProjectCollaboratorDTOPK(id, collabUser, role);
     }
 

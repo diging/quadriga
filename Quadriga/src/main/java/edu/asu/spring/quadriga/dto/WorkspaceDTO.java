@@ -294,4 +294,9 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     public void setCollaboratorList(List<WorkspaceCollaboratorDTO> list) {
         workspaceCollaboratorDTOList = list;
     }
+
+    @Override
+    public String getId() {
+        return workspaceid;
+    }
 }

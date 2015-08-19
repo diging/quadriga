@@ -24,12 +24,12 @@ public class DictionaryCollaboratorManager extends CollaboratorManager<Dictionar
 	private IDictionaryDAO dictionaryDao;
 	
 	@Override
-    public DictionaryCollaboratorDTO createNewDTO() {
+    public DictionaryCollaboratorDTO createNewCollaboratorDTO() {
         return new DictionaryCollaboratorDTO();
     }
 
     @Override
-    public DictionaryCollaboratorDTOPK createNewDTOPK(String id,
+    public DictionaryCollaboratorDTOPK createNewCollaboratorDTOPK(String id,
             String collabUser, String role) {
         return new DictionaryCollaboratorDTOPK(id, collabUser, role);
     }

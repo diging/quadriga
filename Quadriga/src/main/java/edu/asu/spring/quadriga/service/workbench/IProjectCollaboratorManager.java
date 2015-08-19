@@ -2,12 +2,12 @@ package edu.asu.spring.quadriga.service.workbench;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.ICollaboratorManager;
 
-public interface IProjectCollaboratorManager {
+public interface IProjectCollaboratorManager extends ICollaboratorManager {
 
 	/**
 	 * This methods returns the users who are not collaborators 
@@ -28,14 +28,5 @@ public interface IProjectCollaboratorManager {
 	 */
 	public abstract List<IProjectCollaborator> getProjectCollaborators(String projectId)
 			throws QuadrigaStorageException;
-
-	
-	public abstract void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName)
-            throws QuadrigaStorageException;
-    
-    public abstract void deleteCollaborators(String userName, String Projectid) throws QuadrigaStorageException;
-
-    public abstract void updateCollaborators(String projectid, String collabUser,
-            String collaboratorRole, String username) throws QuadrigaStorageException;
 
 }

@@ -70,26 +70,24 @@ public class ProjectAuthorization implements IAuthorization
 				roles = getAccessRoleList(userRoles);
 				List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
 				
-				for(IProjectCollaborator projectCollaborator : projectCollaborators)
-				{
-					ICollaborator collaborator = projectCollaborator.getCollaborator();
-					//check if he is a collaborator to the project
-					collaboratorName = collaborator.getUserObj().getUserName();
-				
-					if(userName.equals(collaboratorName))
-					{
-						collaboratorRoles = collaborator.getCollaboratorRoles();
-						
-							for(IQuadrigaRole collabRole : collaboratorRoles)
-							{
+				if (projectCollaborators != null) {
+    				for(IProjectCollaborator projectCollaborator : projectCollaborators) {
+    					ICollaborator collaborator = projectCollaborator.getCollaborator();
+    					//check if he is a collaborator to the project
+    					collaboratorName = collaborator.getUserObj().getUserName();
+    				
+    					if(userName.equals(collaboratorName)) {
+    						collaboratorRoles = collaborator.getCollaboratorRoles();
+    						
+							for(IQuadrigaRole collabRole : collaboratorRoles) {
 								collaboratorRoleId = collabRole.getId();
-								if(roles.contains(collaboratorRoleId))
-								{
+								if(roles.contains(collaboratorRoleId)) {
 									haveAccess = true;
 									return haveAccess;
 								}
 						    }
-					}
+    					}
+    				}
 				}
 			}
 		}

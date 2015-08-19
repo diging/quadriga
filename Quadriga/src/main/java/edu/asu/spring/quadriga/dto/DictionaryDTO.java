@@ -230,4 +230,9 @@ public class DictionaryDTO extends CollaboratingDTO<DictionaryCollaboratorDTOPK,
     public void setCollaboratorList(List<DictionaryCollaboratorDTO> list) {
         dictionaryCollaboratorDTOList = list;
     }
+
+    @Override
+    public String getId() {
+       return dictionaryid;
+    }
 }

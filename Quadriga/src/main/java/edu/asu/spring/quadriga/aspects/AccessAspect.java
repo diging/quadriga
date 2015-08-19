@@ -54,33 +54,24 @@ public class AccessAspect
 	@Around("within(edu.asu.spring.quadriga.web..*) && @annotation(checks)")
 	public Object chkAuthorization(ProceedingJoinPoint pjp, AccessPolicies checks) throws Throwable  
 	{
-		boolean haveAccess;
-		String userName;
-		String accessObjectId;
-		IAuthorization authorization;
-		
-		
-		haveAccess = true;
+		boolean haveAccess = true;
 		
 		//retrieve the logged in User name
-		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		 userName = auth.getName();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String userName = auth.getName();
 		//Loop through all the access policies specified
 		ElementAccessPolicy[] policies = checks.value();
 		
 		for(ElementAccessPolicy policy : policies)
 		{
 			//retrieve the authorization object based on the type
-			authorization = authorizationManager.getAuthorizationObject(policy.type());
+		    IAuthorization authorization = authorizationManager.getAuthorizationObject(policy.type());
 			
 			//calling the object
-			if(policy.paramIndex() > 0)
-			{
-			accessObjectId = pjp.getArgs()[policy.paramIndex()-1].toString();
-			haveAccess = authorization.chkAuthorization(userName,accessObjectId, policy.userRole());
-			}
-			else
-			{
+			if(policy.paramIndex() > 0) {
+			    String accessObjectId = pjp.getArgs()[policy.paramIndex()-1].toString();
+			    haveAccess = authorization.chkAuthorization(userName,accessObjectId, policy.userRole());
+			} else {
 				haveAccess = authorization.chkAuthorizationByRole(userName, policy.userRole());
 			}
 			
@@ -88,12 +79,10 @@ public class AccessAspect
 				break;
 		}
 		
-		if(!haveAccess)
-		{
+		if(!haveAccess) {
 			 throw new QuadrigaAccessException();
 		}
-		Object retVal = pjp.proceed();
-		return retVal;
+		return pjp.proceed();
 	}
 	
 }

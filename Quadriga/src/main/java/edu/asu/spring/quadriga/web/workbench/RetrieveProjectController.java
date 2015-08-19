@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 
 @Controller
@@ -155,24 +159,19 @@ public class RetrieveProjectController
 		return model;
 	}
 
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
 	public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
-		ModelAndView model;
-		String userName;
-		IProject project;
-		List<IWorkSpace> workspaceList;
-		List<IWorkSpace> collaboratorWorkspaceList;
+		ModelAndView model = new ModelAndView("auth/workbench/project");
 
-		model = new ModelAndView("auth/workbench/project");
-
-		userName = principal.getName();
-		project = projectManager.getProjectDetails(projectid);
+		String userName = principal.getName();
+		IProject project = projectManager.getProjectDetails(projectid);
 
 		//retrieve all the workspaces associated with the project
-		workspaceList = wsManager.listActiveWorkspace(projectid,userName);
+		List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectid,userName);
 
-		collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
+		List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);

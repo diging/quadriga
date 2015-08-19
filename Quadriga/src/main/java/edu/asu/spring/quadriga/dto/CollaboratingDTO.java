@@ -10,4 +10,6 @@ public abstract class CollaboratingDTO<U extends CollaboratorDTOPK, T extends Co
     public abstract List<T> getCollaboratorList();
     
     public abstract void setCollaboratorList(List<T> list);
+    
+    public abstract String getId();
 }

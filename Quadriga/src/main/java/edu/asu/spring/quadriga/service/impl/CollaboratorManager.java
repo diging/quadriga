@@ -10,16 +10,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.dto.CollaboratingDTO;
 import edu.asu.spring.quadriga.dto.CollaboratorDTO;
 import edu.asu.spring.quadriga.dto.CollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T extends CollaboratorDTOPK,C extends CollaboratingDTO<T, V>,D extends BaseDAO<C>> {
+public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T extends CollaboratorDTOPK,C extends CollaboratingDTO<T, V>,D extends BaseDAO<C>> implements ICollaboratorManager {
     
+    /* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.service.impl.ICollaboratorManager#updateCollaborators(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
     @Transactional
     public void updateCollaborators(String dtoId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException {
         IBaseDAO<C> dao = getDao();
@@ -56,8 +61,8 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
         for(String role : newCollaboratorRoles) {
             if(!existingRoles.contains(role)) {
                 Date date = new Date();
-                V collaboratorDto = createNewDTO();
-                T collaboratorKey = createNewDTOPK(dtoId,collabUser,role);
+                V collaboratorDto = createNewCollaboratorDTO();
+                T collaboratorKey = createNewCollaboratorDTOPK(dtoId,collabUser,role);
                 collaboratorDto.setRelatedDTO(dto);
                 collaboratorDto.setCollaboratorDTOPK(collaboratorKey);
                 collaboratorDto.setQuadrigaUserDTO(user);
@@ -73,6 +78,10 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
         dao.updateDTO(dto);    
     }
     
+    /* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.service.impl.ICollaboratorManager#deleteCollaborators(java.lang.String, java.lang.String)
+     */
+    @Override
     @Transactional
     public void deleteCollaborators(String collaboratorListAsString,String dtoId) throws QuadrigaStorageException {
         IBaseDAO<C> dao = getDao();
@@ -102,8 +111,74 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
         dao.updateDTO(dto);
     }
     
-    public abstract V createNewDTO();
-    public abstract T createNewDTOPK(String id, String collabUser, String role);
+    /* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.service.impl.ICollaboratorManager#addCollaborator(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    @Transactional
+    public void addCollaborator(String collaboratorName,String collabRoleList,String dtoId,String userAddingCollaborator) throws QuadrigaStorageException
+    {
+        IBaseDAO<C> dao = getDao();
+        
+        C dto = dao.getDTO(dtoId);
+        if(dto == null) {
+            return;
+        }
+        
+        List<V> collaboratorList = dto.getCollaboratorList();
+        List<String> collabRoles = Arrays.asList(collabRoleList.split(","));
+                
+        for(String role: collabRoles) {
+            if (role.trim().isEmpty())
+                continue;
+            V collaborator = createCollaborator(collaboratorName, userAddingCollaborator, dto, role);
+            collaboratorList.add(collaborator);
+        }
+        
+        dao.updateDTO(dto);
+    }
+    
+    /**
+     * This method adds the given collaborator to the specified DTO.
+     * @param collaborator Collaborator to add.
+     * @param dtoId Id of the DTO the collaboartor should be added to.
+     * @param loggedInUser Username of the user who initiated the process.
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    @Transactional
+    public void addCollaborator(ICollaborator collaborator, String dtoId, String loggedInUser) throws QuadrigaStorageException {
+        StringBuffer rolesString = new StringBuffer();
+        for (IQuadrigaRole role : collaborator.getCollaboratorRoles()) {
+            rolesString.append(role.getDBid() + ",");
+        }
+        addCollaborator(collaborator.getUserObj().getUserName(), rolesString.toString(), dtoId, loggedInUser);
+    }
+    /**
+     * Method to create a new workspace collaborator DTO object.
+     * @param collaboratorName Username of collaborator
+     * @param workspaceid  Id of workspace of the new collaborator.
+     * @param userName Username of user who added a new collaborator.
+     * @param wsDTO    Workspace to which the new collaborator is added to.
+     * @param role     Role of the new collaborator.
+     * @return a newly created {@link WorkspaceCollaboratorDTO} object
+     */
+    private V createCollaborator(String collaboratorName, String userName,
+            C wsDTO, String role) {
+        V collaborator = createNewCollaboratorDTO();
+        T collaboratorPK = createNewCollaboratorDTOPK(wsDTO.getId(), collaboratorName, role);
+        collaborator.setRelatedDTO(wsDTO);
+        collaborator.setCollaboratorDTOPK(collaboratorPK);
+        collaborator.setQuadrigaUserDTO(getDao().getUserDTO(collaboratorName));
+        collaborator.setCreatedby(userName);
+        collaborator.setCreateddate(new Date());
+        collaborator.setUpdatedby(userName);
+        collaborator.setUpdateddate(new Date());
+        return collaborator;
+    }
+    
+    public abstract V createNewCollaboratorDTO();
+    public abstract T createNewCollaboratorDTOPK(String id, String collabUser, String role);
     
     public abstract IBaseDAO<C> getDao();
     public abstract IBaseDAO<V> getCollaboratorDao();

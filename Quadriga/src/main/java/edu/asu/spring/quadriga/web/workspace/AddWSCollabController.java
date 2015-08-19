@@ -46,238 +46,232 @@ import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
-public class AddWSCollabController 
-{
-	
-	@Autowired
-	IModifyWSCollabManager wsManager;
-	
-	@Autowired
-	IRetrieveWSCollabManager wsCollabManager;
-	
-	@Autowired
-	private IQuadrigaRoleManager roleManager;
-	
-	@Autowired
-	ICollaboratorFactory collaboratorFactory;
-	
-	@Autowired
-	private IUserFactory userFactory;
-	
-	@Autowired
-	private IUserManager userManager;
-	
-	@Autowired
-	private CollaboratorValidator validator;
-	
-	@Autowired
-	private IListWSManager retrieveWSManager;
-	
-	private static final Logger logger = LoggerFactory.getLogger(ModifyWSCollabManager.class);
-	
-	/**
-	 * This method binds the selected input by the user and validates the 
-	 * input.
-	 */
-	@InitBinder
-	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
-		
-		validateBinder.setValidator(validator);
-		
-		binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
-			@Override
-			public void setAsText(String text) {
+public class AddWSCollabController {
 
-				IUser user;
-				try {
-					user = userManager.getUser(text);
-					setValue(user);
-				} catch (QuadrigaStorageException e) {
-					logger.error("In ModifyWSCollabController class :"+e);
-				}
-				
-			}
-		});
-		binder.registerCustomEditor(List.class, "collaboratorRoles", new PropertyEditorSupport() {
+    @Autowired
+    IModifyWSCollabManager wsManager;
 
-			@Override
-			public void setAsText(String text) {
+    @Autowired
+    IRetrieveWSCollabManager wsCollabManager;
 
-				String[] roleIds = text.split(",");
-				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-				for (String roleId : roleIds) {
-				    IQuadrigaRole role = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.WORKSPACE_ROLES, roleId);
-					roles.add(role);
-				}
-				setValue(roles);
-			} 	
-		}); 
-	}
-	
-	/**
-	 * This method displays the form to add collaborators to
-	 * workspace.
-	 * @param workspaceid
-	 * @param principal
-	 * @return ModelAndView
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
-	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addcollaborators", method = RequestMethod.GET)
-	public ModelAndView addWorkspaceCollaboratorForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
-	{
-		ModelAndView model;
-		List<IUser> nonCollaboratingUser;
-		ICollaborator collaborator;
-		List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
-		
-		model = new ModelAndView("auth/workbench/workspace/addcollaborators");
-		String userName = principal.getName();
-		
-		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
-		
-		//adding the collaborator model
-		collaborator =  collaboratorFactory.createCollaborator();
-		model.getModelMap().put("collaborator", collaborator);
-		
-		//adding the workspace id
-		model.getModelMap().put("workspaceid", workspaceid);
-		model.getModelMap().put("workspacename",workspace.getWorkspaceName());
-		model.getModelMap().put("workspacedesc", workspace.getDescription());
-		
-		
-		//fetch the users who are not collaborators to the workspace
-		nonCollaboratingUser = wsCollabManager.getWorkspaceNonCollaborators(workspaceid);
-		
-		//remove the restricted user
-		Iterator<IUser> userIterator = nonCollaboratingUser.iterator();
-		while(userIterator.hasNext())
-		{
-			//fetch the quadriga roles and eliminate the restricted user
-			IUser user = userIterator.next();
-			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
-			for(IQuadrigaRole role : userQuadrigaRole)
-			{
-				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
-				{
-					userIterator.remove();
-					break;
-				}
-			}
-		}
-		
-		//add the users list to the model
-		model.getModelMap().put("noncollabusers", nonCollaboratingUser);
-		
-		//fetch the roles that can be associated to the workspace collaborator
-		List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
-		
-        //add the collaborator roles to the model
-		model.getModelMap().put("wscollabroles", collaboratorRoles);
-		
-		//fetch all the collaborating users and their roles
-		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
-		
-		model.getModelMap().put("collaboratingusers", collaboratingUser);
-		
-		return model;
-	}
-	
-	/**
-	 * This method adds collaborator to given workspace.
-	 * @param collaborator
-	 * @param result
-	 * @param workspaceid
-	 * @param principal
-	 * @return ModelAndView
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 3, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
-	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addcollaborators", method = RequestMethod.POST)
-	public ModelAndView addWorkspaceCollaborator(@Validated @ModelAttribute("collaborator") Collaborator collaborator,BindingResult result,
-			@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
-	{
-		ModelAndView model;
-		String userName;
-		String collabUser;
-		StringBuilder roleIdList;
-		List<IUser> nonCollaboratingUser;
-		List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
-		
-		//create the model view
-		model = new ModelAndView("auth/workbench/workspace/addcollaborators");
-		roleIdList = new StringBuilder();
-		userName = principal.getName();
-		
-		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
-		model.getModelMap().put("workspacename",workspace.getWorkspaceName());
-		model.getModelMap().put("workspacedesc", workspace.getDescription());
-		
-		if(result.hasErrors())
-		{
-			model.getModelMap().put("collaborator", collaborator);
+    @Autowired
+    private IQuadrigaRoleManager roleManager;
 
-		}
-		else
-		{
-			//get all the required input parameters
-			
-			collabUser = collaborator.getUserObj().getUserName();
-			for(IQuadrigaRole role : collaborator.getCollaboratorRoles())
-			{
-				roleIdList.append(",");
-				roleIdList.append(role.getDBid());
-			}
-			
-			//call the method to insert the collaborator
-			wsManager.addWorkspaceCollaborator(collabUser, roleIdList.toString().substring(1), workspaceid, userName);
-			
-			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
+    @Autowired
+    ICollaboratorFactory collaboratorFactory;
 
-		}
-		
-		//adding the workspace id
-		model.getModelMap().put("workspaceid", workspaceid);
-		
-		
-		//fetch the users who are not collaborators to the workspace
-		nonCollaboratingUser = wsCollabManager.getWorkspaceNonCollaborators(workspaceid);
-		
-		//remove the restricted user
-		Iterator<IUser> userIterator = nonCollaboratingUser.iterator();
-		while(userIterator.hasNext())
-		{
-			//fetch the quadriga roles and eliminate the restricted user
-			IUser user = userIterator.next();
-			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
-			for(IQuadrigaRole role : userQuadrigaRole)
-			{
-				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
-				{
-					userIterator.remove();
-					break;
-				}
-			}
-		}
-		
-		//add the users list to the model
-		model.getModelMap().put("noncollabusers", nonCollaboratingUser);
-		
-		//fetch the roles that can be associated to the workspace collaborator
-		List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
-		
-        //add the collaborator roles to the model
-		model.getModelMap().put("wscollabroles", collaboratorRoles);
-		
-		//fetch all the collaborating users and their roles
-		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
-		
-		model.getModelMap().put("collaboratingusers", collaboratingUser);
-		return model;
-		
+    @Autowired
+    private IUserFactory userFactory;
 
-	}
+    @Autowired
+    private IUserManager userManager;
+
+    @Autowired
+    private CollaboratorValidator validator;
+
+    @Autowired
+    private IListWSManager retrieveWSManager;
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(ModifyWSCollabManager.class);
+
+    /**
+     * This method binds the selected input by the user and validates the input.
+     */
+    @InitBinder
+    protected void initBinder(HttpServletRequest request,
+            ServletRequestDataBinder binder, WebDataBinder validateBinder)
+            throws Exception {
+
+        validateBinder.setValidator(validator);
+
+        binder.registerCustomEditor(IUser.class, "userObj",
+                new PropertyEditorSupport() {
+                    @Override
+                    public void setAsText(String text) {
+
+                        IUser user;
+                        try {
+                            user = userManager.getUser(text);
+                            setValue(user);
+                        } catch (QuadrigaStorageException e) {
+                            logger.error("In ModifyWSCollabController class :"
+                                    + e);
+                        }
+
+                    }
+                });
+        binder.registerCustomEditor(List.class, "collaboratorRoles",
+                new PropertyEditorSupport() {
+
+                    @Override
+                    public void setAsText(String text) {
+
+                        String[] roleIds = text.split(",");
+                        List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
+                        for (String roleId : roleIds) {
+                            IQuadrigaRole role = roleManager
+                                    .getQuadrigaRoleByDbId(
+                                            IQuadrigaRoleManager.WORKSPACE_ROLES,
+                                            roleId);
+                            roles.add(role);
+                        }
+                        setValue(roles);
+                    }
+                });
+    }
+
+    /**
+     * This method displays the form to add collaborators to workspace.
+     * 
+     * @param workspaceid
+     * @param principal
+     * @return ModelAndView
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addcollaborators", method = RequestMethod.GET)
+    public ModelAndView addWorkspaceCollaboratorForm(
+            @PathVariable("workspaceid") String workspaceid, Principal principal)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+        ModelAndView model;
+        List<IUser> nonCollaboratingUser;
+        ICollaborator collaborator;
+        List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
+
+        model = new ModelAndView("auth/workbench/workspace/addcollaborators");
+        String userName = principal.getName();
+
+        IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(
+                workspaceid, userName);
+
+        // adding the collaborator model
+        collaborator = collaboratorFactory.createCollaborator();
+        model.getModelMap().put("collaborator", collaborator);
+
+        // adding the workspace id
+        model.getModelMap().put("workspaceid", workspaceid);
+        model.getModelMap().put("workspacename", workspace.getWorkspaceName());
+        model.getModelMap().put("workspacedesc", workspace.getDescription());
+
+        // fetch the users who are not collaborators to the workspace
+        nonCollaboratingUser = wsCollabManager
+                .getWorkspaceNonCollaborators(workspaceid);
+
+        // remove the restricted user
+        Iterator<IUser> userIterator = nonCollaboratingUser.iterator();
+        while (userIterator.hasNext()) {
+            // fetch the quadriga roles and eliminate the restricted user
+            IUser user = userIterator.next();
+            List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+            for (IQuadrigaRole role : userQuadrigaRole) {
+                if (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) {
+                    userIterator.remove();
+                    break;
+                }
+            }
+        }
+
+        // add the users list to the model
+        model.getModelMap().put("noncollabusers", nonCollaboratingUser);
+
+        // fetch the roles that can be associated to the workspace collaborator
+        List<IQuadrigaRole> collaboratorRoles = roleManager
+                .getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
+
+        // add the collaborator roles to the model
+        model.getModelMap().put("wscollabroles", collaboratorRoles);
+
+        // fetch all the collaborating users and their roles
+        collaboratingUser = wsCollabManager
+                .getWorkspaceCollaborators(workspaceid);
+
+        model.getModelMap().put("collaboratingusers", collaboratingUser);
+
+        return model;
+    }
+
+    /**
+     * This method adds collaborator to given workspace.
+     * 
+     * @param collaborator
+     * @param result
+     * @param workspaceid
+     * @param principal
+     * @return ModelAndView
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 3, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addcollaborators", method = RequestMethod.POST)
+    public ModelAndView addWorkspaceCollaborator(
+            @Validated @ModelAttribute("collaborator") Collaborator collaborator,
+            BindingResult result,
+            @PathVariable("workspaceid") String workspaceid, Principal principal)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+        List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
+
+        // create the model view
+        ModelAndView model = new ModelAndView("auth/workbench/workspace/addcollaborators");
+        String userName = principal.getName();
+
+        IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(
+                workspaceid, userName);
+        model.getModelMap().put("workspacename", workspace.getWorkspaceName());
+        model.getModelMap().put("workspacedesc", workspace.getDescription());
+
+        if (result.hasErrors()) {
+            model.getModelMap().put("collaborator", collaborator);
+
+        } else {
+            // get all the required input parameters
+
+            // call the method to insert the collaborator
+            wsManager.addCollaborator(collaborator, workspaceid, userName);
+
+            model.getModelMap().put("collaborator",
+                    collaboratorFactory.createCollaborator());
+        }
+
+        // adding the workspace id
+        model.getModelMap().put("workspaceid", workspaceid);
+
+        // fetch the users who are not collaborators to the workspace
+        List<IUser> nonCollaboratingUser = wsCollabManager
+                .getWorkspaceNonCollaborators(workspaceid);
+
+        // remove the restricted user
+        Iterator<IUser> userIterator = nonCollaboratingUser.iterator();
+        while (userIterator.hasNext()) {
+            // fetch the quadriga roles and eliminate the restricted user
+            IUser user = userIterator.next();
+            List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+            for (IQuadrigaRole role : userQuadrigaRole) {
+                if (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) {
+                    userIterator.remove();
+                    break;
+                }
+            }
+        }
+
+        // add the users list to the model
+        model.getModelMap().put("noncollabusers", nonCollaboratingUser);
+
+        // fetch the roles that can be associated to the workspace collaborator
+        List<IQuadrigaRole> collaboratorRoles = roleManager
+                .getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
+
+        // add the collaborator roles to the model
+        model.getModelMap().put("wscollabroles", collaboratorRoles);
+
+        // fetch all the collaborating users and their roles
+        collaboratingUser = wsCollabManager
+                .getWorkspaceCollaborators(workspaceid);
+
+        model.getModelMap().put("collaboratingusers", collaboratingUser);
+        return model;
+
+    }
 
 }

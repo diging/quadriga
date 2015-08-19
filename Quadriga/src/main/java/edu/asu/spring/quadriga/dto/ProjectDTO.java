@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.dto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -252,5 +253,10 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
     @Override
     public void setCollaboratorList(List<ProjectCollaboratorDTO> list) {
         projectCollaboratorDTOList = list;
+    }
+
+    @Override
+    public String getId() {
+        return projectid;
     }
 }

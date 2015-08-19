@@ -1,17 +1,8 @@
 package edu.asu.spring.quadriga.service.conceptcollection;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.ICollaboratorManager;
 
-public interface ICCCollaboratorManager {
+public interface ICCCollaboratorManager extends ICollaboratorManager {
 
-	public abstract void addCollaborators(ICollaborator collaborator, String collectionid,
-			String userName) throws QuadrigaStorageException;
-
-	public abstract void deleteCollaborators(String userName, String collectionid)
-			throws QuadrigaStorageException;
-
-	public abstract void updateCollaborators(String collectionId, String collabUser,
-			String collaboratorRole, String username) throws QuadrigaStorageException;
-
+	
 }

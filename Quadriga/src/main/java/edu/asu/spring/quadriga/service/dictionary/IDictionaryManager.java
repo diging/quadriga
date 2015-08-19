@@ -157,17 +157,6 @@ public interface IDictionaryManager {
 	
 	
 	/**
-	 * this method used to add collaborators in the current dictionary
-	 * 
-	 * @param collaborator
-	 * @param dictionaryid
-	 * @param userName
-	 * @param sessionUser
-	 * @return String
-	 */
-	public abstract void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser);
-	
-	/**
 	 * Delete a dictinary
 	 * @param user
 	 * @param dictionaryId
