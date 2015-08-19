@@ -22,7 +22,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.dao.IDspaceDAO;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionListWSManager;
+import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
@@ -74,7 +74,7 @@ public class DspaceManager implements IDspaceManager{
 			.getLogger(DspaceManager.class);
 
 	@Autowired
-	private IDBConnectionListWSManager dbconnectListWSManager;
+	private IListWsDAO dbconnectListWSManager;
 
 	@Override
 	public Properties getDspaceMessages() {

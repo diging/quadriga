@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.conceptcollection.IDBConnectionModifyCCManager;
@@ -17,11 +15,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
-public class ConceptCollectionModifyManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBConnectionModifyCCManager
-{
-	@Autowired
-	private SessionFactory sessionFactory;
-
+public class ConceptCollectionModifyManagerDAO extends BaseDAO<ConceptCollectionDTO> implements IDBConnectionModifyCCManager {
 	/**
 	 * This method transfers the ownership of the concept collection
 	 * to other user and assigns the current user as a collaborator.
@@ -72,7 +66,7 @@ public class ConceptCollectionModifyManagerDAO extends BaseDAO<ConceptCollection
 			collaborator.setUpdateddate(date);
 			conceptCollectionCollaborator.add(collaborator);
 			
-			sessionFactory.getCurrentSession().update(conceptCollection);
+			updateDTO(conceptCollection);
 		}
 		catch(Exception ex)
 		{
@@ -100,7 +94,7 @@ public class ConceptCollectionModifyManagerDAO extends BaseDAO<ConceptCollection
 		    conceptCollection.setAccessibility(Boolean.FALSE);
 		    conceptCollection.setUpdatedby(userName);
 		    conceptCollection.setUpdateddate(date);
-		    sessionFactory.getCurrentSession().update(conceptCollection);
+		    updateDTO(conceptCollection);
 		}
 		catch(Exception ex)
 		{

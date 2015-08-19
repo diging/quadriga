@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionListWSManager;
+import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
@@ -49,7 +49,7 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDictionaryShal
 public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 
 	@Autowired
-	private IDBConnectionListWSManager dbConnect;
+	private IListWsDAO dbConnect;
 
 	@Autowired
 	private IWorkspaceCCShallowMapper workspaceCCShallowMapper;
@@ -101,7 +101,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	@Transactional
 	public IWorkSpace getWorkSpaceDetails(String workspaceId) throws QuadrigaStorageException{
 
-		WorkspaceDTO workspaceDTO = dbConnect.getWorkspaceDTO(workspaceId);
+		WorkspaceDTO workspaceDTO = dbConnect.getDTO(workspaceId);
 		IWorkSpace workspace = null;
 
 		if(workspaceDTO != null){
@@ -142,7 +142,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	@Override
 	public IWorkSpace getWorkSpaceDetails(String workspaceId,String userName) throws QuadrigaStorageException{
 
-		WorkspaceDTO workspaceDTO = dbConnect.getWorkspaceDTO(workspaceId);
+		WorkspaceDTO workspaceDTO = dbConnect.getDTO(workspaceId);
 		IWorkSpace workspace = null;
 
 		if(workspaceDTO != null){

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionListWSManager;
+import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Repository
-public class ListWSManagerDAO extends BaseDAO<WorkspaceDTO> implements IDBConnectionListWSManager {
+public class ListWsDAO extends BaseDAO<WorkspaceDTO> implements IListWsDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -43,7 +43,7 @@ public class ListWSManagerDAO extends BaseDAO<WorkspaceDTO> implements IDBConnec
 	@Autowired
 	private NetworkDTOMapper networkDTOMapper;
 	
-	private static final Logger logger = LoggerFactory.getLogger(ListWSManagerDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(ListWsDAO.class);
 	
 	
 	/**
@@ -461,25 +461,6 @@ public class ListWSManagerDAO extends BaseDAO<WorkspaceDTO> implements IDBConnec
         	throw new QuadrigaStorageException();
 		}
 		return workspace;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public WorkspaceDTO getWorkspaceDTO(String workspaceId) throws QuadrigaStorageException
-	{
-		WorkspaceDTO workspaceDTO = null;
-		try
-		{
-			workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-		}
-		catch(HibernateException e)
-		{
-			logger.error("Retrieve workspace details method :",e);
-        	throw new QuadrigaStorageException();
-		}
-		return workspaceDTO;
 	}
 	
 	/**

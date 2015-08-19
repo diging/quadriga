@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionListWSManager;
+import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.proxy.WorkSpaceProxy;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 
 	@Autowired
-	private IDBConnectionListWSManager dbConnect;
+	private IListWsDAO dbConnect;
 	
 	@Autowired
 	private IListWSManager wsManager;
@@ -104,7 +104,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	@Override
 	@Transactional
 	public IWorkSpace getWorkSpaceDetails(String workspaceId) throws QuadrigaStorageException{
-		WorkspaceDTO workspaceDTO = dbConnect.getWorkspaceDTO(workspaceId);
+		WorkspaceDTO workspaceDTO = dbConnect.getDTO(workspaceId);
 		IWorkSpace workspaceProxy = null;
 		
 		if(workspaceDTO != null){

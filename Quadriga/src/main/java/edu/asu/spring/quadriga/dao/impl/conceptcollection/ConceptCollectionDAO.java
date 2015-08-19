@@ -2,11 +2,8 @@ package edu.asu.spring.quadriga.dao.impl.conceptcollection;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
@@ -27,9 +23,7 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollab
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionConcepts;
-import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
@@ -226,97 +220,6 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
 			throw new QuadrigaStorageException(e);
 		}
 		return userList;
-	}
-	
-	/**
-	 * retrieves data from database to retrieve collaborators
-	 * 
-	 * @param collectionid
-	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
-	 * 
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public List<ICollaborator> showCollaboratorRequest(String collectionid) throws QuadrigaStorageException 
-	{
-		List<ICollaborator> collaboratorList = new ArrayList<ICollaborator>();
-		List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
-		
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid");
-			query.setParameter("conceptCollectionid", collectionid);
-			List<ConceptCollectionCollaboratorDTO> ccCollabList = query.list();
-			
-			Iterator<ConceptCollectionCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
-			HashMap<String, String> userRoleMap = new HashMap<String, String>();
-			while(ccCollabIterator.hasNext())
-			{
-				ConceptCollectionCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
-				String roles= "";
-				if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
-				{
-					roles = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole()+",");
-				}
-				else
-				{
-					roles = ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole()+",";
-				}
-				
-				userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(), roles);
-			}
-			
-			Iterator<Entry<String, String>> userRoleMapItr = userRoleMap.entrySet().iterator();
-			while(userRoleMapItr.hasNext())
-			{
-				Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
-				ICollaborator collaborator = collaboratorFactory.createCollaborator();
-				IUser user = userFactory.createUserObject();
-				user = userManager.getUser((String) pairs.getKey());
-				collaborator.setUserObj(user);
-				//fetch the collaborator roles
-				String userRoleList = (String) pairs.getValue();
-				collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-1));
-				collaborator.setCollaboratorRoles(collaboratorRoles);
-				collaboratorList.add(collaborator);
-			}
-		}
-		catch(Exception e)
-		{
-			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
-			throw new QuadrigaStorageException(e);
-		}
-		return collaboratorList;
-	}
-	
-	/**
-	 * splits the comma seperated roles string coming from database and converts
-	 * into list of roles
-	 * 
-	 * @param role
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 * 
-	 */
-	public List<IQuadrigaRole> splitAndgetCollaboratorRolesList(String role) {
-		if(role == null || role.isEmpty())
-		{
-			logger.error("splitAndgetCollaboratorRolesList: input argument role is null");
-			return null;
-		}
-		String[] collabroles;
-		List<IQuadrigaRole> collaboratorRoleList = new ArrayList<IQuadrigaRole>();
-		IQuadrigaRole collaboratorRole = null;
-
-		collabroles = role.split(",");
-
-		for (int i = 0; i < collabroles.length; i++) {
-			collaboratorRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collabroles[i]);
-			collaboratorRoleList.add(collaboratorRole);
-		}
-
-		return collaboratorRoleList;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -538,69 +441,6 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
 		return ccID;
 	}
 
-
-	/**
-	 * This method retrieves the collaborators associated with the given 
-	 * concept collection
-	 * @param : collection - Concept collection object
-	 * @throws : QuadrigaStorageEXception
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
-		List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
-		List<IConceptCollectionCollaborator> conceptCollectionCollaboratorList = new ArrayList<IConceptCollectionCollaborator>();
-		
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid");
-			query.setParameter("conceptCollectionid", collection.getConceptCollectionId());
-			List<ConceptCollectionCollaboratorDTO> ccCollabList = query.list();
-			
-			if(ccCollabList != null && ccCollabList.size() > 0)
-			{
-				Iterator<ConceptCollectionCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
-				HashMap<String, String> userRoleMap = new HashMap<String, String>();
-				while(ccCollabIterator.hasNext())
-				{
-					ConceptCollectionCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
-					if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
-					{
-						String updatedRoleStr = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole()+",");
-						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(), updatedRoleStr);
-					}
-					else
-					{
-						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getCollaboratorDTOPK().getCollaboratorrole()+",");
-					}
-				}
-				
-				Iterator<Entry<String, String>> userRoleMapItr = userRoleMap.entrySet().iterator();
-				while(userRoleMapItr.hasNext())
-				{
-					Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
-					ICollaborator collaborator = collaboratorFactory.createCollaborator();
-					IUser user = userFactory.createUserObject();
-					user = userManager.getUser((String) pairs.getKey());
-					collaborator.setUserObj(user);
-					String userRoleList = (String) pairs.getValue();
-					collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-1));
-					collaborator.setCollaboratorRoles(collaboratorRoles);
-					IConceptCollectionCollaborator conceptCollectionCollaborator = new ConceptCollectionCollaborator();
-					conceptCollectionCollaborator.setConceptCollection(collection);
-					conceptCollectionCollaborator.setCollaborator(collaborator);
-					conceptCollectionCollaboratorList.add(conceptCollectionCollaborator);
-				}
-				
-				collection.setConceptCollectionCollaborators(conceptCollectionCollaboratorList);
-			}	
-		}
-		catch(Exception e)
-		{
-			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
-			throw new QuadrigaStorageException(e);
-		}
-	}
 	
 	@Override
 	public ConceptCollectionDTO getCCDTO(String ccId) throws QuadrigaStorageException 

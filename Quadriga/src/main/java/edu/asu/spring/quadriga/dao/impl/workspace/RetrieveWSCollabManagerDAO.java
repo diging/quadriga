@@ -12,12 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionRetrieveWSCollabManager;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
@@ -25,7 +21,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.IUserManager;
 
 @Repository
 public class RetrieveWSCollabManagerDAO extends BaseDAO<WorkspaceCollaboratorDTO> implements IDBConnectionRetrieveWSCollabManager {
@@ -43,30 +38,6 @@ public class RetrieveWSCollabManagerDAO extends BaseDAO<WorkspaceCollaboratorDTO
 	private UserDTOMapper userDTOMapper;
 	
 	private static final Logger logger = LoggerFactory.getLogger(RetrieveWSCollabManagerDAO.class);
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<ICollaborator> getWorkspaceCollaborators(String workspaceId)
-			throws QuadrigaStorageException 
-	{
-		List<ICollaborator> wrkspaceCollabList = new ArrayList<ICollaborator>();
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from WorkspaceCollaboratorDTO wrkspaceCollab where wrkspaceCollab.collaboratorDTOPK.workspaceid =:id");
-			query.setParameter("id", workspaceId);
-			@SuppressWarnings("unchecked")
-			List<WorkspaceCollaboratorDTO> wrkCollabList = query.list();
-			wrkspaceCollabList = wsCollaboratorMapper.getWorkspaceCollaborators(wrkCollabList);
-		}
-		catch(Exception e)
-		{
-			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
-			throw new QuadrigaStorageException(e);
-		}
-		return wrkspaceCollabList;
-	}
 
 	/**
 	 * {@inheritDoc}

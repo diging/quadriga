@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -9,7 +10,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionListWSManager {
+public interface IListWsDAO extends IBaseDAO<WorkspaceDTO> {
 
 	/**
 	 * Retrieve the list of deactivated workspace for a given user associated to given project
@@ -148,9 +149,6 @@ public interface IDBConnectionListWSManager {
 			throws QuadrigaStorageException;
 
 	public List<WorkspaceDTO> listWorkspaceDTO(String projectid) throws QuadrigaStorageException;
-
-	WorkspaceDTO getWorkspaceDTO(String workspaceId)
-			throws QuadrigaStorageException;
 
 	List<WorkspaceDTO> listWorkspaceDTO(String projectid, String userName)
 			throws QuadrigaStorageException;

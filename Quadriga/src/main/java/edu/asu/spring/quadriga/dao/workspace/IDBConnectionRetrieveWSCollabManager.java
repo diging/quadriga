@@ -2,22 +2,12 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionRetrieveWSCollabManager 
 {
-
-	/**
-	 * Retrieves collaborators for associated workspace
-	 * @param workspaceId
-	 * @return List<ICollaborator> - list of collaborators for associated workspace.
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<ICollaborator> getWorkspaceCollaborators(String workspaceId)
-			throws QuadrigaStorageException;
 
 	/**
 	 * Retrieves list of users who are not yet collaborators for given workspace

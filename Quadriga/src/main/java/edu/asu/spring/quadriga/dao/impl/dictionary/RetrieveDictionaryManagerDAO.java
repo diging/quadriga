@@ -32,46 +32,8 @@ public class RetrieveDictionaryManagerDAO extends BaseDAO<DictionaryDTO> impleme
 	
 	private static final Logger logger = LoggerFactory.getLogger(RetrieveDictionaryManagerDAO.class);
 
-	/**
-	 * This method retrieves the dictionary details for the specified dictionaryid.
-	 * @param dictionaryId
-	 * @return IDictinary object
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	public DictionaryDTO getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException 
-	{
-		DictionaryDTO dictionaryDTO = null;
-		try
-		{
-			dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
-			//dictionary = dictionaryDTOMapper.getDictionary(dictionaryDTO);
-		} 
-		catch (HibernateException e) 
-		{
-			logger.error("getDictionaryDetails method :",e);
-			throw new QuadrigaStorageException();
-		}
-		return dictionaryDTO;
-	}
 	
 
-	@Override
-	public DictionaryDTO getDictionaryDTO(String dictionaryId) throws QuadrigaStorageException 
-	{
-		DictionaryDTO dictionaryDTO = null;
-		try
-		{
-			dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
-		} 
-		catch (HibernateException e) 
-		{
-			logger.error("getDictionaryDetails method :",e);
-			throw new QuadrigaStorageException();
-		}
-		return dictionaryDTO;
-	}
-	
 	@Override
 	public DictionaryDTO getDictionaryDTO(String dictionaryId, String userName) throws QuadrigaStorageException 
 	{

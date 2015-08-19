@@ -6,7 +6,6 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -17,12 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
@@ -46,48 +43,6 @@ public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> impl
 	private static final Logger logger = LoggerFactory.getLogger(ProjectCollaboratorDAO.class);
 	
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
-	{
-		try
-		{
-			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
-			
-			if(projectDTO != null) {
-				projectMapper.addCollaboratorToProjectDTO(projectDTO,collaborator,userName);
-				sessionFactory.getCurrentSession().update(projectDTO);
-			}
-		}
-		catch(HibernateException ex)
-		{
-			logger.error("Adding project collaborator :",ex);
-			throw new QuadrigaStorageException();
-		}
-	}
-	
-	/**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<ICollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
-    {
-
-        List<ICollaborator> collaborator = null;
-        
-        ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
-        if(project.equals(null))
-        {
-            throw new QuadrigaStorageException();
-        }
-        
-            collaborator = projectMapper.getProjectCollaboratorList(project);
-        
-        return collaborator;
-    }
-    
-    /**
      * {@inheritDoc}
      */
     @Override

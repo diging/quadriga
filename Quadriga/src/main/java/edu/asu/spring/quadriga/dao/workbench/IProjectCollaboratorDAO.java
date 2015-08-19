@@ -3,23 +3,12 @@ package edu.asu.spring.quadriga.dao.workbench;
 import java.util.List;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IProjectCollaboratorDAO extends IBaseDAO<ProjectCollaboratorDTO> {
 
-	/**
-	 * This method adds a collaborator  for a project
-	 * @param collaborator
-	 * @param projectid
-	 * @param userName
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName)
-			throws QuadrigaStorageException;
-	
 	/**
      * Retrieves all the user who are not associated with the project as collaborators.
      * @param projectid
@@ -29,14 +18,5 @@ public interface IProjectCollaboratorDAO extends IBaseDAO<ProjectCollaboratorDTO
      */
     public abstract List<IUser> getProjectNonCollaborators(String projectid) throws QuadrigaStorageException;
 
-    /**
-     * Retrieves all the users associated with project as collaborators.
-     * @param projectId
-     * @return List<ICollaborator> - list of collaborators associated with the specified project.
-     * @throws QuadrigaStorageException
-     */
-    public abstract List<ICollaborator> getProjectCollaborators(String projectId)
-            throws QuadrigaStorageException;
-    
 
 }

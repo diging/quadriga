@@ -111,7 +111,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 	@Override
 	@Transactional
 	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException{
-		DictionaryDTO dictionaryDTO = dbconnect1.getDictionaryDTO(dictionaryId);
+		DictionaryDTO dictionaryDTO = dbconnect1.getDTO(dictionaryId);
 		IDictionary dictionaryProxy = null;
 		if(dictionaryDTO != null){
 			dictionaryProxy = new DictionaryProxy(dictionaryManager);

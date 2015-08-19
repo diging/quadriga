@@ -21,15 +21,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 
 
 	/**
-	 * Queries the database to get a list of dictionary objects list
-	 * 
-	 * @return List containing DictionaryDTO objects of dictionary of the users
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<DictionaryDTO> getDictionaryOfUser(String userName)
-			throws QuadrigaStorageException;
-
-	/**
 	 * Adds the dictionary in the database
 	 * 
 	 * @return Status message
@@ -37,16 +28,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 	 */
 	public abstract void addDictionary(IDictionary dictionary)
 			throws QuadrigaStorageException;
-
-	/**
-	 * Queries the database to get a list of dictionary items objects list
-	 * 
-	 * @return List containing IDictionaryItems objects of dictionary items for
-	 *         a dictionary
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<IItem> getDictionaryItemsDetails(
-			String dictionaryid,String ownerName) throws QuadrigaStorageException;
 
 	/**
 	 * Queries the database to get dictionary name
@@ -96,42 +77,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 	 */
 	public abstract List<IUser> showNonCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
 	
-	
-	/**
-	 * makes database call to show collaborating users of the current dictionary
-	 * 
-	 * @param dictionaryid
-	 * @return List<ICollaborator>
-	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
-	 */
-	public abstract List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
-	
-	
-	/**
-	 * makes db call to add collaborator in dictionary
-	 * 
-	 * @param collaborator
-	 * @param dictionaryid
-	 * @param userName
-	 * @param sessionUser
-	 * @return String 			error message from the database
-	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
-	 */
-	public abstract void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException;
-
-	/**
-	 * makes db call to delete collaborator in dictionary
-	 * 
-	 * @param dictionaryid
-	 * @param userName
-	 * @return String 			error message from the database
-	 * @author rohit pendbhaje
-	 */
-	public abstract void deleteCollaborators(String dictionaryid, String userName) throws QuadrigaStorageException;
-	
-
 	/**
 	 * Deletes the dictionary 
 	 * @param dictionaryId
@@ -169,16 +114,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 	 * @author Karthik Jayaraman
 	 */
 	public abstract List<String> getDictionaryCollaboratorRoles(String userId, String dicitonaryId)
-			throws QuadrigaStorageException;
-
-	/**
-	 * Get the Dictionary Items corresponding to a dictionary ID
-	 * @param udictionary id
-	 * @return List of dictionary items
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	public abstract List<IItem> getDictionaryItemsDetailsCollab(String dictionaryid)
 			throws QuadrigaStorageException;
 
 	/**

@@ -16,11 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
@@ -52,33 +49,6 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 	
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryDAO.class);
 
-	/**
-	 * Gets the dictionary of the user matched with his user name
-	 * @param user id id
-	 * @return List of Dictionary 
-	 * @throws QuadrigaStorageException
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<DictionaryDTO> getDictionaryOfUser(String userId) throws QuadrigaStorageException 
-	{
-		List<DictionaryDTO> dictionaryDTOList = null;
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryDTO dictionary where dictionary.dictionaryowner.username =:username");
-			query.setParameter("username", userId);
-			dictionaryDTOList = query.list();
-//			if(dictionaryDTOList != null && dictionaryDTOList.size() > 0)
-//			{
-//				dictionaryList = dictionaryDTOMapper.getDictionaryList(dictionaryDTOList);
-//			}
-		} 
-		catch (HibernateException e) 
-		{
-			logger.error("getDictionaryOfUser method :",e);
-		}
-		return dictionaryDTOList;
-	}
 
 	/**
 	 * Save a dictionary in the database
@@ -102,38 +72,6 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 			logger.error("addDictionary :",e);
 			throw new QuadrigaStorageException(e);
 		}
-	}
-
-	/**
-	 * Get dictionary Item details with dictionary ID and owner name
-	 * @param dictionary id and owner name
-	 * @return List of IDictionaryItem
-	 * @throws QuadrigaStorageException
-	 * @author karthik jayaraman
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<IItem> getDictionaryItemsDetails(String dictionaryid,String ownerName) throws QuadrigaStorageException 
-	{
-		List<IItem> dictItemList = null;
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryItemsDTO dictItems where dictItems.dictionaryDTO.dictionaryowner.username =:ownerName and dictItems.dictionaryDTO.dictionaryid =:dictionaryid ORDER BY dictItems.term");
-			query.setParameter("ownerName", ownerName);
-			query.setParameter("dictionaryid", dictionaryid);
-			
-			List<DictionaryItemsDTO> dictItemsDTOList = query.list();
-			if(dictItemsDTOList != null && dictItemsDTOList.size() > 0)
-			{
-				dictItemList = dictionaryDTOMapper.getDictionaryItemList(dictItemsDTOList);
-			}
-		} 
-		catch (HibernateException e) 
-		{
-			logger.error("getDictionaryItemsDetails method :",e);
-			throw new QuadrigaStorageException();
-		}
-		return dictItemList;
 	}
 
 	/**
@@ -290,64 +228,6 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 	}
 
 	/**
-	 * Add dictionary collarborators based on the roles to the database.
-	 * @param Collaborator object, dictionary id, dictionary owner user name and logged in username
-	 * @return Error message
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	@Override
-	public void addCollaborators(ICollaborator collaborator,String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException 
-	{
-		try
-		{
-			DictionaryDTO dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryid);
-			
-			for(IQuadrigaRole collaboratorRole:collaborator.getCollaboratorRoles())
-			{
-				if(collaboratorRole.getDBid()!=null)
-				{
-					String collabRole = collaboratorRole.getDBid();
-					DictionaryCollaboratorDTO dictCollabDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionary,userName, sessionUser, collabRole);
-					sessionFactory.getCurrentSession().save(dictCollabDTO);
-				}
-			}
-		}
-		catch(HibernateException e)
-		{
-			logger.error("addCollaborators method :",e);
-			throw new QuadrigaStorageException();
-		}
-	}
-
-	/**
-	 * Delete dictionary collarborators based on the dictionaryid and the collaborator user name
-	 * @param username and dictionary id 
-	 * @return void
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	@Override
-	public void deleteCollaborators(String dictionaryid, String userName) throws QuadrigaStorageException {
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryCollaboratorDTO dictCollab where dictCollab.collaboratorDTOPK.dictionaryid =:dictionaryid and dictCollab.collaboratorDTOPK.collaboratoruser =:collaboratoruser");
-			query.setParameter("dictionaryid", dictionaryid);
-			query.setParameter("collaboratoruser",userName);
-			int output = query.executeUpdate();
-			if(output == 0)
-			{
-				throw new QuadrigaStorageException();
-			}
-		}
-		catch(Exception e)
-		{
-			logger.error("deleteCollaborators method :",e);
-			throw new QuadrigaStorageException();
-		}
-	}
-
-	/**
 	 * Delete dictionary from the database corresponding to the dictionary ID and owner name
 	 * @param username and dictionary id 
 	 * @return Error message
@@ -469,36 +349,6 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 	}
 
 	/**
-	 * Get the Dictionary Items corresponding to a dictionary ID
-	 * @param udictionary id
-	 * @return List of dictionary items
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<IItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
-		List<IItem> dictionaryItemList = null;
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.dictionaryid =:dictionaryid ORDER BY dictItems.term");
-			query.setParameter("dictionaryid",dictionaryid);
-			List<DictionaryItemsDTO> dictItemsDTOList = query.list();
-			
-			if(dictItemsDTOList != null && dictItemsDTOList.size() > 0)
-			{
-				dictionaryItemList = dictionaryDTOMapper.getDictionaryItemList(dictItemsDTOList);
-			}
-		}
-		catch(Exception e)
-		{
-			logger.error("getDictionaryItemsDetailsCollab method :",e);
-			throw new QuadrigaStorageException();
-		}
-		return dictionaryItemList;
-	}
-
-	/**
 	 * Delete Dictionary Items corresponding to a dictionary ID and Term id
 	 * @param dictionary id and term id
 	 * @return error messages if any
@@ -612,30 +462,6 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 		query.setParameter("username",userName);
 		dictionaryDTOList = query.list();
 		return dictionaryDTOList;
-	}
-
-	/**
-	 * This method retrieves the collaborators associated with given dictionary
-	 * @param : dictionaryid - dictionary id
-	 * @throws : QuadrigaStorageException
-	 */
-	@Override
-	public List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException {
-		List<ICollaborator> collaborators = new ArrayList<ICollaborator>();
-		
-		
-		try
-		{
-			DictionaryDTO dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryid);
-			
-			collaborators = collaboratorMapper.getDictionaryCollaboratorList(dictionary);
-		}
-		catch(HibernateException e)
-		{
-			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
-			throw new QuadrigaStorageException(e);
-		}
-		return collaborators;
 	}
 
     @Override

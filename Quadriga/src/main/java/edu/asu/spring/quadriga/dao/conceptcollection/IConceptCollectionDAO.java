@@ -6,7 +6,6 @@ package edu.asu.spring.quadriga.dao.conceptcollection;
 import java.util.List;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
@@ -93,30 +92,12 @@ public interface IConceptCollectionDAO extends IBaseDAO<ConceptCollectionDTO> {
 		public abstract String updateItem(IConcept concept, String collectionId, String username) throws QuadrigaStorageException;
 		
 		/**
-		 * retrieves data from database to retrieve collaborators
-		 * 
-		 * @param collectionid
-		 * @throws QuadrigaStorageException
-		 * @author rohit pendbhaje
-		 * 
-		 */
-		public abstract List<ICollaborator> showCollaboratorRequest(String collectionid) throws QuadrigaStorageException;
-		
-		/**
 		 * Get the user list of non owners and collaborators
 		 * @param collectionid
 		 * @return List of users
 		 * @throws QuadrigaStorageException
 		 */
 		public abstract List<IUser> showNonCollaboratorRequest(String collectionid) throws QuadrigaStorageException;
-		
-		/**
-		 * This method retrieves the collaborators associated with the given 
-		 * concept collection
-		 * @param : collection - Concept collection object
-		 * @throws : QuadrigaStorageEXception
-		 */
-		public abstract void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException;
 		
 		/**
 		 * This method retrieves the concept collection id associated with the given

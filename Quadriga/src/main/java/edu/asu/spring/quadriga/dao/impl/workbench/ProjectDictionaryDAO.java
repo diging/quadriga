@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
@@ -92,39 +91,6 @@ public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implemen
 		dictionary.setProjectDictionaryDTOList(projectDictionaryList);
 		sessionFactory.getCurrentSession().update(dictionary);
 		
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<ProjectDictionaryDTO> listProjectDictionary(String projectId,String userId) throws QuadrigaStorageException
-	{
-		List<IDictionary> dictionaryList = null;
-		DictionaryDTO dictionaryDTO = null;
-		IDictionary dictionary = null;
-		
-		//verify project id
-		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
-		
-		if(project.equals(null))
-		{
-			throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
-		}
-		
-		dictionaryList = new ArrayList<IDictionary>();
-		
-		List<ProjectDictionaryDTO> projectDictionaryDTOList = project.getProjectDictionaryDTOList();
-		
-//	    for(ProjectDictionaryDTO projectDictionary: projectDictionaryDTOList)	
-//	    {
-//	    	ProjectDictionaryDTOPK projectDictionaryKey = projectDictionary.getProjectDictionaryDTOPK();
-//	    	dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, projectDictionaryKey.getDictionaryid());
-//	    	dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
-//	    	dictionaryList.add(dictionary);
-//	    }
-		
-		return projectDictionaryDTOList;
 	}
 	
 	/**

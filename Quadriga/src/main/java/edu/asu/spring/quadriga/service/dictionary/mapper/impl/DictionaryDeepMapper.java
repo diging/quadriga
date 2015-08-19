@@ -83,7 +83,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException{
 		IDictionary dictionary = null;
 		
-		DictionaryDTO dictionaryDTO = dbConnect.getDictionaryDTO(dictionaryId);
+		DictionaryDTO dictionaryDTO = dbConnect.getDTO(dictionaryId);
 		if(dictionaryDTO != null){
 			dictionary = dictionaryFactory.createDictionaryObject();
 			dictionary.setDictionaryId(dictionaryDTO.getDictionaryid());

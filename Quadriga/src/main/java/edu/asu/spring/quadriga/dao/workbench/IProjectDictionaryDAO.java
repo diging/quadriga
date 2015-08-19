@@ -20,16 +20,6 @@ public interface IProjectDictionaryDAO extends IBaseDAO<ProjectDictionaryDTO> {
 			String dictionaryId, String userId) throws QuadrigaStorageException;
 
 	/**
-	 * Retrieves the dictionaries associated with the specified project.
-	 * @param projectId
-	 * @param userId
-	 * @return List<IDictionary> - list of dictionaries associated with the specified project.
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<ProjectDictionaryDTO> listProjectDictionary(String projectId, String userId)
-			throws QuadrigaStorageException;
-
-	/**
 	 * Removes the association of the given dictionary from the specified project.
 	 * @param projectId
 	 * @param userId
