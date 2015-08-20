@@ -128,38 +128,20 @@ public class TransferDictionaryOwnerController
     public String transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid,Principal principal, ModelMap model,
 			@Validated @ModelAttribute("user")User collaboratorUser, BindingResult result) throws QuadrigaStorageException, QuadrigaException, JSONException
 	{
-		String userName;
-		String newOwner;
-		String collaboratorRole;
-		IDictionary dictionary; 
+		
+		
 		List<IDictionaryCollaborator> collaboratingUser = new ArrayList<IDictionaryCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
-		userName = principal.getName();
+		String userName = principal.getName();
 		
-		dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
-		model.put("dictionaryid",dictionaryid);
-		
-		
-		//model.put("user", collaboratorUser);
-		
-		//create a model
-		List<IDictionaryItems> dictionaryItemList = dictionaryCollabManager
-                .getDictionariesItems(dictionaryid,userName);
-		
-		model.addAttribute("dictionaryItemList", dictionaryItemList);
-        model.addAttribute("dictionary", dictionary);
-	    
-		String jsonTreeData = dictionaryCollabManager.getProjectsTree(userName, dictionaryid);
-        model.addAttribute("core", jsonTreeData);
-
 		if(result.hasErrors()) {
 			model.put("success", 0);
 		} else {
 			//fetch the new owner
-        	newOwner = collaboratorUser.getUserName();
+		    String newOwner = collaboratorUser.getUserName();
         	
-        	collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.DICT_ROLES, RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN).getDBid();
+		    String collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.DICT_ROLES, RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN).getDBid();
         	
 			//call the method to transfer the ownership
         	dictCollabManager.transferOwnership(dictionaryid, userName, newOwner, collaboratorRole);
@@ -169,6 +151,18 @@ public class TransferDictionaryOwnerController
 			model.addAttribute("alert_msg", "Ownership successfully transferred.");
 		}
 		
+		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
+        model.put("dictionaryid",dictionaryid);
+        
+        List<IDictionaryItems> dictionaryItemList = dictionaryCollabManager
+                .getDictionariesItems(dictionaryid,userName);
+        
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+        model.addAttribute("dictionary", dictionary);
+        
+        String jsonTreeData = dictionaryCollabManager.getProjectsTree(userName, dictionaryid);
+        model.addAttribute("core", jsonTreeData);
+
 		//fetch the collaborators
         collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
         
