@@ -27,6 +27,7 @@
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-ui.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.dataTables.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
 <noscript>
@@ -73,6 +74,26 @@
 					<hr class="clearLoggedIn">
 				</div>
 			</sec:authorize>
+			<c:choose>
+            <c:when test="${show_success_alert}">
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                 ${alert_msg}
+            </div>
+            </c:when>
+            <c:when test="${show_error_alert}">
+            <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                 ${alert_msg}
+            </div>
+            </c:when>
+            <c:when test="${show_info_alert}">
+            <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                 ${alert_msg}
+            </div>
+           </c:when>
+           </c:choose>
 			<div class="row flush">
 			<div class="9u">
 			<div class="row">

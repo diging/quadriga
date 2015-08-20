@@ -247,33 +247,25 @@
 						<c:forEach var="dictionaryItem" items="${dictionaryItemList}">
 							<tr>
 								<c:choose>
-									<c:when test="${roleAccess=='1'}">
-										<td><input type="checkbox" class="selected"
-											name="selected"
-											value='<c:out value="${dictionaryItem.id}"></c:out>' /></td>
-									</c:when>
-									<c:otherwise>
+                                <c:when test="${roleAccess=='1'}">
+                                
+                                <td>
+                                <input type="checkbox" class="selected" name="selected"
+                                    value='<c:out value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out>' />
+                                
+                                </td>
+                                </c:when>
+                                </c:choose>
+                                <td width="25%" align="center"><input name="items"
+                                    type="hidden"
+                                    value="<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out>" /> <c:out
+                                        value="${dictionaryItem.dictionaryItem.term}"></c:out></td>
+                                <td width="25%" align="justify"><c:out
+                                        value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out></td>
+                                <td width="25%" align="center"><c:out
+                                        value="${dictionaryItem.dictionaryItem.pos}"></c:out></td>
 
-
-									</c:otherwise>
-								</c:choose>
-								<td width="25%" align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${dictionaryItem.items}"></c:out>" /> <c:out
-										value="${dictionaryItem.items}"></c:out></td>
-								<td width="25%" align="justify"><c:out
-										value="${dictionaryItem.id}"></c:out></td>
-								<td width="25%" align="center"><c:out
-										value="${dictionaryItem.pos}"></c:out></td>
-								<!--<td align="center">
-					<c:out value="${dictionaryItem.vocabulary}"></c:out> 
-				</td>
-				<td align="center">
-					<c:out value="${dictionaryItem.description}"></c:out> 
-				</td>-->
-
-
-							</tr>
+                            </tr>
 						</c:forEach>
 					</tbody>
 

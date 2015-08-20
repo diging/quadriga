@@ -61,7 +61,7 @@ public class TransferDictionaryOwnerController
 	@Autowired
 	private UserValidator validator;
 	
-	@InitBinder
+	@InitBinder("user")
 	protected void initBinder(WebDataBinder validateBinder){
 		validateBinder.setValidator(validator);
 	}
@@ -95,11 +95,12 @@ public class TransferDictionaryOwnerController
 		//fetch the collaborators
 		collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
 		
-		for(IDictionaryCollaborator collabuser : collaboratingUser)
-		{
-			//userList.add(collabuser);
-			
-			userList.add(collabuser.getCollaborator().getUserObj());
+		if (collaboratingUser != null) {
+    		for(IDictionaryCollaborator collabuser : collaboratingUser) {
+    			//userList.add(collabuser);
+    			
+    			userList.add(collabuser.getCollaborator().getUserObj());
+    		}
 		}
 		
 		model.getModelMap().put("collaboratinguser", userList);
@@ -148,18 +149,6 @@ public class TransferDictionaryOwnerController
 		
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
         model.addAttribute("dictionary", dictionary);
-
-		
-		//fetch the collaborators
-		collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
-		
-		for(IDictionaryCollaborator collabuser : collaboratingUser)
-		{
-			userList.add(collabuser.getCollaborator().getUserObj());
-		}
-		
-		model.put("collaboratingUsers", userList);
-		model.addAttribute("owner", dictionary.getOwner().getUserName().equals(userName));
 	    
 		String jsonTreeData = dictionaryCollabManager.getProjectsTree(userName, dictionaryid);
         model.addAttribute("core", jsonTreeData);
@@ -176,8 +165,20 @@ public class TransferDictionaryOwnerController
         	dictCollabManager.transferOwnership(dictionaryid, userName, newOwner, collaboratorRole);
 			
 			model.put("success", 1);
-			//model.put("user", userFactory.createUserObject());
+			model.addAttribute("show_success_alert", true);
+			model.addAttribute("alert_msg", "Ownership successfully transferred.");
 		}
+		
+		//fetch the collaborators
+        collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
+        
+        for(IDictionaryCollaborator collabuser : collaboratingUser)
+        {
+            userList.add(collabuser.getCollaborator().getUserObj());
+        }
+        
+        model.put("collaboratingUsers", collaboratingUser);
+        model.addAttribute("owner", dictionary.getOwner().getUserName().equals(userName));
 		
 		return "auth/dictionary/dictionary";
 	}
