@@ -72,7 +72,7 @@ public class ConceptCollectionDeepMapper implements
 	public IConceptCollection getConceptCollectionDetails(String ccId)
 			throws QuadrigaStorageException {
 		IConceptCollection conceptCollection = null;
-		ConceptCollectionDTO ccDTO = dbConnect.getCCDTO(ccId);
+		ConceptCollectionDTO ccDTO = dbConnect.getDTO(ccId);
 		if(ccDTO != null){
 			conceptCollection = ccFactory.createConceptCollectionObject();
 			conceptCollection.setConceptCollectionId(ccDTO.getConceptCollectionid());

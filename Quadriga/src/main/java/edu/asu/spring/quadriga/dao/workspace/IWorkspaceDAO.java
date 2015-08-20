@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.dao.workspace;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 

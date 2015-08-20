@@ -25,9 +25,11 @@ import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.UserValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -36,10 +38,13 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class TransferProjectOwnerController 
 {
 	@Autowired
-	IModifyProjectManager projectManager;
+	private IModifyProjectManager projectManager;
 
 	@Autowired
-	IRetrieveProjectManager retrieveProjectManager;
+	private IRetrieveProjectManager retrieveProjectManager;
+	
+	@Autowired
+	private IProjectCollaboratorManager collabManager;
 
 	@Autowired
 	private UserValidator validator;
@@ -118,11 +123,12 @@ public class TransferProjectOwnerController
 	 * @return ModelAndView object
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException
+	 * @throws QuadrigaException 
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.POST)
 	public ModelAndView transferProjectOwnerRequest(@PathVariable("projectid") String projectid,Principal principal,
-			@Validated @ModelAttribute("user")User collaboratorUser,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException
+			@Validated @ModelAttribute("user")User collaboratorUser,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
 			{
 		ModelAndView model;
 		String userName;
@@ -169,8 +175,8 @@ public class TransferProjectOwnerController
 			collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN).getDBid();
 
 			//call the method to transfer the ownership
-			projectManager.transferProjectOwnerRequest(projectid, userName, newOwner,collaboratorRole);
-
+			collabManager.transferOwnership(projectid, userName, newOwner,collaboratorRole);
+			
 			model.getModelMap().put("success", 1);
 			model.getModelMap().put("user", userFactory.createUserObject());
 		}

@@ -33,11 +33,10 @@ import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
-import edu.asu.spring.quadriga.service.profile.IAuthorityFileSearchService;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
+import edu.asu.spring.quadriga.web.profile.impl.AuthorityFileSearchService;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanForm;
-import edu.asu.spring.quadriga.web.profile.impl.AuthorityFileSearchService;
 
 /**
  * Handles requests for the application home page.

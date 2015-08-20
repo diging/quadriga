@@ -230,7 +230,7 @@
     <h2>Dictionary: ${dictionary.dictionaryName}</h2>
     <div>${dictionary.description}</div>
     <br />
-    <div class="user">Owned by: ${dictionary.owner.name}</div>
+    <div class="user">Owned by: ${dictionary.owner.name} <c:if test="${owner}">(<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/transfer/${dictionary.dictionaryId}">Change</a>)</c:if></div>
     <br />
     <div id="html"></div>
     <input type="button"

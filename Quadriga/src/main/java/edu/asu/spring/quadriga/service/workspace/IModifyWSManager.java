@@ -14,9 +14,6 @@ public interface IModifyWSManager {
 	public void updateWorkspace(IWorkSpace workspace)
 			throws QuadrigaStorageException;
 
-	public abstract void transferWSOwnerRequest(String projectId, String oldOwner,
-			String newOwner, String collabRole) throws QuadrigaStorageException;
-
 	public abstract void assignEditorRole(String workspaceId, String userName)
 			throws QuadrigaStorageException;
 

@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.network.mapper;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.dto.NetworksDTO;

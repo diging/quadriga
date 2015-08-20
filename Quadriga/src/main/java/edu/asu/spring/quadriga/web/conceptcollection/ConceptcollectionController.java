@@ -201,6 +201,7 @@ public class ConceptcollectionController {
 		String jsTreeData = conceptControllerManager.getProjectsTree(userName,
 				collection_id);
 		model.addAttribute("core", jsTreeData);
+		model.addAttribute("owner", collection.getOwner().getUserName().equals(userName));
 
 		// TODO: showCollaboratingUsers() should be changed with mapper
 		List<IConceptCollectionCollaborator> collaboratingUsers = conceptControllerManager

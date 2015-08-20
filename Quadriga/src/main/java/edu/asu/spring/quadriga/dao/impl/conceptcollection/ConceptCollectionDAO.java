@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
@@ -443,22 +441,6 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
 
 	
 	@Override
-	public ConceptCollectionDTO getCCDTO(String ccId) throws QuadrigaStorageException 
-	{
-		ConceptCollectionDTO ccDTO = null;
-		try
-		{
-			ccDTO = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, ccId);
-		} 
-		catch (HibernateException e) 
-		{
-			logger.error("getConceptCollectionDetails method :",e);
-			throw new QuadrigaStorageException();
-		}
-		return ccDTO;
-	}
-
-    @Override
     public ConceptCollectionDTO getDTO(String id) {
         return getDTO(ConceptCollectionDTO.class, id);
     }

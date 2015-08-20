@@ -4,8 +4,10 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,10 +24,13 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.User;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IModifyDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
@@ -43,6 +48,9 @@ public class TransferDictionaryOwnerController
 	
 	@Autowired
 	IDictionaryManager dictionaryCollabManager;
+	
+	@Autowired
+	private IDictionaryCollaboratorManager dictCollabManager;
 	
 	@Autowired
 	IQuadrigaRoleManager roleManager;
@@ -66,7 +74,7 @@ public class TransferDictionaryOwnerController
 	 * @throws QuadrigaStorageException
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {} )})
-	@RequestMapping(value="auth/dictionaries/changedictionaryowner/{dictionaryid}", method = RequestMethod.GET)
+	@RequestMapping(value="auth/dictionaries/transfer/{dictionaryid}", method = RequestMethod.GET)
 	public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException
 	{
 		ModelAndView model;
@@ -111,59 +119,66 @@ public class TransferDictionaryOwnerController
 	 * @param result
 	 * @return ModelAndView
 	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaException 
+	 * @throws JSONException 
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value="auth/dictionaries/changedictionaryowner/{dictionaryid}", method = RequestMethod.POST)
-    public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid,Principal principal,
-			@Validated @ModelAttribute("user")User collaboratorUser,BindingResult result) throws QuadrigaStorageException
+    public String transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid,Principal principal, ModelMap model,
+			@Validated @ModelAttribute("user")User collaboratorUser, BindingResult result) throws QuadrigaStorageException, QuadrigaException, JSONException
 	{
 		String userName;
 		String newOwner;
 		String collaboratorRole;
-		ModelAndView model;
 		IDictionary dictionary; 
 		List<IDictionaryCollaborator> collaboratingUser = new ArrayList<IDictionaryCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		userName = principal.getName();
-		model = new ModelAndView("auth/dictionaries/changedictionaryowner");
-		dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
-		model.getModelMap().put("dictionaryid",dictionaryid);
 		
-		if(result.hasErrors())
+		dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
+		model.put("dictionaryid",dictionaryid);
+		
+		
+		//model.put("user", collaboratorUser);
+		
+		//create a model
+		List<IDictionaryItems> dictionaryItemList = dictionaryCollabManager
+                .getDictionariesItems(dictionaryid,userName);
+		
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+        model.addAttribute("dictionary", dictionary);
+
+		
+		//fetch the collaborators
+		collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
+		
+		for(IDictionaryCollaborator collabuser : collaboratingUser)
 		{
-			model.getModelMap().put("user", collaboratorUser);
-			
-			//create a model
-			model.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
-			model.getModelMap().put("dictionaryowner", dictionary.getOwner().getUserName());
-			
-			//fetch the collaborators
-			collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
-			
-			for(IDictionaryCollaborator collabuser : collaboratingUser)
-			{
-				userList.add(collabuser.getCollaborator().getUserObj());
-			}
-			
-			model.getModelMap().put("collaboratinguser", userList);
-			
-			model.getModelMap().put("success", 0);
+			userList.add(collabuser.getCollaborator().getUserObj());
 		}
-		else
-		{
+		
+		model.put("collaboratingUsers", userList);
+		model.addAttribute("owner", dictionary.getOwner().getUserName().equals(userName));
+	    
+		String jsonTreeData = dictionaryCollabManager.getProjectsTree(userName, dictionaryid);
+        model.addAttribute("core", jsonTreeData);
+
+		if(result.hasErrors()) {
+			model.put("success", 0);
+		} else {
 			//fetch the new owner
         	newOwner = collaboratorUser.getUserName();
         	
         	collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.DICT_ROLES, RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN).getDBid();
         	
 			//call the method to transfer the ownership
-        	modifyDictionaryManager.transferDictionaryOwner(dictionaryid, userName, newOwner, collaboratorRole);
+        	dictCollabManager.transferOwnership(dictionaryid, userName, newOwner, collaboratorRole);
 			
-			model.getModelMap().put("success", 1);
-			model.getModelMap().put("user", userFactory.createUserObject());
+			model.put("success", 1);
+			//model.put("user", userFactory.createUserObject());
 		}
 		
-		return model;
+		return "auth/dictionary/dictionary";
 	}
 }

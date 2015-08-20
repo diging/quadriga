@@ -21,8 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -62,24 +60,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     @Basic(optional = false)
     @Column(name = "isdeactivated")
     private Boolean isdeactivated;
-    
-    @Basic(optional = false)
-    @Column(name = "updatedby")
-    private String updatedby;
-    
-    @Basic(optional = false)
-    @Column(name = "updateddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateddate;
-    
-    @Basic(optional = false)
-    @Column(name = "createdby")
-    private String createdby;
-   
-    @Basic(optional = false)
-    @Column(name = "createddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
 	
     @JoinColumn(name = "workspaceowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
@@ -298,5 +278,15 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     @Override
     public String getId() {
         return workspaceid;
+    }
+
+    @Override
+    public QuadrigaUserDTO getOwner() {
+        return workspaceowner;
+    }
+
+    @Override
+    public void setOwner(QuadrigaUserDTO owner) {
+       this.workspaceowner = owner; 
     }
 }

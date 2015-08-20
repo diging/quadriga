@@ -34,13 +34,12 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  * @author Kiran Kumar Batna
  */
 @Service
-public class ListWSManager implements IListWSManager 
-{
+public class ListWSManager implements IListWSManager  {
 
 	private static final Logger logger = LoggerFactory.getLogger(ListWSManager.class);
 
 	@Autowired
-	private IListWsDAO dbConnect;
+	private IListWsDAO listWsDao;
 
 	@Autowired
 	private IWorkspaceShallowMapper workspaceShallowMapper;
@@ -64,11 +63,8 @@ public class ListWSManager implements IListWSManager
 	 */
 	@Override
 	@Transactional
-	public List<IWorkSpace> listWorkspace(String projectid,String user) throws QuadrigaStorageException
-	{
-		List<IWorkSpace> workspaceList;
-		workspaceList = workspaceShallowMapper.getWorkSpaceList(projectid, user);
-		return workspaceList;
+	public List<IWorkSpace> listWorkspace(String projectid,String user) throws QuadrigaStorageException {
+		return workspaceShallowMapper.getWorkSpaceList(projectid, user);
 	}
 
 	/**
@@ -103,7 +99,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listActiveWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> ownerWorkspaceList;
-		ownerWorkspaceList = workspaceShallowMapper.listActiveWorkspaceOfOwner(projectid, user);
+		ownerWorkspaceList = workspaceShallowMapper.listActiveWorkspacesOfOwner(projectid, user);
 		return ownerWorkspaceList;
 	}
 

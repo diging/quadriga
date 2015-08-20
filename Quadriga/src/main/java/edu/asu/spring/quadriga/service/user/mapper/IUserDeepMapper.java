@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.service.user.mapper;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.impl.User;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IUserDeepMapper {

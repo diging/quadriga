@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.domain.factory.workspace;
 
+import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 
 public interface IWorkspaceFactory {

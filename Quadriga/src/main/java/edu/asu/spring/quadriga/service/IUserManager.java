@@ -2,10 +2,7 @@ package edu.asu.spring.quadriga.service;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;

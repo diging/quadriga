@@ -18,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceDictionary;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;

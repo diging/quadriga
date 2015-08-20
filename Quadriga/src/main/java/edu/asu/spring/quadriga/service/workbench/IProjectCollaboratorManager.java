@@ -5,7 +5,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.ICollaboratorManager;
+import edu.asu.spring.quadriga.service.ICollaboratorManager;
 
 public interface IProjectCollaboratorManager extends ICollaboratorManager {
 

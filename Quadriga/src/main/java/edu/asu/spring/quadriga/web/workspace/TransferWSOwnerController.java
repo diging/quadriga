@@ -25,10 +25,12 @@ import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.UserValidator;
@@ -54,6 +56,9 @@ public class TransferWSOwnerController
 	
 	@Autowired
 	IRetrieveWSCollabManager wsCollabManager;
+	
+	@Autowired
+	private IModifyWSCollabManager modifyWsCollabManager;
 	
 	@Autowired
 	IUserFactory userFactory;
@@ -128,11 +133,12 @@ public class TransferWSOwnerController
 	 * @return ModelAndView
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException
+	 * @throws QuadrigaException 
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/transferworkspaceowner", method = RequestMethod.POST)
 	public ModelAndView transferWSOwnerRequest(@PathVariable("workspaceid") String workspaceid,Principal principal,
-			@Validated @ModelAttribute("user")User collaboratorUser,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException
+			@Validated @ModelAttribute("user")User collaboratorUser,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
 	{
 		ModelAndView model;
 		String userName;
@@ -178,7 +184,7 @@ public class TransferWSOwnerController
 	        	//fetch the collaborator role
 	        	collaboratorRole = collaboratorRoleManager.getQuadrigaRoleById(IQuadrigaRoleManager.WORKSPACE_ROLES, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN).getDBid();
 				//call the method to transfer the ownership
-				workspaceManager.transferWSOwnerRequest(workspaceid, userName, newOwner, collaboratorRole);
+	        	modifyWsCollabManager.transferOwnership(workspaceid, userName, newOwner, collaboratorRole);
 				
 				model.getModelMap().put("success", 1);
 				model.getModelMap().put("user", userFactory.createUserObject());

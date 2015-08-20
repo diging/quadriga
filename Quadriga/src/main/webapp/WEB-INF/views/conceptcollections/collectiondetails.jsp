@@ -146,7 +146,7 @@ function addCCtoWorkspace(id,name){
     <h2>Concept Collection: ${concept.conceptCollectionName}</h2>
     <div>${concept.description}</div>
     <br>
-    <div class="user">Owned by: ${concept.owner.name}</div>
+    <div class="user">Owned by: ${concept.owner.name} <c:if test="${owner}">(<a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/transfer/${concept.conceptCollectionId}">Change</a>)</c:if></div>
     <br />
    
     <div id="html"> </div>

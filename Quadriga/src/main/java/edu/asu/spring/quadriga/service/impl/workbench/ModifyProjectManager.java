@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -129,36 +128,6 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
             projectDao.updateDTO(project);    
             projectDao.deleteDTO(project);
         }
-	}
-	
-	/**
-	 * This method transfers the project ownership to another user
-	 * @param projectId
-	 * @param oldOwner
-	 * @param newOwner
-	 * @param collabRole
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	@Override
-	@Transactional
-	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException {
-	    ProjectDTO projectDTO = projectDao.getProjectDTO(projectId);
-        projectDTO.setProjectowner(projectDao.getUserDTO(newOwner));
-        projectDTO.setUpdatedby(oldOwner);
-        projectDTO.setUpdateddate(new Date());
-        
-        Iterator<ProjectCollaboratorDTO> iterator = projectDTO.getProjectCollaboratorDTOList().iterator();
-        while(iterator.hasNext()) {
-            ProjectCollaboratorDTO projectCollaboratorDTO = iterator.next();
-            if(projectCollaboratorDTO.getQuadrigaUserDTO().getUsername().equals(newOwner)) {
-                iterator.remove();
-            }
-        }
-        
-        ProjectCollaboratorDTO collaborator = projCollabMapper.getProjectCollaborator(projectDTO, oldOwner, collabRole);
-        projectDTO.getProjectCollaboratorDTOList().add(collaborator);
-        projectDao.updateDTO(projectDTO);
 	}
 	
 	/**

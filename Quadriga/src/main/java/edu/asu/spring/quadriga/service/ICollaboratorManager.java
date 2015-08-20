@@ -1,10 +1,8 @@
-package edu.asu.spring.quadriga.service.impl;
-
-import org.springframework.transaction.annotation.Transactional;
+package edu.asu.spring.quadriga.service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.dto.CollaboratorDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface ICollaboratorManager {
@@ -31,5 +29,8 @@ public interface ICollaboratorManager {
 
     public abstract void addCollaborator(ICollaborator collaborator, String dtoId,
             String loggedInUser) throws QuadrigaStorageException;
+
+    public abstract void transferOwnership(String dtoId, String oldOwner,
+            String newOwner, String collabRole) throws QuadrigaException;
 
 }

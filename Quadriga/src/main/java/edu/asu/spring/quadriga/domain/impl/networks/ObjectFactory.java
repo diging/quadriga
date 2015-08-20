@@ -9,6 +9,7 @@
 package edu.asu.spring.quadriga.domain.impl.networks;
 
 import java.math.BigInteger;
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;

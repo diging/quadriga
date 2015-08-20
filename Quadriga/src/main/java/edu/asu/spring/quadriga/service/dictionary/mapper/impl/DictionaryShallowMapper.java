@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionRetrieveDictionaryManager;
+import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;

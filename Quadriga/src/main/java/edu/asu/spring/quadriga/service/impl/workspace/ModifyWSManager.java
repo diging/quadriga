@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.service.impl.workspace;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import edu.asu.spring.quadriga.dao.workspace.IWorkspaceEditorDAO;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
@@ -111,43 +109,6 @@ public class ModifyWSManager implements IModifyWSManager
         workspaceDTO.setUpdatedby(workspace.getOwner().getName());
 	    
 		workspaceDao.updateDTO(workspaceDTO);
-	}
-
-	/**
-	 * This method assigns a new owner to the workspace
-	 * @param projectId
-	 * @param oldOwner
-	 * @param newOwner
-	 * @param collabRole
-	 * @throws QuadrigaStorageException
-	 * @author kiranbatna, Julia Damerow
-	 */
-	@Override
-	@Transactional
-	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) {
-	    WorkspaceDTO workspaceDTO = workspaceDao.getWorkspaceDTO(workspaceId);
-        //set the new workspace owner
-        workspaceDTO.setWorkspaceowner(workspaceDao.getUserDTO(newOwner));
-        workspaceDTO.setUpdatedby(oldOwner);
-        workspaceDTO.setUpdateddate(new Date());
-
-
-        //delete new owner from collaborators list
-        Iterator<WorkspaceCollaboratorDTO> workspaceCollaboratorIt = workspaceDTO.getWorkspaceCollaboratorDTOList().iterator();
-        WorkspaceCollaboratorDTO collaborator = null;
-        while(workspaceCollaboratorIt.hasNext()) {
-            collaborator = workspaceCollaboratorIt.next();
-            if(collaborator.getQuadrigaUserDTO().getUsername().equals(newOwner)) {
-                workspaceCollaboratorIt.remove();
-                break;
-            }
-        }
-
-        //add the current owner as a collaborator
-        collaborator = collaboratorMapper.getWorkspaceCollaboratorDTO(workspaceDTO, oldOwner, collabRole);
-        workspaceDTO.getWorkspaceCollaboratorDTOList().add(collaborator);
-
-        workspaceDao.updateDTO(workspaceDTO);
 	}
 
 	/**

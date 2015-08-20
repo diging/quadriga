@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.service.network.domain;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
-import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
-import edu.asu.spring.quadriga.service.network.domain.IStatementObject;
 
 public interface INodeObjectWithStatement {
 

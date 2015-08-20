@@ -27,7 +27,6 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
-import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 /**
  * Controller for {@link IUser} related rest APIs exposed to other clients

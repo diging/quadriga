@@ -7,8 +7,8 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 
 /**
  * The class representation of the communities list got from Dspace repostiory.

@@ -127,6 +127,8 @@ public class DictionaryItemController {
 	    IDictionary dictionaryObj = dictionaryFactory.createDictionaryObject();
 	    dictionaryObj.setDictionaryId(dictionaryid);
 	    dictionaryObj = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
+	    
+	    model.addAttribute("owner", dictionaryObj.getOwner().getUserName().equals(userName));
 	   
 	    String jsonTreeData = dictonaryManager.getProjectsTree(userName, dictionaryid);
 	    model.addAttribute("core", jsonTreeData);

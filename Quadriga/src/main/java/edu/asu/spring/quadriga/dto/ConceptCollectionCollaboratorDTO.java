@@ -6,7 +6,6 @@ package edu.asu.spring.quadriga.dto;
 
 import java.util.Date;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;

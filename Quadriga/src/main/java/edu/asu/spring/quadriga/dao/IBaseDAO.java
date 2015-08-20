@@ -1,12 +1,8 @@
 package edu.asu.spring.quadriga.dao;
 
-import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IBaseDAO<T> {

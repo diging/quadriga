@@ -5,7 +5,9 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,12 +93,14 @@ public class RetrieveProjectController
 
 		model = new ModelAndView("auth/workbench");
 		List<String> projectIds = new ArrayList<String>();
+		Map<String, Boolean> accessibleProjects = new HashMap<String, Boolean>();
 		
 		if(projectListAsOwner != null)
 		{
 			for (IProject p : projectListAsOwner) {
 				fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
 				projectIds.add(p.getProjectId());
+				accessibleProjects.put(p.getProjectId(), true);
 			}
 		}
 		
@@ -109,6 +113,7 @@ public class RetrieveProjectController
 				{
 					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
 					projectIds.add(p.getProjectId());
+					accessibleProjects.put(p.getProjectId(), true);
 				}
 			}
 		}
@@ -122,6 +127,7 @@ public class RetrieveProjectController
 				{
 					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
 					projectIds.add(p.getProjectId());
+					accessibleProjects.put(p.getProjectId(), false);
 				}	
 			}
 		}
@@ -135,6 +141,7 @@ public class RetrieveProjectController
 				{
 					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
 					projectIds.add(p.getProjectId());
+					accessibleProjects.put(p.getProjectId(), false);
 				}	
 			}
 		}
@@ -148,7 +155,7 @@ public class RetrieveProjectController
 		});
 		
 		model.getModelMap().put("projects", fullProjects);
-		
+		model.getModelMap().put("accessibleProjects", accessibleProjects);
 		
 		
 //		model.getModelMap().put("projectlistasowner", projectListAsOwner);

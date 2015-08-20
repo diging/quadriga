@@ -63,7 +63,7 @@ public interface IWorkspaceShallowMapper {
 	 * @return												Returns a {@link List} of {@link IWorkSpace} object
 	 * @throws QuadrigaStorageException						Throws the storage exception when the method has issues to access the database
 	 */
-	public abstract List<IWorkSpace> listActiveWorkspaceOfOwner(String projectid,
+	public abstract List<IWorkSpace> listActiveWorkspacesOfOwner(String projectid,
 			String username) throws QuadrigaStorageException;
 
 	/**

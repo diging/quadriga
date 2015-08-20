@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;

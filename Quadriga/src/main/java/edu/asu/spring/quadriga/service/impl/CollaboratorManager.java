@@ -17,7 +17,9 @@ import edu.asu.spring.quadriga.dto.CollaboratorDTO;
 import edu.asu.spring.quadriga.dto.CollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.ICollaboratorManager;
 
 public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T extends CollaboratorDTOPK,C extends CollaboratingDTO<T, V>,D extends BaseDAO<C>> implements ICollaboratorManager {
     
@@ -28,12 +30,12 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
     @Transactional
     public void updateCollaborators(String dtoId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException {
         IBaseDAO<C> dao = getDao();
+        IBaseDAO<V> collaboratorDao = getCollaboratorDao();
         
         C dto = dao.getDTO(dtoId);
         if(dto == null) {
             return;
         }
-        
         
         List<V> collaboratorList = dto.getCollaboratorList();
         List<String> newCollaboratorRoles = Arrays.asList(collaboratorRole.split(","));
@@ -49,6 +51,7 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
             if(collaborator.equals(collabUser)) {
                 if(!newCollaboratorRoles.contains(collabRole)) {
                     iterator.remove();
+                    collaboratorDao.deleteDTO(projectCollaborator);
                 } else {
                     existingRoles.add(collabRole);
                 }
@@ -154,6 +157,67 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
         }
         addCollaborator(collaborator.getUserObj().getUserName(), rolesString.toString(), dtoId, loggedInUser);
     }
+    
+    /**
+     * This method transfers ownership from one user to another.
+     * @param dtoId The id of the dto, the ownership should be transfered on.
+     * @param oldOwner The previous owner of the dto.
+     * @param newOwner The new owner of the dto.
+     * @param collabRole The role the old owner should have a as collaborator.
+     * @throws QuadrigaException If the given old owner is not the owner on the specified
+     *      DTO, this exception is thrown.
+     */
+    @Override
+    @Transactional
+    public void transferOwnership(String dtoId,
+            String oldOwner, String newOwner, String collabRole) throws QuadrigaException {
+        
+        Date date = new Date();
+        IBaseDAO<C> dao = getDao();
+        IBaseDAO<V> collaboratorDao = getCollaboratorDao();
+        
+        C dto = dao.getDTO(dtoId);
+        if(dto == null) {
+            return;
+        }
+        
+        if (!dto.getOwner().getUsername().equals(oldOwner))
+            throw new QuadrigaException("Given owner does not correspond to owner on DTO object.");
+        
+        // update the owner of the concept collection
+        dto.setOwner(dao.getUserDTO(newOwner));
+        dto.setUpdatedby(oldOwner);
+        dto.setUpdateddate(date);
+
+        // remove the new owner from the collaborator role
+        List<V> collaborators = dto.getCollaboratorList();
+        Iterator<V> collaboratorIterator = collaborators.iterator();
+        
+        while (collaboratorIterator.hasNext()) {
+            V collaborator = collaboratorIterator.next();
+            if (collaborator.getQuadrigaUserDTO().getUsername()
+                    .equals(newOwner)) {
+                collaboratorIterator.remove();
+                collaboratorDao.deleteDTO(collaborator);
+            }
+        }
+
+        // add the existing owner as collaborator admin role
+        V collaborator = createNewCollaboratorDTO();
+        collaborator.setRelatedDTO(dto);
+        collaborator
+                .setCollaboratorDTOPK(createNewCollaboratorDTOPK(
+                        dtoId, oldOwner, collabRole));
+        collaborator.setQuadrigaUserDTO(dao.getUserDTO(oldOwner));
+        collaborator.setCreatedby(oldOwner);
+        collaborator.setCreateddate(date);
+        collaborator.setUpdatedby(oldOwner);
+        collaborator.setUpdateddate(date);
+        collaborators.add(collaborator);
+
+        dao.updateDTO(dto);
+    }
+    
     /**
      * Method to create a new workspace collaborator DTO object.
      * @param collaboratorName Username of collaborator

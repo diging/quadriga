@@ -20,8 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -53,20 +51,7 @@ public class ConceptCollectionDTO extends CollaboratingDTO<ConceptCollectionColl
     @Basic(optional = false)
     @Column(name = "accessibility")
     private Boolean accessibility;
-    @Basic(optional = false)
-    @Column(name = "updatedby")
-    private String updatedby;
-    @Basic(optional = false)
-    @Column(name = "updateddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateddate;
-    @Basic(optional = false)
-    @Column(name = "createdby")
-    private String createdby;
-    @Basic(optional = false)
-    @Column(name = "createddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
     private List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
@@ -144,38 +129,6 @@ public class ConceptCollectionDTO extends CollaboratingDTO<ConceptCollectionColl
         this.accessibility = accessibility;
     }
 
-    public String getUpdatedby() {
-        return updatedby;
-    }
-
-    public void setUpdatedby(String updatedby) {
-        this.updatedby = updatedby;
-    }
-
-    public Date getUpdateddate() {
-        return updateddate;
-    }
-
-    public void setUpdateddate(Date updateddate) {
-        this.updateddate = updateddate;
-    }
-
-    public String getCreatedby() {
-        return createdby;
-    }
-
-    public void setCreatedby(String createdby) {
-        this.createdby = createdby;
-    }
-
-    public Date getCreateddate() {
-        return createddate;
-    }
-
-    public void setCreateddate(Date createddate) {
-        this.createddate = createddate;
-    }
-
 
     @XmlTransient
     public List<ConceptCollectionCollaboratorDTO> getConceptCollectionCollaboratorDTOList() {
@@ -237,5 +190,15 @@ public class ConceptCollectionDTO extends CollaboratingDTO<ConceptCollectionColl
     @Override
     public String getId() {
         return conceptCollectionid;
+    }
+
+    @Override
+    public void setOwner(QuadrigaUserDTO owner) {
+        setCollectionowner(owner);
+    }
+
+    @Override
+    public QuadrigaUserDTO getOwner() {
+        return collectionowner;
     }
 }

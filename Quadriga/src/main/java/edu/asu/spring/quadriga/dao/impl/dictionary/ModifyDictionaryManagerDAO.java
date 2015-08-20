@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl.dictionary;
 
 import java.util.Date;
-import java.util.Iterator;
 
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionModifyDictionaryManager;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryCollaboratorDTOMapper;
@@ -50,49 +48,6 @@ public class ModifyDictionaryManagerDAO extends BaseDAO<DictionaryDTO>
             logger.error("Update dictionary request :", e);
             throw new QuadrigaStorageException(e);
         }
-    }
-
-    /**
-     * Transfer dictionary owner
-     * 
-     * @param dictionaryId
-     *            , old owner, new owner and collaborator role
-     * @return void
-     * @throws QuadrigaStorageException
-     */
-
-    @Override
-    public void transferDictionaryOwner(String dictionaryId, String oldOwner,
-            String newOwner, String collabRole) throws QuadrigaStorageException {
-        try {
-            DictionaryDTO dictionaryDTO = getDTO(dictionaryId);
-            dictionaryDTO.setDictionaryowner(getUserDTO(newOwner));
-            dictionaryDTO.setUpdatedby(oldOwner);
-            dictionaryDTO.setUpdateddate(new Date());
-
-            Iterator<DictionaryCollaboratorDTO> dictCollabItr = dictionaryDTO
-                    .getDictionaryCollaboratorDTOList().iterator();
-            while (dictCollabItr.hasNext()) {
-                DictionaryCollaboratorDTO dictCollaboratorDTO = dictCollabItr
-                        .next();
-                if (dictCollaboratorDTO.getQuadrigaUserDTO().getUsername()
-                        .equals(newOwner)) {
-                    dictCollabItr.remove();
-                }
-            }
-
-            DictionaryCollaboratorDTO dictCollaboratorDTO = collaboratorMapper
-                    .getDictionaryCollaboratorDTO(dictionaryDTO, oldOwner,
-                            newOwner, collabRole);
-            dictionaryDTO.getDictionaryCollaboratorDTOList().add(
-                    dictCollaboratorDTO);
-
-            updateDTO(dictionaryDTO);
-        } catch (HibernateException e) {
-            logger.error("transferDictionaryOwner method :", e);
-            throw new QuadrigaStorageException();
-        }
-
     }
 
     @Override

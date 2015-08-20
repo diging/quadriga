@@ -16,8 +16,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -57,20 +55,7 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
     @Basic(optional = false)
     @Column(name = "accessibility")
     private String accessibility;
-    @Basic(optional = false)
-    @Column(name = "updatedby")
-    private String updatedby;
-    @Basic(optional = false)
-    @Column(name = "updateddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateddate;
-    @Basic(optional = false)
-    @Column(name = "createdby")
-    private String createdby;
-    @Basic(optional = false)
-    @Column(name = "createddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
+    
     @JoinColumn(name = "projectowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO projectowner;
@@ -258,5 +243,15 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
     @Override
     public String getId() {
         return projectid;
+    }
+
+    @Override
+    public QuadrigaUserDTO getOwner() {
+       return projectowner;
+    }
+
+    @Override
+    public void setOwner(QuadrigaUserDTO owner) {
+        this.projectowner = owner;
     }
 }

@@ -10,20 +10,6 @@ public interface IModifyProjectManager {
 	public abstract void deleteProjectRequest(List<String> projectIdList)
 			throws QuadrigaStorageException;
 
-	/**
-	 * This method updates a project into the database.
-	 * @param project
-	 * @param userName
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 *//*
-	public abstract void updateProjectRequest(IProject project, String userName)
-			throws QuadrigaStorageException;*/
-
-	public abstract void transferProjectOwnerRequest(String projectId,
-			String oldOwner, String newOwner, String collabRole)
-			throws QuadrigaStorageException;
-
 	public abstract void assignEditorRole(String projectId, String owner) throws QuadrigaStorageException;
 
 	public abstract void removeEditorRole(String projectId, String owner)

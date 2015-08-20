@@ -55,7 +55,14 @@ All
 <c:forEach items="${projects}" var="project">
 <div class="projectList">
 <img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/project-new.png"> 
+<c:choose>
+<c:when test="${accessibleProjects[project.projectId]}">
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}">${project.projectName}</a> 
+</c:when>
+<c:otherwise>
+${project.projectName} <span style="font-size: 12px"><span title="No access" class="glyphicon glyphicon-eye-close"></span></span>
+</c:otherwise>
+</c:choose>
 	<span class="project_owner">
 	Owned by: ${project.owner.name}
 	</span>
@@ -85,81 +92,6 @@ All
 	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">Add Project</a>
 </div>
 <div style="clear: right;"></div>
-<!-- 
-<div id="tabs" class="tabs">
-	<ul>
-		<li><a href="#asowner">Owner</a></li>
-		<li><a href="#ascollaborator">Collaborator</a></li>
-		<li><a href="#aswsowner">Workspace Owner</a></li>
-		<li><a href="#aswscollaborator">Workspace Collaborator</a></li>
-	</ul>
-
-	<div id=asowner>
-		<c:if test="${not empty projectlistasowner}">
-	  You are the owner of the following projects:
-	  <ul class="style2 pagination1">
-				<c:forEach var="project" items="${projectlistasowner}">
-					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}"><c:out
-								value="${project.projectName}"></c:out></a> <br> <c:out
-							value="${project.description}"></c:out></li>
-				</c:forEach>
-			</ul>
-		</c:if>
-		<c:if test="${empty projectlistasowner}">
-	      You don't own any projects.
-	   </c:if>
-	</div>
-	<div id=ascollaborator>
-		<c:if test="${not empty projectlistascollaborator}">
-			<ul class="style2 pagination1">
-				<c:forEach var="project" items="${projectlistascollaborator}">
-					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}"><c:out
-								value="${project.projectName}"></c:out></a> <br>
-					<c:out value="${project.description}"></c:out></li>
-				</c:forEach>
-			</ul>
-		</c:if>
-		<c:if test="${empty projectlistascollaborator}">
-	   You are not collaborator to any of the projects.
-	</c:if>
-	</div>
-	<div id=aswsowner>
-		<c:if test="${not empty projectlistaswsowner}">
-	  You are the workspace owner associated with the following projects:
-	  <ul class="style2 pagination1">
-				<c:forEach var="project" items="${projectlistaswsowner}">
-					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}"><c:out
-								value="${project.projectName}"></c:out></a> <br>
-					<c:out value="${project.description}"></c:out></li>
-				</c:forEach>
-			</ul>
-		</c:if>
-		<c:if test="${empty projectlistaswsowner}">
-	    You don't own any workspace associated with projects.
-	 </c:if>
-	</div>
-
-	<div id=aswscollaborator>
-		<c:if test="${not empty projectlistaswscollaborator}">
-	  You are the workspace collaborator associated with the following projects:
-	  <ul class="style2 pagination1">
-				<c:forEach var="project" items="${projectlistaswscollaborator}">
-					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}"><c:out
-								value="${project.projectName}"></c:out></a> <br>
-					<c:out value="${project.description}"></c:out></li>
-				</c:forEach>
-			</ul>
-		</c:if>
-		<c:if test="${empty projectlistaswscollaborator}">
-		    You are not collaborator to any workspace associated with the projects.
-		</c:if>
-	</div>
-</div>
- -->
 
 
 

@@ -19,6 +19,7 @@
 <link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/jquery.dataTables_themeroller.css" />
 <link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/demo_table_jui.css" />
 <link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ul-pagination-styles.css" />
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700" rel="stylesheet" />
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/config.js"></script>
