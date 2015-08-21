@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectDictionaryFactory;
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
@@ -25,7 +25,7 @@ public class ProjectDictionaryShallowMapper implements
 IProjectDictionaryShallowMapper {
 
 	@Autowired
-	private IDBConnectionRetrieveProjectManager dbConnect;
+	private IRetrieveProjectDAO dbConnect;
 
 
 	@Autowired

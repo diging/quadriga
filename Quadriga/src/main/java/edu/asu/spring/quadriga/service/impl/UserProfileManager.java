@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.profile.IDBConnectionProfileManager;
+import edu.asu.spring.quadriga.dao.profile.IProfileManagerDAO;
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 public class UserProfileManager implements IUserProfileManager {
 	
 	@Autowired
-	IDBConnectionProfileManager connectionProfileManager;
+	IProfileManagerDAO connectionProfileManager;
 	
 /**
  * adds a searchresults retrieved from services to the user's searchresult account

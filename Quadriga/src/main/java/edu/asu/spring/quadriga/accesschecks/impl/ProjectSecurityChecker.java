@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
-import edu.asu.spring.quadriga.dao.workbench.IProjectAccessManager;
+import edu.asu.spring.quadriga.dao.workbench.IProjectAccessDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
@@ -25,7 +25,7 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
     private IProjectCollaboratorManager projectManager;
 
     @Autowired
-    private IProjectAccessManager accessManager;
+    private IProjectAccessDAO accessManager;
 
     /**
      * This method checks if the user is Quadriga Admin

@@ -7,7 +7,7 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionWorkspaceCC {
+public interface IWorkspaceCCDAO {
 
 	/**
 	 *  Method add a Concept collection to a workspace                   

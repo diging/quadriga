@@ -6,7 +6,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionRetrieveWSCollabManager 
+public interface IRetrieveWSCollabDAO 
 {
 
 	/**

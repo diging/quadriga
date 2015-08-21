@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceDictionary;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.service.workspace.mapper.impl.WorkspaceDictionary
 public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 
 	@Autowired
-	private IDBConnectionWorkspaceDictionary dbConnect;
+	private IWorkspaceDictionaryDAO dbConnect;
 	
 	@Autowired
 	private WorkspaceDictionaryShallowMapper wsDictShallowMapper;

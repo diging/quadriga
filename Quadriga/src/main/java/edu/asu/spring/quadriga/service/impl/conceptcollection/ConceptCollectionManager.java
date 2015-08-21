@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -90,7 +90,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	private	IListWSManager wsManager;
 	
 	@Autowired
-	private IDBConnectionRetrieveProjectManager projectManager;
+	private IRetrieveProjectDAO projectManager;
 	
 	@Autowired
 	private IListWsDAO wsListManger;

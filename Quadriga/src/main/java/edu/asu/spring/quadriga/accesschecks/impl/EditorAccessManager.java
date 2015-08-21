@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.editor.IDBConnectionEditorAccessManager;
+import edu.asu.spring.quadriga.dao.editor.IEditorAccessDAO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.editor.IEditorAccessManager;
 
@@ -12,7 +12,7 @@ import edu.asu.spring.quadriga.service.editor.IEditorAccessManager;
 public class EditorAccessManager implements IEditorAccessManager 
 {
 	@Autowired
-	private IDBConnectionEditorAccessManager dbConnect;
+	private IEditorAccessDAO dbConnect;
 	
 	/**
 	 * This method checks if the given user has an editor role

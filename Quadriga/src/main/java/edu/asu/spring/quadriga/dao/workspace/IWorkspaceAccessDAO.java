@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionWSAccessManager 
+public interface IWorkspaceAccessDAO 
 {
 
 	/**

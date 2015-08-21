@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.accesschecks.impl.WSSecurityChecker;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWSAccessManager;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceAccessDAO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import static org.junit.Assert.assertFalse;
@@ -20,7 +20,7 @@ public class CheckWSSecurityTest {
     private IProjectSecurityChecker projectSecurity;
     
     @Mock
-    private IDBConnectionWSAccessManager dbConnect;
+    private IWorkspaceAccessDAO dbConnect;
     
     @InjectMocks
     private WSSecurityChecker securityChecker;
@@ -28,7 +28,7 @@ public class CheckWSSecurityTest {
     @Before
     public void init() throws QuadrigaStorageException {
         projectSecurity = Mockito.mock(IProjectSecurityChecker.class);
-        dbConnect = Mockito.mock(IDBConnectionWSAccessManager.class);
+        dbConnect = Mockito.mock(IWorkspaceAccessDAO.class);
         MockitoAnnotations.initMocks(this);
 
         // set default return values

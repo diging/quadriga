@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceCC;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCCDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
 
 @Repository
-public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> implements IDBConnectionWorkspaceCC {
+public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> implements IWorkspaceCCDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;

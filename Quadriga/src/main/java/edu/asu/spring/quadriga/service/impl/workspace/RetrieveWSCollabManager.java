@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.dao.workspace.IRetrieveWSCollabDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 
 	@Autowired
-	IDBConnectionRetrieveWSCollabManager dbConnect;
+	IRetrieveWSCollabDAO dbConnect;
 
 	@Autowired
 	private IQuadrigaRoleManager roleManager;

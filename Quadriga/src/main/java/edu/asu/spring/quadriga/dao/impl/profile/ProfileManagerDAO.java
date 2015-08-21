@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.profile.IDBConnectionProfileManager;
+import edu.asu.spring.quadriga.dao.profile.IProfileManagerDAO;
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.factories.IProfileFactory;
 import edu.asu.spring.quadriga.dto.QuadrigaUserprofileDTO;
@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
  */
 @Repository
 public class ProfileManagerDAO extends BaseDAO<QuadrigaUserprofileDTO> implements
-        IDBConnectionProfileManager {
+        IProfileManagerDAO {
     @Autowired
     private SessionFactory sessionFactory;
     

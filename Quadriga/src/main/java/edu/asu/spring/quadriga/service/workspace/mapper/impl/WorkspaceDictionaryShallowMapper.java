@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceDictionaryFactory;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 @Service
 public class WorkspaceDictionaryShallowMapper implements IWorkspaceDictionaryShallowMapper {
 	@Autowired
-	private IDBConnectionRetrieveProjectManager dbConnect;
+	private IRetrieveProjectDAO dbConnect;
 
 	@Autowired
 	private IDictionaryManager dictionaryManager;

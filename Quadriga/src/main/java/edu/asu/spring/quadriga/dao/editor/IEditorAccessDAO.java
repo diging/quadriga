@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.dao.editor;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionEditorAccessManager 
+public interface IEditorAccessDAO 
 {
 
 	/**

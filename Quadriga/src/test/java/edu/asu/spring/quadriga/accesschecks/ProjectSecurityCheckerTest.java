@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker;
-import edu.asu.spring.quadriga.dao.workbench.IProjectAccessManager;
+import edu.asu.spring.quadriga.dao.workbench.IProjectAccessDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 public class ProjectSecurityCheckerTest {
 
     @Mock
-    private IProjectAccessManager mockedManager;
+    private IProjectAccessDAO mockedManager;
 
     @InjectMocks
     private ProjectSecurityChecker securityChecker;
@@ -39,7 +39,7 @@ public class ProjectSecurityCheckerTest {
 
     @Before
     public void init() throws QuadrigaStorageException {
-        mockedManager = Mockito.mock(IProjectAccessManager.class);
+        mockedManager = Mockito.mock(IProjectAccessDAO.class);
         mockedProjectManager = Mockito.mock(IProjectCollaboratorManager.class);
         MockitoAnnotations.initMocks(this);
 

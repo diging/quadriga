@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWSAccessManager;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceAccessDAO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
-public class WorkspaceAccessManagerDAO extends BaseDAO<WorkspaceDTO> implements IDBConnectionWSAccessManager
+public class WorkspaceAccessDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceAccessDAO
 {
 	@Autowired
 	private SessionFactory sessionFactory;

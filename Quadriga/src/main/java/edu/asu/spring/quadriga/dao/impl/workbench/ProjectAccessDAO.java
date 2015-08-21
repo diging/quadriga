@@ -8,16 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.workbench.IProjectAccessManager;
+import edu.asu.spring.quadriga.dao.workbench.IProjectAccessDAO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 
 @Repository
-public class ProjectAccessManagerDAO extends BaseDAO<ProjectDTO> implements  IProjectAccessManager 
+public class ProjectAccessDAO extends BaseDAO<ProjectDTO> implements  IProjectAccessDAO 
 {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	public static final Logger logger = LoggerFactory.getLogger(ProjectAccessManagerDAO.class);
+	public static final Logger logger = LoggerFactory.getLogger(ProjectAccessDAO.class);
 	
 	/**
 	 * {@inheritDoc}

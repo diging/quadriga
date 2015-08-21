@@ -6,12 +6,12 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.asu.spring.quadriga.dao.editor.IDBConnectionEditorAccessManager;
+import edu.asu.spring.quadriga.dao.editor.IEditorAccessDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
-public class EditorAccessManagerDAO extends BaseDAO implements IDBConnectionEditorAccessManager
+public class EditorAccessDAO extends BaseDAO implements IEditorAccessDAO
 {
 	@Autowired
 	private SessionFactory sessionFactory;

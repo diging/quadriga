@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceDictionary;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDictionaryDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
@@ -84,7 +84,7 @@ public class DictionaryManager implements IDictionaryManager {
 	private IRetrieveProjectManager retrieveProjectManager;
 
 	@Autowired
-	private IDBConnectionWorkspaceDictionary connectWorkspaceDictionary;
+	private IWorkspaceDictionaryDAO connectWorkspaceDictionary;
 
 	@Autowired
 	private IListWSManager wsManager;

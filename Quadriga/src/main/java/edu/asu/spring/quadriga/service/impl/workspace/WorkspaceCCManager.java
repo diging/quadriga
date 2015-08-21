@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceCC;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCCDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 public class WorkspaceCCManager implements IWorkspaceCCManager {
 
 	@Autowired
-	private IDBConnectionWorkspaceCC dbConnect;
+	private IWorkspaceCCDAO dbConnect;
 	
 	@Autowired
 	private IWorkspaceCCShallowMapper wsCCShallowMapper;

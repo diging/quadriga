@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.dao.workbench;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IProjectAccessManager 
+public interface IProjectAccessDAO 
 {
 
 	/**

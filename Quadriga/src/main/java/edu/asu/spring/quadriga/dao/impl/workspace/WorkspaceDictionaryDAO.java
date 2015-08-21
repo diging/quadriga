@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWorkspaceDictionary;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
 
 @Repository
-public class WorkspaceDictionaryDAO extends BaseDAO<WorkspaceDictionaryDTO> implements IDBConnectionWorkspaceDictionary 
+public class WorkspaceDictionaryDAO extends BaseDAO<WorkspaceDictionaryDTO> implements IWorkspaceDictionaryDAO 
 {
 	
 	@Autowired

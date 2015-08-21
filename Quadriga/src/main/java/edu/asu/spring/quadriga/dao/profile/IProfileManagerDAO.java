@@ -6,7 +6,7 @@ import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
-public interface IDBConnectionProfileManager {
+public interface IProfileManagerDAO {
 	
 	public abstract void addUserProfileDBRequest(String name, String serviceId, SearchResultBackBean resultBackBean ) throws QuadrigaStorageException;
 	

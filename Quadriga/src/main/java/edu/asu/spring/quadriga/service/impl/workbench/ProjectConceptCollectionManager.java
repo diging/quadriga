@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
@@ -28,7 +28,7 @@ public class ProjectConceptCollectionManager implements IProjectConceptCollectio
 	private IProjectDeepMapper projDeepMapper;
 	
 	@Autowired
-	private IDBConnectionRetrieveProjectManager projManager;
+	private IRetrieveProjectDAO projManager;
 
 	/**
 	 * This method associates the concept collection with the project.

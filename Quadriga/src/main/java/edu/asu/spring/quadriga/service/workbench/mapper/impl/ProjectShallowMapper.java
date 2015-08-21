@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -21,7 +21,7 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 public class ProjectShallowMapper implements IProjectShallowMapper {
 
 	@Autowired
-	private IDBConnectionRetrieveProjectManager dbConnect;
+	private IRetrieveProjectDAO dbConnect;
 	
 	@Autowired
 	private IRetrieveProjectManager projectManager;

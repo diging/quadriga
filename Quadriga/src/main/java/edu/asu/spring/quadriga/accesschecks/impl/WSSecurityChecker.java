@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionWSAccessManager;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceAccessDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -26,7 +26,7 @@ public class WSSecurityChecker implements IWSSecurityChecker
 	private IRetrieveWSCollabManager workspaceManager;
 
 	@Autowired
-	private IDBConnectionWSAccessManager dbConnect;
+	private IWorkspaceAccessDAO dbConnect;
 
 	/**
 	 * This method checks if the user has access to create a worksapce.

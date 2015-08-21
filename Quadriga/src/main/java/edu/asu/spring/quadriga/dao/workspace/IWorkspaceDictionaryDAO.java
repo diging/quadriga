@@ -8,7 +8,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionWorkspaceDictionary {
+public interface IWorkspaceDictionaryDAO {
 
 	/**
 	 *  Method add a dictionary to a workspace                   

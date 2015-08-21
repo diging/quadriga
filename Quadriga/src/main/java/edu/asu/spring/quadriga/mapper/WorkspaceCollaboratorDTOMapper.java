@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.dao.workspace.IRetrieveWSCollabDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -37,7 +37,7 @@ public class WorkspaceCollaboratorDTOMapper extends BaseMapper {
 	private IUserFactory userFactory;
 	
 	@Autowired
-	private IDBConnectionRetrieveWSCollabManager collaboratorManager;
+	private IRetrieveWSCollabDAO collaboratorManager;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WorkspaceCollaboratorDTOMapper.class);
 	

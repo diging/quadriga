@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.workspace.IDBConnectionRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.dao.workspace.IRetrieveWSCollabDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 
 @Repository
-public class RetrieveWSCollabManagerDAO extends BaseDAO<WorkspaceCollaboratorDTO> implements IDBConnectionRetrieveWSCollabManager {
+public class RetrieveWSCollabDAO extends BaseDAO<WorkspaceCollaboratorDTO> implements IRetrieveWSCollabDAO {
 
 	@Autowired
 	SessionFactory sessionFactory;
@@ -37,7 +37,7 @@ public class RetrieveWSCollabManagerDAO extends BaseDAO<WorkspaceCollaboratorDTO
 	@Autowired
 	private UserDTOMapper userDTOMapper;
 	
-	private static final Logger logger = LoggerFactory.getLogger(RetrieveWSCollabManagerDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(RetrieveWSCollabDAO.class);
 
 	/**
 	 * {@inheritDoc}

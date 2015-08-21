@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
@@ -33,7 +33,7 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallow
 public class ProjectDeepMapper implements IProjectDeepMapper {
 
 	@Autowired
-	private IDBConnectionRetrieveProjectManager dbConnect;
+	private IRetrieveProjectDAO dbConnect;
 
 	@Autowired
 	private IRetrieveProjectManager projectManager;

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.proxy.ConceptCollectionProxy;
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 @Service
 public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
 	@Autowired
-	private IDBConnectionRetrieveProjectManager dbConnect;
+	private IRetrieveProjectDAO dbConnect;
 	
 	@Autowired
 	private IConceptCollectionManager ccManager;
