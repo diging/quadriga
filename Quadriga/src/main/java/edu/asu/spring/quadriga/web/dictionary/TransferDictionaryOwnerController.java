@@ -77,14 +77,10 @@ public class TransferDictionaryOwnerController
 	@RequestMapping(value="auth/dictionaries/transfer/{dictionaryid}", method = RequestMethod.GET)
 	public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException
 	{
-		ModelAndView model;
-		IDictionary dictionary;
-		List<IDictionaryCollaborator> collaboratingUser = new ArrayList<IDictionaryCollaborator>();
-		List<IUser> userList = new ArrayList<IUser>();
 		
-		model = new ModelAndView("auth/dictionaries/changedictionaryowner");
+		ModelAndView model = new ModelAndView("auth/dictionaries/changedictionaryowner");
 		
-		dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
+		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
 		
 		//create a model
 	    model.getModelMap().put("user", userFactory.createUserObject());
@@ -93,10 +89,11 @@ public class TransferDictionaryOwnerController
 		model.getModelMap().put("dictionaryid", dictionaryid);
 		
 		//fetch the collaborators
-		collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
-		
-		if (collaboratingUser != null) {
-    		for(IDictionaryCollaborator collabuser : collaboratingUser) {
+		List<IDictionaryCollaborator> collaboratingUsers = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
+		List<IUser> userList = new ArrayList<IUser>();
+        
+		if (collaboratingUsers != null) {
+    		for(IDictionaryCollaborator collabuser : collaboratingUsers) {
     			//userList.add(collabuser);
     			
     			userList.add(collabuser.getCollaborator().getUserObj());
