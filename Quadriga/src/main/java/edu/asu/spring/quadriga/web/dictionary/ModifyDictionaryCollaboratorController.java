@@ -30,7 +30,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -50,10 +50,10 @@ public class ModifyDictionaryCollaboratorController
 	private IQuadrigaRoleManager collaboratorRoleManager;
 	
 	@Autowired
-	IDictionaryCollaboratorManager dictionaryManager;
+	private IDictionaryCollaboratorManager dictionaryCollabManager;
 	
 	@Autowired
-	IRetrieveDictionaryManager retrieveDictionaryManager;
+	private IDictionaryManager dictManager;
 	
 	@Autowired
 	private CollaboratorFormValidator validator;
@@ -99,7 +99,7 @@ public class ModifyDictionaryCollaboratorController
 		 model = new ModelAndView("auth/dictionaries/updatecollaborators");
 		 
 		 //fetch the dictionary details
-		 IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
+		 IDictionary dictionary = dictManager.getDictionaryDetails(dictionaryid);
 		 
 		 //create a model for collaborators
 		 collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
@@ -151,7 +151,7 @@ public class ModifyDictionaryCollaboratorController
 			if(result.hasErrors())
 			{
 				//fetch the dictionary details
-				IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
+				IDictionary dictionary = dictManager.getDictionaryDetails(dictionaryid);
 				
 				//add a variable to display the entire page
 				model.getModelMap().put("success", 0);
@@ -187,7 +187,7 @@ public class ModifyDictionaryCollaboratorController
 						collabRoles.append(role.getDBid());
 					}
 					
-					dictionaryManager.updateCollaborators(dictionaryid, collabUser, collabRoles.toString().substring(1), userName);
+					dictionaryCollabManager.updateCollaborators(dictionaryid, collabUser, collabRoles.toString().substring(1), userName);
 					
 					model.getModelMap().put("success", 1);
 				}

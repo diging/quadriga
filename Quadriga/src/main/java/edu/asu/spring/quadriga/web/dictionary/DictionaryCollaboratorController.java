@@ -42,7 +42,6 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
@@ -58,7 +57,7 @@ import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManag
 public class DictionaryCollaboratorController {
 
     @Autowired
-    IDictionaryManager dictionaryManager;
+    private IDictionaryManager dictionaryManager;
 
     @Autowired
     private IDictionaryCollaboratorManager dictCollaboratorManager;
@@ -74,9 +73,6 @@ public class DictionaryCollaboratorController {
 
     @Autowired
     IUserFactory userFactory;
-
-    @Autowired
-    IRetrieveDictionaryManager retrieveDictionaryManager;
 
     @Autowired
     IQuadrigaRoleManager collaboratorRoleManager;
@@ -157,7 +153,7 @@ public class DictionaryCollaboratorController {
                 "auth/dictionaries/showAddCollaborators");
 
         // fetch the dictionary details
-        IDictionary dictionary = retrieveDictionaryManager
+        IDictionary dictionary = dictionaryManager
                 .getDictionaryDetails(dictionaryId);
 
         modelAndView.getModelMap().put("dictionaryid", dictionaryId);
@@ -242,7 +238,7 @@ public class DictionaryCollaboratorController {
                 "auth/dictionaries/showAddCollaborators");
 
         // fetch dictionary details
-        IDictionary dictionary = retrieveDictionaryManager
+        IDictionary dictionary = dictionaryManager
                 .getDictionaryDetails(dictionaryId);
         model.getModelMap().put("dictionaryname",
                 dictionary.getDictionaryName());

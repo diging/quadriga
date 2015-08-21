@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionRetrieveDictionaryManager;
+import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
@@ -45,12 +43,10 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 	private IDictionaryCollaboratorFactory dictionaryCollaboratorFactory;
 	
 	@Autowired
-	private IDBConnectionRetrieveDictionaryManager dbConnect;
+	private IDictionaryDAO dictDao;
 	
 	@Autowired
 	private IDictionaryFactory dictionaryFactory;
-	
-	private static final Logger logger = LoggerFactory.getLogger(DictionaryDeepMapper.class);
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
@@ -83,7 +79,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException{
 		IDictionary dictionary = null;
 		
-		DictionaryDTO dictionaryDTO = dbConnect.getDTO(dictionaryId);
+		DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryId);
 		if(dictionaryDTO != null){
 			dictionary = dictionaryFactory.createDictionaryObject();
 			dictionary.setDictionaryId(dictionaryDTO.getDictionaryid());
@@ -115,27 +111,29 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 	public IDictionary getDictionaryDetails(String dictionaryId, String userName) throws QuadrigaStorageException{
 		IDictionary dictionary = null;
 		
-		DictionaryDTO dictionaryDTO = dbConnect.getDictionaryDTO(dictionaryId, userName);
-		if(dictionaryDTO != null){
-			dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setDictionaryId(dictionaryDTO.getDictionaryid());
-			dictionary.setDictionaryName(dictionaryDTO.getDictionaryname());
-			dictionary.setDescription(dictionaryDTO.getDescription());
-			dictionary.setCreatedBy(dictionaryDTO.getCreatedby());
-			dictionary.setCreatedDate(dictionaryDTO.getCreateddate());
-			dictionary.setUpdatedBy(dictionaryDTO.getUpdatedby());
-			dictionary.setUpdatedDate(dictionaryDTO.getUpdateddate());
-			dictionary.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
-			
-			// Setting dictionary collaborator
-			dictionary.setDictionaryCollaborators(getDictionaryCollaboratorList(dictionaryDTO, dictionary));
-			// Setting dictionary Projects
-			dictionary.setDictionaryProjects(projectDictionaryShallowMapper.getProjectDictionaryList(dictionaryDTO, dictionary));
-			// Setting dictionary Workspaces
-			dictionary.setDictionaryWorkspaces(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(dictionary, dictionaryDTO));
-			// Setting dictionary Items
-			dictionary.setDictionaryItems(getDictionaryItemList(dictionaryDTO, dictionary));
-		}
+		DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryId);
+		if (!dictionaryDTO.getOwner().equals(userName))
+		    return null;
+		
+		dictionary = dictionaryFactory.createDictionaryObject();
+		dictionary.setDictionaryId(dictionaryDTO.getDictionaryid());
+		dictionary.setDictionaryName(dictionaryDTO.getDictionaryname());
+		dictionary.setDescription(dictionaryDTO.getDescription());
+		dictionary.setCreatedBy(dictionaryDTO.getCreatedby());
+		dictionary.setCreatedDate(dictionaryDTO.getCreateddate());
+		dictionary.setUpdatedBy(dictionaryDTO.getUpdatedby());
+		dictionary.setUpdatedDate(dictionaryDTO.getUpdateddate());
+		dictionary.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
+		
+		// Setting dictionary collaborator
+		dictionary.setDictionaryCollaborators(getDictionaryCollaboratorList(dictionaryDTO, dictionary));
+		// Setting dictionary Projects
+		dictionary.setDictionaryProjects(projectDictionaryShallowMapper.getProjectDictionaryList(dictionaryDTO, dictionary));
+		// Setting dictionary Workspaces
+		dictionary.setDictionaryWorkspaces(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(dictionary, dictionaryDTO));
+		// Setting dictionary Items
+		dictionary.setDictionaryItems(getDictionaryItemList(dictionaryDTO, dictionary));
+		
 		return dictionary;
 	}
 	

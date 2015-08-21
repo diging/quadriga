@@ -26,7 +26,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 
 /**
  * This class will handle add and search dictionaries items controller for the
@@ -38,12 +37,8 @@ import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 @Controller
 public class DictionaryItemSearchAddController {
 	@Autowired
-	IDictionaryManager dictonaryManager;
+	private IDictionaryManager dictionaryManager;
 	
-	@Autowired
-	IRetrieveDictionaryManager retrieveDictionaryManager;
-	
-
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryItemSearchAddController.class);
 
@@ -59,11 +54,11 @@ public class DictionaryItemSearchAddController {
 	}
 
 	public IDictionaryManager getDictonaryManager() {
-		return dictonaryManager;
+		return dictionaryManager;
 	}
 
 	public void setDictonaryManager(IDictionaryManager dictonaryManager) {
-		this.dictonaryManager = dictonaryManager;
+		this.dictionaryManager = dictonaryManager;
 	}
 
 	
@@ -96,24 +91,24 @@ public class DictionaryItemSearchAddController {
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser user = usermanager.getUser(principal.getName());
-		boolean result=dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryId);
+		boolean result=dictionaryManager.userDictionaryPerm(user.getUserName(),dictionaryId);
 		logger.info("Came here "+ result);
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {
-			dictonaryManager.addDictionaryItems(dictionaryItems, values, dictionaryId);
+			dictionaryManager.addDictionaryItems(dictionaryItems, values, dictionaryId);
 		}else{
 			model.addAttribute("additemsuccess", 2);
 			
 			//TODO: getDictionaryItems() should return IDictionaryItems
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+			List<IDictionaryItems> dictionaryItemList = dictionaryManager
 					.getDictionariesItems(dictionaryId,user.getUserName());
-			String dictionaryName = dictonaryManager
+			String dictionaryName = dictionaryManager
 					.getDictionaryName(dictionaryId);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			//fetch the dictionary details
-			IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+			IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
 			model.addAttribute("dictionary", dictionary);
 			model.addAttribute("dictID", dictionaryId);
 
@@ -133,14 +128,14 @@ public class DictionaryItemSearchAddController {
 				model.addAttribute("errormsg", msg);
 			}
 		}
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+		List<IDictionaryItems> dictionaryItemList = dictionaryManager
 				.getDictionariesItems(dictionaryId,user.getUserName());
-		String dictionaryName = dictonaryManager
+		String dictionaryName = dictionaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
-		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
 		model.addAttribute("dictionary", dictionary);
 		JSONObject core = new JSONObject();
 		model.addAttribute("core", core.toString());
@@ -162,17 +157,17 @@ public class DictionaryItemSearchAddController {
 			@RequestParam("posdropdown") String pos,Principal principal, ModelMap model)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser user = usermanager.getUser(principal.getName());
-		dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
+		dictionaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
 		try {
 			List<DictionaryEntry> dictionaryEntryList = null;
 			if (!item.equals("")) {
 				logger.debug("Query for Item :" + item + " and pos :" + pos);
-				dictionaryEntryList = dictonaryManager.searchWordPower(item,
+				dictionaryEntryList = dictionaryManager.searchWordPower(item,
 						pos);
 			}
 			model.addAttribute("status", 1);
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
-			String dictionaryName = dictonaryManager
+			String dictionaryName = dictionaryManager
 					.getDictionaryName(dictionaryid);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictionaryid", dictionaryid);

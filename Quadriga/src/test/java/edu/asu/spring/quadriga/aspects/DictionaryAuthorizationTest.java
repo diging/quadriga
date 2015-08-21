@@ -30,12 +30,9 @@ import edu.asu.spring.quadriga.domain.impl.dictionary.DictionaryCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 
 public class DictionaryAuthorizationTest {
 
-    @Mock
-    private IRetrieveDictionaryManager mockedManager;
     @Mock
     private IDictionaryManager dictionaryManager;
     
@@ -47,7 +44,6 @@ public class DictionaryAuthorizationTest {
     
     @Before
     public void init() throws QuadrigaStorageException {
-        mockedManager = Mockito.mock(IRetrieveDictionaryManager.class);
         dictionaryManager = Mockito.mock(IDictionaryManager.class);
         dictionaryFactory = new DictionaryFactory();
         
@@ -82,7 +78,7 @@ public class DictionaryAuthorizationTest {
         
         collaborators.add(ccCollaborator);
         
-        Mockito.when(mockedManager.getDictionaryDetails("dictionaryId")).thenReturn(dictionary);
+        Mockito.when(dictionaryManager.getDictionaryDetails("dictionaryId")).thenReturn(dictionary);
         Mockito.when(dictionaryManager.showCollaboratingUsers("dictionaryId")).thenReturn(collaborators);
     }
     

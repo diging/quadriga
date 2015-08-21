@@ -31,7 +31,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -49,25 +48,16 @@ public class DictionaryItemController {
 			.getLogger(DictionaryItemController.class);
 
 	@Autowired
-	IUserManager usermanager;
+	private IUserManager usermanager;
 	
 	@Autowired
-	IQuadrigaRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager collaboratorRoleManager;
 	
 	@Autowired
-	IRetrieveDictionaryManager retrieveDictionaryManager;
+	private IDictionaryFactory dictionaryFactory;
 	
 	@Autowired
-	IDictionaryFactory dictionaryFactory;
-
-	public IRetrieveDictionaryManager getRetrieveDictionaryManager() {
-		return retrieveDictionaryManager;
-	}
-
-	public void setRetrieveDictionaryManager(
-			IRetrieveDictionaryManager retrieveDictionaryManager) {
-		this.retrieveDictionaryManager = retrieveDictionaryManager;
-	}
+	private IDictionaryManager dictionaryManager;
 
 	public IUserManager getUsermanager() {
 		return usermanager;
@@ -109,7 +99,7 @@ public class DictionaryItemController {
 					throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		
 		//fetch the dictionary details
-		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
+		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
 		
 		String userName = principal.getName();
 
@@ -126,7 +116,7 @@ public class DictionaryItemController {
 		
 	    IDictionary dictionaryObj = dictionaryFactory.createDictionaryObject();
 	    dictionaryObj.setDictionaryId(dictionaryid);
-	    dictionaryObj = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
+	    dictionaryObj = dictionaryManager.getDictionaryDetails(dictionaryid);
 	    
 	    model.addAttribute("owner", dictionaryObj.getOwner().getUserName().equals(userName));
 	   
@@ -170,7 +160,7 @@ public class DictionaryItemController {
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
-			IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+			IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
 			model.addAttribute("dictionary", dictionary);
 			JSONObject core = new JSONObject();
 			model.addAttribute("core", core.toString());
@@ -207,7 +197,7 @@ public class DictionaryItemController {
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
-		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
 		model.addAttribute("dictionary", dictionary);
 		JSONObject core = new JSONObject();
 		model.addAttribute("core", core.toString());
@@ -243,7 +233,7 @@ public class DictionaryItemController {
 			model.addAttribute("dictID", dictionaryId);
 			JSONObject core = new JSONObject();
 			model.addAttribute("core", core.toString());
-			IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+			IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
 			model.addAttribute("dictionary", dictionary);
 			return "auth/dictionary/dictionary";
 		}else{
@@ -294,7 +284,7 @@ public class DictionaryItemController {
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
-		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
 		model.addAttribute("dictionary", dictionary);
 		model.addAttribute("dictID", dictionaryId);
 		JSONObject core = new JSONObject();

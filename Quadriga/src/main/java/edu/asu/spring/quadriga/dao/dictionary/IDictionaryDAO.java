@@ -28,15 +28,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 			throws QuadrigaStorageException;
 
 	/**
-	 * Queries the database to get dictionary name
-	 * 
-	 * @return dictionary name
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract String getDictionaryName(String dictionaryId)
-			throws QuadrigaStorageException;
-
-	/**
 	 * Adds the dictionary items into dictionary in the database
 	 * 
 	 * @return Status message
@@ -73,7 +64,7 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 	 * @throws QuadrigaStorageException
 	 * @author rohit pendbhaje
 	 */
-	public abstract List<IUser> showNonCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
+	public abstract List<IUser> getNonCollaboratingUsers(String dictionaryid) throws QuadrigaStorageException;
 	
 	/**
 	 * Deletes the dictionary 
@@ -81,7 +72,7 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 	 * @return 
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract void deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException;
+	public abstract void deleteDictionary(String dictionaryId) throws QuadrigaStorageException;
 
 	/**
 	 * Checks if user has permission to dictionary
@@ -105,16 +96,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 			throws QuadrigaStorageException;
 
 	/**
-	 * Get the user role of the collaborator with the user id and dictionary id
-	 * @param user id and dictionary id
-	 * @return Role of the user
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	public abstract List<String> getDictionaryCollaboratorRoles(String userId, String dicitonaryId)
-			throws QuadrigaStorageException;
-
-	/**
 	 * Delete Dictionary Items corresponding to a dictionary ID and Term id
 	 * @param dictionary id and term id
 	 * @return error messages if any
@@ -124,18 +105,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 	public abstract void deleteDictionaryItemsCollab(String dictinaryId, String itemid)
 			throws QuadrigaStorageException;
 
-	/**
-	 * Get Dictionary owner name corresponding to a dictionary ID
-	 * @param dictionary id
-	 * @return Owner username
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	public abstract String getDictionaryOwner(String dictionaryId)
-			throws QuadrigaStorageException;
-	
-	public abstract DictionaryDTO getDictionaryDetails(String userName) throws QuadrigaStorageException;
-	
 	public abstract List<DictionaryDTO> getDictionaryDTOList(String userName) throws QuadrigaStorageException;
 	
 	/**
@@ -147,4 +116,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 	 */
 	public abstract String getDictionaryId(String dictName) throws QuadrigaStorageException;
 
+	public void updateDictionary(IDictionary dictionary, String userName)
+            throws QuadrigaStorageException;
 }

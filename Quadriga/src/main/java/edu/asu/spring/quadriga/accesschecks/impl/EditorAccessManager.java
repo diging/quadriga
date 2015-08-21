@@ -25,13 +25,7 @@ public class EditorAccessManager implements IEditorAccessManager
 	@Transactional
 	public boolean checkIsEditor(String userName) throws QuadrigaStorageException
 	{
-		boolean isEditor;
-		
-		isEditor = false;
-		
-		dbConnect.chkIsEditor(userName);
-		
-		return isEditor;
+		return dbConnect.chkIsEditor(userName);
 	}
 	
 	/**
@@ -46,13 +40,7 @@ public class EditorAccessManager implements IEditorAccessManager
 	@Transactional
 	public boolean checkIsNetworkEditor(String networkId,String userName) throws QuadrigaStorageException
 	{
-		boolean isEditor;
-		
-		isEditor = false;
-		
-		isEditor = dbConnect.chkIsNetworkEditor(networkId, userName);
-		
-		return isEditor;
+		return dbConnect.chkIsNetworkEditor(networkId, userName);
 	}
 
 }

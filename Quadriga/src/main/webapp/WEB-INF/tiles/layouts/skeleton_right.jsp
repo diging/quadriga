@@ -88,19 +88,19 @@
             <c:when test="${show_success_alert}">
             <div class="alert alert-success">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                 ${alert_msg}
+                 ${success_alert_msg}
             </div>
             </c:when>
             <c:when test="${show_error_alert}">
             <div class="alert alert-error">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                 ${alert_msg}
+                 ${error_alert_msg}
             </div>
             </c:when>
             <c:when test="${show_info_alert}">
             <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                 ${alert_msg}
+                 ${info_alert_msg}
             </div>
            </c:when>
            </c:choose>

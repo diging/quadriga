@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.dictionary.IDBConnectionRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
@@ -21,10 +20,7 @@ import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 
 	@Autowired
-	private IDictionaryDAO dbConnect;
-	
-	@Autowired
-	private IDBConnectionRetrieveDictionaryManager dbconnect1;
+	private IDictionaryDAO dictDao;
 	
 	@Autowired
 	private IDictionaryManager dictionaryManager;
@@ -36,23 +32,12 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 	@Transactional
 	public List<IDictionary> getDictionaryList(String userName) throws QuadrigaStorageException {
 		
-		List<DictionaryDTO> dictionaryDTOList = dbConnect.getDictionaryDTOList(userName);
+		List<DictionaryDTO> dictionaryDTOList = dictDao.getDictionaryDTOList(userName);
 		
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
-		if(dictionaryDTOList != null)
-		{
-			for(DictionaryDTO dictionaryDTO: dictionaryDTOList)
-			{
-				IDictionary dictionaryProxy = new DictionaryProxy(dictionaryManager);
-				dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
-				dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
-				dictionaryProxy.setDescription(dictionaryDTO.getDescription());
-				dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
-				dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
-				dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
-				dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-				dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
-				dictionaryList.add(dictionaryProxy);
+		if(dictionaryDTOList != null) {
+			for(DictionaryDTO dictionaryDTO: dictionaryDTOList) {
+				dictionaryList.add(createDictionaryProxy(dictionaryDTO));
 			}
 		}
 		
@@ -63,67 +48,46 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 	@Transactional
 	public List<IDictionary> getDictionaryListOfCollaborator(String userName) throws QuadrigaStorageException {
 		
-		List<DictionaryDTO> dictionaryDTOList = dbConnect.getDictionaryCollabOfUser(userName);
-		
+		List<DictionaryDTO> dictionaryDTOList = dictDao.getDictionaryCollabOfUser(userName);
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
-		if(dictionaryDTOList != null)
-		{
-			for(DictionaryDTO dictionaryDTO: dictionaryDTOList)
-			{
-				IDictionary dictionaryProxy = new DictionaryProxy(dictionaryManager);
-				dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
-				dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
-				dictionaryProxy.setDescription(dictionaryDTO.getDescription());
-				dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
-				dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
-				dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
-				dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-				dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
-				dictionaryList.add(dictionaryProxy);
+		if(dictionaryDTOList != null) {
+			for(DictionaryDTO dictionaryDTO: dictionaryDTOList) {
+				dictionaryList.add(createDictionaryProxy(dictionaryDTO));
 			}
 		}
 		
 		return dictionaryList;
 	}
 
+    private IDictionary createDictionaryProxy(DictionaryDTO dictionaryDTO)
+            throws QuadrigaStorageException {
+        IDictionary dictionaryProxy = new DictionaryProxy(dictionaryManager);
+        dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
+        dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
+        dictionaryProxy.setDescription(dictionaryDTO.getDescription());
+        dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
+        dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
+        dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
+        dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
+        dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
+        return dictionaryProxy;
+    }
+
 	@Override
 	public IDictionary getDictionaryDetails(DictionaryDTO  dictionaryDTO)
 			throws QuadrigaStorageException {
-		
-		IDictionary dictionaryProxy = null;
-		
-		if(dictionaryDTO != null){
-			dictionaryProxy = new DictionaryProxy(dictionaryManager);
-			dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
-			dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
-			dictionaryProxy.setDescription(dictionaryDTO.getDescription());
-			dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
-			dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
-			dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
-			dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
-			dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-		}
-		
-		return dictionaryProxy;
+	    if (dictionaryDTO == null)
+	        return null;
+	    return createDictionaryProxy(dictionaryDTO);
 	}
 
 
 	@Override
 	@Transactional
 	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException{
-		DictionaryDTO dictionaryDTO = dbconnect1.getDTO(dictionaryId);
-		IDictionary dictionaryProxy = null;
-		if(dictionaryDTO != null){
-			dictionaryProxy = new DictionaryProxy(dictionaryManager);
-			dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
-			dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
-			dictionaryProxy.setDescription(dictionaryDTO.getDescription());
-			dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
-			dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
-			dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
-			dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-			dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
-		}
-		return dictionaryProxy;
+		DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryId);
+		if (dictionaryDTO == null)
+            return null;
+        return createDictionaryProxy(dictionaryDTO);
 	}
 }

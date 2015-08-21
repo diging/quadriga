@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.dictionary;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
@@ -32,15 +33,6 @@ public interface IDictionaryManager {
 			throws QuadrigaStorageException;
 	
 	
-	/**
-	 * @throws QuadrigaStorageException 
-	 * 
-	 * 
-	 * 
-	 */
-	public abstract IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException;
-	
-
 	/**
 	 * Adding a new item to a dictionary 
 	 * @param dictionaryId
@@ -157,12 +149,11 @@ public interface IDictionaryManager {
 	
 	/**
 	 * Delete a dictinary
-	 * @param user
 	 * @param dictionaryId
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract void deleteDictionary(String user, String dictionaryId)throws QuadrigaStorageException;
+	public abstract void deleteDictionary(String dictionaryId)throws QuadrigaStorageException;
 
 	/**
 	 * Check for user permission on the dictionary
@@ -178,7 +169,7 @@ public interface IDictionaryManager {
 	public abstract List<IDictionary> getDictionaryCollabOfUser(String userId)
 			throws QuadrigaStorageException, QuadrigaAccessException;
 
-	public abstract List<String> getDictionaryCollabPerm(String userId, String dicitonaryId)
+	public abstract List<String> getDictionaryCollaboratorRoles(String userId, String dicitonaryId)
 			throws QuadrigaStorageException;
 
 	public abstract List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid)
@@ -197,5 +188,11 @@ public interface IDictionaryManager {
 	
 	public abstract String getProjectsTree(String userName, String dictionaryId) throws QuadrigaStorageException, JSONException;
 
+
+    public abstract IDictionary getDictionaryDetails(String dictionaryId)
+            throws QuadrigaStorageException;
+
+    public abstract void updateDictionaryDetailsRequest(IDictionary dictionary,
+            String userName) throws QuadrigaStorageException;
 
 }

@@ -32,8 +32,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IModifyDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.UserValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -41,22 +39,16 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class TransferDictionaryOwnerController
 {
 	@Autowired
-	IRetrieveDictionaryManager dictionaryManager;
+	private IUserFactory userFactory;
 	
 	@Autowired
-	IUserFactory   userFactory;
-	
-	@Autowired
-	IDictionaryManager dictionaryCollabManager;
+	private IDictionaryManager dictionaryManager;
 	
 	@Autowired
 	private IDictionaryCollaboratorManager dictCollabManager;
 	
 	@Autowired
-	IQuadrigaRoleManager roleManager;
-	
-	@Autowired
-	IModifyDictionaryManager modifyDictionaryManager;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	private UserValidator validator;
@@ -89,7 +81,7 @@ public class TransferDictionaryOwnerController
 		model.getModelMap().put("dictionaryid", dictionaryid);
 		
 		//fetch the collaborators
-		List<IDictionaryCollaborator> collaboratingUsers = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
+		List<IDictionaryCollaborator> collaboratingUsers = dictionaryManager.showCollaboratingUsers(dictionaryid);
 		List<IUser> userList = new ArrayList<IUser>();
         
 		if (collaboratingUsers != null) {
@@ -145,23 +137,23 @@ public class TransferDictionaryOwnerController
 			
 			model.put("success", 1);
 			model.addAttribute("show_success_alert", true);
-			model.addAttribute("alert_msg", "Ownership successfully transferred.");
+			model.addAttribute("success_alert_msg", "Ownership successfully transferred.");
 		}
 		
 		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
         model.put("dictionaryid",dictionaryid);
         
-        List<IDictionaryItems> dictionaryItemList = dictionaryCollabManager
+        List<IDictionaryItems> dictionaryItemList = dictionaryManager
                 .getDictionariesItems(dictionaryid,userName);
         
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
         model.addAttribute("dictionary", dictionary);
         
-        String jsonTreeData = dictionaryCollabManager.getProjectsTree(userName, dictionaryid);
+        String jsonTreeData = dictionaryManager.getProjectsTree(userName, dictionaryid);
         model.addAttribute("core", jsonTreeData);
 
 		//fetch the collaborators
-        collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
+        collaboratingUser = dictionaryManager.showCollaboratingUsers(dictionaryid);
         
         for(IDictionaryCollaborator collabuser : collaboratingUser)
         {

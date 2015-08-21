@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.dictionary;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.impl.dictionary.DictionaryManager;
 
 /**
  * This class will handle list dictionaries controller for the dictionary
@@ -35,7 +37,7 @@ import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 @Controller
 public class DictionaryListController {
 	@Autowired
-	IDictionaryManager dictonaryManager;
+	IDictionaryManager dictionaryManager;
 
 	@Autowired
 	IQuadrigaRoleManager collabRoleManager;
@@ -48,11 +50,11 @@ public class DictionaryListController {
 	private IUserManager usermanager;
 
 	public IDictionaryManager getDictonaryManager() {
-		return dictonaryManager;
+		return dictionaryManager;
 	}
 
 	public void setDictonaryManager(IDictionaryManager dictonaryManager) {
-		this.dictonaryManager = dictonaryManager;
+		this.dictionaryManager = dictonaryManager;
 	}
 	
 	public IUserManager getUsermanager() {
@@ -88,9 +90,9 @@ public class DictionaryListController {
 			List<IDictionary> dictionaryCollabList = null;
 			logger.debug("Username "+userId);
 			try {
-				dictionaryList = dictonaryManager.getDictionariesList(userId);
+				dictionaryList = dictionaryManager.getDictionariesList(userId);
 				
-				dictionaryCollabList=dictonaryManager.getDictionaryCollabOfUser(userId);
+				dictionaryCollabList=dictionaryManager.getDictionaryCollabOfUser(userId);
 			} catch (QuadrigaStorageException e) {
 				logger.error("2Stack trace", e);
 				throw new QuadrigaStorageException(
@@ -138,7 +140,7 @@ public class DictionaryListController {
 
 		String msg = "";
 		try {
-			dictonaryManager.addNewDictionary(dictionary);
+			dictionaryManager.addNewDictionary(dictionary);
 		} catch (QuadrigaStorageException e1) {
 			msg = "DB Error";
 			logger.error("Issue while adding dictionary",e1);
@@ -146,7 +148,7 @@ public class DictionaryListController {
 		if (msg.equals("")) {
 			model.addAttribute("adddicsuccess", 1);
 			List<IDictionary> dictionaryList = null;
-			dictionaryList = dictonaryManager.getDictionariesList(user
+			dictionaryList = dictionaryManager.getDictionariesList(user
 					.getUserName());
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("userId", user.getUserName());
@@ -174,7 +176,7 @@ public class DictionaryListController {
 			List<IDictionary> dictionaryList = null;
 			try {
 				
-				dictionaryList = dictonaryManager.getDictionariesList(user
+				dictionaryList = dictionaryManager.getDictionariesList(user
 						.getUsername());
 			} catch (QuadrigaStorageException e) {
 				throw new QuadrigaStorageException(
@@ -201,61 +203,55 @@ public class DictionaryListController {
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = usermanager.getUser(principal.getName());
 
-		String[] values = req.getParameterValues("selected");
-		String msg = "";
-		String errormsg = "";
-		int flag = 0;
-
-		if (values == null) {
+		List<String> dictionariesToDelete = Arrays.asList(req.getParameterValues("selected"));
+		
+		if (dictionariesToDelete == null || dictionariesToDelete.isEmpty()) {
 			model.addAttribute("selection", 0);
 			List<IDictionary> dictionaryList = null;
-			logger.info("value null");
-			try {
-				dictionaryList = dictonaryManager.getDictionariesList(user
+			
+			dictionaryList = dictionaryManager.getDictionariesList(user
 						.getUserName());
-			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException(
-						"Oops the DB is an hard hangover, please try later");
-			}
+			
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("userId", user.getUserName());
 			return "auth/dictionaries/deleteDictionary";
-		} else {
-			for (int i = 0; i < values.length; i++) {
-				try {
-					logger.info("Deleting dictionary id : " + values[i]);
-					dictonaryManager.deleteDictionary(
-							user.getUserName(), values[i]);
-					if (!msg.equals("")) {
-						flag = 1;
-						errormsg = msg;
-					} 
-				} catch (QuadrigaStorageException e) {
-					throw new QuadrigaStorageException(
-							"Oops the DB is an hard hangover, please try later");
-				}
-			}
 		}
-		if (flag == 0) {
-			model.addAttribute("deldicitonarysuccess", 1);
-		} else if (flag == 1) {
-			if (errormsg.equals("User don't have access to this dictionary")) {
-				model.addAttribute("dictionaryaccesserror", 0);
-			} else {
-				model.addAttribute("deldicitonarysuccess", 0);
+		
+		
+		StringBuffer errorMsg = new StringBuffer();
+		StringBuffer successMsg = new StringBuffer();
+		for (String dictId : dictionariesToDelete) {
+		    String owner = dictionaryManager.getDictionaryOwner(dictId);
+		    if (!owner.equals(principal.getName())) {
+		        model.addAttribute("show_error_alert", true);
+                errorMsg.append("You are not the owner of dictionary \"" + dictionaryManager.getDictionaryName(dictId) +"\" and can't delete it.");
+                errorMsg.append("\n");
+                continue;
+		    }
+	        
+			try {
+			    String dictName = dictionaryManager.getDictionaryName(dictId);
+			    dictionaryManager.deleteDictionary(dictId);
+			    model.addAttribute("show_success_alert", true);
+			    successMsg.append("Dictionary \"" + dictName + "\" successfully deleted.");
+			    successMsg.append("\n");
+			} catch (QuadrigaStorageException ex) {
+			    model.addAttribute("show_error_alert", true);
+			    errorMsg.append(ex.getMessage());
+			    errorMsg.append("\n");
 			}
+			
 		}
+		model.addAttribute("success_alert_msg", successMsg.toString());
+		model.addAttribute("error_alert_msg", errorMsg.toString());
+		
 		List<IDictionary> dictionaryList = null;
-		try {
-			dictionaryList = dictonaryManager.getDictionariesList(user
+		dictionaryList = dictionaryManager.getDictionariesList(user
 					.getUserName());
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException(
-					"Oops the DB is an hard hangover, please try later");
-		}
+		
 		model.addAttribute("dictinarylist", dictionaryList);
 		model.addAttribute("userId", user.getUserName());
+		
 		return "auth/dictionaries";
-
 	}
 }

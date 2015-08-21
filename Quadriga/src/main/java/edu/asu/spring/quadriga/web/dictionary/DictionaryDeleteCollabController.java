@@ -28,7 +28,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -40,16 +39,13 @@ public class DictionaryDeleteCollabController {
 
 
 	@Autowired
-	ModifyCollaboratorFormManager collaboratorFormManager;
+	private ModifyCollaboratorFormManager collaboratorFormManager;
 
 	@Autowired
-	IDictionaryManager dictionaryManager;
+	private IDictionaryManager dictionaryManager;
 	
 	@Autowired
 	private IDictionaryCollaboratorManager dictCollaboratorManager;
-
-	@Autowired
-	IRetrieveDictionaryManager retrieveDictionaryManager;
 
 	@Autowired
 	private CollaboratorFormDeleteValidator validator;
@@ -99,7 +95,7 @@ public class DictionaryDeleteCollabController {
 		if(result.hasErrors())
 		{
 			//fetch the dictionary details
-			IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
+			IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);
 			collaborators = collaboratorFormManager.modifyDictCollaboratorManager(dictionaryId);
 			collaboratorForm.setCollaborators(collaborators);
 
@@ -143,7 +139,7 @@ public class DictionaryDeleteCollabController {
 		ModifyCollaboratorForm collaboratorForm;
 
 		//fetch the dictionary details
-		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
+		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);
 
 
 		modelAndView = new ModelAndView("auth/dictionaries/showDeleteCollaborators");

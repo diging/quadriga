@@ -22,8 +22,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.dictionary.IModifyDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.validator.DictionaryValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -31,10 +30,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class ModifyDictionaryManagerController 
 {
 	@Autowired
-    private IModifyDictionaryManager dictionaryManager;
-	
-	@Autowired
-	private IRetrieveDictionaryManager dictionaryDetailsManager;
+	private IDictionaryManager dictManager;
 	
 	@Autowired
 	private DictionaryValidator validator;
@@ -64,7 +60,7 @@ public class ModifyDictionaryManagerController
     	 
     	 //create a model
     	 model = new ModelAndView("auth/dictionaries/updatedictionary");
-    	 dictionary = dictionaryDetailsManager.getDictionaryDetails(dictionaryid);
+    	 dictionary = dictManager.getDictionaryDetails(dictionaryid);
     	 model.getModelMap().put("dictionary",dictionary);
     	 model.getModelMap().put("dictionaryid", dictionaryid);
     	 model.getModelMap().put("success", 0);
@@ -100,7 +96,7 @@ public class ModifyDictionaryManagerController
 		else
 		{
 			 dictionary.setDictionaryId(dictionaryid);
-			 dictionaryManager.updateDictionaryDetailsRequest(dictionary, userName);
+			 dictManager.updateDictionaryDetailsRequest(dictionary, userName);
 	    	 model.getModelMap().put("success", 1);
 		}
 		

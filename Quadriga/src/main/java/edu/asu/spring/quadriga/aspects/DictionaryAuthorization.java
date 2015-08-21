@@ -13,7 +13,6 @@ import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 
 /**
  * Service level Implementation of {@link IAuthorization} for
@@ -25,14 +24,12 @@ import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
  */
 @Service("dictionaryAuthorization")
 public class DictionaryAuthorization implements IAuthorization {
+   
     @Autowired
-    IRetrieveDictionaryManager dictionaryRetrieveManager;
+    private IDictionaryFactory dictionaryFactory;
 
     @Autowired
-    IDictionaryFactory dictionaryFactory;
-
-    @Autowired
-    IDictionaryManager dictonaryManager;
+    private IDictionaryManager dictonaryManager;
 
     /**
      * This method checks the access permissions for logged in user for given
@@ -53,7 +50,7 @@ public class DictionaryAuthorization implements IAuthorization {
         List<IQuadrigaRole> collaboratorRoles;
 
         // fetch the details of the concept collection
-        IDictionary dictionary = dictionaryRetrieveManager
+        IDictionary dictionary = dictonaryManager
                 .getDictionaryDetails(accessObjectId);
 
         // check if the user is a dictionary owner
