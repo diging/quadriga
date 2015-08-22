@@ -18,31 +18,11 @@ $(function () {
 });
 </script>
 
-<h2 class="major">
-			<span>Menu</span>
-</h2>
-<div id="conceptcollection">
-	<ul>
-		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'>
-					<a
-					href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators">
-						Add</a>
-				</li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'>
-					<a
-					href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deletecollaborators">
-						Delete</a>
-				</li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/pen.png"}'>
-					<a
-					href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/updatecollaborators">
-						Update</a>
-				</li>
-			</ul></li>
-	</ul>
+<div>
+<a href="${pageContext.servletContext.contextPath}/auth/conceptcollections"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Concept Collections</a>
 </div>
+
+
+
+
+    

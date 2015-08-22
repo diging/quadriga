@@ -52,7 +52,7 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
         IConceptCollection collection = collectionFactory
                 .createConceptCollectionObject();
         collection.setConceptCollectionId(conceptCollectionId);
-        conceptCollectionManager.getCollectionDetails(collection, userName);
+        conceptCollectionManager.fillCollectionDetails(collection, userName);
 
         // check if the user is a concept collection owner
         String conceptCollectionOwner = collection.getOwner().getUserName();

@@ -98,18 +98,42 @@ function resetSelectAll() {
 				<c:forEach var="concept" items="${result}">
 					<tr>
 						<td width="5%" > <input type="checkbox"  class="selected" name = "selected" value='<c:out value="${concept.id}"></c:out>' /></td>
-						<td width="10%"  align="justify"><font size="2"><c:out
-									value="${concept.lemma}"></c:out></font></td>
-						<td width="25%"  align="justify"><font size="2"><c:out
-									value="${concept.id}"></c:out></font></td>
-						<td width="5%"  class="center" align="justify"><font size="2"><c:out
-									value="${concept.pos}"></c:out></font></td>
-						<td width="30%" align="justify"><font size="2"><c:out
-									value="${concept.description}"></c:out></font></td>
-						<td width="10%" class="center" align="justify"><font size="2"><c:out
-									value="${concept.type}"></c:out></font></td>
-						<td width="15%" class="center" align="justify"><font size="2"><c:out
-									value="${concept.conceptList}"></c:out></font></td>		
+						<td width="10%"  align="justify">
+						  <font size="2">
+						  <c:out value="${concept.lemma}"></c:out>
+						  </font>
+						  <input type="hidden" name="lemma" value="${concept.lemma}"/>
+						</td>
+						<td width="25%"  align="justify">
+						  <font size="2">
+						  <c:out value="${concept.id}"></c:out>
+						  <input type="hidden" name="id" value="${concept.id}"/>
+						  </font>
+						</td>
+						<td width="5%"  class="center" align="justify">
+						<font size="2"><c:out
+									value="${concept.pos}"></c:out>
+						<input type="hidden" name="pos" value="${concept.pos}"/>
+						</font>
+						</td>
+						<td width="30%" align="justify">
+						<font size="2"><c:out
+									value="${concept.description}"></c:out>
+						<input type="hidden" name="description" value="${concept.description}"/>
+						</font>
+						</td>
+						<td width="10%" class="center" align="justify">
+						<font size="2"><c:out
+									value="${concept.type}"></c:out>
+						<input type="hidden" name="type" value="${concept.type}"/>
+						</font>
+						</td>
+						<td width="15%" class="center" align="justify">
+						<font size="2"><c:out
+									value="${concept.conceptList}"></c:out>
+						<input type="hidden" name="conceptList" value="${concept.conceptList}"/>
+						</font>
+						</td>		
 					</tr>
 				</c:forEach>
 				

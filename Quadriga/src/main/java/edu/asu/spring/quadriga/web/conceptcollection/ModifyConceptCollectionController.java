@@ -70,7 +70,7 @@ public class ModifyConceptCollectionController
 		//retrieve the collection details
 		collection = collectionFactory.createConceptCollectionObject();
 		collection.setConceptCollectionId(collectionid);
-		conceptControllerManager.getCollectionDetails(collection,userName);
+		conceptControllerManager.fillCollectionDetails(collection,userName);
 		model.getModelMap().put("collection", collection);
 		model.getModelMap().put("success", 0);
 		

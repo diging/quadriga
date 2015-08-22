@@ -71,7 +71,7 @@ public interface IConceptCollectionManager {
 	 * @throws QuadrigaAccessException 
 	 * 
 	 */
-	public abstract void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAccessException;
+	public abstract void fillCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAccessException;
 	
 	
 	/**
@@ -131,20 +131,5 @@ public interface IConceptCollectionManager {
 
 
 	public abstract String getProjectsTree(String userName,String ccId) throws JSONException;
-
-
-	boolean hasConceptID(
-			List<IConceptCollectionConcepts> conceptCollectionConceptList,
-			String id);
-
-
-    public abstract String test(String test);
-
-
-	
-
-	
-	
-
 	
 }

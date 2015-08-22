@@ -460,7 +460,7 @@ public class ConceptCollectionRestController {
 		try {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
-			conceptControllerManager.getCollectionDetails(collection,
+			conceptControllerManager.fillCollectionDetails(collection,
 					principal.getName());
 			template = engine
 					.getTemplate("velocitytemplates/conceptdetails.vm");

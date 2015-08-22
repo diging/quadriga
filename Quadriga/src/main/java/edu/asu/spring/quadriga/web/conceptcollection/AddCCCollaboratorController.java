@@ -154,7 +154,7 @@ public class AddCCCollaboratorController {
         IConceptCollection conceptCollection = collectionFactory
                 .createConceptCollectionObject();
         conceptCollection.setConceptCollectionId(collectionid);
-        conceptControllerManager.getCollectionDetails(conceptCollection,
+        conceptControllerManager.fillCollectionDetails(conceptCollection,
                 userName);
 
         // fetch the non collaborators and add it to the model
@@ -242,7 +242,7 @@ public class AddCCCollaboratorController {
         IConceptCollection conceptCollection = collectionFactory
                 .createConceptCollectionObject();
         conceptCollection.setConceptCollectionId(collectionid);
-        conceptControllerManager.getCollectionDetails(conceptCollection,
+        conceptControllerManager.fillCollectionDetails(conceptCollection,
                 username);
 
         model.getModelMap().put("collectionname",

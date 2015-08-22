@@ -220,7 +220,7 @@ public class ConceptCollectionProxy implements IConceptCollection {
 		try{
 			
 			 try {
-				this.conceptCollectionManager.getCollectionDetails(this.conceptCollection,this.owner.getName());
+				this.conceptCollectionManager.fillCollectionDetails(this.conceptCollection,this.owner.getName());
 			} catch (QuadrigaAccessException e) {
 				logger.error("Issue accessing database from Concept Collection proxy",e);
 			}

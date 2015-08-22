@@ -179,14 +179,11 @@ public class ConceptCollectionDeepMapper implements
 	}
 	
 	public List<IConceptCollectionConcepts> getConceptCollectionConceptsList(ConceptCollectionDTO conceptColelctionDTO, IConceptCollection conceptCollection){
-		List<IConceptCollectionConcepts> ccItemList = null;
+		List<IConceptCollectionConcepts> ccItemList = new ArrayList<IConceptCollectionConcepts>();;
 		List<ConceptCollectionItemsDTO> conceptCollectionItemsDTOList = conceptColelctionDTO.getConceptCollectionItemsDTOList();
 		
 		if(conceptCollectionItemsDTOList != null ){
 			for(ConceptCollectionItemsDTO  ccItemsDTO: conceptCollectionItemsDTOList){
-				if(ccItemList == null){
-					ccItemList = new ArrayList<IConceptCollectionConcepts>();
-				}
 				IConcept concept = conceptFactory.createConceptObject();
 				
 				//TODO : we need to fill this

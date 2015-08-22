@@ -1,7 +1,12 @@
 package edu.asu.spring.quadriga.web.conceptcollection;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -52,368 +57,351 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class ConceptcollectionController {
 
-	@Autowired
-	private IConceptCollectionManager conceptControllerManager;
+    @Autowired
+    private IConceptCollectionManager conceptControllerManager;
 
-	private List<IConceptCollection> list;
+    @Autowired
+    private CollectionsValidator validator;
 
-	private List<IConceptCollection> collab_list;
+    @Autowired
+    private IConceptCollectionFactory collectionFactory;
 
-	private String username;
+    @Autowired
+    private IConceptFactory conceptFactory;
 
-	@Autowired
-	private CollectionsValidator validator;
+    @Autowired
+    private IConceptCollectionDeepMapper conceptCollectionDeepMapper;
 
-	private IConceptCollection collection;
+    @Autowired
+    private IUserManager usermanager;
 
-	@Autowired
-	private IConceptCollectionFactory collectionFactory;
+    /**
+     * Attach the custom validator to the Spring context
+     */
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
 
-	private IConcept concept;
+        binder.setValidator(validator);
+    }
 
-	@Autowired
-	private IConceptFactory conceptFactory;
+    public IConceptCollectionManager getConceptControllerManager() {
+        return conceptControllerManager;
+    }
 
-	private ConceptpowerReply c;
+    public void setConceptControllerManager(
+            IConceptCollectionManager conceptControllerManager) {
+        this.conceptControllerManager = conceptControllerManager;
+    }
 
-	@Autowired
-	private IConceptCollectionDeepMapper conceptCollectionDeepMapper;
+    public CollectionsValidator getValidator() {
+        return validator;
+    }
 
-	@Autowired
-	private IUserManager usermanager;
+    public void setValidator(CollectionsValidator validator) {
+        this.validator = validator;
+    }
 
-	private IUser user;
+    public IConceptCollectionFactory getCollectionFactory() {
+        return collectionFactory;
+    }
 
-	/**
-	 * Attach the custom validator to the Spring context
-	 */
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
+    public void setCollectionFactory(IConceptCollectionFactory collectionFactory) {
+        this.collectionFactory = collectionFactory;
+    }
 
-		binder.setValidator(validator);
-	}
+    public IConceptFactory getConceptFactory() {
+        return conceptFactory;
+    }
 
-	public ConceptpowerReply getC() {
-		return c;
-	}
+    public void setConceptFactory(IConceptFactory conceptFactory) {
+        this.conceptFactory = conceptFactory;
+    }
 
-	public void setC(ConceptpowerReply c) {
-		this.c = c;
-	}
+    public IUserManager getUsermanager() {
+        return usermanager;
+    }
 
-	public IConceptCollectionManager getConceptControllerManager() {
-		return conceptControllerManager;
-	}
+    public void setUsermanager(IUserManager usermanager) {
+        this.usermanager = usermanager;
+    }
 
-	public void setConceptControllerManager(
-			IConceptCollectionManager conceptControllerManager) {
-		this.conceptControllerManager = conceptControllerManager;
-	}
+    /**
+     * This is used to fetch the user related concept collections from database.
+     * 
+     * @param model
+     * @return Returns the list of concept collections of user to the view
+     * @throws QuadrigaStorageException
+     */
+    @RequestMapping(value = "auth/conceptcollections", method = RequestMethod.GET)
+    public String conceptCollectionHandler(ModelMap model, Principal principal)
+            throws QuadrigaStorageException {
+        model.addAttribute("conceptlist", conceptControllerManager
+                .getCollectionsOwnedbyUser(principal.getName()));
+        model.addAttribute("collaborationlist", conceptControllerManager
+                .getUserCollaborations(principal.getName()));
+        return "auth/conceptcollections";
+    }
 
-	public CollectionsValidator getValidator() {
-		return validator;
-	}
+    /**
+     * This is used to fetch the details of a concept from database and display
+     * 
+     * @param collection_id
+     * @param model
+     * @param principal
+     * @return Returns the list of concept collections of user to the view
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     * @throws JSONException
+     */
+    @RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
+    public String conceptDetailsHandler(
+            @PathVariable("collection_id") String collection_id,
+            ModelMap model, Principal principal)
+            throws QuadrigaStorageException, QuadrigaAccessException,
+            JSONException {
 
-	public void setValidator(CollectionsValidator validator) {
-		this.validator = validator;
-	}
+        fillModel(collection_id, model, principal.getName());
+        return "auth/conceptcollections/details";
+    }
 
-	public IConceptCollectionFactory getCollectionFactory() {
-		return collectionFactory;
-	}
+    private void fillModel(String collection_id, ModelMap model, String username)
+            throws QuadrigaStorageException, QuadrigaAccessException,
+            JSONException {
+        IConceptCollection collection = collectionFactory
+                .createConceptCollectionObject();
+        collection.setConceptCollectionId(collection_id);
+        conceptControllerManager.fillCollectionDetails(collection, username);
+        model.addAttribute("concept", collection);
+        conceptControllerManager.getCollaborators(collection);
+        model.addAttribute("collectionid", collection_id);
 
-	public void setCollectionFactory(IConceptCollectionFactory collectionFactory) {
-		this.collectionFactory = collectionFactory;
-	}
+        String jsTreeData = conceptControllerManager.getProjectsTree(username,
+                collection_id);
+        model.addAttribute("core", jsTreeData);
+        model.addAttribute("owner",
+                collection.getOwner().getUserName().equals(username));
 
-	public IConceptFactory getConceptFactory() {
-		return conceptFactory;
-	}
+        // TODO: showCollaboratingUsers() should be changed with mapper
+        List<IConceptCollectionCollaborator> collaboratingUsers = conceptControllerManager
+                .showCollaboratingUsers(collection_id);
+        model.addAttribute("collaboratingUsers", collaboratingUsers);
+    }
 
-	public void setConceptFactory(IConceptFactory conceptFactory) {
-		this.conceptFactory = conceptFactory;
-	}
+    /**
+     * This method is used to search the conceptpower for items and will also
+     * give options to add it.
+     * 
+     * @param collection_id
+     * @param req
+     *            HttpRequest must have pos and search name as parameters to hit
+     *            the conceptpower rest service
+     * @param model
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = {
+            RoleNames.ROLE_CC_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
+    @RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
+    public String conceptSearchHandler(
+            @PathVariable("collection_id") String collection_id,
+            HttpServletRequest req, ModelMap model)
+            throws QuadrigaStorageException {
 
-	public IUserManager getUsermanager() {
-		return usermanager;
-	}
+        ConceptpowerReply conReply = conceptControllerManager.search(
+                req.getParameter("name"), req.getParameter("pos"));
+        if (conReply != null)
+            model.addAttribute("result", conReply.getConceptEntry());
+        model.addAttribute("collectionid", collection_id);
+        return "auth/searchitems";
+    }
 
-	public void setUsermanager(IUserManager usermanager) {
-		this.usermanager = usermanager;
-	}
+    /**
+     * This method is used to save items into a conceptcollection by searching
+     * and choosing from the conceptpower
+     * 
+     * @param collection_id
+     * @param req
+     *            HttpRequest must have all the selected concept items ids.
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     * @throws JSONException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = {
+            RoleNames.ROLE_CC_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
+    @RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
+    public String saveItemsHandler(
+            @PathVariable("collection_id") String collection_id,
+            HttpServletRequest req, ModelMap model, Principal principal)
+            throws QuadrigaStorageException, QuadrigaAccessException,
+            JSONException {
 
-	public IConceptCollection getCollection() {
-		return collection;
-	}
+        String[] selectedIds = req.getParameterValues("selected");
 
-	public void setCollection(IConceptCollection collection) {
-		this.collection = collection;
-	}
+        Map<String, ConceptEntry> allEntries = buildConceptEntries(
+                req.getParameterValues("id"), req.getParameterValues("lemma"),
+                req.getParameterValues("pos"),
+                req.getParameterValues("description"),
+                req.getParameterValues("type"),
+                req.getParameterValues("conceptList"));
 
-	/**
-	 * This is used to fetch the user related concept collections from database.
-	 * 
-	 * @param model
-	 * @return Returns the list of concept collections of user to the view
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "auth/conceptcollections", method = RequestMethod.GET)
-	public String conceptCollectionHandler(ModelMap model, Principal principal)
-			throws QuadrigaStorageException {
-		String userId = principal.getName();
-		list = conceptControllerManager.getCollectionsOwnedbyUser(userId);
-		model.addAttribute("conceptlist", list);
-		collab_list = conceptControllerManager.getUserCollaborations(userId);
-		model.addAttribute("collaborationlist", collab_list);
-		user = usermanager.getUser(userId);
-		username = user.getUserName();
-		model.addAttribute("username", username);
-		return "auth/conceptcollections";
-	}
+        IConceptCollection conceptCollection = conceptCollectionDeepMapper
+                .getConceptCollectionDetails(collection_id);
+        int addedConcepts = 0;
 
-	/**
-	 * This is used to fetch the details of a concept from database and display
-	 * 
-	 * @param collection_id
-	 * @param model
-	 * @param principal
-	 * @return Returns the list of concept collections of user to the view
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 * @throws JSONException
-	 */
-	@RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
-	public String conceptDetailsHandler(
-			@PathVariable("collection_id") String collection_id,
-			ModelMap model, Principal principal)
-					throws QuadrigaStorageException, QuadrigaAccessException,
-					JSONException {
+        if (conceptCollection != null) {
+            Set<String> existingConceptIds = new HashSet<String>();
+            for (IConceptCollectionConcepts concept : conceptCollection
+                    .getConceptCollectionConcepts()) {
+                existingConceptIds.add(concept.getConcept().getConceptId());
+            }
 
-		collection = collectionFactory.createConceptCollectionObject();
-		collection.setConceptCollectionId(collection_id);
-		conceptControllerManager.getCollectionDetails(collection,
-				principal.getName());
-		model.addAttribute("concept", collection);
-		conceptControllerManager.getCollaborators(collection);
-		model.addAttribute("collectionid", collection_id);
+            if (selectedIds != null) {
+                for (String id : selectedIds) {
+                    ConceptEntry entry = allEntries.get(id);
 
-		String userName = principal.getName();
-		String jsTreeData = conceptControllerManager.getProjectsTree(userName,
-				collection_id);
-		model.addAttribute("core", jsTreeData);
-		model.addAttribute("owner", collection.getOwner().getUserName().equals(userName));
+                    if (!existingConceptIds.contains(id)) {
+                        conceptControllerManager.addItems(entry.getLemma(), id,
+                                entry.getPos(), entry.getDescription(),
+                                collection_id, principal.getName());
+                        addedConcepts++;
+                    }
+                }
+            }
+        }
 
-		// TODO: showCollaboratingUsers() should be changed with mapper
-		List<IConceptCollectionCollaborator> collaboratingUsers = conceptControllerManager
-				.showCollaboratingUsers(collection_id);
-		model.addAttribute("collaboratingUsers", collaboratingUsers);
-		return "auth/conceptcollections/details";
-	}
+        fillModel(collection_id, model, principal.getName());
 
-	/**
-	 * This method is used to search the conceptpower for items and will also
-	 * give options to add it.
-	 * 
-	 * @param collection_id
-	 * @param req
-	 *            HttpRequest must have pos and search name as parameters to hit
-	 *            the conceptpower rest service
-	 * @param model
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = {
-			RoleNames.ROLE_CC_COLLABORATOR_ADMIN,
-			RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
-	@RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
-	public String conceptSearchHandler(
-			@PathVariable("collection_id") String collection_id,
-			HttpServletRequest req, ModelMap model)
-					throws QuadrigaStorageException {
+        model.addAttribute("show_success_alert", true);
+        model.addAttribute("success_alert_msg", addedConcepts
+                + " Concepts successfully added.");
+        return "auth/conceptcollections/details";
+    }
 
-		c = conceptControllerManager.search(req.getParameter("name"),
-				req.getParameter("pos"));
-		if (c != null)
-			model.addAttribute("result", c.getConceptEntry());
-		model.addAttribute("collectionid", collection_id);
-		return "auth/searchitems";
-	}
+    private Map<String, ConceptEntry> buildConceptEntries(String[] ids,
+            String[] lemmas, String[] pos, String[] description,
+            String[] types, String[] lists) {
+        Map<String, ConceptEntry> entries = new HashMap<String, ConceptpowerReply.ConceptEntry>();
 
-	/**
-	 * This method is used to save items into a conceptcollection by searching
-	 * and choosing from the conceptpower
-	 * 
-	 * @param collection_id
-	 * @param req
-	 *            HttpRequest must have all the selected concept items ids.
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = {
-			RoleNames.ROLE_CC_COLLABORATOR_ADMIN,
-			RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
-	@RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
-	public String saveItemsHandler(
-			@PathVariable("collection_id") String collection_id,
-			HttpServletRequest req, ModelMap model, Principal principal)
-					throws QuadrigaStorageException, QuadrigaAccessException {
+        for (int i = 0; i < ids.length; i++) {
+            ConceptEntry entry = new ConceptEntry();
+            entry.setId(ids[i]);
+            entry.setConceptList(lists[i]);
+            entry.setDescription(description[i]);
+            entry.setLemma(lemmas[i]);
+            entry.setPos(pos[i]);
+            entry.setType(types[i]);
+            entries.put(entry.getId(), entry);
+        }
 
-		String[] values = req.getParameterValues("selected");
-		IConceptCollection conceptCollection = conceptCollectionDeepMapper.getConceptCollectionDetails(collection_id);
-		if(conceptCollection != null){
-			List<IConceptCollectionConcepts> conceptCollectionConceptList = conceptCollection.getConceptCollectionConcepts();
-			if (values != null) {
-				for (String id : values) {
-					ConceptEntry temp = new ConceptEntry();
-					temp.setId(id);
-					temp = c.getConceptEntry().get(
-							(c.getConceptEntry().indexOf(temp)));
-					if(!conceptControllerManager.hasConceptID(conceptCollectionConceptList, id)){
-						conceptControllerManager.addItems(temp.getLemma(), id,
-								temp.getPos(), temp.getDescription(), collection_id,
-								principal.getName());
-					}
-				}
-			}
-		}else{
-			System.out.println("concept colleciton is null");
-		}
-		int index;
-		if(list == null){
-			System.out.println("list is null");
-		}else{
-			if ((index = list.indexOf(collection)) >= 0)
-				collection = list.get(index);
+        return entries;
+    }
 
-			else if ((index = collab_list.indexOf(collection)) >= 0)
-				collection = collab_list.get(index);
-			conceptControllerManager.getCollectionDetails(collection,
-					principal.getName());
-		}
-		model.addAttribute("conceptlist", conceptCollection);
-		return "redirect:/auth/conceptcollections/" + collection_id + "";
-	}
+    /**
+     * This method handles the addcollections.jsp form which is used to add a
+     * new conceptcollection to quadriga
+     * 
+     * @return
+     */
+    @RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.GET)
+    public ModelAndView addCollectionsForm() {
+        return new ModelAndView("auth/conceptcollections/addCollectionsForm",
+                "command",
+                new ConceptCollectionFactory().createConceptCollectionObject());
+    }
 
-	/**
-	 * This method handles the addcollections.jsp form which is used to add a
-	 * new conceptcollection to quadriga
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.GET)
-	public ModelAndView addCollectionsForm() {
-		return new ModelAndView("auth/conceptcollections/addCollectionsForm",
-				"command",
-				new ConceptCollectionFactory().createConceptCollectionObject());
-	}
+    /**
+     * This method is used to save the form data submitted for adding a
+     * conceptcollection
+     * 
+     * @param collection
+     * @param result
+     * @param model
+     * @param principal
+     * @return Returns the list of concept collections of user to the view
+     * @throws QuadrigaStorageException
+     * 
+     * */
+    @RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.POST)
+    public ModelAndView addConceptCollection(
+            @Validated @ModelAttribute("collection") ConceptCollection collection,
+            BindingResult result, Model model, Principal principal)
+            throws QuadrigaStorageException {
+        if (result.hasErrors()) {
+            model.addAttribute("Error",
+                    "Error: " + collection.getConceptCollectionName()
+                            + "already exists.");
+            return new ModelAndView(
+                    "auth/conceptcollections/addCollectionsForm", "command",
+                    new ConceptCollectionFactory()
+                            .createConceptCollectionObject());
+        }
 
-	/**
-	 * This method is used to save the form data submitted for adding a
-	 * conceptcollection
-	 * 
-	 * @param collection
-	 * @param result
-	 * @param model
-	 * @param principal
-	 * @return Returns the list of concept collections of user to the view
-	 * @throws QuadrigaStorageException
-	 * 
-	 * */
-	@RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.POST)
-	public ModelAndView addConceptCollection(
-			@Validated @ModelAttribute("collection") ConceptCollection collection,
-			BindingResult result, Model model, Principal principal)
-					throws QuadrigaStorageException {
-		if (result.hasErrors()) {
-			model.addAttribute("Error",
-					"Error: " + collection.getConceptCollectionName()
-					+ "already exists.");
-			return new ModelAndView(
-					"auth/conceptcollections/addCollectionsForm", "command",
-					new ConceptCollectionFactory()
-					.createConceptCollectionObject());
-		}
+        IUser user = usermanager.getUser(principal.getName());
+        collection.setOwner(user);
 
-		IUser user = usermanager.getUser(principal.getName());
-		collection.setOwner(user);
+        conceptControllerManager.addConceptCollection(collection);
 
-		conceptControllerManager.addConceptCollection(collection);
+        return new ModelAndView("redirect:/auth/conceptcollections");
 
-		return new ModelAndView("redirect:/auth/conceptcollections");
+    }
 
-	}
+    /**
+     * Returns the list of concept collections of user to the view
+     * 
+     * @param req
+     *            HttpReqest must have selected items ids as parameters
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     * @throws JSONException 
+     * 
+     * */
+    @RequestMapping(value = "auth/conceptcollections/{collection_id}/deleteitems", method = RequestMethod.POST)
+    public String deleteItems(
+            @PathVariable("collection_id") String collectionId,
+            HttpServletRequest req, ModelMap model, Principal principal)
+            throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 
-	/**
-	 * Returns the list of concept collections of user to the view
-	 * 
-	 * @param req
-	 *            HttpReqest must have selected items ids as parameters
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 * 
-	 * */
-	@RequestMapping(value = "auth/conceptcollections/deleteitems", method = RequestMethod.POST)
-	public String deleteItems(HttpServletRequest req, ModelMap model,
-			Principal principal) throws QuadrigaStorageException,
-			QuadrigaAccessException {
+        String[] selectedIds = req.getParameterValues("selected");
+        IConceptCollection conceptCollection = conceptCollectionDeepMapper
+                .getConceptCollectionDetails(collectionId);
 
-		String[] values = req.getParameterValues("selected");
-		if (values != null) {
-			for (String id : values) {
+        int deletedConceptNr = 0;
+        if (selectedIds != null && conceptCollection != null) {
+            for (String id : selectedIds) {
 
-				conceptControllerManager.deleteItem(id,
-						collection.getConceptCollectionId(),
-						principal.getName());
-				concept = conceptFactory.createConceptObject();
-				concept.setConceptId(id);
-				if (collection != null) {
-					if (collection.getConceptCollectionConcepts().contains(
-							concept)) {
-						collection.getConceptCollectionConcepts().remove(
-								collection.getConceptCollectionConcepts()
-								.indexOf(concept));
-					}
-				}
+                conceptControllerManager.deleteItem(id, collectionId,
+                        principal.getName());
+                IConcept concept = conceptFactory.createConceptObject();
+                concept.setConceptId(id);
+                if (conceptCollection.getConceptCollectionConcepts().contains(
+                        concept)) {
+                    conceptCollection.getConceptCollectionConcepts().remove(
+                            concept);
+                }
+            }
+            deletedConceptNr = selectedIds.length;
+        }
 
-			}
-		}
+        conceptControllerManager.fillCollectionDetails(conceptCollection,
+                principal.getName());
 
-		conceptControllerManager.getCollectionDetails(collection,
-				principal.getName());
-
-		return "redirect:/auth/conceptcollections/"
-		+ collection.getConceptCollectionId() + "";
-
-	}
-
-	/**
-	 * This method is used to update the concept/item from concept power
-	 * 
-	 * @param req
-	 *            HttpReqest must have selected items ids as parameters
-	 * @param model
-	 * @param principal
-	 * @return This functions returns to details page
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "auth/conceptcollections/updateitems", method = RequestMethod.POST)
-	public String conceptUpdateHandler(HttpServletRequest req, ModelMap model,
-			Principal principal) throws QuadrigaStorageException {
-		String[] values = req.getParameterValues("selected");
-		if (values != null)
-			conceptControllerManager.update(values, collection,
-					principal.getName());
-
-		return "redirect:/auth/conceptcollections/"
-		+ collection.getConceptCollectionId() + "";
-	}
-
-
+        fillModel(collectionId, model, principal.getName());
+        if (deletedConceptNr > 0) {
+            model.addAttribute("show_success_alert", true);
+            model.addAttribute("success_alert_msg", deletedConceptNr + " Concepts successfully deleted.");
+        } else {
+            model.addAttribute("show_info_alert", true);
+            model.addAttribute("info_alert_msg", "You didn't select any concepts to delete.");
+        }
+        return "auth/conceptcollections/details";
+    }
 
 }

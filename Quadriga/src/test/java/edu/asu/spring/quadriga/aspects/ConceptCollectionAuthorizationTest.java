@@ -92,7 +92,7 @@ public class ConceptCollectionAuthorizationTest {
                 return null;
             }
         
-        }).when(mockedManager).getCollectionDetails(Mockito.isA(IConceptCollection.class), Mockito.anyString());
+        }).when(mockedManager).fillCollectionDetails(Mockito.isA(IConceptCollection.class), Mockito.anyString());
     }
     
     @Test

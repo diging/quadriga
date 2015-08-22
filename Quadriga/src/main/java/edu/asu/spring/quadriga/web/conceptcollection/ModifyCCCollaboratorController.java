@@ -108,7 +108,7 @@ public class ModifyCCCollaboratorController
 		 //fetch the concept collection details
 		 IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
 		 conceptCollection.setConceptCollectionId(collectionid);
-		 conceptControllerManager.getCollectionDetails(conceptCollection, userName);
+		 conceptControllerManager.fillCollectionDetails(conceptCollection, userName);
 		 
 		 
 		 //create a model for collaborators
@@ -165,7 +165,7 @@ public class ModifyCCCollaboratorController
 				//fetch the concept collection details
 				IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
 				conceptCollection.setConceptCollectionId(collectionid);
-				conceptControllerManager.getCollectionDetails(conceptCollection, userName);
+				conceptControllerManager.fillCollectionDetails(conceptCollection, userName);
 
 				//add a variable to display the entire page
 				model.getModelMap().put("success", 0);
