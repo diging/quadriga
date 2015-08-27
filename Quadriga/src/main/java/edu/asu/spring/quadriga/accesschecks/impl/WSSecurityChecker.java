@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Service
@@ -23,8 +23,8 @@ public class WSSecurityChecker implements IWSSecurityChecker
 	private IProjectSecurityChecker projectSecurity;
 
 	@Autowired
-	private IRetrieveWSCollabManager workspaceManager;
-
+	private IWorkspaceCollaboratorManager wsCollabManager;
+	
 	@Autowired
 	private IWorkspaceAccessDAO dbConnect;
 
@@ -120,7 +120,7 @@ public class WSSecurityChecker implements IWSSecurityChecker
 		chkAccess = false;
 
 		//fetch the collaborators associated with the workspace
-		workspaceCollaboratorList = workspaceManager.getWorkspaceCollaborators(workspaceId);
+		workspaceCollaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
 
 		if(workspaceCollaboratorList != null){
 			for(IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList)

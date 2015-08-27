@@ -6,26 +6,61 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
+import edu.asu.spring.quadriga.dao.impl.workspace.WorkspaceDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCollaboratorDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
-//show collaborators for a workspace
-//show non collaborators for a workspace
 @Service
-public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
-
+public class WorkspaceCollaboratorManager extends CollaboratorManager<WorkspaceCollaboratorDTO, WorkspaceCollaboratorDTOPK, WorkspaceDTO, WorkspaceDAO> implements IWorkspaceCollaboratorManager 
+{
+	
+	@Autowired
+	private IWorkspaceDAO workspaceDao;
+	
+	@Autowired
+	private IWorkspaceCollaboratorDAO wsCollabDao;
+	
 	@Autowired
 	private IQuadrigaRoleManager roleManager;
 
 	@Autowired
 	private IWorkspaceDeepMapper workspaceDeepMapper;
+	
+	@Override
+    public WorkspaceCollaboratorDTO createNewCollaboratorDTO() {
+        return new WorkspaceCollaboratorDTO();
+    }
 
-	/**
+    @Override
+    public WorkspaceCollaboratorDTOPK createNewCollaboratorDTOPK(String id,
+            String collabUser, String role) {
+       return new WorkspaceCollaboratorDTOPK(id, collabUser, role);
+    }
+
+    @Override
+    public IBaseDAO<WorkspaceDTO> getDao() {
+        return workspaceDao; 
+    }
+
+    @Override
+    public ICollaboratorDAO<WorkspaceCollaboratorDTO> getCollaboratorDao() {
+        return wsCollabDao;
+    }
+    
+    /**
 	 * This method returns the collaborators list for a workspace
 	 * @param workspaceId
 	 * @return List<ICollaborator>

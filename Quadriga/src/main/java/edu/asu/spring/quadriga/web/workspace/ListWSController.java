@@ -52,7 +52,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -81,10 +81,10 @@ public class ListWSController
 	private	IListWSManager wsManager;
 
 	@Autowired
-	private	IRetrieveWSCollabManager wsCollabManager;
-
+	private IWSSecurityChecker workspaceSecurity;
+	
 	@Autowired
-	IWSSecurityChecker workspaceSecurity;
+	private IWorkspaceCollaboratorManager wsCollabManager;
 
 	@Autowired
 	private IDspaceManager dspaceManager;
@@ -185,12 +185,12 @@ public class ListWSController
 	}
 
 
-	public IRetrieveWSCollabManager getWsCollabManager() {
+	public IWorkspaceCollaboratorManager getWsCollabManager() {
 		return wsCollabManager;
 	}
 
 
-	public void setWsCollabManager(IRetrieveWSCollabManager wsCollabManager) {
+	public void setWsCollabManager(IWorkspaceCollaboratorManager wsCollabManager) {
 		this.wsCollabManager = wsCollabManager;
 	}
 

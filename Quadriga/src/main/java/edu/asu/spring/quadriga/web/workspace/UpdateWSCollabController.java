@@ -30,8 +30,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -42,16 +41,13 @@ import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManag
 public class UpdateWSCollabController 
 {
 	@Autowired
-	private	IRetrieveWSCollabManager wsCollabManager;
-	
-	@Autowired
 	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	private IModifyCollaboratorFormFactory collaboratorFactory;
 	
 	@Autowired
-	private IModifyWSCollabManager wsModifyCollabManager;
+	private IWorkspaceCollaboratorManager wsModifyCollabManager;
 	
 	@Autowired
 	private CollaboratorFormValidator validator;

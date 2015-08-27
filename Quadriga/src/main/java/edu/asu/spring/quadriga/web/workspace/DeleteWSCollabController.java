@@ -21,8 +21,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
@@ -30,10 +29,7 @@ public class DeleteWSCollabController
 {
 	
 	@Autowired
-	IRetrieveWSCollabManager wsRetrieveCollabManager;
-	
-	@Autowired
-	IModifyWSCollabManager wsModifyCollabManager;
+	IWorkspaceCollaboratorManager wsCollabManager;
 	
 	@Autowired
 	private IListWSManager retrieveWSManager;
@@ -59,7 +55,7 @@ public class DeleteWSCollabController
 		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
 		
 		//fetch all the collaborating users and their roles
-		collaboratingUser = wsRetrieveCollabManager.getWorkspaceCollaborators(workspaceid);
+		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
 		
 		model.getModelMap().put("collaboratingusers", collaboratingUser);
 		
@@ -107,10 +103,10 @@ public class DeleteWSCollabController
 		userName = userName.substring(1);
 		
 		//delete the collaborators
-		wsModifyCollabManager.deleteCollaborators(userName, workspaceid);
+		wsCollabManager.deleteCollaborators(userName, workspaceid);
 		
 		//fetch all the collaborating users and their roles
-		collaboratingUser = wsRetrieveCollabManager.getWorkspaceCollaborators(workspaceid);
+		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
 				
 		model.getModelMap().put("collaboratingusers", collaboratingUser);
 		

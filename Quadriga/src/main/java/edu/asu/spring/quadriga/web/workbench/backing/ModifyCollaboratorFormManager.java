@@ -9,15 +9,13 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 
 /**
  * this class returns the collaborator of ModifyCollaborator domain by calling existing DBConnectonManager 
@@ -31,23 +29,16 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 public class ModifyCollaboratorFormManager {
 
 	@Autowired
-	IProjectCollaboratorManager projCollabManager;
+	private IProjectCollaboratorManager projCollabManager;
 
 	@Autowired
-	IDictionaryManager dictManager;
+	private IDictionaryManager dictManager;
 
 	@Autowired
-	IConceptCollectionManager collectionManager;
+	private IConceptCollectionManager collectionManager;
 
 	@Autowired
-	ModifyCollaboratorFormFactory collaboratorFormFactory;
-
-	@Autowired
-	ICollaboratorFactory collaboratorFactory;
-
-	@Autowired
-	IRetrieveWSCollabManager workspaceManager;
-
+	private IWorkspaceCollaboratorManager wsCollabManager;
 
 	/**
 	 * takes project id to return collaborators of ModifyCollaborator domain
@@ -144,7 +135,7 @@ public class ModifyCollaboratorFormManager {
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		IUser user;
 
-		List<IWorkspaceCollaborator> collaborators =  workspaceManager.getWorkspaceCollaborators(workspaceId);
+		List<IWorkspaceCollaborator> collaborators =  wsCollabManager.getWorkspaceCollaborators(workspaceId);
 
 		for(IWorkspaceCollaborator wsCollaborator:collaborators)
 		{

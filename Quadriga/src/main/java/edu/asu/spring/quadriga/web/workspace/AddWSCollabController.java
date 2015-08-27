@@ -38,10 +38,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.impl.workspace.ModifyWSCollabManager;
+import edu.asu.spring.quadriga.service.impl.workspace.WorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -49,11 +48,8 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class AddWSCollabController {
 
     @Autowired
-    IModifyWSCollabManager wsManager;
+    private IWorkspaceCollaboratorManager wsManager;
 
-    @Autowired
-    IRetrieveWSCollabManager wsCollabManager;
-   
     @Autowired
     private IQuadrigaRoleManager roleManager;
 
@@ -73,7 +69,7 @@ public class AddWSCollabController {
     private IListWSManager retrieveWSManager;
 
     private static final Logger logger = LoggerFactory
-            .getLogger(ModifyWSCollabManager.class);
+            .getLogger(WorkspaceCollaboratorManager.class);
 
     /**
      * This method binds the selected input by the user and validates the input.
@@ -184,7 +180,7 @@ public class AddWSCollabController {
         model.getModelMap().put("wscollabroles", collaboratorRoles);
 
         // fetch all the collaborating users and their roles
-        collaboratingUser = wsCollabManager
+        collaboratingUser = wsManager
                 .getWorkspaceCollaborators(workspaceid);
 
         model.getModelMap().put("collaboratingusers", collaboratingUser);
@@ -266,7 +262,7 @@ public class AddWSCollabController {
         model.getModelMap().put("wscollabroles", collaboratorRoles);
 
         // fetch all the collaborating users and their roles
-        collaboratingUser = wsCollabManager
+        collaboratingUser = wsManager
                 .getWorkspaceCollaborators(workspaceid);
 
         model.getModelMap().put("collaboratingusers", collaboratingUser);

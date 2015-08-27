@@ -30,9 +30,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.validator.UserValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -55,10 +54,7 @@ public class TransferWSOwnerController
 	private IListWSManager retrieveWSManager;
 	
 	@Autowired
-	IRetrieveWSCollabManager wsCollabManager;
-	
-	@Autowired
-	private IModifyWSCollabManager modifyWsCollabManager;
+	private IWorkspaceCollaboratorManager wsCollabManager;
 	
 	@Autowired
 	IUserFactory userFactory;
@@ -184,7 +180,7 @@ public class TransferWSOwnerController
 	        	//fetch the collaborator role
 	        	collaboratorRole = collaboratorRoleManager.getQuadrigaRoleById(IQuadrigaRoleManager.WORKSPACE_ROLES, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN).getDBid();
 				//call the method to transfer the ownership
-	        	modifyWsCollabManager.transferOwnership(workspaceid, userName, newOwner, collaboratorRole);
+	        	wsCollabManager.transferOwnership(workspaceid, userName, newOwner, collaboratorRole);
 				
 				model.getModelMap().put("success", 1);
 				model.getModelMap().put("user", userFactory.createUserObject());

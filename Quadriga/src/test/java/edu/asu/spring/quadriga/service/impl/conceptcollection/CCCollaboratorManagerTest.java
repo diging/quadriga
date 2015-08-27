@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.service.impl.conceptcollection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.*;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
-import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;

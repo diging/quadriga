@@ -13,7 +13,6 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
 /**
  * Service level Implementation of {@link IAuthorization} for {@link IWorkSpace} for REST APIs.
@@ -26,9 +25,6 @@ public class WorkspaceRestAuthorization implements IAuthorization
 {
 	@Autowired
 	private	IListWSManager wsManager;
-
-	@Autowired
-	private	IRetrieveWSCollabManager wsCollabManager;
 
 	@Autowired
 	private IWSSecurityChecker wsSecurityManager;

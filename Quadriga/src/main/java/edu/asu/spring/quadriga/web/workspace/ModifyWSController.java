@@ -38,7 +38,7 @@ import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
-import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.validator.WorkspaceValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -46,26 +46,26 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class ModifyWSController {
 
 	@Autowired
-	IWSSecurityChecker workspaceSecurity;
+	private IWSSecurityChecker workspaceSecurity;
 
 	@Autowired
-	IUserManager userManager;
+	private IUserManager userManager;
 
 	@Autowired
-	IModifyWSManager modifyWSManager;
+	private IModifyWSManager modifyWSManager;
 
 	@Autowired
-	IListWSManager wsManager;
+	private IListWSManager wsManager;
 
 	@Autowired
-	WorkspaceValidator validator;
+	private WorkspaceValidator validator;
 
 	@Autowired
 	private IDspaceManager dspaceManager;
-
-	@Autowired
-	private	IRetrieveWSCollabManager wsCollabManager;
 	
+	@Autowired
+	private IWorkspaceCollaboratorManager wsCollabManager;
+
 	private String dspaceUsername;
 	private String dspacePassword;
 	private IDspaceKeys dspaceKeys;

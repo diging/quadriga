@@ -92,14 +92,6 @@ public interface IConceptCollectionDAO extends IBaseDAO<ConceptCollectionDTO> {
 		public abstract String updateItem(IConcept concept, String collectionId, String username) throws QuadrigaStorageException;
 		
 		/**
-		 * Get the user list of non owners and collaborators
-		 * @param collectionid
-		 * @return List of users
-		 * @throws QuadrigaStorageException
-		 */
-		public abstract List<IUser> showNonCollaboratorRequest(String collectionid) throws QuadrigaStorageException;
-		
-		/**
 		 * This method retrieves the concept collection id associated with the given
 		 * concept collection name
 		 * @param : ccName - concept collection name

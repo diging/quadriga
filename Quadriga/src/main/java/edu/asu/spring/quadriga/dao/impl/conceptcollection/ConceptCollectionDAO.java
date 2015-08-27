@@ -190,36 +190,6 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
 		}
 	}
 	
-	/**
-	 * Get the user list of non owners and collaborators
-	 * @param collectionid
-	 * @return List of users
-	 * @throws QuadrigaStorageException
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<IUser> showNonCollaboratorRequest(String collectionid) throws QuadrigaStorageException
-	{
-		List<IUser> userList = new ArrayList<IUser>();
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username NOT IN (Select quadrigaUserDTO.username from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid)  AND user.username NOT IN (Select ccCollab.conceptCollectionDTO.collectionowner.username from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid)");
-			query.setParameter("conceptCollectionid", collectionid);
-			
-			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
-			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
-			{
-				userList = userDTOMapper.getUsers(quadrigaUserDTOList);
-			}
-		}
-		catch(Exception e)
-		{
-			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
-			throw new QuadrigaStorageException(e);
-		}
-		return userList;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public void saveItem(String lemma, String item, String pos, String desc,
