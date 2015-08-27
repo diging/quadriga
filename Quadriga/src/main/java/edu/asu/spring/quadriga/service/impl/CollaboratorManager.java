@@ -67,10 +67,10 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
         
         //add the new roles to the collaborator
         QuadrigaUserDTO user = dao.getUserDTO(collabUser);
+        Date date = new Date();
         
         for(String role : newCollaboratorRoles) {
             if(!existingRoles.contains(role)) {
-                Date date = new Date();
                 V collaboratorDto = createNewCollaboratorDTO();
                 T collaboratorKey = createNewCollaboratorDTOPK(dtoId,collabUser,role);
                 collaboratorDto.setRelatedDTO(dto);
@@ -85,6 +85,8 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
         }
         
         dto.setCollaboratorList(collaboratorList);
+        dto.setUpdatedby(username);
+        dto.setUpdateddate(date);
         dao.updateDTO(dto);    
     }
     
