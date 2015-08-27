@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.dao.dictionary;
 import java.util.List;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -55,16 +54,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 	public abstract void updateDictionaryItems(String dictinaryId,
 			String termid, String term, String pos)
 			throws QuadrigaStorageException;
-	
-	/**
-	 * makes database call to show non-collaborating users of the current dictionary
-	 * 
-	 * @param dictionaryid
-	 * @return List<IUser>
-	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
-	 */
-	public abstract List<IUser> getNonCollaboratingUsers(String dictionaryid) throws QuadrigaStorageException;
 	
 	/**
 	 * Deletes the dictionary 

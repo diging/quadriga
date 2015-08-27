@@ -33,7 +33,6 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -56,9 +55,6 @@ public class AddCCCollaboratorController {
 
     @Autowired
     private ICollaboratorFactory collaboratorFactory;
-
-    @Autowired
-    private IConceptCollectionCollaboratorFactory ccCollaboratorFactory;
 
     @Autowired
     private IUserFactory userFactory;
@@ -158,8 +154,7 @@ public class AddCCCollaboratorController {
                 userName);
 
         // fetch the non collaborators and add it to the model
-        nonCollaboratorList = conceptControllerManager
-                .showNonCollaboratingUsers(collectionid);
+        nonCollaboratorList = collaboratorManager.getUsersNotCollaborating(collectionid);
 
         // remove the restricted user
         Iterator<IUser> userIterator = nonCollaboratorList.iterator();
@@ -260,8 +255,7 @@ public class AddCCCollaboratorController {
                     collaboratorFactory.createCollaborator());
         }
 
-        nonCollaboratorList = conceptControllerManager
-                .showNonCollaboratingUsers(collectionid);
+        nonCollaboratorList = collaboratorManager.getUsersNotCollaborating(collectionid);
         // remove the restricted user
         Iterator<IUser> userIterator = nonCollaboratorList.iterator();
         while (userIterator.hasNext()) {

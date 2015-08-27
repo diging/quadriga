@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
 import edu.asu.spring.quadriga.dao.impl.workspace.WorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
@@ -40,7 +41,7 @@ public class ModifyWSCollabManager extends CollaboratorManager<WorkspaceCollabor
     }
 
     @Override
-    public IBaseDAO<WorkspaceCollaboratorDTO> getCollaboratorDao() {
+    public ICollaboratorDAO<WorkspaceCollaboratorDTO> getCollaboratorDao() {
         return wsCollabDao;
     }
 }

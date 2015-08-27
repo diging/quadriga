@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.impl.dictionary.DictionaryDAO;
@@ -40,10 +41,7 @@ public class DictionaryCollaboratorManager extends CollaboratorManager<Dictionar
     }
 
     @Override
-    public IBaseDAO<DictionaryCollaboratorDTO> getCollaboratorDao() {
+    public ICollaboratorDAO<DictionaryCollaboratorDTO> getCollaboratorDao() {
         return dictionaryCollaboratorDao;
     }
-	
-	
-
 }

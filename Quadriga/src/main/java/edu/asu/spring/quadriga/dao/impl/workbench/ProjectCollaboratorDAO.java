@@ -79,4 +79,14 @@ public class ProjectCollaboratorDAO extends BaseDAO<ProjectCollaboratorDTO> impl
         return getDTO(ProjectCollaboratorDTO.class, id);
     }
 
+	@Override
+	public List<QuadrigaUserDTO> getUsersNotCollaborating(String dtoId) {
+		 Query query = sessionFactory.getCurrentSession().createQuery("SELECT user FROM QuadrigaUserDTO user WHERE user.username NOT IN " +
+	                "(SELECT collaborator.collaboratorDTOPK.collaboratoruser FROM ProjectCollaboratorDTO collaborator " +
+	                "  WHERE collaborator.collaboratorDTOPK.projectid =:projectid)");
+	     query.setParameter("projectid", dtoId);
+	        
+	     return query.list();
+	}
+
 }

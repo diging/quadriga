@@ -34,7 +34,6 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -68,9 +67,7 @@ public class DictionaryCollaboratorController {
     @Autowired
     ICollaboratorFactory collaboratorFactory;
 
-    @Autowired
-    IDictionaryCollaboratorFactory dictCollaboratorFactory;
-
+   
     @Autowired
     IUserFactory userFactory;
 
@@ -170,8 +167,8 @@ public class DictionaryCollaboratorController {
         }
         modelAndView.getModelMap().put("collaborator", collaborator);
 
-        List<IUser> nonCollaboratingUsers = dictionaryManager
-                .showNonCollaboratingUsers(dictionaryId);
+        List<IUser> nonCollaboratingUsers = dictCollaboratorManager
+                .getUsersNotCollaborating(dictionaryId);
         // remove the restricted user
         if (nonCollaboratingUsers != null) {
             Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
@@ -258,8 +255,8 @@ public class DictionaryCollaboratorController {
         }
 
         // mapping collaborators absent in the dictionary
-        List<IUser> nonCollaboratingUsers = dictionaryManager
-                .showNonCollaboratingUsers(dictionaryId);
+        List<IUser> nonCollaboratingUsers = dictCollaboratorManager
+                .getUsersNotCollaborating(dictionaryId);
         model.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
 
         // mapping existing collaborators present in the dictionary

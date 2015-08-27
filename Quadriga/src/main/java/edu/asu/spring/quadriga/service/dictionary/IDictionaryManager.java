@@ -3,9 +3,7 @@ package edu.asu.spring.quadriga.service.dictionary;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
-import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
@@ -136,16 +134,6 @@ public interface IDictionaryManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	public abstract List<IDictionaryCollaborator> showCollaboratingUsers(String dictionaryId) throws QuadrigaStorageException;
-	
-	/**
-	 * this method used to call the db manager method and return collaborators which are 
-	 * not present in the current dictionary
-	 * 
-	 * @param collectionid
-	 * @return List<IUser>
-	 */
-	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
-	
 	
 	/**
 	 * Delete a dictinary

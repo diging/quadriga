@@ -160,7 +160,7 @@ public class AddCollaboratorController {
         // TODO: getProjectNonCollaborators() method has not been changed for
         // mapper
         List<IUser> nonCollaboratingUsers = projectCollaboratorManager
-                .getProjectNonCollaborators(projectid);
+                .getUsersNotCollaborating(projectid);
 
         // remove the restricted user
         Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
@@ -231,7 +231,7 @@ public class AddCollaboratorController {
             }
 
             List<IUser> nonCollaboratingUsers = projectCollaboratorManager
-                    .getProjectNonCollaborators(projectid);
+                    .getUsersNotCollaborating(projectid);
             // remove the restricted user
             Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
             while (userIterator.hasNext()) {

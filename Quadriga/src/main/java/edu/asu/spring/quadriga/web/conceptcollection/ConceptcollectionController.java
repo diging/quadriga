@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web.conceptcollection;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

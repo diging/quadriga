@@ -53,7 +53,7 @@ public class AddWSCollabController {
 
     @Autowired
     IRetrieveWSCollabManager wsCollabManager;
-
+   
     @Autowired
     private IQuadrigaRoleManager roleManager;
 
@@ -156,8 +156,8 @@ public class AddWSCollabController {
         model.getModelMap().put("workspacedesc", workspace.getDescription());
 
         // fetch the users who are not collaborators to the workspace
-        nonCollaboratingUser = wsCollabManager
-                .getWorkspaceNonCollaborators(workspaceid);
+        nonCollaboratingUser = wsManager
+                .getUsersNotCollaborating(workspaceid);
 
         // remove the restricted user
         Iterator<IUser> userIterator = nonCollaboratingUser.iterator();
@@ -238,8 +238,8 @@ public class AddWSCollabController {
         model.getModelMap().put("workspaceid", workspaceid);
 
         // fetch the users who are not collaborators to the workspace
-        List<IUser> nonCollaboratingUser = wsCollabManager
-                .getWorkspaceNonCollaborators(workspaceid);
+        List<IUser> nonCollaboratingUser = wsManager
+                .getUsersNotCollaborating(workspaceid);
 
         // remove the restricted user
         Iterator<IUser> userIterator = nonCollaboratingUser.iterator();

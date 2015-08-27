@@ -18,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDictionaryDAO;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
@@ -521,26 +520,6 @@ public class DictionaryManager implements IDictionaryManager {
 			dictionaryCollaboratorList = dictionary.getDictionaryCollaborators(); 
 		}
 		return dictionaryCollaboratorList;
-	}
-
-	/**
-	 * this method used to return collaborators which are not present in the current dictionary
-	 * 
-	 * @param		dictionaryid
-	 * @return		List of users
-	 * @exception 	QuadrigaStorageException	
-	 */
-	@Override
-	@Transactional
-	public List<IUser> showNonCollaboratingUsers(String dictionaryid) {
-
-		List<IUser> nonCollabUsers = null;
-		try {
-			nonCollabUsers = dictionaryDao.getNonCollaboratingUsers(dictionaryid);
-		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
-		}
-		return nonCollabUsers;
 	}
 
 	/**

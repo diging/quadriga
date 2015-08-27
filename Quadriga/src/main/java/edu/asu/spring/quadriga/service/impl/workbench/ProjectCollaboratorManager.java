@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
 import edu.asu.spring.quadriga.dao.impl.workbench.ProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
@@ -40,23 +39,6 @@ public class ProjectCollaboratorManager extends CollaboratorManager<ProjectColla
    
 	@Autowired
 	private IProjectDAO projectDao;
-
-	/**
-	 * This method retrieves the users who are not collaborators to the project.
-	 * @param projectid - project id
-	 * @return List<IUser> - list of users who are not collaborators to the project.
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public List<IUser> getProjectNonCollaborators(String projectid) throws QuadrigaStorageException
-	{
-		List<IUser> nonCollaborators;
-
-		nonCollaborators = projectCollabDAO.getProjectNonCollaborators(projectid);
-
-		return nonCollaborators;
-	}
 
 	/**
 	 * This method retrieves the collaborators associated with the project
@@ -105,7 +87,7 @@ public class ProjectCollaboratorManager extends CollaboratorManager<ProjectColla
     }
 
     @Override
-    public IBaseDAO<ProjectCollaboratorDTO> getCollaboratorDao() {
+    public ICollaboratorDAO<ProjectCollaboratorDTO> getCollaboratorDao() {
         return projectCollabDAO;
     }
 }

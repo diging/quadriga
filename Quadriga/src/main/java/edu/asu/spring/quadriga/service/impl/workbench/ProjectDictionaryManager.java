@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;

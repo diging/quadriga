@@ -6,12 +6,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.CollaboratingDTO;
 import edu.asu.spring.quadriga.dto.CollaboratorDTO;
 import edu.asu.spring.quadriga.dto.CollaboratorDTOPK;
@@ -19,10 +22,14 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 import edu.asu.spring.quadriga.service.ICollaboratorManager;
 
 public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T extends CollaboratorDTOPK,C extends CollaboratingDTO<T, V>,D extends BaseDAO<C>> implements ICollaboratorManager {
     
+	@Autowired
+	private UserDTOMapper userMapper;
+	
     /* (non-Javadoc)
      * @see edu.asu.spring.quadriga.service.impl.ICollaboratorManager#updateCollaborators(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
@@ -219,6 +226,30 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
     }
     
     /**
+     * Method to get all users that are not collaborating on a DTO.
+     * @param dtoId Id of the DTO for which the users should be retrieved.
+     */
+    @Override
+	@Transactional
+    public List<IUser> getUsersNotCollaborating(String dtoId) {
+        IBaseDAO<C> dao = getDao();
+        C dto = dao.getDTO(dtoId);
+        if(dto == null) {
+            return null;
+        }
+        
+        List<IUser> users = new ArrayList<IUser>();
+        List<QuadrigaUserDTO> collaborator = getCollaboratorDao().getUsersNotCollaborating(dtoId);
+        
+        for(QuadrigaUserDTO tempCollab : collaborator) {
+            if(!dto.getOwner().getUsername().equals(tempCollab.getUsername())) {
+            	users.add(userMapper.getUser(tempCollab));
+            }
+        }
+        return users;
+    }
+    
+    /**
      * Method to create a new workspace collaborator DTO object.
      * @param collaboratorName Username of collaborator
      * @param workspaceid  Id of workspace of the new collaborator.
@@ -245,5 +276,5 @@ public abstract class CollaboratorManager<V extends CollaboratorDTO<T, V>, T ext
     public abstract T createNewCollaboratorDTOPK(String id, String collabUser, String role);
     
     public abstract IBaseDAO<C> getDao();
-    public abstract IBaseDAO<V> getCollaboratorDao();
+    public abstract ICollaboratorDAO<V> getCollaboratorDao();
 }

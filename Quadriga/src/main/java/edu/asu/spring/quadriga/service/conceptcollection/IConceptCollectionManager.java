@@ -7,10 +7,8 @@ import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
 
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -117,8 +115,6 @@ public interface IConceptCollectionManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	public abstract void update(String[] values, IConceptCollection concept,String username) throws QuadrigaStorageException;
-	
-	public abstract List<IUser> showNonCollaboratingUsers(String collectionid) throws QuadrigaStorageException;
 	
 	public abstract List<IConceptCollectionCollaborator> showCollaboratingUsers(String collectionid) throws QuadrigaStorageException;
 	

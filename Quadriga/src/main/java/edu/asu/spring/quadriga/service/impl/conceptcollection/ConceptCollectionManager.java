@@ -24,7 +24,6 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
@@ -276,21 +275,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
             throws QuadrigaStorageException {
         ccDao.deleteItems(id, collectionId, username);
 
-    }
-
-    /**
-     * @description retrieves non collaborating users from database
-     * @param collectionid
-     * @throws QuadrigaStorageException
-     * @return list of non collaborating users
-     * @author rohit pendbhaje
-     */
-    @Override
-    @Transactional
-    public List<IUser> showNonCollaboratingUsers(String collectionid)
-            throws QuadrigaStorageException {
-        return ccDao
-                .showNonCollaboratorRequest(collectionid);
     }
 
     /**

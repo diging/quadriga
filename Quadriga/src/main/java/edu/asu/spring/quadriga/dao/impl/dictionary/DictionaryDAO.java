@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.dao.impl.dictionary;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -17,12 +16,10 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTOPK;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
@@ -143,35 +140,6 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 		} catch(HibernateException e) {
 			throw new QuadrigaStorageException(e);
 		}
-	}
-
-	/**
-	 * Get non collaborators for the dictionary
-	 * @param dictionary id 
-	 * @return Error message
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<IUser> getNonCollaboratingUsers(String dictionaryid) throws QuadrigaStorageException {
-		List<IUser> nonCollabUsersList = new ArrayList<IUser>();
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select quadUser.username from QuadrigaUserDTO quadUser where quadUser.username NOT IN (Select dictCollab.quadrigaUserDTO.username from DictionaryCollaboratorDTO dictCollab where dictCollab.collaboratorDTOPK.dictionaryid =:dictionaryid) AND quadUser.username NOT IN (Select dict.dictionaryowner.username from DictionaryDTO dict where dict.dictionaryid =:dictionaryid)");
-			query.setParameter("dictionaryid", dictionaryid);
-			List<String> userNameList = query.list();
-			
-			for(String userName : userNameList) {
-				QuadrigaUserDTO userDTO = getUserDTO(userName);
-				IUser user = userMapper.getUser(userDTO);
-				nonCollabUsersList.add(user);
-				
-			}
-		} catch(HibernateException e) {
-			throw new QuadrigaStorageException(e);
-		}
-		return nonCollabUsersList;
 	}
 
 	/**
