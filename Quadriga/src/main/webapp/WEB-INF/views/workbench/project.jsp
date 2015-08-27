@@ -63,7 +63,7 @@
 			<strong>Workspaces in this project:</strong>
 			<ul>
 			<c:forEach var="workspace" items="${workspaceList}">
-				<li class="ws">
+				<li class="ws with-icon">
 					<a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
 							value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
@@ -74,7 +74,7 @@
 			</c:forEach>
 			
 			<c:forEach var="workspace" items="${collabworkspacelist}">
-			<li  class="ws"><a
+			<li  class="ws with-icon"><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
 					value="${workspace.workspaceName}"></c:out></a> (Collaborator)<br> <c:out
 					value="${workspace.description}"></c:out></li>
@@ -138,8 +138,13 @@
 					</c:when>
 				
 				</c:choose>
+				
 			</div>
+			<div align="right">
+                <c:if test="${owner=='1'}"><span class="glyphicon glyphicon-ban-circle"></span> <a href="">Delete Project</a></c:if>
+            </div>
 		</td>
+		
 		<!-- Display collaborators -->
 		<td style="width: 200px">
 			<section>

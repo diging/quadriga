@@ -75,6 +75,7 @@
 		a:hover
 		{
 			text-decoration: underline;
+			color: rgb(152, 143, 90);
 		}
 		
 	a.inText {
@@ -128,7 +129,9 @@
 	}
 
 	hr {
-		border: solid 1px #e7eae8;
+	   margin-top: 10px;
+	   margin-bottom: 10px;
+	   border: solid 1px #e7eae8;
 	}
 
 	.byline
@@ -813,29 +816,7 @@
 	}
 	
 	
-	li.ws:before
-		{
-			content: '';
-			display: block;
-			position: absolute;
-			width: 50px;
-			height: 34px;
-			left: 5px;
-			top: 30px;
-			margin-right: 15px;
-			margin-top: -15px;
-			background: no-repeat url('images/ws.png');
-		}
-		
-	li.ws
-		{
-			position: relative;
-			display: block;
-			padding-left: 60px;
-			margin-left: 1em;
-			margin-top: 0.8em;
-			border: 1px solid #dddddd;
-		}
+	
 		
 	li.with-icon:before
         {
@@ -866,6 +847,16 @@
        top: 20px;
        font-size: 20px;
     }
+    
+    li.ws:before
+    {
+        content:"\e117";
+        font-family: 'Glyphicons Halflings';
+        top: 17px;
+        font-size: 20px;
+    }
+    
+   
 		
 	.projectList {
 		border: 1px solid #c1cac5;
@@ -891,7 +882,6 @@
 	
 	
 	ul.workspaceToggleList {
-		list-style-image: url('images/ws-sm.png');
 		margin-bottom: 0em;
 	}
 	
@@ -899,6 +889,13 @@
 			margin-left: 45px;
 			line-height: 20px;
 		}
+		
+		ul.workspaceToggleList li:before {
+            content:"\e117";
+            font-family: 'Glyphicons Halflings';
+            margin-left: -22px;
+            margin-right: 5px;
+        }
 
 /*********************************************************************************/
 /* Footer                                                                        */
