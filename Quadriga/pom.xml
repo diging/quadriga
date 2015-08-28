@@ -23,6 +23,8 @@
         <database.username>dbadmin</database.username>
         <database.pw>dbadmin</database.pw>
         <qstore.url>http://localhost:8080/qstore</qstore.url>
+        <wordpower.url>http://digitalhps-develop.asu.edu:8080/wordpower</wordpower.url>
+	    <conceptpower.url>https://chps.asu.edu/conceptpower</conceptpower.url>
 	</properties>
 
 	<dependencies>
@@ -376,6 +378,8 @@
                 <deploy.path>${deploy.path.dev}</deploy.path>
                 <tomcat.path>${tomcat.deploy.path}</tomcat.path>
                 <qstore4s.url>${qstore.url}</qstore4s.url>
+                <profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
+                <profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
             </properties>
         </profile>
         <profile>
@@ -389,6 +393,8 @@
                 <deploy.path>${deploy.path.test}</deploy.path>
                 <tomcat.path>${tomcat.deploy.path}</tomcat.path>
                 <qstore4s.url>${qstore.url}</qstore4s.url>
+                <profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
+                <profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
             </properties>
         </profile>
         <profile>
@@ -402,6 +408,8 @@
                 <deploy.path>${deploy.path.prod}</deploy.path>
                 <tomcat.path>${tomcat.deploy.path}</tomcat.path>
                 <qstore4s.url>${qstore.url}</qstore4s.url>
+                <profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
+                <profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
             </properties>
         </profile>
     </profiles>
