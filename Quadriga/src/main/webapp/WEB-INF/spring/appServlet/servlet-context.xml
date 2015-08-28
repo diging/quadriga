@@ -41,4 +41,6 @@
 	
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
 	
+	<resources mapping="/resources/**" location="/resources/" /> 
+	
 </beans:beans>

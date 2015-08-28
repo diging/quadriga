@@ -6,7 +6,7 @@
 
 window._skel_config = {
 	preset: 'standard',
-	prefix: '/quadriga/resources/txt-layout/css/style',
+	prefix: '/${deploy.path}/resources/txt-layout/css/style',
 	resetCSS: true
 };
 

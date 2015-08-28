@@ -131,8 +131,7 @@
 
 	<!-- Footer -->
 	<footer id="footer" class="container">
-
-		<div class="row">
+        <div class="row">
 
 			<!-- Copyright -->
 			<div id="copyright">
@@ -140,6 +139,8 @@
 					href="http://flickr.com/people/freakyman/">freakyman</a> + <a
 					href="http://iconify.it">Iconify.it</a> | Design: <a
 					href="http://html5up.net/">HTML5 UP</a>
+				<div> Version: ${buildNumber}</div>
+            
 			</div>
 			<!-- /Copyright -->
 
