@@ -48,18 +48,12 @@ $(document).ready(function() {
 </c:choose>
 <br />
 
-<div id = "tabs" class="tabs">
-	<ul>
-	  <li><a href="#asowner">Owner</a></li>
-	  <li><a href="#ascollaborator">Collaborator</a></li>
-	</ul>
-	<div id=asowner>
-			<c:choose>
-		<c:when test="${not empty dictinarylist}">
+<div >
+		<c:if test="${not empty dictinarylist}">
 		You own these Dictionaries:
-			<ul class="style2 pagination1">
+			<ul>
 				<c:forEach var="dictionary" items="${dictinarylist}">
-					<li>
+					<li class="dt with-icon">
 					<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
 			          <c:out value="${dictionary.dictionaryName}"></c:out>
 			   </a> <br> 
@@ -67,26 +61,25 @@ $(document).ready(function() {
 						</li>
 				</c:forEach>
 			</ul>
-		</c:when>
-		<c:otherwise> <spring:message code="empty.dictionary" /></c:otherwise>
-	</c:choose>
+		</c:if>
+		<c:if test="${empty dictinarylist}"> You don't own any dictionaries.
+	</c:if>
 	</div>
-	<div id=ascollaborator>
 	<c:if test="${not empty dictionaryCollabList}">
 	You participate in these Dictionaries:
-	<ul class="style2 pagination1">
+	<ul>
 	<c:forEach var="dictionary" items="${dictionaryCollabList}">
-	<li>
-			   <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.dictionaryId}">
-			          <c:out value="${dictionary.dictionaryName}"></c:out>
-			   </a> <br> 
-			     <c:out value="${dictionary.description}"></c:out>
-			     </li>
-			</c:forEach>
+	<li class="dt with-icon">
+		<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.dictionaryId}">
+			<c:out value="${dictionary.dictionaryName}"></c:out>
+		</a> <br> 
+			<c:out value="${dictionary.description}"></c:out>
+	</li>
+	</c:forEach>
 	</ul>
 		</c:if>
 			<c:if test="${empty dictionaryCollabList}">
-	      <spring:message code="empty.dictionary" />
+	       You don't collaborate on any dictionaries.
 	   </c:if>
 	</div>
 	</div>
