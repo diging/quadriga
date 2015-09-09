@@ -346,6 +346,24 @@
 							<c:when test="${not empty wrongDspaceLogin}">*</c:when>
 						</c:choose>
 					</a>
+					
+					
+					
+					<a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deleteSingleWorkspace"><input type="submit"
+				value="Delete Workspace"></a>
+					
+					<a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/archiveworkspace"><input type="submit"
+				value="Archive"></a>
+					
+					<a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace"><input type="submit"
+				value="Deactivate">
+				</a>
+				
+				${workspaceid}----
+					
 					<div id="login-box" class="login-popup"
 						title="Dspace Authentication">
 						<form id="dspaceLogin" method="post" class="signin">

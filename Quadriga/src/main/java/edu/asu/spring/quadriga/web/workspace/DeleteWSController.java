@@ -163,4 +163,30 @@ public class DeleteWSController
 		}
 		return model;
 	}
+	
+	
+	
+	
+	
+	/**
+	 * This calls workspaceManager to delete the workspace submitted.
+	 * @param   projectid
+	 * @param   req
+	 * @param   model
+	 * @param   principal
+	 * @return  String - URL of the form
+	 * @throws  QuadrigaStorageException
+	 * @author  Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
+	 */
+	@RequestMapping(value = "auth/workbench/{workspaceId}/deleteSingleWorkspace", method = RequestMethod.POST)
+	public ModelAndView deleteSingleWorkspaceRequest(@PathVariable("workspaceId") String workspaceId,ModelAndView model) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		
+			model = new ModelAndView("auth/workbench");
+			modifyWSManger.deleteWorkspace(workspaceId.toString().substring(1));
+		return model;
+	}
+	
+	
 }
