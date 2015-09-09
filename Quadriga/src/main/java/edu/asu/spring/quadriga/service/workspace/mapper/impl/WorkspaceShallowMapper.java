@@ -44,12 +44,9 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	@Transactional
 	public List<IWorkSpace> getWorkSpaceList(String projectId) throws QuadrigaStorageException{
 		List<WorkspaceDTO> workspaceDTOList = dbConnect.listWorkspaceDTO(projectId);
-		List<IWorkSpace> workspaceList = null;
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
 		if(workspaceDTOList != null){
 			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
-				if(workspaceList == null){
-					workspaceList = new ArrayList<IWorkSpace>();
-				}
 				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
@@ -153,12 +150,9 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	@Transactional
 	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String username) throws QuadrigaStorageException{
 		List<WorkspaceDTO> workspaceDTOList = dbConnect.listWorkspaceDTOofCollaborator(projectid, username);
-		List<IWorkSpace> workspaceList = null;
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
 		if(workspaceDTOList != null){
 			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
-				if(workspaceList == null){
-					workspaceList = new ArrayList<IWorkSpace>();
-				}
 				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
@@ -184,12 +178,9 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	public List<IWorkSpace> listActiveWorkspacesOfOwner(String projectid,
 			String username) throws QuadrigaStorageException{
 		List<WorkspaceDTO> workspaceDTOList = dbConnect.listActiveWorkspaceDTOofOwner(projectid, username);
-		List<IWorkSpace> workspaceList = null;
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();;
 		if(workspaceDTOList != null){
 			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
-				if(workspaceList == null){
-					workspaceList = new ArrayList<IWorkSpace>();
-				}
 				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
@@ -215,12 +206,9 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	public List<IWorkSpace> listActiveWorkspaceOfCollaborator(String projectid,
 			String username) throws QuadrigaStorageException{
 		List<WorkspaceDTO> workspaceDTOList = dbConnect.listActiveWorkspaceDTOofCollaborator(projectid, username);
-		List<IWorkSpace> workspaceList = null;
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
 		if(workspaceDTOList != null){
 			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
-				if(workspaceList == null){
-					workspaceList = new ArrayList<IWorkSpace>();
-				}
 				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
@@ -246,12 +234,9 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	public List<IWorkSpace> listArchivedWorkspace(String projectid,
 			String username) throws QuadrigaStorageException{
 		List<WorkspaceDTO> workspaceDTOList = dbConnect.listArchivedWorkspaceDTO(projectid, username);
-		List<IWorkSpace> workspaceList = null;
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
 		if(workspaceDTOList != null){
 			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
-				if(workspaceList == null){
-					workspaceList = new ArrayList<IWorkSpace>();
-				}
 				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
@@ -277,12 +262,9 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	public List<IWorkSpace> listDeactivatedWorkspace(String projectid,
 			String username) throws QuadrigaStorageException{
 		List<WorkspaceDTO> workspaceDTOList = dbConnect.listDeactivatedWorkspaceDTO(projectid, username);
-		List<IWorkSpace> workspaceList = null;
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
 		if(workspaceDTOList != null){
 			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
-				if(workspaceList == null){
-					workspaceList = new ArrayList<IWorkSpace>();
-				}
 				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());

@@ -98,9 +98,7 @@ public class ListWSManager implements IListWSManager  {
 	@Transactional
 	public List<IWorkSpace> listActiveWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
-		List<IWorkSpace> ownerWorkspaceList;
-		ownerWorkspaceList = workspaceShallowMapper.listActiveWorkspacesOfOwner(projectid, user);
-		return ownerWorkspaceList;
+		return workspaceShallowMapper.listActiveWorkspacesOfOwner(projectid, user);
 	}
 
 	@Override

@@ -27,16 +27,12 @@ public class ModifyWorkspaceFormManager
 	 */
 	public List<ModifyWorkspace> getActiveWorkspaceList(String projectId,String userName) throws QuadrigaStorageException
 	{
-		List<IWorkSpace> workspaceList;
-		List<ModifyWorkspace> modifyWorkspaceList;
-		ModifyWorkspace modifyWorkspace;
-		
-		modifyWorkspaceList = new ArrayList<ModifyWorkspace>();
-		workspaceList = wsManager.listActiveWorkspace(projectId,userName);
+		List<ModifyWorkspace> modifyWorkspaceList = new ArrayList<ModifyWorkspace>();
+		List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
 		
 		for(IWorkSpace workspace : workspaceList)
 		{
-			modifyWorkspace = new ModifyWorkspace();
+		    ModifyWorkspace modifyWorkspace = new ModifyWorkspace();
 			modifyWorkspace.setId(workspace.getWorkspaceId());
 			modifyWorkspace.setName(workspace.getWorkspaceName());
 			modifyWorkspace.setDescription(workspace.getDescription());
