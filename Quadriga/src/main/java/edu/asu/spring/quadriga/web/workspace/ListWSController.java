@@ -279,18 +279,13 @@ public class ListWSController
 	@RequestMapping(value="auth/workbench/workspace/workspacedetails/{workspaceid}", method = RequestMethod.GET)
 	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model,@RequestParam("projectid") String projectid) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
 	{
-		String userName;
-		IWorkSpace workspace;
-		List<IWorkspaceCollaborator> workspaceCollaboratorList;
-
-		userName = principal.getName();
-		workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
+		String userName = principal.getName();
+		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
 
 		
 		//Check bitstream access in dspace. 
 		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
-		if(this.getDspaceKeys() != null)
-		{
+		if(this.getDspaceKeys() != null) {
 			model.addAttribute("dspaceKeys", "true");
 		}
 
@@ -311,7 +306,7 @@ public class ListWSController
 		
 
 		//retrieve the collaborators associated with the workspace
-		workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
+		List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
 
 
 		workspace.setWorkspaceCollaborators(workspaceCollaboratorList);
