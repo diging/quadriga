@@ -25,6 +25,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 
 	/**List of QuadrigaRole objects which will store various user roles.*/
 	@Autowired
+	@Qualifier("mainRoles")
 	private List<IQuadrigaRole> quadrigaRoles;
 	
 	@Autowired 

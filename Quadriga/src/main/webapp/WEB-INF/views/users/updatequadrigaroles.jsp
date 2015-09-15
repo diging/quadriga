@@ -43,15 +43,15 @@ function submitClick(id){
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="user"
+					<c:forEach var="myuser"
 						items="${userrolesform.users}" varStatus="status">
 						<tr>
 							<td><font size="3">
 							<form:label path="users[${status.index}].name">
-							<c:out value="${user.name}"></c:out>
+							<c:out value="${myuser.name}"></c:out>
 							</form:label>
 							</font>
-							<form:input path="users[${status.index}].userName" id="users[${status.index}].userName" type="hidden"/>
+							<form:input path="users[${status.index}].userName" id="users[${status.index}].userName" value="${myuser.userName}" type="hidden"/>
 							</td>
 										
 							<td align="left"><font size="3"> <form:checkboxes
