@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
@@ -95,6 +96,35 @@ public class ActivateWSController {
         model.getModelMap().put("success", 0);
         return model;
     }
+    
+	@AccessPolicies({
+			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
+			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {}) })
+	@RequestMapping(value = "auth/workbench/{workspaceid}/deactivatesingleworkspace", method = RequestMethod.GET)
+	public ModelAndView deactivateSingleWorkspaceForm(
+			@RequestParam("projectid") String projectid,@PathVariable("workspaceid") String workspaceid, Principal principal)
+			throws QuadrigaStorageException, QuadrigaAccessException {
+
+		ModelAndView model = new ModelAndView(
+				"auth/workbench/workspace/deactivateworkspace");
+
+		// retrieve the workspaces associated with the projects
+		/*List<ModifyWorkspace> deactivateWSList = workspaceFormManager
+				.getActiveWorkspaceList(projectid, principal.getName());
+
+		ModifyWorkspaceForm workspaceForm = workspaceFormFactory
+				.createModifyWorkspaceForm();
+
+		workspaceForm.setWorkspaceList(deactivateWSList);
+
+		model.getModelMap().put("workspaceform", workspaceForm);
+		model.getModelMap().put("wsprojectid", projectid);
+		model.getModelMap().put("success", 0);*/
+		return model;
+	}
 
     /**
      * This calls workspaceManager to archive the workspace submitted.

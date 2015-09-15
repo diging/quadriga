@@ -65,7 +65,7 @@
 			<c:forEach var="workspace" items="${workspaceList}">
 				<li class="ws with-icon">
 					<a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}?projectid=${project.projectId}"><c:out
 							value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
 						
 					<c:out
@@ -75,7 +75,7 @@
 			
 			<c:forEach var="workspace" items="${collabworkspacelist}">
 			<li  class="ws with-icon"><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}?projectid=${project.projectId}"><c:out
 					value="${workspace.workspaceName}"></c:out></a> (Collaborator)<br> <c:out
 					value="${workspace.description}"></c:out></li>
 			</c:forEach>

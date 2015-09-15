@@ -277,7 +277,7 @@ public class ListWSController
 	 * @author Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/workspace/workspacedetails/{workspaceid}", method = RequestMethod.GET)
-	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
+	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model,@RequestParam("projectid") String projectid) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
 	{
 		String userName;
 		IWorkSpace workspace;
@@ -334,7 +334,8 @@ public class ListWSController
 		}else{
 			model.addAttribute("projectinherit", 0);
 		}
-
+		
+		model.addAttribute("projectid", projectid);
 		return "auth/workbench/workspace/workspacedetails";
 	}
 
