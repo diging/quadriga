@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.web.manageusers;
 
+import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,8 +46,9 @@ public class ModifyUserRolesController
 	private ModifyQuadrigaUserFormManager quadrigaUserMananger;
 
 	@InitBinder
-	protected void initBinder(WebDataBinder validateBinder) throws Exception {
-        validateBinder.setValidator(validator);
+	protected void initBinder(WebDataBinder binder) throws Exception {
+        binder.setValidator(validator);
+        binder.registerCustomEditor(IQuadrigaRole.class, new QuadrigaRoleEditor());
 	}
 	
 	/**
@@ -175,4 +177,12 @@ public class ModifyUserRolesController
 		return model;
 	}
 
+	class QuadrigaRoleEditor extends PropertyEditorSupport {  
+	    public void setAsText(String text) {
+	        IQuadrigaRole role = rolemanager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, text);
+	        setValue(role);
+	    }
+	} 
 }
+
+
