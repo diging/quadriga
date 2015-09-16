@@ -53,7 +53,7 @@
 <div>
     <c:if test="${not empty dictinarylist}">
 		You own these Dictionaries:
-		<ul>
+	    <ul>
             <c:forEach var="dictionary" items="${dictinarylist}">
                 <li class="dt with-icon"><a
                     href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
