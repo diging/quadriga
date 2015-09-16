@@ -48,41 +48,37 @@ $(document).ready(function() {
 </c:choose>
 <br />
 
-<div >
-		<c:if test="${not empty dictinarylist}">
+<div>
+	<c:if test="${not empty dictinarylist}">
 		You own these Dictionaries:
 			<ul>
-				<c:forEach var="dictionary" items="${dictinarylist}">
-					<li class="dt with-icon">
-					<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
-			          <c:out value="${dictionary.dictionaryName}"></c:out>
-			   </a> <br> 
-			     <c:out value="${dictionary.description}"></c:out>
-						</li>
-				</c:forEach>
-			</ul>
-		</c:if>
-		<c:if test="${empty dictinarylist}"> You don't own any dictionaries.
+			<c:forEach var="dictionary" items="${dictinarylist}">
+				<li class="dt with-icon"><a
+					href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
+						<c:out value="${dictionary.dictionaryName}"></c:out>
+				</a> <br> <c:out value="${dictionary.description}"></c:out></li>
+			</c:forEach>
+		</ul>
 	</c:if>
-	</div>
-	
-	<c:if test="${not empty dictionaryCollabList}">
+	<c:if test="${empty dictinarylist}"> You don't own any dictionaries.
+	</c:if>
+</div>
+
+<c:if test="${not empty dictionaryCollabList}">
 	You participate in these Dictionaries:
 	<ul>
-	<c:forEach var="dictionary" items="${dictionaryCollabList}">
-	<li class="dt with-icon">
-		<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.dictionaryId}">
-			<c:out value="${dictionary.dictionaryName}"></c:out>
-		</a> <br> 
-			<c:out value="${dictionary.description}"></c:out>
-	</li>
-	</c:forEach>
+		<c:forEach var="dictionary" items="${dictionaryCollabList}">
+			<li class="dt with-icon"><a
+				href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.dictionaryId}">
+					<c:out value="${dictionary.dictionaryName}"></c:out>
+			</a> <br> <c:out value="${dictionary.description}"></c:out></li>
+		</c:forEach>
 	</ul>
-	</c:if>
-			
-	<c:if test="${empty dictionaryCollabList}">
-	      		<spring:message code="empty.dictionary" />
-	</c:if>
-	
-	</div>
-	</div>
+</c:if>
+
+<c:if test="${empty dictionaryCollabList}">
+	<spring:message code="empty.dictionary" />
+</c:if>
+
+</div>
+</div>
