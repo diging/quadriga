@@ -65,6 +65,7 @@ $(document).ready(function() {
 		<c:if test="${empty dictinarylist}"> You don't own any dictionaries.
 	</c:if>
 	</div>
+	
 	<c:if test="${not empty dictionaryCollabList}">
 	You participate in these Dictionaries:
 	<ul>
@@ -77,9 +78,11 @@ $(document).ready(function() {
 	</li>
 	</c:forEach>
 	</ul>
-		</c:if>
-			<c:if test="${empty dictionaryCollabList}">
-	       You don't collaborate on any dictionaries.
-	   </c:if>
+	</c:if>
+			
+	<c:if test="${empty dictionaryCollabList}">
+	      		<spring:message code="empty.dictionary" />
+	</c:if>
+	
 	</div>
 	</div>
