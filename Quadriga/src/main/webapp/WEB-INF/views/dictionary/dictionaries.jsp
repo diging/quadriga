@@ -52,7 +52,7 @@
 
 <div>
     <c:if test="${not empty dictinarylist}">
-		You own these Dictionaries:
+	    You own these Dictionaries:
 	    <ul>
             <c:forEach var="dictionary" items="${dictinarylist}">
                 <li class="dt with-icon"><a
@@ -64,12 +64,12 @@
         </ul>
     </c:if>
     <c:if test="${empty dictinarylist}"> You don't own any dictionaries.
-	</c:if>
+    </c:if>
 </div>
 
 <c:if test="${not empty dictionaryCollabList}">
-	You participate in these Dictionaries:
-	<ul>
+    You participate in these Dictionaries:
+    <ul>
         <c:forEach var="dictionary" items="${dictionaryCollabList}">
             <li class="dt with-icon"><a
                 href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.dictionaryId}">
