@@ -180,6 +180,21 @@ public class ListWSManager implements IListWSManager  {
 	}
 
 	/**
+	 * This method gets the project id for the workspace id.
+	 * @param   workspaceId
+	 * @return  Project Id - String object
+	 * @throws  QuadrigaStorageException
+	 */
+	@Override
+	@Transactional
+	public String getProjectIdFromWorkspaceId(String workspaceId) throws QuadrigaStorageException
+	{
+		String projectId = null;
+		projectId = listWsDao.getProjectWorkspaceDTO(workspaceId);
+		return projectId;
+	}
+	
+	/**
 	 * This method get the workspace name for the workspace id.
 	 * @param   workspaceId
 	 * @return  workspacename - String object
@@ -196,6 +211,7 @@ public class ListWSManager implements IListWSManager  {
 		return workspacename;
 	}
 
+	
 	@Override
 	@Transactional
 	public List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceid)

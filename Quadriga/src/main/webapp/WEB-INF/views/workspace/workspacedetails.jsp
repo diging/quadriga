@@ -304,7 +304,9 @@
 					<font color="red"> <spring:message
 							code="workspace.delete.owner.editor.assigned" /></font>
 				</c:when>
-			</c:choose> <br /> <c:choose>
+			</c:choose> <br /> 
+			
+			<c:choose>
 				<c:when test="${empty dspaceKeys}">
 					<!-- Dspace Login popup -->
 					<script>
@@ -338,6 +340,9 @@
 				</c:otherwise>
 			</c:choose> <a href="#login-box" class="login-window"><input type="submit"
 				value="Add text from Dspace"></a> <!-- DSpace Login credentials -->
+				
+				
+		</a></li>
 			<c:choose>
 				<c:when test="${empty dspaceKeys}">
 					<!-- Allow the user to change the dspace login credentials -->
@@ -349,18 +354,25 @@
 					
 					
 					
+					<div style="text-align: right">
 					<a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deleteSingleWorkspace"><input type="submit"
-				value="Delete Workspace"></a>
+					href="${pageContext.servletContext.contextPath}auth/workbench/${workspaceid}/deleteSingleWorkspaceWithProjectID?projectid=${myprojectid}">Delete Workspace
+					</a>
+					</div>
 					
 					<a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/archiveworkspace"><input type="submit"
 				value="Archive"></a>
 					
-					<a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace"><input type="submit"
-				value="Deactivate">
-				</a>
+				
+				
+				<div style="text-align: right">
++				<a
++					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}">
++					Deactivate Workspace
++				</a>
++			</div>
+				
 				
 				${workspaceid}----
 					
@@ -462,7 +474,20 @@
 			</c:choose> <br>
 		<br> <c:choose>
 				<c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when>
-			</c:choose> <!-- Display bit streams --> <c:choose>
+			</c:choose> 
+			
+			<div style="text-align: right">
+				<a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}">
+					Deactivate Workspace
+				</a>
+			</div>
+			
+			
+			<%-- <li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${myprojectid}">Deactivate</a></li>
+			 --%>
+			<!-- Display bit streams --> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">

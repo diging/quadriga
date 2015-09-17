@@ -142,7 +142,7 @@ public class DeleteWSController
 //			model = new ModelAndView("auth/workbench/project");
 			deleteWSList = workspaceForm.getWorkspaceList();
 			
-			//loop through the selected workspace
+			//loop through the selected workspace	
 			for(ModifyWorkspace workspace : deleteWSList)
 			{
 				wsInternalId = workspace.getId();
@@ -160,7 +160,7 @@ public class DeleteWSController
 			model.getModelMap().put("wsprojectid", projectid);	
 //			model.getModelMap().put("projectid", projectid);
 			
-		}
+		}			
 		return model;
 	}
 	
@@ -179,12 +179,40 @@ public class DeleteWSController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@RequestMapping(value = "auth/workbench/{workspaceId}/deleteSingleWorkspace", method = RequestMethod.POST)
-	public ModelAndView deleteSingleWorkspaceRequest(@PathVariable("workspaceId") String workspaceId,ModelAndView model) throws QuadrigaStorageException, QuadrigaAccessException
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {} )})
+	@RequestMapping(value = "auth/workbench/deleteSingleWorkspace/{workspaceId}", method = RequestMethod.GET)
+	public ModelAndView deleteSingleWorkspaceRequest(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
+			@PathVariable("workspaceId") String workspaceId,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		
+			ModelAndView model;
 			model = new ModelAndView("auth/workbench");
 			modifyWSManger.deleteWorkspace(workspaceId.toString().substring(1));
+			return model;
+	}
+	
+	
+	
+	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
+	@RequestMapping(value = "auth/workbench/{workspaceid}/deleteSingleWorkspaceWithProjectID", method = RequestMethod.POST)
+	public ModelAndView deleteWorkspaceRequest1(
+			@PathVariable("projectid") String projectid, @PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		ModelAndView model;
+		
+		
+		
+		model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
+		
+			
+			//loop through the selected workspace	
+			modifyWSManger.deleteWorkspace(workspaceid.toString().substring(1));
+			
+			//frame the model objects
+			model.getModelMap().put("success", 1);
+			model.getModelMap().put("wsprojectid", projectid);	
+			
 		return model;
 	}
 	
