@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
@@ -625,7 +626,31 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO> implements IListWsDAO {
     public WorkspaceDTO getDTO(String id) {
         return getDTO(WorkspaceDTO.class, id);
     }
-	
-	
+
+
+	/* This method is used to get object of ProjectWorkspaceDTO from workspace id
+	 * 
+	 * @param workspaceId Workspace id
+	 * @return Projet id for workspace
+	 */
+	@Override
+	public String getProjectWorkspaceDTO(String workspaceId)
+			throws QuadrigaStorageException {
+		ProjectWorkspaceDTO projectWorkspaceDTO = null;
+		try {
+			Query query = sessionFactory.getCurrentSession().getNamedQuery(
+					"ProjectWorkspaceDTO.findByWorkspaceid");
+			query.setParameter("workspaceid", workspaceId);
+			projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
+		} catch (HibernateException he) {
+			logger.error("getWorkspaceRejectedNetworkList method :", he);
+			throw new QuadrigaStorageException();
+		}
+		if (projectWorkspaceDTO != null) {
+			return projectWorkspaceDTO.getProjectDTO() != null ? projectWorkspaceDTO
+					.getProjectDTO().getProjectid() : null;
+		}
+		return null;
+	}
 	
 }

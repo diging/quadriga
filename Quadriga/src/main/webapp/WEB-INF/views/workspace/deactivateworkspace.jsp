@@ -112,6 +112,15 @@ $(function() {
 			value='Okay' name="Back"></li>
 	</ul>
           </c:when>
+		  <c:when test="${success == '2'}">
+				<span class="byline">Do you want to deactivate this workspace?</span>
+				<ul>
+				<li><input class="command" type="submit" value='Deactivate' name="deactivatews"></li>
+				<li><input type="button" onClick="submitClick(this.id);"
+						value='Cancel' name="Back"></li>
+				</ul>
+				
+		  </c:when>
 		</c:choose>
 	</form:form>
 </article>

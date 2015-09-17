@@ -451,9 +451,17 @@
 				<c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when>
 			</c:choose> 
 			
-			<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${projectid}">Deactivate</a></li>
+			<div style="text-align: right">
+				<a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}">
+					Deactivate Workspace
+				</a>
+			</div>
 			
+			
+			<%-- <li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${myprojectid}">Deactivate</a></li>
+			 --%>
 			<!-- Display bit streams --> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"

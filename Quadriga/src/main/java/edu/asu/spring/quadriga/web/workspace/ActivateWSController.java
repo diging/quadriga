@@ -59,136 +59,58 @@ public class ActivateWSController {
     }
 
     /**
-     * This calls workspaceManger to list all the workspace associated with a
-     * project to deactivate.
+     * This calls workspaceManger to deactivate the workspace passed using workspace id
      * 
-     * @param model
-     * @param projectid
-     * @return String - URL of the form
-     * @throws QuadrigaStorageException
-     * @author Kiran Kumar Batna
+     * @param principal User for workspace
+     * @param projectid Identifier for project
+     * @param workspaceid Identifier for workspace
+     * @return Model and view object.
+     * @throws QuadrigaStorageException and QuadrigaAccessException
      */
-    @AccessPolicies({
-            @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-                    RoleNames.ROLE_COLLABORATOR_ADMIN,
-                    RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-                    RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
-            @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {}) })
-    @RequestMapping(value = "auth/workbench/{projectid}/deactivateworkspace", method = RequestMethod.GET)
-    public ModelAndView deactivateWorkspaceForm(
-            @PathVariable("projectid") String projectid, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException {
-
-        ModelAndView model = new ModelAndView(
-                "auth/workbench/workspace/deactivateworkspace");
-
-        // retrieve the workspaces associated with the projects
-        List<ModifyWorkspace> deactivateWSList = workspaceFormManager
-                .getActiveWorkspaceList(projectid, principal.getName());
-
-        ModifyWorkspaceForm workspaceForm = workspaceFormFactory
-                .createModifyWorkspaceForm();
-
-        workspaceForm.setWorkspaceList(deactivateWSList);
-
-        model.getModelMap().put("workspaceform", workspaceForm);
-        model.getModelMap().put("wsprojectid", projectid);
-        model.getModelMap().put("success", 0);
-        return model;
-    }
-    
 	@AccessPolicies({
 			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
 					RoleNames.ROLE_COLLABORATOR_ADMIN,
 					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
 					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
 			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {}) })
-	@RequestMapping(value = "auth/workbench/{workspaceid}/deactivatesingleworkspace", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/workbench/{workspaceid}/deactivateworkspace", method = RequestMethod.GET)
 	public ModelAndView deactivateSingleWorkspaceForm(
 			@RequestParam("projectid") String projectid,@PathVariable("workspaceid") String workspaceid, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 
 		ModelAndView model = new ModelAndView(
 				"auth/workbench/workspace/deactivateworkspace");
-
-		// retrieve the workspaces associated with the projects
-		/*List<ModifyWorkspace> deactivateWSList = workspaceFormManager
-				.getActiveWorkspaceList(projectid, principal.getName());
-
-		ModifyWorkspaceForm workspaceForm = workspaceFormFactory
-				.createModifyWorkspaceForm();
-
-		workspaceForm.setWorkspaceList(deactivateWSList);
-
-		model.getModelMap().put("workspaceform", workspaceForm);
 		model.getModelMap().put("wsprojectid", projectid);
-		model.getModelMap().put("success", 0);*/
+		model.getModelMap().put("success", 2);
 		return model;
 	}
+	
+	@AccessPolicies({
+			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
+			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {}) })
+	@RequestMapping(value = "auth/workbench/{workspaceid}/deactivateworkspace", method = RequestMethod.POST)
+	public ModelAndView deactivateWorkspaceForm(
+			@RequestParam("projectid") String projectid,
+			@PathVariable("workspaceid") String workspaceid, Principal principal)
+			throws QuadrigaStorageException, QuadrigaAccessException {
 
-    /**
-     * This calls workspaceManager to archive the workspace submitted.
-     * 
-     * @param projectid
-     * @param req
-     * @param model
-     * @param principal
-     * @return String - URL of the form
-     * @throws QuadrigaStorageException
-     * @author Kiran Kumar Batna
-     * @throws QuadrigaAccessException
-     */
-    @AccessPolicies({
-            @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-                    RoleNames.ROLE_COLLABORATOR_ADMIN,
-                    RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-                    RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
-            @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {}) })
-    @RequestMapping(value = "auth/workbench/{projectid}/deactivateworkspace", method = RequestMethod.POST)
-    public ModelAndView deactivateWorkspace(
-            @Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,
-            BindingResult result, @PathVariable("projectid") String projectid,
-            Principal principal) throws QuadrigaStorageException,
-            QuadrigaAccessException {
-        ModelAndView model = new ModelAndView(
-                "auth/workbench/workspace/deactivateworkspace");
+		ModelAndView model = new ModelAndView(
+				"auth/workbench/workspace/deactivateworkspace");
+		StringBuilder workspaceIdList = new StringBuilder();
 
-        List<ModifyWorkspace> deactivateWSList = new ArrayList<ModifyWorkspace>();
-        StringBuilder workspaceId = new StringBuilder();
+		workspaceIdList.append(",");
+		workspaceIdList.append(workspaceid);
 
-        if (result.hasErrors()) {
-            // retrieve the workspaces associated with the projects
-            deactivateWSList =  workspaceFormManager.getActiveWorkspaceList(
-                    projectid, principal.getName());
+		archiveWSManager.deactivateWorkspace(workspaceIdList.toString()
+				.substring(1), principal.getName());
 
-            workspaceForm.setWorkspaceList(deactivateWSList);
-
-            // frame the model objects
-            model.getModelMap().put("success", 0);
-            model.getModelMap().put("error", 1);
-            model.getModelMap().put("workspaceform", workspaceForm);
-            model.getModelMap().put("wsprojectid", projectid);
-        } else {
-            deactivateWSList = workspaceForm.getWorkspaceList();
-
-            // loop through the selected workspace
-            for (ModifyWorkspace workspace : deactivateWSList) {
-                String wsInternalId = workspace.getId();
-
-                if (wsInternalId != null) {
-                    workspaceId.append(",");
-                    workspaceId.append(wsInternalId);
-                }
-            }
-            archiveWSManager.deactivateWorkspace(workspaceId.toString()
-                    .substring(1), principal.getName());
-
-            // frame the model objects
-            model.getModelMap().put("success", 1);
-            model.getModelMap().put("wsprojectid", projectid);
-        }
-        return model;
-    }
+		model.getModelMap().put("wsprojectid", projectid);
+		model.getModelMap().put("success", 1);
+		return model;
+	}
 
     /**
      * This calls workspaceManger to list the workspace associated with a
