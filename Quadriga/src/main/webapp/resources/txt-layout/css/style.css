@@ -848,6 +848,13 @@
        font-size: 20px;
     }
     
+    li.dt:before {
+       content:'\e032';
+       font-family: 'Glyphicons Halflings';
+       top: 20px;
+       font-size: 20px;
+    }
+    
     li.ws:before
     {
         content:"\e117";
