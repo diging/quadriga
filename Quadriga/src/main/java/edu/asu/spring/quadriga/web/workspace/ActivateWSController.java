@@ -80,6 +80,7 @@ public class ActivateWSController {
 
 		ModelAndView model = new ModelAndView(
 				"auth/workbench/workspace/deactivateworkspace");
+		model.getModelMap().put("workspaceid", workspaceid);
 		model.getModelMap().put("wsprojectid", projectid);
 		model.getModelMap().put("success", 2);
 		return model;
@@ -98,7 +99,7 @@ public class ActivateWSController {
 			throws QuadrigaStorageException, QuadrigaAccessException {
 
 		ModelAndView model = new ModelAndView(
-				"auth/workbench/workspace/deactivateworkspace");
+				"auth/workbench/project");
 		StringBuilder workspaceIdList = new StringBuilder();
 
 		workspaceIdList.append(",");
@@ -108,7 +109,8 @@ public class ActivateWSController {
 				.substring(1), principal.getName());
 
 		model.getModelMap().put("wsprojectid", projectid);
-		model.getModelMap().put("success", 1);
+		model.getModelMap().put("show_success_alert", true);
+		model.getModelMap().put("success_alert_msg", "The workspace is deactivated successfully");
 		return model;
 	}
 
