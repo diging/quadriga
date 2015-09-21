@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -49,7 +51,9 @@ public class ListWSManager implements IListWSManager  {
 
 	@Autowired
 	private IDspaceManager dspaceManager;
-
+	
+	@Autowired 
+    protected IWorkspaceDAO workspaceDao;
 
 
 	/**
@@ -352,6 +356,17 @@ public class ListWSManager implements IListWSManager  {
 
 		return itemData;
 
+	}
+	
+	
+	@Override
+	@Transactional
+	public boolean getDeactiveStatus(String workspaceId) throws QuadrigaStorageException
+	{
+		WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(workspaceId.trim());
+		boolean deactivatedWorkspace = wsDto.getIsdeactivated();
+		
+		return deactivatedWorkspace;
 	}
 
 }
