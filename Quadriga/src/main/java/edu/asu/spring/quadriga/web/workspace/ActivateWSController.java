@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -95,7 +96,7 @@ public class ActivateWSController {
 	@RequestMapping(value = "auth/workbench/{workspaceid}/deactivateworkspace", method = RequestMethod.POST)
 	public ModelAndView deactivateWorkspaceForm(
 			@RequestParam("projectid") String projectid,
-			@PathVariable("workspaceid") String workspaceid, Principal principal)
+			@PathVariable("workspaceid") String workspaceid, Principal principal,RedirectAttributes redirectAttributes)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 
 		ModelAndView model = new ModelAndView(
@@ -107,10 +108,10 @@ public class ActivateWSController {
 
 		archiveWSManager.deactivateWorkspace(workspaceIdList.toString()
 				.substring(1), principal.getName());
-
-		model.getModelMap().put("projectid", projectid);
-		model.getModelMap().put("show_success_alert", true);
-		model.getModelMap().put("success_alert_msg", "The workspace is deactivated successfully");
+		
+		 redirectAttributes.addFlashAttribute("show_success_alert", true);
+	     redirectAttributes.addFlashAttribute("success_alert_msg",
+	                "The workspace is deactivated successfully");
 		return model;
 	}
 
