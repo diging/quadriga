@@ -9,6 +9,7 @@
 	</bean>
 	
 	<bean class="edu.asu.spring.quadriga.domain.impl.QuadrigaRole">
+	    <qualifier value="mainRoles" />
 		<property name="DBid" value="role1"></property>
 		<property name="id" value="ROLE_QUADRIGA_DEACTIVATED"></property>
 		<property name="name" value="Inactive User"></property>
@@ -16,13 +17,15 @@
 	</bean>
 
 	<bean class="edu.asu.spring.quadriga.domain.impl.QuadrigaRole">
-		<property name="DBid" value="role_noaccount"></property>
+		<qualifier value="mainRoles" />
+        <property name="DBid" value="role_noaccount"></property>
 		<property name="id" value="ROLE_QUADRIGA_NOACCOUNT"></property>
 		<property name="name" value="Invalid User"></property>
 		<property name="description" value="No such user found in Quadriga"></property>
 	</bean>
 
 	<bean class="edu.asu.spring.quadriga.domain.impl.QuadrigaRole">
+		<qualifier value="mainRoles" />
 		<property name="DBid" value="role3"></property>
 		<property name="id" value="ROLE_QUADRIGA_USER_ADMIN"></property>
 		<property name="name" value="Quadriga Admin"></property>
@@ -31,6 +34,7 @@
 	</bean>
 
 	<bean class="edu.asu.spring.quadriga.domain.impl.QuadrigaRole">
+		<qualifier value="mainRoles" />
 		<property name="DBid" value="role4"></property>
 		<property name="id" value="ROLE_QUADRIGA_USER_STANDARD"></property>
 		<property name="name" value="Quadriga Standard User"></property>
@@ -39,6 +43,7 @@
 	</bean>
 
 	<bean class="edu.asu.spring.quadriga.domain.impl.QuadrigaRole">
+		<qualifier value="mainRoles" />
 		<property name="DBid" value="role5"></property>
 		<property name="id" value="ROLE_QUADRIGA_USER_COLLABORATOR"></property>
 		<property name="name" value="Quadriga Collaborating User"></property>
@@ -47,6 +52,7 @@
 	</bean>
 
 	<bean class="edu.asu.spring.quadriga.domain.impl.QuadrigaRole">
+		<qualifier value="mainRoles" />
 		<property name="DBid" value="role6"></property>
 		<property name="id" value="ROLE_QUADRIGA_USER_RESTRICTED_USER"></property>
 		<property name="name" value="Quadriga Restricted User"></property>
