@@ -92,7 +92,7 @@
             </div>
             </c:when>
             <c:when test="${show_error_alert}">
-            <div class="alert alert-error">
+            <div class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
                  ${error_alert_msg}
             </div>
