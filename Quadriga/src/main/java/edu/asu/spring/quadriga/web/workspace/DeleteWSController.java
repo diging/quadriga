@@ -51,8 +51,6 @@ public class DeleteWSController {
 			@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm, BindingResult result,
 			@PathVariable("workspaceid") String workspaceid, Principal principal)
 					throws QuadrigaStorageException, QuadrigaAccessException {
-		System.out.println(workspaceid);
-		System.out.println(myprojectid);
 		ModelAndView model;
 		model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
 		modifyWSManger.deleteWorkspace(workspaceid.toString());
