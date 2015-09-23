@@ -59,15 +59,18 @@ public class ActivateWSController {
         binder.setValidator(validator);
     }
 
-    /**
-     * This calls workspaceManger to deactivate the workspace passed using workspace id
-     * 
-     * @param principal User for workspace
-     * @param projectid Identifier for project
-     * @param workspaceid Identifier for workspace
-     * @return Model and view object.
-     * @throws QuadrigaStorageException and QuadrigaAccessException
-     */
+    
+	/**
+	 * This method deactivates the workpace for the project
+	 * 
+	 * @param projectid Project identifier
+	 * @param workspaceid Workspace identifier
+	 * @param principal User for the workspace
+	 * @param redirectAttributes Attributes to be forwarded to another controller
+	 * @return Model containing view
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({
 			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
 					RoleNames.ROLE_COLLABORATOR_ADMIN,
@@ -75,32 +78,14 @@ public class ActivateWSController {
 					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
 			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {}) })
 	@RequestMapping(value = "auth/workbench/{workspaceid}/deactivateworkspace", method = RequestMethod.GET)
-	public ModelAndView deactivateSingleWorkspaceForm(
-			@RequestParam("projectid") String projectid,@PathVariable("workspaceid") String workspaceid, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAccessException {
-
-		ModelAndView model = new ModelAndView(
-				"auth/workbench/workspace/deactivateworkspace");
-		model.getModelMap().put("workspaceid", workspaceid);
-		model.getModelMap().put("wsprojectid", projectid);
-		model.getModelMap().put("success", 2);
-		return model;
-	}
-	
-	@AccessPolicies({
-			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-					RoleNames.ROLE_COLLABORATOR_ADMIN,
-					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
-			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {}) })
-	@RequestMapping(value = "auth/workbench/{workspaceid}/deactivateworkspace", method = RequestMethod.POST)
 	public ModelAndView deactivateWorkspaceForm(
 			@RequestParam("projectid") String projectid,
-			@PathVariable("workspaceid") String workspaceid, Principal principal,RedirectAttributes redirectAttributes)
+			@PathVariable("workspaceid") String workspaceid,
+			Principal principal, RedirectAttributes redirectAttributes)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 
-		ModelAndView model = new ModelAndView(
-				"redirect:/auth/workbench/"+projectid);
+		ModelAndView model = new ModelAndView("redirect:/auth/workbench/"
+				+ projectid);
 		StringBuilder workspaceIdList = new StringBuilder();
 
 		workspaceIdList.append(",");
@@ -108,10 +93,10 @@ public class ActivateWSController {
 
 		archiveWSManager.deactivateWorkspace(workspaceIdList.toString()
 				.substring(1), principal.getName());
-		
-		 redirectAttributes.addFlashAttribute("show_success_alert", true);
-	     redirectAttributes.addFlashAttribute("success_alert_msg",
-	                "The workspace is deactivated successfully");
+
+		redirectAttributes.addFlashAttribute("show_success_alert", true);
+		redirectAttributes.addFlashAttribute("success_alert_msg",
+				"The workspace is deactivated successfully");
 		return model;
 	}
 
