@@ -627,30 +627,4 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO> implements IListWsDAO {
         return getDTO(WorkspaceDTO.class, id);
     }
 
-
-	/* This method is used to get object of ProjectWorkspaceDTO from workspace id
-	 * 
-	 * @param workspaceId Workspace id
-	 * @return Projet id for workspace
-	 */
-	@Override
-	public String getProjectWorkspaceDTO(String workspaceId)
-			throws QuadrigaStorageException {
-		ProjectWorkspaceDTO projectWorkspaceDTO = null;
-		try {
-			Query query = sessionFactory.getCurrentSession().getNamedQuery(
-					"ProjectWorkspaceDTO.findByWorkspaceid");
-			query.setParameter("workspaceid", workspaceId);
-			projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
-		} catch (HibernateException he) {
-			logger.error("getWorkspaceRejectedNetworkList method :", he);
-			throw new QuadrigaStorageException();
-		}
-		if (projectWorkspaceDTO != null) {
-			return projectWorkspaceDTO.getProjectDTO() != null ? projectWorkspaceDTO
-					.getProjectDTO().getProjectid() : null;
-		}
-		return null;
-	}
-	
 }

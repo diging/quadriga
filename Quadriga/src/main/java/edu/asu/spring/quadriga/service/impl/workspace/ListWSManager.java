@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
+import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
@@ -39,9 +39,6 @@ public class ListWSManager implements IListWSManager  {
 	private static final Logger logger = LoggerFactory.getLogger(ListWSManager.class);
 
 	@Autowired
-	private IListWsDAO listWsDao;
-
-	@Autowired
 	private IWorkspaceShallowMapper workspaceShallowMapper;
 
 	@Autowired
@@ -49,6 +46,9 @@ public class ListWSManager implements IListWSManager  {
 
 	@Autowired
 	private IDspaceManager dspaceManager;
+	
+	@Autowired
+	private IProjectWorkspaceDAO projectWorkspaceDao;
 
 
 
@@ -179,21 +179,7 @@ public class ListWSManager implements IListWSManager  {
 		return workspace;
 	}
 
-	/**
-	 * This method gets the project id for the workspace id.
-	 * @param   workspaceId
-	 * @return  Project Id - String object
-	 * @throws  QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public String getProjectIdFromWorkspaceId(String workspaceId) throws QuadrigaStorageException
-	{
-		String projectId = null;
-		projectId = listWsDao.getProjectWorkspaceDTO(workspaceId);
-		return projectId;
-	}
-	
+		
 	/**
 	 * This method get the workspace name for the workspace id.
 	 * @param   workspaceId
@@ -211,7 +197,6 @@ public class ListWSManager implements IListWSManager  {
 		return workspacename;
 	}
 
-	
 	@Override
 	@Transactional
 	public List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceid)
@@ -352,6 +337,12 @@ public class ListWSManager implements IListWSManager  {
 
 		return itemData;
 
+	}
+
+	@Override
+	public String getProjectIdFromWorkspaceId(String workspaceId)
+			throws QuadrigaStorageException {
+		return projectWorkspaceDao.getCorrespondingProjectID(workspaceId);
 	}
 
 }
