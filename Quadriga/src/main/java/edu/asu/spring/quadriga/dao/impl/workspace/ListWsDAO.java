@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
@@ -625,7 +626,5 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO> implements IListWsDAO {
     public WorkspaceDTO getDTO(String id) {
         return getDTO(WorkspaceDTO.class, id);
     }
-	
-	
-	
+
 }
