@@ -16,7 +16,7 @@ public interface IModifyProjectManager {
 			throws QuadrigaStorageException;
 
 	void updateProject(String projID, String projName, String projDesc,
-			String projAccess, String unixName, String userName)
+			String userName)
 			throws QuadrigaStorageException;
 
 	void addNewProject(IProject project, String userName)
