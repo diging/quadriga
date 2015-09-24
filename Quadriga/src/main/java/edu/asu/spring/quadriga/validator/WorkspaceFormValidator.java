@@ -25,25 +25,20 @@ public class WorkspaceFormValidator implements Validator {
 
 	@Override
 	public void validate(Object obj, Errors err) {
-		List<ModifyWorkspace> workspaceList;
-		String internalId;
 		boolean isAllNull = true;
 
 		ModifyWorkspaceForm workspaceForm = (ModifyWorkspaceForm) obj;
-		workspaceList = workspaceForm.getWorkspaceList();
+		List<ModifyWorkspace> workspaceList = workspaceForm.getWorkspaceList();
 
 		if (workspaceList != null) {
 			// validating if any row is selected
 			for (ModifyWorkspace workspace : workspaceList) {
-				internalId = workspace.getId();
+				String internalId = workspace.getId();
 				if (internalId != null) {
 					isAllNull = false;
 				}
 			}
-			// if no row is selected
-			if (isAllNull) {
 				err.reject("workspace_selection.required");
-			}
 		}
 
 	}

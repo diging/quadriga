@@ -53,7 +53,7 @@ public class DeleteWSController {
 					throws QuadrigaStorageException, QuadrigaAccessException {
 		ModelAndView model;
 		model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
-		modifyWSManger.deleteWorkspace(workspaceid.toString());
+		modifyWSManger.deleteWorkspace(workspaceid);
 		model.getModelMap().put("success", 1);
 		model.getModelMap().put("wsprojectid", myprojectid);
 		return model;

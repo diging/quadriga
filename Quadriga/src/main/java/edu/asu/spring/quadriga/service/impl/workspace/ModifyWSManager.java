@@ -83,9 +83,7 @@ public class ModifyWSManager implements IModifyWSManager
 	 */
 	@Override
 	public boolean deleteWorkspace(String wsId) {
-		boolean success = true;
-		success =   workspaceDao.deleteWorkspace(wsId);
-		return success;
+		return workspaceDao.deleteWorkspace(wsId);
 	}
 
 	/**
