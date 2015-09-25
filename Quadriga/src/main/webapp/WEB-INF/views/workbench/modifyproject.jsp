@@ -71,23 +71,13 @@ input {
 						id="description" /></td>
 						<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 			</tr>
-					<tr>
-						<td>Project Public Access:</td>
-						<td><form:select path="projectAccess">
-						     <form:option value="" label="--- Select ---" />
-								<form:options />
-							</form:select>
-						<td><form:errors path="projectAccess" class="ui-state-error-text"></form:errors></td>
-					</tr>
-			<tr>
-				<td>Custom URL:</td>
-				<td><form:input path="unixName" size="60" id="unixName" /></td>
-				<td><form:errors path="unixName" class="ui-state-error-text"></form:errors></td>
-			</tr>
 			<tr>
 				<td>Public URL:
 				    <!--<form:input path="unixName" type="hidden" />-->
 				    <form:input path="projectId" type="hidden" /> 
+				    <form:input path="unixName" id="unixName" type="hidden"/>
+				    <form:input path="projectAccess" id="projectAccess" type="hidden"/>
+				    
 				</td>
 				<td><div id="UnixURL"></div></td>
 			</tr>
