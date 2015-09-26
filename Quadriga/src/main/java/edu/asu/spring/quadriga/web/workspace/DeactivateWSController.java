@@ -60,7 +60,7 @@ public class DeactivateWSController {
 
 		redirectAttributes.addFlashAttribute("show_success_alert", true);
 		redirectAttributes.addFlashAttribute("success_alert_msg",
-				"The workspace is deactivated successfully");
+				"The workspace has been successfully deactivated.");
 		return model;
 	}
 }
