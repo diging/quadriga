@@ -50,13 +50,8 @@ public class DeactivateWSController {
 
 		ModelAndView model = new ModelAndView("redirect:/auth/workbench/"
 				+ projectid);
-		StringBuilder workspaceIdList = new StringBuilder();
 
-		workspaceIdList.append(",");
-		workspaceIdList.append(workspaceid);
-
-		archiveWSManager.deactivateWorkspace(workspaceIdList.toString()
-				.substring(1), principal.getName());
+		archiveWSManager.deactivateWorkspace(workspaceid, principal.getName());
 
 		redirectAttributes.addFlashAttribute("show_success_alert", true);
 		redirectAttributes.addFlashAttribute("success_alert_msg",
