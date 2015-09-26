@@ -38,8 +38,8 @@ public class ProjectWorkspaceDAO extends BaseDAO<ProjectWorkspaceDTO> implements
 			query.setParameter("workspaceid", workspaceId);
 			projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
 		} catch (HibernateException he) {
-			logger.error("getWorkspaceRejectedNetworkList method :", he);
-			throw new QuadrigaStorageException();
+			logger.error("getCorrespondingProjectID method :", he);
+			throw new QuadrigaStorageException(he);
 		}
 		if (projectWorkspaceDTO != null) {
 			return projectWorkspaceDTO.getProjectDTO() != null ? projectWorkspaceDTO
