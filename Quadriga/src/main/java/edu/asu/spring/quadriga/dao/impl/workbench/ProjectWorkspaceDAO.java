@@ -2,8 +2,6 @@ package edu.asu.spring.quadriga.dao.impl.workbench;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,24 +11,25 @@ import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Service
-public class ProjectWorkspaceDAO extends BaseDAO<ProjectWorkspaceDTO> implements IProjectWorkspaceDAO {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ProjectWorkspaceDAO.class);
-    @Override
-    public ProjectWorkspaceDTO getDTO(String id) {
-        return getDTO(ProjectWorkspaceDTO.class, id);
-    }
-    
-    /**
+public class ProjectWorkspaceDAO extends BaseDAO<ProjectWorkspaceDTO> implements
+		IProjectWorkspaceDAO {
+
+	@Override
+	public ProjectWorkspaceDTO getDTO(String id) {
+		return getDTO(ProjectWorkspaceDTO.class, id);
+	}
+
+	/**
 	 * This method gets the project id for the workspace id.
-	 * @param   workspaceId
-	 * @return  Project Id - String object
-	 * @throws  QuadrigaStorageException
+	 * 
+	 * @param workspaceId
+	 * @return Project Id - String object
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
-	public String getCorrespondingProjectID(String workspaceId) throws QuadrigaStorageException
-	{
+	public String getCorrespondingProjectID(String workspaceId)
+			throws QuadrigaStorageException {
 		ProjectWorkspaceDTO projectWorkspaceDTO = null;
 		try {
 			Query query = sessionFactory.getCurrentSession().getNamedQuery(
@@ -38,7 +37,6 @@ public class ProjectWorkspaceDAO extends BaseDAO<ProjectWorkspaceDTO> implements
 			query.setParameter("workspaceid", workspaceId);
 			projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
 		} catch (HibernateException he) {
-			logger.error("getCorrespondingProjectID method :", he);
 			throw new QuadrigaStorageException(he);
 		}
 		if (projectWorkspaceDTO != null) {
