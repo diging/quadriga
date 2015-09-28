@@ -93,6 +93,20 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
 		projectDao.updateDTO(projectDTO);
 	}
 
+	
+	@Override
+	@Transactional
+	public void updateProjectURL(String projID, String projAccess, String unixName, String userName) throws QuadrigaStorageException
+	{
+	    ProjectDTO projectDTO = projectDao.getProjectDTO(projID);
+        projectDTO.setAccessibility(projAccess);
+        projectDTO.setUnixname(unixName);
+        projectDTO.setUpdatedby(userName);
+        projectDTO.setUpdateddate(new Date());
+	    
+        projectDao.updateDTO(projectDTO);
+	}
+	
 	/**
 	 * This method deletes a project into the database.
 	 * 
