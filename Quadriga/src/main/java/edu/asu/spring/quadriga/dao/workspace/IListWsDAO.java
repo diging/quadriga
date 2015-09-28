@@ -167,4 +167,5 @@ public interface IListWsDAO extends IBaseDAO<WorkspaceDTO> {
 
 	List<WorkspaceDTO> listDeactivatedWorkspaceDTO(String projectid,
 			String username) throws QuadrigaStorageException;
+
 }
