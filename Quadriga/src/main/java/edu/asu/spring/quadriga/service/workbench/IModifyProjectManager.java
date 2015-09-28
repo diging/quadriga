@@ -7,19 +7,18 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IModifyProjectManager {
 
-	public abstract void deleteProjectRequest(List<String> projectIdList)
-			throws QuadrigaStorageException;
+	public abstract void deleteProjectRequest(List<String> projectIdList) throws QuadrigaStorageException;
 
 	public abstract void assignEditorRole(String projectId, String owner) throws QuadrigaStorageException;
 
-	public abstract void removeEditorRole(String projectId, String owner)
+	public abstract void removeEditorRole(String projectId, String owner) throws QuadrigaStorageException;
+
+	void updateProject(String projID, String projName, String projDesc, String userName)
 			throws QuadrigaStorageException;
 
-	void updateProject(String projID, String projName, String projDesc,
-			String projAccess, String unixName, String userName)
+	void updateProjectURL(String projID, String projAccess, String unixName, String userName)
 			throws QuadrigaStorageException;
 
-	void addNewProject(IProject project, String userName)
-			throws QuadrigaStorageException;
+	void addNewProject(IProject project, String userName) throws QuadrigaStorageException;
 
 }
