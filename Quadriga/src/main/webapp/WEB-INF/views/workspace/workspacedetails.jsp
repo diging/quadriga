@@ -3,8 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
-
-
 <c:choose>
 	<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 		<script>
@@ -304,7 +302,9 @@
 					<font color="red"> <spring:message
 							code="workspace.delete.owner.editor.assigned" /></font>
 				</c:when>
-			</c:choose> <br /> <c:choose>
+			</c:choose> <br /> 
+			
+			<c:choose>
 				<c:when test="${empty dspaceKeys}">
 					<!-- Dspace Login popup -->
 					<script>
@@ -338,6 +338,9 @@
 				</c:otherwise>
 			</c:choose> <a href="#login-box" class="login-window"><input type="submit"
 				value="Add text from Dspace"></a> <!-- DSpace Login credentials -->
+				
+				
+		</a></li>
 			<c:choose>
 				<c:when test="${empty dspaceKeys}">
 					<!-- Allow the user to change the dspace login credentials -->
@@ -444,7 +447,41 @@
 			</c:choose> <br>
 		<br> <c:choose>
 				<c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when>
-			</c:choose> <!-- Display bit streams --> <c:choose>
+			</c:choose> 
+			<script>
+				function confirmWorkspaceDeactivation() {
+					// Define the Dialog and its properties.
+					$("#dialog-deactivate-confirm")
+					.dialog(
+							{
+								resizable : false,
+								modal : true,
+								title : "Do you want to deactivate this workspace?",
+								height : 140,
+								width : 500,
+								buttons : {
+									"Deactivate" : function() {
+										$(this).dialog('close');
+										location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
+										return false;
+									},
+									"Cancel" : function() {
+										$(this).dialog('close');
+										return false;
+									}
+								}
+							});
+				}
+			</script>
+			<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
+				<a href="#" onclick="return confirmWorkspaceDeactivation();"> 
+					Deactivate Workspace
+				</a>
+			
+			 <%-- <li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${myprojectid}">Deactivate</a></li>
+			 --%>
+			<!-- Display bit streams --> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
