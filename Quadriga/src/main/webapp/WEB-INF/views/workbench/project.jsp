@@ -141,8 +141,40 @@
 				
 			</div>
 			<div align="right">
-                <c:if test="${owner=='1'}"><span class="glyphicon glyphicon-ban-circle"></span> <a href="">Delete Project</a></c:if>
-            </div>
+				<c:if test="${owner=='1'}">
+					
+
+					<span class="glyphicon glyphicon-ban-circle"></span>
+					<a href="#" onclick="return confirmProjectDeletion()">Delete
+						Project</a>
+				</c:if>
+			</div>
+			<script>
+				function confirmProjectDeletion() {
+					// Define the Dialog and its properties.
+					$("#dialog-delete-project-confirm")
+							.dialog(
+									{
+										resizable : false,
+										modal : true,
+										title : "Do you want to delete this project?",
+										height : 140,
+										width : 500,
+										buttons : {
+											"Delete" : function() {
+												$(this).dialog('close');
+												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteproject/${project.projectId}';
+												return false;
+											},
+											"Cancel" : function() {
+												$(this).dialog('close');
+												return false;
+											}
+										}
+									});
+				}
+			</script>
+			<div id="dialog-delete-project-confirm" title="Confirm Delete?"></div>
 		</td>
 		
 		<!-- Display collaborators -->
