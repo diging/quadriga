@@ -55,7 +55,6 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceDAO
     @Transactional
     public boolean deleteWorkspace(String wsId) {
         WorkspaceDTO workspace = getWorkspaceDTO(wsId);
-        
         if (workspace == null) {
             logger.error("Workspace does not exist.");
             return false;
