@@ -82,13 +82,8 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @author  Julia Damerow, kiranbatna
 	 */
 	@Override
-	public boolean deleteWorkspace(String workspaceIdList) {
-		List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
-		boolean success = true;
-		for (String wsId : wsIds) {
-		  success = success && workspaceDao.deleteWorkspace(wsId);
-		}
-		return success;
+	public boolean deleteWorkspace(String wsId) {
+		return workspaceDao.deleteWorkspace(wsId);
 	}
 
 	/**
