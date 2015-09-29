@@ -82,10 +82,8 @@ public class ProjectValidator implements Validator {
 	 * @author kiran batna
 	 */
 	public void validateUnixName(String unixName, String projectId, Errors err) throws QuadrigaStorageException {
-		boolean isDuplicate;
-
 		// Verifying if the Unix name already exists
-		isDuplicate = projectCheckSecurityManager.isUnixnameInUse(unixName, projectId);
+		boolean isDuplicate = projectCheckSecurityManager.isUnixnameInUse(unixName, projectId);
 		if (isDuplicate) {
 			err.rejectValue("unixName", "projectUnixName.unique");
 		}
