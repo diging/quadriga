@@ -383,14 +383,19 @@
 
 						<div id="dialog-confirm" title="Confirm ?"></div>
 
+
+						<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
+						<a href="#" onclick="return confirmWorkspaceDeactivation();">
+							Deactivate Workspace</a>
+
+
 						<c:if test="${isDeactivated == true}">
-							<a href="#" onclick="return funConfirmDeletion();"> Delete
-								Workspace</a>
+							<a href="#" disabled
+								onclick="return funConfirmDeletion();">&nbsp;&nbsp;Delete Workspace</a>
 						</c:if>
 						<c:if test="${isDeactivated == false }">
-							<a href="#" onclick="return false;"
-								title="Only Deactivated Workspace Can be deleted"> Delete
-								Workspace</a>
+							 <font color="#CCCCCC" title="Only deactivated workspaces can be deleted.">&nbsp;&nbsp;Delete
+								Workspace</font>
 
 						</c:if>
 
@@ -519,12 +524,7 @@
 								}
 							});
 				}
-			</script>
-			<div id="dialog-deactivate-confirm" title="Confirm ?"></div> <a
-			href="#" onclick="return confirmWorkspaceDeactivation();">
-				Deactivate Workspace </a> <%-- <li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${myprojectid}">Deactivate</a></li>
-			 --%> <!-- Display bit streams --> <c:choose>
+			</script> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
