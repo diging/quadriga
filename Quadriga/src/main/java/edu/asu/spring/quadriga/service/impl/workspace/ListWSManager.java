@@ -86,9 +86,7 @@ public class ListWSManager implements IListWSManager {
     @Override
     @Transactional
     public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid, String user) throws QuadrigaStorageException {
-        List<IWorkSpace> workspaceList;
-        workspaceList = workspaceShallowMapper.listWorkspaceOfCollaborator(projectid, user);
-        return workspaceList;
+        return workspaceShallowMapper.listWorkspaceOfCollaborator(projectid, user);
     }
 
     /**
@@ -110,9 +108,7 @@ public class ListWSManager implements IListWSManager {
     @Transactional
     public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid, String user)
             throws QuadrigaStorageException {
-        List<IWorkSpace> collaboratorWorkspaceList;
-        collaboratorWorkspaceList = workspaceShallowMapper.listActiveWorkspaceOfCollaborator(projectid, user);
-        return collaboratorWorkspaceList;
+        return workspaceShallowMapper.listActiveWorkspaceOfCollaborator(projectid, user);
     }
 
     /**
