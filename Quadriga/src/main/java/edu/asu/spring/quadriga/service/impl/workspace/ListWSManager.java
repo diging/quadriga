@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
-import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
-
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
@@ -123,9 +121,7 @@ public class ListWSManager implements IListWSManager {
     @Override
     @Transactional
     public List<IWorkSpace> listArchivedWorkspace(String projectid, String user) throws QuadrigaStorageException {
-        List<IWorkSpace> workspaceList;
-        workspaceList = workspaceShallowMapper.listArchivedWorkspace(projectid, user);
-        return workspaceList;
+        return workspaceShallowMapper.listArchivedWorkspace(projectid, user);
     }
 
     /**
@@ -141,9 +137,7 @@ public class ListWSManager implements IListWSManager {
     @Override
     @Transactional
     public List<IWorkSpace> listDeactivatedWorkspace(String projectid, String user) throws QuadrigaStorageException {
-        List<IWorkSpace> workspaceList;
-        workspaceList = workspaceShallowMapper.listDeactivatedWorkspace(projectid, user);
-        return workspaceList;
+        return workspaceShallowMapper.listDeactivatedWorkspace(projectid, user);
     }
 
     /**
@@ -159,8 +153,7 @@ public class ListWSManager implements IListWSManager {
     @Transactional
     public IWorkSpace getWorkspaceDetails(String workspaceId, String username)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId, username);
-        return workspace;
+        return workspaceDeepMapper.getWorkSpaceDetails(workspaceId, username);
     }
 
     /**
@@ -175,8 +168,7 @@ public class ListWSManager implements IListWSManager {
     @Override
     @Transactional
     public IWorkSpace getWorkspaceDetails(String workspaceId) throws QuadrigaStorageException, QuadrigaAccessException {
-        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
-        return workspace;
+        return workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
     }
 
     /**
@@ -191,9 +183,7 @@ public class ListWSManager implements IListWSManager {
     @Override
     @Transactional
     public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException {
-        String workspacename;
-        workspacename = workspaceDeepMapper.getWorkSpaceDetails(workspaceId).getWorkspaceName();
-        return workspacename;
+        return workspaceDeepMapper.getWorkSpaceDetails(workspaceId).getWorkspaceName();
     }
 
     @Override
@@ -214,35 +204,24 @@ public class ListWSManager implements IListWSManager {
     public List<IWorkspaceNetwork> getWorkspaceRejectedNetworkList(String workspaceid) throws QuadrigaStorageException {
 
         IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
-        List<IWorkspaceNetwork> workspaceNetworkList = null;
-        if (workspace != null) {
-            workspaceNetworkList = workspace.getWorkspaceNetworks();
+        if (workspace == null) {
+            return null;
         }
-        List<Integer> removeList = null;
-        if (workspaceNetworkList != null) {
-            for (int i = 0; i < workspaceNetworkList.size(); i++) {
-                IWorkspaceNetwork workspaceNetwork = workspaceNetworkList.get(i);
-                INetwork network = workspaceNetwork.getNetwork();
-                if (network != null) {
-                    if (network.getStatus().equals(INetworkStatus.REJECTED)) {
-                        // do nothing
-                    } else {
-                        if (removeList == null) {
-                            removeList = new ArrayList<Integer>();
-                        }
-                        removeList.add(i);
-                    }
-                } else {
-                    if (removeList == null) {
-                        removeList = new ArrayList<Integer>();
-                    }
-                    removeList.add(i);
-                }
-            }
+        List<IWorkspaceNetwork> workspaceNetworkList = workspace.getWorkspaceNetworks();
+        if (workspaceNetworkList == null) {
+            return null;
+        }
 
-            for (Integer i : removeList) {
-                workspaceNetworkList.remove(i);
+        List<IWorkspaceNetwork> removeList = new ArrayList<IWorkspaceNetwork>();
+        for (IWorkspaceNetwork workspaceNetwork : workspaceNetworkList) {
+            INetwork network = workspaceNetwork.getNetwork();
+            if (network == null || !network.getStatus().equals(INetworkStatus.REJECTED)) {
+                removeList.add(workspaceNetwork);
             }
+        }
+
+        for (IWorkspaceNetwork workspaceNetwork : removeList) {
+            workspaceNetworkList.remove(workspaceNetwork);
         }
 
         return workspaceNetworkList;
@@ -343,8 +322,7 @@ public class ListWSManager implements IListWSManager {
         WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(workspaceId.trim());
         if (wsDto != null)
             return wsDto.getIsdeactivated();
-        else
-            return false;
+        return false;
     }
 
 }
