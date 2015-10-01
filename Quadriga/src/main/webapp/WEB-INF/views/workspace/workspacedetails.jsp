@@ -302,9 +302,7 @@
 					<font color="red"> <spring:message
 							code="workspace.delete.owner.editor.assigned" /></font>
 				</c:when>
-			</c:choose> <br /> 
-			
-			<c:choose>
+			</c:choose> <br /> <c:choose>
 				<c:when test="${empty dspaceKeys}">
 					<!-- Dspace Login popup -->
 					<script>
@@ -338,10 +336,10 @@
 				</c:otherwise>
 			</c:choose> <a href="#login-box" class="login-window"><input type="submit"
 				value="Add text from Dspace"></a> <!-- DSpace Login credentials -->
-				
-				
-		</a></li>
-			<c:choose>
+
+
+			</a>
+			</li> <c:choose>
 				<c:when test="${empty dspaceKeys}">
 					<!-- Allow the user to change the dspace login credentials -->
 					<a href="#change-login" class="change-login">Change Dspace
@@ -349,6 +347,63 @@
 							<c:when test="${not empty wrongDspaceLogin}">*</c:when>
 						</c:choose>
 					</a>
+
+
+
+					<div style="text-align: right">
+
+						<script>
+							function funConfirmDeletion() {
+
+								// Define the Dialog and its properties.
+								$("#dialog-confirm")
+										.dialog(
+												{
+													resizable : false,
+													modal : true,
+													title : "Confirm Delete",
+													height : 140,
+													width : 400,
+													buttons : {
+														"Delete" : function() {
+															$(this).dialog(
+																	'close');
+															location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteSingleWorkspace/${workspaceid}?projectId=${myprojectid}';
+															return false;
+														},
+														"Cancel" : function() {
+															$(this).dialog(
+																	'close');
+															return false;
+														}
+													}
+												});
+							}
+						</script>
+
+						<div id="dialog-confirm" title="Confirm ?"></div>
+
+
+						<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
+						<a href="#" onclick="return confirmWorkspaceDeactivation();">
+							Deactivate Workspace</a>&nbsp;&nbsp;
+
+
+						<c:if test="${isDeactivated == true}">
+							<a href="#" onclick="return funConfirmDeletion();">Delete
+								Workspace</a>
+						</c:if>
+						<c:if test="${isDeactivated == false }">
+							<font color="#CCCCCC"
+								title="Only deactivated workspaces can be deleted.">Delete
+								Workspace</font>
+
+						</c:if>
+
+
+					</div>
+
+
 					<div id="login-box" class="login-popup"
 						title="Dspace Authentication">
 						<form id="dspaceLogin" method="post" class="signin">
@@ -444,44 +499,33 @@
 										})
 					</script>
 				</c:when>
-			</c:choose> <br>
-		<br> <c:choose>
+			</c:choose> <br> <br> <c:choose>
 				<c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when>
-			</c:choose> 
-			<script>
+			</c:choose> <script>
 				function confirmWorkspaceDeactivation() {
 					// Define the Dialog and its properties.
 					$("#dialog-deactivate-confirm")
-					.dialog(
-							{
-								resizable : false,
-								modal : true,
-								title : "Do you want to deactivate this workspace?",
-								height : 140,
-								width : 500,
-								buttons : {
-									"Deactivate" : function() {
-										$(this).dialog('close');
-										location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
-										return false;
-									},
-									"Cancel" : function() {
-										$(this).dialog('close');
-										return false;
-									}
-								}
-							});
+							.dialog(
+									{
+										resizable : false,
+										modal : true,
+										title : "Do you want to deactivate this workspace?",
+										height : 140,
+										width : 500,
+										buttons : {
+											"Deactivate" : function() {
+												$(this).dialog('close');
+												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
+												return false;
+											},
+											"Cancel" : function() {
+												$(this).dialog('close');
+												return false;
+											}
+										}
+									});
 				}
-			</script>
-			<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
-				<a href="#" onclick="return confirmWorkspaceDeactivation();"> 
-					Deactivate Workspace
-				</a>
-			
-			 <%-- <li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${myprojectid}">Deactivate</a></li>
-			 --%>
-			<!-- Display bit streams --> <c:choose>
+			</script> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
@@ -591,9 +635,7 @@
 		<td style="width: 200px">
 			<h3 class="major">
 				<span>Collaborators</span>
-			</h3>
-			<c:if
-				test="${not empty workspacedetails.workspaceCollaborators}">
+			</h3> <c:if test="${not empty workspacedetails.workspaceCollaborators}">
 				<ul class="collaborators">
 					<c:forEach var="workspaceCollaborator"
 						items="${workspacedetails.workspaceCollaborators}">
@@ -602,9 +644,7 @@
 						</li>
 					</c:forEach>
 				</ul>
-			</c:if>
-			<c:if
-				test="${empty workspacedetails.workspaceCollaborators}">
+			</c:if> <c:if test="${empty workspacedetails.workspaceCollaborators}">
 				There are no collaborators.
 			</c:if>
 
@@ -623,7 +663,8 @@
 						style="vertical-align: middle; padding-bottom: 2px;"> <a
 						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/updatecollaborators">Update</a></li>
 				</ul>
-			</div></td>
+			</div>
+		</td>
 	</tr>
 </table>
 
