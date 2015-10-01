@@ -41,314 +41,314 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 @Service
 public class ListWSManager implements IListWSManager {
 
-	private static final Logger logger = LoggerFactory.getLogger(ListWSManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(ListWSManager.class);
 
-	@Autowired
-	private IWorkspaceShallowMapper workspaceShallowMapper;
+    @Autowired
+    private IWorkspaceShallowMapper workspaceShallowMapper;
 
-	@Autowired
-	private IWorkspaceDeepMapper workspaceDeepMapper;
+    @Autowired
+    private IWorkspaceDeepMapper workspaceDeepMapper;
 
-	@Autowired
-	private IDspaceManager dspaceManager;
+    @Autowired
+    private IDspaceManager dspaceManager;
 
-	@Autowired
-	private IProjectWorkspaceDAO projectWorkspaceDao;
+    @Autowired
+    private IProjectWorkspaceDAO projectWorkspaceDao;
 
-	@Autowired
-	protected IWorkspaceDAO workspaceDao;
+    @Autowired
+    protected IWorkspaceDAO workspaceDao;
 
-	/**
-	 * This will list all the workspaces associated with the project.
-	 * 
-	 * @param projectid
-	 * @return List<IWorkSpace> - list of workspaces associated with the
-	 *         project.
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	@Override
-	@Transactional
-	public List<IWorkSpace> listWorkspace(String projectid, String user) throws QuadrigaStorageException {
-		return workspaceShallowMapper.getWorkSpaceList(projectid, user);
-	}
+    /**
+     * This will list all the workspaces associated with the project.
+     * 
+     * @param projectid
+     * @return List<IWorkSpace> - list of workspaces associated with the
+     *         project.
+     * @throws QuadrigaStorageException
+     * @author Kiran Kumar Batna
+     */
+    @Override
+    @Transactional
+    public List<IWorkSpace> listWorkspace(String projectid, String user) throws QuadrigaStorageException {
+        return workspaceShallowMapper.getWorkSpaceList(projectid, user);
+    }
 
-	/**
-	 * This method retrieves all the workspace associated with the given having
-	 * the user as a collaborator.
-	 * 
-	 * @param projectid
-	 * @return List<IWorkSpace> - list of workspaces associated with the
-	 *         project.
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	@Override
-	@Transactional
-	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid, String user) throws QuadrigaStorageException {
-		List<IWorkSpace> workspaceList;
-		workspaceList = workspaceShallowMapper.listWorkspaceOfCollaborator(projectid, user);
-		return workspaceList;
-	}
+    /**
+     * This method retrieves all the workspace associated with the given having
+     * the user as a collaborator.
+     * 
+     * @param projectid
+     * @return List<IWorkSpace> - list of workspaces associated with the
+     *         project.
+     * @throws QuadrigaStorageException
+     * @author Kiran Kumar Batna
+     */
+    @Override
+    @Transactional
+    public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid, String user) throws QuadrigaStorageException {
+        List<IWorkSpace> workspaceList;
+        workspaceList = workspaceShallowMapper.listWorkspaceOfCollaborator(projectid, user);
+        return workspaceList;
+    }
 
-	/**
-	 * This will list all the active workspaces associated with the project.
-	 * 
-	 * @param projectid
-	 * @return List<IWorkSpace> - list of active workspaces associated with the
-	 *         project.
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	@Override
-	@Transactional
-	public List<IWorkSpace> listActiveWorkspace(String projectid, String user) throws QuadrigaStorageException {
-		return workspaceShallowMapper.listActiveWorkspacesOfOwner(projectid, user);
-	}
+    /**
+     * This will list all the active workspaces associated with the project.
+     * 
+     * @param projectid
+     * @return List<IWorkSpace> - list of active workspaces associated with the
+     *         project.
+     * @throws QuadrigaStorageException
+     * @author Kiran Kumar Batna
+     */
+    @Override
+    @Transactional
+    public List<IWorkSpace> listActiveWorkspace(String projectid, String user) throws QuadrigaStorageException {
+        return workspaceShallowMapper.listActiveWorkspacesOfOwner(projectid, user);
+    }
 
-	@Override
-	@Transactional
-	public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid, String user)
-			throws QuadrigaStorageException {
-		List<IWorkSpace> collaboratorWorkspaceList;
-		collaboratorWorkspaceList = workspaceShallowMapper.listActiveWorkspaceOfCollaborator(projectid, user);
-		return collaboratorWorkspaceList;
-	}
+    @Override
+    @Transactional
+    public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid, String user)
+            throws QuadrigaStorageException {
+        List<IWorkSpace> collaboratorWorkspaceList;
+        collaboratorWorkspaceList = workspaceShallowMapper.listActiveWorkspaceOfCollaborator(projectid, user);
+        return collaboratorWorkspaceList;
+    }
 
-	/**
-	 * This will list all the archived workspaces associated with the project.
-	 * 
-	 * @param projectid
-	 * @return List<IWorkSpace> - list of archived workspaces associated with
-	 *         the project.
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	@Override
-	@Transactional
-	public List<IWorkSpace> listArchivedWorkspace(String projectid, String user) throws QuadrigaStorageException {
-		List<IWorkSpace> workspaceList;
-		workspaceList = workspaceShallowMapper.listArchivedWorkspace(projectid, user);
-		return workspaceList;
-	}
+    /**
+     * This will list all the archived workspaces associated with the project.
+     * 
+     * @param projectid
+     * @return List<IWorkSpace> - list of archived workspaces associated with
+     *         the project.
+     * @throws QuadrigaStorageException
+     * @author Kiran Kumar Batna
+     */
+    @Override
+    @Transactional
+    public List<IWorkSpace> listArchivedWorkspace(String projectid, String user) throws QuadrigaStorageException {
+        List<IWorkSpace> workspaceList;
+        workspaceList = workspaceShallowMapper.listArchivedWorkspace(projectid, user);
+        return workspaceList;
+    }
 
-	/**
-	 * This will list all the deactivated workspaces associated with the
-	 * project.
-	 * 
-	 * @param projectid
-	 * @return List<IWorkSpace> - list of archived workspaces associated with
-	 *         the project.
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	@Override
-	@Transactional
-	public List<IWorkSpace> listDeactivatedWorkspace(String projectid, String user) throws QuadrigaStorageException {
-		List<IWorkSpace> workspaceList;
-		workspaceList = workspaceShallowMapper.listDeactivatedWorkspace(projectid, user);
-		return workspaceList;
-	}
+    /**
+     * This will list all the deactivated workspaces associated with the
+     * project.
+     * 
+     * @param projectid
+     * @return List<IWorkSpace> - list of archived workspaces associated with
+     *         the project.
+     * @throws QuadrigaStorageException
+     * @author Kiran Kumar Batna
+     */
+    @Override
+    @Transactional
+    public List<IWorkSpace> listDeactivatedWorkspace(String projectid, String user) throws QuadrigaStorageException {
+        List<IWorkSpace> workspaceList;
+        workspaceList = workspaceShallowMapper.listDeactivatedWorkspace(projectid, user);
+        return workspaceList;
+    }
 
-	/**
-	 * This method display the workspace details for the workspace submitted.
-	 * 
-	 * @param workspaceId
-	 * @return IWorkSpace - workspace object
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 * @throws QuadrigaAccessException
-	 */
-	@Override
-	@Transactional
-	public IWorkSpace getWorkspaceDetails(String workspaceId, String username)
-			throws QuadrigaStorageException, QuadrigaAccessException {
-		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId, username);
-		return workspace;
-	}
+    /**
+     * This method display the workspace details for the workspace submitted.
+     * 
+     * @param workspaceId
+     * @return IWorkSpace - workspace object
+     * @throws QuadrigaStorageException
+     * @author Kiran Kumar Batna
+     * @throws QuadrigaAccessException
+     */
+    @Override
+    @Transactional
+    public IWorkSpace getWorkspaceDetails(String workspaceId, String username)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId, username);
+        return workspace;
+    }
 
-	/**
-	 * This method display the workspace details for the workspace submitted.
-	 * 
-	 * @param workspaceId
-	 * @return IWorkSpace - workspace object
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 * @throws QuadrigaAccessException
-	 */
-	@Override
-	@Transactional
-	public IWorkSpace getWorkspaceDetails(String workspaceId) throws QuadrigaStorageException, QuadrigaAccessException {
-		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
-		return workspace;
-	}
+    /**
+     * This method display the workspace details for the workspace submitted.
+     * 
+     * @param workspaceId
+     * @return IWorkSpace - workspace object
+     * @throws QuadrigaStorageException
+     * @author Kiran Kumar Batna
+     * @throws QuadrigaAccessException
+     */
+    @Override
+    @Transactional
+    public IWorkSpace getWorkspaceDetails(String workspaceId) throws QuadrigaStorageException, QuadrigaAccessException {
+        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
+        return workspace;
+    }
 
-	/**
-	 * This method get the workspace name for the workspace id.
-	 * 
-	 * @param workspaceId
-	 * @return workspacename - String object
-	 * @throws QuadrigaStorageException
-	 * @author Lohith Dwaraka
-	 * @throws QuadrigaAccessException
-	 */
-	@Override
-	@Transactional
-	public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException {
-		String workspacename;
-		workspacename = workspaceDeepMapper.getWorkSpaceDetails(workspaceId).getWorkspaceName();
-		return workspacename;
-	}
+    /**
+     * This method get the workspace name for the workspace id.
+     * 
+     * @param workspaceId
+     * @return workspacename - String object
+     * @throws QuadrigaStorageException
+     * @author Lohith Dwaraka
+     * @throws QuadrigaAccessException
+     */
+    @Override
+    @Transactional
+    public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException {
+        String workspacename;
+        workspacename = workspaceDeepMapper.getWorkSpaceDetails(workspaceId).getWorkspaceName();
+        return workspacename;
+    }
 
-	@Override
-	@Transactional
-	public List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceid) throws QuadrigaStorageException {
+    @Override
+    @Transactional
+    public List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceid) throws QuadrigaStorageException {
 
-		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
-		List<IWorkspaceNetwork> workspaceNetworkList = null;
-		if (workspace != null) {
-			workspaceNetworkList = workspace.getWorkspaceNetworks();
-		}
+        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+        List<IWorkspaceNetwork> workspaceNetworkList = null;
+        if (workspace != null) {
+            workspaceNetworkList = workspace.getWorkspaceNetworks();
+        }
 
-		return workspaceNetworkList;
-	}
+        return workspaceNetworkList;
+    }
 
-	@Override
-	@Transactional
-	public List<IWorkspaceNetwork> getWorkspaceRejectedNetworkList(String workspaceid) throws QuadrigaStorageException {
+    @Override
+    @Transactional
+    public List<IWorkspaceNetwork> getWorkspaceRejectedNetworkList(String workspaceid) throws QuadrigaStorageException {
 
-		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
-		List<IWorkspaceNetwork> workspaceNetworkList = null;
-		if (workspace != null) {
-			workspaceNetworkList = workspace.getWorkspaceNetworks();
-		}
-		List<Integer> removeList = null;
-		if (workspaceNetworkList != null) {
-			for (int i = 0; i < workspaceNetworkList.size(); i++) {
-				IWorkspaceNetwork workspaceNetwork = workspaceNetworkList.get(i);
-				INetwork network = workspaceNetwork.getNetwork();
-				if (network != null) {
-					if (network.getStatus().equals(INetworkStatus.REJECTED)) {
-						// do nothing
-					} else {
-						if (removeList == null) {
-							removeList = new ArrayList<Integer>();
-						}
-						removeList.add(i);
-					}
-				} else {
-					if (removeList == null) {
-						removeList = new ArrayList<Integer>();
-					}
-					removeList.add(i);
-				}
-			}
+        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+        List<IWorkspaceNetwork> workspaceNetworkList = null;
+        if (workspace != null) {
+            workspaceNetworkList = workspace.getWorkspaceNetworks();
+        }
+        List<Integer> removeList = null;
+        if (workspaceNetworkList != null) {
+            for (int i = 0; i < workspaceNetworkList.size(); i++) {
+                IWorkspaceNetwork workspaceNetwork = workspaceNetworkList.get(i);
+                INetwork network = workspaceNetwork.getNetwork();
+                if (network != null) {
+                    if (network.getStatus().equals(INetworkStatus.REJECTED)) {
+                        // do nothing
+                    } else {
+                        if (removeList == null) {
+                            removeList = new ArrayList<Integer>();
+                        }
+                        removeList.add(i);
+                    }
+                } else {
+                    if (removeList == null) {
+                        removeList = new ArrayList<Integer>();
+                    }
+                    removeList.add(i);
+                }
+            }
 
-			for (Integer i : removeList) {
-				workspaceNetworkList.remove(i);
-			}
-		}
+            for (Integer i : removeList) {
+                workspaceNetworkList.remove(i);
+            }
+        }
 
-		return workspaceNetworkList;
-	}
+        return workspaceNetworkList;
+    }
 
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 */
-	@Override
-	@Transactional
-	public List<IWorkspaceNetwork> getWorkspaceApprovedNetworkList(String workspaceid) throws QuadrigaStorageException {
-		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
-		List<IWorkspaceNetwork> workspaceNetworkList = null;
-		if (workspace != null) {
-			workspaceNetworkList = workspace.getWorkspaceNetworks();
-		}
+    /**
+     * 
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    @Transactional
+    public List<IWorkspaceNetwork> getWorkspaceApprovedNetworkList(String workspaceid) throws QuadrigaStorageException {
+        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+        List<IWorkspaceNetwork> workspaceNetworkList = null;
+        if (workspace != null) {
+            workspaceNetworkList = workspace.getWorkspaceNetworks();
+        }
 
-		List<Integer> removeList = null;
-		if (workspaceNetworkList != null) {
-			for (int i = 0; i < workspaceNetworkList.size(); i++) {
-				IWorkspaceNetwork workspaceNetwork = workspaceNetworkList.get(i);
-				INetwork network = workspaceNetwork.getNetwork();
-				if (network != null) {
-					if (network.getStatus().equals(INetworkStatus.APPROVED)) {
-						// do nothing
-					} else {
-						if (removeList == null) {
-							removeList = new ArrayList<Integer>();
-						}
-						removeList.add(i);
-					}
-				} else {
-					if (removeList == null) {
-						removeList = new ArrayList<Integer>();
-					}
-					removeList.add(i);
-				}
-			}
+        List<Integer> removeList = null;
+        if (workspaceNetworkList != null) {
+            for (int i = 0; i < workspaceNetworkList.size(); i++) {
+                IWorkspaceNetwork workspaceNetwork = workspaceNetworkList.get(i);
+                INetwork network = workspaceNetwork.getNetwork();
+                if (network != null) {
+                    if (network.getStatus().equals(INetworkStatus.APPROVED)) {
+                        // do nothing
+                    } else {
+                        if (removeList == null) {
+                            removeList = new ArrayList<Integer>();
+                        }
+                        removeList.add(i);
+                    }
+                } else {
+                    if (removeList == null) {
+                        removeList = new ArrayList<Integer>();
+                    }
+                    removeList.add(i);
+                }
+            }
 
-			for (Integer i : removeList) {
-				workspaceNetworkList.remove(i);
-			}
-		}
-		return workspaceNetworkList;
-	}
+            for (Integer i : removeList) {
+                workspaceNetworkList.remove(i);
+            }
+        }
+        return workspaceNetworkList;
+    }
 
-	@Override
-	public String getItemMetadataAsJson(String fileid, String dspaceUsername, String dspacePassword,
-			IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException, JSONException {
+    @Override
+    public String getItemMetadataAsJson(String fileid, String dspaceUsername, String dspacePassword,
+            IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException, JSONException {
 
-		IDspaceMetadataItemEntity metaData = dspaceManager.getItemMetadata(fileid, dspaceUsername, dspacePassword,
-				dspaceKeys);
+        IDspaceMetadataItemEntity metaData = dspaceManager.getItemMetadata(fileid, dspaceUsername, dspacePassword,
+                dspaceKeys);
 
-		logger.info(metaData.getName() + metaData.getLastModifiedDate() + metaData.getSubmitter().getFullname());
+        logger.info(metaData.getName() + metaData.getLastModifiedDate() + metaData.getSubmitter().getFullname());
 
-		String itemData = "";
-		JSONArray ja = new JSONArray();
-		JSONObject ja1 = new JSONObject();
-		JSONObject j = new JSONObject();
+        String itemData = "";
+        JSONArray ja = new JSONArray();
+        JSONObject ja1 = new JSONObject();
+        JSONObject j = new JSONObject();
 
-		if (metaData.getName() == null) {
-			j.put("filename", "");
-		} else {
-			j.put("filename", metaData.getName());
-		}
+        if (metaData.getName() == null) {
+            j.put("filename", "");
+        } else {
+            j.put("filename", metaData.getName());
+        }
 
-		if (metaData.getSubmitter().getFullname() == null) {
-			j.put("submitter", "");
-		} else {
-			j.put("submitter", metaData.getSubmitter().getFullname());
-		}
+        if (metaData.getSubmitter().getFullname() == null) {
+            j.put("submitter", "");
+        } else {
+            j.put("submitter", metaData.getSubmitter().getFullname());
+        }
 
-		if (metaData.getLastModifiedDate() == null) {
-			j.put("modifieddate", "");
-		} else {
-			j.put("modifieddate", metaData.getLastModifiedDate());
-		}
+        if (metaData.getLastModifiedDate() == null) {
+            j.put("modifieddate", "");
+        } else {
+            j.put("modifieddate", metaData.getLastModifiedDate());
+        }
 
-		ja.put(j);
+        ja.put(j);
 
-		ja1.put("text", ja);
+        ja1.put("text", ja);
 
-		itemData = ja1.toString();
+        itemData = ja1.toString();
 
-		return itemData;
+        return itemData;
 
-	}
+    }
 
-	@Override
-	public String getProjectIdFromWorkspaceId(String workspaceId) throws QuadrigaStorageException {
-		return projectWorkspaceDao.getCorrespondingProjectID(workspaceId);
-	}
+    @Override
+    public String getProjectIdFromWorkspaceId(String workspaceId) throws QuadrigaStorageException {
+        return projectWorkspaceDao.getCorrespondingProjectID(workspaceId);
+    }
 
-	@Transactional
-	public boolean getDeactiveStatus(String workspaceId) throws QuadrigaStorageException {
-		WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(workspaceId.trim());
-		if (wsDto != null)
-			return wsDto.getIsdeactivated();
-		else
-			return false;
-	}
+    @Transactional
+    public boolean getDeactiveStatus(String workspaceId) throws QuadrigaStorageException {
+        WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(workspaceId.trim());
+        if (wsDto != null)
+            return wsDto.getIsdeactivated();
+        else
+            return false;
+    }
 
 }

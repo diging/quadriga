@@ -18,29 +18,29 @@ import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
 @Service
 public class WorkspaceFormValidator implements Validator {
 
-	@Override
-	public boolean supports(Class<?> arg0) {
-		return arg0.isAssignableFrom(ModifyWorkspaceForm.class);
-	}
+    @Override
+    public boolean supports(Class<?> arg0) {
+        return arg0.isAssignableFrom(ModifyWorkspaceForm.class);
+    }
 
-	@Override
-	public void validate(Object obj, Errors err) {
-		boolean isAllNull = true;
+    @Override
+    public void validate(Object obj, Errors err) {
+        boolean isAllNull = true;
 
-		ModifyWorkspaceForm workspaceForm = (ModifyWorkspaceForm) obj;
-		List<ModifyWorkspace> workspaceList = workspaceForm.getWorkspaceList();
+        ModifyWorkspaceForm workspaceForm = (ModifyWorkspaceForm) obj;
+        List<ModifyWorkspace> workspaceList = workspaceForm.getWorkspaceList();
 
-		if (workspaceList != null) {
-			// validating if any row is selected
-			for (ModifyWorkspace workspace : workspaceList) {
-				String internalId = workspace.getId();
-				if (internalId != null) {
-					isAllNull = false;
-				}
-			}
-				err.reject("workspace_selection.required");
-		}
+        if (workspaceList != null) {
+            // validating if any row is selected
+            for (ModifyWorkspace workspace : workspaceList) {
+                String internalId = workspace.getId();
+                if (internalId != null) {
+                    isAllNull = false;
+                }
+            }
+            err.reject("workspace_selection.required");
+        }
 
-	}
+    }
 
 }

@@ -390,11 +390,12 @@
 
 
 						<c:if test="${isDeactivated == true}">
-							<a href="#" disabled
-								onclick="return funConfirmDeletion();">&nbsp;&nbsp;Delete Workspace</a>
+							<a href="#" disabled onclick="return funConfirmDeletion();">&nbsp;&nbsp;Delete
+								Workspace</a>
 						</c:if>
 						<c:if test="${isDeactivated == false }">
-							 <font color="#CCCCCC" title="Only deactivated workspaces can be deleted.">&nbsp;&nbsp;Delete
+							<font color="#CCCCCC"
+								title="Only deactivated workspaces can be deleted.">&nbsp;&nbsp;Delete
 								Workspace</font>
 
 						</c:if>
@@ -504,25 +505,25 @@
 				function confirmWorkspaceDeactivation() {
 					// Define the Dialog and its properties.
 					$("#dialog-deactivate-confirm")
-					.dialog(
-							{
-								resizable : false,
-								modal : true,
-								title : "Do you want to deactivate this workspace?",
-								height : 140,
-								width : 500,
-								buttons : {
-									"Deactivate" : function() {
-										$(this).dialog('close');
-										location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
-										return false;
-									},
-									"Cancel" : function() {
-										$(this).dialog('close');
-										return false;
-									}
-								}
-							});
+							.dialog(
+									{
+										resizable : false,
+										modal : true,
+										title : "Do you want to deactivate this workspace?",
+										height : 140,
+										width : 500,
+										buttons : {
+											"Deactivate" : function() {
+												$(this).dialog('close');
+												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
+												return false;
+											},
+											"Cancel" : function() {
+												$(this).dialog('close');
+												return false;
+											}
+										}
+									});
 				}
 			</script> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
