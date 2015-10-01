@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -97,8 +99,10 @@ public class ArchiveWSController
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/workbench/{projectid}/archiveworkspace", method = RequestMethod.POST)
-	public ModelAndView archiveWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
-			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView archiveWorkspace(
+			@RequestParam("projectid") String projectid,
+			@PathVariable("workspaceid") String workspaceid,
+			Principal principal, RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		StringBuilder workspaceId;
 		String userName;
@@ -113,7 +117,7 @@ public class ArchiveWSController
 		archiveWorkspaceList = new ArrayList<ModifyWorkspace>();
 		workspaceId = new StringBuilder();
 		
-		if(result.hasErrors())
+		/*if(result.hasErrors())
 		{
 			// retrieve the workspaces associated with the projects
 			archiveWorkspaceList = workspaceFormManager.getActiveWorkspaceList(projectid, userName);
@@ -147,7 +151,7 @@ public class ArchiveWSController
 			//frame the model objects
 			model.getModelMap().put("success", 1);
 			model.getModelMap().put("wsprojectid", projectid);	
-		}
+		}*/
 
       return model; 
 

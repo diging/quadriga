@@ -525,7 +525,42 @@
 										}
 									});
 				}
-			</script> <c:choose>
+				function confirmWorkspaceArchive() {
+					// Define the Dialog and its properties.
+					$("#dialog-archive-confirm")
+					.dialog(
+							{
+								resizable : false,
+								modal : true,
+								title : "Do you want to archive this workspace?",
+								height : 140,
+								width : 500,
+								buttons : {
+									"Archive" : function() {
+										$(this).dialog('close');
+										location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/archiveworkspace?projectid=${myprojectid}';
+										return false;
+									},
+									"Cancel" : function() {
+										$(this).dialog('close');
+										return false;
+									}
+								}
+							});
+				}
+			</script>
+			<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
+				<a href="#" onclick="return confirmWorkspaceDeactivation();"> 
+					Deactivate Workspace
+				</a>
+				<a href="#" onclick=""> 
+					Archive Workspace
+				</a>
+			
+			 <%-- <li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${myprojectid}">Deactivate</a></li>
+			 --%>
+			<!-- Display bit streams --> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
