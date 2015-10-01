@@ -386,16 +386,16 @@
 
 						<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
 						<a href="#" onclick="return confirmWorkspaceDeactivation();">
-							Deactivate Workspace</a>
+							Deactivate Workspace</a>&nbsp;&nbsp;
 
 
 						<c:if test="${isDeactivated == true}">
-							<a href="#" disabled onclick="return funConfirmDeletion();">&nbsp;&nbsp;Delete
+							<a href="#" onclick="return funConfirmDeletion();">&nbsp;&nbsp;Delete
 								Workspace</a>
 						</c:if>
 						<c:if test="${isDeactivated == false }">
 							<font color="#CCCCCC"
-								title="Only deactivated workspaces can be deleted.">&nbsp;&nbsp;Delete
+								title="Only deactivated workspaces can be deleted.">Delete
 								Workspace</font>
 
 						</c:if>
