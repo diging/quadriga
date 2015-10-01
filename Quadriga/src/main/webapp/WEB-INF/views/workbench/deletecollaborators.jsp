@@ -38,7 +38,7 @@ $(function() {
 });
 	
 function submitClick(id){
-	location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}';
+	location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}';
 }
 
 </script> 

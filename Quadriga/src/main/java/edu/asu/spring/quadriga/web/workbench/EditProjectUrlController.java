@@ -32,49 +32,49 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class EditProjectUrlController {
 
-	@Autowired
-	IModifyProjectManager projectManager;
+    @Autowired
+    IModifyProjectManager projectManager;
 
-	@Autowired
-	IRetrieveProjectManager retrieveProjectManager;
+    @Autowired
+    IRetrieveProjectManager retrieveProjectManager;
 
-	@Resource(name = "projectconstants")
-	private Properties messages;
+    @Resource(name = "projectconstants")
+    private Properties messages;
 
-	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModifyProjectController.class);
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.GET)
-	public String editProjectPageURL(@PathVariable("projectid") String projectid, Principal principal,ModelMap model)
-			throws QuadrigaStorageException, QuadrigaAccessException {
-		IProject project = retrieveProjectManager.getProjectDetails(projectid);
-		model.addAttribute("project", project);
-		model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
-		return "auth/workbench/editProjectPageURL";
-	}
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.GET)
+    public String editProjectPageURL(@PathVariable("projectid") String projectid, Principal principal, ModelMap model)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+        IProject project = retrieveProjectManager.getProjectDetails(projectid);
+        model.addAttribute("project", project);
+        model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
+        return "auth/workbench/editProjectPageURL";
+    }
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.POST)
-	public String editProjectPageURL(@Validated @ModelAttribute("project") Project project, BindingResult result,
-			@PathVariable("projectid") String projectid, Principal principal,ModelMap model,RedirectAttributes redirectAttributes)
-					throws QuadrigaStorageException, QuadrigaAccessException {
-		if (result.hasErrors()) {
-			logger.error("Update project details error:", result);
-			model.addAttribute("project", project);
-			model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
-			model.addAttribute("show_error_alert", true);
-			model.addAttribute("error_alert_msg", "Cannot be Updated");
-			return "auth/workbench/editProjectPageURL";
-		} else {
-			String userName = principal.getName();
-			projectManager.updateProjectURL(project.getProjectId(), project.getProjectAccess().name(),
-					project.getUnixName(), userName);
-			redirectAttributes.addFlashAttribute("show_success_alert", true);
-			redirectAttributes.addFlashAttribute("success_alert_msg", "Project URL has been updated successfully");
-			return "redirect:/auth/workbench?projectid="+projectid;
-		}
-	}
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.POST)
+    public String editProjectPageURL(@Validated @ModelAttribute("project") Project project, BindingResult result,
+            @PathVariable("projectid") String projectid, Principal principal, ModelMap model,
+            RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
+        if (result.hasErrors()) {
+            logger.error("Update project details error:", result);
+            model.addAttribute("project", project);
+            model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg", "Cannot be Updated");
+            return "auth/workbench/editProjectPageURL";
+        } else {
+            String userName = principal.getName();
+            projectManager.updateProjectURL(project.getProjectId(), project.getProjectAccess().name(),
+                    project.getUnixName(), userName);
+            redirectAttributes.addFlashAttribute("show_success_alert", true);
+            redirectAttributes.addFlashAttribute("success_alert_msg", "Project URL has been updated successfully");
+            return "redirect:/auth/workbench?projectid=" + projectid;
+        }
+    }
 
 }

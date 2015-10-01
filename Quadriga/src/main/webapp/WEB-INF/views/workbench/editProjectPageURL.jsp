@@ -81,7 +81,7 @@ input {
 					<td><input class="command" type="submit"
 						value="Edit Project URL"></td>
 					<td><input type="button" value="Cancel"
-						onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}'"></td>
+						onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"></td>
 				</tr>
 			</table>
 		</form:form>

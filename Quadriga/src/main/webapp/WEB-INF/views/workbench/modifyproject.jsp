@@ -25,7 +25,7 @@
 
 	function submitClick(id) {
 
-		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}';
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}';
 	}
 </script>
 
@@ -84,7 +84,7 @@ input {
 							<td><input class="command" type="submit"
 								value="Modify Project"></td>
 							<td><input type="button" value="Cancel"
-								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}'"></td>
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"></td>
 						</tr>
 					</table>
 				</c:when>
