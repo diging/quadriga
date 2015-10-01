@@ -5,8 +5,6 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -30,29 +28,27 @@ import edu.asu.spring.quadriga.validator.ProjectValidator;
 @Controller
 public class AddProjectController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AddProjectController.class);
 
     @Autowired
-    IProjectFactory projectFactory;
+    private IProjectFactory projectFactory;
 
     @Resource(name = "projectconstants")
     private Properties messages;
 
     @Autowired
-    IUserManager userManager;
+    private IUserManager userManager;
 
     @Autowired
-    IModifyProjectManager projectManager;
+    private IModifyProjectManager projectManager;
 
     @Autowired
-    ProjectValidator validator;
+    private ProjectValidator validator;
 
     /**
      * Attach the custom validator to the Spring context
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-
         binder.setValidator(validator);
     }
 
@@ -65,7 +61,6 @@ public class AddProjectController {
     @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
     @RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.GET)
     public ModelAndView addProjectRequestForm() {
-        logger.info("Loading add project form page");
         ModelAndView model = new ModelAndView("auth/workbench/addproject");
         model.getModelMap().put("project", projectFactory.createProjectObject());
         model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
@@ -91,10 +86,8 @@ public class AddProjectController {
     public ModelAndView addProjectRequest(@Validated @ModelAttribute("project") Project project, BindingResult result,
             Principal principal) throws QuadrigaStorageException {
 
-        ModelAndView model;
-        model = new ModelAndView("auth/workbench/addproject");
+        ModelAndView model = new ModelAndView("auth/workbench/addproject");
         if (result.hasErrors()) {
-            logger.debug("Adding project details", result);
             model.getModelMap().put("project", project);
             model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
             model.getModelMap().put("success", 0);
