@@ -390,7 +390,7 @@
 
 
 						<c:if test="${isDeactivated == true}">
-							<a href="#" onclick="return funConfirmDeletion();">&nbsp;&nbsp;Delete
+							<a href="#" onclick="return funConfirmDeletion();">Delete
 								Workspace</a>
 						</c:if>
 						<c:if test="${isDeactivated == false }">
