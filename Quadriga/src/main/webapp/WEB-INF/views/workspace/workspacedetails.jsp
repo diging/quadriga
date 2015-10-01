@@ -499,10 +499,11 @@
 				}
 			</script>
 			<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
+			<div id="dialog-archive-confirm" title="Confirm ?"></div>
 				<a href="#" onclick="return confirmWorkspaceDeactivation();"> 
 					Deactivate Workspace
 				</a>
-				<a href="#" onclick=""> 
+				<a href="#" onclick="confirmWorkspaceArchive()"> 
 					Archive Workspace
 				</a>
 			

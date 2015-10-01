@@ -53,108 +53,33 @@ public class ArchiveWSController
 	}
 	
 	/**
-	 * This calls workspaceManger to list the workspace associated with a project for archival process.
-	 * @param   model
-	 * @param   projectid
-	 * @return  String - URL of the form
-	 * @throws  QuadrigaStorageException
-	 * @author  Kiran Kumar Batna
+	 This method archives the workspace for the project
+	 * 
+	 * @param  projectid                : Project identifier
+	 * @param  workspaceid              : Workspace identifier
+	 * @param  principal                : User for the workspace
+	 * @param  redirectAttributes       : Attributes to be forwarded to another controller
+	 * @return Model containing view
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 * @author Kiran Kumar Batna
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
-			,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
-	@RequestMapping(value="auth/workbench/{projectid}/archiveworkspace", method=RequestMethod.GET)
-	public ModelAndView archiveWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
-	{
-		ModelAndView model;
-		String userName;
-		ModifyWorkspaceForm workspaceForm;
-		List<ModifyWorkspace> archiveWorkspaceList;
-		
-		model = new ModelAndView("auth/workbench/workspace/archiveworkspace");
-		userName = principal.getName();
-		
-		workspaceForm = workspaceFormFactory.createModifyWorkspaceForm();
-		
-		// retrieve the workspaces associated with the projects
-		archiveWorkspaceList = workspaceFormManager.getActiveWorkspaceList(projectid, userName);
-		workspaceForm.setWorkspaceList(archiveWorkspaceList);
-		
-		model.getModelMap().put("workspaceform", workspaceForm);
-		model.getModelMap().put("wsprojectid",projectid);
-		model.getModelMap().put("success", 0);
-		return model;
-	}
+	@AccessPolicies({ @ElementAccessPolicy(
+			type = CheckedElementType.PROJECT,paramIndex = 1, 
+			userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR}),
+	@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0, userRole={})})
+	@RequestMapping(value = "auth/workbench/{workspaceid}/archiveworkspace", method = RequestMethod.GET)
 	
-	/**
-	 * This calls workspaceManager to archive the workspace submitted.
-	 * @param   projectid
-	 * @param   req
-	 * @param   model
-	 * @param   principal
-	 * @return  String - URL of the form
-	 * @throws  QuadrigaStorageException
-	 * @author  Kiran Kumar Batna
-	 * @throws QuadrigaAccessException 
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
-	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
-	@RequestMapping(value = "auth/workbench/{projectid}/archiveworkspace", method = RequestMethod.POST)
 	public ModelAndView archiveWorkspace(
 			@RequestParam("projectid") String projectid,
 			@PathVariable("workspaceid") String workspaceid,
 			Principal principal, RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		StringBuilder workspaceId;
-		String userName;
-		String wsInternalId;
-		ModelAndView model;
-		List<ModifyWorkspace> archiveWorkspaceList;
-		
-		model = new ModelAndView("auth/workbench/workspace/archiveworkspace");
-		//fetch the user name
-		userName = principal.getName();
-		
-		archiveWorkspaceList = new ArrayList<ModifyWorkspace>();
-		workspaceId = new StringBuilder();
-		
-		/*if(result.hasErrors())
-		{
-			// retrieve the workspaces associated with the projects
-			archiveWorkspaceList = workspaceFormManager.getActiveWorkspaceList(projectid, userName);
-			
-			workspaceForm.setWorkspaceList(archiveWorkspaceList);
-			
-			//frame the model objects
-			model.getModelMap().put("success", 0);
-			model.getModelMap().put("error", 1);
-			model.getModelMap().put("workspaceform", workspaceForm);
-			model.getModelMap().put("wsprojectid", projectid);
-		}
-		else
-		{
-			archiveWorkspaceList = workspaceForm.getWorkspaceList();
-			
-			//loop through the selected workspace
-			for(ModifyWorkspace workspace : archiveWorkspaceList)
-			{
-				wsInternalId = workspace.getId();
-				
-				if(wsInternalId != null)
-				{
-					workspaceId.append(",");
-					workspaceId.append(wsInternalId);
-				}
-			}
-			
-			archiveWSManager.archiveWorkspace(workspaceId.toString().substring(1), userName);
-			
-			//frame the model objects
-			model.getModelMap().put("success", 1);
-			model.getModelMap().put("wsprojectid", projectid);	
-		}*/
-
-      return model; 
-
+		ModelAndView model = new ModelAndView("redirect:/auth/workbench/"+ projectid);
+		archiveWSManager.archiveWorkspace(workspaceid, principal.getName());		
+		redirectAttributes.addFlashAttribute("show_success_alert", true);
+		redirectAttributes.addFlashAttribute("success_alert_msg", "The workspace has been successfully archived.");
+        return model; 
 	}
 	
 	/**
