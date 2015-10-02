@@ -54,49 +54,50 @@ public class ActivateWSController {
         binder.setValidator(validator);
     }
 
-    /**
-     * This method activates workspace for a given workspaceid and projectid.
-     * 
-     * @param workspaceid
-     * @param projectid
-     * @param principal
-     * @param redirectAttributes
-     * @return String - URL of the form
-     * @throws QuadrigaStorageException
-     * @throws QuadrigaAccessException
-     * @author Hari Chandana Kanchanapally
-     */
-    @AccessPolicies({
-    	@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
-    			RoleNames.ROLE_COLLABORATOR_ADMIN,
-    			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-    			RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
-    			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-    					RoleNames.ROLE_COLLABORATOR_ADMIN,
-    					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-    					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR}) })
-    @RequestMapping(value = "auth/workbench/{workspaceid}/activateWorkspace", method = RequestMethod.GET)
-    public ModelAndView activateWorkspace(
-    		@PathVariable("workspaceid") String workspaceid, @RequestParam("projectid") String projectid,
-    		Principal principal, RedirectAttributes redirectAttributes) throws QuadrigaStorageException,
-    		QuadrigaAccessException {
+	/**
+	 * This method activates workspace for a given workspaceid and projectid.
+	 * 
+	 * @param workspaceid
+	 * @param projectid
+	 * @param principal
+	 * @param redirectAttributes
+	 * @return String - URL of the form
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 * @author Hari Chandana Kanchanapally
+	 */
+	@AccessPolicies({
+			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
+					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
+			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
+					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
+	@RequestMapping(value = "auth/workbench/{workspaceid}/activateWorkspace", method = RequestMethod.GET)
+	public ModelAndView activateWorkspace(
+			@PathVariable("workspaceid") String workspaceid,
+			@RequestParam("projectid") String projectid, Principal principal,
+			RedirectAttributes redirectAttributes)
+			throws QuadrigaStorageException, QuadrigaAccessException {
 
-    	String userName;
-    	// fetch the user name
-    	userName = principal.getName();
+		String userName;
+		// fetch the user name
+		userName = principal.getName();
 
-    	ModelAndView model = new ModelAndView("redirect:/auth/workbench/"
-    			+ projectid);
+		ModelAndView model = new ModelAndView("redirect:/auth/workbench/"
+				+ projectid);
 
-    	archiveWSManager.activateWorkspace(workspaceid, userName);
-    	
-    	// frame the model objects
-    	redirectAttributes.addFlashAttribute("show_success_alert",true);  
-    	redirectAttributes.addFlashAttribute("success_alert_msg",
-    			"The workspace has been successfully activated.");
-    	return model;
+		archiveWSManager.activateWorkspace(workspaceid, userName);
 
-    }
+		// frame the model objects
+		redirectAttributes.addFlashAttribute("show_success_alert", true);
+		redirectAttributes.addFlashAttribute("success_alert_msg",
+				"The workspace has been successfully activated.");
+
+		return model;
+	}
 
     @RequestMapping(value = "auth/workbench/{projectid}/showinactiveworkspace", method = RequestMethod.GET)
     public String showInactiveWorkspaces(
