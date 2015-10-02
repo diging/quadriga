@@ -157,16 +157,16 @@
 									{
 										resizable : false,
 										modal : true,
-										title : "Do you want to delete this project?",
-										height : 140,
+										title : "Delete Project",
+										height : 300,
 										width : 500,
 										buttons : {
-											"Delete" : function() {
+											"Yes" : function() {
 												$(this).dialog('close');
 												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteproject/${project.projectId}';
 												return false;
 											},
-											"Cancel" : function() {
+											"No" : function() {
 												$(this).dialog('close');
 												return false;
 											}
@@ -174,7 +174,8 @@
 									});
 				}
 			</script>
-			<div id="dialog-delete-project-confirm" title="Confirm Delete?"></div>
+			<div id="dialog-delete-project-confirm" title="Confirm Delete?">
+				You are about to delete a project, this is not reversible.</br> Do you want to proceed?.</div>
 		</td>
 		
 		<!-- Display collaborators -->
