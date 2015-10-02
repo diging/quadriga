@@ -66,21 +66,21 @@ public class ActivateWSController {
 	 * @throws QuadrigaAccessException
 	 * @author Hari Chandana Kanchanapally
 	 */
-	@AccessPolicies({
-			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
-					RoleNames.ROLE_COLLABORATOR_ADMIN,
-					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
-			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-					RoleNames.ROLE_COLLABORATOR_ADMIN,
-					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
-	@RequestMapping(value = "auth/workbench/{workspaceid}/activateWorkspace", method = RequestMethod.GET)
-	public ModelAndView activateWorkspace(
-			@PathVariable("workspaceid") String workspaceid,
-			@RequestParam("projectid") String projectid, Principal principal,
-			RedirectAttributes redirectAttributes)
-			throws QuadrigaStorageException, QuadrigaAccessException {
+    @AccessPolicies({
+    	@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
+    			RoleNames.ROLE_COLLABORATOR_ADMIN,
+    			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+    			RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
+    			@ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
+    					RoleNames.ROLE_COLLABORATOR_ADMIN,
+    					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+    					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
+    @RequestMapping(value = "auth/workbench/{workspaceid}/activateWorkspace", method = RequestMethod.GET)
+    public ModelAndView activateWorkspace(
+    		@PathVariable("workspaceid") String workspaceid,
+    		@RequestParam("projectid") String projectid, Principal principal,
+    		RedirectAttributes redirectAttributes)
+    				throws QuadrigaStorageException, QuadrigaAccessException {
 
 		String userName;
 		// fetch the user name
