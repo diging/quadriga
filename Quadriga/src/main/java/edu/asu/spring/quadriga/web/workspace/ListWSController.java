@@ -332,6 +332,10 @@ public class ListWSController
 		
 		String projectid = wsManager.getProjectIdFromWorkspaceId(workspaceid);
 		model.addAttribute("myprojectid", projectid);
+		
+		//Including a condition to check if the workspace is not deactive. If the workspace is deactive adding attribute to make delete button disabled
+		model.addAttribute("isDeactivated", wsManager.getDeactiveStatus(workspaceid));
+		
 		return "auth/workbench/workspace/workspacedetails";
 	}
 
