@@ -27,9 +27,8 @@ public class DeleteProjectController {
 	 * This method calls the user manager to delete the project.
 	 * 
 	 * @param projectId Project identifier corresponding to project to be deleted
-	 * @return String - URL on success and failure.
+	 * @return model - URL on success and failure.
 	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = { RoleNames.ROLE_COLLABORATOR_ADMIN }) })
