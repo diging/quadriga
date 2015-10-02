@@ -473,11 +473,42 @@
 							});
 				}
 			</script>
+			<script>
+            	function confirmWorkspaceActivation() {
+					// Define the Dialog and its properties.
+                    $("#dialog-activate-confirm")
+                    .dialog(
+                    		{
+                            	resizable : false,
+                                modal : true,
+                                title : "Confirm Activate",
+                                height : 140,
+                                width : 500,
+                                buttons : {
+                                	"Activate" : function() {
+                                     	$(this).dialog(
+                                     	'close');
+                                     	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/activateWorkspace?projectid=${myprojectid}';
+                                        return false;
+                                        },
+                                        "Cancel" : function() {
+                                         	$(this).dialog('close');
+                                            return false;
+                                         }
+                                }
+                      });
+                   }
+            </script>
 			<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
 				<a href="#" onclick="return confirmWorkspaceDeactivation();"> 
 					Deactivate Workspace
 				</a>
 			
+           <div id="dialog-activate-confirm" title="Confirm ?"></div>
+				<a href="#" onclick="return confirmWorkspaceActivation();"> 
+					Activate Workspace
+				</a>
+
 			 <%-- <li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${myprojectid}">Deactivate</a></li>
 			 --%>
