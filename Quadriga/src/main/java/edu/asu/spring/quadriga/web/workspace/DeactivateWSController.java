@@ -40,7 +40,10 @@ public class DeactivateWSController {
 					RoleNames.ROLE_COLLABORATOR_ADMIN,
 					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
 					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
-			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {}) })
+			@ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 2, userRole = {
+					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR })})
 	@RequestMapping(value = "auth/workbench/{workspaceid}/deactivateworkspace", method = RequestMethod.GET)
 	public ModelAndView deactivateWorkspaceForm(
 			@RequestParam("projectid") String projectid,
