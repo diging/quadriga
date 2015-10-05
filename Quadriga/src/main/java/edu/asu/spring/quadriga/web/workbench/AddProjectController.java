@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectFactory;
@@ -64,7 +65,6 @@ public class AddProjectController {
         ModelAndView model = new ModelAndView("auth/workbench/addproject");
         model.getModelMap().put("project", projectFactory.createProjectObject());
         model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
-        model.getModelMap().put("success", 0);
         return model;
     }
 
@@ -84,18 +84,20 @@ public class AddProjectController {
     @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
     @RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
     public ModelAndView addProjectRequest(@Validated @ModelAttribute("project") Project project, BindingResult result,
-            Principal principal) throws QuadrigaStorageException {
+            Principal principal,RedirectAttributes redirectAttribtutes) throws QuadrigaStorageException {
 
-        ModelAndView model = new ModelAndView("auth/workbench/addproject");
+        ModelAndView model;
         if (result.hasErrors()) {
+            model = new ModelAndView("auth/workbench/addproject");
             model.getModelMap().put("project", project);
             model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
-            model.getModelMap().put("success", 0);
         } else {
+            model = new ModelAndView("redirect:auth/workbench");
             IUser user = userManager.getUser(principal.getName());
             project.setOwner(user);
             projectManager.addNewProject(project, principal.getName());
-            model.getModelMap().put("success", 1);
+            model.getModelMap().addAttribute("show_success_alert", true);
+            model.getModelMap().addAttribute("success_alert_msg", "Project created successfully.");
         }
         return model;
     }
