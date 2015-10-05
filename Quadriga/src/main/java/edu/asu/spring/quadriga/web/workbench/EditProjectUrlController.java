@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.validator.ProjectValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
@@ -37,11 +40,24 @@ public class EditProjectUrlController {
 
     @Autowired
     IRetrieveProjectManager retrieveProjectManager;
+    
+    @Autowired
+    ProjectValidator validator;
 
     @Resource(name = "projectconstants")
     private Properties messages;
 
     private static final Logger logger = LoggerFactory.getLogger(ModifyProjectController.class);
+    
+    /**
+     * Attach the custom validator to the Spring context
+     */
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+
+        binder.setValidator(validator);
+    }
+
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
@@ -64,8 +80,6 @@ public class EditProjectUrlController {
             logger.error("Update project details error:", result);
             model.addAttribute("project", project);
             model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
-            model.addAttribute("show_error_alert", true);
-            model.addAttribute("error_alert_msg", "Cannot be Updated");
             return "auth/workbench/editProjectPageURL";
         } else {
             String userName = principal.getName();

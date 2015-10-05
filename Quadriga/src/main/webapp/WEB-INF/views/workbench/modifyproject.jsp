@@ -49,8 +49,6 @@ input {
 	<div id="projectDiv">
 		<form:form commandName="project" method="POST"
 			action="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}">
-			<c:choose>
-				<c:when test="${success == '0'}">
 					<header>
 						<h2>Modify Project</h2>
 						<span class="byline">Please fill in the following
@@ -87,15 +85,6 @@ input {
 								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"></td>
 						</tr>
 					</table>
-				</c:when>
-				<c:when test="${success == '1'}">
-					<span class="byline">Project modified successfully.</span>
-					<ul>
-						<li><input type="button" onClick="submitClick();"
-							value='Okay'></li>
-					</ul>
-				</c:when>
-			</c:choose>
 		</form:form>
 	</div>
 </article>

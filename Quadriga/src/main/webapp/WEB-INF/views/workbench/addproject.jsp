@@ -4,7 +4,7 @@
 <!-- Content -->
 <script>
 	$(document).ready(function() {
-		
+
 		$("#unixName").keyup(function(event) {
 			var keyedInput = $("#unixName").val();
 			$("#UnixURL").text('${unixnameurl}' + $.trim(keyedInput));
@@ -14,15 +14,14 @@
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
-		
+
 		$("input[type=button]").button().click(function(event) {
 		});
 	});
-
 </script>
 <article class="is-page-content">
 	<form:form commandName="project" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/projects/addproject">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/addproject">
 		<header>
 			<h2>Create new Project</h2>
 			<span class="byline">Please fill in the following information:</span>

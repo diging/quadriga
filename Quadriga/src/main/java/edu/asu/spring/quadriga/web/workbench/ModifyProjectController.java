@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
@@ -109,7 +109,6 @@ public class ModifyProjectController {
         project = retrieveProjectManager.getProjectDetails(projectid);
         model.getModelMap().put("project", project);
         model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
-        model.getModelMap().put("success", 0);
         return model;
     }
 
@@ -131,22 +130,21 @@ public class ModifyProjectController {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
     public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project") Project project,
-            BindingResult result, @PathVariable("projectid") String projectid, Principal principal)
+            BindingResult result, @PathVariable("projectid") String projectid, Principal principal,RedirectAttributes redirectAttributes)
                     throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model;
         String userName = principal.getName();
-
-        logger.info("Update project details");
-        model = new ModelAndView("auth/workbench/modifyproject");
         if (result.hasErrors()) {
             logger.error("Update project details error:", result);
+            model = new ModelAndView("auth/workbench/modifyproject");
             model.getModelMap().put("project", project);
             model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
-            model.getModelMap().put("success", 0);
         } else {
             projectManager.updateProject(project.getProjectId(), project.getProjectName(), project.getDescription(),
                     userName);
-            model.getModelMap().put("success", 1);
+            redirectAttributes.addFlashAttribute("show_success_alert", true);
+            redirectAttributes.addFlashAttribute("success_alert_msg", "Project edited successfully.");
+            model = new ModelAndView("redirect:/auth/workbench/projects/"+projectid);
         }
         return model;
     }

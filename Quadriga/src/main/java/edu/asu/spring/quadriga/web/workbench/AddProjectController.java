@@ -29,7 +29,6 @@ import edu.asu.spring.quadriga.validator.ProjectValidator;
 @Controller
 public class AddProjectController {
 
-
     @Autowired
     private IProjectFactory projectFactory;
 
@@ -84,7 +83,7 @@ public class AddProjectController {
     @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
     @RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
     public ModelAndView addProjectRequest(@Validated @ModelAttribute("project") Project project, BindingResult result,
-            Principal principal,RedirectAttributes redirectAttribtutes) throws QuadrigaStorageException {
+            Principal principal, RedirectAttributes redirectAttribtutes) throws QuadrigaStorageException {
 
         ModelAndView model;
         if (result.hasErrors()) {
@@ -92,12 +91,12 @@ public class AddProjectController {
             model.getModelMap().put("project", project);
             model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
         } else {
-            model = new ModelAndView("redirect:auth/workbench");
+            model = new ModelAndView("redirect:/auth/workbench");
             IUser user = userManager.getUser(principal.getName());
             project.setOwner(user);
             projectManager.addNewProject(project, principal.getName());
-            model.getModelMap().addAttribute("show_success_alert", true);
-            model.getModelMap().addAttribute("success_alert_msg", "Project created successfully.");
+            redirectAttribtutes.addFlashAttribute("show_success_alert", true);
+            redirectAttribtutes.addFlashAttribute("success_alert_msg", "Project created successfully.");
         }
         return model;
     }
