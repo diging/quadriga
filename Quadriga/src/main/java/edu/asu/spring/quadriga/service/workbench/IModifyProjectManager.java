@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.workbench;
 
+import java.security.Principal;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -7,7 +8,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IModifyProjectManager {
 
-	public abstract void deleteProjectRequest(List<String> projectIdList)
+	public abstract void deleteProjectRequest(List<String> projectIdList, Principal principal)
 			throws QuadrigaStorageException;
 
 	public abstract void assignEditorRole(String projectId, String owner) throws QuadrigaStorageException;

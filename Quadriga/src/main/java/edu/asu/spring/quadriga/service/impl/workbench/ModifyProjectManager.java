@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
@@ -38,7 +40,9 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 @Service
 public class ModifyProjectManager extends BaseManager implements IModifyProjectManager 
 {
-
+    @Autowired
+    private IProjectSecurityChecker projectSecurity;
+    
 	@Autowired
 	private IProjectDAO projectDao;
 	
@@ -105,20 +109,24 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
 	 */
 	@Override
 	@Transactional
-	public void deleteProjectRequest(List<String> projectIdList) throws QuadrigaStorageException
+	public void deleteProjectRequest(List<String> projectIdList,Principal principal) throws QuadrigaStorageException
 	{
-	    for(String projectId : projectIdList) {
-            ProjectDTO  project = projectDao.getProjectDTO(projectId);
-            //retrieve all the foreign key tables associated with them
-            //delete the project workspace DTO
-            deleteProjectWorkspaceMapping(project);
-            deleteProjectDictionaryMapping(project);
-            deleteProjectConceptCollectionMapping(project);
-            deleteProjectCollaboratorMapping(project);
-            deleteProjectEditorMapping(project);
-            
-            projectDao.updateDTO(project);    
-            projectDao.deleteDTO(project);
+        for (String projectId : projectIdList) {
+            boolean checkAuthorization = projectSecurity.isProjectOwner(
+                    principal.getName(), projectId);
+            if (checkAuthorization) {
+                ProjectDTO project = projectDao.getProjectDTO(projectId);
+                // retrieve all the foreign key tables associated with them
+                // delete the project workspace DTO
+                deleteProjectWorkspaceMapping(project);
+                deleteProjectDictionaryMapping(project);
+                deleteProjectConceptCollectionMapping(project);
+                deleteProjectCollaboratorMapping(project);
+                deleteProjectEditorMapping(project);
+
+                projectDao.updateDTO(project);
+                projectDao.deleteDTO(project);
+            }
         }
 	}
 	
