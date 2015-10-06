@@ -40,7 +40,6 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 @Service
 public class ModifyProjectManager extends BaseManager implements IModifyProjectManager 
 {
-
     @Autowired
     private IProjectSecurityChecker projectSecurity;
     
@@ -112,9 +111,10 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
 	@Transactional
 	public void deleteProjectRequest(List<String> projectIdList,Principal principal) throws QuadrigaStorageException
 	{
-	    for(String projectId : projectIdList) {
-	        boolean isAuthorized = projectSecurity.isProjectOwner(principal.getName(), projectId);
-            if (isAuthorized) {
+        for (String projectId : projectIdList) {
+            boolean checkAuthorization = projectSecurity.isProjectOwner(
+                    principal.getName(), projectId);
+            if (checkAuthorization) {
                 ProjectDTO project = projectDao.getProjectDTO(projectId);
                 // retrieve all the foreign key tables associated with them
                 // delete the project workspace DTO
