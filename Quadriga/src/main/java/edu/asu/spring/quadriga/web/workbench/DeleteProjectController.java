@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.web.workbench;
 
+import java.security.Principal;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class DeleteProjectController {
     @Autowired
     IModifyProjectManager projectManager;
-
     /**
      * This method calls the user manager to delete the project.
      * 
@@ -35,15 +35,14 @@ public class DeleteProjectController {
     @RequestMapping(value = "auth/workbench/deleteproject/{projectId}", method = RequestMethod.GET)
     public ModelAndView deleteProjectRequest(
             @PathVariable("projectId") String projectId,
-            RedirectAttributes redirectAttributes)
+            RedirectAttributes redirectAttributes,Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
-
         ModelAndView model = new ModelAndView("redirect:/auth/workbench");
 
         ArrayList<String> projectIdList = new ArrayList<String>();
         projectIdList.add(projectId);
 
-        projectManager.deleteProjectRequest(projectIdList);
+        projectManager.deleteProjectRequest(projectIdList,principal);
 
         redirectAttributes.addFlashAttribute("show_success_alert", true);
         redirectAttributes.addFlashAttribute("success_alert_msg",
