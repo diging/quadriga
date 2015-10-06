@@ -20,35 +20,35 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class DeleteProjectController {
-	@Autowired
-	IModifyProjectManager projectManager;
+    @Autowired
+    IModifyProjectManager projectManager;
 
-	/**
-	 * This method calls the user manager to delete the project.
-	 * 
-	 * @param projectId Project identifier corresponding to project to be deleted
-	 * @return model - URL on success and failure.
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = { RoleNames.ROLE_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/deleteproject/{projectId}", method = RequestMethod.GET)
-	public ModelAndView deleteProjectRequest(
-			@PathVariable("projectId") String projectId,
-			RedirectAttributes redirectAttributes)
-			throws QuadrigaStorageException, QuadrigaAccessException {
-		
-		ModelAndView model = new ModelAndView("redirect:/auth/workbench");
+    /**
+     * This method calls the user manager to delete the project.
+     * 
+     * @param projectId Project identifier corresponding to project to be deleted
+     * @return model - URL on success and failure.
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = { RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/deleteproject/{projectId}", method = RequestMethod.GET)
+    public ModelAndView deleteProjectRequest(
+            @PathVariable("projectId") String projectId,
+            RedirectAttributes redirectAttributes)
+            throws QuadrigaStorageException, QuadrigaAccessException {
 
-		ArrayList<String> projectIdList = new ArrayList<String>();
-		projectIdList.add(projectId);
+        ModelAndView model = new ModelAndView("redirect:/auth/workbench");
 
-		projectManager.deleteProjectRequest(projectIdList);
+        ArrayList<String> projectIdList = new ArrayList<String>();
+        projectIdList.add(projectId);
 
-		redirectAttributes.addFlashAttribute("show_success_alert", true);
-		redirectAttributes.addFlashAttribute("success_alert_msg",
-				"The project has been successfully deleted.");
+        projectManager.deleteProjectRequest(projectIdList);
 
-		return model;
-	}
+        redirectAttributes.addFlashAttribute("show_success_alert", true);
+        redirectAttributes.addFlashAttribute("success_alert_msg",
+                "The project has been successfully deleted.");
+
+        return model;
+    }
 }
