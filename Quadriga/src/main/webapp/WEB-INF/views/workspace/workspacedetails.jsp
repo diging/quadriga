@@ -381,7 +381,7 @@
 							}
 						</script>
 
-						<div id="dialog-confirm" title="Confirm ?"></div>
+                        <div id="dialog-confirm" title="Confirm ?"></div>
 
                         <c:if test="${isDeactivated == true}">
                             <a href="#" onclick="return confirmWorkspaceActivation();">
@@ -405,17 +405,18 @@
                                 Deactivate Workspace</a>&nbsp;&nbsp; </font>
                         </c:if>
 
-						<c:if test="${isDeactivated == true}">
-							<a href="#" onclick="return funConfirmDeletion();">Delete
-								Workspace</a>
-						</c:if>
+                        <c:if test="${isDeactivated == true}">
+                            <a href="#" onclick="return funConfirmDeletion();">Delete
+                                Workspace</a>
+                        </c:if>
 						
-						<c:if test="${isDeactivated == false }">
-							<font color="#CCCCCC"
-								title="Only deactivated workspaces can be deleted.">Delete
-								Workspace</font>
-						</c:if>
-					</div>
+                        <c:if test="${isDeactivated == false }">
+                            <font color="#CCCCCC"
+                                title="Only deactivated workspaces can be deleted.">Delete
+                                Workspace</font>
+                        </c:if>
+                        
+                        </div>
 
 
 					<div id="login-box" class="login-popup"
