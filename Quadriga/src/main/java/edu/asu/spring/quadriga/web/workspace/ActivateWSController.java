@@ -68,9 +68,8 @@ public class ActivateWSController {
 	 */
     @AccessPolicies({
             @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
-                    RoleNames.ROLE_COLLABORATOR_ADMIN,
-                    RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-                    RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
+                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,
+                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR }),
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
                     RoleNames.ROLE_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
@@ -82,9 +81,8 @@ public class ActivateWSController {
             RedirectAttributes redirectAttributes)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        String userName;
         // fetch the user name
-        userName = principal.getName();
+        String userName = principal.getName();
 
         ModelAndView model = new ModelAndView("redirect:/auth/workbench/"
                 + projectid);
