@@ -7,11 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -21,7 +19,7 @@ public class ProjectURLValidator implements Validator {
     @Autowired
     IProjectSecurityChecker projectCheckSecurityManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(UpdateProjectValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProjectURLValidator.class);
 
     @Override
     public boolean supports(Class<?> arg0) {
@@ -31,18 +29,10 @@ public class ProjectURLValidator implements Validator {
     @Override
     public void validate(Object obj, Errors err) {
         // validate all the input parameters
-        ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectAccess", "project_projectAccess.required");
-
         Project project = (Project) obj;
 
         String projUnixName = project.getUnixName();
         String projectId = project.getProjectId();
-        EProjectAccessibility projectAccess = project.getProjectAccess();
-
-        if (err.getFieldError("projectAccess") == null) {
-            // validate the selected project accessibility
-            validateProjectAccessibility(projectAccess, err);
-        }
 
         if (err.getFieldError("unixName") == null) {
             // validate the regular expression
@@ -56,13 +46,6 @@ public class ProjectURLValidator implements Validator {
                 logger.error("Error", e);
             }
         }
-    }
-
-    public void validateProjectAccessibility(EProjectAccessibility projectAccess, Errors err) {
-        if (projectAccess == null) {
-            err.rejectValue("projectAccess", "project_projectAccess_selection.required");
-        }
-
     }
 
     /**
@@ -92,10 +75,8 @@ public class ProjectURLValidator implements Validator {
      * @author kiran batna
      */
     public void validateUnixName(String unixName, String projectId, Errors err) throws QuadrigaStorageException {
-        boolean isDuplicate;
-
         // Verifying if the Unix name already exists
-        isDuplicate = projectCheckSecurityManager.isUnixnameInUse(unixName, projectId);
+        boolean isDuplicate = projectCheckSecurityManager.isUnixnameInUse(unixName, projectId);
         if (isDuplicate) {
             err.rejectValue("unixName", "projectUnixName.unique");
         }

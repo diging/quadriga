@@ -13,10 +13,10 @@ public interface IModifyProjectManager {
 
 	public abstract void removeEditorRole(String projectId, String owner) throws QuadrigaStorageException;
 
-	void updateProject(String projID, String projName, String projDesc, String userName)
+	void updateProject(String projID, String projName, String projDesc, String projectAccess, String userName)
 			throws QuadrigaStorageException;
 
-	void updateProjectURL(String projID, String projAccess, String unixName, String userName)
+	void updateProjectURL(String projID, String unixName, String userName)
 			throws QuadrigaStorageException;
 
 	void addNewProject(IProject project, String userName) throws QuadrigaStorageException;

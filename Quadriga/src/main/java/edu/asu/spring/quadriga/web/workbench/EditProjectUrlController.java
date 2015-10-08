@@ -40,7 +40,7 @@ public class EditProjectUrlController {
 
     @Autowired
     IRetrieveProjectManager retrieveProjectManager;
-    
+
     @Autowired
     ProjectURLValidator validator;
 
@@ -48,7 +48,7 @@ public class EditProjectUrlController {
     private Properties messages;
 
     private static final Logger logger = LoggerFactory.getLogger(ModifyProjectController.class);
-    
+
     /**
      * Attach the custom validator to the Spring context
      */
@@ -57,7 +57,6 @@ public class EditProjectUrlController {
 
         binder.setValidator(validator);
     }
-
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
@@ -83,8 +82,7 @@ public class EditProjectUrlController {
             return "auth/workbench/editProjectPageURL";
         } else {
             String userName = principal.getName();
-            projectManager.updateProjectURL(project.getProjectId(), project.getProjectAccess().name(),
-                    project.getUnixName(), userName);
+            projectManager.updateProjectURL(project.getProjectId(), project.getUnixName(), userName);
             redirectAttributes.addFlashAttribute("show_success_alert", true);
             redirectAttributes.addFlashAttribute("success_alert_msg", "Project URL has been updated successfully");
             return "redirect:/auth/workbench?projectid=" + projectid;

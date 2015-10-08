@@ -130,22 +130,20 @@ public class ModifyProjectController {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
     public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project") Project project,
-            BindingResult result, @PathVariable("projectid") String projectid, Principal principal,RedirectAttributes redirectAttributes)
-                    throws QuadrigaStorageException, QuadrigaAccessException {
+            BindingResult result, @PathVariable("projectid") String projectid, Principal principal,
+            RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model;
         String userName = principal.getName();
         if (result.hasErrors()) {
-            logger.error("Update project details error:", result);
             model = new ModelAndView("auth/workbench/modifyproject");
             model.getModelMap().put("project", project);
-            model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
-        } else {
-            projectManager.updateProject(project.getProjectId(), project.getProjectName(), project.getDescription(),
-                    userName);
-            redirectAttributes.addFlashAttribute("show_success_alert", true);
-            redirectAttributes.addFlashAttribute("success_alert_msg", "Project edited successfully.");
-            model = new ModelAndView("redirect:/auth/workbench/projects/"+projectid);
+            return model;
         }
+        projectManager.updateProject(project.getProjectId(), project.getProjectName(), project.getDescription(),
+                project.getProjectAccess().name(), userName);
+        redirectAttributes.addFlashAttribute("show_success_alert", true);
+        redirectAttributes.addFlashAttribute("success_alert_msg", "Project has been updated successfully.");
+        model = new ModelAndView("redirect:/auth/workbench/projects/" + projectid);
         return model;
     }
 
