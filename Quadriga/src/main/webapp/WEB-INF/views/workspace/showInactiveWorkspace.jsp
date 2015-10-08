@@ -31,7 +31,7 @@ $(document).ready(function() {
 <h2>List of Inactive Workspaces</h2>
 <br>
 <input type="button" value="Go Back" onclick="
-location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"/>
+location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}'"/>
 <table style="width: 100%" class="display dataTable" id="workspacelist">
 	<thead>
 		<tr>

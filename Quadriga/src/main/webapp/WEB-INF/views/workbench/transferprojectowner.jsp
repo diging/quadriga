@@ -4,7 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <script>
 	function submitClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${projectid}';
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}';
 	}
 
 	$(document).ready(function() {
