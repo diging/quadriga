@@ -82,17 +82,15 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
 	 */
 	@Override
 	@Transactional
-	public void updateProject(String projID, String projName, String projDesc, String projAccess, String unixName,
-			String userName) throws QuadrigaStorageException {
-		ProjectDTO projectDTO = projectDao.getProjectDTO(projID);
-		projectDTO.setProjectname(projName);
-		projectDTO.setDescription(projDesc);
-		projectDTO.setAccessibility(projAccess);
-		projectDTO.setUnixname(unixName);
-		projectDTO.setUpdatedby(userName);
-		projectDTO.setUpdateddate(new Date());
 
-		projectDao.updateDTO(projectDTO);
+	public void updateProject(String projID, String projName,String projDesc,String userName) throws QuadrigaStorageException
+	{
+	    ProjectDTO projectDTO = projectDao.getProjectDTO(projID);
+        projectDTO.setProjectname(projName);
+        projectDTO.setDescription(projDesc);
+        projectDTO.setUpdatedby(userName);
+        projectDTO.setUpdateddate(new Date());
+        projectDao.updateDTO(projectDTO);
 	}
 
 	/**
