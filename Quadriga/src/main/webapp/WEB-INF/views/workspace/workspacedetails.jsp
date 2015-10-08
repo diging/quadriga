@@ -381,27 +381,42 @@
 							}
 						</script>
 
-						<div id="dialog-confirm" title="Confirm ?"></div>
+                        <div id="dialog-confirm" title="Confirm ?"></div>
 
+                        <c:if test="${isDeactivated == true}">
+                            <a href="#" onclick="return confirmWorkspaceActivation();">
+                                Activate Workspace</a>&nbsp;&nbsp; 
+                        </c:if>
+                        
+                        <c:if test="${isDeactivated == false }">
+                            <font color="#CCCCCC"
+                                title="The workspace is already activated.">
+                                Activate Workspace</a>&nbsp;&nbsp; </font>
+                        </c:if>
+                            
+                        <c:if test="${isDeactivated == false}">
+                            <a href="#" onclick="return confirmWorkspaceDeactivation();">
+                                Deactivate Workspace</a>&nbsp;&nbsp; 
+                        </c:if>
+                        
+                        <c:if test="${isDeactivated == true }">
+                            <font color="#CCCCCC"
+                                title="The workspace is already deactivated.">
+                                Deactivate Workspace</a>&nbsp;&nbsp; </font>
+                        </c:if>
 
-						<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
-						<a href="#" onclick="return confirmWorkspaceDeactivation();">
-							Deactivate Workspace</a>&nbsp;&nbsp;
-
-
-						<c:if test="${isDeactivated == true}">
-							<a href="#" onclick="return funConfirmDeletion();">Delete
-								Workspace</a>
-						</c:if>
-						<c:if test="${isDeactivated == false }">
-							<font color="#CCCCCC"
-								title="Only deactivated workspaces can be deleted.">Delete
-								Workspace</font>
-
-						</c:if>
-
-
-					</div>
+                        <c:if test="${isDeactivated == true}">
+                            <a href="#" onclick="return funConfirmDeletion();">Delete
+                                Workspace</a>
+                        </c:if>
+						
+                        <c:if test="${isDeactivated == false }">
+                            <font color="#CCCCCC"
+                                title="Only deactivated workspaces can be deleted.">Delete
+                                Workspace</font>
+                        </c:if>
+                        
+                        </div>
 
 
 					<div id="login-box" class="login-popup"
@@ -504,7 +519,7 @@
 			</c:choose> <script>
 				function confirmWorkspaceDeactivation() {
 					// Define the Dialog and its properties.
-					$("#dialog-deactivate-confirm")
+					$("#dialog-confirm")
 							.dialog(
 									{
 										resizable : false,
@@ -516,6 +531,31 @@
 											"Deactivate" : function() {
 												$(this).dialog('close');
 												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
+												return false;
+											},
+											"Cancel" : function() {
+												$(this).dialog('close');
+												return false;
+											}
+										}
+									});
+				}
+			</script>
+			<script>
+				function confirmWorkspaceActivation() {
+					// Define the Dialog and its properties.
+					$("#dialog-confirm")
+							.dialog(
+									{
+										resizable : false,
+										modal : true,
+										title : "Confirm Activate",
+										height : 140,
+										width : 500,
+										buttons : {
+											"Activate" : function() {
+												$(this).dialog('close');
+												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/activateWorkspace?projectid=${myprojectid}';
 												return false;
 											},
 											"Cancel" : function() {
