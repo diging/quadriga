@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.validator.ProjectValidator;
+import edu.asu.spring.quadriga.validator.ProjectURLValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
@@ -42,7 +42,7 @@ public class EditProjectUrlController {
     IRetrieveProjectManager retrieveProjectManager;
     
     @Autowired
-    ProjectValidator validator;
+    ProjectURLValidator validator;
 
     @Resource(name = "projectconstants")
     private Properties messages;

@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.validator.ProjectValidator;
+import edu.asu.spring.quadriga.validator.AddProjectValidator;
 
 @Controller
 public class AddProjectController {
@@ -42,7 +42,7 @@ public class AddProjectController {
     private IModifyProjectManager projectManager;
 
     @Autowired
-    private ProjectValidator validator;
+    private AddProjectValidator validator;
 
     /**
      * Attach the custom validator to the Spring context
