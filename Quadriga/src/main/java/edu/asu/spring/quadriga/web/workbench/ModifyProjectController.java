@@ -6,8 +6,6 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -74,14 +72,12 @@ public class ModifyProjectController {
     @Resource(name = "projectconstants")
     private Properties messages;
 
-    private static final Logger logger = LoggerFactory.getLogger(ModifyProjectController.class);
 
     /**
      * Attach the custom validator to the Spring context
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-
         binder.setValidator(validator);
     }
 
@@ -104,7 +100,6 @@ public class ModifyProjectController {
             throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model;
         IProject project;
-        logger.info("Updating project details");
         model = new ModelAndView("auth/workbench/modifyproject");
         project = retrieveProjectManager.getProjectDetails(projectid);
         model.getModelMap().put("project", project);

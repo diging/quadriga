@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 public class UpdateProjectValidator implements Validator {
 
     @Autowired
-    IProjectSecurityChecker projectCheckSecurityManager;
+    private IProjectSecurityChecker projectCheckSecurityManager;
 
     @Override
     public boolean supports(Class<?> arg0) {
