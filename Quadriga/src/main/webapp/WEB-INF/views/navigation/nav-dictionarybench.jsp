@@ -22,9 +22,6 @@ $(function () {
 </h2>
 <div id = "dictionarymenu">
 <ul>
-<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">
-			Add Dictionary</a>
-	</li>
 	<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'>
 	<a href="${pageContext.servletContext.contextPath}//auth/dictionaries/deleteDictionary">
 			Delete Dictionary</a>
