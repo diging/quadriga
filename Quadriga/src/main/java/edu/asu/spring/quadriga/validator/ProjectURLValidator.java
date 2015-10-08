@@ -21,7 +21,7 @@ public class ProjectURLValidator implements Validator {
     @Autowired
     IProjectSecurityChecker projectCheckSecurityManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProjectValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(UpdateProjectValidator.class);
 
     @Override
     public boolean supports(Class<?> arg0) {

@@ -18,9 +18,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public class AddProjectValidator implements Validator {
     
     @Autowired
-    IProjectSecurityChecker projectCheckSecurityManager;
+    private IProjectSecurityChecker projectCheckSecurityManager;
     
-    private static final Logger logger = LoggerFactory.getLogger(ProjectValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(AddProjectValidator.class);
     
     @Override
     public boolean supports(Class<?> arg0) {

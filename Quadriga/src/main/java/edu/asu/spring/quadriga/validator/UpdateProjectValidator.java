@@ -9,7 +9,7 @@ import org.springframework.validation.Validator;
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 @Service
-public class ProjectValidator implements Validator {
+public class UpdateProjectValidator implements Validator {
     
     @Autowired
     IProjectSecurityChecker projectCheckSecurityManager;
