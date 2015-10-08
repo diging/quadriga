@@ -21,8 +21,6 @@ public class ProjectValidator implements Validator {
     @Autowired
     IProjectSecurityChecker projectCheckSecurityManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProjectValidator.class);
-
     @Override
     public boolean supports(Class<?> arg0) {
         return arg0.isAssignableFrom(Project.class);
@@ -34,8 +32,7 @@ public class ProjectValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectName", "project_name.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "project_description.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectAccess", "project_projectAccess.required");
-        // ValidationUtils.rejectIfEmptyOrWhitespace(err, "unixName",
-        // "project_unixname.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(err, "unixName", "project_unixname.required");
 
         Project project = (Project) obj;
 
