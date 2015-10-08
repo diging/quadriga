@@ -35,14 +35,14 @@ public class DeleteProjectController {
     @RequestMapping(value = "auth/workbench/deleteproject/{projectId}", method = RequestMethod.GET)
     public ModelAndView deleteProjectRequest(
             @PathVariable("projectId") String projectId,
-            RedirectAttributes redirectAttributes,Principal principal)
+            RedirectAttributes redirectAttributes, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model = new ModelAndView("redirect:/auth/workbench");
 
         ArrayList<String> projectIdList = new ArrayList<String>();
         projectIdList.add(projectId);
 
-        projectManager.deleteProjectRequest(projectIdList,principal);
+        projectManager.deleteProjectRequest(projectIdList, principal);
 
         redirectAttributes.addFlashAttribute("show_success_alert", true);
         redirectAttributes.addFlashAttribute("success_alert_msg",
