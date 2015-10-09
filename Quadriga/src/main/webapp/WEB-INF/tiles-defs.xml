@@ -231,6 +231,13 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/deleteproject.jsp" />
 	</definition>
+	
+	<definition name="auth/workbench/editProjectPageURL" extends="base.definition.workbench">
+		<put-attribute name="title"
+			value="Quadriga Workbench - Edit Project Page URL" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workbench/editProjectPageURL.jsp" />
+	</definition>
 
 	<!-- Add/Update/Delete Project Collaborator START -->
 	<definition name="auth/workbench/addcollaborators"

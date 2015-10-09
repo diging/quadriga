@@ -57,7 +57,7 @@ All
 <img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/project-new.png"> 
 <c:choose>
 <c:when test="${accessibleProjects[project.projectId]}">
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}">${project.projectName}</a> 
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}">${project.projectName}</a> 
 </c:when>
 <c:otherwise>
 ${project.projectName} <span style="font-size: 12px"><span title="No access" class="glyphicon glyphicon-eye-close"></span></span>
