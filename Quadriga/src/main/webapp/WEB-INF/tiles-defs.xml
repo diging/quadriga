@@ -123,8 +123,6 @@
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/conceptcollection.jsp" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-conceptcollectionbench.jsp" />
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	<definition name="auth/conceptcollections/details" extends="base.definition.conceptcollections">
