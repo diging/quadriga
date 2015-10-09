@@ -38,8 +38,6 @@ public class ProjectValidator implements Validator {
 		
 		Project project = (Project)obj;
 		
-		String projUnixName = project.getUnixName();
-		String projectId = project.getProjectId();
 		EProjectAccessibility projectAccess = project.getProjectAccess();
 		
 		if(err.getFieldError("projectAccess")==null)
@@ -48,19 +46,6 @@ public class ProjectValidator implements Validator {
 			validateProjectAccessibility(projectAccess,err);
 		}
 		
-		if(err.getFieldError("unixName")==null) {
-    		//validate the regular expression
-    		validateUnixNameExp(projUnixName,err);
-		}
-		
-		
-		if(err.getFieldError("unixName")==null) {
-			try {
-				validateUnixName(projUnixName,projectId,err);
-			} catch(QuadrigaStorageException e) {
-				logger.error("Error", e);
-			}
-		}
 	}
 	
 	public void validateProjectAccessibility( EProjectAccessibility projectAccess,Errors err)
