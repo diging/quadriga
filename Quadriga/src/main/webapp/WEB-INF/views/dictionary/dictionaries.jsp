@@ -67,6 +67,10 @@
     </c:if>
 </div>
 
+<div style="float:right;">
+	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">Add Dictionary</a>
+</div>
+</br>
 <c:if test="${not empty dictionaryCollabList}">
     You participate in these Dictionaries:
     <ul>
