@@ -44,6 +44,11 @@ You don't own any concept collections.
 </c:if>
 </div>
 
+<div style="float:right;">
+	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/addCollectionsForm">Add Concept Collection</a>
+</div>
+<br/>
+
 <div>
 <c:if test="${not empty collaborationlist}">
     You collaborate on these concept collections:
@@ -61,9 +66,4 @@ You don't own any concept collections.
             <c:if test="${empty collaborationlist}">
           You don't collaborate on any concept collections.
        </c:if>
-</div>
-
-
-<div style="float:right;">
-	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/addCollectionsForm">Add Concept Collection</a>
 </div>

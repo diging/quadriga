@@ -120,7 +120,7 @@
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	
-	<definition name="auth/conceptcollections" extends="base.definition.conceptcollections.nav">
+	<definition name="auth/conceptcollections" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/conceptcollection.jsp" />
