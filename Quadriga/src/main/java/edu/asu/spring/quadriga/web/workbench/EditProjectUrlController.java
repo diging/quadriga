@@ -68,24 +68,24 @@ public class EditProjectUrlController {
         return "auth/workbench/editProjectPageURL";
     }
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.POST)
-	public String editProjectPageURL(@Validated @ModelAttribute("project") Project project, BindingResult result,
-			@PathVariable("projectid") String projectid, Principal principal, ModelMap model,
-			RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
-		if (result.hasErrors()) {
-			logger.error("Update project details error:", result);
-			model.addAttribute("project", project);
-			model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
-			return "auth/workbench/editProjectPageURL";
-		}
-		String userName = principal.getName();
-		projectManager.updateProjectURL(project.getProjectId(), project.getUnixName(), userName);
-		redirectAttributes.addFlashAttribute("show_success_alert", true);
-		redirectAttributes.addFlashAttribute("success_alert_msg", "Project URL has been updated successfully");
-		return "redirect:/auth/workbench?projectid=" + projectid;
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.POST)
+    public String editProjectPageURL(@Validated @ModelAttribute("project") Project project, BindingResult result,
+            @PathVariable("projectid") String projectid, Principal principal, ModelMap model,
+            RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
+        if (result.hasErrors()) {
+            logger.error("Update project details error:", result);
+            model.addAttribute("project", project);
+            model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
+            return "auth/workbench/editProjectPageURL";
+        }
+        String userName = principal.getName();
+        projectManager.updateProjectURL(project.getProjectId(), project.getUnixName(), userName);
+        redirectAttributes.addFlashAttribute("show_success_alert", true);
+        redirectAttributes.addFlashAttribute("success_alert_msg", "Project URL has been updated successfully");
+        return "redirect:/auth/workbench?projectid=" + projectid;
 
-	}
+    }
 
 }

@@ -84,20 +84,19 @@ public class AddProjectController {
     @RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
     public ModelAndView addProjectRequest(@Validated @ModelAttribute("project") Project project, BindingResult result,
             Principal principal, RedirectAttributes redirectAttribtutes) throws QuadrigaStorageException {
-
         ModelAndView model;
         if (result.hasErrors()) {
             model = new ModelAndView("auth/workbench/addproject");
             model.getModelMap().put("project", project);
             model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
-        } else {
-            model = new ModelAndView("redirect:/auth/workbench");
-            IUser user = userManager.getUser(principal.getName());
-            project.setOwner(user);
-            projectManager.addNewProject(project, principal.getName());
-            redirectAttribtutes.addFlashAttribute("show_success_alert", true);
-            redirectAttribtutes.addFlashAttribute("success_alert_msg", "Project created successfully.");
+            return model;
         }
+        model = new ModelAndView("redirect:/auth/workbench");
+        IUser user = userManager.getUser(principal.getName());
+        project.setOwner(user);
+        projectManager.addNewProject(project, principal.getName());
+        redirectAttribtutes.addFlashAttribute("show_success_alert", true);
+        redirectAttribtutes.addFlashAttribute("success_alert_msg", "Project created successfully.");
         return model;
     }
 }
