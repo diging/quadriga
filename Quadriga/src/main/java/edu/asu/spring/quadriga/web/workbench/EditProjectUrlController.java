@@ -84,7 +84,7 @@ public class EditProjectUrlController {
         projectManager.updateProjectURL(project.getProjectId(), project.getUnixName(), userName);
         redirectAttributes.addFlashAttribute("show_success_alert", true);
         redirectAttributes.addFlashAttribute("success_alert_msg", "Project URL has been updated successfully");
-        return "redirect:/auth/workbench?projectid=" + projectid;
+        return "redirect:/auth/workbench/projects/" + projectid;
 
     }
 

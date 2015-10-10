@@ -40,6 +40,7 @@ public class ProjectURLValidator implements Validator {
             try {
                 unixNameValidator.validateUnixName(projUnixName, projectId, err);
             } catch (QuadrigaStorageException e) {
+            	err.rejectValue("unixName", "projectUnixName.unique");
                 logger.error("Error", e);
             }
         }
