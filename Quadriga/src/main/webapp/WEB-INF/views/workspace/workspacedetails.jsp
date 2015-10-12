@@ -549,10 +549,38 @@
 							});
 				}
 			</script>
+			<script>
+				function confirmWorkspaceArchive() {
+					// Define the Dialog and its properties.
+					$("#dialog-archive-confirm")
+					.dialog(
+							{
+								resizable : false,
+								modal : true,
+								title : "Do you want to archive this workspace?",
+								height : 140,
+								width : 500,
+								buttons : {
+									"Archive" : function() {
+										$(this).dialog('close');
+										location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/archiveworkspace?projectid=${myprojectid}';
+										return false;
+									},
+									"Cancel" : function() {
+										$(this).dialog('close');
+										return false;
+									}
+								}
+							});
+				}
+			</script>
 			<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
 			<div id="dialog-archive-confirm" title="Confirm ?"></div>
 				<a href="#" onclick="return confirmWorkspaceDeactivation();"> 
 					Deactivate Workspace
+				</a>
+				<a href="#" onclick="confirmWorkspaceArchive()"> 
+					Archive Workspace
 				</a>
 				<a href="#" onclick="confirmWorkspaceArchive()"> 
 					Archive Workspace
