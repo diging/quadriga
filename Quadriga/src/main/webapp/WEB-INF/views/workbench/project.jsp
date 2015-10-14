@@ -40,9 +40,15 @@
 			<h2>Project: ${project.projectName}</h2>
 			<div>${project.description}</div>
 			<div style="text-align:right">
-			<a href="modifyproject/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project
 			</a>
 			</div>
+			
+			<div style="text-align:right">
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project URL
+			</a>
+			</div>
+			
 			<hr>
 			<div class="user">Owned by: ${project.owner.name} <c:if test="${owner=='1'}">(<a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">Change</a>)</c:if></div>
 					
