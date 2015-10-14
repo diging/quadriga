@@ -15,6 +15,15 @@ public class ProjectValidator implements Validator {
         return arg0.isAssignableFrom(Project.class);
     }
 
+    /**
+     * This method validates the entered ProjectName, Description, Project
+     * access and Unix Name. Validates if the values are available or not. If
+     * values are not available error is thrown
+     * 
+     * @param obj
+     * @param err
+     * @author Karthikeyan Mohan
+     */
     @Override
     public void validate(Object obj, Errors err) {
         // validate all the input parameters

@@ -23,6 +23,16 @@ public class ProjectURLValidator implements Validator {
         return arg0.isAssignableFrom(Project.class);
     }
 
+    /**
+     * This method validates if the entered Unix name is duplicate or not and if
+     * unix name contains any special characters
+     * 
+     * @param unixName
+     * @param projectId
+     * @param err
+     * @throws QuadrigaStorageException
+     * @author Karthikeyan Mohan
+     */
     @Override
     public void validate(Object obj, Errors err) {
         // validate all the input parameters
@@ -40,7 +50,7 @@ public class ProjectURLValidator implements Validator {
             try {
                 unixNameValidator.validateUnixName(projUnixName, projectId, err);
             } catch (QuadrigaStorageException e) {
-            	err.rejectValue("unixName", "projectUnixName.unique");
+                err.rejectValue("unixName", "projectUnixName.unique");
                 logger.error("Error", e);
             }
         }

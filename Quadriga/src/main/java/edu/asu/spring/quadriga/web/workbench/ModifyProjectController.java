@@ -37,7 +37,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.validator.UpdateProjectValidator;
+import edu.asu.spring.quadriga.validator.ProjectValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
@@ -58,7 +58,7 @@ public class ModifyProjectController {
     private IUserManager userManager;
 
     @Autowired
-    private UpdateProjectValidator validator;
+    private ProjectValidator validator;
 
     @Autowired
     private IListWSManager wsManager;

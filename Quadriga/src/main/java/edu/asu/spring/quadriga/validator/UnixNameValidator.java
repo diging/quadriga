@@ -21,7 +21,7 @@ public class UnixNameValidator implements IUnixNameValidator {
      * 
      * @param unixName
      * @param err
-     * @author kiran batna
+     * @author Karthikeyan Mohan
      */
     public void validateUnixNameExp(String unixName, Errors err) {
         String regex = "^[a-zA-Z0-9-_.+]*$";
@@ -38,7 +38,7 @@ public class UnixNameValidator implements IUnixNameValidator {
      * @param projectId
      * @param err
      * @throws QuadrigaStorageException
-     * @author kiran batna
+     * @author Karthikeyan Mohan
      */
     public void validateUnixName(String unixName, String projectId, Errors err) throws QuadrigaStorageException {
         // Verifying if the Unix name already exists
