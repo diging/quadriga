@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class DeactivateWSController {
     @Autowired
-    IArchiveWSManager archiveWSManager;
+    private IArchiveWSManager archiveWSManager;
 
     /**
      * This method deactivates the workpace for the project

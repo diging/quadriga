@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class DeleteProjectController {
     @Autowired
-    IModifyProjectManager projectManager;
+    private IModifyProjectManager projectManager;
     /**
      * This method calls the user manager to delete the project.
      * 

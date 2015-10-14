@@ -21,14 +21,14 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 public class DeleteProjectControllerTest {
     
     @InjectMocks
-    DeleteProjectController mockDeleteProjectController;
+    private DeleteProjectController deleteProjectController;
     @Mock
-    IModifyProjectManager mockProjectManager;
-    Principal principal;
+    private IModifyProjectManager projectManager;
+    private Principal principal;
     
     @Before
     public void setup(){
-        mockProjectManager = Mockito.mock(IModifyProjectManager.class);
+        projectManager = Mockito.mock(IModifyProjectManager.class);
         MockitoAnnotations.initMocks(this);
         principal = new Principal() {           
             @Override
@@ -46,8 +46,8 @@ public class DeleteProjectControllerTest {
         ArrayList<String> projectIdList = new ArrayList<String>();
         projectIdList.add(mockProjectId);
         
-        ModelAndView actualModel = mockDeleteProjectController.deleteProjectRequest(mockProjectId, redirectAttributes,principal);
-        Mockito.verify(mockProjectManager, Mockito.atLeastOnce()).deleteProjectRequest(projectIdList,principal);
+        ModelAndView actualModel = deleteProjectController.deleteProjectRequest(mockProjectId, redirectAttributes,principal);
+        Mockito.verify(projectManager, Mockito.atLeastOnce()).deleteProjectRequest(projectIdList,principal);
 
         String expectedViewName = "redirect:/auth/workbench";
         assertEquals(expectedViewName,actualModel.getViewName());
