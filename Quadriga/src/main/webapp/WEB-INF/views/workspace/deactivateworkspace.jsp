@@ -21,10 +21,9 @@ function submitClick(id){
 $(function() {
 	
 	$("input[name='Back']").button().click(function(event) {
-		event.preventDefault();
 	});
 	
-	$("input[name='unarchivews']").button().click(function(event){
+	$("input[name='deactivatews']").button().click(function(event) {
 	});
 	
 	$("input[name='selectall']").button().click(function(event){
@@ -42,11 +41,11 @@ $(function() {
 </script>
 <article class="is-page-content">
 	<form:form modelAttribute="workspaceform" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/unarchiveworkspace" id="unarchivewsform">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/deactivateworkspace" id="deactivatewsform">
 		<c:choose>
 			<c:when test="${success == '0'}">
 					<c:if test="${not empty workspaceform.workspaceList}">
-					<span class="byline">Select the workspace to be activate:</span>
+					<span class="byline">Select the workspace to be deactivated:</span>
 					<c:choose>
 						<c:when test="${error == '1'}">
 							<span class="ui-state-error-text"> <spring:message
@@ -55,7 +54,7 @@ $(function() {
 							<br>
 						</c:when>
 					</c:choose>
-			<input class="command" type="submit" value='Activate' name="unarchivews">
+			<input class="command" type="submit" value='Deactivate' name="deactivatews">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
 			<input type="button"
@@ -90,7 +89,7 @@ $(function() {
 					</c:forEach>
 				</tbody>
 			</table>
-			<input class="command" type="submit" value='Activate' name="unarchivews">
+			<input class="command" type="submit" value='Deactivate' name="deactivatews">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
 			<input type="button"
@@ -99,14 +98,14 @@ $(function() {
 				</c:if>
 				<c:if test="${empty workspaceform.workspaceList}">
 					<ul>
-				<li><input type=button onClick="submitClick(this.id);"
+				<li><input type="button" onClick="submitClick(this.id);"
 					value='Okay' name="Back"></li>
 			</ul>
 			You don't have any workspace to activate.
 				</c:if>
 			</c:when>
 				     <c:when test="${success == '1'}"> 
-		     <span class="byline">Successfully activated selected workspace</span> 
+		     <span class="byline">Successfully deactivated selected workspace</span> 
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
