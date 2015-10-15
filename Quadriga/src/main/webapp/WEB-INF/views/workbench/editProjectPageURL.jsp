@@ -47,49 +47,31 @@ input {
 
 			<script>
 				function funConfirmChanges() {
-
-					var name = $.trim($('#unixName').val());
-					if (name === '') {
-						$("#dialog-confirm").dialog({
-							resizable : false,
-							modal : true,
-							title : "Custom URL cannot be empty.",
-							height : 140,
-							width : 400,
-							buttons : {
-								"Ok" : function() {
-									$(this).dialog('close');
-									return false;
-								}
+					// Define the Dialog and its properties.
+					$("#dialog-confirm").dialog({
+						resizable : false,
+						modal : true,
+						height : 200,
+						width : 400,
+						buttons : {
+							"Yes" : function() {
+								$(this).dialog('close');
+								$("#target").submit();
+								loca
+								return false;
+							},
+							"No" : function() {
+								$(this).dialog('close');
+								return false;
 							}
-						});
-						return false;
-					} else {
-						// Define the Dialog and its properties.
-						$("#dialog-confirm").dialog({
-							resizable : false,
-							modal : true,
-							title : "Old URL will not work anymore. Continue?",
-							height : 140,
-							width : 500,
-							buttons : {
-								"Yes" : function() {
-									$(this).dialog('close');
-									$("#target").submit();
-									loca
-									return false;
-								},
-								"No" : function() {
-									$(this).dialog('close');
-									return false;
-								}
-							}
-						});
-					}
+						}
+					});
 				}
 			</script>
 
-			<div id="dialog-confirm" title="Confirm ?"></div>
+			<div id="dialog-confirm" title="Warning" style="word-wrap:break-word;">
+			<p>Old URL will not work anymore. Do you wish to continue? </p>
+			</div>
 
 			<header>
 				<h2>Edit Project URL</h2>
