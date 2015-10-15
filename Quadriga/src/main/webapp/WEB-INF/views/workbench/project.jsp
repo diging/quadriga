@@ -158,6 +158,7 @@
 										resizable : false,
 										modal : true,
 										title : "Delete Project",
+										position: 'top',
 										height : 300,
 										width : 500,
 										buttons : {
@@ -175,7 +176,7 @@
 				}
 			</script>
 			<div id="dialog-delete-project-confirm" title="Confirm Delete?">
-				You are about to delete a project, this is not reversible.</br> Do you want to proceed?.</div>
+				You are about to delete a project, this is not reversible.</br> Do you want to proceed?</div>
 		</td>
 		
 		<!-- Display collaborators -->
