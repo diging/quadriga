@@ -28,10 +28,8 @@ public class UnixNameValidator implements IUnixNameValidator {
         Pattern pattern = Pattern.compile(regex);
         if (!pattern.matcher(unixName).matches()) {
             err.rejectValue("unixName", "project_UnixName.expression");
-        }
-        else if(unixName.trim().equalsIgnoreCase("")){
-            err.rejectValue("unixName", "project_unixname.required"
-                    + "");
+        } else if (unixName.trim().equalsIgnoreCase("")) {
+            err.rejectValue("unixName", "project_unixname.required" + "");
         }
     }
 
