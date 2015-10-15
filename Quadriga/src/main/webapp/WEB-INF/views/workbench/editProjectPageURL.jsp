@@ -42,8 +42,55 @@ input {
 
 <article class="is-page-content">
 	<div id="projectDiv">
-		<form:form commandName="project" method="POST"
+		<form:form id="target" commandName="project" method="POST"
 			action="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}">
+
+			<script>
+				function funConfirmChanges() {
+
+					var name = $.trim($('#unixName').val());
+					if (name === '') {
+						$("#dialog-confirm").dialog({
+							resizable : false,
+							modal : true,
+							title : "Custom URL cannot be empty.",
+							height : 140,
+							width : 400,
+							buttons : {
+								"Ok" : function() {
+									$(this).dialog('close');
+									return false;
+								}
+							}
+						});
+						return false;
+					} else {
+						// Define the Dialog and its properties.
+						$("#dialog-confirm").dialog({
+							resizable : false,
+							modal : true,
+							title : "Old URL will not work anymore. Continue?",
+							height : 140,
+							width : 500,
+							buttons : {
+								"Yes" : function() {
+									$(this).dialog('close');
+									$("#target").submit();
+									loca
+									return false;
+								},
+								"No" : function() {
+									$(this).dialog('close');
+									return false;
+								}
+							}
+						});
+					}
+				}
+			</script>
+
+			<div id="dialog-confirm" title="Confirm ?"></div>
+
 			<header>
 				<h2>Edit Project URL</h2>
 				<span class="byline">Please fill in the following
@@ -52,10 +99,9 @@ input {
 			<table style="width: 100%">
 				<tr>
 					<td style="width: 170px">Name:</td>
-					<td style="width: 400px"><form:input path="projectName"
-							size="60" id="projectName" readonly="true" /></td>
-					<td><form:errors path="projectName"
-							class="ui-state-error-text"></form:errors></td>
+					<td style="width: 400px"><c:out
+							value="${project.projectName }" /> <form:hidden
+							path="projectName" /></td>
 				</tr>
 				<tr>
 					<td>Custom URL:</td>
@@ -69,8 +115,8 @@ input {
 					<td><div id="UnixURL"></div></td>
 				</tr>
 				<tr>
-					<td><input class="command" type="submit"
-						value="Edit Project URL"></td>
+					<td><input class="command" type="button"
+						onclick="return funConfirmChanges();" value="Edit Project URL"></td>
 					<td><input type="button" value="Cancel"
 						onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"></td>
 				</tr>
