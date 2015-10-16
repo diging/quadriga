@@ -228,17 +228,18 @@
 			</c:choose>
 
 		</td>
-		<td style="width: 10%"><c:if
-				test="${not empty collaboratingUsers}">
+		<td style="width: 10%">
 				<section>
 					<h3 class="major">
 						<span>Collaborators</span>
 					</h3>
 					<ul class="collaborators">
+					<c:if test="${not empty collaboratingUsers}">
 						<c:forEach var="collab" items="${collaboratingUsers}">
 							<li><c:out value="${collab.collaborator.userObj.name}"></c:out></li>
 						</c:forEach>
-						<div style="border-top: dashed 1px #e7eae8; padding: 5px; margin-top: 15px;">
+					</c:if>
+					<div style="border-top: dashed 1px #e7eae8; padding: 5px; margin-top: 15px;">
 							<ul class="colltools">
 								<li><img
 									src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"
@@ -256,7 +257,7 @@
 						</div>
 					</ul>
 				</section>
-			</c:if></td>
+			</td>
 	</tr>
 </table>
 <div id="dlgConfirm" title="Confirmation" style="display: none">
