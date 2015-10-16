@@ -193,7 +193,7 @@ public class ModifyProjectController
 		}
 		else
 		{
-			projectManager.updateProject(project.getProjectId(),project.getProjectName(),project.getDescription(),project.getProjectAccess().name(),project.getUnixName(),userName);
+			projectManager.updateProject(project.getProjectId(),project.getProjectName(),project.getDescription(),userName);
 			model.getModelMap().put("success", 1);
 		}
 		return model;

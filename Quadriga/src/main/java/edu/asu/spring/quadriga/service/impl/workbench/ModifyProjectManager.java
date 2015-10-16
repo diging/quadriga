@@ -83,21 +83,18 @@ public class ModifyProjectManager extends BaseManager implements
         ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project,
                 userName);
         projectDao.saveNewDTO(projectDTO);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Transactional
-    public void updateProject(String projID, String projName, String projDesc,
-            String projAccess, String unixName, String userName)
-            throws QuadrigaStorageException {
-        ProjectDTO projectDTO = projectDao.getProjectDTO(projID);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional
+	public void updateProject(String projID, String projName,String projDesc,String userName) throws QuadrigaStorageException
+	{
+	    ProjectDTO projectDTO = projectDao.getProjectDTO(projID);
         projectDTO.setProjectname(projName);
         projectDTO.setDescription(projDesc);
-        projectDTO.setAccessibility(projAccess);
-        projectDTO.setUnixname(unixName);
         projectDTO.setUpdatedby(userName);
         projectDTO.setUpdateddate(new Date());
 
