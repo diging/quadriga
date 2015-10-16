@@ -8,6 +8,11 @@
 			var keyedInput = $("#unixName").val();
 			$("#UnixURL").text('${unixnameurl}' + keyedInput);
 		});
+		$("#dialog-confirm").dialog({
+			autoOpen : false,
+		});
+
+		$('#editProject').click(funConfirmChanges);
 	});
 
 	$(function() {
@@ -50,28 +55,27 @@ input {
 					// Define the Dialog and its properties.
 					$("#dialog-confirm").dialog({
 						resizable : false,
-						modal : true,
-						height : 200,
+						height : 210,
 						width : 400,
 						buttons : {
 							"Yes" : function() {
-								$(this).dialog('close');
+								$("#dialog-confirm").dialog('close');
 								$("#target").submit();
-								loca
-								return false;
 							},
 							"No" : function() {
-								$(this).dialog('close');
-								return false;
+								$("#dialog-confirm").dialog('close');
 							}
 						}
 					});
+
+					$("#dialog-confirm").dialog('open');
+
 				}
 			</script>
 
-			<div id="dialog-confirm" title="Warning" style="word-wrap:break-word;">
-			<p>Old URL will not work anymore. Do you wish to continue? </p>
-			</div>
+
+			<div id="dialog-confirm" title="Warning">Old URL will not work
+				anymore. Do you wish to continue?</div>
 
 			<header>
 				<h2>Edit Project URL</h2>
@@ -97,8 +101,8 @@ input {
 					<td><div id="UnixURL"></div></td>
 				</tr>
 				<tr>
-					<td><input class="command" type="button"
-						onclick="return funConfirmChanges();" value="Edit Project URL"></td>
+					<td><input id="editProject" class="command" type="button"
+						value="Edit Project URL"></td>
 					<td><input type="button" value="Cancel"
 						onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"></td>
 				</tr>
