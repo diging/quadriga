@@ -107,7 +107,7 @@
 			<form method="POST">
 
 				<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}'"
 	value='Okay'/>
 	<br />
 				<input type="submit" value="Delete Dictionary"

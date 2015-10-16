@@ -23,7 +23,7 @@
 <h2>Project: ${project.projectName}</h2>
 <hr />
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}'"
 	value='Okay'>
 <br>
 <br>
