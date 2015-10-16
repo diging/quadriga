@@ -354,24 +354,25 @@
 
 						<script>
 							function funConfirmDeletion() {
-
+								var pos = [ $(window).width() / 4, 50 ];
 								// Define the Dialog and its properties.
 								$("#dialog-confirm")
 										.dialog(
 												{
 													resizable : false,
 													modal : true,
-													title : "Confirm Delete",
+													title : "Are you sure you want to delete the workspace?",
 													height : 140,
-													width : 400,
+													width : 650,
+													position : pos,
 													buttons : {
-														"Delete" : function() {
+														"Yes" : function() {
 															$(this).dialog(
 																	'close');
 															location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteSingleWorkspace/${workspaceid}?projectId=${myprojectid}';
 															return false;
 														},
-														"Cancel" : function() {
+														"No" : function() {
 															$(this).dialog(
 																	'close');
 															return false;
@@ -519,21 +520,23 @@
 			</c:choose> <script>
 				function confirmWorkspaceDeactivation() {
 					// Define the Dialog and its properties.
+					var pos = [ $(window).width() / 4, 50 ];
 					$("#dialog-confirm")
 							.dialog(
 									{
 										resizable : false,
 										modal : true,
-										title : "Do you want to deactivate this workspace?",
+										title : "Are you sure you want to deactivate the workspace?",
 										height : 140,
-										width : 500,
+										width : 650,
+										position : pos,
 										buttons : {
-											"Deactivate" : function() {
+											"Yes" : function() {
 												$(this).dialog('close');
 												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
 												return false;
 											},
-											"Cancel" : function() {
+											"No" : function() {
 												$(this).dialog('close');
 												return false;
 											}
@@ -544,21 +547,23 @@
 			<script>
 				function confirmWorkspaceActivation() {
 					// Define the Dialog and its properties.
+					var pos = [ $(window).width() / 4, 50 ];
 					$("#dialog-confirm")
 							.dialog(
 									{
 										resizable : false,
 										modal : true,
-										title : "Confirm Activate",
+										title : "Are you sure you want to activate the workspace?",
 										height : 140,
-										width : 500,
+										width : 650,
+										position : pos,
 										buttons : {
-											"Activate" : function() {
+											"Yes" : function() {
 												$(this).dialog('close');
 												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/activateWorkspace?projectid=${myprojectid}';
 												return false;
 											},
-											"Cancel" : function() {
+											"No" : function() {
 												$(this).dialog('close');
 												return false;
 											}
