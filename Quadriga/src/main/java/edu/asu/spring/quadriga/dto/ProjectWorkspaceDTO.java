@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -52,7 +53,7 @@ public class ProjectWorkspaceDTO implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
     @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid",insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,cascade = CascadeType.ALL)
     private WorkspaceDTO workspaceDTO;
     @JoinColumn(name = "projectid", referencedColumnName = "projectid",insertable = false, updatable = false)
     @ManyToOne(optional = false)

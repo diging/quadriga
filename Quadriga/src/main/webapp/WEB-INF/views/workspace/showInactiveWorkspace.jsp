@@ -30,21 +30,14 @@ $(document).ready(function() {
 
 <h2>List of Inactive Workspaces</h2>
 <br>
-<input type="button" value="Go Back" onclick="
-location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"/>
-<table style="width: 100%" class="display dataTable" id="workspacelist">
-	<thead>
-		<tr>
-			<th width="21%"><h1>Workspace Name</h1></th>
-			<th width="75%"><h1>Description</h1></th>
-		</tr>
-	</thead>
-	<tbody>
-	<c:forEach var="workspace" items="${deactivatedWSList}">
-	<tr>
-		<td width="30%"><c:out value="${workspace.name}" /></td>
-		<td width="70%"><c:out value="${workspace.description}" /></td>
-	</tr>
-	</c:forEach>
-	</tbody>
-</table>
+<c:forEach var="workspace" items="${deactivatedWSList}">
+    <li class="ws with-icon"><a
+        href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}">
+            <c:out value="${workspace.name}"></c:out>
+    </a> (Owner) <br> <c:out value="${workspace.description}"></c:out>
+    </li>
+</c:forEach>
+<br>
+<input type="button" value="Go Back"
+    onclick="
+location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectid}'" />
