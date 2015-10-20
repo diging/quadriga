@@ -67,7 +67,7 @@ public class ArchiveWSController
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, 
 	userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR}),
 	@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=2,userRole={})})
-	@RequestMapping(value = "auth/workbench/{workspaceid}/archiveworkspace", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/workbench/{workspaceid}/archiveSingleWorkspace", method = RequestMethod.GET)
 	
 	public ModelAndView archiveWorkspace(
 			@RequestParam("projectid") String projectid,

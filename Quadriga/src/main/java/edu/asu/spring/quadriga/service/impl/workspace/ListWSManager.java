@@ -309,7 +309,6 @@ public class ListWSManager implements IListWSManager {
         itemData = ja1.toString();
 
         return itemData;
-
     }
 
     @Override
@@ -322,6 +321,16 @@ public class ListWSManager implements IListWSManager {
         WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(workspaceId.trim());
         if (wsDto != null)
             return wsDto.getIsdeactivated();
+        return false;
+    }
+    @Transactional
+    public boolean getArchiveStatus(String workspaceId) throws QuadrigaStorageException 
+    {
+        WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(workspaceId.trim());
+        if (wsDto != null)
+        {
+            return wsDto.getIsarchived();
+        }
         return false;
     }
 
