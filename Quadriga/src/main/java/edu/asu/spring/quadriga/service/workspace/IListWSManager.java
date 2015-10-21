@@ -57,6 +57,7 @@ public interface IListWSManager {
 			throws QuadrigaStorageException;
 	
 	public boolean getDeactiveStatus(String workspaceId) throws QuadrigaStorageException;
+	public boolean getArchiveStatus(String workspaceId) throws QuadrigaStorageException;
 
 	
 }
