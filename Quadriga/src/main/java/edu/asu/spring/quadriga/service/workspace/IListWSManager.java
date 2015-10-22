@@ -57,6 +57,16 @@ public interface IListWSManager {
 			throws QuadrigaStorageException;
 	
 	public boolean getDeactiveStatus(String workspaceId) throws QuadrigaStorageException;
+	
+	
+	/**
+	 * This method gets the archive status for the workspace id.
+	 * 
+	 * @param workspaceId
+	 * @return Boolean - true if archive
+	 * @author Gunpreet Singh
+	 * @throws QuadrigaStorageException
+	 */
 	public boolean getArchiveStatus(String workspaceId) throws QuadrigaStorageException;
 
 	

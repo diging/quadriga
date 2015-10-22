@@ -64,15 +64,10 @@ public class ArchiveWSController
 	 * @throws QuadrigaAccessException
 	 * @author Kiran Kumar Batna
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, 
-	userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR}),
-	@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=2,userRole={})})
-	@RequestMapping(value = "auth/workbench/{workspaceid}/archiveSingleWorkspace", method = RequestMethod.GET)
-	
-	public ModelAndView archiveWorkspace(
-			@RequestParam("projectid") String projectid,
-			@PathVariable("workspaceid") String workspaceid,
-			Principal principal, RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=2,userRole={})})
+	@RequestMapping(value = "auth/workbench/{workspaceid}/archiveSingleWorkspace", method = RequestMethod.GET)	
+	public ModelAndView archiveWorkspace(@RequestParam("projectid") String projectid, @PathVariable("workspaceid") String workspaceid, Principal principal, RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model = new ModelAndView("redirect:/auth/workbench/"+ projectid);
 		archiveWSManager.archiveWorkspace(workspaceid, principal.getName());		

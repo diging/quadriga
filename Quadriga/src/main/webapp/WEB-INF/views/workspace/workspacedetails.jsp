@@ -394,11 +394,7 @@
 								Workspace</font>
 
 						</c:if>
-						<c:if test="${isDeactivated == true}">
-							
-						</c:if>
-
-
+						
 					</div>
 
 
@@ -584,8 +580,8 @@
 					<a href="#" onclick="confirmWorkspaceArchive()"> 
 							Archive Workspace
 					</a>
-					<a href="#" onclick="return confirmWorkspaceDeactivation();"> 
-						Deactivate Workspace
+					<a href="#" onclick="confirmWorkspaceDeactivation();"> 
+							Deactivate Workspace
 					</a>
 				</c:if>
 				
