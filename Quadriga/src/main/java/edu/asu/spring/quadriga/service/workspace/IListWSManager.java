@@ -53,5 +53,10 @@ public interface IListWSManager {
 			throws NoSuchAlgorithmException, QuadrigaStorageException,
 			JSONException;
 
+	String getProjectIdFromWorkspaceId(String workspaceId)
+			throws QuadrigaStorageException;
+	
+	public boolean getDeactiveStatus(String workspaceId) throws QuadrigaStorageException;
+
 	
 }

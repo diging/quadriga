@@ -15,11 +15,6 @@ public class ModifyQuadrigaUser
 	private String name;
 	private List<IQuadrigaRole> quadrigaRoles;
 	
-	public ModifyQuadrigaUser()
-	{
-		
-	}
-	
 	public String getUserName() {
 		return userName;
 	}

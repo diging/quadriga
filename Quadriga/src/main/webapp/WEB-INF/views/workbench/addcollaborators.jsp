@@ -52,7 +52,7 @@ $(document).ready(function() {
 
 function onSubmit(){
 	
-	location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}';
+	location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}';
 }
 
 </script>
