@@ -139,13 +139,10 @@
 					<c:when test="${owner=='1'}">
 						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
 						<img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/archive.png"> Show Inactive Workspace
-						</a> 
-													
-					</c:when>
-				
-				</c:choose>
-				
-			</div>
+						</a>																		
+					</c:when>				
+				</c:choose>				
+			</div>			
 			<div align="right">
 				<c:if test="${owner=='1'}">
 					

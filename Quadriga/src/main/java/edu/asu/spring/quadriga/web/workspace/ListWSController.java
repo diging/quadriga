@@ -335,6 +335,8 @@ public class ListWSController
 		
 		//Including a condition to check if the workspace is not deactive. If the workspace is deactive adding attribute to make delete button disabled
 		model.addAttribute("isDeactivated", wsManager.getDeactiveStatus(workspaceid));
+		//Including a condition to check if the workspace is not archived. 
+		model.addAttribute("isArchived", wsManager.getArchiveStatus(workspaceid));
 		
 		return "auth/workbench/workspace/workspacedetails";
 	}

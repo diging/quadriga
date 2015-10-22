@@ -384,11 +384,6 @@
 						<div id="dialog-confirm" title="Confirm ?"></div>
 
 
-						<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
-						<a href="#" onclick="return confirmWorkspaceDeactivation();">
-							Deactivate Workspace</a>&nbsp;&nbsp;
-
-
 						<c:if test="${isDeactivated == true}">
 							<a href="#" onclick="return funConfirmDeletion();">Delete
 								Workspace</a>
@@ -399,8 +394,7 @@
 								Workspace</font>
 
 						</c:if>
-
-
+						
 					</div>
 
 
@@ -525,7 +519,77 @@
 										}
 									});
 				}
-			</script> <c:choose>
+				function confirmWorkspaceArchive() {
+					// Define the Dialog and its properties.
+					$("#dialog-archive-confirm")
+					.dialog(
+							{
+								resizable : false,
+								modal : true,
+								title : "Do you want to archive this workspace?",
+								height : 140,
+								width : 500,
+								buttons : {
+									"Archive" : function() {
+										$(this).dialog('close');
+										location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/archiveSingleWorkspace?projectid=${myprojectid}';
+										return false;
+									},
+									"Cancel" : function() {
+										$(this).dialog('close');
+										return false;
+									}
+								}
+							});
+				}
+			</script>
+			<script>
+				function confirmWorkspaceUnarchive() {
+					// Define the Dialog and its properties.
+					$("#dialog-unarchive-confirm")
+					.dialog(
+							{
+								resizable : false,
+								modal : true,
+								title : "Do you want to unarchive this workspace?",
+								height : 140,
+								width : 500,
+								buttons : {
+									"Unarchive" : function() {
+										$(this).dialog('close');
+										location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/unarchiveSingleWorkspace?projectid=${myprojectid}';
+										return false;
+									},
+									"Cancel" : function() {
+										$(this).dialog('close');
+										return false;
+									}
+								}
+							});
+				}
+			</script>
+			<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
+			<div id="dialog-archive-confirm" title="Confirm ?"></div>
+			<div id="dialog-unarchive-confirm" title="Confirm ?"></div>
+				<c:if test="${isArchived == true}">
+						<a href="#" onclick="confirmWorkspaceUnarchive()"> 
+							Unarchive Workspace
+						</a>	
+				</c:if>
+				<c:if test="${isDeactivated == false && isArchived == false}">
+					<a href="#" onclick="confirmWorkspaceArchive()"> 
+							Archive Workspace
+					</a>
+					<a href="#" onclick="confirmWorkspaceDeactivation();"> 
+							Deactivate Workspace
+					</a>
+				</c:if>
+				
+							
+			 <%-- <li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivatesingleworkspace?projectid=${myprojectid}">Deactivate</a></li>
+			 --%>
+			<!-- Display bit streams --> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
