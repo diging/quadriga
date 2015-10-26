@@ -17,10 +17,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "tbl_external_project")
 @XmlRootElement
-@NamedQueries({
-        @NamedQuery(name = "PassThroughProjectDTO.findAll", query = "SELECT p FROM PassThroughProjectDTO p"),
+@NamedQueries({ @NamedQuery(name = "PassThroughProjectDTO.findAll", query = "SELECT p FROM PassThroughProjectDTO p"),
         @NamedQuery(name = "PassThroughProjectDTO.findByProjectid", query = "SELECT p FROM PassThroughProjectDTO p WHERE p.projectid = :projectid"),
-        @NamedQuery(name = "PassThroughProjectDTO.findByExternalProjectid", query = "SELECT p FROM PassThroughProjectDTO p WHERE p.externalprojectid = :externalprojectid"), })
+        @NamedQuery(name = "PassThroughProjectDTO.findByExternalProjectid", query = "SELECT p FROM PassThroughProjectDTO p WHERE p.externalProjectid = :externalProjectid"), })
 
 public class PassThroughProjectDTO extends ProjectDTO {
     private static final long serialVersionUID = 1L;
@@ -37,11 +36,6 @@ public class PassThroughProjectDTO extends ProjectDTO {
     @Column(name = "client")
     private String client;
 
-    @Lob
-    @Column(name = "description")
-    private String description;
-
-    @Id
     @Basic(optional = false)
     @Column(name = "externalprojectid")
     private String externalProjectid;
@@ -71,14 +65,6 @@ public class PassThroughProjectDTO extends ProjectDTO {
 
     public void setClient(String client) {
         this.client = client;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getExternalProjectid() {
