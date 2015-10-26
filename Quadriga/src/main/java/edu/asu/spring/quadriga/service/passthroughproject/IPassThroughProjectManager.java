@@ -1,9 +1,19 @@
 package edu.asu.spring.quadriga.service.passthroughproject;
 
+import java.io.IOException;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 public interface IPassThroughProjectManager {
-    
-    void createWorkspaceForExternalProject();
+
+    String createWorkspaceForExternalProject(String response) throws JAXBException;
+
     void addPassThroughProject();
+
     void getPassThroughProjectDTO();
-    void callQStore();
+
+    String callQStore() throws ParserConfigurationException, SAXException, IOException, JAXBException;
 }
