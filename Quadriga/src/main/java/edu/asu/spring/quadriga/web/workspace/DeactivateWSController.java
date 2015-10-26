@@ -53,7 +53,7 @@ public class DeactivateWSController {
 
         ModelAndView model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/"
                 + workspaceid);
-
+        
         archiveWSManager.deactivateWorkspace(workspaceid, principal.getName());
 
         redirectAttributes.addFlashAttribute("show_success_alert", true);
