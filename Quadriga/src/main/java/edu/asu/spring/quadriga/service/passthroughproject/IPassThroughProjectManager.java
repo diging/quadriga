@@ -15,5 +15,5 @@ public interface IPassThroughProjectManager {
 
     void getPassThroughProjectDTO();
 
-    String callQStore() throws ParserConfigurationException, SAXException, IOException, JAXBException;
+    String callQStore(String xml) throws ParserConfigurationException, SAXException, IOException, JAXBException;
 }

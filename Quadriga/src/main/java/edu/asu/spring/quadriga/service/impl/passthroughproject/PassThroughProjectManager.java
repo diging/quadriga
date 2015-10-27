@@ -45,9 +45,8 @@ public class PassThroughProjectManager implements IPassThroughProjectManager {
     }
 
     @Override
-    public String callQStore() throws ParserConfigurationException, SAXException, IOException, JAXBException {
+    public String callQStore(String xml) throws ParserConfigurationException, SAXException, IOException, JAXBException {
         // TODO Auto-generated method stub -- Karthik
-        String xml = "";
         return createWorkspaceForExternalProject(networkManager.storeXMLQStore(xml));
         // Returns networkId
     }
