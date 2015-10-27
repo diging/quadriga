@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,11 +21,11 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
-
+@Controller
 public class PassThroughProjectRestController {
 	
-    @Autowired
-    private IPassThroughProjectManager passThroughProjectManager;
+   /* @Autowired
+    private IPassThroughProjectManager passThroughProjectManager;*/
     
     @Autowired
     private IUserManager userManager;
@@ -35,6 +36,8 @@ public class PassThroughProjectRestController {
 			HttpServletResponse response, @RequestBody String xml,
 			Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
 		
+	    System.out.println("hi");
+	    
 		return null;
 	}
 
