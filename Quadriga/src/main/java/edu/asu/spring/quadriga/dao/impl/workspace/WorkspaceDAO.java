@@ -65,13 +65,13 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
 
         deleteWorkspaceProjectMappings(workspace);
         deleteWorkspaceConceptCollectionMappings(workspace);
-        deleteWorkspaceDictionaryMappings(workspace);
+        //deleteWorkspaceDictionaryMappings(workspace);
         deleteWorkspaceDSpaceMappings(workspace);
         deleteWorkspaceEditorMappings(workspace);
         deleteWorkspaceNetworkMappings(workspace);
 
         // save the above changes
-        updateDTO(workspace);
+        //updateDTO(workspace);
         // then delete
         deleteDTO(workspace);
         return true;
