@@ -6,6 +6,10 @@ import java.io.StringReader;
 import java.security.Principal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +21,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,9 +45,7 @@ import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectMan
 @Controller
 public class PassThroughProjectRestController {
 
-    /*
-     * @Autowired private IPassThroughProjectManager passThroughProjectManager;
-     */
+    private IPassThroughProjectManager passThroughProjectManager;
 
     @Autowired
     private IUserManager userManager;
@@ -63,25 +66,25 @@ public class PassThroughProjectRestController {
         String description = getTagValue(document,"description");
         String sender = getTagValue(document,"sender");
         
-        String annotatedData = getAnnotateData(xml,document);
+        String annotatedText = getAnnotateData(xml);
         
         
         System.out.println(projetId+" "+userName+" "+userId+" "+name+" "+description+" "+sender+" ");
 
+        passThroughProjectManager.callQStore(annotatedText, userManager.getUser(principal.getName()));
+
         return null;
     }
 
-    private String getAnnotateData(String xml,Document document) {
-       
-        Node tagNode = document.getElementsByTagName("element_events").item(0);
+    private String getAnnotateData(String xml) {
         
+        int startIndex = xml.indexOf("<element_events");
+        int endIndex = xml.indexOf("</element_events>");
         
-        final Pattern pattern = Pattern.compile("<element_events>(.+?)</element_events>");
-        final Matcher matcher = pattern.matcher(xml);
-        matcher.find();
-        System.out.println(matcher.group(1)); // Prints String I want to extract
+        StringBuffer annotatedText = new StringBuffer(StringUtils.substring(xml, startIndex,endIndex));
+        annotatedText.append("</element_events>");
         
-        return null;
+        return annotatedText.toString();
     }
 
     private String getTagValue(Document document,String tagName) {
@@ -107,5 +110,6 @@ public class PassThroughProjectRestController {
         Node idNode = projetctAttributeMap.getNamedItem("id");
         return idNode.getNodeValue();
     }
+
 
 }
