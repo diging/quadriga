@@ -22,7 +22,7 @@
         <database.url>jdbc:mysql://localhost:3306/quadriga</database.url>
         <database.username>dbadmin</database.username>
         <database.pw>dbadmin</database.pw>
-        <qstore.url>http://localhost:8080/qstore4s</qstore.url>
+        <qstore.url>http://localhost:8080/qstore</qstore.url>
         <wordpower.url>http://digitalhps-develop.asu.edu:8080/wordpower</wordpower.url>
 	    <conceptpower.url>https://chps.asu.edu/conceptpower</conceptpower.url>
 	</properties>

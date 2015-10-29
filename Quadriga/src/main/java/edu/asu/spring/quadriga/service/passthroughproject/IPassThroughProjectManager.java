@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.passthroughproject;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,7 +17,8 @@ public interface IPassThroughProjectManager {
     String createWorkspaceForExternalProject(String externalWorkspaceId, String response, IUser user)
             throws JAXBException, QuadrigaStorageException, QuadrigaAccessException;
 
-    void addPassThroughProject();
+    String addPassThroughProject(Principal principal, String projectName, String description, String externalProjectid,
+            String externalUserId, String externalUserName, String client) throws QuadrigaStorageException;
 
     void getPassThroughProjectDTO();
 
