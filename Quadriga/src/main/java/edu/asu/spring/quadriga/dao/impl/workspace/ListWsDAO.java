@@ -551,5 +551,4 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
     public WorkspaceDTO getDTO(String id) {
         return getDTO(WorkspaceDTO.class, id);
     }
-
 }

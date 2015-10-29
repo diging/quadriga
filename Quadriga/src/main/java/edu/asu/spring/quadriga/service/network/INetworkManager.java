@@ -463,4 +463,7 @@ public interface INetworkManager {
 	String getSourceReferenceFromElementEventsType(
 			ElementEventsType elementEventsType);
 	
+    public abstract String storeNetworkDetailsWithExternalWorkspaceId(String xml, IUser user, String networkName,
+            String workspaceId, String uploadStatus, String networkId, int version) throws JAXBException;
+	
 }

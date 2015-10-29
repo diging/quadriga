@@ -86,6 +86,10 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<NetworkWorkspaceDTO> workspaceNetworkDTOList;
     
+    @JoinColumn(name = "workspaceid", referencedColumnName = "externalWorkspaceid",insertable = false, updatable = false)
+    @OneToOne(optional = false,cascade = CascadeType.ALL)
+    private ExternalWorkspaceDTO externalWorkspaceDTO;
+    
     public WorkspaceDTO() {
     }
 

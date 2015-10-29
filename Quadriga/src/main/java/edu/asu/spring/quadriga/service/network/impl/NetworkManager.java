@@ -88,6 +88,7 @@ import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementF
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IListExternalWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -1174,6 +1175,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
 		// Get Workspace details.
 		IWorkSpace workspace = null;
+
 		try {
 			workspace = wsManager.getWorkspaceDetails(workspaceId, user.getUserName());
 		} catch (QuadrigaStorageException e3) {
@@ -1633,5 +1635,62 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     public NetworksDTO getDTO(String id) {
         return getDTO(NetworksDTO.class, id);
     }
+    
+    
+    @Override
+    @Transactional
+    public String storeNetworkDetailsWithExternalWorkspaceId(String xml, IUser user, String networkName,String workspaceId, String uploadStatus, String networkId, int version) throws JAXBException{
+        ElementEventsType elementEventType = unMarshalXmlToElementEventsType(xml);
+
+        // Get Workspace details.
+        IWorkSpace workspace = null;
+
+        try {
+            workspace = wsManager.getWorkspaceDetails(workspaceId, user.getUserName());
+        } catch (QuadrigaStorageException e3) {
+            logger.error("Error while getting workspace details",e3);
+        } catch (QuadrigaAccessException e3) {
+            logger.error("User doesn't have access to workspace",e3);
+        }
+
+        // Get DSpace of the workspace
+        List<IWorkspaceBitStream> workspaceBitStreamList = workspace.getWorkspaceBitStreams();
+
+        NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
+
+        // Below code reads the top level Appelation events 
+
+        newNetworkDetailCache = parseNewNetworkStatement(elementEventType,workspaceBitStreamList,newNetworkDetailCache);
+
+        // Check if it DSpace is present in the XML
+        if(!newNetworkDetailCache.isFileExists()){
+            logger.info("Network not uploaded");
+            logger.info("Some of the text files in the uploaded network were not present in the workspace");
+            return INetworkManager.DSPACEERROR;
+        }
+
+        // Add network into database 
+        if(uploadStatus == INetworkManager.NEWNETWORK){
+            try{
+                networkId=dbConnect.addNetworkRequest(networkName, user,workspaceId);
+            }catch(QuadrigaStorageException e1){
+                logger.error("DB action error ",e1);
+            }
+        }
+
+        List<String []> networkDetailsCache = newNetworkDetailCache.getNetworkDetailsCache();
+        // Add network statements for networks
+        for(String node[] : networkDetailsCache){
+            try{
+                String rowid = generateUniqueID();
+                dbConnect.addNetworkStatement(rowid,networkId,node[0],node[1], node[2], user,version);
+            }catch(QuadrigaStorageException e1){
+                logger.error("DB error while adding network statment",e1);
+            }
+        }
+        return networkId;
+    }
+    
+    
 
 }
