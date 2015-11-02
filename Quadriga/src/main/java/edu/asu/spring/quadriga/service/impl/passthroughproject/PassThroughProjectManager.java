@@ -33,12 +33,11 @@ import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectMan
 import edu.asu.spring.quadriga.service.workspace.mapper.IListExternalWSManager;
 
 @Service
-public class PassThroughProjectManager extends BaseManager implements
-        IPassThroughProjectManager {
+public class PassThroughProjectManager extends BaseManager implements IPassThroughProjectManager {
 
     @Autowired
     private IWorkspaceDAO workspaceDao;
-    
+
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -87,18 +86,17 @@ public class PassThroughProjectManager extends BaseManager implements
 
     @Override
     @Transactional
-    public String addPassThroughProject(Principal principal,
-            String projectName, String description, String externalProjectid,
-            String externalUserId, String externalUserName, String client) throws QuadrigaStorageException {
+    public String addPassThroughProject(Principal principal, String projectName, String description,
+            String externalProjectid, String externalUserId, String externalUserName, String client)
+                    throws QuadrigaStorageException {
 
-        String projectId = messages.getProperty("project_internalid.name")
-                + generateUniqueID();
+        String projectId = messages.getProperty("project_internalid.name") + generateUniqueID();
 
         IUser user = userManager.getUser(principal.getName());
-        
+
         Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
-        query.setParameter("username",principal.getName());
-        
+        query.setParameter("username", principal.getName());
+
         List<QuadrigaUserDTO> quadrigaUsers = query.list();
 
         PassThroughProjectDTO projectDTO = new PassThroughProjectDTO();
@@ -106,7 +104,8 @@ public class PassThroughProjectManager extends BaseManager implements
         projectDTO.setProjectid(projectId);
         projectDTO.setProjectname(projectName);
         projectDTO.setDescription(description);
-        // Since we are not passing unix name in REST request, we are assigning the unix name as projet name
+        // Since we are not passing unix name in REST request, we are assigning
+        // the unix name as projet name
         projectDTO.setUnixname(projectName);
         projectDTO.setProjectid(projectId);
         projectDTO.setProjectowner(quadrigaUsers.get(0));
@@ -135,10 +134,10 @@ public class PassThroughProjectManager extends BaseManager implements
     }
 
     @Override
-    public String callQStore(String xml, IUser user) throws ParserConfigurationException, SAXException, IOException,
-            JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+    public String callQStore(String externalWorkspaceId, String xml, IUser user) throws ParserConfigurationException,
+            SAXException, IOException, JAXBException, QuadrigaStorageException, QuadrigaAccessException {
         // TODO Auto-generated method stub -- Karthik
-        return createWorkspaceForExternalProject("", networkManager.storeXMLQStore(xml), user);
+        return createWorkspaceForExternalProject(externalWorkspaceId, networkManager.storeXMLQStore(xml), user);
         // Returns networkId
     }
 

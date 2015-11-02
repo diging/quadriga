@@ -86,8 +86,8 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<NetworkWorkspaceDTO> workspaceNetworkDTOList;
     
-    @JoinColumn(name = "workspaceid", referencedColumnName = "externalWorkspaceid",insertable = false, updatable = false)
-    @OneToOne(optional = false,cascade = CascadeType.ALL)
+    
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "workspaceDTO",orphanRemoval=true)
     private ExternalWorkspaceDTO externalWorkspaceDTO;
     
     public WorkspaceDTO() {
@@ -292,5 +292,13 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     @Override
     public void setOwner(QuadrigaUserDTO owner) {
        this.workspaceowner = owner; 
+    }
+
+    public ExternalWorkspaceDTO getExternalWorkspaceDTO() {
+        return externalWorkspaceDTO;
+    }
+
+    public void setExternalWorkspaceDTO(ExternalWorkspaceDTO externalWorkspaceDTO) {
+        this.externalWorkspaceDTO = externalWorkspaceDTO;
     }
 }

@@ -42,6 +42,7 @@ IProjectWorkspaceShallowMapper {
 			List<ProjectWorkspaceDTO> projectWorkspaceDTOList =	projectDTO.getProjectWorkspaceDTOList();
 			if(projectWorkspaceDTOList != null){
 				projectWorkspaceList = new ArrayList<IProjectWorkspace>();
+				try{
 				for(ProjectWorkspaceDTO projectWorkspaceDTO :  projectWorkspaceDTOList){
 
 					IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
@@ -61,6 +62,10 @@ IProjectWorkspaceShallowMapper {
 					projectWorkspace.setUpdatedBy(projectWorkspaceDTO.getUpdatedby());
 					projectWorkspace.setUpdatedDate(projectWorkspaceDTO.getUpdateddate());
 					projectWorkspaceList.add(projectWorkspace);
+				}
+				}
+				catch(Exception ex){
+				    ex.printStackTrace();
 				}
 
 			}
