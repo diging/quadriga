@@ -47,19 +47,19 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     @Autowired
     private IListExternalWSManager externalWSManager;
-    
+
     @Autowired
     private IPassThroughProjectDAO projectDao;
 
     @Autowired
-    IUserManager userManager;
+    private IUserManager userManager;
 
     @Resource(name = "projectconstants")
     private Properties messages;
 
     @Override
-    public String createWorkspaceForExternalProject(String externalWorkspaceId,String externalWorkspaceName, String response, IUser user)
-            throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+    public String createWorkspaceForExternalProject(String externalWorkspaceId, String externalWorkspaceName,
+            IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
         // TODO Auto-generated method stub -- Karthik
 
         boolean isExternalWorkspaceExists = externalWSManager.isExternalWorkspaceExists(externalWorkspaceId);
@@ -70,7 +70,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
             // Create a new externalWorkspaceId and InternalWorkspaceId and then
             // call storeNetworkDetails
             workspaceId = workspaceDao.generateUniqueID();
-            externalWSManager.createExternalWorkspace(externalWorkspaceId,externalWorkspaceName, workspaceId);
+            externalWSManager.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName, workspaceId);
         } else {
             // Get the workspace Id related to the external workspace Id
             workspaceId = externalWSManager.getInternalWorkspaceId(externalWorkspaceId);
@@ -78,13 +78,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
         // After creating the values save the values by calling store network
         // details. If already available. Call network details for updation
-
-        String networkName = "VogenWeb_Details";
-
-        networkManager.storeNetworkDetails(response, user, networkName, workspaceId, INetworkManager.NEWNETWORK, "",
-                INetworkManager.VERSION_ZERO);
-
-        return null;
+        return workspaceId;
     }
 
     @Override
@@ -129,19 +123,19 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         return projectId;
 
     }
-    
+
     @Override
     @Transactional
     public String getInternalProjectId(String externalProjectid) {
-        
+
         Query query = sessionFactory.getCurrentSession().getNamedQuery("PassThroughProjectDTO.findByExternalProjectid");
-        query.setParameter("externalProjectid",externalProjectid);
-        
+        query.setParameter("externalProjectid", externalProjectid);
+
         List<PassThroughProjectDTO> projectDTOs = query.list();
-        
-        return CollectionUtils.isEmpty(projectDTOs)? null:projectDTOs.get(0).getProjectid();
+
+        return CollectionUtils.isEmpty(projectDTOs) ? null : projectDTOs.get(0).getProjectid();
     }
-    
+
     @Override
     public void getPassThroughProjectDTO() {
         // TODO Auto-generated method stub
@@ -149,10 +143,14 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     }
 
     @Override
-    public String callQStore(String externalWorkspaceId, String externalWorkspaceName, String xml, IUser user) throws ParserConfigurationException,
+    public String callQStore(String workspaceId, String xml, IUser user) throws ParserConfigurationException,
             SAXException, IOException, JAXBException, QuadrigaStorageException, QuadrigaAccessException {
         // TODO Auto-generated method stub -- Karthik
-        return createWorkspaceForExternalProject(externalWorkspaceId, externalWorkspaceName, networkManager.storeXMLQStore(xml), user);
+        String networkName = "VogenWeb_Details";
+        String responseFromQStore = networkManager.storeXMLQStore(xml);
+        String networkId = networkManager.storeNetworkDetails(responseFromQStore, user, networkName, workspaceId,
+                INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
+        return networkId;
         // Returns networkId
     }
 
