@@ -61,7 +61,7 @@ public class PassThroughProjectRestController {
 
         String externalWorkspaceId = "";
         String externalWorkspaceName = getTagValue(document, "workspace");
-        String internalWorkspaceId = processWorkspace(externalWorkspaceId, externalWorkspaceName, principal);
+        String internalWorkspaceId = processWorkspace(externalWorkspaceId, externalWorkspaceName, projectId,principal);
         String annotatedText = getAnnotateData(xml);
 
         // TODO
@@ -83,12 +83,17 @@ public class PassThroughProjectRestController {
         return internalProjetid;
     }
 
-    private String processWorkspace(String externalWorkspaceId, String externalWorkspaceName, Principal principal)
+    private String processWorkspace(String externalWorkspaceId, String externalWorkspaceName, String projectId, Principal principal)
             throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
         // TODO Auto-generated method stub
         IUser user = userManager.getUser(principal.getName());
-        return passThroughProjectManager.createWorkspaceForExternalProject(externalWorkspaceId, externalWorkspaceName,
+        String internalWorkspaceId =  passThroughProjectManager.createWorkspaceForExternalProject(externalWorkspaceId, externalWorkspaceName, projectId,
                 user);
+        
+        
+        
+        
+        return null;
     }
 
     private String getAnnotateData(String xml) {

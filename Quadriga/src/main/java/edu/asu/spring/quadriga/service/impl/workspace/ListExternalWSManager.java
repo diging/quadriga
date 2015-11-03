@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.workspace.IListExternalWsDAO;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.mapper.IListExternalWSManager;
@@ -20,8 +21,8 @@ public class ListExternalWSManager implements IListExternalWSManager {
     }
 
     @Override
-    public void createExternalWorkspace(String externalWorkspaceId,String externalWorkspaceName, String workspaceId) {
-        dbConnect.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName, workspaceId);
+    public void createExternalWorkspace(String externalWorkspaceId,String externalWorkspaceName, String workspaceId,String projectId,IUser user) {
+        dbConnect.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName, workspaceId,projectId,user);
     }
 
     @Override

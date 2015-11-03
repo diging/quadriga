@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl.workspace;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -11,8 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.workspace.IListExternalWsDAO;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
@@ -44,13 +46,6 @@ public class ListExternalWsDAO implements IListExternalWsDAO {
         return false;
     }
 
-    public void createExternalWorkspace(String externalId, String externalWorkspaceName, String workspaceId) {
-        ExternalWorkspaceDTO externalWorkspaceDTO = new ExternalWorkspaceDTO();
-        externalWorkspaceDTO.setExternalWorkspaceid(externalId);
-        externalWorkspaceDTO.setWorkspaceid(workspaceId);
-        externalWorkspaceDTO.setWorkspacename(externalWorkspaceName);
-        sessionFactory.getCurrentSession().save(externalWorkspaceDTO);
-    }
 
     @Override
     public String getInternalWorkspaceId(String externalWorkspaceid) {
@@ -61,6 +56,20 @@ public class ListExternalWsDAO implements IListExternalWsDAO {
         List internalProjectId = query.list();
         return String.valueOf(internalProjectId.get(0));
 
+    }
+
+    @Override
+    public void createExternalWorkspace(String externalId, String externalWorkspaceName, String workspaceId,
+            String projectId, IUser user) {
+        ExternalWorkspaceDTO externalWorkspaceDTO = new ExternalWorkspaceDTO();
+        externalWorkspaceDTO.setExternalWorkspaceid(externalId);
+        externalWorkspaceDTO.setWorkspaceid(workspaceId);
+        externalWorkspaceDTO.setWorkspacename(externalWorkspaceName);
+        //Saving projectDetails of the externalWorkspace
+        ProjectWorkspaceDTO projectDTO = new ProjectWorkspaceDTO(projectId,workspaceId,user.getName(),new Date(),user.getName(),new Date());
+        externalWorkspaceDTO.setProjectWorkspaceDTO(projectDTO);
+        sessionFactory.getCurrentSession().save(externalWorkspaceDTO);
+        
     }
 
 }

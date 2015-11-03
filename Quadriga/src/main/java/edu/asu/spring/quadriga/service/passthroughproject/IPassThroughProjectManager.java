@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IPassThroughProjectManager {
 
-    String createWorkspaceForExternalProject(String externalWorkspaceId,String externalWorkspaceName, IUser user)
+    String createWorkspaceForExternalProject(String externalWorkspaceId,String externalWorkspaceName, String projectId, IUser user)
             throws JAXBException, QuadrigaStorageException, QuadrigaAccessException;
 
     String addPassThroughProject(Principal principal, String projectName, String description, String externalProjectid,
@@ -26,4 +26,5 @@ public interface IPassThroughProjectManager {
 
     String callQStore(String workspaceId, String xml, IUser user) throws ParserConfigurationException,
             SAXException, IOException, JAXBException, QuadrigaStorageException, QuadrigaAccessException;
+    
 }

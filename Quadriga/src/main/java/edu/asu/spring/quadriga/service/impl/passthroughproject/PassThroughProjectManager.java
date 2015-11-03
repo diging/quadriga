@@ -58,30 +58,6 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     private Properties messages;
 
     @Override
-    public String createWorkspaceForExternalProject(String externalWorkspaceId, String externalWorkspaceName,
-            IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
-        // TODO Auto-generated method stub -- Karthik
-
-        boolean isExternalWorkspaceExists = externalWSManager.isExternalWorkspaceExists(externalWorkspaceId);
-        String workspaceId = null;
-        if (!isExternalWorkspaceExists) {
-            // External workspace does not exists so insert the values into
-            // externalWorkspace table
-            // Create a new externalWorkspaceId and InternalWorkspaceId and then
-            // call storeNetworkDetails
-            workspaceId = workspaceDao.generateUniqueID();
-            externalWSManager.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName, workspaceId);
-        } else {
-            // Get the workspace Id related to the external workspace Id
-            workspaceId = externalWSManager.getInternalWorkspaceId(externalWorkspaceId);
-        }
-
-        // After creating the values save the values by calling store network
-        // details. If already available. Call network details for updation
-        return workspaceId;
-    }
-
-    @Override
     @Transactional
     public String addPassThroughProject(Principal principal, String projectName, String description,
             String externalProjectid, String externalUserId, String externalUserName, String client)
@@ -152,6 +128,34 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
                 INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
         return networkId;
         // Returns networkId
+    }
+
+    @Override
+    public String createWorkspaceForExternalProject(String externalWorkspaceId, String externalWorkspaceName,
+            String projectId, IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+
+        // TODO Auto-generated method stub -- Karthik
+
+        boolean isExternalWorkspaceExists = externalWSManager.isExternalWorkspaceExists(externalWorkspaceId);
+        String workspaceId = null;
+        if (!isExternalWorkspaceExists) {
+            // External workspace does not exists so insert the values into
+            // externalWorkspace table
+            // Create a new externalWorkspaceId and InternalWorkspaceId and then
+            // call storeNetworkDetails
+            workspaceId = workspaceDao.generateUniqueID();
+            externalWSManager.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName, workspaceId,
+                    projectId, user);
+        } else {
+            // Get the workspace Id related to the external workspace Id
+            workspaceId = externalWSManager.getInternalWorkspaceId(externalWorkspaceId);
+        }
+
+        // After creating the values save the values by calling store network
+        // details. If already available. Call network details for updation
+
+        return workspaceId;
+
     }
 
 }
