@@ -18,13 +18,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({ @NamedQuery(name = "ExternalWorkspaceDTO.findAll", query = "SELECT w FROM ExternalWorkspaceDTO w"),
         @NamedQuery(name = "ExternalWorkspaceDTO.findByWorkspaceid", query = "SELECT w FROM ExternalWorkspaceDTO w WHERE w.externalWorkspaceid = :externalWorkspaceid"),
         @NamedQuery(name = "ExternalWorkspaceDTO.findByExternalWorkspaceid", query = "SELECT w FROM ExternalWorkspaceDTO w WHERE w.externalWorkspaceid = :externalWorkspaceid"),
-         })
+        @NamedQuery(name = "ExternalWorkspaceDTO.getWorkspaceIdFromExternalWorkspaceId", query = "SELECT n FROM ExternalWorkspaceDTO n WHERE n.internalWorkspaceid = :workspaceid"), })
 public class ExternalWorkspaceDTO {
 
     @Id
     @Basic(optional = false)
     @Column(name = "externalWorkspaceid")
     private String externalWorkspaceid;
+    
+    
+    @Basic(optional = false)
+    @Column(name = "internalWorkspaceid")
+    private String internalWorkspaceid;
+    
 
     @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
@@ -44,6 +50,14 @@ public class ExternalWorkspaceDTO {
 
     public void setWorkspaceDTO(WorkspaceDTO workspaceDTO) {
         this.workspaceDTO = workspaceDTO;
+    }
+
+    public String getInternalWorkspaceid() {
+        return internalWorkspaceid;
+    }
+
+    public void setInternalWorkspaceid(String internalWorkspaceid) {
+        this.internalWorkspaceid = internalWorkspaceid;
     }
 
 }
