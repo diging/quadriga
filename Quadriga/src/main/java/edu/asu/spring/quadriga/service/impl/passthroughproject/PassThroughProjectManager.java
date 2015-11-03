@@ -47,6 +47,8 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     @Autowired
     private IListExternalWSManager externalWSManager;
+    
+    @Autowired
     private IPassThroughProjectDAO projectDao;
 
     @Autowired

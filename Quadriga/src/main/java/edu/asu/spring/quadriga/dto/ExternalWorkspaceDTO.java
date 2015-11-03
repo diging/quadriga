@@ -26,23 +26,11 @@ public class ExternalWorkspaceDTO extends WorkspaceDTO {
     @Column(name = "externalWorkspaceid")
     private String externalWorkspaceid;
     
-    @Basic(optional = false)
-    @Column(name = "externalWorkspaceName")
-    private String externalWorkspaceName;
-
     public String getExternalWorkspaceid() {
         return externalWorkspaceid;
     }
 
     public void setExternalWorkspaceid(String externalWorkspaceid) {
         this.externalWorkspaceid = externalWorkspaceid;
-    }
-
-    public String getExternalWorkspaceName() {
-        return externalWorkspaceName;
-    }
-
-    public void setExternalWorkspaceName(String externalWorkspaceName) {
-        this.externalWorkspaceName = externalWorkspaceName;
     }
 }
