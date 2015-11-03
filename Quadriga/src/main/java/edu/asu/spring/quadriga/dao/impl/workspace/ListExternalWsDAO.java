@@ -44,10 +44,12 @@ public class ListExternalWsDAO implements IListExternalWsDAO {
         return false;
     }
 
-    public void createExternalWorkspace(String externalId, String workspaceId) {
+    public void createExternalWorkspace(String externalId, String externalWorkspaceName, String workspaceId) {
         ExternalWorkspaceDTO externalWorkspaceDTO = new ExternalWorkspaceDTO();
         externalWorkspaceDTO.setExternalWorkspaceid(externalId);
         externalWorkspaceDTO.setWorkspaceid(workspaceId);
+        externalWorkspaceDTO.setWorkspacename(externalWorkspaceName);
+        externalWorkspaceDTO.setExternalWorkspaceName(externalWorkspaceName);
         sessionFactory.getCurrentSession().save(externalWorkspaceDTO);
     }
 

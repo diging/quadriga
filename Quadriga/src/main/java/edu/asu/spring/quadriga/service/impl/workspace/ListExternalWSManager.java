@@ -20,8 +20,8 @@ public class ListExternalWSManager implements IListExternalWSManager {
     }
 
     @Override
-    public void createExternalWorkspace(String externalWorkspaceId, String workspaceId) {
-        dbConnect.createExternalWorkspace(externalWorkspaceId, workspaceId);
+    public void createExternalWorkspace(String externalWorkspaceId,String externalWorkspaceName, String workspaceId) {
+        dbConnect.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName, workspaceId);
     }
 
     @Override

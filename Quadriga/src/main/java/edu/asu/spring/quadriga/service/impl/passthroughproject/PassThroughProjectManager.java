@@ -55,7 +55,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     private Properties messages;
 
     @Override
-    public String createWorkspaceForExternalProject(String externalWorkspaceId, String response, IUser user)
+    public String createWorkspaceForExternalProject(String externalWorkspaceId,String externalWorkspaceName, String response, IUser user)
             throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
         // TODO Auto-generated method stub -- Karthik
 
@@ -67,7 +67,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
             // Create a new externalWorkspaceId and InternalWorkspaceId and then
             // call storeNetworkDetails
             workspaceId = workspaceDao.generateUniqueID();
-            externalWSManager.createExternalWorkspace(externalWorkspaceId, workspaceId);
+            externalWSManager.createExternalWorkspace(externalWorkspaceId,externalWorkspaceName, workspaceId);
         } else {
             // Get the workspace Id related to the external workspace Id
             workspaceId = externalWSManager.getInternalWorkspaceId(externalWorkspaceId);
@@ -134,10 +134,10 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     }
 
     @Override
-    public String callQStore(String externalWorkspaceId, String xml, IUser user) throws ParserConfigurationException,
+    public String callQStore(String externalWorkspaceId, String externalWorkspaceName, String xml, IUser user) throws ParserConfigurationException,
             SAXException, IOException, JAXBException, QuadrigaStorageException, QuadrigaAccessException {
         // TODO Auto-generated method stub -- Karthik
-        return createWorkspaceForExternalProject(externalWorkspaceId, networkManager.storeXMLQStore(xml), user);
+        return createWorkspaceForExternalProject(externalWorkspaceId, externalWorkspaceName, networkManager.storeXMLQStore(xml), user);
         // Returns networkId
     }
 

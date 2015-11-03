@@ -64,7 +64,8 @@ public class PassThroughProjectRestController {
         
         //TODO
         String externalWorkspaceId = "";
-        passThroughProjectManager.callQStore(externalWorkspaceId,annotatedText, userManager.getUser(principal.getName()));
+        String externalWorkspaceName = getTagValue(document, "workspace");
+        passThroughProjectManager.callQStore(externalWorkspaceId,externalWorkspaceName, annotatedText, userManager.getUser(principal.getName()));
 
         return null;
     }

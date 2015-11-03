@@ -6,7 +6,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface IListExternalWSManager {
     boolean isExternalWorkspaceExists(String externalWorkspaceId)throws QuadrigaStorageException, QuadrigaAccessException;
     
-    public void createExternalWorkspace(String externalWorkspaceId,String workspaceId);
+    public void createExternalWorkspace(String externalWorkspaceId,String externalWorkspaceName, String workspaceId);
     
     public String getInternalWorkspaceId(String externalWorkspaceId);
 }
