@@ -35,6 +35,8 @@ import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectMan
 @Controller
 public class PassThroughProjectRestController {
 
+    private static final String DEFAULT_WORKSPACE = "default_external_workspace";
+
     @Autowired
     private IPassThroughProjectManager passThroughProjectManager;
 
@@ -43,10 +45,12 @@ public class PassThroughProjectRestController {
 
     @ResponseBody
     @RequestMapping(value = "rest/passthroughproject", method = RequestMethod.POST)
-    public String getPassThroughProject(HttpServletRequest request, HttpServletResponse response,
-            @RequestBody String xml, Principal principal)
-                    throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException,
-                    TransformerException, QuadrigaStorageException, QuadrigaAccessException {
+    public String getPassThroughProject(HttpServletRequest request,
+            HttpServletResponse response, @RequestBody String xml,
+            Principal principal) throws QuadrigaException,
+            ParserConfigurationException, SAXException, IOException,
+            JAXBException, TransformerException, QuadrigaStorageException,
+            QuadrigaAccessException {
 
         Document document = getXMLParser(xml);
         String externalProjectId = getProjectId(document);
@@ -55,45 +59,56 @@ public class PassThroughProjectRestController {
         String name = getTagValue(document, "name");
         String description = getTagValue(document, "description");
         String sender = getTagValue(document, "sender");
+        String workspaceName = getWorkspaceName(document);
+        String externalWorkspaceId = getExternalWorkspaceId(document);
 
-        String projectId = processProject(principal, externalProjectId, name, description, externalUserName,
-                externalUserId, sender);
+        String projectId = processProject(principal, externalProjectId, name,
+                description, externalUserName, externalUserId, sender);
 
-        String externalWorkspaceId = "";
-        String externalWorkspaceName = getTagValue(document, "workspace");
-        String internalWorkspaceId = processWorkspace(externalWorkspaceId, externalWorkspaceName, projectId,principal);
+        String internalWorkspaceId = processWorkspace(externalWorkspaceId,
+                workspaceName, projectId, principal);
+
         String annotatedText = getAnnotateData(xml);
 
-        // TODO
-        String networkId = passThroughProjectManager.callQStore(internalWorkspaceId, annotatedText,
+        String networkId = passThroughProjectManager.callQStore(
+                internalWorkspaceId, annotatedText,
                 userManager.getUser(principal.getName()));
 
         return null;
     }
 
-    private String processProject(Principal principal, String externalProjectid, String name, String description,
-            String externalUserName, String externalUserId, String sender) throws QuadrigaStorageException {
+    private String processProject(Principal principal,
+            String externalProjectid, String name, String description,
+            String externalUserName, String externalUserId, String sender)
+            throws QuadrigaStorageException {
 
-        String internalProjetid = passThroughProjectManager.getInternalProjectId(externalProjectid);
+        String internalProjetid = passThroughProjectManager
+                .getInternalProjectId(externalProjectid);
 
         if (StringUtils.isEmpty(internalProjetid)) {
-            return passThroughProjectManager.addPassThroughProject(principal, name, description, externalProjectid,
-                    externalUserId, externalUserName, sender);
+            return passThroughProjectManager.addPassThroughProject(principal,
+                    name, description, externalProjectid, externalUserId,
+                    externalUserName, sender);
         }
         return internalProjetid;
     }
 
-    private String processWorkspace(String externalWorkspaceId, String externalWorkspaceName, String projectId, Principal principal)
-            throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+    private String processWorkspace(String externalWorkspaceId,
+            String externalWorkspaceName, String projectId, Principal principal)
+            throws JAXBException, QuadrigaStorageException,
+            QuadrigaAccessException {
         // TODO Auto-generated method stub
         IUser user = userManager.getUser(principal.getName());
-        String internalWorkspaceId =  passThroughProjectManager.createWorkspaceForExternalProject(externalWorkspaceId, externalWorkspaceName, projectId,
-                user);
-        
-        
-        
-        
-        return null;
+        String internalWorkspaceId = passThroughProjectManager
+                .createWorkspaceForExternalProject(externalWorkspaceId,
+                        externalWorkspaceName, projectId, user);
+        return internalWorkspaceId;
+    }
+
+    private String getWorkspaceName(Document document) {
+        String workspaceName = getTagValue(document, "workspace");
+        return StringUtils.isEmpty(workspaceName) ? DEFAULT_WORKSPACE
+                : workspaceName;
     }
 
     private String getAnnotateData(String xml) {
@@ -101,7 +116,8 @@ public class PassThroughProjectRestController {
         int startIndex = xml.indexOf("<element_events");
         int endIndex = xml.indexOf("</element_events>");
 
-        String annotatedText = StringUtils.substring(xml, startIndex, endIndex + 17);
+        String annotatedText = StringUtils.substring(xml, startIndex,
+                endIndex + 17);
 
         return annotatedText;
     }
@@ -112,7 +128,8 @@ public class PassThroughProjectRestController {
 
     }
 
-    private Document getXMLParser(String xml) throws ParserConfigurationException, SAXException, IOException {
+    private Document getXMLParser(String xml)
+            throws ParserConfigurationException, SAXException, IOException {
 
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
         DocumentBuilder b = f.newDocumentBuilder();
@@ -126,6 +143,14 @@ public class PassThroughProjectRestController {
         Node project = document.getElementsByTagName("project").item(0);
         NamedNodeMap projetctAttributeMap = project.getAttributes();
         Node idNode = projetctAttributeMap.getNamedItem("id");
+        return idNode.getNodeValue();
+    }
+
+    private String getExternalWorkspaceId(Document document) {
+
+        Node wokspace = document.getElementsByTagName("workspace").item(0);
+        NamedNodeMap workspaceAttributeMap = wokspace.getAttributes();
+        Node idNode = workspaceAttributeMap.getNamedItem("id");
         return idNode.getNodeValue();
     }
 
