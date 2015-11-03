@@ -13,6 +13,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -30,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_workspace")
+@Inheritance(strategy=InheritanceType.JOINED)
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkspaceDTO.findAll", query = "SELECT w FROM WorkspaceDTO w"),
@@ -85,10 +88,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<NetworkWorkspaceDTO> workspaceNetworkDTOList;
-    
-    
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "workspaceDTO",orphanRemoval=true)
-    private ExternalWorkspaceDTO externalWorkspaceDTO;
     
     public WorkspaceDTO() {
     }
@@ -294,11 +293,4 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
        this.workspaceowner = owner; 
     }
 
-    public ExternalWorkspaceDTO getExternalWorkspaceDTO() {
-        return externalWorkspaceDTO;
-    }
-
-    public void setExternalWorkspaceDTO(ExternalWorkspaceDTO externalWorkspaceDTO) {
-        this.externalWorkspaceDTO = externalWorkspaceDTO;
-    }
 }

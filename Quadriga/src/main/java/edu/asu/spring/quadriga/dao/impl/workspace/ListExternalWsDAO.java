@@ -35,7 +35,7 @@ public class ListExternalWsDAO implements IListExternalWsDAO {
             externalWorkspaceid = query.list();
         } catch (HibernateException e) {
             logger.error("Retrieve external workspace details method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         if (externalWorkspaceid != null) {
             return true;
@@ -47,10 +47,7 @@ public class ListExternalWsDAO implements IListExternalWsDAO {
     public void createExternalWorkspace(String externalId, String workspaceId) {
         ExternalWorkspaceDTO externalWorkspaceDTO = new ExternalWorkspaceDTO();
         externalWorkspaceDTO.setExternalWorkspaceid(externalId);
-        WorkspaceDTO workspaceDTO = new WorkspaceDTO();
-        workspaceDTO.setWorkspaceid(workspaceId);
-        externalWorkspaceDTO.setInternalWorkspaceid(workspaceId);
-        externalWorkspaceDTO.setWorkspaceDTO(workspaceDTO);
+        externalWorkspaceDTO.setWorkspaceid(workspaceId);
         sessionFactory.getCurrentSession().save(externalWorkspaceDTO);
     }
 
