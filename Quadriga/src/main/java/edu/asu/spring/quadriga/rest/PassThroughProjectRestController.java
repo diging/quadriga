@@ -62,9 +62,9 @@ public class PassThroughProjectRestController {
                 
         String annotatedText = getAnnotateData(xml);
         
-        
-      
-        passThroughProjectManager.callQStore(annotatedText, userManager.getUser(principal.getName()));
+        //TODO
+        String externalWorkspaceId = "";
+        passThroughProjectManager.callQStore(externalWorkspaceId,annotatedText, userManager.getUser(principal.getName()));
 
         return null;
     }

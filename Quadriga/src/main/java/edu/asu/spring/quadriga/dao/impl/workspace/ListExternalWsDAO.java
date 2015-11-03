@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.workspace.IListExternalWsDAO;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
@@ -46,8 +47,9 @@ public class ListExternalWsDAO implements IListExternalWsDAO {
     public void createExternalWorkspace(String externalId, String workspaceId) {
         ExternalWorkspaceDTO externalWorkspaceDTO = new ExternalWorkspaceDTO();
         externalWorkspaceDTO.setExternalWorkspaceid(externalId);
-        externalWorkspaceDTO.setInternalWorkspaceid(workspaceId);
-        externalWorkspaceDTO.setWorkspaceid(workspaceId);
+        WorkspaceDTO workspaceDTO = new WorkspaceDTO();
+        workspaceDTO.setWorkspaceid(workspaceId);
+        externalWorkspaceDTO.setWorkspaceDTO(workspaceDTO);
         sessionFactory.getCurrentSession().save(externalWorkspaceDTO);
     }
 

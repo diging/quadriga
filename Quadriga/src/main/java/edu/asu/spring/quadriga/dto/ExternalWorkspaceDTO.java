@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -20,13 +21,10 @@ import javax.xml.bind.annotation.XmlRootElement;
         @NamedQuery(name = "ExternalWorkspaceDTO.getWorkspaceIdFromExternalWorkspaceId", query = "SELECT w.workspaceid FROM WorkspaceDTO w INNER JOIN  w.externalWorkspaceDTO e where e.internalWorkspaceid = w.workspaceid AND e.externalWorkspaceid = :externalWorkspaceid "), })
 public class ExternalWorkspaceDTO {
 
+    @Id
     @Basic(optional = false)
     @Column(name = "externalWorkspaceid")
     private String externalWorkspaceid;
-
-    @Basic(optional = false)
-    @Column(name = "internalWorkspaceid")
-    private String internalWorkspaceid;
 
     @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
@@ -34,14 +32,6 @@ public class ExternalWorkspaceDTO {
 
     public String getExternalWorkspaceid() {
         return externalWorkspaceid;
-    }
-
-    public String getInternalWorkspaceid() {
-        return internalWorkspaceid;
-    }
-
-    public void setInternalWorkspaceid(String internalWorkspaceid) {
-        this.internalWorkspaceid = internalWorkspaceid;
     }
 
     public void setExternalWorkspaceid(String externalWorkspaceid) {
