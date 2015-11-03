@@ -21,6 +21,8 @@ public interface IPassThroughProjectManager {
             String externalUserId, String externalUserName, String client) throws QuadrigaStorageException;
 
     void getPassThroughProjectDTO();
+    
+    String getInternalProjectId(String externalProjectid);
 
     String callQStore(String externalWorkspaceId, String externalWorkspaceName, String xml, IUser user) throws ParserConfigurationException,
             SAXException, IOException, JAXBException, QuadrigaStorageException, QuadrigaAccessException;

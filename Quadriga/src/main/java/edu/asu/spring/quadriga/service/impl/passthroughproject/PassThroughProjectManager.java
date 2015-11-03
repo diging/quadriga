@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +127,19 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         return projectId;
 
     }
-
+    
+    @Override
+    @Transactional
+    public String getInternalProjectId(String externalProjectid) {
+        
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("PassThroughProjectDTO.findByExternalProjectid");
+        query.setParameter("externalProjectid",externalProjectid);
+        
+        List<PassThroughProjectDTO> projectDTOs = query.list();
+        
+        return CollectionUtils.isEmpty(projectDTOs)? null:projectDTOs.get(0).getProjectid();
+    }
+    
     @Override
     public void getPassThroughProjectDTO() {
         // TODO Auto-generated method stub

@@ -70,14 +70,20 @@ public class PassThroughProjectRestController {
         return null;
     }
 
-    private String processProject(Principal principal,String externalProjectid, String name,
-            String description, String externalUserName, String externalUserId,
-            String sender) throws QuadrigaStorageException {
-        
-        
-        String projetid = passThroughProjectManager.addPassThroughProject(principal, name, description, externalProjectid, externalUserId, externalUserName, sender);
-        
-        return projetid;
+    private String processProject(Principal principal,
+            String externalProjectid, String name, String description,
+            String externalUserName, String externalUserId, String sender)
+            throws QuadrigaStorageException {
+
+        String internalProjetid = passThroughProjectManager
+                .getInternalProjectId(externalProjectid);
+
+        if (StringUtils.isEmpty(internalProjetid)) {
+            return passThroughProjectManager.addPassThroughProject(principal,
+                    name, description, externalProjectid, externalUserId,
+                    externalUserName, sender);
+        }
+        return internalProjetid;
     }
 
     private String processWorkspace(Document document) {
@@ -90,10 +96,9 @@ public class PassThroughProjectRestController {
         int startIndex = xml.indexOf("<element_events");
         int endIndex = xml.indexOf("</element_events>");
         
-        StringBuffer annotatedText = new StringBuffer(StringUtils.substring(xml, startIndex,endIndex));
-        annotatedText.append("</element_events>");
-        
-        return annotatedText.toString();
+        String annotatedText = StringUtils.substring(xml, startIndex,endIndex+17);
+       
+        return annotatedText;
     }
 
     private String getTagValue(Document document,String tagName) {
