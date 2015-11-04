@@ -777,7 +777,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
 		try{
 			// add xml in QStore
-			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
+		    String url = getQStoreAddURL();
+			res = restTemplate.postForObject(url, request,String.class);
 		}catch(Exception e){
 			logger.error("QStore not accepting the xml, please check with the server logs.",e);
 			//res = e.getMessage();
