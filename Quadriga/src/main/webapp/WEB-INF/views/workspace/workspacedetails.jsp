@@ -334,44 +334,50 @@
 										});
 					</script>
 				</c:otherwise>
-			</c:choose> <a href="#login-box" class="login-window"><input type="submit"
-				value="Add text from Dspace"></a> <!-- DSpace Login credentials -->
+			</c:choose> <c:if test="${isDeactivated == false}">
+                <a href="#login-box" class="login-window"><input
+                    type="submit" value="Add text from Dspace"></a>
+                <!-- DSpace Login credentials -->
+                </a>
+            </c:if>
+            </li> <c:choose>
+                <c:when test="${empty dspaceKeys}">
+                    <!-- Allow the user to change the dspace login credentials -->
+                    <c:if test="${isDeactivated == false}">
+                        <a href="#change-login" class="change-login">Change
+                            Dspace Login<c:choose>
+                                <c:when
+                                    test="${not empty wrongDspaceLogin}">*</c:when>
+                            </c:choose>
+                    </c:if>
+                    </a>
 
 
-			</a>
-			</li> <c:choose>
-				<c:when test="${empty dspaceKeys}">
-					<!-- Allow the user to change the dspace login credentials -->
-					<a href="#change-login" class="change-login">Change Dspace
-						Login<c:choose>
-							<c:when test="${not empty wrongDspaceLogin}">*</c:when>
-						</c:choose>
-					</a>
+                    <div style="text-align: right">
 
-
-
-					<div style="text-align: right">
-
-						<script>
+                        <script>
 							function funConfirmDeletion() {
-
+								var pos = [ $(window).width() / 4, 50 ];
 								// Define the Dialog and its properties.
+								
 								$("#dialog-confirm")
+										.html("Are you sure you want to delete the workspace?")
 										.dialog(
 												{
 													resizable : false,
 													modal : true,
-													title : "Confirm Delete",
-													height : 140,
-													width : 400,
+													title : "Delete Workspace",
+													height : 180,
+													width : 650,
+													position : pos,
 													buttons : {
-														"Delete" : function() {
+														"Yes" : function() {
 															$(this).dialog(
 																	'close');
 															location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteSingleWorkspace/${workspaceid}?projectId=${myprojectid}';
 															return false;
 														},
-														"Cancel" : function() {
+														"No" : function() {
 															$(this).dialog(
 																	'close');
 															return false;
@@ -381,50 +387,77 @@
 							}
 						</script>
 
-						<div id="dialog-confirm" title="Confirm ?"></div>
+                        <div id="dialog-confirm" title="Confirm ?"></div>
+
+                        <c:if test="${isDeactivated == true}">
+                            <a href="#"
+                                onclick="return confirmWorkspaceActivation();">
+                                Activate Workspace</a>&nbsp;&nbsp; 
+                        </c:if>
+
+                        <c:if test="${isDeactivated == false }">
+                            <font color="#CCCCCC"
+                                title="The workspace is already activated.">
+                                Activate Workspace</a>&nbsp;&nbsp;
+                            </font>
+                        </c:if>
+
+                        <c:if test="${isDeactivated == false}">
+                            <a href="#"
+                                onclick="return confirmWorkspaceDeactivation();">
+                                Deactivate Workspace</a>&nbsp;&nbsp; 
+                        </c:if>
+
+                        <c:if test="${isDeactivated == true }">
+                            <font color="#CCCCCC"
+                                title="The workspace is already deactivated.">
+                                Deactivate Workspace</a>&nbsp;&nbsp;
+                            </font>
+                        </c:if>
+
+                        <c:if test="${isDeactivated == true}">
+                            <a href="#"
+                                onclick="return funConfirmDeletion();">Delete
+                                Workspace</a>
+                        </c:if>
+
+                        <c:if test="${isDeactivated == false }">
+                            <font color="#CCCCCC"
+                                title="Only deactivated workspaces can be deleted.">Delete
+                                Workspace</font>
+                        </c:if>
+
+                    </div>
 
 
-						<div id="dialog-deactivate-confirm" title="Confirm ?"></div>
-						<a href="#" onclick="return confirmWorkspaceDeactivation();">
-							Deactivate Workspace</a>&nbsp;&nbsp;
-
-
-						<c:if test="${isDeactivated == true}">
-							<a href="#" onclick="return funConfirmDeletion();">Delete
-								Workspace</a>
-						</c:if>
-						<c:if test="${isDeactivated == false }">
-							<font color="#CCCCCC"
-								title="Only deactivated workspaces can be deleted.">Delete
-								Workspace</font>
-
-						</c:if>
-
-
-					</div>
-
-
-					<div id="login-box" class="login-popup"
-						title="Dspace Authentication">
-						<form id="dspaceLogin" method="post" class="signin">
-							<fieldset class="textbox">
-								<label class="username"><span>Dspace UserName:</span> <input
-									id="username" name="username" value="" type="text"
-									autocomplete="on" placeholder="Username" /> </label> <label
-									class="password"><span>Dspace Password: </span> <input
-									id="password" name="password" value="" type="password"
-									placeholder="Password" /> </label>
-							</fieldset>
-							<label><input type="checkbox" name="dspacePublicAccess"
-								id="dspacePublicAccess" value="public" /><font size="2">Use
-									Public Access</font></label>
-						</form>
-						<font size="1">We recommend setting up Dspace Access keys <a
-							href="${pageContext.servletContext.contextPath}/auth/workbench/keys">here</a>.
-							It's more secure !
-						</font>
-					</div>
-					<script>
+                    <div id="login-box" class="login-popup"
+                        title="Dspace Authentication">
+                        <form id="dspaceLogin" method="post"
+                            class="signin">
+                            <fieldset class="textbox">
+                                <label class="username"><span>Dspace
+                                        UserName:</span> <input id="username"
+                                    name="username" value="" type="text"
+                                    autocomplete="on"
+                                    placeholder="Username" /> </label> <label
+                                    class="password"><span>Dspace
+                                        Password: </span> <input id="password"
+                                    name="password" value=""
+                                    type="password"
+                                    placeholder="Password" /> </label>
+                            </fieldset>
+                            <label><input type="checkbox"
+                                name="dspacePublicAccess"
+                                id="dspacePublicAccess" value="public" /><font
+                                size="2">Use Public Access</font></label>
+                        </form>
+                        <font size="1">We recommend setting up
+                            Dspace Access keys <a
+                            href="${pageContext.servletContext.contextPath}/auth/workbench/keys">here</a>.
+                            It's more secure !
+                        </font>
+                    </div>
+                    <script>
 						$(document)
 								.ready(
 										function() {
@@ -498,27 +531,58 @@
 															});
 										})
 					</script>
-				</c:when>
-			</c:choose> <br> <br> <c:choose>
+                </c:when>
+            </c:choose> <br> <br> <c:choose>
 				<c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when>
 			</c:choose> <script>
 				function confirmWorkspaceDeactivation() {
 					// Define the Dialog and its properties.
-					$("#dialog-deactivate-confirm")
+					var pos = [ $(window).width() / 4, 50 ];
+					$("#dialog-confirm")
+							.html("Are you sure you want to deactivate the workspace?")
 							.dialog(
 									{
 										resizable : false,
 										modal : true,
-										title : "Do you want to deactivate this workspace?",
-										height : 140,
-										width : 500,
+										title : "Deactivate Workspace",
+										height : 180,
+										width : 650,
+										position : pos,
 										buttons : {
-											"Deactivate" : function() {
+											"Yes" : function() {
 												$(this).dialog('close');
 												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
 												return false;
 											},
-											"Cancel" : function() {
+											"No" : function() {
+												$(this).dialog('close');
+												return false;
+											}
+										}
+									});
+				}
+			</script>
+			<script>
+				function confirmWorkspaceActivation() {
+					// Define the Dialog and its properties.
+					var pos = [ $(window).width() / 4, 50 ];
+					$("#dialog-confirm")
+							.html("Are you sure you want to activate the workspace?")
+							.dialog(
+									{
+										resizable : false,
+										modal : true,
+										title : "Activate Workspace",
+										height : 180,
+										width : 650,
+										position : pos,
+										buttons : {
+											"Yes" : function() {
+												$(this).dialog('close');
+												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/activateWorkspace?projectid=${myprojectid}';
+												return false;
+											},
+											"No" : function() {
 												$(this).dialog('close');
 												return false;
 											}

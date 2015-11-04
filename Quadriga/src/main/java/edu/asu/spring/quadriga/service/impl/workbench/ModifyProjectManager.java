@@ -39,8 +39,7 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
  * @author kbatna, Julia Damerow
  */
 @Service
-public class ModifyProjectManager extends BaseManager implements
-        IModifyProjectManager {
+public class ModifyProjectManager extends BaseManager implements IModifyProjectManager {
     @Autowired
     private IProjectSecurityChecker projectSecurity;
 
@@ -68,8 +67,7 @@ public class ModifyProjectManager extends BaseManager implements
     @Resource(name = "projectconstants")
     private Properties messages;
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(ModifyProjectManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModifyProjectManager.class);
 
     /**
      * {@inheritDoc}
@@ -77,11 +75,9 @@ public class ModifyProjectManager extends BaseManager implements
     @Override
     @Transactional
     public void addNewProject(IProject project, String userName) {
-        String projectId = messages.getProperty("project_internalid.name")
-                + generateUniqueID();
+        String projectId = messages.getProperty("project_internalid.name") + generateUniqueID();
         project.setProjectId(projectId);
-        ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project,
-                userName);
+        ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project, userName);
         projectDao.saveNewDTO(projectDTO);
     }
 
@@ -90,13 +86,21 @@ public class ModifyProjectManager extends BaseManager implements
      */
     @Override
     @Transactional
-    public void updateProject(String projID, String projName, String projDesc,
-            String projAccess, String unixName, String userName)
+    public void updateProject(String projID, String projName, String projDesc, String projectAccess, String userName)
             throws QuadrigaStorageException {
         ProjectDTO projectDTO = projectDao.getProjectDTO(projID);
         projectDTO.setProjectname(projName);
         projectDTO.setDescription(projDesc);
-        projectDTO.setAccessibility(projAccess);
+        projectDTO.setUpdatedby(userName);
+        projectDTO.setAccessibility(projectAccess);
+        projectDTO.setUpdateddate(new Date());
+        projectDao.updateDTO(projectDTO);
+    }
+
+    @Override
+    @Transactional
+    public void updateProjectURL(String projID, String unixName, String userName) throws QuadrigaStorageException {
+        ProjectDTO projectDTO = projectDao.getProjectDTO(projID);
         projectDTO.setUnixname(unixName);
         projectDTO.setUpdatedby(userName);
         projectDTO.setUpdateddate(new Date());
@@ -115,11 +119,9 @@ public class ModifyProjectManager extends BaseManager implements
      */
     @Override
     @Transactional
-    public void deleteProjectRequest(List<String> projectIdList,
-            Principal principal) throws QuadrigaStorageException {
+    public void deleteProjectRequest(List<String> projectIdList, Principal principal) throws QuadrigaStorageException {
         for (String projectId : projectIdList) {
-            boolean checkAuthorization = projectSecurity.isProjectOwner(
-                    principal.getName(), projectId);
+            boolean checkAuthorization = projectSecurity.isProjectOwner(principal.getName(), projectId);
             if (checkAuthorization) {
                 ProjectDTO project = projectDao.getProjectDTO(projectId);
                 // retrieve all the foreign key tables associated with them
@@ -146,12 +148,9 @@ public class ModifyProjectManager extends BaseManager implements
      */
     @Override
     @Transactional
-    public void assignEditorRole(String projectId, String editor)
-            throws QuadrigaStorageException {
-        ProjectEditorDTOPK projectEditorKey = new ProjectEditorDTOPK(projectId,
-                editor);
-        ProjectEditorDTO projectEditor = projectEditorDao
-                .getProjectEditorDTO(projectEditorKey);
+    public void assignEditorRole(String projectId, String editor) throws QuadrigaStorageException {
+        ProjectEditorDTOPK projectEditorKey = new ProjectEditorDTOPK(projectId, editor);
+        ProjectEditorDTO projectEditor = projectEditorDao.getProjectEditorDTO(projectEditorKey);
 
         // if user is not editor yet, make him editor
         if (projectEditor == null) {
@@ -172,13 +171,9 @@ public class ModifyProjectManager extends BaseManager implements
      */
     @Override
     @Transactional
-    public void removeEditorRole(String projectId, String editor)
-            throws QuadrigaStorageException {
-        ProjectEditorDTOPK projectEditorKey = new ProjectEditorDTOPK(projectId,
-                editor);
-        ProjectEditorDTO projectEditor = projectEditorDao
-                .getProjectEditorDTO(projectEditorKey);
-
+    public void removeEditorRole(String projectId, String editor) throws QuadrigaStorageException {
+        ProjectEditorDTOPK projectEditorKey = new ProjectEditorDTOPK(projectId, editor);
+        ProjectEditorDTO projectEditor = projectEditorDao.getProjectEditorDTO(projectEditorKey);
         if (projectEditor != null) {
             projectEditorDao.deleteDTO(projectEditor);
         }
@@ -189,8 +184,7 @@ public class ModifyProjectManager extends BaseManager implements
      * ==================================================
      */
     private void deleteProjectWorkspaceMapping(ProjectDTO project) {
-        List<ProjectWorkspaceDTO> projectWorkspaceList = project
-                .getProjectWorkspaceDTOList();
+        List<ProjectWorkspaceDTO> projectWorkspaceList = project.getProjectWorkspaceDTOList();
         if (projectWorkspaceList != null) {
             for (ProjectWorkspaceDTO projectWorkspace : projectWorkspaceList) {
                 projectWorkspaceDao.deleteDTO(projectWorkspace);
@@ -200,8 +194,7 @@ public class ModifyProjectManager extends BaseManager implements
     }
 
     private void deleteProjectDictionaryMapping(ProjectDTO project) {
-        List<ProjectDictionaryDTO> projectDictionaryList = project
-                .getProjectDictionaryDTOList();
+        List<ProjectDictionaryDTO> projectDictionaryList = project.getProjectDictionaryDTOList();
         if (projectDictionaryList != null) {
             for (ProjectDictionaryDTO projectDictionary : projectDictionaryList) {
                 projectDictionaryDao.deleteDTO(projectDictionary);
@@ -212,8 +205,7 @@ public class ModifyProjectManager extends BaseManager implements
     }
 
     private void deleteProjectConceptCollectionMapping(ProjectDTO project) {
-        List<ProjectConceptCollectionDTO> projectConceptCollectionList = project
-                .getProjectConceptCollectionDTOList();
+        List<ProjectConceptCollectionDTO> projectConceptCollectionList = project.getProjectConceptCollectionDTOList();
         if (projectConceptCollectionList != null) {
             for (ProjectConceptCollectionDTO projectConceptCollection : projectConceptCollectionList) {
                 projectCCDao.deleteDTO(projectConceptCollection);
@@ -223,8 +215,7 @@ public class ModifyProjectManager extends BaseManager implements
     }
 
     private void deleteProjectCollaboratorMapping(ProjectDTO project) {
-        List<ProjectCollaboratorDTO> projectCollaboratorList = project
-                .getProjectCollaboratorDTOList();
+        List<ProjectCollaboratorDTO> projectCollaboratorList = project.getProjectCollaboratorDTOList();
         if (projectCollaboratorList != null) {
             for (ProjectCollaboratorDTO projectCollaborator : projectCollaboratorList) {
                 projectCollabDao.deleteDTO(projectCollaborator);
@@ -234,8 +225,7 @@ public class ModifyProjectManager extends BaseManager implements
     }
 
     private void deleteProjectEditorMapping(ProjectDTO project) {
-        List<ProjectEditorDTO> projectEditorList = project
-                .getProjectEditorDTOList();
+        List<ProjectEditorDTO> projectEditorList = project.getProjectEditorDTOList();
         if (projectEditorList != null) {
             for (ProjectEditorDTO projectEditor : projectEditorList) {
                 projectEditorDao.deleteDTO(projectEditor);
