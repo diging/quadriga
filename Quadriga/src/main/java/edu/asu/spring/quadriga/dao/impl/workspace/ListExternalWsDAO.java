@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.dao.impl.workspace;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -39,7 +40,7 @@ public class ListExternalWsDAO implements IListExternalWsDAO {
             logger.error("Retrieve external workspace details method :", e);
             throw new QuadrigaStorageException(e);
         }
-        if (externalWorkspaceid != null) {
+        if (CollectionUtils.isNotEmpty(externalWorkspaceid)) {
             return true;
         }
 
