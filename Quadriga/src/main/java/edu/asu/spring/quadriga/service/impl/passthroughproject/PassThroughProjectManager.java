@@ -131,6 +131,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     }
 
     @Override
+    @Transactional
     public String createWorkspaceForExternalProject(String externalWorkspaceId, String externalWorkspaceName,
             String projectId, IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
 
