@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
+import edu.asu.spring.quadriga.dao.impl.workbench.ProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
@@ -43,6 +45,9 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
 
     @Autowired
     private NetworkDTOMapper networkDTOMapper;
+    
+    @Autowired
+    private ProjectDAO projectDao;
 
     private static final Logger logger = LoggerFactory.getLogger(ListWsDAO.class);
 
@@ -239,20 +244,24 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<WorkspaceDTO> listActiveWorkspaceDTOofCollaborator(String projectid, String username)
-            throws QuadrigaStorageException {
+    public List<WorkspaceDTO> listActiveWorkspaceDTOofCollaborator(
+            String projectid, String username) throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = null;
         try {
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    "Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where workcollab.quadrigaUserDTO.username =:username and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated");
+            String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid"
+                    + " AND projWork.workspaceDTO.isarchived =:isarchived "
+                    + " AND projWork.workspaceDTO.isdeactivated =:isdeactivated "
+                    + " AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN ("
+                    + " SELECT wsc.collaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.collaboratorDTOPK.collaboratoruser =:username)))";
+            Query query = sessionFactory.getCurrentSession().createQuery(value);
             query.setParameter("username", username);
             query.setParameter("projectid", projectid);
-            query.setParameter("isdeactivated", false);
             query.setParameter("isarchived", false);
-
+            query.setParameter("isdeactivated", false);
             workspaceDTOList = query.list();
+
         } catch (HibernateException e) {
-            logger.error("retrieve active workspace of collaborator :", e);
+            logger.error("retrieve deactive workspace method :", e);
             throw new QuadrigaStorageException();
         }
         return workspaceDTOList;
