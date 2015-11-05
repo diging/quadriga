@@ -51,7 +51,7 @@ public class ListExternalWsDAO implements IListExternalWsDAO {
     public String getInternalWorkspaceId(String externalWorkspaceid) {
         // TODO Auto-generated method stub
 
-        Query query = sessionFactory.getCurrentSession().getNamedQuery("getWorkspaceIdFromExternalWorkspaceId");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("ExternalWorkspaceDTO.getWorkspaceIdFromExternalWorkspaceId");
         query.setParameter("externalWorkspaceid", externalWorkspaceid);
         List internalProjectId = query.list();
         return String.valueOf(internalProjectId.get(0));
