@@ -80,4 +80,26 @@ public class ConceptCollectionShallowMapperTest {
 		assertEquals("collectionname2", ccProxyList.get(1).getConceptCollectionName());
 
 	}
+
+	@Test
+	public void getConceptCollectionListOfCollaboratorTest() throws QuadrigaStorageException {
+		QuadrigaUserDTO userDTO = new QuadrigaUserDTO();
+		userDTO.setUsername("username");
+		
+		ConceptCollectionDTO dto = new ConceptCollectionDTO();
+		dto.setCollectionname("collectionname");
+		dto.setUpdatedby("updatedby");
+        dto.setOwner(userDTO);
+        
+		List<ConceptCollectionDTO> concolList = new ArrayList<ConceptCollectionDTO>();
+		concolList.add(dto);
+
+		Mockito.when(mockeddbConnect.getCollaboratedConceptsofUser(Matchers.anyString())).thenReturn(concolList);
+
+		List<IConceptCollection> ccList = conceptCollectionShallowMapperUnderTest
+				.getConceptCollectionListOfCollaborator("username");
+
+		assertEquals("collectionname", ccList.get(0).getConceptCollectionName());
+		assertEquals("updatedby", ccList.get(0).getUpdatedBy());
+	}
 }
