@@ -36,18 +36,33 @@ public class ConceptCollectionShallowMapperTest {
 	@InjectMocks
 	ConceptCollectionShallowMapper conceptCollectionShallowMapperUnderTest;
 
+	private QuadrigaUserDTO userDTO;
+
+	private ConceptCollectionDTO dto;
+
 	@Before
-	public void setUp() {
+	public void setUp() throws QuadrigaStorageException {
 		MockitoAnnotations.initMocks(this);
+
+		userDTO = new QuadrigaUserDTO();
+		userDTO.setUsername("username");
+
+		dto = new ConceptCollectionDTO();
+		dto.setCollectionname("collectionname");
+		dto.setUpdatedby("updatedby");
+		dto.setOwner(userDTO);
+
+		User user = new User();
+		user.setUserName("username");
+
+		User user2 = new User();
+		user2.setUserName("username2");
+		Mockito.when(mockedUserDeepMapper.getUser("username")).thenReturn(user);
+		Mockito.when(mockedUserDeepMapper.getUser("username2")).thenReturn(user2);
 	}
 
 	@Test
 	public void getConceptCollectionListTest() throws QuadrigaStorageException {
-		QuadrigaUserDTO userDTO = new QuadrigaUserDTO();
-		userDTO.setUsername("username");
-		ConceptCollectionDTO dto = new ConceptCollectionDTO();
-		dto.setCollectionname("collectionname");
-		dto.setOwner(userDTO);
 
 		QuadrigaUserDTO userDTO2 = new QuadrigaUserDTO();
 		userDTO2.setUsername("username2");
@@ -59,15 +74,7 @@ public class ConceptCollectionShallowMapperTest {
 		ccDTOList.add(dto);
 		ccDTOList.add(dto2);
 
-		User user = new User();
-		user.setUserName("username");
-
-		User user2 = new User();
-		user2.setUserName("username2");
-
 		Mockito.when(mockeddbConnect.getConceptsOwnedbyUser(Matchers.anyString())).thenReturn(ccDTOList);
-		Mockito.when(mockedUserDeepMapper.getUser("username")).thenReturn(user);
-		Mockito.when(mockedUserDeepMapper.getUser("username2")).thenReturn(user2);
 
 		List<IConceptCollection> ccProxyList = conceptCollectionShallowMapperUnderTest
 				.getConceptCollectionList("username");
@@ -83,14 +90,7 @@ public class ConceptCollectionShallowMapperTest {
 
 	@Test
 	public void getConceptCollectionListOfCollaboratorTest() throws QuadrigaStorageException {
-		QuadrigaUserDTO userDTO = new QuadrigaUserDTO();
-		userDTO.setUsername("username");
-		
-		ConceptCollectionDTO dto = new ConceptCollectionDTO();
-		dto.setCollectionname("collectionname");
-		dto.setUpdatedby("updatedby");
-        dto.setOwner(userDTO);
-        
+
 		List<ConceptCollectionDTO> concolList = new ArrayList<ConceptCollectionDTO>();
 		concolList.add(dto);
 
