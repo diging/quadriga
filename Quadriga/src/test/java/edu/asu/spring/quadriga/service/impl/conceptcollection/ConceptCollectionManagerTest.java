@@ -17,10 +17,14 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
@@ -49,6 +53,12 @@ public class ConceptCollectionManagerTest {
 
 	@Mock
 	private IListWSManager mockedwsManager = Mockito.mock(IListWSManager.class);
+
+	@Mock
+	private IConceptFactory mockedConceptFactory = Mockito.mock(IConceptFactory.class);
+
+	@Mock
+	private IConceptCollectionDAO mockedccDao = Mockito.mock(IConceptCollectionDAO.class);
 
 	@InjectMocks
 	ConceptCollectionManager conceptCollectionManagerUnderTest;
@@ -184,4 +194,25 @@ public class ConceptCollectionManagerTest {
 		String actualResult = conceptCollectionManagerUnderTest.getProjectsTree("username", "ccId");
 		assertEquals(result, actualResult);
 	}
+
+	@Test
+	public void updateTest() throws QuadrigaStorageException {
+		Concept concept = new Concept();
+
+		List<ConceptpowerReply.ConceptEntry> conceptEntries = new ArrayList<ConceptpowerReply.ConceptEntry>();
+		ConceptpowerReply.ConceptEntry entry = new ConceptpowerReply.ConceptEntry();
+		entry.setLemma("test-lemma");
+		conceptEntries.add(entry);
+		ConceptpowerReply rep = new ConceptpowerReply();
+		rep.setConceptEntry(conceptEntries);
+
+		mockRestTemplate("getForObject", rep);
+		Mockito.when(mockedConceptFactory.createConceptObject()).thenReturn(concept);
+		Mockito.when(mockedccDao.updateItem(Matchers.any(IConcept.class), Mockito.anyString(), Mockito.anyString()))
+				.thenReturn("dummy");
+
+		conceptCollectionManagerUnderTest.update(new String[] { "id" }, new ConceptCollection(), "username");
+		assertEquals("test-lemma", concept.getLemma());
+	}
+
 }
