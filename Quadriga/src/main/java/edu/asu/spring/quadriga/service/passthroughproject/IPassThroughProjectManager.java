@@ -22,7 +22,7 @@ public interface IPassThroughProjectManager {
 
     void getPassThroughProjectDTO();
     
-    String getInternalProjectId(String externalProjectid);
+    String getInternalProjectId(String externalProjectid, Principal principal) throws QuadrigaStorageException;
 
     String callQStore(String workspaceId, String xml, IUser user) throws ParserConfigurationException,
             SAXException, IOException, JAXBException, QuadrigaStorageException, QuadrigaAccessException;
