@@ -52,11 +52,6 @@ public class ListExternalWSManager implements IListExternalWSManager {
     @Override
     public void createExternalWorkspace(String externalWorkspaceId,String externalWorkspaceName, String workspaceId,String projectId,IUser user) {
         
-        
-        
-        
-
-
         ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
 
         ExternalWorkspaceDTO workspaceDTO = new ExternalWorkspaceDTO();
@@ -64,7 +59,7 @@ public class ListExternalWSManager implements IListExternalWSManager {
         workspaceDTO.setDescription("External Workspace");
 
         Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
-        query.setParameter("username", user.getName());
+        query.setParameter("username", user.getUserName());
         List<QuadrigaUserDTO> quadrigaUsers = query.list();
         workspaceDTO.setWorkspaceowner(quadrigaUsers.get(0));
         workspaceDTO.setIsarchived(false);

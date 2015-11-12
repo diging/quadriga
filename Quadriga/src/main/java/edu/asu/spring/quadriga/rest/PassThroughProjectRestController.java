@@ -13,6 +13,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,13 +31,15 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 
 @Controller
 public class PassThroughProjectRestController {
 
-    private static final String DEFAULT_WORKSPACE = "default_external_workspace";
+    private static final Logger logger = LoggerFactory
+            .getLogger(PassThroughProjectRestController.class);
 
     @Autowired
     private IPassThroughProjectManager passThroughProjectManager;
@@ -53,28 +57,74 @@ public class PassThroughProjectRestController {
             QuadrigaAccessException {
 
         Document document = getXMLParser(xml);
-        String externalProjectId = getProjectId(document);
-        String externalUserName = getTagValue(document, "user_name");
-        String externalUserId = getTagValue(document, "user_id");
-        String name = getTagValue(document, "name");
-        String description = getTagValue(document, "description");
-        String sender = getTagValue(document, "sender");
-        String workspaceName = getWorkspaceName(document);
-        String externalWorkspaceId = getExternalWorkspaceId(document);
 
-        String projectId = processProject(principal, externalProjectId, name,
-                description, externalUserName, externalUserId, sender);
-
-        String internalWorkspaceId = processWorkspace(externalWorkspaceId,
-                workspaceName, projectId, principal);
+        String projectId = processProjectInformation(document, principal);
+        
+        String workspaceId = processWorkspaceInformation(document, projectId, principal);
 
         String annotatedText = getAnnotateData(xml);
 
         String networkId = passThroughProjectManager.callQStore(
-                internalWorkspaceId, annotatedText,
+                workspaceId, annotatedText,
                 userManager.getUser(principal.getName()));
 
         return null;
+    }
+
+    private String processWorkspaceInformation(Document document, String projectId, Principal principal) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+        
+        String workspaceName = getTagValue(document, "workspace");
+        if(workspaceName == null){
+            workspaceName = Constants.DEFAULT_WORKSPACE_NAME;
+        }
+        
+        String externalWorkspaceId = getTagId(document, "workspace");
+        if(externalWorkspaceId == null){
+            externalWorkspaceId = Constants.DEFAULT_WORKSPACE_ID;
+        }
+        
+        String internalWorkspaceId = processWorkspace(externalWorkspaceId,
+                workspaceName, projectId, principal);
+        
+        return internalWorkspaceId;
+    }
+
+    private String processProjectInformation(Document document,
+            Principal principal) throws QuadrigaStorageException {
+
+        String externalProjectId = getTagId(document,"project");
+        if(externalProjectId == null){
+            externalProjectId = Constants.DEFAULT_PROJECT_ID;
+        }
+        
+        String externalUserName = getTagValue(document, "user_name");
+        if(externalUserName == null){
+            externalUserName = Constants.DEFAULT_VOGONWEB_USER_NAME;
+        }
+        
+        String externalUserId = getTagValue(document, "user_id");
+        if(externalUserId == null){
+            externalUserId = Constants.DEFAULT_VOGONWEB_USER_ID;
+        }
+        
+        String name = getTagValue(document, "name");
+        if(name == null){
+            name = Constants.DEFAULT_PROJECT_NAME;
+        }
+        
+        String description = getTagValue(document, "description");
+        if(description == null){
+            description = Constants.DEFAULT_PROJECT_DESCRIPTION;
+        }
+        
+        String sender = getTagValue(document, "sender");
+        if(sender == null){
+            sender = Constants.VOGONWEB_SENDER;
+        }
+
+        String projectId = processProject(principal, externalProjectId, name,
+                description, externalUserName, externalUserId, sender);
+        return projectId;
     }
 
     private String processProject(Principal principal,
@@ -105,12 +155,6 @@ public class PassThroughProjectRestController {
         return internalWorkspaceId;
     }
 
-    private String getWorkspaceName(Document document) {
-        String workspaceName = getTagValue(document, "workspace");
-        return StringUtils.isEmpty(workspaceName) ? DEFAULT_WORKSPACE
-                : workspaceName;
-    }
-
     private String getAnnotateData(String xml) {
 
         int startIndex = xml.indexOf("<element_events");
@@ -123,9 +167,13 @@ public class PassThroughProjectRestController {
     }
 
     private String getTagValue(Document document, String tagName) {
+        try{
         Node tagNode = document.getElementsByTagName(tagName).item(0);
-        return tagNode.getFirstChild().getNodeValue();
-
+        return tagNode!=null ? tagNode.getFirstChild().getNodeValue() : null;
+        }catch(Exception ex){
+            logger.info("Exception occurred while processsing tag ->"+tagName+". So returning null");
+            return null;
+        }
     }
 
     private Document getXMLParser(String xml)
@@ -138,20 +186,21 @@ public class PassThroughProjectRestController {
         return doc;
     }
 
-    private String getProjectId(Document document) {
+    private String getTagId(Document document, String tagName) {
 
-        Node project = document.getElementsByTagName("project").item(0);
-        NamedNodeMap projetctAttributeMap = project.getAttributes();
-        Node idNode = projetctAttributeMap.getNamedItem("id");
-        return idNode.getNodeValue();
+        try {
+            Node node = document.getElementsByTagName(tagName).item(0);
+            if (node == null) {
+                return null;
+            }
+            NamedNodeMap nodeAttributeMap = node.getAttributes();
+            Node idNode = nodeAttributeMap.getNamedItem("id");
+            return idNode.getNodeValue();
+        } catch (Exception ex) {
+            logger.info("Problem while processing id for tag->"+ tagName +" in xml. So returning null");
+            return null;
+        }
     }
 
-    private String getExternalWorkspaceId(Document document) {
-
-        Node wokspace = document.getElementsByTagName("workspace").item(0);
-        NamedNodeMap workspaceAttributeMap = wokspace.getAttributes();
-        Node idNode = workspaceAttributeMap.getNamedItem("id");
-        return idNode.getNodeValue();
-    }
-
+ 
 }
