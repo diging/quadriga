@@ -34,7 +34,7 @@ public class ListExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements 
         List externalWorkspaceid = null;
         try {
             Query query = sessionFactory.getCurrentSession().getNamedQuery("ExternalWorkspaceDTO.findByExternalWorkspaceid");
-            query.setParameter("externalWorkspaceid", externalWorkspaceid);
+            query.setParameter("externalWorkspaceid", workspaceId);
             externalWorkspaceid = query.list();
         } catch (HibernateException e) {
             logger.error("Retrieve external workspace details method :", e);
