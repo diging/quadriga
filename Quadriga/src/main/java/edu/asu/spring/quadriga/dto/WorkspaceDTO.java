@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_workspace")
-@Inheritance(strategy=InheritanceType.JOINED)
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkspaceDTO.findAll", query = "SELECT w FROM WorkspaceDTO w"),
@@ -63,7 +62,7 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     @Basic(optional = false)
     @Column(name = "isdeactivated")
     private Boolean isdeactivated;
-	
+    
     @JoinColumn(name = "workspaceowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO workspaceowner;

@@ -246,25 +246,21 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
     @Override
     public List<WorkspaceDTO> listActiveWorkspaceDTOofCollaborator(
             String projectid, String username) throws QuadrigaStorageException {
-        List<WorkspaceDTO> workspaceDTOList = null;
-        try {
-            String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid"
-                    + " AND projWork.workspaceDTO.isarchived =:isarchived "
-                    + " AND projWork.workspaceDTO.isdeactivated =:isdeactivated "
-                    + " AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN ("
-                    + " SELECT wsc.collaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.collaboratorDTOPK.collaboratoruser =:username)))";
-            Query query = sessionFactory.getCurrentSession().createQuery(value);
-            query.setParameter("username", username);
-            query.setParameter("projectid", projectid);
-            query.setParameter("isarchived", false);
-            query.setParameter("isdeactivated", false);
-            workspaceDTOList = query.list();
+            List<WorkspaceDTO> workspaceDTOList = null;
+            try {
+                Query query = sessionFactory.getCurrentSession().createQuery(
+                        "Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where workcollab.quadrigaUserDTO.username =:username and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated");
+                query.setParameter("username", username);
+                query.setParameter("projectid", projectid);
+                query.setParameter("isdeactivated", false);
+                query.setParameter("isarchived", false);
 
-        } catch (HibernateException e) {
-            logger.error("retrieve deactive workspace method :", e);
-            throw new QuadrigaStorageException();
-        }
-        return workspaceDTOList;
+                workspaceDTOList = query.list();
+            } catch (HibernateException e) {
+                logger.error("retrieve active workspace of collaborator :", e);
+                throw new QuadrigaStorageException(e);
+            }
+            return workspaceDTOList;
     }
 
     /**
