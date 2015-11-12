@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.profile;
+package edu.asu.spring.quadriga.profile.impl;
 
 import static org.junit.Assert.assertEquals;
 
