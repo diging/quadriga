@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -32,6 +33,7 @@ import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IListExternalWSManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Service
 public class PassThroughProjectManager extends BaseManager implements IPassThroughProjectManager {
@@ -53,7 +55,11 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     @Autowired
     private IUserManager userManager;
-
+    
+    @Autowired
+    private IProjectSecurityChecker projectSecurityChecker;
+    
+    
     @Resource(name = "projectconstants")
     private Properties messages;
 
@@ -102,14 +108,30 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     @Override
     @Transactional
-    public String getInternalProjectId(String externalProjectid) {
+    public String getInternalProjectId(String externalProjectid,
+            Principal principal) throws QuadrigaStorageException {
 
-        Query query = sessionFactory.getCurrentSession().getNamedQuery("PassThroughProjectDTO.findByExternalProjectid");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(
+                "PassThroughProjectDTO.findByExternalProjectid");
         query.setParameter("externalProjectid", externalProjectid);
 
         List<PassThroughProjectDTO> projectDTOs = query.list();
 
-        return CollectionUtils.isEmpty(projectDTOs) ? null : projectDTOs.get(0).getProjectid();
+        for (PassThroughProjectDTO projectDTO : projectDTOs) {
+            boolean isOwner = projectSecurityChecker.isProjectOwner(
+                    principal.getName(), projectDTO.getProjectid());
+            if (isOwner) {
+                return projectDTO.getProjectid();
+            }
+            boolean isCollaborator = projectSecurityChecker.isCollaborator(
+                    principal.getName(),
+                    RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+                    projectDTO.getProjectid());
+            if (isCollaborator) {
+                return projectDTO.getProjectid();
+            }
+        }
+        return null;
     }
 
     @Override

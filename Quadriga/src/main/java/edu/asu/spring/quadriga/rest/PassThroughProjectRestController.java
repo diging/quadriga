@@ -133,7 +133,7 @@ public class PassThroughProjectRestController {
             throws QuadrigaStorageException {
 
         String internalProjetid = passThroughProjectManager
-                .getInternalProjectId(externalProjectid);
+                .getInternalProjectId(externalProjectid, principal);
 
         if (StringUtils.isEmpty(internalProjetid)) {
             return passThroughProjectManager.addPassThroughProject(principal,
