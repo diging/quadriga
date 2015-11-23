@@ -49,7 +49,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
@@ -102,9 +101,6 @@ public class ConceptCollectionRestController {
 
 	@Autowired
 	private IWSSecurityChecker checkWSSecurity;
-
-	@Autowired
-	private IConceptFactory conFact;
 
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
@@ -254,8 +250,6 @@ public class ConceptCollectionRestController {
 			}
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.setContentType(MediaType.valueOf(accept));
-			response.setStatus(200);
-			response.setContentType(accept);
 			return new ResponseEntity<String>("Success", httpHeaders, HttpStatus.OK);
 		}
 	}
@@ -358,7 +352,7 @@ public class ConceptCollectionRestController {
 			RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR }) })
 	@ResponseBody
 	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
-	public String addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,
+	public ResponseEntity<String> addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,
 			HttpServletRequest request, HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept, ModelMap model, Principal principal)
 					throws RestException, QuadrigaStorageException, QuadrigaAccessException {
@@ -368,22 +362,19 @@ public class ConceptCollectionRestController {
 
 		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
 			logger.info("Workspace ID : " + workspaceId + " doesn't exist");
-			response.setStatus(403);
 			String errorMsg = restMessage.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist", request);
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
 		}
 
 		IConceptCollection collection = conceptCollectionFactory.createConceptCollectionObject();
 
 		if (ccName == null || ccName.isEmpty()) {
-			response.setStatus(403);
 			String errorMsg = restMessage.getErrorMsg("Please provide concept collection name", request);
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
 		}
 		if (desc == null || desc.isEmpty()) {
-			response.setStatus(403);
 			String errorMsg = restMessage.getErrorMsg("Please provide concept collection description", request);
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
 		}
 		logger.debug("XML : " + xml);
 		JAXBElement<QuadrigaConceptReply> response1 = null;
@@ -395,22 +386,19 @@ public class ConceptCollectionRestController {
 			response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
 		} catch (Exception e) {
 			logger.error("Error in unmarshalling", e);
-			response.setStatus(403);
 			String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
 		}
 		if (response1 == null) {
-			response.setStatus(403);
 			String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
 		}
 		QuadrigaConceptReply qReply = response1.getValue();
 		ConceptList c1 = qReply.getConceptList();
 		List<Concept> conceptList = c1.getConcepts();
 		if (conceptList.size() < 1) {
-			response.setStatus(403);
 			String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
 		}
 
 		collection.setDescription(desc);
@@ -433,19 +421,19 @@ public class ConceptCollectionRestController {
 						c.getDescription().trim(), ccId, user.getUserName());
 			} catch (QuadrigaStorageException e) {
 				logger.error("Errors in adding items", e);
-				response.setStatus(500);
-				response.setContentType(accept);
 				String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error", request);
-				return errorMsg;
+				HttpHeaders httpHeaders = new HttpHeaders();
+				httpHeaders.setContentType(MediaType.valueOf(accept));
+				return new ResponseEntity<String>(errorMsg, httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 
 		}
 
 		workspaceCCManager.addWorkspaceCC(workspaceId, ccId, user.getUserName());
 
-		response.setStatus(200);
-		response.setContentType(accept);
-		return ccId;
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(MediaType.valueOf(accept));
+		return new ResponseEntity<String>(ccId, httpHeaders, HttpStatus.OK);
 	}
 
 	/**
