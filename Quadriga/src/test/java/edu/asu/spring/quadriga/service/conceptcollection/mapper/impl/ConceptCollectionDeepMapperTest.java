@@ -83,9 +83,26 @@ public class ConceptCollectionDeepMapperTest {
 	@InjectMocks
 	ConceptCollectionDeepMapper conceptCollectionDeepMapperUnderTest;
 
+	private ConceptCollectionDTO ccDTO;
+
+	private User user;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+
+		QuadrigaUserDTO dto = new QuadrigaUserDTO();
+		dto.setUsername("test name");
+		ccDTO = new ConceptCollectionDTO();
+		ccDTO.setConceptCollectionid("conceptCollectionid");
+		ccDTO.setCollectionname("collectionname");
+		ccDTO.setCreatedby("createdby");
+		ccDTO.setCollectionowner(dto);
+
+		user = new User();
+		user.setName("name");
+		user.setEmail("test@gmail.com");
+		user.setUserName("username");
 	}
 
 	@Test
@@ -108,11 +125,9 @@ public class ConceptCollectionDeepMapperTest {
 		List<ConceptCollectionItemsDTO> conceptCollectionItemsDTOList = new ArrayList<ConceptCollectionItemsDTO>();
 		conceptCollectionItemsDTOList.add(collectionItemsDTO);
 
-		ConceptCollectionDTO ccDTO = createTestConceptCollectionDTO();
-
 		ccDTO.setConceptCollectionItemsDTOList(conceptCollectionItemsDTOList);
 
-		setMockContitionsCollectionDetailsTest(ccDTO);
+		setMockConditionsCollectionDetailsTest(ccDTO);
 
 		IConceptCollection col = conceptCollectionDeepMapperUnderTest.getConceptCollectionDetails("ccId");
 
@@ -132,11 +147,11 @@ public class ConceptCollectionDeepMapperTest {
 		assertNull(col);
 	}
 
-	private void setMockContitionsCollectionDetailsTest(ConceptCollectionDTO ccDTO) throws QuadrigaStorageException {
+	private void setMockConditionsCollectionDetailsTest(ConceptCollectionDTO ccDTO) throws QuadrigaStorageException {
 
 		Mockito.when(mockedccFactory.createConceptCollectionObject()).thenReturn(new ConceptCollection());
 		Mockito.when(mockeddbConnect.getDTO(Matchers.anyString())).thenReturn(ccDTO);
-		Mockito.when(mockedUserDeepMapper.getUser(Matchers.anyString())).thenReturn(createTestUser());
+		Mockito.when(mockedUserDeepMapper.getUser(Matchers.anyString())).thenReturn(user);
 		Mockito.when(mockedProjectCCShallowMapper.getProjectConceptCollectionList(
 				Matchers.any(ConceptCollectionDTO.class), Matchers.any(IConceptCollection.class)))
 				.thenReturn(new ArrayList<IProjectConceptCollection>());
@@ -193,8 +208,6 @@ public class ConceptCollectionDeepMapperTest {
 		collaboratorRole.setId("id");
 		setMockConditionsCollaboratorListTest(collaboratorRole);
 
-		ConceptCollectionDTO ccDTO = createTestConceptCollectionDTO();
-
 		ccDTO.setConceptCollectionCollaboratorDTOList(collabList);
 		ConceptCollection conceptCollection = new ConceptCollection();
 		conceptCollection.setConceptCollectionId(ccDTO.getConceptCollectionid());
@@ -204,7 +217,7 @@ public class ConceptCollectionDeepMapperTest {
 		conceptCollection.setCreatedDate(ccDTO.getCreateddate());
 		conceptCollection.setUpdatedBy(ccDTO.getUpdatedby());
 		conceptCollection.setUpdatedDate(ccDTO.getUpdateddate());
-		conceptCollection.setOwner(createTestUser());
+		conceptCollection.setOwner(user);
 
 		List<IConceptCollectionCollaborator> collectionCollaborators = conceptCollectionDeepMapperUnderTest
 				.getConceptCollectionCollaboratorList(ccDTO, conceptCollection);
@@ -231,25 +244,4 @@ public class ConceptCollectionDeepMapperTest {
 				.thenReturn(new ConceptCollectionCollaborator());
 	}
 
-	private User createTestUser() {
-
-		User user = new User();
-		user.setName("name");
-		user.setEmail("test@gmail.com");
-		user.setUserName("username");
-
-		return user;
-	}
-
-	private ConceptCollectionDTO createTestConceptCollectionDTO() {
-		QuadrigaUserDTO dto = new QuadrigaUserDTO();
-		dto.setUsername("test name");
-		ConceptCollectionDTO ccDTO = new ConceptCollectionDTO();
-		ccDTO.setConceptCollectionid("conceptCollectionid");
-		ccDTO.setCollectionname("collectionname");
-		ccDTO.setCreatedby("createdby");
-		ccDTO.setCollectionowner(dto);
-
-		return ccDTO;
-	}
 }
