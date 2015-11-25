@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
@@ -128,13 +127,11 @@ public class ConceptCollectionRestController {
 	 * @throws RestException
 	 */
 	@RequestMapping(value = "rest/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
 	public ResponseEntity<String> listConceptCollections(ModelMap model, Principal principal, HttpServletRequest req)
 			throws RestException {
 		List<IConceptCollection> collectionsList = null;
 		VelocityEngine engine = null;
 		Template template = null;
-
 		try {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
@@ -198,7 +195,6 @@ public class ConceptCollectionRestController {
 	@RestAccessPolicies({
 			@ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST, paramIndex = 1, userRole = {
 					RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
-	@ResponseBody
 	@RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
 	public ResponseEntity<String> addConceptsToConceptColleciton(
 			@PathVariable("conceptCollectionID") String conceptCollectionId, HttpServletRequest request,
@@ -262,6 +258,7 @@ public class ConceptCollectionRestController {
 	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/
 	 * conceptcollections
 	 * 
+	 * 
 	 * @param workspaceId
 	 *            {@link Workspace} ID , access this parameter to get concept
 	 *            collection of the {@link Workspace}
@@ -279,7 +276,6 @@ public class ConceptCollectionRestController {
 			RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR,
 			RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
 	@RequestMapping(value = "rest/workspace/{workspaceId}/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
 	public ResponseEntity<String> listWorkspaceConceptCollections(@PathVariable("workspaceId") String workspaceId,
 			ModelMap model, Principal principal, HttpServletRequest req) throws RestException {
 		List<IWorkspaceConceptCollection> collectionsList = null;
@@ -350,7 +346,6 @@ public class ConceptCollectionRestController {
 	 */
 	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST, paramIndex = 1, userRole = {
 			RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR }) })
-	@ResponseBody
 	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
 	public ResponseEntity<String> addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,
 			HttpServletRequest request, HttpServletResponse response, @RequestBody String xml,
@@ -361,20 +356,19 @@ public class ConceptCollectionRestController {
 		String desc = request.getParameter("desc");
 
 		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
-			logger.info("Workspace ID : " + workspaceId + " doesn't exist");
 			String errorMsg = restMessage.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist", request);
-			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		IConceptCollection collection = conceptCollectionFactory.createConceptCollectionObject();
 
 		if (ccName == null || ccName.isEmpty()) {
 			String errorMsg = restMessage.getErrorMsg("Please provide concept collection name", request);
-			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
 		if (desc == null || desc.isEmpty()) {
 			String errorMsg = restMessage.getErrorMsg("Please provide concept collection description", request);
-			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
 		logger.debug("XML : " + xml);
 		JAXBElement<QuadrigaConceptReply> response1 = null;
@@ -387,18 +381,18 @@ public class ConceptCollectionRestController {
 		} catch (Exception e) {
 			logger.error("Error in unmarshalling", e);
 			String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
-			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
 		if (response1 == null) {
 			String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
 		QuadrigaConceptReply qReply = response1.getValue();
 		ConceptList c1 = qReply.getConceptList();
 		List<Concept> conceptList = c1.getConcepts();
 		if (conceptList.size() < 1) {
 			String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
 
 		collection.setDescription(desc);
@@ -454,7 +448,6 @@ public class ConceptCollectionRestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/conceptdetails/{collectionID}", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
 	public ResponseEntity<String> getConceptList(@PathVariable("collectionID") String collectionID, ModelMap model,
 			HttpServletRequest req, Principal principal) throws RestException {
 		VelocityEngine engine = null;
