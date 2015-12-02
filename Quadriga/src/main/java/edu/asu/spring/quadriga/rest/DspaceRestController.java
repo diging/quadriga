@@ -135,7 +135,7 @@ public class DspaceRestController {
 		} catch (ParseErrorException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
@@ -253,9 +253,10 @@ public class DspaceRestController {
 			throw new RestException(403);
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("The algorithm used for dspace hashing is causing exception", e);
+			throw new RestException(404);
 		} catch (QuadrigaStorageException e) {
 			logger.error("Exception:", e);
-			throw new RestException(405);
+			throw new RestException(500);
 		} finally {
 			if (inputStream != null) {
 				try {
@@ -443,16 +444,13 @@ public class DspaceRestController {
 				logger.error("Exception: ", e);
 				throw new RestException(404);
 			} catch (NoSuchAlgorithmException e) {
-				// System error
-				e.printStackTrace();
-				throw new RestException(406);
-			} catch (QuadrigaStorageException e) {
-				// Error in the database
-				e.printStackTrace();
+				logger.error("Exception: ", e);
 				throw new RestException(404);
+			} catch (QuadrigaStorageException e) {
+				logger.error("Exception: ", e);
+				throw new RestException(500);
 			} catch (QuadrigaAccessException e) {
-				// User not allowed to access the workspace
-				e.printStackTrace();
+				logger.error("Exception: ", e);
 				throw new RestException(403);
 			}
 		}
