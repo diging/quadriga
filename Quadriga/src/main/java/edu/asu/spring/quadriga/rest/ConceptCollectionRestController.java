@@ -150,7 +150,7 @@ public class ConceptCollectionRestController {
 		} catch (ParseErrorException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
@@ -204,7 +204,7 @@ public class ConceptCollectionRestController {
 		IUser user = userManager.getUser(principal.getName());
 		if (xml.equals("")) {
 			String errorMsg = restMessage.getErrorMsg("Please provide XML in body of the post request.", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		} else {
 
 			logger.debug("XML : " + xml);
@@ -300,7 +300,7 @@ public class ConceptCollectionRestController {
 		} catch (ParseErrorException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
@@ -364,11 +364,11 @@ public class ConceptCollectionRestController {
 
 		if (ccName == null || ccName.isEmpty()) {
 			String errorMsg = restMessage.getErrorMsg("Please provide concept collection name", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		if (desc == null || desc.isEmpty()) {
 			String errorMsg = restMessage.getErrorMsg("Please provide concept collection description", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		logger.debug("XML : " + xml);
 		JAXBElement<QuadrigaConceptReply> response1 = null;
@@ -385,14 +385,14 @@ public class ConceptCollectionRestController {
 		}
 		if (response1 == null) {
 			String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		QuadrigaConceptReply qReply = response1.getValue();
 		ConceptList c1 = qReply.getConceptList();
 		List<Concept> conceptList = c1.getConcepts();
 		if (conceptList.size() < 1) {
 			String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		collection.setDescription(desc);
@@ -472,7 +472,7 @@ public class ConceptCollectionRestController {
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 			logger.error("Exception:", e);
 			throw new RestException(403);

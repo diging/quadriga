@@ -141,7 +141,7 @@ public class DictionaryRestController {
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 			logger.error("Exception:", e);
 			throw new RestException(403);
@@ -184,7 +184,7 @@ public class DictionaryRestController {
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 			logger.error("Exception:", e);
 			throw new RestException(403);
@@ -235,7 +235,7 @@ public class DictionaryRestController {
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 			logger.error("Exception:", e);
 			throw new RestException(403);
@@ -267,7 +267,7 @@ public class DictionaryRestController {
 		IUser user = usermanager.getUser(principal.getName());
 		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
 			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		String dictName = request.getParameter("name");
@@ -276,11 +276,11 @@ public class DictionaryRestController {
 
 		if (dictName == null || dictName.isEmpty()) {
 			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary name", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		if (desc == null || desc.isEmpty()) {
 			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary description", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		logger.debug("XML : " + xml);
 		JAXBElement<QuadrigaDictDetailsReply> response1 = null;
@@ -297,14 +297,14 @@ public class DictionaryRestController {
 		}
 		if (response1 == null) {
 			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		QuadrigaDictDetailsReply qReply = response1.getValue();
 		DictionaryItemList dictList = qReply.getDictionaryItemsList();
 		List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
 		if (dictionaryList.size() < 1) {
 			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		dictionary.setDescription(desc);
@@ -368,7 +368,7 @@ public class DictionaryRestController {
 		IUser user = usermanager.getUser(principal.getName());
 		if (xml.equals("")) {
 			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		} else {
 
 			logger.debug("XML : " + xml);
@@ -392,7 +392,7 @@ public class DictionaryRestController {
 			List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
 			if (dictionaryList.size() < 1) {
 				String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
-				return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+				return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 			}
 
 			Iterator<DictionaryItem> I = dictionaryList.iterator();
