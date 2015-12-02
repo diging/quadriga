@@ -15,11 +15,12 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -62,8 +63,7 @@ public class ProjectRestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/projects", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
-	public String listProjects(ModelMap model, Principal principal, HttpServletRequest req)
+	public ResponseEntity<String> listProjects(ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
 		List<IProject> projectList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
@@ -78,7 +78,7 @@ public class ProjectRestController {
 			
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			return writer.toString();
+			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 			logger.error("Exception:", e);
 			throw new RestException(404);
@@ -87,7 +87,7 @@ public class ProjectRestController {
 			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 	}
 }
