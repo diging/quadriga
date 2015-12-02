@@ -20,7 +20,9 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
@@ -37,7 +38,6 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
-import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
@@ -101,12 +101,12 @@ public class NetworkRestController {
 	 * @throws JAXBException 
 	 * @throws TransformerException 
 	 * @throws QuadrigaStorageException 
+	 * @throws RestException 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
 	public ResponseEntity<String> getNetworkFromClients(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
+			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException, RestException {
 
 
 		IUser user = userManager.getUser(principal.getName());
@@ -115,53 +115,47 @@ public class NetworkRestController {
 		String workspaceid = request.getParameter("workspaceid");
 
 		if(workspaceid == null||workspaceid.isEmpty()){
-			return new ResponseEntity<String>("Please provide correct workspace id.", HttpStatus.NOT_FOUND);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide correct workspace id.");
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
 		if(projectid == null || projectid.isEmpty()){
-			return new ResponseEntity<String>("Please provide correct workspace id.", HttpStatus.NOT_FOUND);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide correct workspace id.");
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		if(networkName == null ||  networkName.isEmpty()){
-			return new ResponseEntity<String>("Please provide network name as a part of post parameters", HttpStatus.NOT_FOUND);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide network name as a part of post parameters");
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 
 		xml=xml.trim();
 		if (xml.isEmpty()) {
-			//TODO
-			//response.setStatus(406);
-			//return "Please provide XML in body of the post request.";
-			return new ResponseEntity<String>("Please provide XML in body of the post request.", HttpStatus.NOT_FOUND);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 
 		} else {
 			String res=networkManager.storeXMLQStore(xml);
 			if(res.equals("")){
-				//TODO
-				//response.setStatus(406);
-				//return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
-				return new ResponseEntity<String>("Please provide correct XML in body of the post request. Qstore system is not accepting ur XML", HttpStatus.NOT_FOUND);
+				String errorMsg = "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
+				return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 			}
 
 			networkId=networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,networkId,INetworkManager.VERSION_ZERO);
 
 			if(networkId.endsWith(INetworkManager.DSPACEERROR)){
-				//TODO
-				//response.setStatus(404);
-				//return "Text files don't belong to this workspace.";
-				return new ResponseEntity<String>("Text files don't belong to this workspace.", HttpStatus.NOT_FOUND);
+				String errorMsg = "Text files don't belong to this workspace.";
+				return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 			}
 
 			//TODO: Send email to all editors of a workspace
 			//TODO: Get the workspace editors from the workspaceid
 
-
-			//TODO - add http header to response entity
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setHeader("networkid",networkId );
-			//return res;
-			return new ResponseEntity<String>(res, HttpStatus.OK);
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			httpHeaders.set("networkid",networkId);
+			return new ResponseEntity<String>(res, httpHeaders, HttpStatus.OK);
 		}
 
 	}
@@ -177,16 +171,14 @@ public class NetworkRestController {
 	 * @return status
 	 * @throws Exception 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/networkstatus/{NetworkId}", method = RequestMethod.GET, produces = "application/xml")
-	public String getNetworkStatus(@PathVariable("NetworkId") String networkId,
+	public ResponseEntity<String> getNetworkStatus(@PathVariable("NetworkId") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		IUser user = userManager.getUser(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
@@ -207,10 +199,10 @@ public class NetworkRestController {
 			context.put("networkAnnoList",networkAnnoList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setContentType("application/xml");
-			return writer.toString();
+			
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -240,16 +232,14 @@ public class NetworkRestController {
 	 * @return											XML with list of annotations belonging to a Network
 	 * @throws Exception								Throws the exception for any issue in the Velocity engine 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/network/{NetworkId}/annotations", method = RequestMethod.GET, produces = "application/xml")
-	public String getAnnotationOfNetwork(@PathVariable("NetworkId") String networkId,
+	public ResponseEntity<String> getAnnotationOfNetwork(@PathVariable("NetworkId") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		IUser user = userManager.getUser(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
@@ -265,10 +255,10 @@ public class NetworkRestController {
 			context.put("networkAnnoList",networkAnnoList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setContentType("application/xml");
-			return writer.toString();
+			
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -280,7 +270,7 @@ public class NetworkRestController {
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 
 	}
@@ -296,16 +286,14 @@ public class NetworkRestController {
 	 * @return status
 	 * @throws Exception 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/workspace/{workspaceid}/networks", method = RequestMethod.GET, produces = "application/xml")
-	public String getWorkspaceNetworkList(@PathVariable("workspaceid") String workspaceId,
+	public ResponseEntity<String> getWorkspaceNetworkList(@PathVariable("workspaceid") String workspaceId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
 		if(workspace==null){
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist");
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceId);
@@ -320,10 +308,10 @@ public class NetworkRestController {
 			context.put("workspaceNetworkList", workspaceNetworkList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setContentType("application/xml");
-			return writer.toString();
+			
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -335,7 +323,7 @@ public class NetworkRestController {
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 	}
 
@@ -351,17 +339,15 @@ public class NetworkRestController {
 	 * @return status
 	 * @throws Exception 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/workspace/{workspaceid}/rejectednetworks", method = RequestMethod.GET, produces = "application/xml")
-	public String getWorkspaceRejectedNetworkList(@PathVariable("workspaceid") String workspaceId,
+	public ResponseEntity<String> getWorkspaceRejectedNetworkList(@PathVariable("workspaceid") String workspaceId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
 		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
 		if(workspace==null){
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist");
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
@@ -376,10 +362,9 @@ public class NetworkRestController {
 			context.put("workspaceNetworkList", workspaceNetworkList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setContentType("application/xml");
-			return writer.toString();
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -391,7 +376,7 @@ public class NetworkRestController {
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 	}
 
@@ -406,17 +391,15 @@ public class NetworkRestController {
 	 * @return status
 	 * @throws Exception 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/workspace/{workspaceid}/approvednetworks", method = RequestMethod.GET, produces = "application/xml")
-	public String getWorkspaceApprovedNetworkList(@PathVariable("workspaceid") String workspaceId,
+	public ResponseEntity<String> getWorkspaceApprovedNetworkList(@PathVariable("workspaceid") String workspaceId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
 		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
 		if(workspace==null){
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist");
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceApprovedNetworkList(workspaceId);
@@ -431,10 +414,9 @@ public class NetworkRestController {
 			context.put("workspaceNetworkList", workspaceNetworkList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setContentType("application/xml");
-			return writer.toString();
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -446,7 +428,7 @@ public class NetworkRestController {
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 	}
 
@@ -462,17 +444,15 @@ public class NetworkRestController {
 	 * @return status
 	 * @throws Exception 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/network/{networkid}", method = RequestMethod.GET, produces = "application/xml")
-	public String getNetworkXmlFromQstore(@PathVariable("networkid") String networkId,
+	public ResponseEntity<String> getNetworkXmlFromQstore(@PathVariable("networkid") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		
 		String networkXML = networkManager.getNetworkXML(networkId);
@@ -491,10 +471,9 @@ public class NetworkRestController {
 			context.put("networkxml", networkXML);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setContentType("application/xml");
-			return writer.toString();
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -506,14 +485,13 @@ public class NetworkRestController {
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 	}
 
 
-	@ResponseBody
 	@RequestMapping(value = "rest/mynetworks", method = RequestMethod.GET, produces = "application/xml")
-	public String getMyNetwork(
+	public ResponseEntity<String> getMyNetwork(
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
@@ -531,10 +509,9 @@ public class NetworkRestController {
 			context.put("networkList", networkList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setContentType("application/xml");
-			return writer.toString();
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -546,7 +523,7 @@ public class NetworkRestController {
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 	}
 
@@ -563,17 +540,15 @@ public class NetworkRestController {
 	 * @return status
 	 * @throws Exception 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/network/{networkid}/all", method = RequestMethod.GET, produces = "application/xml")
-	public String getNetworkDetails(@PathVariable("networkid") String networkId,
+	public ResponseEntity<String> getNetworkDetails(@PathVariable("networkid") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		
 		IUser user = userManager.getUser(principal.getName());
@@ -594,10 +569,10 @@ public class NetworkRestController {
 			context.put("networkAnnoList",editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId));
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setContentType("application/xml");
-			return writer.toString();
+			
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaType.valueOf(accept));
+			return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -609,7 +584,7 @@ public class NetworkRestController {
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 
 	}
@@ -631,9 +606,8 @@ public class NetworkRestController {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/reuploadnetwork/{networkid}", method = RequestMethod.POST)
-	public String reuploadNetwork(@PathVariable("networkid") String networkId,
+	public ResponseEntity<String> reuploadNetwork(@PathVariable("networkid") String networkId,
 			HttpServletResponse response,HttpServletRequest request,
 			@RequestBody String xml,
 			@RequestHeader("Accept") String accept,
@@ -645,47 +619,45 @@ public class NetworkRestController {
 
 
 		if(networkId == null||networkId.isEmpty()){
-			response.setStatus(404);
-			return "Please provide network id.";
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide network id.");
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		INetwork network = null;
 		try{
 			network = networkManager.getNetwork(networkId);
 			if(network==null){
-				logger.info("network is null");
-				response.setStatus(404);
-				return "Please provide correct network id.";
-			}else{
-				logger.info(network.getNetworkName());
+				String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
+				return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 			}
 		}catch(QuadrigaStorageException e){
-			logger.error("DB Error :",e);
+			logger.error("Exception:", e);
+			throw new RestException(500);
 		}
 		//		logger.info("Old name : "+network.getName()+"  new name : "+networkName);
 		if(!(network.getStatus().equals(INetworkStatus.REJECTED))){
-			response.setStatus(500);
-			return "The Network doesn't have status : REJECTED";
+			String errorMsg = errorMessageRest.getErrorMsg("The Network doesn't have status : REJECTED");
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}else{
 
 			xml=xml.trim();
 			if (xml.isEmpty()) {
-				response.setStatus(500);
-				return "Please provide XML in body of the post request.";
+				String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
+				return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 
 			} else {
 
 				String res=networkManager.storeXMLQStore(xml);
 				if(res.equals("")){
-					response.setStatus(500);
-					return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
+					String errorMsg = errorMessageRest.getErrorMsg("Please provide correct XML in body of the post request. Qstore system is not accepting ur XML");
+					return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 				}
 				String networkNameUpdateStatus="";
 				if(!(networkName == null ||networkName.equals(network.getNetworkName()) || networkName.equals(""))){
 					networkNameUpdateStatus = networkManager.updateNetworkName(networkId,networkName);
 					if(!(networkNameUpdateStatus.equals("success"))){
-						response.setStatus(500);
-						return "DB Issue, please try after sometime";
+						String errorMsg = errorMessageRest.getErrorMsg("DB Issue, please try after sometime");
+						return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 				}
 
@@ -695,14 +667,14 @@ public class NetworkRestController {
 				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK, networkId,latestVersion);
 
 				if(networkId.endsWith(INetworkManager.DSPACEERROR)){
-					response.setStatus(404);
-					return "Text files don't belong to this workspace.";
+					String errorMsg = errorMessageRest.getErrorMsg("Text files don't belong to this workspace.");
+					return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 				}
 
-				response.setStatus(200);
-				response.setContentType(accept);
-				response.setHeader("networkid",networkId );
-				return res;
+				HttpHeaders httpHeaders = new HttpHeaders();
+				httpHeaders.setContentType(MediaType.valueOf(accept));
+				httpHeaders.set("networkid",networkId);
+				return new ResponseEntity<String>(res.toString(), httpHeaders, HttpStatus.OK);
 			}
 		}
 	}

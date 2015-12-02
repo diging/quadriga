@@ -25,6 +25,10 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
@@ -48,8 +51,6 @@ import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
-import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
-import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
 /**
  * @author satyaswaroop boddu
@@ -66,12 +67,6 @@ public class WorkspaceRestController {
 
 	@Autowired
 	private IRestMessage errorMessageRest;
-	
-	@Autowired
-	private IWorkspaceDictionaryManager workspaceDictionaryManager;
-	
-	@Autowired
-	private IWorkspaceCCManager workspaceCCManager;
 	
 	@Autowired 
 	IUserManager userManager;
@@ -96,8 +91,7 @@ public class WorkspaceRestController {
 	 * @throws RestException
 	 */
 	@RequestMapping(value = "rest/projects/{project_id}/workspaces", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
-	public String listWorkspaces(@PathVariable("project_id") String project_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
+	public ResponseEntity<String> listWorkspaces(@PathVariable("project_id") String project_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
 	{
 		List<IWorkSpace> workspaceList = null;
 		VelocityEngine engine = null;
@@ -117,21 +111,21 @@ public class WorkspaceRestController {
 
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			return writer.toString();
+			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 			logger.error("Exception:", e);
 			throw new RestException(e);
 		} catch (ParseErrorException e) {
 
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		} catch (QuadrigaStorageException e) {
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(500);
 		} catch (Exception e) {
 			logger.error("Exception:", e);
 			throw new RestException(403);
@@ -151,8 +145,7 @@ public class WorkspaceRestController {
 	 * @throws RestException
 	 */
 	@RequestMapping(value = "rest/workspaces/{workspaces_id}", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
-	public String workspaceDetails(@PathVariable("workspaces_id") String workspaces_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
+	public ResponseEntity<String> workspaceDetails(@PathVariable("workspaces_id") String workspaces_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
 	{
 		VelocityEngine engine = null;
 		Template template = null;
@@ -173,7 +166,7 @@ public class WorkspaceRestController {
 			//context.put("cclist", ccList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			return writer.toString();
+			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 			logger.error("Exception:", e);
 			throw new RestException(404);
@@ -187,10 +180,10 @@ public class WorkspaceRestController {
 			throw new RestException(403);
 		} catch (QuadrigaStorageException e) {
 			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(500);
 		} catch (Exception e) {
 			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(403);
 		}
 	}
 	
@@ -210,8 +203,7 @@ public class WorkspaceRestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/projects/{project_id}/createworkspace", method = RequestMethod.POST)
-	@ResponseBody
-	public String addWorkspaceToProject(@PathVariable("project_id") String projectId,HttpServletRequest request,
+	public ResponseEntity<String> addWorkspaceToProject(@PathVariable("project_id") String projectId,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept, ModelMap model, Principal principal) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
 		IUser user = userManager.getUser(principal.getName());
@@ -227,21 +219,19 @@ public class WorkspaceRestController {
 			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaWorkspaceDetailsReply.class);
 		}catch(Exception e ){
 			logger.error("Error in unmarshalling",e);
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
 		if(response1 == null){
-			response.setStatus(404);
-			return "Concepts XML is not valid";
+			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid");
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		QuadrigaWorkspaceDetailsReply qReply= response1.getValue();
 		WorkspacesList w1 = qReply.getWorkspacesList();
 		List<Workspace> workspaceList = w1.getWorkspaceList();
 		if(workspaceList.size()<1){
-			response.setStatus(404);
 			String errorMsg = errorMessageRest.getErrorMsg("Workspace XML is not valid",request);
-			return errorMsg;
+			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 		IWorkSpace workspaceNew = workspaceFactory.createWorkspaceObject();
 		for(Workspace workspace : workspaceList){
@@ -256,8 +246,8 @@ public class WorkspaceRestController {
 		}
 		
 		
-		response.setStatus(200);
-		response.setContentType(accept);
-		return "success";
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(MediaType.valueOf(accept));
+		return new ResponseEntity<String>("success", httpHeaders, HttpStatus.OK);
 	}
 }

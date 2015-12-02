@@ -4,6 +4,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -11,92 +13,101 @@ import org.springframework.stereotype.Component;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.NoAuthorizationCheck;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.RestAccessException;
+import edu.asu.spring.quadriga.exceptions.RestException;
 
 /**
- * Aspect based Access authentication for REST APIs
- * Can be used around a method in any REST based controllers to authenticate the client.
+ * Aspect based Access authentication for REST APIs Can be used around a method
+ * in any REST based controllers to authenticate the client.
+ * 
  * @author Lohith Dwaraka
  *
  */
 @Aspect
 @Component
-public class RestAccessAspect 
-{
+public class RestAccessAspect {
 	@Autowired
 	private RestAccessException restAccessException;
-	
-	
+
 	@Autowired
 	private IAuthorizationManager authorizationManager;
-	
+
 	/**
-	 * This method prevents the access permissions check for the web package methods
-	 * annotated with 'noCheck' for rest interfaces
+	 * This method prevents the access permissions check for the web package
+	 * methods annotated with 'noCheck' for rest interfaces
+	 * 
 	 * @param pjp
 	 * @param noCheck
 	 * @return ProceedingJoinPoint object
 	 * @throws Throwable
 	 */
 	@Around("within(edu.asu.spring.quadriga.rest..*) && @annotation(noCheck)")
-	public Object chkProjectAuthorization(ProceedingJoinPoint pjp, NoAuthorizationCheck noCheck) throws Throwable 
-	{
+	public Object chkProjectAuthorization(ProceedingJoinPoint pjp, NoAuthorizationCheck noCheck) throws Throwable {
 		return pjp.proceed();
 	}
-	
+
 	/**
-	 * This method checks the access permissions for the objects before executing the 
-	 * methods.This provides run time access permission check to the methods in the 
-	 * web package and annotated with 'checks' during rest interface access.
+	 * This method checks the access permissions for the objects before
+	 * executing the methods.This provides run time access permission check to
+	 * the methods in the web package and annotated with 'checks' during rest
+	 * interface access.
+	 * 
 	 * @param pjp
 	 * @param checks
-	 * @return - no access it throws Access Denied exception.
-	 *           if he have access returns ProceedingJointPoint object
+	 * @return - no access it throws Access Denied exception. if he have access
+	 *         returns ProceedingJointPoint object
 	 * @throws Throwable
 	 */
 	@Around("within(edu.asu.spring.quadriga.rest..*) && @annotation(checks)")
-	public Object chkAuthorization(ProceedingJoinPoint pjp, RestAccessPolicies checks) throws Throwable  
-	{
+	public Object chkAuthorization(ProceedingJoinPoint pjp, RestAccessPolicies checks) throws Throwable {
 		boolean haveAccess;
 		String userName;
 		String accessObjectId;
 		IAuthorization authorization;
-		
+
 		haveAccess = true;
-		
-		//retrieve the logged in User name
-		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		 userName = auth.getName();
-		//Loop through all the access policies specified
-		ElementAccessPolicy[] policies = checks.value();
-		
-		for(ElementAccessPolicy policy : policies)
-		{
-			//retrieve the authorization object based on the type
-			authorization = authorizationManager.getAuthorizationObject(policy.type());
-			
-			//calling the object
-			if(policy.paramIndex() > 0)
-			{
-			accessObjectId = pjp.getArgs()[policy.paramIndex()-1].toString();
-			haveAccess = authorization.chkAuthorization(userName,accessObjectId, policy.userRole());
+		try {
+			// retrieve the logged in User name
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			userName = auth.getName();
+			// Loop through all the access policies specified
+			ElementAccessPolicy[] policies = checks.value();
+
+			for (ElementAccessPolicy policy : policies) {
+				// retrieve the authorization object based on the type
+				authorization = authorizationManager.getAuthorizationObject(policy.type());
+
+				// calling the object
+				if (policy.paramIndex() > 0) {
+					accessObjectId = pjp.getArgs()[policy.paramIndex() - 1].toString();
+
+					haveAccess = authorization.chkAuthorization(userName, accessObjectId, policy.userRole());
+
+				} else {
+					haveAccess = authorization.chkAuthorizationByRole(userName, policy.userRole());
+				}
+
+				if (haveAccess) {
+					break;
+				}
 			}
-			else
-			{
-				haveAccess = authorization.chkAuthorizationByRole(userName, policy.userRole());
-			}
-			
-			if(haveAccess){
-				break;
-			}
+		} catch (QuadrigaAccessException e) {
+			// return new ResponseEntity<String>("<error>You don't have
+			// permission</error>",
+			// HttpStatus.UNAUTHORIZED);
+			throw new RestException(403);
 		}
-		
-		if(!haveAccess)
-		{
-			return restAccessException.accessErrorMsg(400,"You don't have permission");
+
+		if (!haveAccess) {
+			throw new RestException(403);
+			// return new ResponseEntity<String>("<error>You don't have
+			// permission</error>", HttpStatus.UNAUTHORIZED);
+			// return restAccessException.accessErrorMsg(400, "You don't have
+			// permission");
 		}
 		Object retVal = pjp.proceed();
 		return retVal;
 	}
-	
+
 }

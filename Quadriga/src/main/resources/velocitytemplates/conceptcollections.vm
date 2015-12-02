@@ -4,9 +4,13 @@
 
 #foreach ($conceptcollection in $list)
 <Quadriga:conceptcollection>
-	<Quadriga:name>$conceptcollection.name</Quadriga:name>
+	<Quadriga:name>$conceptcollection.conceptCollectionName</Quadriga:name>
 	<Quadriga:description>$conceptcollection.description</Quadriga:description>
-	<Quadriga:uri>$url/rest/conceptdetails/$conceptcollection.id</Quadriga:uri>
+	<Quadriga:uri>$url/rest/conceptdetails/$conceptcollection.conceptCollectionId</Quadriga:uri>
+	<Quadriga:createdBy>$conceptcollection.createdBy</Quadriga:createdBy>
+	<Quadriga:createdDate>$conceptcollection.createdDate</Quadriga:createdDate>
+	<Quadriga:updatedBy>$conceptcollection.updatedBy</Quadriga:updatedBy>
+	<Quadriga:updatedDate>$conceptcollection.updatedDate</Quadriga:updatedDate>
 </Quadriga:conceptcollection> 	
 #end
 </Quadriga:conceptcollectionsList>
