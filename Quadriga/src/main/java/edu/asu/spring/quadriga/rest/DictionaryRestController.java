@@ -173,7 +173,7 @@ public class DictionaryRestController {
 		try {
 			engine.init();
 			dictionaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, user.getUsername());
-			template = engine.getTemplate("velocitytemplates/dictionarylist.vm");
+			template = engine.getTemplate("velocitytemplates/workspacedictionarylist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", dictionaryList);
 			StringWriter writer = new StringWriter();
@@ -211,6 +211,7 @@ public class DictionaryRestController {
 		List<IDictionaryItems> dictionaryItemsList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
+		//TODO details not getting retrieved
 		Template template = null;
 
 		try {
@@ -219,7 +220,7 @@ public class DictionaryRestController {
 			dictionaryItemsList = dictionaryManager.getDictionariesItems(dictionaryId, user.getUsername());
 
 			if (dictionaryItemsList == null) {
-				throw new RestException(403);
+				throw new RestException(404);
 			}
 			template = engine.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
