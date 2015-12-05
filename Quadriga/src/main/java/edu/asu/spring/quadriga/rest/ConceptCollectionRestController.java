@@ -287,7 +287,7 @@ public class ConceptCollectionRestController {
 			engine.init();
 			String userId = principal.getName();
 			collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
-			template = engine.getTemplate("velocitytemplates/conceptcollections.vm");
+			template = engine.getTemplate("velocitytemplates/workspaceconceptcollections.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", collectionsList);
 
