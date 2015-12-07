@@ -358,7 +358,7 @@ public class DictionaryRestController {
 	 * @throws QuadrigaStorageException
 	 * @throws RestException
 	 */
-	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST, paramIndex = 1, userRole = {
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = {
 			RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
 	@RequestMapping(value = "rest/syncdictionary/{dictionaryID}", method = RequestMethod.POST)
 	public ResponseEntity<String> getCCXMLFromVogon(@PathVariable("dictionaryID") String dictionaryID,
