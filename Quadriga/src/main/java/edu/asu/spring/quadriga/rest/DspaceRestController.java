@@ -244,11 +244,8 @@ public class DspaceRestController {
 			response.setHeader("Content-Disposition", httpConnection.getHeaderField("Content-Disposition"));
 			response.setContentType(httpConnection.getContentType());
 			response.getOutputStream().write(fileOutputStream.toByteArray());
-			logger.info("The user " + principal.getName() + " successfully downloaded the file "
-					+ httpConnection.getHeaderField("Content-Disposition") + " with fileid: " + fileid
-					+ " from Dspace");
 		} catch (IOException ioe) {
-			logger.info("Access exception occurred during file download. User: " + principal.getName() + " Fileid: "
+			logger.error("Access exception occurred during file download. User: " + principal.getName() + " Fileid: "
 					+ fileid, ioe);
 			throw new RestException(403);
 		} catch (NoSuchAlgorithmException e) {

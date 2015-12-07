@@ -235,10 +235,6 @@ public class WorkspaceRestController {
 		}
 		IWorkSpace workspaceNew = workspaceFactory.createWorkspaceObject();
 		for(Workspace workspace : workspaceList){
-			logger.info("Description : "+workspace.getDescription().trim());
-			logger.info("URI : "+workspace.getUri().trim());
-			logger.info("Name : " +workspace.getName().trim());
-			logger.info("ID : "+workspace.getId().trim());
 			workspaceNew.setDescription(workspace.getDescription().trim());
 			workspaceNew.setWorkspaceName(workspace.getName().trim());
 			workspaceNew.setOwner(user);
