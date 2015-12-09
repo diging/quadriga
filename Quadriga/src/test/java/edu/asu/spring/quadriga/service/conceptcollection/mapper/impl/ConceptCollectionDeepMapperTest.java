@@ -47,201 +47,201 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMappe
 
 public class ConceptCollectionDeepMapperTest {
 
-	@Mock
-	private IConceptCollectionDAO mockeddbConnect = Mockito.mock(IConceptCollectionDAO.class);
+    @Mock
+    private IConceptCollectionDAO mockeddbConnect = Mockito.mock(IConceptCollectionDAO.class);
 
-	@Mock
-	private IConceptCollectionFactory mockedccFactory = Mockito.mock(IConceptCollectionFactory.class);
+    @Mock
+    private IConceptCollectionFactory mockedccFactory = Mockito.mock(IConceptCollectionFactory.class);
 
-	@Mock
-	private IUserDeepMapper mockedUserDeepMapper = Mockito.mock(IUserDeepMapper.class);
+    @Mock
+    private IUserDeepMapper mockedUserDeepMapper = Mockito.mock(IUserDeepMapper.class);
 
-	@Mock
-	private IProjectConceptCollectionShallowMapper mockedProjectCCShallowMapper = Mockito
-			.mock(IProjectConceptCollectionShallowMapper.class);
+    @Mock
+    private IProjectConceptCollectionShallowMapper mockedProjectCCShallowMapper = Mockito
+            .mock(IProjectConceptCollectionShallowMapper.class);
 
-	@Mock
-	private IWorkspaceCCShallowMapper mockedWorkspaceCCShallowMapper = Mockito.mock(IWorkspaceCCShallowMapper.class);
+    @Mock
+    private IWorkspaceCCShallowMapper mockedWorkspaceCCShallowMapper = Mockito.mock(IWorkspaceCCShallowMapper.class);
 
-	@Mock
-	private IQuadrigaRoleManager mockedRoleManager = Mockito.mock(IQuadrigaRoleManager.class);
+    @Mock
+    private IQuadrigaRoleManager mockedRoleManager = Mockito.mock(IQuadrigaRoleManager.class);
 
-	@Mock
-	private ICollaboratorFactory mockedCollaboratorFactory = Mockito.mock(ICollaboratorFactory.class);
+    @Mock
+    private ICollaboratorFactory mockedCollaboratorFactory = Mockito.mock(ICollaboratorFactory.class);
 
-	@Mock
-	private IConceptCollectionCollaboratorFactory mockedccCollaboratorFactory = Mockito
-			.mock(IConceptCollectionCollaboratorFactory.class);
+    @Mock
+    private IConceptCollectionCollaboratorFactory mockedccCollaboratorFactory = Mockito
+            .mock(IConceptCollectionCollaboratorFactory.class);
 
-	@Mock
-	private IConceptFactory mockedConceptFactory = Mockito.mock(IConceptFactory.class);
+    @Mock
+    private IConceptFactory mockedConceptFactory = Mockito.mock(IConceptFactory.class);
 
-	@Mock
-	private IConceptCollectionConceptFactory mockedccConceptsFactory = Mockito
-			.mock(IConceptCollectionConceptFactory.class);
+    @Mock
+    private IConceptCollectionConceptFactory mockedccConceptsFactory = Mockito
+            .mock(IConceptCollectionConceptFactory.class);
 
-	@InjectMocks
-	ConceptCollectionDeepMapper conceptCollectionDeepMapperUnderTest;
+    @InjectMocks
+    private ConceptCollectionDeepMapper conceptCollectionDeepMapperUnderTest;
 
-	private ConceptCollectionDTO ccDTO;
+    private ConceptCollectionDTO ccDTO;
 
-	private User user;
+    private User user;
 
-	@Before
-	public void setUp() {
-		MockitoAnnotations.initMocks(this);
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
 
-		QuadrigaUserDTO dto = new QuadrigaUserDTO();
-		dto.setUsername("test name");
-		ccDTO = new ConceptCollectionDTO();
-		ccDTO.setConceptCollectionid("conceptCollectionid");
-		ccDTO.setCollectionname("collectionname");
-		ccDTO.setCreatedby("createdby");
-		ccDTO.setCollectionowner(dto);
+        QuadrigaUserDTO dto = new QuadrigaUserDTO();
+        dto.setUsername("test name");
+        ccDTO = new ConceptCollectionDTO();
+        ccDTO.setConceptCollectionid("conceptCollectionid");
+        ccDTO.setCollectionname("collectionname");
+        ccDTO.setCreatedby("createdby");
+        ccDTO.setCollectionowner(dto);
 
-		user = new User();
-		user.setName("name");
-		user.setEmail("test@gmail.com");
-		user.setUserName("username");
-	}
+        user = new User();
+        user.setName("name");
+        user.setEmail("test@gmail.com");
+        user.setUserName("username");
+    }
 
-	@Test
-	public void getConceptCollectionDetailsTest() throws QuadrigaStorageException {
+    @Test
+    public void getConceptCollectionDetailsTest() throws QuadrigaStorageException {
 
-		ConceptsDTO conceptDTO = new ConceptsDTO();
-		conceptDTO.setLemma("lemma");
+        ConceptsDTO conceptDTO = new ConceptsDTO();
+        conceptDTO.setLemma("lemma");
 
-		ConceptCollectionItemsDTOPK conceptCollectionItemsDTOPK = new ConceptCollectionItemsDTOPK();
-		conceptCollectionItemsDTOPK.setConcept("concept");
+        ConceptCollectionItemsDTOPK conceptCollectionItemsDTOPK = new ConceptCollectionItemsDTOPK();
+        conceptCollectionItemsDTOPK.setConcept("concept");
 
-		ConceptCollectionItemsDTO ccItemsDTO = new ConceptCollectionItemsDTO();
-		ccItemsDTO.setConceptCollectionItemsDTOPK(conceptCollectionItemsDTOPK);
+        ConceptCollectionItemsDTO ccItemsDTO = new ConceptCollectionItemsDTO();
+        ccItemsDTO.setConceptCollectionItemsDTOPK(conceptCollectionItemsDTOPK);
 
-		ConceptCollectionItemsDTO collectionItemsDTO = new ConceptCollectionItemsDTO();
-		collectionItemsDTO.setConceptcollectionsItemsDTOPK(conceptCollectionItemsDTOPK);
-		collectionItemsDTO.setConceptDTO(conceptDTO);
-		ccItemsDTO.setConceptcollectionsItemsDTOPK(conceptCollectionItemsDTOPK);
+        ConceptCollectionItemsDTO collectionItemsDTO = new ConceptCollectionItemsDTO();
+        collectionItemsDTO.setConceptcollectionsItemsDTOPK(conceptCollectionItemsDTOPK);
+        collectionItemsDTO.setConceptDTO(conceptDTO);
+        ccItemsDTO.setConceptcollectionsItemsDTOPK(conceptCollectionItemsDTOPK);
 
-		List<ConceptCollectionItemsDTO> conceptCollectionItemsDTOList = new ArrayList<ConceptCollectionItemsDTO>();
-		conceptCollectionItemsDTOList.add(collectionItemsDTO);
+        List<ConceptCollectionItemsDTO> conceptCollectionItemsDTOList = new ArrayList<ConceptCollectionItemsDTO>();
+        conceptCollectionItemsDTOList.add(collectionItemsDTO);
 
-		ccDTO.setConceptCollectionItemsDTOList(conceptCollectionItemsDTOList);
+        ccDTO.setConceptCollectionItemsDTOList(conceptCollectionItemsDTOList);
 
-		setMockConditionsCollectionDetailsTest(ccDTO);
+        setMockConditionsCollectionDetailsTest(ccDTO);
 
-		IConceptCollection col = conceptCollectionDeepMapperUnderTest.getConceptCollectionDetails("ccId");
+        IConceptCollection col = conceptCollectionDeepMapperUnderTest.getConceptCollectionDetails("ccId");
 
-		assertEquals("conceptCollectionid", col.getConceptCollectionId());
-		assertEquals("collectionname", col.getConceptCollectionName());
-		assertEquals("test@gmail.com", col.getOwner().getEmail());
-		assertEquals("username", col.getOwner().getUserName());
-		assertEquals("lemma", col.getConceptCollectionConcepts().get(0).getConcept().getLemma());
-		assertEquals("concept", col.getConceptCollectionConcepts().get(0).getConcept().getConceptId());
+        assertEquals("conceptCollectionid", col.getConceptCollectionId());
+        assertEquals("collectionname", col.getConceptCollectionName());
+        assertEquals("test@gmail.com", col.getOwner().getEmail());
+        assertEquals("username", col.getOwner().getUserName());
+        assertEquals("lemma", col.getConceptCollectionConcepts().get(0).getConcept().getLemma());
+        assertEquals("concept", col.getConceptCollectionConcepts().get(0).getConcept().getConceptId());
 
-	}
+    }
 
-	@Test
-	public void getConceptCollectionDetailsNullTest() throws QuadrigaStorageException {
-		Mockito.when(mockeddbConnect.getDTO(Matchers.anyString())).thenReturn(null);
-		IConceptCollection col = conceptCollectionDeepMapperUnderTest.getConceptCollectionDetails("ccId");
-		assertNull(col);
-	}
+    @Test
+    public void getConceptCollectionDetailsNullTest() throws QuadrigaStorageException {
+        Mockito.when(mockeddbConnect.getDTO(Matchers.anyString())).thenReturn(null);
+        IConceptCollection col = conceptCollectionDeepMapperUnderTest.getConceptCollectionDetails("ccId");
+        assertNull(col);
+    }
 
-	private void setMockConditionsCollectionDetailsTest(ConceptCollectionDTO ccDTO) throws QuadrigaStorageException {
+    private void setMockConditionsCollectionDetailsTest(ConceptCollectionDTO ccDTO) throws QuadrigaStorageException {
 
-		Mockito.when(mockedccFactory.createConceptCollectionObject()).thenReturn(new ConceptCollection());
-		Mockito.when(mockeddbConnect.getDTO(Matchers.anyString())).thenReturn(ccDTO);
-		Mockito.when(mockedUserDeepMapper.getUser(Matchers.anyString())).thenReturn(user);
-		Mockito.when(mockedProjectCCShallowMapper.getProjectConceptCollectionList(
-				Matchers.any(ConceptCollectionDTO.class), Matchers.any(IConceptCollection.class)))
-				.thenReturn(new ArrayList<IProjectConceptCollection>());
-		Mockito.when(mockedWorkspaceCCShallowMapper.getWorkspaceConceptCollectionList(
-				Matchers.any(IConceptCollection.class), Matchers.any(ConceptCollectionDTO.class)))
-				.thenReturn(new ArrayList<IWorkspaceConceptCollection>());
-		Mockito.when(mockedConceptFactory.createConceptObject()).thenReturn(new Concept());
-		Mockito.when(mockedccConceptsFactory.createConceptCollectionConceptsObject())
-				.thenReturn(new ConceptCollectionConcepts());
-	}
+        Mockito.when(mockedccFactory.createConceptCollectionObject()).thenReturn(new ConceptCollection());
+        Mockito.when(mockeddbConnect.getDTO(Matchers.anyString())).thenReturn(ccDTO);
+        Mockito.when(mockedUserDeepMapper.getUser(Matchers.anyString())).thenReturn(user);
+        Mockito.when(mockedProjectCCShallowMapper.getProjectConceptCollectionList(
+                Matchers.any(ConceptCollectionDTO.class), Matchers.any(IConceptCollection.class)))
+                .thenReturn(new ArrayList<IProjectConceptCollection>());
+        Mockito.when(mockedWorkspaceCCShallowMapper.getWorkspaceConceptCollectionList(
+                Matchers.any(IConceptCollection.class), Matchers.any(ConceptCollectionDTO.class)))
+                .thenReturn(new ArrayList<IWorkspaceConceptCollection>());
+        Mockito.when(mockedConceptFactory.createConceptObject()).thenReturn(new Concept());
+        Mockito.when(mockedccConceptsFactory.createConceptCollectionConceptsObject())
+                .thenReturn(new ConceptCollectionConcepts());
+    }
 
-	@Test
-	public void getConceptCollectionCollaboratorListTest() throws QuadrigaStorageException {
-		QuadrigaUserDTO quadrigaUserDTO = new QuadrigaUserDTO();
-		quadrigaUserDTO.setUsername("username");
+    @Test
+    public void getConceptCollectionCollaboratorListTest() throws QuadrigaStorageException {
+        QuadrigaUserDTO quadrigaUserDTO = new QuadrigaUserDTO();
+        quadrigaUserDTO.setUsername("username");
 
-		ConceptCollectionCollaboratorDTOPK collabDTOPK = new ConceptCollectionCollaboratorDTOPK();
-		collabDTOPK.setCollaboratorrole("role");
+        ConceptCollectionCollaboratorDTOPK collabDTOPK = new ConceptCollectionCollaboratorDTOPK();
+        collabDTOPK.setCollaboratorrole("role");
 
-		QuadrigaUserDTO quadrigaUserDTO2 = new QuadrigaUserDTO();
-		quadrigaUserDTO2.setUsername("username2");
+        QuadrigaUserDTO quadrigaUserDTO2 = new QuadrigaUserDTO();
+        quadrigaUserDTO2.setUsername("username2");
 
-		ConceptCollectionCollaboratorDTOPK collabDTOPK2 = new ConceptCollectionCollaboratorDTOPK();
-		collabDTOPK2.setCollaboratorrole("role2");
+        ConceptCollectionCollaboratorDTOPK collabDTOPK2 = new ConceptCollectionCollaboratorDTOPK();
+        collabDTOPK2.setCollaboratorrole("role2");
 
-		QuadrigaUserDTO quadrigaUserDTO3 = new QuadrigaUserDTO();
-		quadrigaUserDTO3.setUsername("username");
+        QuadrigaUserDTO quadrigaUserDTO3 = new QuadrigaUserDTO();
+        quadrigaUserDTO3.setUsername("username");
 
-		ConceptCollectionCollaboratorDTOPK collabDTOPK3 = new ConceptCollectionCollaboratorDTOPK();
-		collabDTOPK3.setCollaboratorrole("role3");
+        ConceptCollectionCollaboratorDTOPK collabDTOPK3 = new ConceptCollectionCollaboratorDTOPK();
+        collabDTOPK3.setCollaboratorrole("role3");
 
-		List<ConceptCollectionCollaboratorDTO> collabList = new ArrayList<ConceptCollectionCollaboratorDTO>();
+        List<ConceptCollectionCollaboratorDTO> collabList = new ArrayList<ConceptCollectionCollaboratorDTO>();
 
-		ConceptCollectionCollaboratorDTO collaboratorDTO = new ConceptCollectionCollaboratorDTO();
-		collaboratorDTO.setQuadrigaUserDTO(quadrigaUserDTO);
-		collaboratorDTO.setCollaboratorDTOPK(collabDTOPK);
-		collaboratorDTO.setUpdateddate(new Date());
+        ConceptCollectionCollaboratorDTO collaboratorDTO = new ConceptCollectionCollaboratorDTO();
+        collaboratorDTO.setQuadrigaUserDTO(quadrigaUserDTO);
+        collaboratorDTO.setCollaboratorDTOPK(collabDTOPK);
+        collaboratorDTO.setUpdateddate(new Date());
 
-		ConceptCollectionCollaboratorDTO collaboratorDTO2 = new ConceptCollectionCollaboratorDTO();
-		collaboratorDTO2.setQuadrigaUserDTO(quadrigaUserDTO2);
-		collaboratorDTO2.setCollaboratorDTOPK(collabDTOPK2);
-		collaboratorDTO2.setUpdateddate(new Date());
+        ConceptCollectionCollaboratorDTO collaboratorDTO2 = new ConceptCollectionCollaboratorDTO();
+        collaboratorDTO2.setQuadrigaUserDTO(quadrigaUserDTO2);
+        collaboratorDTO2.setCollaboratorDTOPK(collabDTOPK2);
+        collaboratorDTO2.setUpdateddate(new Date());
 
-		ConceptCollectionCollaboratorDTO collaboratorDTO3 = new ConceptCollectionCollaboratorDTO();
-		collaboratorDTO3.setQuadrigaUserDTO(quadrigaUserDTO3);
-		collaboratorDTO3.setCollaboratorDTOPK(collabDTOPK3);
-		collaboratorDTO3.setUpdateddate(new Date());
+        ConceptCollectionCollaboratorDTO collaboratorDTO3 = new ConceptCollectionCollaboratorDTO();
+        collaboratorDTO3.setQuadrigaUserDTO(quadrigaUserDTO3);
+        collaboratorDTO3.setCollaboratorDTOPK(collabDTOPK3);
+        collaboratorDTO3.setUpdateddate(new Date());
 
-		collabList.add(collaboratorDTO);
-		collabList.add(collaboratorDTO2);
-		collabList.add(collaboratorDTO3);
+        collabList.add(collaboratorDTO);
+        collabList.add(collaboratorDTO2);
+        collabList.add(collaboratorDTO3);
 
-		QuadrigaRole collaboratorRole = new QuadrigaRole();
-		collaboratorRole.setId("id");
-		setMockConditionsCollaboratorListTest(collaboratorRole);
+        QuadrigaRole collaboratorRole = new QuadrigaRole();
+        collaboratorRole.setId("id");
+        setMockConditionsCollaboratorListTest(collaboratorRole);
 
-		ccDTO.setConceptCollectionCollaboratorDTOList(collabList);
-		ConceptCollection conceptCollection = new ConceptCollection();
-		conceptCollection.setConceptCollectionId(ccDTO.getConceptCollectionid());
-		conceptCollection.setConceptCollectionName(ccDTO.getCollectionname());
-		conceptCollection.setDescription(ccDTO.getDescription());
-		conceptCollection.setCreatedBy(ccDTO.getCreatedby());
-		conceptCollection.setCreatedDate(ccDTO.getCreateddate());
-		conceptCollection.setUpdatedBy(ccDTO.getUpdatedby());
-		conceptCollection.setUpdatedDate(ccDTO.getUpdateddate());
-		conceptCollection.setOwner(user);
+        ccDTO.setConceptCollectionCollaboratorDTOList(collabList);
+        ConceptCollection conceptCollection = new ConceptCollection();
+        conceptCollection.setConceptCollectionId(ccDTO.getConceptCollectionid());
+        conceptCollection.setConceptCollectionName(ccDTO.getCollectionname());
+        conceptCollection.setDescription(ccDTO.getDescription());
+        conceptCollection.setCreatedBy(ccDTO.getCreatedby());
+        conceptCollection.setCreatedDate(ccDTO.getCreateddate());
+        conceptCollection.setUpdatedBy(ccDTO.getUpdatedby());
+        conceptCollection.setUpdatedDate(ccDTO.getUpdateddate());
+        conceptCollection.setOwner(user);
 
-		List<IConceptCollectionCollaborator> collectionCollaborators = conceptCollectionDeepMapperUnderTest
-				.getConceptCollectionCollaboratorList(ccDTO, conceptCollection);
+        List<IConceptCollectionCollaborator> collectionCollaborators = conceptCollectionDeepMapperUnderTest
+                .getConceptCollectionCollaboratorList(ccDTO, conceptCollection);
 
-		// since we have 2 users - username and username2
-		assertEquals(2, collectionCollaborators.size());
+        // since we have 2 users - username and username2
+        assertEquals(2, collectionCollaborators.size());
 
-		assertEquals("id", collectionCollaborators.get(0).getCollaborator().getCollaboratorRoles().get(0).getId());
-		assertEquals("createdby", collectionCollaborators.get(0).getConceptCollection().getCreatedBy());
-		assertEquals("conceptCollectionid",
-				collectionCollaborators.get(0).getConceptCollection().getConceptCollectionId());
-		assertEquals("test@gmail.com", collectionCollaborators.get(0).getConceptCollection().getOwner().getEmail());
+        assertEquals("id", collectionCollaborators.get(0).getCollaborator().getCollaboratorRoles().get(0).getId());
+        assertEquals("createdby", collectionCollaborators.get(0).getConceptCollection().getCreatedBy());
+        assertEquals("conceptCollectionid",
+                collectionCollaborators.get(0).getConceptCollection().getConceptCollectionId());
+        assertEquals("test@gmail.com", collectionCollaborators.get(0).getConceptCollection().getOwner().getEmail());
 
-	}
+    }
 
-	private void setMockConditionsCollaboratorListTest(QuadrigaRole collaboratorRole) throws QuadrigaStorageException {
+    private void setMockConditionsCollaboratorListTest(QuadrigaRole collaboratorRole) throws QuadrigaStorageException {
 
-		Mockito.when(mockedRoleManager.getQuadrigaRoleByDbId(Matchers.anyString(), Matchers.anyString()))
-				.thenReturn(collaboratorRole);
-		Mockito.doNothing().when(mockedRoleManager).fillQuadrigaRole(Matchers.anyString(),
-				Matchers.any(IQuadrigaRole.class));
-		Mockito.when(mockedCollaboratorFactory.createCollaborator()).thenReturn(new Collaborator());
-		Mockito.when(mockedccCollaboratorFactory.createConceptCollectionCollaboratorObject())
-				.thenReturn(new ConceptCollectionCollaborator());
-	}
+        Mockito.when(mockedRoleManager.getQuadrigaRoleByDbId(Matchers.anyString(), Matchers.anyString()))
+                .thenReturn(collaboratorRole);
+        Mockito.doNothing().when(mockedRoleManager).fillQuadrigaRole(Matchers.anyString(),
+                Matchers.any(IQuadrigaRole.class));
+        Mockito.when(mockedCollaboratorFactory.createCollaborator()).thenReturn(new Collaborator());
+        Mockito.when(mockedccCollaboratorFactory.createConceptCollectionCollaboratorObject())
+                .thenReturn(new ConceptCollectionCollaborator());
+    }
 
 }

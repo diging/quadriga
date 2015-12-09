@@ -35,175 +35,185 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import mockit.Mocked;
 
 public class ConceptCollectionManagerTest {
 
-	@Mock
-	private RestTemplate mockedRestTemplate = Mockito.mock(RestTemplate.class);
+    @Mock
+    private RestTemplate mockedRestTemplate = Mockito.mock(RestTemplate.class);
 
-	@Mock
-	private IConceptCollectionDeepMapper mockedConceptCollectionDeepMapper = Mockito
-			.mock(IConceptCollectionDeepMapper.class);
+    @Mock
+    private IConceptCollectionDeepMapper mockedConceptCollectionDeepMapper = Mockito
+            .mock(IConceptCollectionDeepMapper.class);
 
-	@Mock
-	private IProjectShallowMapper mockedProjectShallowMapper = Mockito.mock(IProjectShallowMapper.class);
+    @Mock
+    private IProjectShallowMapper mockedProjectShallowMapper = Mockito.mock(IProjectShallowMapper.class);
 
-	@Mock
-	private IListWsDAO mockedwsListManger = Mockito.mock(IListWsDAO.class);
+    @Mock
+    private IListWsDAO mockedwsListManger = Mockito.mock(IListWsDAO.class);
 
-	@Mock
-	private IListWSManager mockedwsManager = Mockito.mock(IListWSManager.class);
+    @Mock
+    private IListWSManager mockedwsManager = Mockito.mock(IListWSManager.class);
 
-	@Mock
-	private IConceptFactory mockedConceptFactory = Mockito.mock(IConceptFactory.class);
+    @Mock
+    private IConceptFactory mockedConceptFactory = Mockito.mock(IConceptFactory.class);
 
-	@Mock
-	private IConceptCollectionDAO mockedccDao = Mockito.mock(IConceptCollectionDAO.class);
+    @Mock
+    private IConceptCollectionDAO mockedccDao = Mockito.mock(IConceptCollectionDAO.class);
 
-	@InjectMocks
-	ConceptCollectionManager conceptCollectionManagerUnderTest;
+    @Mocked("conceptURL")
+    private String conceptURL;
 
-	private Concept concept;
+    @Mocked("searchURL")
+    private String searchURL;
 
-	@Before
-	public void setUp() throws QuadrigaStorageException {
-		MockitoAnnotations.initMocks(this);
+    @InjectMocks
+    private ConceptCollectionManager conceptCollectionManagerUnderTest;
 
-		List<ConceptpowerReply.ConceptEntry> conceptEntries = new ArrayList<ConceptpowerReply.ConceptEntry>();
-		ConceptpowerReply.ConceptEntry entry = new ConceptpowerReply.ConceptEntry();
-		entry.setLemma("test-lemma");
-		conceptEntries.add(entry);
-		ConceptpowerReply rep = new ConceptpowerReply();
-		rep.setConceptEntry(conceptEntries);
+    private Concept concept;
 
-		Mockito.when(mockedRestTemplate.getForObject(Matchers.anyString(), Matchers.eq(ConceptpowerReply.class),
-				Matchers.anyMapOf(String.class, String.class))).thenReturn(rep);
+    @Before
+    public void setUp() throws QuadrigaStorageException {
+        MockitoAnnotations.initMocks(this);
 
-		Project project = new Project();
-		project.setCreatedBy("createdBy");
-		project.setProjectName("test project");
-		project.setProjectId("id");
+        List<ConceptpowerReply.ConceptEntry> conceptEntries = new ArrayList<ConceptpowerReply.ConceptEntry>();
+        ConceptpowerReply.ConceptEntry entry = new ConceptpowerReply.ConceptEntry();
+        entry.setLemma("test-lemma");
+        conceptEntries.add(entry);
+        ConceptpowerReply rep = new ConceptpowerReply();
+        rep.setConceptEntry(conceptEntries);
 
-		Project project2 = new Project();
-		project2.setCreatedBy("createdBy2");
-		project2.setProjectName("test project2");
-		project2.setProjectId("id2");
+        Mockito.when(mockedRestTemplate.getForObject(Matchers.eq(conceptURL + searchURL + "{name}/{pos}"),
+                Matchers.eq(ConceptpowerReply.class), Matchers.anyMapOf(String.class, String.class))).thenReturn(rep);
 
-		List<IProject> ccProjectsList = new ArrayList<IProject>();
-		ccProjectsList.add(project);
+        Mockito.when(mockedRestTemplate.getForObject(Matchers.eq(conceptURL + searchURL + "{name}"),
+                Matchers.eq(ConceptpowerReply.class), Matchers.anyMapOf(String.class, String.class))).thenReturn(rep);
 
-		List<IProject> ccProjectsList2 = new ArrayList<IProject>();
-		ccProjectsList2.add(project);
-		ccProjectsList2.add(project2);
+        Project project = new Project();
+        project.setCreatedBy("createdBy");
+        project.setProjectName("test project");
+        project.setProjectId("id");
 
-		Mockito.when(mockedProjectShallowMapper.getProjectList(Matchers.anyString())).thenReturn(ccProjectsList2);
-		Mockito.when(mockedProjectShallowMapper.getCollaboratorProjectListOfUser(Matchers.anyString()))
-				.thenReturn(ccProjectsList);
+        Project project2 = new Project();
+        project2.setCreatedBy("createdBy2");
+        project2.setProjectName("test project2");
+        project2.setProjectId("id2");
 
-		WorkSpace workspace = new WorkSpace();
-		workspace.setWorkspaceId("w-id");
-		workspace.setWorkspaceName("w-name");
+        List<IProject> ccProjectsList = new ArrayList<IProject>();
+        ccProjectsList.add(project);
 
-		WorkSpace workspace2 = new WorkSpace();
-		workspace2.setWorkspaceId("w-id2");
-		workspace2.setWorkspaceName("w-name2");
+        List<IProject> ccProjectsList2 = new ArrayList<IProject>();
+        ccProjectsList2.add(project);
+        ccProjectsList2.add(project2);
 
-		List<IWorkSpace> ccWorkspaceList = new ArrayList<IWorkSpace>();
-		ccWorkspaceList.add(workspace);
+        Mockito.when(mockedProjectShallowMapper.getProjectList(Matchers.anyString())).thenReturn(ccProjectsList2);
+        Mockito.when(mockedProjectShallowMapper.getCollaboratorProjectListOfUser(Matchers.anyString()))
+                .thenReturn(ccProjectsList);
 
-		List<IWorkSpace> ccWorkspaceList2 = new ArrayList<IWorkSpace>();
-		ccWorkspaceList2.add(workspace);
-		ccWorkspaceList2.add(workspace2);
-		Mockito.when(mockedwsListManger.getWorkspaceByConceptCollection(Matchers.anyString()))
-				.thenReturn(ccWorkspaceList);
-		Mockito.when(mockedwsManager.listActiveWorkspace(Matchers.anyString(), Matchers.anyString()))
-				.thenReturn(ccWorkspaceList2);
+        WorkSpace workspace = new WorkSpace();
+        workspace.setWorkspaceId("w-id");
+        workspace.setWorkspaceName("w-name");
 
-		concept = new Concept();
+        WorkSpace workspace2 = new WorkSpace();
+        workspace2.setWorkspaceId("w-id2");
+        workspace2.setWorkspaceName("w-name2");
 
-		Mockito.when(mockedConceptFactory.createConceptObject()).thenReturn(concept);
-		Mockito.when(mockedccDao.updateItem(Matchers.any(IConcept.class), Mockito.anyString(), Mockito.anyString()))
-				.thenReturn("dummy");
-	}
+        List<IWorkSpace> ccWorkspaceList = new ArrayList<IWorkSpace>();
+        ccWorkspaceList.add(workspace);
 
-	@Test
-	public void testSearch() {
+        List<IWorkSpace> ccWorkspaceList2 = new ArrayList<IWorkSpace>();
+        ccWorkspaceList2.add(workspace);
+        ccWorkspaceList2.add(workspace2);
+        Mockito.when(mockedwsListManger.getWorkspaceByConceptCollection(Matchers.anyString()))
+                .thenReturn(ccWorkspaceList);
+        Mockito.when(mockedwsManager.listActiveWorkspace(Matchers.anyString(), Matchers.anyString()))
+                .thenReturn(ccWorkspaceList2);
 
-		ConceptpowerReply reply = conceptCollectionManagerUnderTest.search("item", "pos");
-		assertNotNull(reply);
-	}
+        concept = new Concept();
 
-	@Test
-	public void testSearchNegative() {
+        Mockito.when(mockedConceptFactory.createConceptObject()).thenReturn(concept);
+        Mockito.when(mockedccDao.updateItem(Matchers.any(IConcept.class), Mockito.anyString(), Mockito.anyString()))
+                .thenReturn("dummy");
+    }
 
-		ConceptpowerReply reply = conceptCollectionManagerUnderTest.search(null, null);
-		assertNull(reply);
-	}
+    @Test
+    public void testSearch() {
 
-	@Test
-	public void getConceptLemmaFromConceptIdTest() {
+        ConceptpowerReply reply = conceptCollectionManagerUnderTest.search("item", "pos");
+        assertNotNull(reply);
+    }
 
-		String result = conceptCollectionManagerUnderTest.getConceptLemmaFromConceptId("id");
-		assertEquals("test-lemma", result);
-	}
+    @Test
+    public void testSearchNegative() {
 
-	@Test
-	public void getConceptLemmaFromConceptIdTestWithNoEntries() {
-		List<ConceptpowerReply.ConceptEntry> conceptEntries = new ArrayList<ConceptpowerReply.ConceptEntry>();
-		ConceptpowerReply rep = new ConceptpowerReply();
-		rep.setConceptEntry(conceptEntries);
+        ConceptpowerReply reply = conceptCollectionManagerUnderTest.search(null, null);
+        assertNull(reply);
+    }
 
-		Mockito.when(mockedRestTemplate.getForObject(Matchers.anyString(), Matchers.eq(ConceptpowerReply.class),
-				Matchers.anyMapOf(String.class, String.class))).thenReturn(rep);
+    @Test
+    public void getConceptLemmaFromConceptIdTest() {
 
-		String result = conceptCollectionManagerUnderTest.getConceptLemmaFromConceptId("id");
-		assertEquals("id", result);
-	}
+        String result = conceptCollectionManagerUnderTest.getConceptLemmaFromConceptId("id");
+        assertEquals("test-lemma", result);
+    }
 
-	private void mockConceptCollectionDeepMapper(IConceptCollection returnType) throws QuadrigaStorageException {
-		Mockito.when(mockedConceptCollectionDeepMapper.getConceptCollectionDetails(Matchers.anyString()))
-				.thenReturn(returnType);
-	}
+    @Test
+    public void getConceptLemmaFromConceptIdTestWithNoEntries() {
+        List<ConceptpowerReply.ConceptEntry> conceptEntries = new ArrayList<ConceptpowerReply.ConceptEntry>();
+        ConceptpowerReply rep = new ConceptpowerReply();
+        rep.setConceptEntry(conceptEntries);
 
-	@Test
-	public void showCollaboratingUsersTest() throws QuadrigaStorageException {
-		ConceptCollection conceptCollection = new ConceptCollection();
-		List<IConceptCollectionCollaborator> collabList = new ArrayList<IConceptCollectionCollaborator>();
+        Mockito.when(mockedRestTemplate.getForObject(Matchers.anyString(), Matchers.eq(ConceptpowerReply.class),
+                Matchers.anyMapOf(String.class, String.class))).thenReturn(rep);
 
-		ConceptCollectionCollaborator col = new ConceptCollectionCollaborator();
-		col.setUpdatedBy("test updater");
-		collabList.add(col);
+        String result = conceptCollectionManagerUnderTest.getConceptLemmaFromConceptId("id");
+        assertEquals("id", result);
+    }
 
-		conceptCollection.setConceptCollectionCollaborators(collabList);
-		mockConceptCollectionDeepMapper(conceptCollection);
+    private void mockConceptCollectionDeepMapper(IConceptCollection returnType) throws QuadrigaStorageException {
+        Mockito.when(mockedConceptCollectionDeepMapper.getConceptCollectionDetails(Matchers.anyString()))
+                .thenReturn(returnType);
+    }
 
-		List<IConceptCollectionCollaborator> resultList = conceptCollectionManagerUnderTest
-				.showCollaboratingUsers("id");
-		assertEquals("test updater", resultList.get(0).getUpdatedBy());
-	}
+    @Test
+    public void showCollaboratingUsersTest() throws QuadrigaStorageException {
+        ConceptCollection conceptCollection = new ConceptCollection();
+        List<IConceptCollectionCollaborator> collabList = new ArrayList<IConceptCollectionCollaborator>();
 
-	@Test
-	public void showCollaboratingUsersNegativeTest() throws QuadrigaStorageException {
-		mockConceptCollectionDeepMapper(null);
-		List<IConceptCollectionCollaborator> resultList = conceptCollectionManagerUnderTest
-				.showCollaboratingUsers("id");
-		assertNull(resultList);
-	}
+        ConceptCollectionCollaborator col = new ConceptCollectionCollaborator();
+        col.setUpdatedBy("test updater");
+        collabList.add(col);
 
-	@Test
-	public void getProjectsTreeTest() throws QuadrigaStorageException, JSONException {
+        conceptCollection.setConceptCollectionCollaborators(collabList);
+        mockConceptCollectionDeepMapper(conceptCollection);
 
-		String result = "{\"core\": {\"data\": [\n {\n  \"id\": \"id\",\n  \"parent\": \"#\",\n  \"text\": \"test project\"\n },\n {\n  \"id\": \"w-id\",\n  \"parent\": \"id\",\n  \"text\": \"w-name\"\n },\n {\n  \"id\": \"w-id2\",\n  \"parent\": \"id\",\n  \"text\": \"<a href=\'#\' id=\'w-id2\' name=\'w-name2\' onclick=\'javascript:addCCtoWorkspace(this.id,this.name);\' >w-name2<\\/a>\"\n },\n {\n  \"id\": \"id2\",\n  \"parent\": \"#\",\n  \"text\": \"<a href=\'#\' id=\'id2\' name=\'test project2\' onclick=\'javascript:addCCtoProjects(this.id,this.name);\' > test project2<\\/a>\"\n },\n {\n  \"id\": \"w-id\",\n  \"parent\": \"id2\",\n  \"text\": \"w-name\"\n },\n {\n  \"id\": \"w-id2\",\n  \"parent\": \"id2\",\n  \"text\": \"<a href=\'#\' id=\'w-id2\' name=\'w-name2\' onclick=\'javascript:addCCtoWorkspace(this.id,this.name);\' >w-name2<\\/a>\"\n }\n]}}";
+        List<IConceptCollectionCollaborator> resultList = conceptCollectionManagerUnderTest
+                .showCollaboratingUsers("id");
+        assertEquals("test updater", resultList.get(0).getUpdatedBy());
+    }
 
-		String actualResult = conceptCollectionManagerUnderTest.getProjectsTree("username", "ccId");
-		assertEquals(result, actualResult);
-	}
+    @Test
+    public void showCollaboratingUsersNegativeTest() throws QuadrigaStorageException {
+        mockConceptCollectionDeepMapper(null);
+        List<IConceptCollectionCollaborator> resultList = conceptCollectionManagerUnderTest
+                .showCollaboratingUsers("id");
+        assertNull(resultList);
+    }
 
-	@Test
-	public void updateTest() throws QuadrigaStorageException {
+    @Test
+    public void getProjectsTreeTest() throws QuadrigaStorageException, JSONException {
 
-		conceptCollectionManagerUnderTest.update(new String[] { "id" }, new ConceptCollection(), "username");
-		assertEquals("test-lemma", concept.getLemma());
-	}
+        String result = "{\"core\": {\"data\": [\n {\n  \"id\": \"id\",\n  \"parent\": \"#\",\n  \"text\": \"test project\"\n },\n {\n  \"id\": \"w-id\",\n  \"parent\": \"id\",\n  \"text\": \"w-name\"\n },\n {\n  \"id\": \"w-id2\",\n  \"parent\": \"id\",\n  \"text\": \"<a href=\'#\' id=\'w-id2\' name=\'w-name2\' onclick=\'javascript:addCCtoWorkspace(this.id,this.name);\' >w-name2<\\/a>\"\n },\n {\n  \"id\": \"id2\",\n  \"parent\": \"#\",\n  \"text\": \"<a href=\'#\' id=\'id2\' name=\'test project2\' onclick=\'javascript:addCCtoProjects(this.id,this.name);\' > test project2<\\/a>\"\n },\n {\n  \"id\": \"w-id\",\n  \"parent\": \"id2\",\n  \"text\": \"w-name\"\n },\n {\n  \"id\": \"w-id2\",\n  \"parent\": \"id2\",\n  \"text\": \"<a href=\'#\' id=\'w-id2\' name=\'w-name2\' onclick=\'javascript:addCCtoWorkspace(this.id,this.name);\' >w-name2<\\/a>\"\n }\n]}}";
+
+        String actualResult = conceptCollectionManagerUnderTest.getProjectsTree("username", "ccId");
+        assertEquals(result, actualResult);
+    }
+
+    @Test
+    public void updateTest() throws QuadrigaStorageException {
+
+        conceptCollectionManagerUnderTest.update(new String[] { "id" }, new ConceptCollection(), "username");
+        assertEquals("test-lemma", concept.getLemma());
+    }
 
 }

@@ -24,82 +24,82 @@ import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 
 public class ConceptCollectionShallowMapperTest {
 
-	@Mock
-	private IConceptCollectionDAO mockeddbConnect = Mockito.mock(IConceptCollectionDAO.class);
+    @Mock
+    private IConceptCollectionDAO mockeddbConnect = Mockito.mock(IConceptCollectionDAO.class);
 
-	@Mock
-	private IConceptCollectionManager mockedccManager = Mockito.mock(IConceptCollectionManager.class);
+    @Mock
+    private IConceptCollectionManager mockedccManager = Mockito.mock(IConceptCollectionManager.class);
 
-	@Mock
-	private IUserDeepMapper mockedUserDeepMapper = Mockito.mock(IUserDeepMapper.class);
+    @Mock
+    private IUserDeepMapper mockedUserDeepMapper = Mockito.mock(IUserDeepMapper.class);
 
-	@InjectMocks
-	ConceptCollectionShallowMapper conceptCollectionShallowMapperUnderTest;
+    @InjectMocks
+    private ConceptCollectionShallowMapper conceptCollectionShallowMapperUnderTest;
 
-	private QuadrigaUserDTO userDTO;
+    private QuadrigaUserDTO userDTO;
 
-	private ConceptCollectionDTO dto;
+    private ConceptCollectionDTO dto;
 
-	@Before
-	public void setUp() throws QuadrigaStorageException {
-		MockitoAnnotations.initMocks(this);
+    @Before
+    public void setUp() throws QuadrigaStorageException {
+        MockitoAnnotations.initMocks(this);
 
-		userDTO = new QuadrigaUserDTO();
-		userDTO.setUsername("username");
+        userDTO = new QuadrigaUserDTO();
+        userDTO.setUsername("username");
 
-		dto = new ConceptCollectionDTO();
-		dto.setCollectionname("collectionname");
-		dto.setUpdatedby("updatedby");
-		dto.setOwner(userDTO);
+        dto = new ConceptCollectionDTO();
+        dto.setCollectionname("collectionname");
+        dto.setUpdatedby("updatedby");
+        dto.setOwner(userDTO);
 
-		User user = new User();
-		user.setUserName("username");
+        User user = new User();
+        user.setUserName("username");
 
-		User user2 = new User();
-		user2.setUserName("username2");
-		Mockito.when(mockedUserDeepMapper.getUser("username")).thenReturn(user);
-		Mockito.when(mockedUserDeepMapper.getUser("username2")).thenReturn(user2);
-	}
+        User user2 = new User();
+        user2.setUserName("username2");
+        Mockito.when(mockedUserDeepMapper.getUser("username")).thenReturn(user);
+        Mockito.when(mockedUserDeepMapper.getUser("username2")).thenReturn(user2);
+    }
 
-	@Test
-	public void getConceptCollectionListTest() throws QuadrigaStorageException {
+    @Test
+    public void getConceptCollectionListTest() throws QuadrigaStorageException {
 
-		QuadrigaUserDTO userDTO2 = new QuadrigaUserDTO();
-		userDTO2.setUsername("username2");
-		ConceptCollectionDTO dto2 = new ConceptCollectionDTO();
-		dto2.setCollectionname("collectionname2");
-		dto2.setOwner(userDTO2);
+        QuadrigaUserDTO userDTO2 = new QuadrigaUserDTO();
+        userDTO2.setUsername("username2");
+        ConceptCollectionDTO dto2 = new ConceptCollectionDTO();
+        dto2.setCollectionname("collectionname2");
+        dto2.setOwner(userDTO2);
 
-		List<ConceptCollectionDTO> ccDTOList = new ArrayList<ConceptCollectionDTO>();
-		ccDTOList.add(dto);
-		ccDTOList.add(dto2);
+        List<ConceptCollectionDTO> ccDTOList = new ArrayList<ConceptCollectionDTO>();
+        ccDTOList.add(dto);
+        ccDTOList.add(dto2);
 
-		Mockito.when(mockeddbConnect.getConceptsOwnedbyUser(Matchers.anyString())).thenReturn(ccDTOList);
+        Mockito.when(mockeddbConnect.getConceptsOwnedbyUser(Matchers.anyString())).thenReturn(ccDTOList);
 
-		List<IConceptCollection> ccProxyList = conceptCollectionShallowMapperUnderTest
-				.getConceptCollectionList("username");
+        List<IConceptCollection> ccProxyList = conceptCollectionShallowMapperUnderTest
+                .getConceptCollectionList("username");
 
-		assertEquals(2, ccProxyList.size());
-		assertEquals("username", ccProxyList.get(0).getOwner().getUserName());
-		assertEquals("collectionname", ccProxyList.get(0).getConceptCollectionName());
+        assertEquals(2, ccProxyList.size());
+        assertEquals("username", ccProxyList.get(0).getOwner().getUserName());
+        assertEquals("collectionname", ccProxyList.get(0).getConceptCollectionName());
 
-		assertEquals("username2", ccProxyList.get(1).getOwner().getUserName());
-		assertEquals("collectionname2", ccProxyList.get(1).getConceptCollectionName());
+        assertEquals("username2", ccProxyList.get(1).getOwner().getUserName());
+        assertEquals("collectionname2", ccProxyList.get(1).getConceptCollectionName());
 
-	}
+    }
 
-	@Test
-	public void getConceptCollectionListOfCollaboratorTest() throws QuadrigaStorageException {
+    @Test
+    public void getConceptCollectionListOfCollaboratorTest() throws QuadrigaStorageException {
 
-		List<ConceptCollectionDTO> concolList = new ArrayList<ConceptCollectionDTO>();
-		concolList.add(dto);
+        List<ConceptCollectionDTO> concolList = new ArrayList<ConceptCollectionDTO>();
+        concolList.add(dto);
 
-		Mockito.when(mockeddbConnect.getCollaboratedConceptsofUser(Matchers.anyString())).thenReturn(concolList);
+        Mockito.when(mockeddbConnect.getCollaboratedConceptsofUser(Matchers.anyString())).thenReturn(concolList);
 
-		List<IConceptCollection> ccList = conceptCollectionShallowMapperUnderTest
-				.getConceptCollectionListOfCollaborator("username");
+        List<IConceptCollection> ccList = conceptCollectionShallowMapperUnderTest
+                .getConceptCollectionListOfCollaborator("username");
 
-		assertEquals("collectionname", ccList.get(0).getConceptCollectionName());
-		assertEquals("updatedby", ccList.get(0).getUpdatedBy());
-	}
+        assertEquals("collectionname", ccList.get(0).getConceptCollectionName());
+        assertEquals("updatedby", ccList.get(0).getUpdatedBy());
+    }
 }

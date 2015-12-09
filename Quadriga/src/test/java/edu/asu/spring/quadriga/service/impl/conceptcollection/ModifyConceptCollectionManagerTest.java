@@ -1,11 +1,10 @@
 package edu.asu.spring.quadriga.service.impl.conceptcollection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -17,29 +16,30 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public class ModifyConceptCollectionManagerTest {
 
-	@Mock
-	private IConceptCollectionDAO mockedccDao = Mockito.mock(IConceptCollectionDAO.class);
+    @Mock
+    private IConceptCollectionDAO mockedccDao = Mockito.mock(IConceptCollectionDAO.class);
 
-	@InjectMocks
-	ModifyConceptCollectionManager modifyConceptCollectionManagerUnderTest;
+    @InjectMocks
+    private ModifyConceptCollectionManager modifyConceptCollectionManagerUnderTest;
 
-	@Before
-	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-	}
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
-	@Test
-	public void updateCollectionDetailsTest() throws QuadrigaStorageException {
-		ConceptCollectionDTO conceptCollection = new ConceptCollectionDTO();
+    @Test
+    public void updateCollectionDetailsTest() throws QuadrigaStorageException {
+        ConceptCollectionDTO conceptCollection = new ConceptCollectionDTO();
 
-		ConceptCollection collection = new ConceptCollection();
-		collection.setConceptCollectionName("conceptCollectionName");
+        ConceptCollection collection = new ConceptCollection();
+        collection.setConceptCollectionName("conceptCollectionName");
+        collection.setConceptCollectionId("id");
 
-		Mockito.when(mockedccDao.getDTO(Matchers.anyString())).thenReturn(conceptCollection);
-		modifyConceptCollectionManagerUnderTest.updateCollectionDetails(collection, "username");
+        Mockito.when(mockedccDao.getDTO("id")).thenReturn(conceptCollection);
+        modifyConceptCollectionManagerUnderTest.updateCollectionDetails(collection, "username");
 
-		assertEquals("conceptCollectionName", collection.getConceptCollectionName());
+        assertEquals("conceptCollectionName", collection.getConceptCollectionName());
 
-	}
+    }
 
 }
