@@ -1192,13 +1192,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
 		newNetworkDetailCache = parseNewNetworkStatement(elementEventType,workspaceBitStreamList,newNetworkDetailCache);
 
-		/*// Check if it DSpace is present in the XML
-		if(!newNetworkDetailCache.isFileExists()){
-			logger.info("Network not uploaded");
-			logger.info("Some of the text files in the uploaded network were not present in the workspace");
-			return INetworkManager.DSPACEERROR;
-		}*/
-
 		// Add network into database 
 		if(uploadStatus == INetworkManager.NEWNETWORK){
 			try{
