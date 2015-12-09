@@ -777,7 +777,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
 		try{
 			// add xml in QStore
-			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
+		    String url = getQStoreAddURL();
+			res = restTemplate.postForObject(url, request,String.class);
 		}catch(Exception e){
 			logger.error("QStore not accepting the xml, please check with the server logs.",e);
 			//res = e.getMessage();
@@ -1190,13 +1191,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 		// Below code reads the top level Appelation events 
 
 		newNetworkDetailCache = parseNewNetworkStatement(elementEventType,workspaceBitStreamList,newNetworkDetailCache);
-
-		// Check if it DSpace is present in the XML
-		if(!newNetworkDetailCache.isFileExists()){
-			logger.info("Network not uploaded");
-			logger.info("Some of the text files in the uploaded network were not present in the workspace");
-			return INetworkManager.DSPACEERROR;
-		}
 
 		// Add network into database 
 		if(uploadStatus == INetworkManager.NEWNETWORK){
