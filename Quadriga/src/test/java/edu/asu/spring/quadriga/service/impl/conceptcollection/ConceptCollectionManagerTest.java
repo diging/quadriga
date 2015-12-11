@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jettison.json.JSONException;
 import org.junit.Before;
@@ -83,11 +85,18 @@ public class ConceptCollectionManagerTest {
         ConceptpowerReply rep = new ConceptpowerReply();
         rep.setConceptEntry(conceptEntries);
 
+        Map<String, String> vars = new HashMap<String, String>();
+        vars.put("name", "item");
+        vars.put("pos", "pos");
+
+        Map<String, String> vars2 = new HashMap<String, String>();
+        vars2.put("name", "id");
+
         Mockito.when(mockedRestTemplate.getForObject(Matchers.eq(conceptURL + searchURL + "{name}/{pos}"),
-                Matchers.eq(ConceptpowerReply.class), Matchers.anyMapOf(String.class, String.class))).thenReturn(rep);
+                Matchers.eq(ConceptpowerReply.class), Matchers.eq(vars))).thenReturn(rep);
 
         Mockito.when(mockedRestTemplate.getForObject(Matchers.eq(conceptURL + searchURL + "{name}"),
-                Matchers.eq(ConceptpowerReply.class), Matchers.anyMapOf(String.class, String.class))).thenReturn(rep);
+                Matchers.eq(ConceptpowerReply.class), Matchers.eq(vars2))).thenReturn(rep);
 
         Project project = new Project();
         project.setCreatedBy("createdBy");
