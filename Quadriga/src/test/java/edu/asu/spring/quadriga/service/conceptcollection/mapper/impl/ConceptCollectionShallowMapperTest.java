@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -74,7 +73,7 @@ public class ConceptCollectionShallowMapperTest {
         ccDTOList.add(dto);
         ccDTOList.add(dto2);
 
-        Mockito.when(mockeddbConnect.getConceptsOwnedbyUser(Matchers.anyString())).thenReturn(ccDTOList);
+        Mockito.when(mockeddbConnect.getConceptsOwnedbyUser("username")).thenReturn(ccDTOList);
 
         List<IConceptCollection> ccProxyList = conceptCollectionShallowMapperUnderTest
                 .getConceptCollectionList("username");
@@ -94,7 +93,7 @@ public class ConceptCollectionShallowMapperTest {
         List<ConceptCollectionDTO> concolList = new ArrayList<ConceptCollectionDTO>();
         concolList.add(dto);
 
-        Mockito.when(mockeddbConnect.getCollaboratedConceptsofUser(Matchers.anyString())).thenReturn(concolList);
+        Mockito.when(mockeddbConnect.getCollaboratedConceptsofUser("username")).thenReturn(concolList);
 
         List<IConceptCollection> ccList = conceptCollectionShallowMapperUnderTest
                 .getConceptCollectionListOfCollaborator("username");

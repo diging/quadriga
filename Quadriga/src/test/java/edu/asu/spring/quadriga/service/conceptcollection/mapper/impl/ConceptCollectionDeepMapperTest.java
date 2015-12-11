@@ -142,7 +142,7 @@ public class ConceptCollectionDeepMapperTest {
 
     @Test
     public void getConceptCollectionDetailsNullTest() throws QuadrigaStorageException {
-        Mockito.when(mockeddbConnect.getDTO(Matchers.anyString())).thenReturn(null);
+        Mockito.when(mockeddbConnect.getDTO("ccId")).thenReturn(null);
         IConceptCollection col = conceptCollectionDeepMapperUnderTest.getConceptCollectionDetails("ccId");
         assertNull(col);
     }
@@ -150,8 +150,8 @@ public class ConceptCollectionDeepMapperTest {
     private void setMockConditionsCollectionDetailsTest(ConceptCollectionDTO ccDTO) throws QuadrigaStorageException {
 
         Mockito.when(mockedccFactory.createConceptCollectionObject()).thenReturn(new ConceptCollection());
-        Mockito.when(mockeddbConnect.getDTO(Matchers.anyString())).thenReturn(ccDTO);
-        Mockito.when(mockedUserDeepMapper.getUser(Matchers.anyString())).thenReturn(user);
+        Mockito.when(mockeddbConnect.getDTO("ccId")).thenReturn(ccDTO);
+        Mockito.when(mockedUserDeepMapper.getUser("test name")).thenReturn(user);
         Mockito.when(mockedProjectCCShallowMapper.getProjectConceptCollectionList(
                 Matchers.any(ConceptCollectionDTO.class), Matchers.any(IConceptCollection.class)))
                 .thenReturn(new ArrayList<IProjectConceptCollection>());
@@ -235,10 +235,10 @@ public class ConceptCollectionDeepMapperTest {
 
     private void setMockConditionsCollaboratorListTest(QuadrigaRole collaboratorRole) throws QuadrigaStorageException {
 
-        Mockito.when(mockedRoleManager.getQuadrigaRoleByDbId(Matchers.anyString(), Matchers.anyString()))
-                .thenReturn(collaboratorRole);
-        Mockito.doNothing().when(mockedRoleManager).fillQuadrigaRole(Matchers.anyString(),
-                Matchers.any(IQuadrigaRole.class));
+        Mockito.when(mockedRoleManager.getQuadrigaRoleByDbId(Matchers.eq(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES),
+                Matchers.anyString())).thenReturn(collaboratorRole);
+        Mockito.doNothing().when(mockedRoleManager).fillQuadrigaRole(
+                Matchers.eq(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES), Matchers.any(IQuadrigaRole.class));
         Mockito.when(mockedCollaboratorFactory.createCollaborator()).thenReturn(new Collaborator());
         Mockito.when(mockedccCollaboratorFactory.createConceptCollectionCollaboratorObject())
                 .thenReturn(new ConceptCollectionCollaborator());

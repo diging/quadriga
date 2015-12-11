@@ -364,11 +364,6 @@
 			<artifactId>mockito-core</artifactId>
 			<version>1.9.5</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jmockit</groupId>
-			<artifactId>jmockit</artifactId>
-			<version>1.8</version>
-		</dependency>
 	</dependencies>
 	
 	<profiles>
