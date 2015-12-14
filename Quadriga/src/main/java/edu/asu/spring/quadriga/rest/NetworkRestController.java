@@ -309,7 +309,7 @@ public class NetworkRestController {
         Template template = null;
         try {
             engine.init();
-            template = engine.getTemplate("velocitytemplates/networks.vm");
+            template = engine.getTemplate("velocitytemplates/approvednetworks.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("workspaceNetworkList", workspaceNetworkList);
             StringWriter writer = new StringWriter();
