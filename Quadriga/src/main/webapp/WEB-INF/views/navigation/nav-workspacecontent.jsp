@@ -26,6 +26,55 @@
 <div id="workspacemenu">
 	<ul>
 		<li
+			data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Workspace
+			<ul>
+				<li
+					data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"}'><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/addworkspace">Add</a></li>
+				<li
+					data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"}'>
+					<c:if test="${isDeactivated == true}">
+						<a href="#" onclick="return funConfirmDeletion();">Delete</a>
+					</c:if> <c:if test="${isDeactivated == false }">
+						<font color="#CCCCCC"
+							title="Only deactivated workspaces can be deleted.">Delete
+							Workspace</font>
+					</c:if>
+				</li>
+				<li
+					data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'>
+
+					<c:if test="${isDeactivated == false}">
+						<a href="#" onclick="return confirmWorkspaceDeactivation();">Deactivate</a>
+
+
+					</c:if> <c:if test="${isDeactivated == true }">
+						<font color="#CCCCCC"
+							title="The workspace is already deactivated."> Deactivate
+							Workspace</a>&nbsp;&nbsp;
+						</font>
+
+					</c:if>
+
+				</li>
+
+				<li
+					data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'>
+
+					<c:if test="${isDeactivated == true}">
+						<a href="#" onclick="return confirmWorkspaceActivation();">Activate</a>
+					</c:if> <c:if test="${isDeactivated == false }">
+						<font color="#CCCCCC" title="The workspace is already activated.">
+							Activate Workspace</a>&nbsp;&nbsp;
+						</font>
+					</c:if>
+
+				</li>
+			</ul>
+		</li>
+
+
+		<li
 			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Dictionary
 			<ul>
 				<li
