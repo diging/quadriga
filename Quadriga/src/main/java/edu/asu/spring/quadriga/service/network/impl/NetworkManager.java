@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -40,6 +42,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -726,6 +730,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
+		String authHeader = getAuthHeader();
+        headers.set("Authorization", authHeader);
 		ResponseEntity<String> response = null;
 		try{
 			logger.debug("URL : "+getQStoreGetURL()+id);
@@ -769,12 +775,16 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 		messageConverters.add(new FormHttpMessageConverter());
 		messageConverters.add(new StringHttpMessageConverter());
 		restTemplate.setMessageConverters(messageConverters);
+		
+		
 		// prepare http headers
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
+		String authHeader = getAuthHeader();
+        headers.set("Authorization", authHeader);
 		HttpEntity<String> request = new HttpEntity<String>(XML,headers);
-
+        
 		try{
 			// add xml in QStore
 		    String url = getQStoreAddURL();
@@ -785,6 +795,13 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 			return res;
 		}
 		return res;
+	}
+	
+	private String getAuthHeader(){
+	    UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String auth = user.getUsername() + ":" + user.getPassword();
+        byte[] encodedAuth = Base64.encodeBase64( auth.getBytes(Charset.forName("US-ASCII")) );
+        return "Basic " + new String( encodedAuth );
 	}
 
 	/**
@@ -808,6 +825,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
+		String authHeader = getAuthHeader();
+        headers.set("Authorization", authHeader);
+        
 		HttpEntity<String> request = new HttpEntity<String>(xml,headers);
 
 		try{
