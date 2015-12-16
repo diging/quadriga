@@ -730,6 +730,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
+		String authHeader = getAuthHeader();
+        headers.set("Authorization", authHeader);
 		ResponseEntity<String> response = null;
 		try{
 			logger.debug("URL : "+getQStoreGetURL()+id);
@@ -823,6 +825,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
+		String authHeader = getAuthHeader();
+        headers.set("Authorization", authHeader);
+        
 		HttpEntity<String> request = new HttpEntity<String>(xml,headers);
 
 		try{
