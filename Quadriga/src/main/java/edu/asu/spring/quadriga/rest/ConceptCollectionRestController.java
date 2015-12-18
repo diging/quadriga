@@ -205,49 +205,45 @@ public class ConceptCollectionRestController {
         if (xml.equals("")) {
             String errorMsg = restMessage.getErrorMsg("Please provide XML in body of the post request.", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
-        } else {
-
-            logger.debug("XML : " + xml);
-            JAXBElement<QuadrigaConceptReply> response1 = null;
-            try {
-                JAXBContext context = JAXBContext.newInstance(QuadrigaConceptReply.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-                unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-                InputStream is = new ByteArrayInputStream(xml.getBytes());
-                response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
-            } catch (Exception e) {
-                logger.error("Error in unmarshalling", e);
-                String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
-                return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
-            }
-            QuadrigaConceptReply qReply = response1.getValue();
-            ConceptList c1 = qReply.getConceptList();
-            List<Concept> conceptList = c1.getConcepts();
-
-            Iterator<Concept> I = conceptList.iterator();
-
-            while (I.hasNext()) {
-                Concept c = I.next();
-                logger.debug("arg Name :" + c.getName().trim());
-                logger.debug("arg Pos :" + c.getPos().trim());
-                logger.debug("arg URI :" + c.getUri().trim());
-                logger.debug("arg descrtiption :" + c.getDescription().trim());
-                try {
-                    conceptControllerManager.addItems(c.getName(), c.getUri(), c.getPos(), c.getDescription(),
-                            conceptCollectionId, user.getUserName());
-                } catch (QuadrigaStorageException e) {
-                    logger.error("Errors in adding items", e);
-                    String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error", request);
-                    HttpHeaders httpHeaders = new HttpHeaders();
-                    httpHeaders.setContentType(MediaType.valueOf(accept));
-                    return new ResponseEntity<String>(errorMsg, httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-
-            }
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.valueOf(accept));
-            return new ResponseEntity<String>("Success", httpHeaders, HttpStatus.OK);
         }
+
+        logger.debug("XML : " + xml);
+        JAXBElement<QuadrigaConceptReply> response1 = null;
+        try {
+            JAXBContext context = JAXBContext.newInstance(QuadrigaConceptReply.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+            InputStream is = new ByteArrayInputStream(xml.getBytes());
+            response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
+        } catch (Exception e) {
+            logger.error("Error in unmarshalling", e);
+            String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+        }
+        QuadrigaConceptReply qReply = response1.getValue();
+        ConceptList conList = qReply.getConceptList();
+        List<Concept> conceptList = conList.getConcepts();
+
+        Iterator<Concept> I = conceptList.iterator();
+
+        while (I.hasNext()) {
+            Concept c = I.next();
+            logger.debug(c.toString());
+            try {
+                conceptControllerManager.addItems(c.getName(), c.getUri(), c.getPos(), c.getDescription(),
+                        conceptCollectionId, user.getUserName());
+            } catch (QuadrigaStorageException e) {
+                logger.error("Errors in adding items", e);
+                String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error", request);
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setContentType(MediaType.valueOf(accept));
+                return new ResponseEntity<String>(errorMsg, httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        }
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.valueOf(accept));
+        return new ResponseEntity<String>("Success", httpHeaders, HttpStatus.OK);
     }
 
     /**
