@@ -112,7 +112,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 		IDictionary dictionary = null;
 		
 		DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryId);
-		if (!dictionaryDTO.getOwner().getCreatedby().equals(userName))
+		if (!dictionaryDTO.getDictionaryowner().getUsername().equals(userName))
 		    return null;
 		
 		dictionary = dictionaryFactory.createDictionaryObject();
