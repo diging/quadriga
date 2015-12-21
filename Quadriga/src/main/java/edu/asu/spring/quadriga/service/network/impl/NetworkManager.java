@@ -42,13 +42,13 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.authentication.UserAuthDetails;
+import edu.asu.spring.quadriga.authentication.qstore.IQStoreUserManager;
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -165,6 +165,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
 	@Autowired
 	private INetworkDAO dbConnect;
+	
+	@Autowired
+	private IQStoreUserManager qstoreUserManager;
 
 	/**
 	 * 
@@ -798,8 +801,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 	}
 	
 	private String getAuthHeader(){
-	    UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String auth = user.getUsername() + ":" + user.getPassword();
+	    UserAuthDetails userDetails = qstoreUserManager.getQStoreUser();
+        String auth = userDetails.getUsername() + ":" + userDetails.getPassword();
         byte[] encodedAuth = Base64.encodeBase64( auth.getBytes(Charset.forName("US-ASCII")) );
         return "Basic " + new String( encodedAuth );
 	}

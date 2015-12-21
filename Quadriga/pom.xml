@@ -16,15 +16,17 @@
 		<spring-security-version>3.2.7.RELEASE</spring-security-version>
 		<!-- Deploy Properties -->
 		<tomcat.deploy.path>http://localhost:8080/manager/</tomcat.deploy.path>
-        <deploy.path.test>quadriga-test</deploy.path.test>
-        <deploy.path.dev>quadriga</deploy.path.dev>
-        <deploy.path.prod>quadriga</deploy.path.prod>
-        <database.url>jdbc:mysql://localhost:3306/quadriga</database.url>
-        <database.username>dbadmin</database.username>
-        <database.pw>dbadmin</database.pw>
-        <qstore.url>http://localhost:8080/qstore</qstore.url>
-        <wordpower.url>http://digitalhps-develop.asu.edu:8080/wordpower</wordpower.url>
-	    <conceptpower.url>https://chps.asu.edu/conceptpower</conceptpower.url>
+		<deploy.path.test>quadriga-test</deploy.path.test>
+		<deploy.path.dev>quadriga</deploy.path.dev>
+		<deploy.path.prod>quadriga</deploy.path.prod>
+		<database.url>jdbc:mysql://localhost:3306/quadriga</database.url>
+		<database.username>dbadmin</database.username>
+		<database.pw>dbadmin</database.pw>
+		<qstore.url>http://localhost:8080/qstore4s</qstore.url>
+		<wordpower.url>http://digitalhps-develop.asu.edu:8080/wordpower</wordpower.url>
+		<conceptpower.url>https://chps.asu.edu/conceptpower</conceptpower.url>
+		<qstore.admin.username>admin</qstore.admin.username>
+		<qstore.admin.password>admin</qstore.admin.password>
 	</properties>
 
 	<dependencies>
@@ -365,55 +367,55 @@
 			<version>1.9.5</version>
 		</dependency>
 	</dependencies>
-	
+
 	<profiles>
-        <profile>
-            <id>dev</id>
-            <!-- Dev Env. Properties -->
-            <properties>
-                <!-- SQL Properties -->
-                <db.url>${database.url}</db.url>
-                <db.username>${database.username}</db.username>
-                <db.pw>${database.pw}</db.pw>
-                <deploy.path>${deploy.path.dev}</deploy.path>
-                <tomcat.path>${tomcat.deploy.path}</tomcat.path>
-                <qstore4s.url>${qstore.url}</qstore4s.url>
-                <profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
-                <profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
-            </properties>
-        </profile>
-        <profile>
-            <id>test</id>
-            <!-- Test Env. Properties -->
-            <properties>
-                <!-- SQL Properties -->
-                <db.url>${database.url}</db.url>
-                <db.username>${database.username}</db.username>
-                <db.pw>${database.pw}</db.pw>
-                <deploy.path>${deploy.path.test}</deploy.path>
-                <tomcat.path>${tomcat.deploy.path}</tomcat.path>
-                <qstore4s.url>${qstore.url}</qstore4s.url>
-                <profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
-                <profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <!-- Dev Env. Properties -->
-            <properties>
-                <!-- SQL Properties -->
-                <db.url>${database.url}</db.url>
-                <db.username>${database.username}</db.username>
-                <db.pw>${database.pw}</db.pw>
-                <deploy.path>${deploy.path.prod}</deploy.path>
-                <tomcat.path>${tomcat.deploy.path}</tomcat.path>
-                <qstore4s.url>${qstore.url}</qstore4s.url>
-                <profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
-                <profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
-            </properties>
-        </profile>
-    </profiles>
-    
+		<profile>
+			<id>dev</id>
+			<!-- Dev Env. Properties -->
+			<properties>
+				<!-- SQL Properties -->
+				<db.url>${database.url}</db.url>
+				<db.username>${database.username}</db.username>
+				<db.pw>${database.pw}</db.pw>
+				<deploy.path>${deploy.path.dev}</deploy.path>
+				<tomcat.path>${tomcat.deploy.path}</tomcat.path>
+				<qstore4s.url>${qstore.url}</qstore4s.url>
+				<profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
+				<profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<!-- Test Env. Properties -->
+			<properties>
+				<!-- SQL Properties -->
+				<db.url>${database.url}</db.url>
+				<db.username>${database.username}</db.username>
+				<db.pw>${database.pw}</db.pw>
+				<deploy.path>${deploy.path.test}</deploy.path>
+				<tomcat.path>${tomcat.deploy.path}</tomcat.path>
+				<qstore4s.url>${qstore.url}</qstore4s.url>
+				<profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
+				<profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<!-- Dev Env. Properties -->
+			<properties>
+				<!-- SQL Properties -->
+				<db.url>${database.url}</db.url>
+				<db.username>${database.username}</db.username>
+				<db.pw>${database.pw}</db.pw>
+				<deploy.path>${deploy.path.prod}</deploy.path>
+				<tomcat.path>${tomcat.deploy.path}</tomcat.path>
+				<qstore4s.url>${qstore.url}</qstore4s.url>
+				<profile.wordpower.url>${wordpower.url}</profile.wordpower.url>
+				<profile.conceptpower.url>${conceptpower.url}</profile.conceptpower.url>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -461,62 +463,72 @@
 				</configuration>
 			</plugin>
 			<plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tomcat-maven-plugin</artifactId>
-                <version>1.1</version>
-                <configuration>
-                    <url>${tomcat.path}</url>
-                    <server>TomcatServer</server>
-                    <path>/${deploy.path}</path>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <webResources>
-                        <resource>
-                            <filtering>true</filtering>
-                            <directory>src/main/webapp</directory>
-                            <includes>
-                                <include>**/*</include>
-                                <!-- include any other file types you want to filter -->
-                            </includes>
-                        </resource>
-                    </webResources>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <doCheck>false</doCheck>
-                    <doUpdate>false</doUpdate>
-                    <revisionOnScmFailure></revisionOnScmFailure>
-                    <!-- <format>#{0} ({1,date})</format> -->
-                    <items>
-                        <item>buildNumber\d*</item>
-                        <item>timestamp</item>
-                    </items>
-                    <format>#{0} ({1,date,yyyy-MM-dd HH:mm:ss})</format>
-                </configuration>
-            </plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+					<url>${tomcat.path}</url>
+					<server>TomcatServer</server>
+					<path>/${deploy.path}</path>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<filtering>true</filtering>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>**/*</include>
+								<!-- include any other file types you want to filter -->
+							</includes>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+					<revisionOnScmFailure></revisionOnScmFailure>
+					<!-- <format>#{0} ({1,date})</format> -->
+					<items>
+						<item>buildNumber\d*</item>
+						<item>timestamp</item>
+					</items>
+					<format>#{0} ({1,date,yyyy-MM-dd HH:mm:ss})</format>
+				</configuration>
+			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
-	
+
 	<scm>
-        <connection>scm:svn:http://none</connection>
-        <url>scm:svn:https://none</url>
-    </scm>
+		<connection>scm:svn:http://none</connection>
+		<url>scm:svn:https://none</url>
+	</scm>
 
 	<reporting>
 		<plugins>
