@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -47,8 +49,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.authentication.UserAuthDetails;
-import edu.asu.spring.quadriga.authentication.qstore.IQStoreUserManager;
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -102,6 +102,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  * @author : Lohith Dwaraka
  */
 
+@PropertySource(value = "classpath:/user.properties")
 @Service
 public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkManager {
 
@@ -167,7 +168,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 	private INetworkDAO dbConnect;
 	
 	@Autowired
-	private IQStoreUserManager qstoreUserManager;
+	private Environment env;
 
 	/**
 	 * 
@@ -801,8 +802,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 	}
 	
 	private String getAuthHeader(){
-	    UserAuthDetails userDetails = qstoreUserManager.getQStoreUser();
-        String auth = userDetails.getUsername() + ":" + userDetails.getPassword();
+        String auth = env.getProperty("qstore.admin.username") + ":" + env.getProperty("qstore.admin.password");
         byte[] encodedAuth = Base64.encodeBase64( auth.getBytes(Charset.forName("US-ASCII")) );
         return "Basic " + new String( encodedAuth );
 	}
