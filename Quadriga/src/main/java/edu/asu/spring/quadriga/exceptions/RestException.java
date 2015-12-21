@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.exceptions;
 
-
 /**
  * Exception to handle exceptions thrown in the REST interface.
  * @author Julia Damerow
@@ -39,6 +38,11 @@ public class RestException extends Exception {
 		errorcode = errorno;
 		
 	}
+
+    public RestException(int errorno, Throwable error) {
+        super(error);
+        errorcode = errorno;
+    }
 
 	
 }

@@ -145,22 +145,15 @@ public class ConceptCollectionRestController {
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(403, e);
         } catch (QuadrigaStorageException e) {
-            logger.error("Exception:", e);
-            throw new RestException(500);
+            throw new RestException(500, e);
         } catch (Exception e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(403, e);
         }
 
     }
@@ -215,7 +208,7 @@ public class ConceptCollectionRestController {
             unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
             InputStream is = new ByteArrayInputStream(xml.getBytes());
             response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
-        } catch (Exception e) {
+        } catch (JAXBException e) {
             logger.error("Error in unmarshalling", e);
             String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
@@ -224,13 +217,13 @@ public class ConceptCollectionRestController {
         ConceptList conList = qReply.getConceptList();
         List<Concept> conceptList = conList.getConcepts();
 
-        Iterator<Concept> I = conceptList.iterator();
+        Iterator<Concept> iter = conceptList.iterator();
 
-        while (I.hasNext()) {
-            Concept c = I.next();
-            logger.debug(c.toString());
+        while (iter.hasNext()) {
+            Concept concept = iter.next();
+            logger.debug(concept.toString());
             try {
-                conceptControllerManager.addItems(c.getName(), c.getUri(), c.getPos(), c.getDescription(),
+                conceptControllerManager.addItems(concept.getName(), concept.getUri(), concept.getPos(), concept.getDescription(),
                         conceptCollectionId, user.getUserName());
             } catch (QuadrigaStorageException e) {
                 logger.error("Errors in adding items", e);
@@ -291,22 +284,15 @@ public class ConceptCollectionRestController {
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(403, e);
         } catch (QuadrigaStorageException e) {
-            logger.error("Exception:", e);
-            throw new RestException(500);
+            throw new RestException(500, e);
         } catch (Exception e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(403, e);
         }
 
     }
@@ -374,7 +360,7 @@ public class ConceptCollectionRestController {
             unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
             InputStream is = new ByteArrayInputStream(xml.getBytes());
             response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
-        } catch (Exception e) {
+        } catch (JAXBException e) {
             logger.error("Error in unmarshalling", e);
             String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
@@ -384,8 +370,8 @@ public class ConceptCollectionRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
         }
         QuadrigaConceptReply qReply = response1.getValue();
-        ConceptList c1 = qReply.getConceptList();
-        List<Concept> conceptList = c1.getConcepts();
+        ConceptList conList = qReply.getConceptList();
+        List<Concept> conceptList = conList.getConcepts();
         if (conceptList.size() < 1) {
             String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
@@ -398,17 +384,14 @@ public class ConceptCollectionRestController {
         conceptControllerManager.addConceptCollection(collection);
         String ccId = conceptControllerManager.getConceptCollectionId(ccName);
 
-        Iterator<Concept> I = conceptList.iterator();
+        Iterator<Concept> iter = conceptList.iterator();
 
-        while (I.hasNext()) {
-            Concept c = I.next();
-            logger.debug("arg Name :" + c.getName().trim());
-            logger.debug("arg Pos :" + c.getPos().trim());
-            logger.debug("arg URI :" + c.getUri().trim());
-            logger.debug("arg descrtiption :" + c.getDescription().trim());
+        while (iter.hasNext()) {
+            Concept concept = iter.next();
+            logger.debug(concept.toString());
             try {
-                conceptControllerManager.addItems(c.getName().trim(), c.getUri().trim(), c.getPos().trim(),
-                        c.getDescription().trim(), ccId, user.getUserName());
+                conceptControllerManager.addItems(concept.getName().trim(), concept.getUri().trim(), concept.getPos().trim(),
+                        concept.getDescription().trim(), ccId, user.getUserName());
             } catch (QuadrigaStorageException e) {
                 logger.error("Errors in adding items", e);
                 String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error", request);
@@ -464,23 +447,17 @@ public class ConceptCollectionRestController {
             return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
 
         } catch (ResourceNotFoundException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (MethodInvocationException e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(403, e);
         } catch (QuadrigaStorageException e) {
-            logger.error("Exception:", e);
-            throw new RestException(500);
+            throw new RestException(500, e);
         } catch (QuadrigaAccessException e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(403, e);
         } catch (Exception e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(403, e);
         }
 
     }
