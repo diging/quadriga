@@ -114,12 +114,7 @@ public class DspaceRestController {
             Iterator<IBitStream> bitStreamIterator = bitstreams.iterator();
             while (bitStreamIterator.hasNext()) {
                 IBitStream bit = bitStreamIterator.next();
-                logger.info(bit.getId());
-                logger.info(bit.getName());
-                logger.info(bit.getItemName());
-                logger.info(bit.getMimeType());
-                logger.info(bit.getSize());
-                logger.info("" + bit.getLoadStatus());
+                logger.debug(bit.toString());
             }
 
             template = engine.getTemplate("velocitytemplates/dspacefiles.vm");
@@ -130,22 +125,15 @@ public class DspaceRestController {
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         } catch (QuadrigaStorageException e) {
-            logger.error("Exception:", e);
-            throw new RestException(500);
+            throw new RestException(500, e);
         } catch (Exception e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
     }
 
@@ -244,21 +232,18 @@ public class DspaceRestController {
             response.setHeader("Content-Disposition", httpConnection.getHeaderField("Content-Disposition"));
             response.setContentType(httpConnection.getContentType());
             response.getOutputStream().write(fileOutputStream.toByteArray());
-        } catch (IOException ioe) {
-            logger.error("Access exception occurred during file download. User: " + principal.getName() + " Fileid: "
-                    + fileid, ioe);
-            throw new RestException(403);
+        } catch (IOException e) {
+            throw new RestException(403, e);
         } catch (NoSuchAlgorithmException e) {
-            logger.error("The algorithm used for dspace hashing is causing exception", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (QuadrigaStorageException e) {
-            logger.error("Exception:", e);
-            throw new RestException(500);
+            throw new RestException(500, e);
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
-                } catch (IOException ioe) {
+                } catch (IOException e) {
+                    throw new RestException(403, e);
                 }
             }
         }
@@ -311,7 +296,8 @@ public class DspaceRestController {
                     + dspaceProperties.getProperty("dspace.?") + dspaceProperties.getProperty("dspace.api_key")
                     + publicKey + dspaceProperties.getProperty("dspace.&")
                     + dspaceProperties.getProperty("dspace.api_digest") + digestKey;
-        } else if (email != null && password != null && !email.equals("") && !password.equals("")) {
+        }
+        if (email != null && password != null && !email.equals("") && !password.equals("")) {
             // Authenticate based on email and password
             return dspaceProperties.getProperty("dspace.dspace_url")
                     + dspaceProperties.getProperty("dspace.bitstream_url") + fileid
@@ -434,26 +420,21 @@ public class DspaceRestController {
             } catch (HttpClientErrorException e) {
                 // Thrown when the dspace username and password or dspace keys
                 // do not have access to the file.
-                logger.error("Exception: ", e);
-                throw new RestException(401);
+                throw new RestException(401, e);
             } catch (HttpServerErrorException e) {
                 // No such file name was found.
-                logger.error("Exception: ", e);
-                throw new RestException(404);
+                throw new RestException(404, e);
             } catch (NoSuchAlgorithmException e) {
-                logger.error("Exception: ", e);
-                throw new RestException(404);
+                throw new RestException(404, e);
             } catch (QuadrigaStorageException e) {
-                logger.error("Exception: ", e);
-                throw new RestException(500);
+                throw new RestException(500, e);
             } catch (QuadrigaAccessException e) {
-                logger.error("Exception: ", e);
-                throw new RestException(403);
+                throw new RestException(403, e);
             }
         }
 
         String msg = restMessage.getErrorMsg(dspaceProperties.getProperty("dspace.file_add_error"), request);
-        return new ResponseEntity<String>(msg, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 
     }
 
@@ -473,7 +454,8 @@ public class DspaceRestController {
                     + dspaceProperties.getProperty("dspace.api_key") + publicKey
                     + dspaceProperties.getProperty("dspace.&") + dspaceProperties.getProperty("dspace.api_digest")
                     + digestKey;
-        } else if (email != null && password != null && !email.equals("") && !password.equals("")) {
+        }
+        if (email != null && password != null && !email.equals("") && !password.equals("")) {
             // Authenticate based on email and password
             return dspaceProperties.getProperty("dspace.dspace_url")
                     + dspaceProperties.getProperty("dspace.bitstream_url") + fileid

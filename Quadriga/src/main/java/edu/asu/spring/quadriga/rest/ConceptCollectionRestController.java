@@ -147,13 +147,13 @@ public class ConceptCollectionRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(404, e);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(403, e);
+            throw new RestException(400, e);
         } catch (QuadrigaStorageException e) {
             throw new RestException(500, e);
         } catch (Exception e) {
-            throw new RestException(403, e);
+            throw new RestException(400, e);
         }
 
     }
@@ -197,7 +197,7 @@ public class ConceptCollectionRestController {
         IUser user = userManager.getUser(principal.getName());
         if (xml.equals("")) {
             String errorMsg = restMessage.getErrorMsg("Please provide XML in body of the post request.", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
         logger.debug("XML : " + xml);
@@ -211,7 +211,7 @@ public class ConceptCollectionRestController {
         } catch (JAXBException e) {
             logger.error("Error in unmarshalling", e);
             String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         QuadrigaConceptReply qReply = response1.getValue();
         ConceptList conList = qReply.getConceptList();
@@ -223,8 +223,8 @@ public class ConceptCollectionRestController {
             Concept concept = iter.next();
             logger.debug(concept.toString());
             try {
-                conceptControllerManager.addItems(concept.getName(), concept.getUri(), concept.getPos(), concept.getDescription(),
-                        conceptCollectionId, user.getUserName());
+                conceptControllerManager.addItems(concept.getName(), concept.getUri(), concept.getPos(),
+                        concept.getDescription(), conceptCollectionId, user.getUserName());
             } catch (QuadrigaStorageException e) {
                 logger.error("Errors in adding items", e);
                 String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error", request);
@@ -286,13 +286,13 @@ public class ConceptCollectionRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(404, e);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(403, e);
+            throw new RestException(400, e);
         } catch (QuadrigaStorageException e) {
             throw new RestException(500, e);
         } catch (Exception e) {
-            throw new RestException(403, e);
+            throw new RestException(400, e);
         }
 
     }
@@ -346,11 +346,11 @@ public class ConceptCollectionRestController {
 
         if (ccName == null || ccName.isEmpty()) {
             String errorMsg = restMessage.getErrorMsg("Please provide concept collection name", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         if (desc == null || desc.isEmpty()) {
             String errorMsg = restMessage.getErrorMsg("Please provide concept collection description", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         logger.debug("XML : " + xml);
         JAXBElement<QuadrigaConceptReply> response1 = null;
@@ -363,18 +363,18 @@ public class ConceptCollectionRestController {
         } catch (JAXBException e) {
             logger.error("Error in unmarshalling", e);
             String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         if (response1 == null) {
             String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         QuadrigaConceptReply qReply = response1.getValue();
         ConceptList conList = qReply.getConceptList();
         List<Concept> conceptList = conList.getConcepts();
         if (conceptList.size() < 1) {
             String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
         collection.setDescription(desc);
@@ -390,8 +390,8 @@ public class ConceptCollectionRestController {
             Concept concept = iter.next();
             logger.debug(concept.toString());
             try {
-                conceptControllerManager.addItems(concept.getName().trim(), concept.getUri().trim(), concept.getPos().trim(),
-                        concept.getDescription().trim(), ccId, user.getUserName());
+                conceptControllerManager.addItems(concept.getName().trim(), concept.getUri().trim(),
+                        concept.getPos().trim(), concept.getDescription().trim(), ccId, user.getUserName());
             } catch (QuadrigaStorageException e) {
                 logger.error("Errors in adding items", e);
                 String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error", request);
@@ -449,15 +449,15 @@ public class ConceptCollectionRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(404, e);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(403, e);
+            throw new RestException(400, e);
         } catch (QuadrigaStorageException e) {
             throw new RestException(500, e);
         } catch (QuadrigaAccessException e) {
             throw new RestException(403, e);
         } catch (Exception e) {
-            throw new RestException(403, e);
+            throw new RestException(400, e);
         }
 
     }

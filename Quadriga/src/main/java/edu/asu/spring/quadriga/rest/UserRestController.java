@@ -12,8 +12,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,9 +42,6 @@ public class UserRestController {
 	
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
-	
-	private static final Logger logger = LoggerFactory
-			.getLogger(DictionaryRestController.class);
 
 	@Autowired
 	private IUserManager userManager;
@@ -83,16 +78,11 @@ public class UserRestController {
 			template.merge(context, writer);
 			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
-			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(404, e);
 		} catch (ParseErrorException e) {
-			
-			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(400, e);
 		} catch (MethodInvocationException e) {
-			
-			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(400, e);
 		}
 	
 	}

@@ -137,14 +137,11 @@ public class DictionaryRestController {
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
 
     }
@@ -180,14 +177,11 @@ public class DictionaryRestController {
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
 
     }
@@ -232,14 +226,11 @@ public class DictionaryRestController {
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
     }
 
@@ -277,11 +268,11 @@ public class DictionaryRestController {
 
         if (dictName == null || dictName.isEmpty()) {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary name", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         if (desc == null || desc.isEmpty()) {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary description", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         logger.debug("XML : " + xml);
         JAXBElement<QuadrigaDictDetailsReply> response1 = null;
@@ -291,21 +282,21 @@ public class DictionaryRestController {
             unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
             InputStream is = new ByteArrayInputStream(xml.getBytes());
             response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
-        } catch (Exception e) {
+        } catch (JAXBException e) {
             logger.error("Error in unmarshalling", e);
             String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         if (response1 == null) {
             String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         QuadrigaDictDetailsReply qReply = response1.getValue();
         DictionaryItemList dictList = qReply.getDictionaryItemsList();
         List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
         if (dictionaryList.size() < 1) {
             String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
         dictionary.setDescription(desc);
@@ -315,14 +306,14 @@ public class DictionaryRestController {
         dictionaryManager.addNewDictionary(dictionary);
         String dictId = dictionaryManager.getDictionaryId(dictName);
 
-        Iterator<DictionaryItem> I = dictionaryList.iterator();
+        Iterator<DictionaryItem> iter = dictionaryList.iterator();
 
-        while (I.hasNext()) {
-            DictionaryItem d = I.next();
+        while (iter.hasNext()) {
+            DictionaryItem dicItem = iter.next();
             try {
-                dictionaryManager.addNewDictionariesItems(dictId, d.getTerm(), d.getUri(), d.getPos(),
+                dictionaryManager.addNewDictionariesItems(dictId, dicItem.getTerm(), dicItem.getUri(), dicItem.getPos(),
                         user.getUserName());
-                dictionaryManager.updateDictionariesItems(dictId, d.getUri(), d.getTerm(), d.getPos());
+                dictionaryManager.updateDictionariesItems(dictId, dicItem.getUri(), dicItem.getTerm(), dicItem.getPos());
             } catch (QuadrigaStorageException e) {
                 logger.error("Errors in adding items", e);
                 String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error", request);
@@ -369,7 +360,7 @@ public class DictionaryRestController {
         IUser user = usermanager.getUser(principal.getName());
         if (xml.equals("")) {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         } else {
 
             logger.debug("XML : " + xml);
@@ -381,29 +372,32 @@ public class DictionaryRestController {
                 unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
                 InputStream is = new ByteArrayInputStream(xml.getBytes());
                 response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
-            } catch (Exception e) {
+            } catch (JAXBException e) {
                 logger.error("Error in unmarshalling", e);
+                String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling", request);
+                return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
             }
             if (response1 == null) {
                 String errorMsg = errorMessageRest.getErrorMsg("Dictionaries XML is not valid", request);
-                return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+                return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
             }
             QuadrigaDictDetailsReply qReply = response1.getValue();
             DictionaryItemList dictList = qReply.getDictionaryItemsList();
             List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
             if (dictionaryList.size() < 1) {
                 String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
-                return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
             }
 
-            Iterator<DictionaryItem> I = dictionaryList.iterator();
+            Iterator<DictionaryItem> iter = dictionaryList.iterator();
 
-            while (I.hasNext()) {
-                DictionaryItem d = I.next();
+            while (iter.hasNext()) {
+                DictionaryItem dicItem = iter.next();
                 try {
-                    dictionaryManager.addNewDictionariesItems(dictionaryID, d.getTerm().trim(), d.getUri().trim(),
-                            d.getPos().trim(), user.getUserName());
-                    dictionaryManager.updateDictionariesItems(dictionaryID, d.getUri(), d.getTerm(), d.getPos());
+                    dictionaryManager.addNewDictionariesItems(dictionaryID, dicItem.getTerm().trim(), dicItem.getUri().trim(),
+                            dicItem.getPos().trim(), user.getUserName());
+                    dictionaryManager.updateDictionariesItems(dictionaryID, dicItem.getUri(), dicItem.getTerm(),
+                            dicItem.getPos());
                 } catch (QuadrigaStorageException e) {
                     logger.error("Errors in adding items", e);
                     String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error", request);

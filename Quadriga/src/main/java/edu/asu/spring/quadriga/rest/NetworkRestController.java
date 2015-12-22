@@ -17,8 +17,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,8 +56,6 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  */
 @Controller
 public class NetworkRestController {
-
-    private static final Logger logger = LoggerFactory.getLogger(NetworkRestController.class);
 
     @Autowired
     private INetworkManager networkManager;
@@ -114,48 +110,45 @@ public class NetworkRestController {
         String workspaceid = request.getParameter("workspaceid");
 
         if (workspaceid == null || workspaceid.isEmpty()) {
-            String errorMsg = errorMessageRest.getErrorMsg("Please provide correct workspace id.");
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            String errorMsg = errorMessageRest
+                    .getErrorMsg("Please provide a workspace id as a part of post parameters");
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
         if (projectid == null || projectid.isEmpty()) {
-            String errorMsg = errorMessageRest.getErrorMsg("Please provide correct workspace id.");
+            String errorMsg = errorMessageRest
+                    .getErrorMsg("No project could be found for the given workspace id " + workspaceid);
             return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
         }
 
         if (networkName == null || networkName.isEmpty()) {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide network name as a part of post parameters");
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
         xml = xml.trim();
         if (xml.isEmpty()) {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 
-        } else {
-            String res = networkManager.storeXMLQStore(xml);
-            if (res.equals("")) {
-                String errorMsg = "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
-                return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
-            }
-
-            networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid,
-                    INetworkManager.NEWNETWORK, networkId, INetworkManager.VERSION_ZERO);
-
-            if (networkId.endsWith(INetworkManager.DSPACEERROR)) {
-                String errorMsg = "Text files don't belong to this workspace.";
-                return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
-            }
-
-            // TODO: Send email to all editors of a workspace
-            // TODO: Get the workspace editors from the workspaceid
-
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.valueOf(accept));
-            httpHeaders.set("networkid", networkId);
-            return new ResponseEntity<String>(res, httpHeaders, HttpStatus.OK);
         }
+
+        String res = networkManager.storeXMLQStore(xml);
+        if (res.equals("")) {
+            String errorMsg = "Please provide correct XML in body of the post request. Qstore system is not accepting your XML";
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+        }
+
+        networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,
+                networkId, INetworkManager.VERSION_ZERO);
+
+        // TODO: Send email to all editors of a workspace
+        // TODO: Get the workspace editors from the workspaceid
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.valueOf(accept));
+        httpHeaders.set("networkid", networkId);
+        return new ResponseEntity<String>(res, httpHeaders, HttpStatus.OK);
 
     }
 
@@ -203,17 +196,11 @@ public class NetworkRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         }
 
     }
@@ -266,17 +253,11 @@ public class NetworkRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
 
     }
@@ -319,17 +300,11 @@ public class NetworkRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
     }
 
@@ -372,17 +347,11 @@ public class NetworkRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
     }
 
@@ -425,17 +394,11 @@ public class NetworkRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
     }
 
@@ -480,17 +443,11 @@ public class NetworkRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
     }
 
@@ -515,17 +472,11 @@ public class NetworkRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
     }
 
@@ -574,17 +525,11 @@ public class NetworkRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(404, e);
         } catch (ParseErrorException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(404);
+            throw new RestException(400, e);
         } catch (MethodInvocationException e) {
-
-            logger.error("Exception:", e);
-            throw new RestException(403);
+            throw new RestException(400, e);
         }
 
     }
@@ -619,7 +564,7 @@ public class NetworkRestController {
 
         if (networkId == null || networkId.isEmpty()) {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide network id.");
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
         INetwork network = null;
@@ -630,55 +575,46 @@ public class NetworkRestController {
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
         } catch (QuadrigaStorageException e) {
-            logger.error("Exception:", e);
-            throw new RestException(500);
+            throw new RestException(500, e);
         }
-        // logger.info("Old name : "+network.getName()+" new name :
-        // "+networkName);
         if (!(network.getStatus().equals(INetworkStatus.REJECTED))) {
             String errorMsg = errorMessageRest.getErrorMsg("The Network doesn't have status : REJECTED");
-            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         } else {
 
             xml = xml.trim();
             if (xml.isEmpty()) {
                 String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
-                return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 
-            } else {
-
-                String res = networkManager.storeXMLQStore(xml);
-                if (res.equals("")) {
-                    String errorMsg = errorMessageRest.getErrorMsg(
-                            "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML");
-                    return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
-                }
-                String networkNameUpdateStatus = "";
-                if (!(networkName == null || networkName.equals(network.getNetworkName()) || networkName.equals(""))) {
-                    networkNameUpdateStatus = networkManager.updateNetworkName(networkId, networkName);
-                    if (!(networkNameUpdateStatus.equals("success"))) {
-                        String errorMsg = errorMessageRest.getErrorMsg("DB Issue, please try after sometime");
-                        return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                }
-
-                // networkManager.archiveNetwork(networkId);
-                editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
-                int latestVersion = networkManager.getLatestVersionOfNetwork(networkId) + 1;
-                networkId = networkManager.storeNetworkDetails(res, user, networkName,
-                        network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK,
-                        networkId, latestVersion);
-
-                if (networkId.endsWith(INetworkManager.DSPACEERROR)) {
-                    String errorMsg = errorMessageRest.getErrorMsg("Text files don't belong to this workspace.");
-                    return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
-                }
-
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setContentType(MediaType.valueOf(accept));
-                httpHeaders.set("networkid", networkId);
-                return new ResponseEntity<String>(res.toString(), httpHeaders, HttpStatus.OK);
             }
+            String res = networkManager.storeXMLQStore(xml);
+            if (res.equals("")) {
+                String errorMsg = errorMessageRest.getErrorMsg(
+                        "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML");
+                return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+            }
+            String networkNameUpdateStatus = "";
+            if (!(networkName == null || networkName.equals(network.getNetworkName()) || networkName.equals(""))) {
+                networkNameUpdateStatus = networkManager.updateNetworkName(networkId, networkName);
+                if (!(networkNameUpdateStatus.equals("success"))) {
+                    String errorMsg = errorMessageRest.getErrorMsg("DB Issue, please try after sometime");
+                    return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+
+            // networkManager.archiveNetwork(networkId);
+            editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
+            int latestVersion = networkManager.getLatestVersionOfNetwork(networkId) + 1;
+            networkId = networkManager.storeNetworkDetails(res, user, networkName,
+                    network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK,
+                    networkId, latestVersion);
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.valueOf(accept));
+            httpHeaders.set("networkid", networkId);
+            return new ResponseEntity<String>(res.toString(), httpHeaders, HttpStatus.OK);
+
         }
     }
 
