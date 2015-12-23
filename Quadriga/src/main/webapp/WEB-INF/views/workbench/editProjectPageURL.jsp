@@ -4,9 +4,22 @@
 <!-- Content -->
 <script>
 	$(document).ready(function() {
+		var oldUnixName = $("#unixName").val();
+		$("#editProject").prop("disabled",true);
+		$("#editProject").css("background-color","lightgray");
+		
 		$("#unixName").keyup(function(event) {
 			var keyedInput = $("#unixName").val();
 			$("#UnixURL").text('${unixnameurl}' + keyedInput);
+			
+			if(keyedInput != oldUnixName) {
+				$("#editProject").prop("disabled",false);
+				$("#editProject").css("background-color","rgb(192, 192, 192)");
+			}
+			else {
+				$("#editProject").prop("disabled",true);
+				$("#editProject").css("background-color","lightgray");
+			}
 		});
 		$("#dialog-confirm").dialog({
 			autoOpen : false,
