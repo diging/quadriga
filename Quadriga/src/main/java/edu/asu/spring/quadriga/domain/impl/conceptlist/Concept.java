@@ -46,5 +46,10 @@ public class Concept {
 		this.uri = uri;
 	}
 	
+    @Override
+    public String toString() {
+        return "Concept [arg Name :" + name + ", arg Pos :" + pos + ", arg descrtiption :" + description + ", arg URI :" + uri + "]";
+    }
+	
 	
 }

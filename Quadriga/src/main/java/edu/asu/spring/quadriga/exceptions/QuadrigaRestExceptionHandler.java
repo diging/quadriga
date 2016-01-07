@@ -34,7 +34,7 @@ public class QuadrigaRestExceptionHandler {
 	@ExceptionHandler(RestException.class)
 	@ResponseBody
 	public String handleRestException(RestException ex, HttpServletRequest req, HttpServletResponse res) {
-		
+        logger.error("Exception:", ex);
 		VelocityEngine engine=null;
 		Template template = null;
 		StringWriter sw = new StringWriter();
@@ -51,6 +51,7 @@ public class QuadrigaRestExceptionHandler {
 			context.put("status", "ERROR");
 			context.put("ErrorCode",errorcode);
 			context.put("message",errorProperties.getProperty("error_message_"+errorcode));
+			context.put("exception",ex.getMessage());
 			template.merge(context, sw);
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {
