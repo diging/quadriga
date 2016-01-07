@@ -27,7 +27,7 @@
 		<conceptpower.url>https://chps.asu.edu/conceptpower</conceptpower.url>
 		<qstore.admin.username>admin</qstore.admin.username>
 		<qstore.admin.password>admin</qstore.admin.password>
-		<pullrequest></pullrequest>
+		<pullrequest> </pullrequest>
 	</properties>
 
 	<dependencies>
