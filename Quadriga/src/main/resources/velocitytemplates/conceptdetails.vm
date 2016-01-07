@@ -4,10 +4,10 @@
 
 #foreach ($concept in $list)
 <Quadriga:concept>
-	<Quadriga:pos>$concept.pos</Quadriga:pos>
-	<Quadriga:name>$concept.lemma</Quadriga:name>
-	<Quadriga:description><![CDATA[$concept.description]]></Quadriga:description>
-	<Quadriga:uri>$concept.id</Quadriga:uri>
+	<Quadriga:pos>$concept.concept.pos</Quadriga:pos>
+	<Quadriga:name>$concept.concept.lemma</Quadriga:name>
+	<Quadriga:description><![CDATA[$concept.concept.description]]></Quadriga:description>
+	<Quadriga:uri>$concept.concept.conceptId</Quadriga:uri>
 </Quadriga:concept> 	
 #end
 </Quadriga:conceptList>
