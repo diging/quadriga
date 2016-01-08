@@ -254,6 +254,10 @@
 		margin-top: 15px;
 	}
 
+	input[type=button]:disabled, button:disabled {
+		background-color: #778899;
+		color: #FFFFFF;
+	}
 		.button:hover, input.ui-button:hover
 		{
 			background: #ebe3b2;
