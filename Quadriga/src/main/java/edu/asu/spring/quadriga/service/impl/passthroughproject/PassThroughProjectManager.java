@@ -32,7 +32,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IListExternalWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IExternalWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Service
@@ -48,7 +48,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     private INetworkManager networkManager;
 
     @Autowired
-    private IListExternalWSManager externalWSManager;
+    private IExternalWSManager externalWSManager;
 
     @Autowired
     private IPassThroughProjectDAO projectDao;

@@ -88,7 +88,7 @@ import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementF
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IListExternalWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IExternalWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 

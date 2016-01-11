@@ -21,10 +21,10 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.IListExternalWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IExternalWSManager;
 
 @Service
-public class ListExternalWSManager implements IListExternalWSManager {
+public class ExternalWSManager implements IExternalWSManager {
 
     @Autowired
     private IListExternalWsDAO externalWorkspaceDAO;

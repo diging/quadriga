@@ -37,7 +37,6 @@ public class ListExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements 
             query.setParameter("externalWorkspaceid", workspaceId);
             externalWorkspaceid = query.list();
         } catch (HibernateException e) {
-            logger.error("Retrieve external workspace details method :", e);
             throw new QuadrigaStorageException(e);
         }
         if (CollectionUtils.isNotEmpty(externalWorkspaceid)) {
@@ -49,7 +48,6 @@ public class ListExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements 
 
     @Override
     public String getInternalWorkspaceId(String externalWorkspaceid) {
-        // TODO Auto-generated method stub
 
         Query query = sessionFactory.getCurrentSession()
                 .getNamedQuery("ExternalWorkspaceDTO.getWorkspaceIdFromExternalWorkspaceId");
