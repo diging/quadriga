@@ -147,9 +147,9 @@ public class ConceptCollectionRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (QuadrigaStorageException e) {
             throw new RestException(500, e);
         } catch (Exception e) {
@@ -189,7 +189,7 @@ public class ConceptCollectionRestController {
             @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST, paramIndex = 1, userRole = {
                     RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
-    public ResponseEntity<String> addConceptsToConceptColleciton(
+    public ResponseEntity<String> addConceptsToConceptCollection(
             @PathVariable("conceptCollectionID") String conceptCollectionId, HttpServletRequest request,
             HttpServletResponse response, @RequestBody String xml, @RequestHeader("Accept") String accept,
             Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException,
@@ -286,9 +286,9 @@ public class ConceptCollectionRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (QuadrigaStorageException e) {
             throw new RestException(500, e);
         } catch (Exception e) {
@@ -365,10 +365,7 @@ public class ConceptCollectionRestController {
             String errorMsg = restMessage.getErrorMsg("Error in unmarshalling", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        if (response1 == null) {
-            String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-        }
+        
         QuadrigaConceptReply qReply = response1.getValue();
         ConceptList conList = qReply.getConceptList();
         List<Concept> conceptList = conList.getConcepts();
@@ -449,9 +446,9 @@ public class ConceptCollectionRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (QuadrigaStorageException e) {
             throw new RestException(500, e);
         } catch (QuadrigaAccessException e) {

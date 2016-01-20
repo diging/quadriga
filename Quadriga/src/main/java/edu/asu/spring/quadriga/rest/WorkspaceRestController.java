@@ -116,9 +116,9 @@ public class WorkspaceRestController {
 		} catch (ResourceNotFoundException e) {
 			throw new RestException(404, e);
 		} catch (ParseErrorException e) {
-			throw new RestException(400, e);
+			throw new RestException(500, e);
 		} catch (MethodInvocationException e) {
-			throw new RestException(400, e);
+			throw new RestException(500, e);
 		} catch (QuadrigaStorageException e) {
 			throw new RestException(500, e);
 		} catch (Exception e) {
@@ -164,9 +164,9 @@ public class WorkspaceRestController {
 		} catch (ResourceNotFoundException e) {
 			throw new RestException(404, e);
 		} catch (ParseErrorException e) {
-			throw new RestException(400, e);
+			throw new RestException(500, e);
 		} catch (MethodInvocationException e) {
-			throw new RestException(400, e);
+			throw new RestException(500, e);
 		} catch (QuadrigaStorageException e) {
 			throw new RestException(500, e);
 		} catch (Exception e) {
@@ -209,10 +209,7 @@ public class WorkspaceRestController {
 			String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling",request);
 			return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 		}
-		if(response1 == null){
-			String errorMsg = errorMessageRest.getErrorMsg("Workspace XML is not valid");
-			return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-		}
+		
 		QuadrigaWorkspaceDetailsReply qReply= response1.getValue();
 		WorkspacesList workList = qReply.getWorkspacesList();
 		List<Workspace> workspaceList = workList.getWorkspaceList();

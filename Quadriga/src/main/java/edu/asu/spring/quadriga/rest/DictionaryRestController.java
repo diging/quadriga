@@ -139,9 +139,9 @@ public class DictionaryRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         }
 
     }
@@ -179,9 +179,9 @@ public class DictionaryRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         }
 
     }
@@ -228,9 +228,9 @@ public class DictionaryRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         }
     }
 
@@ -287,10 +287,7 @@ public class DictionaryRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        if (response1 == null) {
-            String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-        }
+        
         QuadrigaDictDetailsReply qReply = response1.getValue();
         DictionaryItemList dictList = qReply.getDictionaryItemsList();
         List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
@@ -378,10 +375,7 @@ public class DictionaryRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        if (response1 == null) {
-            String errorMsg = errorMessageRest.getErrorMsg("Dictionaries XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-        }
+        
         QuadrigaDictDetailsReply qReply = response1.getValue();
         DictionaryItemList dictList = qReply.getDictionaryItemsList();
         List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();

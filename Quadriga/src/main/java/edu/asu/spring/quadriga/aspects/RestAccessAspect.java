@@ -62,17 +62,17 @@ public class RestAccessAspect {
         IAuthorization authorization;
 
         haveAccess = true;
-        try {
-            // retrieve the logged in User name
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            userName = auth.getName();
-            // Loop through all the access policies specified
-            ElementAccessPolicy[] policies = checks.value();
 
-            for (ElementAccessPolicy policy : policies) {
-                // retrieve the authorization object based on the type
-                authorization = authorizationManager.getAuthorizationObject(policy.type());
+        // retrieve the logged in User name
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        userName = auth.getName();
+        // Loop through all the access policies specified
+        ElementAccessPolicy[] policies = checks.value();
 
+        for (ElementAccessPolicy policy : policies) {
+            // retrieve the authorization object based on the type
+            authorization = authorizationManager.getAuthorizationObject(policy.type());
+            try {
                 // calling the object
                 if (policy.paramIndex() > 0) {
                     accessObjectId = pjp.getArgs()[policy.paramIndex() - 1].toString();
@@ -82,13 +82,13 @@ public class RestAccessAspect {
                 } else {
                     haveAccess = authorization.chkAuthorizationByRole(userName, policy.userRole());
                 }
-
-                if (haveAccess) {
-                    break;
-                }
+            } catch (QuadrigaAccessException e) {
+                throw new RestException(404);
             }
-        } catch (QuadrigaAccessException e) {
-            throw new RestException(403);
+
+            if (haveAccess) {
+                break;
+            }
         }
 
         if (!haveAccess) {

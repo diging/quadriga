@@ -50,7 +50,7 @@ public class DictionaryAuthorization implements IAuthorization {
                 .getDictionaryDetails(accessObjectId);
 
         if(dictionary == null){
-        	return false;
+            throw new QuadrigaAccessException();
         }
         // check if the user is a dictionary owner
         String dictionaryOwner = dictionary.getOwner().getUserName();

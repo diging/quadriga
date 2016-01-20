@@ -80,9 +80,9 @@ public class UserRestController {
 		} catch (ResourceNotFoundException e) {
 			throw new RestException(404, e);
 		} catch (ParseErrorException e) {
-			throw new RestException(400, e);
+			throw new RestException(500, e);
 		} catch (MethodInvocationException e) {
-			throw new RestException(400, e);
+			throw new RestException(500, e);
 		}
 	
 	}
