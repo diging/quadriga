@@ -149,7 +149,8 @@
 					href="http://flickr.com/people/freakyman/">freakyman</a> + <a
 					href="http://iconify.it">Iconify.it</a> | Design: <a
 					href="http://html5up.net/">HTML5 UP</a>
-				<div> Version: ${buildNumber}</div>
+				<div> <c:set var="PR" value="${pullrequest}" />
+			    Version: ${buildNumber}<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if> </div>
             
 			</div>
 			<!-- /Copyright -->
