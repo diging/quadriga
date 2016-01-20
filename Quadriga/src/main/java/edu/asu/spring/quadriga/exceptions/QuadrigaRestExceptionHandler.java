@@ -16,10 +16,11 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 
@@ -32,8 +33,7 @@ public class QuadrigaRestExceptionHandler {
 	private Properties errorProperties;
 	@RequestMapping(produces="application/xml")
 	@ExceptionHandler(RestException.class)
-	@ResponseBody
-	public String handleRestException(RestException ex, HttpServletRequest req, HttpServletResponse res) {
+	public ResponseEntity<String> handleRestException(RestException ex, HttpServletRequest req, HttpServletResponse res) {
         logger.error("Exception:", ex);
 		VelocityEngine engine=null;
 		Template template = null;
@@ -43,7 +43,7 @@ public class QuadrigaRestExceptionHandler {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 			if(errorcode==0)
-				errorcode=406;
+				errorcode=500;
 			res.setStatus(errorcode);
 			template = engine
 					.getTemplate("velocitytemplates/resterror.vm");
@@ -53,7 +53,7 @@ public class QuadrigaRestExceptionHandler {
 			context.put("message",errorProperties.getProperty("error_message_"+errorcode));
 			context.put("exception",ex.getMessage());
 			template.merge(context, sw);
-			return sw.toString();
+			return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
 			logger.error("Exception:", e);
 		} catch (ParseErrorException e) {
@@ -64,7 +64,7 @@ public class QuadrigaRestExceptionHandler {
 		catch (Exception e) {
 			logger.error("Exception:", e);
 		}
-		return sw.toString();
+		return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
 	}
 
 

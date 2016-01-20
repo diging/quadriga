@@ -116,18 +116,19 @@ public class DictionaryRestController {
      * @param userId
      * @param model
      * @return
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/dictionaries", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listDictionaries(ModelMap model, Principal principal, HttpServletRequest req)
-            throws Exception {
+            throws RestException {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<IDictionary> dictionaryList = null;
-        VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+        VelocityEngine engine = null;
 
         Template template = null;
 
         try {
+            engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             dictionaryList = dictionaryManager.getDictionariesList(user.getUsername());
             template = engine.getTemplate("velocitytemplates/dictionarylist.vm");
@@ -139,9 +140,11 @@ public class DictionaryRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
+        } catch (Exception e) {
+            throw new RestException(500, e);
         }
 
     }
@@ -156,18 +159,19 @@ public class DictionaryRestController {
      * @param userId
      * @param model
      * @return
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/workspace/{workspaceId}/dictionaries", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listWorkspaceDictionaries(@PathVariable("workspaceId") String workspaceId,
-            ModelMap model, Principal principal, HttpServletRequest req) throws Exception {
+            ModelMap model, Principal principal, HttpServletRequest req) throws RestException {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<IWorkspaceDictionary> dictionaryList = null;
-        VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+        VelocityEngine engine = null;
 
         Template template = null;
 
         try {
+            engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             dictionaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, user.getUsername());
             template = engine.getTemplate("velocitytemplates/workspacedictionarylist.vm");
@@ -179,9 +183,11 @@ public class DictionaryRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
+        } catch (Exception e) {
+            throw new RestException(500, e);
         }
 
     }
@@ -195,20 +201,21 @@ public class DictionaryRestController {
      * @param dictionaryId
      * @param model
      * @return
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/dictionaryDetails/{dictionaryId}", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listDictionaryItems(@PathVariable("dictionaryId") String dictionaryId, ModelMap model,
-            HttpServletRequest req) throws Exception {
+            HttpServletRequest req) throws RestException {
 
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<IDictionaryItems> dictionaryItemsList = null;
-        VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+        VelocityEngine engine = null;
 
         // TODO details not getting retrieved
         Template template = null;
 
         try {
+            engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             logger.debug("Getting dictionary items list for dictionary id : " + dictionaryId);
             dictionaryItemsList = dictionaryManager.getDictionariesItems(dictionaryId, user.getUsername());
@@ -228,9 +235,11 @@ public class DictionaryRestController {
         } catch (ResourceNotFoundException e) {
             throw new RestException(404, e);
         } catch (ParseErrorException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
         } catch (MethodInvocationException e) {
-            throw new RestException(400, e);
+            throw new RestException(500, e);
+        } catch (Exception e) {
+            throw new RestException(500, e);
         }
     }
 
@@ -247,7 +256,6 @@ public class DictionaryRestController {
      * @throws RestException
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
-     * @throws Exception
      */
     @RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST, paramIndex = 1, userRole = {
             RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
@@ -287,10 +295,7 @@ public class DictionaryRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        if (response1 == null) {
-            String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-        }
+
         QuadrigaDictDetailsReply qReply = response1.getValue();
         DictionaryItemList dictList = qReply.getDictionaryItemsList();
         List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
@@ -378,10 +383,7 @@ public class DictionaryRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        if (response1 == null) {
-            String errorMsg = errorMessageRest.getErrorMsg("Dictionaries XML is not valid", request);
-            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-        }
+
         QuadrigaDictDetailsReply qReply = response1.getValue();
         DictionaryItemList dictList = qReply.getDictionaryItemsList();
         List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();

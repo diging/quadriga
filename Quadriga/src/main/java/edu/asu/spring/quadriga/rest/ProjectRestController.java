@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -59,11 +60,12 @@ public class ProjectRestController {
 	 */
 	@RequestMapping(value = "rest/projects", method = RequestMethod.GET, produces = "application/xml")
 	public ResponseEntity<String> listProjects(ModelMap model, Principal principal, HttpServletRequest req)
-			throws Exception {
+			throws RestException {
 		List<IProject> projectList = null;
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		VelocityEngine engine = null;
 		Template template = null;
 		try {
+		    engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 			String userId = principal.getName();
 			projectList = projectManager.getProjectList(userId);
@@ -77,9 +79,13 @@ public class ProjectRestController {
 		} catch (ResourceNotFoundException e) {
 			throw new RestException(404, e);
 		} catch (ParseErrorException e) {
-			throw new RestException(400, e);
+			throw new RestException(500, e);
 		} catch (MethodInvocationException e) {
-			throw new RestException(400, e);
-		}
+			throw new RestException(500, e);
+		} catch (QuadrigaStorageException e) {
+		    throw new RestException(500, e);
+        } catch (Exception e) {
+            throw new RestException(500, e);
+        }
 	}
 }
