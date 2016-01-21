@@ -15,7 +15,6 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -34,34 +33,11 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @Controller
 public class WebsiteProjectController {
 	
-	//public static String projectid = "";
-	
 	@Autowired 
-	IRetrieveProjectManager projectManager;
+	private IRetrieveProjectManager projectManager;
 	
 	@Autowired
-	INetworkManager networkmanager;
-	
-	@Autowired
-	@Qualifier("qStoreURL")
-	private String qStoreURL;
-
-	@Autowired
-	@Qualifier("qStoreURL_Add")
-	private String qStoreURL_Add;
-
-	@Autowired
-	@Qualifier("qStoreURL_Get")
-	private String qStoreURL_Get;
-
-
-	/*
-	 * Prepare the QStore GET URL
-	 */
-	public String getQStoreGetURL() {
-		return qStoreURL+""+qStoreURL_Get;
-	}
-
+	private INetworkManager networkmanager;
 	
 	public IRetrieveProjectManager getProjectManager() {
 		return projectManager;
@@ -72,8 +48,7 @@ public class WebsiteProjectController {
 	}
 	
 	private IProject getProjectDetails(String name) throws QuadrigaStorageException{
-		IProject project = projectManager.getProjectDetailsByUnixName(name);
-		return project;
+		return projectManager.getProjectDetailsByUnixName(name);
 	}
 
 	
@@ -97,32 +72,29 @@ public class WebsiteProjectController {
 		}
 		
 		IProject project = getProjectDetails(unixName);
-		//IProject project = projectManager.getProjectDetailsByUnixName(unixName);
-		//String projectid = project.getInternalid();
 		
-		if(project!=null){
-			if(user == null){
-				if(projectManager.getPublicProjectWebsiteAccessibility(unixName)){
-					model.addAttribute("project", project);
-					return "sites/website";
-				}
-				else
-					return "forbidden";
+		if (project == null)
+		    return "forbidden";
+		
+		if(user == null) {
+			if(projectManager.getPublicProjectWebsiteAccessibility(unixName)){
+				model.addAttribute("project", project);
+				return "sites/website";
 			}
-			if(user!=null){
-				if(projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
-						|| projectManager.getPublicProjectWebsiteAccessibility(unixName)){
-					model.addAttribute("project", project);
-					return "sites/website";
-				}
-				else
-					return "forbidden";
+			else {
+				return "forbidden";
 			}
 		}
-
-		return "forbidden";
+	
 		
-		
+		if(projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
+				|| projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
+			model.addAttribute("project", project);
+			return "sites/website";
+		}
+		else {
+			return "forbidden";	
+		}
 	}
 	
 	/**
