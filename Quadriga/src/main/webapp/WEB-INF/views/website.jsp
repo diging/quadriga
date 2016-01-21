@@ -6,111 +6,53 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
-<script type="text/javascript">
 
-$(function() {
-	$("input[type=submit]").button().click(function(event) {
-	});
-	
-	$("input[type=button]").button().click(function(event) {
-	});
-});
-
-$(document).ready(function() {
-	activeTable = $('.dataTable').dataTable({
-		"bJQueryUI" : true,
-		"sPaginationType" : "full_numbers",
-		"bAutoWidth" : false
-	});
-	
-	$("form input:checkbox").prop("checked",false);
-});
-
-$(function(){
-$("input[name='selectAll']").button().click(function(){
-		
-		$("form input:checkbox").prop("checked",true);
-		event.preventDefault();
-		return;
-	});
-	
-$("input[name='deselectAll']").button().click(function(){
-	
-	$("form input:checkbox").prop("checked",false);
-	event.preventDefault();
-	return;
-	
-});
-
-
-});
-
-</script> 
-
-<head>
-<style type="text/css">
-h1{
-	font-size:50x;
-}
-
-</style>
-</head>
 
 
 
 <c:if test="${not empty project}">
-<header><h2> Details of the project </h2></header>
-<form:form method="GET">
-
-<table>
-	<tr>
-		<td>
-			<h3>Project Name</h3>
-		</td>
-		<td><h3>${project.projectName}</h3></td>
-	</tr>	
-	<tr>
-		<td>
-			Description:
-		</td>
-		<td>${project.description}</td>
-	</tr>
-	<tr>
-		<td>
-			Owner:
-		</td>
-		<td>${project.owner.name}</td>
-	</tr>	
-	<tr>
-		<td>
-			Collaborators:
-		</td>
-		<td>
-			<section>
-				<c:if test="${not empty project.projectCollaborators}">
-					<ul class="collaborators">
-						<c:forEach var="projectcollaborator"
-							items="${project.projectCollaborators}">
-							<li><c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
-							</li>
-						</c:forEach>
-					</ul>
-				</c:if>
-			</section>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="button" onClick="location.href='${pageContext.servletContext.contextPath}/sites/${project.unixName}/browsenetworks'" value="Browse Networks"/> 
-		</td>
-		<td>
-			<input type="submit" value="Search Networks"/> 
-		</td>
-	</tr>
-</table>
-
+<div class="jumbotron">
+	<h1>${project.projectName}</h1>
+	<p>
+	${project.description}
+	</p>
+	<p  class="smaller">
+	<i class="fa fa-user"></i> ${project.owner.name}
+	</p>
+	<p  class="smaller">
+	<c:if test="${not empty project.projectCollaborators}">
+	   <i class="fa fa-users"></i>
+       <c:forEach var="projectcollaborator"
+                items="${project.projectCollaborators}" varStatus="loop">
+        <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out><c:if test="${!loop.last}">, </c:if>
+        </c:forEach>
+        </ul>
+    </c:if>
 	
-</form:form> 
+	</p>
+	<p class="smaller">
+	<i class="fa fa-commenting-o"></i> When citing this data set please use the following URL: <i>${project_baseurl}${pageContext.servletContext.contextPath}/sites/${project.unixName}</i>.
+	</p>
+</div>
+
+<div class="row">
+  <div class="col-lg-4">
+    <h2>Browse the networks of this project!</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/browsenetworks" role="button">Browse</a></p>
+  </div>
+  <div class="col-lg-4">
+    <h2>Explore the combined graph!</h2>
+    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+    <p><a class="btn btn-primary" href="#" role="button">Explore</a></p>
+ </div>
+  <div class="col-lg-4">
+    <h2>Search the graph!</h2>
+    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
+    <p><a class="btn btn-primary" href="#" role="button">Search</a></p>
+  </div>
+</div>
+
 </c:if>
 
 

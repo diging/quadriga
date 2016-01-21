@@ -15,7 +15,8 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -30,37 +31,18 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
-
+@PropertySource(value = "classpath:/user.properties")
 @Controller
 public class WebsiteProjectController {
 	
-	//public static String projectid = "";
-	
 	@Autowired 
-	IRetrieveProjectManager projectManager;
+	private IRetrieveProjectManager projectManager;
 	
 	@Autowired
-	INetworkManager networkmanager;
+	private INetworkManager networkmanager;
 	
 	@Autowired
-	@Qualifier("qStoreURL")
-	private String qStoreURL;
-
-	@Autowired
-	@Qualifier("qStoreURL_Add")
-	private String qStoreURL_Add;
-
-	@Autowired
-	@Qualifier("qStoreURL_Get")
-	private String qStoreURL_Get;
-
-
-	/*
-	 * Prepare the QStore GET URL
-	 */
-	public String getQStoreGetURL() {
-		return qStoreURL+""+qStoreURL_Get;
-	}
+    private Environment env;
 
 	
 	public IRetrieveProjectManager getProjectManager() {
@@ -72,8 +54,7 @@ public class WebsiteProjectController {
 	}
 	
 	private IProject getProjectDetails(String name) throws QuadrigaStorageException{
-		IProject project = projectManager.getProjectDetailsByUnixName(name);
-		return project;
+		return projectManager.getProjectDetailsByUnixName(name);
 	}
 
 	
@@ -97,32 +78,31 @@ public class WebsiteProjectController {
 		}
 		
 		IProject project = getProjectDetails(unixName);
-		//IProject project = projectManager.getProjectDetailsByUnixName(unixName);
-		//String projectid = project.getInternalid();
 		
-		if(project!=null){
-			if(user == null){
-				if(projectManager.getPublicProjectWebsiteAccessibility(unixName)){
-					model.addAttribute("project", project);
-					return "sites/website";
-				}
-				else
-					return "forbidden";
+		model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
+		
+		if (project == null)
+		    return "forbidden";
+		
+		if(user == null) {
+			if(projectManager.getPublicProjectWebsiteAccessibility(unixName)){
+				model.addAttribute("project", project);
+				return "sites/website";
 			}
-			if(user!=null){
-				if(projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
-						|| projectManager.getPublicProjectWebsiteAccessibility(unixName)){
-					model.addAttribute("project", project);
-					return "sites/website";
-				}
-				else
-					return "forbidden";
+			else {
+				return "forbidden";
 			}
 		}
-
-		return "forbidden";
+	
 		
-		
+		if(projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
+				|| projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
+			model.addAttribute("project", project);
+			return "sites/website";
+		}
+		else {
+			return "forbidden";	
+		}
 	}
 	
 	/**
@@ -139,7 +119,6 @@ public class WebsiteProjectController {
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}/browsenetworks", method=RequestMethod.GET)
 	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName,Model model, Principal principal) throws QuadrigaStorageException{
-		System.out.println("browse");
 		IProject project = getProjectDetails(unixName);
 		String projectid = project.getProjectId();
 		List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
@@ -163,12 +142,15 @@ public class WebsiteProjectController {
 	 * @throws QuadrigaStorageException		Database storage exception thrown
 	 * @throws JAXBException				JAXB exception while getting the JSON
 	 */
-	@RequestMapping(value = "sites/networks/visualize/{networkId}", method = RequestMethod.GET)
-	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+	@RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
+	public String visualizeNetworks(@PathVariable("projectUnixName") String unixName, @PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		INetwork network = networkmanager.getNetwork(networkId);
 		if(network==null){
 			return "auth/accessissue";
 		}
+		IProject project = getProjectDetails(unixName);
+		model.addAttribute("project", project);
+		
 		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);

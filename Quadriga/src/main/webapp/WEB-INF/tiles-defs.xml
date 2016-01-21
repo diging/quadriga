@@ -45,6 +45,15 @@
 		<put-attribute name="right-sub-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
+	
+	<definition name="base.definition.public"
+        template="/WEB-INF/tiles/layouts/skeleton_public.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="navigation"
+            value="/WEB-INF/views/public/navbar.jsp" />
+        <put-attribute name="footer" value="/tiles/credits.jsp" />
+        <put-attribute name="currentPage" value="home" />
+    </definition>
 
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.nonav">
@@ -671,11 +680,13 @@
 			value="/WEB-INF/views/networks/networkerror.jsp" />
 	</definition> -->
 	<!-- external website -->
-	<definition name="sites/website" extends="base.definition">
+	<definition name="sites/website" extends="base.definition.public">
+	   <put-attribute name="currentPage" value="home" />
 		<put-attribute name="content" value="/WEB-INF/views/website.jsp"/>
 	</definition>
 	
-	<definition name="sites/browseNetworks" extends="base.definition">
+	<definition name="sites/browseNetworks" extends="base.definition.public">
+	   <put-attribute name="currentPage" value="networks" />
 		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp"/>
 	</definition>
 	
