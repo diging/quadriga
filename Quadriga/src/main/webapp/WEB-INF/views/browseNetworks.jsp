@@ -16,7 +16,7 @@
 			<table class="table table-striped networks">
 				<thead>
 					<tr>
-						<th>Name</th>
+						<th width="80%">Name</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -26,7 +26,7 @@
 						<tr>
 							<td>
 								${network.networkName}</td>
-							<td><a href='${pageContext.servletContext.contextPath}/sites/networks/visualize/${network.networkId}' >Visualize</a></td>
+							<td><a href='${pageContext.servletContext.contextPath}/sites/${project.unixName}/networks/${network.networkId}' >Visualize</a></td>
 						</tr>
 					</c:forEach>
 				</tbody>
