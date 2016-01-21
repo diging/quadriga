@@ -119,7 +119,6 @@ public class WebsiteProjectController {
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}/browsenetworks", method=RequestMethod.GET)
 	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName,Model model, Principal principal) throws QuadrigaStorageException{
-		System.out.println("browse");
 		IProject project = getProjectDetails(unixName);
 		String projectid = project.getProjectId();
 		List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
@@ -143,12 +142,15 @@ public class WebsiteProjectController {
 	 * @throws QuadrigaStorageException		Database storage exception thrown
 	 * @throws JAXBException				JAXB exception while getting the JSON
 	 */
-	@RequestMapping(value = "sites/networks/visualize/{networkId}", method = RequestMethod.GET)
-	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+	@RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
+	public String visualizeNetworks(@PathVariable("projectUnixName") String unixName, @PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		INetwork network = networkmanager.getNetwork(networkId);
 		if(network==null){
 			return "auth/accessissue";
 		}
+		IProject project = getProjectDetails(unixName);
+		model.addAttribute("project", project);
+		
 		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
