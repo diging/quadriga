@@ -15,6 +15,8 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -29,7 +31,7 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
-
+@PropertySource(value = "classpath:/user.properties")
 @Controller
 public class WebsiteProjectController {
 	
@@ -38,6 +40,10 @@ public class WebsiteProjectController {
 	
 	@Autowired
 	private INetworkManager networkmanager;
+	
+	@Autowired
+    private Environment env;
+
 	
 	public IRetrieveProjectManager getProjectManager() {
 		return projectManager;
@@ -72,6 +78,8 @@ public class WebsiteProjectController {
 		}
 		
 		IProject project = getProjectDetails(unixName);
+		
+		model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 		
 		if (project == null)
 		    return "forbidden";
