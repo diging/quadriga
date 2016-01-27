@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
@@ -59,7 +60,7 @@ import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 @Controller
 public class WorkspaceRestController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ConceptCollectionRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WorkspaceRestController.class);
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
 	@Autowired
@@ -113,22 +114,15 @@ public class WorkspaceRestController {
 			template.merge(context, writer);
 			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
-			logger.error("Exception:", e);
-			throw new RestException(e);
+			throw new RestException(404, e);
 		} catch (ParseErrorException e) {
-
-			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(500, e);
 		} catch (MethodInvocationException e) {
-
-			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(500, e);
 		} catch (QuadrigaStorageException e) {
-			logger.error("Exception:", e);
-			throw new RestException(500);
+			throw new RestException(500, e);
 		} catch (Exception e) {
-			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(500, e);
 		}
 	}
 	/**
@@ -168,22 +162,15 @@ public class WorkspaceRestController {
 			template.merge(context, writer);
 			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
-			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(404, e);
 		} catch (ParseErrorException e) {
-
-			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(500, e);
 		} catch (MethodInvocationException e) {
-
-			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(500, e);
 		} catch (QuadrigaStorageException e) {
-			logger.error("Exception:", e);
-			throw new RestException(500);
+			throw new RestException(500, e);
 		} catch (Exception e) {
-			logger.error("Exception:", e);
-			throw new RestException(403);
+			throw new RestException(500, e);
 		}
 	}
 	
@@ -217,21 +204,18 @@ public class WorkspaceRestController {
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(xml.getBytes());
 			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaWorkspaceDetailsReply.class);
-		}catch(Exception e ){
+		}catch(JAXBException e ){
 			logger.error("Error in unmarshalling",e);
-			String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
+			String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling",request);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 		}
-		if(response1 == null){
-			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid");
-			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
-		}
+		
 		QuadrigaWorkspaceDetailsReply qReply= response1.getValue();
-		WorkspacesList w1 = qReply.getWorkspacesList();
-		List<Workspace> workspaceList = w1.getWorkspaceList();
+		WorkspacesList workList = qReply.getWorkspacesList();
+		List<Workspace> workspaceList = workList.getWorkspaceList();
 		if(workspaceList.size()<1){
 			String errorMsg = errorMessageRest.getErrorMsg("Workspace XML is not valid",request);
-			return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 		}
 		IWorkSpace workspaceNew = workspaceFactory.createWorkspaceObject();
 		for(Workspace workspace : workspaceList){

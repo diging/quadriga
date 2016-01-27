@@ -12,8 +12,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -38,9 +37,6 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Controller
 public class ProjectRestController {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(ProjectRestController.class);
 
 	@Autowired
 	IUserManager usermanager;
@@ -64,11 +60,12 @@ public class ProjectRestController {
 	 */
 	@RequestMapping(value = "rest/projects", method = RequestMethod.GET, produces = "application/xml")
 	public ResponseEntity<String> listProjects(ModelMap model, Principal principal, HttpServletRequest req)
-			throws Exception {
+			throws RestException {
 		List<IProject> projectList = null;
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		VelocityEngine engine = null;
 		Template template = null;
 		try {
+		    engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 			String userId = principal.getName();
 			projectList = projectManager.getProjectList(userId);
@@ -80,14 +77,15 @@ public class ProjectRestController {
 			template.merge(context, writer);
 			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
-			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(404, e);
 		} catch (ParseErrorException e) {
-			logger.error("Exception:", e);
-			throw new RestException(404);
+			throw new RestException(500, e);
 		} catch (MethodInvocationException e) {
-			logger.error("Exception:", e);
-			throw new RestException(403);
-		}
+			throw new RestException(500, e);
+		} catch (QuadrigaStorageException e) {
+		    throw new RestException(500, e);
+        } catch (Exception e) {
+            throw new RestException(500, e);
+        }
 	}
 }
