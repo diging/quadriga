@@ -274,7 +274,7 @@
 	}
 
 	input[type=button]:disabled, input[type=submit]:disabled {
-		background-color: #778899;
+		background-color: #d3d3d3;
 		color: #FFFFFF;
 	}
 		.button:hover, input.ui-button:hover
