@@ -80,9 +80,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformer;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -111,7 +111,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     IRestVelocityFactory restVelocityFactory;
 
     @Autowired
-    private ID3NetworkManager d3NetworkManager;
+    private INetworkTransformer d3NetworkManager;
 
     @Autowired
     IConceptCollectionManager conceptCollectionManager;
@@ -182,34 +182,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     public String getQStoreGetPOSTURL() {
         return qStoreURL + qStoreURL_Get_POST;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
-    public INetworkJSon getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException {
-
-        INetworkJSon networkJSon = null;
-
-        List<INetworkNodeInfo> networkTopNodesList = null;
-
-        try {
-            networkTopNodesList = getNetworkTopNodes(networkId);
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while getting network top nodes", e);
-            return null;
-        }
-
-        if (jqueryType.equals(INetworkManager.D3JQUERY)) {
-            networkJSon = d3NetworkManager.parseNetworkForD3Jquery(networkTopNodesList);
-        } 
-
-        return networkJSon;
     }
 
     /**
@@ -980,35 +952,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             logger.error("DB Error while fetching project, Workspace and network details", e);
         }
         return core.toString(SUCCESS);
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
-    public INetworkJSon getJsonForOldNetworks(String networkId, String jqueryType, String versionID)
-            throws QuadrigaStorageException {
-
-        INetworkJSon networkJSon = null;
-
-        List<INetworkNodeInfo> oldNetworkTopNodesList = null;
-
-        try {
-            oldNetworkTopNodesList = getNetworkTopNodesByVersion(networkId, Integer.parseInt(versionID));
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while getting network top nodes", e);
-        }
-
-        if (jqueryType.equals(INetworkManager.D3JQUERY)) {
-            networkJSon = d3NetworkManager.parseNetworkForD3Jquery(oldNetworkTopNodesList);
-
-        } 
-
-        return networkJSon;
     }
 
     /**

@@ -27,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @PropertySource(value = "classpath:/user.properties")
@@ -40,6 +42,12 @@ public class WebsiteProjectController {
 	
 	@Autowired
 	private INetworkManager networkmanager;
+	
+	@Autowired
+    private INetworkTransformationManager transformationManager;
+    
+    @Autowired
+    private ID3Creator d3Creator;
 	
 	@Autowired
     private Environment env;
@@ -151,12 +159,13 @@ public class WebsiteProjectController {
 		IProject project = getProjectDetails(unixName);
 		model.addAttribute("project", project);
 		
-		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork networkJSon = transformationManager.getTransformedNetwork(networkId, INetworkManager.D3JQUERY);
+		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
 		if(networkJSon!=null){
-			json = networkJSon.getJson();
+			json = d3Creator.getD3JSON(networkJSon.getNodes(), networkJSon.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 		return "sites/networks/visualize";

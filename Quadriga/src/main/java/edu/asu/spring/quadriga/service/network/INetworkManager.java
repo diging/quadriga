@@ -30,7 +30,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 /**
  * This interface would have all the methods required to work on storing, displaying or manipulating {@link INetwork} 
@@ -238,15 +238,6 @@ public interface INetworkManager {
 	public abstract String shortUUID();
 	
 	/**
-	 * This method should help in returning the JSon String for a {@link INetwork} for a particualr JQuery Type
-	 * @param networkId							{@link INetwork} ID of type {@link String}
-	 * @param jqueryType						JQuery type could be D3JQUERY or JITJQUERY
-	 * @return									Returns {@link INetworkJSon} object which contains the JSon String and {@link List} of network Name of type {@link String} 
-	 * @throws QuadrigaStorageException			Database storage exception thrown
-	 */
-	public abstract  INetworkJSon getJsonForNetworks(String networkId, String jqueryType)  throws QuadrigaStorageException;
-
-	/**
 	 * This method should help in getting the {@link ElementEventsType} object using a {@link RelationEventType} ID.
 	 * Usually the source of the data for {@link RelationEventType} is QStore, We could get the XML from QStore and Marshall it into a {@link ElementEventsType} object.
 	 * @param relationEventId					{@link RelationEventType} ID in form of {@link String}	
@@ -325,19 +316,7 @@ public interface INetworkManager {
 	public abstract ObjectTypeObject parseThroughObject(RelationEventType relationEventType,
 			SubjectObjectType subjectObjectType,
 			List<List<Object>> relationEventPredicateMapping);
-
-	/**
-	 * This method should help to get JSon of selected JQuery Type based on version number.
-	 * Our System would store version number for each network and network statement. Based on the version number we need to form the JSon String. for view  
-	 * @param networkId									{@link INetwork} ID of type {@link String}
-	 * @param jqueryType								JQuery type could be D3JQUERY or JITJQUERY of type {@link String}
-	 * @param versionNo									Version number of the {@link INetwork} in form of String
-	 * @return											Returns {@link INetworkJSon} object which contains the JSon String and {@link List} of network Name of type {@link String}
-	 * @throws QuadrigaStorageException					Database storage exception thrown
-	 */
-	public abstract INetworkJSon getJsonForOldNetworks(String networkId, String jqueryType,
-			String versionNo) throws QuadrigaStorageException;
-
+	
 	/**
 	 * This method should help to store the Network XML from clients into QStore
 	 * We should store all the nodes ID ( RelationEvent ID, Appellation ID ) in the network XML.

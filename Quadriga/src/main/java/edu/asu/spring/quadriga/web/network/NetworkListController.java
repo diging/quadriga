@@ -27,8 +27,10 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -43,6 +45,12 @@ public class NetworkListController {
 
 	@Autowired
 	INetworkManager networkManager;
+	
+	@Autowired
+    private INetworkTransformationManager transformationManager;
+    
+    @Autowired
+    private ID3Creator d3Creator;
 
 	@Autowired
 	@Qualifier("restTemplate")
@@ -156,12 +164,13 @@ public class NetworkListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork networkJSon= transformationManager.getTransformedNetwork(networkId, INetworkManager.D3JQUERY);
+		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
 		if(networkJSon!=null){
-			json = networkJSon.getJson();
+			json = d3Creator.getD3JSON(networkJSon.getNodes(), networkJSon.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 
@@ -189,14 +198,14 @@ public class NetworkListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork networkJSon= transformationManager.getTransformedNetwork(networkId, INetworkManager.D3JQUERY);
 
 		logger.info("Source reference ID " + networkManager.getSourceReferenceURL(networkId, networkManager.getLatestVersionOfNetwork(networkId)));
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
 		if(networkJSon!=null){
-			json = networkJSon.getJson();
+		    json = d3Creator.getD3JSON(networkJSon.getNodes(), networkJSon.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 		return "auth/editing/editnetworks";
