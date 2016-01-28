@@ -229,23 +229,23 @@ function d3visualizepublic(graph, networkId, path,type) {
 
 	function fade(opacity) {
 		return function(d, i) {
-			//fade all elements
-//			d3.select(d.source).style("opacity", opacity);
-//			d3.select(d.target).style("opacity", opacity);
-			//fade all elements
 			vis.selectAll("circle, line").style("opacity", opacity);
-
-			var associated_links = vis.selectAll("line").filter(function(d) {
-				return  d.source.index == i;
-				// return d.source.index == i || d.target.index == i;
-			}).each(function(d) {
-				//unfade links and nodes connected to the current node
+			
+			var stId = d.statementid;
+			var associated_nodes = vis.selectAll('circle').filter(function(node) {
+				return ($.inArray(stId[0], node.statementid)) > -1;
+			});
+			associated_nodes.each(function(a) {
 				d3.select(this).style("opacity", 1);
-				//THE FOLLOWING CAUSES: Uncaught TypeError: Cannot call method 'setProperty' of undefined
-				//  d3.select(d.source).style("opacity", 1);
-				//  d3.select(d.target).style("opacity", 1);
-				node.style("opacity", function(o) {
-					d3.select(o.source).style("opacity", 1);
+				
+				var aIndex = a.index;
+				
+				var associated_links = vis.selectAll("line").filter(function(d) {
+					return d.source.index == aIndex;
+				});
+				associated_links.each(function(d) {
+					//unfade links and nodes connected to the current node
+					d3.select(this).style("opacity", 1);
 				});
 			});
 

@@ -31,7 +31,6 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
-import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 /**
  * This interface would have all the methods required to work on storing, displaying or manipulating {@link INetwork} 
@@ -43,7 +42,7 @@ public interface INetworkManager {
 
 	// Constants to request for type of JQuery JSon 
 	public static String D3JQUERY = "D3JQUERY";
-	public static String JITJQUERY= "JITJQUERY";
+	//public static String JITJQUERY= "JITJQUERY";
 	
 	// Constants to mention type of event in the QStore XML
 	public static String RELATIONEVENT = "RE";
@@ -257,23 +256,6 @@ public interface INetworkManager {
 	public abstract NodeObject getPredicateNodeObjectContent(PredicateObject predicateObject,
 			NodeObject nodeObject);
 
-	/**
-	 * This method would help in parsing through a statement of type {@link RelationEventType}.
-	 * A Network would contain a {@link List} of Network Statements, while Iterating through each statement we could call this method. 
-	 * @param relationEventId					{@link RelationEventType} ID in form of {@link String}	
-	 * @param statementType						Statement Type could be RE or AE constant
-	 * @param statementId						Usually {@link RelationEventType} ID which should be assigned to each node for highlighting.
-	 * @param relationEventPredicateMapping		{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network. 
-	 * @param nodeObjectWithStatementList		{@link List} of {@link INodeObjectWithStatement} containing the details of {@link NodeObject}
-	 * @return									Returns the updated {@link List} of {@link INodeObjectWithStatement}
-	 * @throws JAXBException					Throws JAXB exception in case we have issues while parsing JAXB element object.
-	 * @throws QStoreStorageException			Database storage exception thrown
-	 */
-	public abstract List<INodeObjectWithStatement> parseEachStatement(String relationEventTypeId,
-			String statementType, String statementId,
-			List<List<Object>> relationEventPredicateMapping,
-			List<INodeObjectWithStatement> nodeObjectWithStatementList)
-			throws JAXBException, QStoreStorageException;
 
 	/**
 	 * This method should help in getting the {@link ElementEventsType} object using a {@link RelationEventType} ID.
@@ -354,19 +336,6 @@ public interface INetworkManager {
 	public abstract ObjectTypeObject parseThroughObject(RelationEventType relationEventType,
 			SubjectObjectType subjectObjectType,
 			List<List<Object>> relationEventPredicateMapping);
-
-	/**
-	 * This method should help in preparing the {@link NodeObject} content.
-	 * Preparse {@link NodeObject} with the contents of {@link PredicateObject}, {@link SubjectObject}, {@link ObjectTypeObject}. 
-	 * @param relationEventObject					{@link RelationEventObject} object
-	 * @param nodeObjectWithStatementList			{@link List} of {@link INodeObjectWithStatement} object 
-	 * @param statementId							Statement ID of the Relation in form of {@link String}
-	 * @return										Returns updated {@link List} of {@link INodeObjectWithStatement} object
-	 */
-	public abstract List<INodeObjectWithStatement> prepareNodeObjectContent(
-			RelationEventObject relationEventObject,
-			List<INodeObjectWithStatement> nodeObjectWithStatementList,
-			String statementId);
 
 	/**
 	 * This method should help in parsing through the {@link SubjectObjectType} of a particular {@link RelationEventType} for SubjectType of Relation.
