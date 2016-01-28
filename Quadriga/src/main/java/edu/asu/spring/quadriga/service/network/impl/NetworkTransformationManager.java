@@ -24,7 +24,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     private NetworkTransformer transformer;
 
     @Override
-    public ITransformedNetwork getTransformedNetwork(String networkId, String jqueryType, String versionID)
+    public ITransformedNetwork getTransformedNetwork(String networkId, String versionID)
             throws QuadrigaStorageException {
 
         ITransformedNetwork networkJSon = null;
@@ -37,16 +37,13 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             logger.error("DB Error while getting network top nodes", e);
         }
 
-        if (jqueryType.equals(INetworkManager.D3JQUERY)) {
-            networkJSon = transformer.transformNetwork(oldNetworkTopNodesList);
-
-        } 
+        networkJSon = transformer.transformNetwork(oldNetworkTopNodesList);
 
         return networkJSon;
     }
     
     @Override
-    public ITransformedNetwork getTransformedNetwork(String networkId, String jqueryType) throws QuadrigaStorageException {
+    public ITransformedNetwork getTransformedNetwork(String networkId) throws QuadrigaStorageException {
 
         ITransformedNetwork networkJSon = null;
 
@@ -59,9 +56,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             return null;
         }
 
-        if (jqueryType.equals(INetworkManager.D3JQUERY)) {
-            networkJSon = transformer.transformNetwork(networkTopNodesList);
-        } 
+        networkJSon = transformer.transformNetwork(networkTopNodesList); 
 
         return networkJSon;
     }

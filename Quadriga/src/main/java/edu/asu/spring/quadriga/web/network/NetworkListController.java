@@ -164,13 +164,13 @@ public class NetworkListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		ITransformedNetwork networkJSon= transformationManager.getTransformedNetwork(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork= transformationManager.getTransformedNetwork(networkId);
 		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		if(networkJSon!=null){
-			json = d3Creator.getD3JSON(networkJSon.getNodes(), networkJSon.getLinks());
+		if(transformedNetwork!=null){
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 
@@ -198,14 +198,14 @@ public class NetworkListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		ITransformedNetwork networkJSon= transformationManager.getTransformedNetwork(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 
 		logger.info("Source reference ID " + networkManager.getSourceReferenceURL(networkId, networkManager.getLatestVersionOfNetwork(networkId)));
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		if(networkJSon!=null){
-		    json = d3Creator.getD3JSON(networkJSon.getNodes(), networkJSon.getLinks());
+		if(transformedNetwork!=null){
+		    json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 		return "auth/editing/editnetworks";

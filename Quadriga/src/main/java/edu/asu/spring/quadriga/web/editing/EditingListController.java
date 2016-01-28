@@ -211,7 +211,7 @@ public class EditingListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = "";
@@ -241,7 +241,7 @@ public class EditingListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId, INetworkManager.D3JQUERY,versionNo);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId, versionNo);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;

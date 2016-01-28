@@ -17,7 +17,6 @@ import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
@@ -30,7 +29,6 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 /**
  * This interface would have all the methods required to work on storing, displaying or manipulating {@link INetwork} 
@@ -40,10 +38,6 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  */
 public interface INetworkManager {
 
-	// Constants to request for type of JQuery JSon 
-	public static String D3JQUERY = "D3JQUERY";
-	//public static String JITJQUERY= "JITJQUERY";
-	
 	// Constants to mention type of event in the QStore XML
 	public static String RELATIONEVENT = "RE";
 	public static String APPELLATIONEVENT = "AE";

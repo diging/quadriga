@@ -159,13 +159,13 @@ public class WebsiteProjectController {
 		IProject project = getProjectDetails(unixName);
 		model.addAttribute("project", project);
 		
-		ITransformedNetwork networkJSon = transformationManager.getTransformedNetwork(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		if(networkJSon!=null){
-			json = d3Creator.getD3JSON(networkJSon.getNodes(), networkJSon.getLinks());
+		if(transformedNetwork!=null){
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 		return "sites/networks/visualize";
