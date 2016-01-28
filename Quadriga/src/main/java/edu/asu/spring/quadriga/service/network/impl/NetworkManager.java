@@ -64,8 +64,6 @@ import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
@@ -82,13 +80,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
-import edu.asu.spring.quadriga.service.network.IJITNetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformer;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
-import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
-import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
-import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -114,16 +108,10 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private String qStoreURL;
 
     @Autowired
-    private INodeObjectWithStatementFactory nodeObjectWithStatementFactory;
-
-    @Autowired
     IRestVelocityFactory restVelocityFactory;
 
     @Autowired
-    private IJITNetworkManager jitNetworkManager;
-
-    @Autowired
-    private ID3NetworkManager d3NetworkManager;
+    private INetworkTransformer d3NetworkManager;
 
     @Autowired
     IConceptCollectionManager conceptCollectionManager;
@@ -199,80 +187,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     /**
      * 
      * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
-    public INetworkJSon getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException {
-
-        INetworkJSon networkJSon = null;
-
-        List<INetworkNodeInfo> networkTopNodesList = null;
-
-        try {
-            networkTopNodesList = getNetworkTopNodes(networkId);
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while getting network top nodes", e);
-        }
-
-        if (jqueryType.equals(INetworkManager.D3JQUERY)) {
-            networkJSon = d3NetworkManager.parseNetworkForD3Jquery(networkTopNodesList);
-        } else if (jqueryType.equals(INetworkManager.JITJQUERY)) {
-            String jitJSon = jitNetworkManager.parseNetworkForJITJquery(networkTopNodesList);
-            if (networkJSon == null) {
-                networkJSon = new NetworkJSon(jitJSon, null);
-            }
-        }
-
-        return networkJSon;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public List<INodeObjectWithStatement> parseEachStatement(String relationEventId, String statementType,
-            String statementId, List<List<Object>> relationEventPredicateMapping,
-            List<INodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException {
-        ElementEventsType elementEventType = getElementEventTypeFromCreationEventTypeID(relationEventId);
-        List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
-        Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-
-        while (creationEventIterator.hasNext()) {
-            CreationEvent creationEvent = creationEventIterator.next();
-            // Check if event is Appellation event
-            if (creationEvent instanceof AppellationEventType) {
-                // Do nothing, we don't need to display appellation events on
-                // UI.
-            }
-            // Check if event is Relation event
-            if (creationEvent instanceof RelationEventType) {
-                // Trying to get a list of objects in the relations event type
-                // object
-                // First get PredicateType
-                // Then go recursively to subject and object
-                JsonObject jsonObject = new JsonObject();
-                RelationEventType relationEventType = (RelationEventType) creationEvent;
-                jsonObject.setIsRelationEventObject(true);
-                jsonObject.setRelationEventObject(parseThroughRelationEvent(relationEventType,
-                        new RelationEventObject(), relationEventPredicateMapping));
-
-                // This would help us in forming the json string as per
-                // requirement.
-                nodeObjectWithStatementList = prepareNodeObjectContent(jsonObject.getRelationEventObject(),
-                        nodeObjectWithStatementList, statementId);
-
-            }
-        }
-
-        return nodeObjectWithStatementList;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
      */
     @Override
     public ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
@@ -320,15 +234,15 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             RelationEventObject relationEventObject, List<List<Object>> relationEventPredicateMapping) {
 
         // Get RelationType of the RelationEventType
-        RelationType relationType = relationEventType.getRelation(relationEventType);
+        RelationType relationType = relationEventType.getRelation();
 
         // Handle Predicate of the RelationType
-        PredicateType predicateType = relationType.getPredicateType(relationType);
+        PredicateType predicateType = relationType.getPredicateType();
         relationEventObject.setPredicateObject(
                 parseThroughPredicate(relationEventType, predicateType, relationEventPredicateMapping));
 
         // Handle Subject of the RelationType
-        SubjectObjectType subjectType = relationType.getSubjectType(relationType);
+        SubjectObjectType subjectType = relationType.getSubjectType();
         SubjectObject subjectObject = parseThroughSubject(relationEventType, subjectType,
                 relationEventPredicateMapping);
         relationEventObject.setSubjectObject(subjectObject);
@@ -354,19 +268,19 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         AppellationEventType appellationEvent = predicateType.getAppellationEvent();
         String nodeId = appellationEvent.getAppellationEventID();
         PredicateObject predicateObject = null;
-        List<TermType> termTypeList = appellationEvent.getTerms(appellationEvent);
+        List<TermType> termTypeList = appellationEvent.getTerms();
         Iterator<TermType> termTypeIterator = termTypeList.iterator();
         while (termTypeIterator.hasNext()) {
             TermType tt = termTypeIterator.next();
             AppellationEventObject appellationEventObject = new AppellationEventObject();
             appellationEventObject
-                    .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)) + "_"
+                    .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()) + "_"
                             + shortUUID());
             if (nodeId != null) {
                 appellationEventObject.setTermId(nodeId + "_" + shortUUID());
                 // appellationEventObject.setTermId(nodeId);
             } else {
-                appellationEventObject.setTermId(tt.getTermID(tt) + "_" + shortUUID());
+                appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
             }
             predicateObject = new PredicateObject();
             predicateObject.setAppellationEventObject(appellationEventObject);
@@ -505,17 +419,17 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         } else {
             String nodeId = appellationEventType.getAppellationEventID();
-            List<TermType> termTypeList = appellationEventType.getTerms(appellationEventType);
+            List<TermType> termTypeList = appellationEventType.getTerms();
             Iterator<TermType> termTypeIterator = termTypeList.iterator();
             while (termTypeIterator.hasNext()) {
                 TermType tt = termTypeIterator.next();
                 AppellationEventObject appellationEventObject = new AppellationEventObject();
                 appellationEventObject
-                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()));
                 if (nodeId != null) {
                     appellationEventObject.setTermId(nodeId);
                 } else {
-                    appellationEventObject.setTermId(tt.getTermID(tt) + "_" + shortUUID());
+                    appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
                 }
                 subjectObject.setAppellationEventObject(appellationEventObject);
             }
@@ -568,151 +482,27 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         } else {
             String nodeId = appellationEventType.getAppellationEventID();
-            List<TermType> termTypeList = appellationEventType.getTerms(appellationEventType);
+            List<TermType> termTypeList = appellationEventType.getTerms();
             Iterator<TermType> termTypeIterator = termTypeList.iterator();
             while (termTypeIterator.hasNext()) {
                 TermType tt = termTypeIterator.next();
                 AppellationEventObject appellationEventObject = new AppellationEventObject();
                 appellationEventObject
-                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()));
                 if (nodeId != null) {
                     appellationEventObject.setTermId(nodeId);
                 } else {
-                    appellationEventObject.setTermId(tt.getTermID(tt) + "_" + shortUUID());
+                    appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
                 }
                 objectTypeObject.setAppellationEventObject(appellationEventObject);
-                logger.debug("subjectType Term : " + tt.getTermInterpertation(tt));
+                logger.debug("subjectType Term : " + tt.getTermInterpertation());
             }
         }
         return objectTypeObject;
 
     }
 
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public List<INodeObjectWithStatement> prepareNodeObjectContent(RelationEventObject relationEventObject,
-            List<INodeObjectWithStatement> nodeObjectWithStatementList, String statementId) {
-
-        // Get predicate Object structure
-        PredicateObject predicateObject = relationEventObject.getPredicateObject();
-        NodeObject nodeObject = getPredicateNodeObjectContent(predicateObject, new NodeObject());
-
-        // Get Subject Object into temp structure
-        SubjectObject subjectObject = relationEventObject.getSubjectObject();
-        ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
-        if (subjectObject.getIsRelationEventObject()) {
-            nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-            nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
-            if (subjectObject.isRemoteLink()) {
-                nodeObject.setSubjectRemoteLink(true);
-            }
-            logger.debug(
-                    "Subject Predicate node : " + subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-
-            // Get Object into temp structure
-            if (objectTypeObject.getIsRelationEventObject()) {
-                nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-                nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
-                if (objectTypeObject.isRemoteLink()) {
-                    nodeObject.setObjectRemoteLink(true);
-                }
-                nodeObjectWithStatementList.add(nodeObjectWithStatementFactory
-                        .getNodeObjectWithStatementFactory(nodeObject, statementId, false));
-                logger.debug("Object Predicate node : "
-                        + objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-            } else {
-
-                AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-                nodeObject.setObject(appellationEventObject1.getNode());
-                nodeObject.setObjectId(appellationEventObject1.getTermId());
-                if (objectTypeObject.isRemoteLink()) {
-                    nodeObject.setObjectRemoteLink(true);
-                }
-                nodeObjectWithStatementList.add(nodeObjectWithStatementFactory
-                        .getNodeObjectWithStatementFactory(nodeObject, statementId, false));
-
-                logger.debug("Object Predicate : " + appellationEventObject1.getNode());
-            }
-
-            nodeObjectWithStatementList = prepareNodeObjectContent(subjectObject.getRelationEventObject(),
-                    nodeObjectWithStatementList, statementId);
-
-        } else {
-
-            AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
-            nodeObject.setSubject(appellationEventObject1.getNode());
-            nodeObject.setSubjectId(appellationEventObject1.getTermId());
-            if (subjectObject.isRemoteLink()) {
-                nodeObject.setSubjectRemoteLink(true);
-            }
-            logger.debug("Subject Predicate : " + appellationEventObject1.getNode());
-        }
-
-        // Get Object into temp structure
-        if (objectTypeObject.getIsRelationEventObject()) {
-            nodeObjectWithStatementList = prepareNodeObjectContent(objectTypeObject.getRelationEventObject(),
-                    nodeObjectWithStatementList, statementId);
-        } else {
-            AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-            nodeObject.setObject(appellationEventObject1.getNode());
-            nodeObject.setObjectId(appellationEventObject1.getTermId());
-            if (objectTypeObject.isRemoteLink()) {
-                nodeObject.setObjectRemoteLink(true);
-            }
-            nodeObjectWithStatementList.add(
-                    nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject, statementId, false));
-            logger.debug("Object Predicate : " + appellationEventObject1.getNode());
-        }
-
-        return nodeObjectWithStatementList;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public NodeObject getPredicateNodeObjectContent(PredicateObject predicateObject, NodeObject nodeObject) {
-        AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
-        // Store predicate detail in our temporary structure
-        nodeObject.setRelationEventId(predicateObject.getRelationEventID());
-
-        nodeObject.setPredicate(appellationEventObject.getNode());
-        nodeObject.setPredicateId(appellationEventObject.getTermId());
-
-        return nodeObject;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getPredicateNameFromStackOfAE(String relationEventId, String predicateName,
-            List<List<Object>> relationEventPredicateMapping) {
-        Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
-
-        while (relationEventPredicateMappingIterator.hasNext()) {
-            List<Object> objectList = relationEventPredicateMappingIterator.next();
-            Iterator<Object> I1 = objectList.iterator();
-            while (I1.hasNext()) {
-                Object object = I1.next();
-                if (object instanceof String[]) {
-                    String pairs[] = (String[]) object;
-                    if (pairs[0].equals(relationEventId)) {
-                        String predicateNameLocal = pairs[1];
-                        return predicateNameLocal;
-                    }
-                }
-            }
-        }
-        return "";
-
-    }
-
+    
     /**
      * Check if we have bit streams in the network XML
      * 
@@ -1162,40 +952,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             logger.error("DB Error while fetching project, Workspace and network details", e);
         }
         return core.toString(SUCCESS);
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
-    public INetworkJSon getJsonForOldNetworks(String networkId, String jqueryType, String versionID)
-            throws QuadrigaStorageException {
-
-        INetworkJSon networkJSon = null;
-
-        List<INetworkNodeInfo> oldNetworkTopNodesList = null;
-
-        try {
-            oldNetworkTopNodesList = getNetworkTopNodesByVersion(networkId, Integer.parseInt(versionID));
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while getting network top nodes", e);
-        }
-
-        if (jqueryType.equals(INetworkManager.D3JQUERY)) {
-            networkJSon = d3NetworkManager.parseNetworkForD3Jquery(oldNetworkTopNodesList);
-
-        } else if (jqueryType.equals(INetworkManager.JITJQUERY)) {
-            String jitJSon = jitNetworkManager.parseNetworkForJITJquery(oldNetworkTopNodesList);
-            if (networkJSon == null) {
-                networkJSon = new NetworkJSon(jitJSon, null);
-            }
-        }
-
-        return networkJSon;
     }
 
     /**

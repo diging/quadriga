@@ -91,8 +91,8 @@ public class AppellationEventType
      * @param aet  : AppellationEventType
      * @return
      */
-    public List<TermType> getTerms(AppellationEventType aet){
-    	List<Object> objectList = aet.getTermOrExternalRefId();
+    public List<TermType> getTerms(){
+    	List<Object> objectList = getTermOrExternalRefId();
     	List<TermType> termTypeList = new ArrayList<TermType>();
     	Iterator <Object> I3 = objectList.iterator();
 		while(I3.hasNext()){

@@ -90,9 +90,9 @@ extends CreationEvent
 	 * @param re			{@link RelationEventType} target object for this method 
 	 * @return				{@link RelationType} object
 	 */
-	public RelationType  getRelation(RelationEventType re){
+	public RelationType  getRelation(){
 		RelationType relationType = null;
-		List <?> ee = re.getRelationCreatorOrRelation();
+		List <?> ee = getRelationCreatorOrRelation();
 		Iterator <?> Iee=ee.iterator();
 		while(Iee.hasNext()){
 			Object o = Iee.next();
