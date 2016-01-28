@@ -60,7 +60,7 @@ public class EventParser {
     
     @Autowired
     @Qualifier("restTemplate")
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     @Autowired
     @Qualifier("qStoreURL_Get_POST")

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
@@ -196,13 +195,10 @@ public class NetworkListController {
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		List<ID3Node> nodeList = null;
 		if(networkJSon!=null){
 			json = networkJSon.getJson();
-			nodeList =networkJSon.getNodeList();
 		}
 		model.addAttribute("jsonstring",json);
-		model.addAttribute("nodeList",nodeList);
 		return "auth/editing/editnetworks";
 	}
 

@@ -247,17 +247,6 @@ public interface INetworkManager {
 	public abstract  INetworkJSon getJsonForNetworks(String networkId, String jqueryType)  throws QuadrigaStorageException;
 
 	/**
-	 * This method would help in getting the Predicate details from the {@link PredicateObject} in {@link NodeObject}.
-	 * We would be parsing through the {@link RelationEventType} object, where we would encounter {@link PredicateObject}.
-	 * @param predicateObject					Target {@link PredicateObject} 
-	 * @param nodeObject						Target {@link NodeObject}
-	 * @return									Returns the modified {@link NodeObject}
-	 */
-	public abstract NodeObject getPredicateNodeObjectContent(PredicateObject predicateObject,
-			NodeObject nodeObject);
-
-
-	/**
 	 * This method should help in getting the {@link ElementEventsType} object using a {@link RelationEventType} ID.
 	 * Usually the source of the data for {@link RelationEventType} is QStore, We could get the XML from QStore and Marshall it into a {@link ElementEventsType} object.
 	 * @param relationEventId					{@link RelationEventType} ID in form of {@link String}	
@@ -335,17 +324,6 @@ public interface INetworkManager {
 	 */
 	public abstract ObjectTypeObject parseThroughObject(RelationEventType relationEventType,
 			SubjectObjectType subjectObjectType,
-			List<List<Object>> relationEventPredicateMapping);
-
-	/**
-	 * This method should help in parsing through the {@link SubjectObjectType} of a particular {@link RelationEventType} for SubjectType of Relation.
-	 * @param relationEventTypeId						{@link RelationEventType} ID in the form of {@link String}
-	 * @param predicateName								{@link PredicateObject} name in the form of {@link String}
-	 * @param relationEventPredicateMapping				{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
-	 * @return											Returns predicate name in the form of {@link String}
-	 */
-	public abstract String getPredicateNameFromStackOfAE(String relationEventTypeId,
-			String predicateName,
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**

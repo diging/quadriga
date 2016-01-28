@@ -13,10 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.d3.domain.ID3Link;
-import edu.asu.spring.quadriga.d3.domain.ID3Node;
-import edu.asu.spring.quadriga.d3.domain.factory.ID3LinkFactory;
-import edu.asu.spring.quadriga.d3.domain.factory.ID3NodeFactory;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -24,7 +20,6 @@ import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
-import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
@@ -77,7 +72,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 			return null;
 		}
 
-		INetworkJSon networkJson = new NetworkJSon(getD3JSON(nodes, links), null);
+		INetworkJSon networkJson = new NetworkJSon(getD3JSON(nodes, links));
 
 		return networkJson;
 

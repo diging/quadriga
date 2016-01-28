@@ -64,7 +64,6 @@ import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
@@ -84,7 +83,6 @@ import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManag
 import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
-import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -108,9 +106,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Autowired
     @Qualifier("qStoreURL")
     private String qStoreURL;
-
-    @Autowired
-    private INodeObjectWithStatementFactory nodeObjectWithStatementFactory;
 
     @Autowired
     IRestVelocityFactory restVelocityFactory;
@@ -207,6 +202,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             networkTopNodesList = getNetworkTopNodes(networkId);
         } catch (QuadrigaStorageException e) {
             logger.error("DB Error while getting network top nodes", e);
+            return null;
         }
 
         if (jqueryType.equals(INetworkManager.D3JQUERY)) {
@@ -535,49 +531,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     }
 
     
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public NodeObject getPredicateNodeObjectContent(PredicateObject predicateObject, NodeObject nodeObject) {
-        AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
-        // Store predicate detail in our temporary structure
-        nodeObject.setRelationEventId(predicateObject.getRelationEventID());
-
-        nodeObject.setPredicate(appellationEventObject.getNode());
-        nodeObject.setPredicateId(appellationEventObject.getTermId());
-
-        return nodeObject;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getPredicateNameFromStackOfAE(String relationEventId, String predicateName,
-            List<List<Object>> relationEventPredicateMapping) {
-        Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
-
-        while (relationEventPredicateMappingIterator.hasNext()) {
-            List<Object> objectList = relationEventPredicateMappingIterator.next();
-            Iterator<Object> I1 = objectList.iterator();
-            while (I1.hasNext()) {
-                Object object = I1.next();
-                if (object instanceof String[]) {
-                    String pairs[] = (String[]) object;
-                    if (pairs[0].equals(relationEventId)) {
-                        String predicateNameLocal = pairs[1];
-                        return predicateNameLocal;
-                    }
-                }
-            }
-        }
-        return "";
-
-    }
-
     /**
      * Check if we have bit streams in the network XML
      * 
