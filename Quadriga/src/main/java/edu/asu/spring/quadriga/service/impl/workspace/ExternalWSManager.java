@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListExternalWsDAO;
-import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
@@ -20,7 +18,6 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
-import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IExternalWSManager;
 
 @Service
@@ -31,12 +28,6 @@ public class ExternalWSManager implements IExternalWSManager {
     
     @Autowired
     private IProjectDAO projectDao;
-
-    @Autowired
-    private WorkspaceDTOMapper workspaceDTOMapper;
-
-    @Autowired
-    private IWorkspaceFactory workspaceFactory;
 
     @Autowired
     private ProjectDTOMapper projectMapper;

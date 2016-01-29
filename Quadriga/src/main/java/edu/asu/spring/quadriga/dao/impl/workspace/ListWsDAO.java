@@ -6,21 +6,16 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.impl.workbench.ProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
-import edu.asu.spring.quadriga.dto.ProjectDTO;
-import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
@@ -46,9 +41,6 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
     @Autowired
     private NetworkDTOMapper networkDTOMapper;
     
-    @Autowired
-    private ProjectDAO projectDao;
-
 
     /**
      * {@inheritDoc}

@@ -16,11 +16,15 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -47,9 +51,8 @@ public class PassThroughProjectRestController {
     @Autowired
     private IUserManager userManager;
 
-    @ResponseBody
     @RequestMapping(value = "rest/passthroughproject", method = RequestMethod.POST)
-    public String getPassThroughProject(HttpServletRequest request,
+    public ResponseEntity<String> getPassThroughProject(HttpServletRequest request, @RequestHeader("Accept") String accept,
             HttpServletResponse response, @RequestBody String xml,
             Principal principal) throws QuadrigaException,
             ParserConfigurationException, SAXException, IOException,
@@ -67,8 +70,12 @@ public class PassThroughProjectRestController {
         String networkId = passThroughProjectManager.callQStore(
                 workspaceId, annotatedText,
                 userManager.getUser(principal.getName()));
+        
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.valueOf(accept));
+        httpHeaders.set("networkid", networkId);
 
-        return null;
+        return new ResponseEntity<String>("Success", httpHeaders, HttpStatus.OK);
     }
 
     private String processWorkspaceInformation(Document document, String projectId, Principal principal) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
