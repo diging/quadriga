@@ -51,7 +51,10 @@ All
 <div id="aswscollaboratorjstree"></div>
  -->
 
-
+<div style="float:right;">
+	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">Add Project</a>
+</div>
+<br/>
 <c:forEach items="${projects}" var="project">
 <div class="projectList">
 <img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/project-new.png"> 

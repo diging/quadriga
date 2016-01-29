@@ -20,8 +20,5 @@ $(function () {
 	<span>Menu</span>
 </h2>
 <div>
-<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">Add Project</a>
-</div>
-<div>
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/keys"><span class="glyphicon glyphicon-tree-deciduous"></span> Manage DSpace</a>
 </div>
