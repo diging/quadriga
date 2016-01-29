@@ -52,13 +52,13 @@ $(document).ready(function() {
 
 function onSubmit(){
 	
-	location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}';
+	location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}';
 }
 
 </script>
 
 <form:form method="POST" name="myForm" commandName="collaborator" 
-  action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
+  action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/addcollaborators">
   <h2>Project Collaborators:</h2>
 <h3>Project: ${projectname}</h3>
 <div>${projectdesc}</div>
