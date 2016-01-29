@@ -40,26 +40,6 @@
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/activateworkspace">Activate</a></li>
 			</ul>
 		</li>
-		<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Dictionary
-			<ul>
-				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary">Add</a></li>
-				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/list.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/dictionaries">List</a></li>
-				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary">Delete</a></li>
-			</ul>
-		</li>
-		<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Collections
-			<ul>
-				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection">Add</a></li>
-				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/list.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/conceptcollections">List</a></li>
-				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections">Delete</a></li>
-			</ul>
-		</li>
 		<!-- 
 		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
 		<ul>
