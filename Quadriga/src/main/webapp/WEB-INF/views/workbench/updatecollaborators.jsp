@@ -4,7 +4,7 @@
 <!-- Content -->
 <script>
 function submitClick(id){
-	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}';
+	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}';
 }
 
 	$(document).ready(function() {
@@ -24,7 +24,7 @@ function submitClick(id){
 </script>
 <article class="is-page-content">
 	<form:form commandName="collaboratorform" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/updatecollaborators"
+		action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/updatecollaborators"
 		id="updateprojcollabform">
 <c:choose> 
     <c:when test="${success == '0'}">
