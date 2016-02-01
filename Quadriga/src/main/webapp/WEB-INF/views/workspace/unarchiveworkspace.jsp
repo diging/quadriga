@@ -40,7 +40,7 @@ $(function() {
 	});
 });
 </script>
-<article class="is-page-content"> helllllloooooooo
+<article class="is-page-content">
 	<form:form modelAttribute="workspaceform" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/unarchiveworkspace" id="unarchivewsform">
 		<c:choose>

@@ -89,7 +89,7 @@ ${project.projectName} <span style="font-size: 12px"><span title="No access" cla
 </c:forEach>
 
 <div style="float:right;">
-	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">Add new Project</a>
+	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">Add Project</a>
 </div>
 <div style="clear: right;"></div>
 
