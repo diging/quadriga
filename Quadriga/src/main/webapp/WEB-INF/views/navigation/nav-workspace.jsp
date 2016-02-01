@@ -22,7 +22,7 @@
 <div>
 	<ul>
 		<li>
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Project Collections </a>
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Projects </a>
 		</li>
 	</ul>
 </div>
