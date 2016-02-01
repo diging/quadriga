@@ -334,10 +334,23 @@
 										});
 					</script>
 				</c:otherwise>
-			</c:choose>
+			</c:choose> <c:if test="${isDeactivated == false}">
+                <a href="#login-box" class="login-window"><input
+                    type="submit" value="Add text from Dspace"></a>
+                <!-- DSpace Login credentials -->
+                </a>
+            </c:if>
             </li> <c:choose>
                 <c:when test="${empty dspaceKeys}">
-                   
+                    <!-- Allow the user to change the dspace login credentials -->
+                    <c:if test="${isDeactivated == false}">
+                        <a href="#change-login" class="change-login">Change
+                            Dspace Login<c:choose>
+                                <c:when
+                                    test="${not empty wrongDspaceLogin}">*</c:when>
+                            </c:choose>
+                    </c:if>
+                    </a>
 
 
                     <div style="text-align: right">
