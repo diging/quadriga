@@ -146,7 +146,7 @@
 				</c:choose>
 				
 			</div>
-			<div align="right">
+			<div align="right" id="delete-project">
 				<c:if test="${owner=='1'}">
 					
 
@@ -181,8 +181,9 @@
 									});
 				}
 			</script>
-			<div id="dialog-delete-project-confirm" title="Confirm Delete?">
-				You are about to delete a project, this is not reversible.</br> Do you want to proceed?</div>
+			<div id="dialog-delete-project-confirm" title="Confirm Delete? " >
+				You are about to delete a project, this is not reversible.</br> Do you want to proceed?
+			</div>
 		</td>
 		
 		<!-- Display collaborators -->
