@@ -438,8 +438,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
@@ -490,29 +490,29 @@
 					</webResources>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>initialize</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<doCheck>false</doCheck>
-					<doUpdate>false</doUpdate>
-					<revisionOnScmFailure></revisionOnScmFailure>
-					<!-- <format>#{0} ({1,date})</format> -->
-					<items>
-						<item>buildNumber\d*</item>
-						<item>timestamp</item>
-					</items>
-					<format>#{0} ({1,date,yyyy-MM-dd HH:mm:ss})</format>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.codehaus.mojo</groupId> -->
+<!-- 				<artifactId>buildnumber-maven-plugin</artifactId> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<phase>initialize</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>create</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<doCheck>false</doCheck> -->
+<!-- 					<doUpdate>false</doUpdate> -->
+<!-- 					<revisionOnScmFailure></revisionOnScmFailure> -->
+<!-- 					<format>#{0} ({1,date})</format> -->
+<!-- 					<items> -->
+<!-- 						<item>buildNumber\d*</item> -->
+<!-- 						<item>timestamp</item> -->
+<!-- 					</items> -->
+<!-- 					<format>#{0} ({1,date,yyyy-MM-dd HH:mm:ss})</format> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 		</plugins>
 
 		<resources>
@@ -526,10 +526,10 @@
 		</resources>
 	</build>
 
-	<scm>
-		<connection>scm:svn:http://none</connection>
-		<url>scm:svn:https://none</url>
-	</scm>
+<!-- 	<scm> -->
+<!-- 		<connection>scm:svn:http://none</connection> -->
+<!-- 		<url>scm:svn:https://none</url> -->
+<!-- 	</scm> -->
 
 	<reporting>
 		<plugins>
