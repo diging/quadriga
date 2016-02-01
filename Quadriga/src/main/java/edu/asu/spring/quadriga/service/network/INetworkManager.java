@@ -58,42 +58,6 @@ public interface INetworkManager {
 	public static String NEWNETWORK= "NEW";
 	public static String UPDATENETWORK= "UPDATE";
 
-	/**
-	 * Getter for QStore network adding URL. 
-	 * This value would be stored in the rest-service.xml in the spring configuration location.
-	 * We use {@link Autowired} to get {@link String} with ID "qStoreURL" and "qStoreURL_Add" from rest-service.xml
-	 * @return			URL with type {@link String} 
-	 */
-	public abstract String getQStoreAddURL();
-
-	/**
-	 * Getter for URL to get network XML from QStore. 
-	 * This value would be stored in the rest-service.xml in the spring configuration location.
-	 * We use {@link Autowired} to get {@link String} with ID "qStoreURL" and "qStoreURL_Get" from rest-service.xml
-	 * @return			URL with type {@link String} 
-	 */
-	public abstract String getQStoreGetURL();
-	
-	/**
-	 * Getter for URL to get whole network XML from QStore by sending a list of {@link RelationEventType} IDs and {@link AppellationEventType} IDs. 
-	 * This value would be stored in the rest-service.xml in the spring configuration location.
-	 * We use {@link Autowired} to get {@link String} with ID "qStoreURL" and "qStoreURL_Post" from rest-service.xml
-	 * @return			URL with type {@link String} 
-	 */
-	public abstract String getQStoreGetPOSTURL();
-
-
-	/**
-	 * This method should help in storing the XML in QStore and receive output from QStore with IDs.
-	 * We could check for errors from QStores if the XML sent to store may not be well formed.
-	 * @param XML									Network XML in form of {@link String}	
-	 * @return										Returns the XML with IDs filled by QStore
-	 * @throws ParserConfigurationException			Parsing exception 
-	 * @throws SAXException							SAX exception while parsing the MXL
-	 * @throws IOException							IO Exceptions while accessing QStore.
-	 */
-	public abstract String storeXMLQStore(String XML)
-			throws ParserConfigurationException, SAXException, IOException;
 
 	/**
 	 * Get {@link INetwork} object for a given networkId and {@link IUser}.
@@ -159,18 +123,6 @@ public interface INetworkManager {
 	public abstract void archiveNetwork(String networkId) throws QuadrigaStorageException;
 
 	/**
-	 * This method should help in getting Network XML from Qstore for a list of network statement.
-	 * @param XML									List of {@link RelationEventType} ID and {@link AppellationEventType} IDs embedded in XML 
-	 * @return										{@link String} XML containing {@link ElementEventsType} embedding {@link RelationEventType} and {@link AppellationEventType}
-	 * @throws ParserConfigurationException			Throws Parse config errors in case
-	 * @throws SAXException							Throws SAX Exception if the XML is not formed properly
-	 * @throws IOException							Throws IO exception in case the QStore is not available
-	 */
-	public abstract String getNetworkXMLFromQStoreForAListOfCStatements(String XML) throws ParserConfigurationException,
-			SAXException, IOException;
-
-
-	/**
 	 * This method should help in getting the network's previous version network statements.
 	 * We could use this to view different versions of the networks. 
 	 * @param networkId							{@link INetwork} ID of type {@link String}
@@ -213,16 +165,6 @@ public interface INetworkManager {
 	 * @throws JSONException					Throws the JSon Exception in case we have any exception while forming the JSon object
 	 */
 	public abstract String getNetworkJSTreeJson(String userName) throws JSONException;
-
-	/**
-	 * This method should help in getting {@link ElementEventsType} XML for a particular {@link RelationEventType} ID.
-	 * Usually our source of XML would be from QStore for a particular {@link RelationEventType} ID.
-	 * This function would return nothing if the {@link RelationEventType} ID is not present in QStore.
-	 * @param relationEventTypeID				{@link RelationEventType} ID of type {@link String}
-	 * @return									Returns the {@link ElementEventsType} Object in form of XML.
-	 * @throws JAXBException					JAXB exception are thrown during unmarshalling the object into XML.
-	 */
-	public abstract  String getCreationEventXmlStringFromQstore(String relationEventTypeID)throws JAXBException;
 
 	/**
 	 * This method should help in returning the UUID in the form of {@link String}.
@@ -382,5 +324,8 @@ public interface INetworkManager {
 
 	String getSourceReferenceFromElementEventsType(
 			ElementEventsType elementEventsType);
+
+    public String storeNetworks(String xml)
+            throws QStoreStorageException;
 	
 }
