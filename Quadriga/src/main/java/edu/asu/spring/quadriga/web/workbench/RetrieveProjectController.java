@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceFormManager;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +50,9 @@ public class RetrieveProjectController
 	@Autowired
 	private IListWSManager wsManager;
 
+    @Autowired
+    ModifyWorkspaceFormManager workspaceFormManager;
+
 	public IListWSManager getWsManager() {
 		return wsManager;
 	}
@@ -73,8 +78,7 @@ public class RetrieveProjectController
 
 	/**
 	 *this method acts as a controller for handling all the activities on the workbench
-	 *home page 
-	 * @param 	model maps projectlist to view (jsp page) 
+	 *home page
 	 * @param   principal
 	 * @return 	string for workbench url 
 	 * @throws  QuadrigaStorageException
@@ -181,9 +185,16 @@ public class RetrieveProjectController
 
 		List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
+        // To get number of inactive workspaces
+        List<ModifyWorkspace> deactivatedWSList = workspaceFormManager
+                .getDeactivatedWorkspaceList(projectid, principal.getName());
+        int deactivatedWSSize = deactivatedWSList != null ? deactivatedWSList.size() : 0;
+
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);
 		model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
+        model.getModelMap().put("deactivatedWSSize", deactivatedWSSize);
+
 		if(projectSecurity.isProjectOwner(userName,projectid)){
 			model.getModelMap().put("owner", 1);
 		}else{
