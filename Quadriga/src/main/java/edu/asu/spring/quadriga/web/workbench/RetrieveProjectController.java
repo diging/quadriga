@@ -50,9 +50,6 @@ public class RetrieveProjectController
 	@Autowired
 	private IListWSManager wsManager;
 
-    @Autowired
-    ModifyWorkspaceFormManager workspaceFormManager;
-
 	public IListWSManager getWsManager() {
 		return wsManager;
 	}
@@ -185,10 +182,13 @@ public class RetrieveProjectController
 
 		List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
-        // To get number of inactive workspaces
-        List<ModifyWorkspace> deactivatedWSList = workspaceFormManager
-                .getDeactivatedWorkspaceList(projectid, principal.getName());
-        int deactivatedWSSize = deactivatedWSList != null ? deactivatedWSList.size() : 0;
+        // list inactive and archived workspaces
+        List<IWorkSpace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
+
+        List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
+
+        int deactivatedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
+        deactivatedWSSize += deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
 
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);
