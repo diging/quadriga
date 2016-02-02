@@ -67,16 +67,24 @@
 			<hr> <!--  Display associated workspace -->
 			
 			<strong>Workspaces in this project:</strong>
+			<div style="float:right;">
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add Workspace</a>
+			</div>
+			
 			<ul>
 			<c:forEach var="workspace" items="${workspaceList}">
 				<li class="ws with-icon">
 					<a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
 							value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
-						
+
+			
 					<c:out
 					value="${workspace.description}"></c:out>
 				</li>
+				 	<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Workspace
+			<ul>
+				 
 			</c:forEach>
 			
 			<c:forEach var="workspace" items="${collabworkspacelist}">
