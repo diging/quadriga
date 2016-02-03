@@ -56,34 +56,33 @@ public class RestAccessAspect {
      */
     @Around("within(edu.asu.spring.quadriga.rest..*) && @annotation(checks)")
     public Object chkAuthorization(ProceedingJoinPoint pjp, RestAccessPolicies checks) throws Throwable {
-        boolean haveAccess;
-        String userName;
-        String accessObjectId;
-        IAuthorization authorization;
-
-        haveAccess = true;
+        
+        boolean haveAccess = true;
 
         // retrieve the logged in User name
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        userName = auth.getName();
+        String userName = auth.getName();
+        
+        if(userName == null || "".equals(userName)){
+            throw new RestException(401);
+        }
+        
         // Loop through all the access policies specified
         ElementAccessPolicy[] policies = checks.value();
 
         for (ElementAccessPolicy policy : policies) {
             // retrieve the authorization object based on the type
-            authorization = authorizationManager.getAuthorizationObject(policy.type());
+            IAuthorization authorization = authorizationManager.getAuthorizationObject(policy.type());
             try {
                 // calling the object
                 if (policy.paramIndex() > 0) {
-                    accessObjectId = pjp.getArgs()[policy.paramIndex() - 1].toString();
-
+                    String accessObjectId = pjp.getArgs()[policy.paramIndex() - 1].toString();
                     haveAccess = authorization.chkAuthorization(userName, accessObjectId, policy.userRole());
-
                 } else {
                     haveAccess = authorization.chkAuthorizationByRole(userName, policy.userRole());
                 }
             } catch (QuadrigaAccessException e) {
-                throw new RestException(404);
+                throw new RestException(403);
             }
 
             if (haveAccess) {
@@ -94,8 +93,7 @@ public class RestAccessAspect {
         if (!haveAccess) {
             throw new RestException(403);
         }
-        Object retVal = pjp.proceed();
-        return retVal;
+        return pjp.proceed();
     }
 
 }

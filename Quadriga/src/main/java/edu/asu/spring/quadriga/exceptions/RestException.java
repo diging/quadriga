@@ -9,17 +9,9 @@ package edu.asu.spring.quadriga.exceptions;
 public class RestException extends Exception {
 
     private int errorcode;
-
-    public int getErrorcode() {
-        return errorcode;
-    }
-
-    public void setErrorcode(int errorcode) {
-        this.errorcode = errorcode;
-    }
-
+    
     private static final long serialVersionUID = 8092941011459848011L;
-
+    
     public RestException(String arg0, Throwable arg1) {
         super(arg0, arg1);
     }
@@ -47,6 +39,14 @@ public class RestException extends Exception {
     public RestException(int errorno, Throwable error) {
         super(error);
         errorcode = errorno;
+    }
+
+    public int getErrorcode() {
+        return errorcode;
+    }
+
+    public void setErrorcode(int errorcode) {
+        this.errorcode = errorcode;
     }
 
 }

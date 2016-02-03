@@ -94,7 +94,6 @@ public class ConceptCollectionRestController {
     @Autowired
     private IConceptCollectionManager conceptControllerManager;
 
-    private IConceptCollection collection;
     @Autowired
     private IConceptCollectionFactory collectionFactory;
 
@@ -342,8 +341,6 @@ public class ConceptCollectionRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
         }
 
-        IConceptCollection collection = conceptCollectionFactory.createConceptCollectionObject();
-
         if (ccName == null || ccName.isEmpty()) {
             String errorMsg = restMessage.getErrorMsg("Please provide concept collection name", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
@@ -374,12 +371,13 @@ public class ConceptCollectionRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
+        IConceptCollection collection = conceptCollectionFactory.createConceptCollectionObject();
         collection.setDescription(desc);
         collection.setOwner(user);
         collection.setConceptCollectionName(ccName);
 
         conceptControllerManager.addConceptCollection(collection);
-        String ccId = conceptControllerManager.getConceptCollectionId(ccName);
+        String ccId = collection.getConceptCollectionId();
 
         Iterator<Concept> iter = conceptList.iterator();
 
@@ -426,16 +424,14 @@ public class ConceptCollectionRestController {
     @RequestMapping(value = "rest/conceptdetails/{collectionID}", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getConceptList(@PathVariable("collectionID") String collectionID, ModelMap model,
             HttpServletRequest req, Principal principal) throws RestException {
-        VelocityEngine engine = null;
-        Template template = null;
         StringWriter sw = new StringWriter();
-        collection = collectionFactory.createConceptCollectionObject();
+        IConceptCollection collection = collectionFactory.createConceptCollectionObject();
         collection.setConceptCollectionId(collectionID);
         try {
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             conceptControllerManager.fillCollectionDetails(collection, principal.getName());
-            template = engine.getTemplate("velocitytemplates/conceptdetails.vm");
+            Template template = engine.getTemplate("velocitytemplates/conceptdetails.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", collection.getConceptCollectionConcepts());
             context.put("conceptPowerURL", conceptPowerURL);

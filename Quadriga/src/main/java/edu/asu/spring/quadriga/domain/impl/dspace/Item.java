@@ -23,7 +23,6 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItems;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceItems;
-import edu.asu.spring.quadriga.rest.DspaceRestController;
 
 /**
  * The class representation of the Item got from Dspace repostiory. When needed it also loads the bitstreams from dspace.
@@ -51,7 +50,7 @@ public class Item implements IItem{
 	private IBitStreamFactory bitstreamFactory;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(DspaceRestController.class);
+			.getLogger(Collection.class);
 
 	public Item()
 	{

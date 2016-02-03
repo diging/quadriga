@@ -100,14 +100,13 @@ public class NetworkRestController {
      * @throws RestException
      */
     @RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
-    public ResponseEntity<String> getNetworkFromClients(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<String> uploadNetwork(HttpServletRequest request, HttpServletResponse response,
             @RequestBody String xml, @RequestHeader("Accept") String accept, Principal principal)
                     throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException,
                     TransformerException, QuadrigaStorageException, RestException {
 
         IUser user = userManager.getUser(principal.getName());
         String networkName = request.getParameter("networkname");
-        String networkId = "";
         String workspaceid = request.getParameter("workspaceid");
 
         if (workspaceid == null || workspaceid.isEmpty()) {
@@ -140,8 +139,8 @@ public class NetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
-        networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,
-                networkId, INetworkManager.VERSION_ZERO);
+        String networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,
+                "", INetworkManager.VERSION_ZERO);
 
         // TODO: Send email to all editors of a workspace
         // TODO: Get the workspace editors from the workspaceid
@@ -238,7 +237,7 @@ public class NetworkRestController {
      *             Throws the exception for any issue in the Velocity engine
      */
     @RequestMapping(value = "rest/network/{NetworkId}/annotations", method = RequestMethod.GET, produces = "application/xml")
-    public ResponseEntity<String> getAnnotationOfNetwork(@PathVariable("NetworkId") String networkId,
+    public ResponseEntity<String> getNetworkAnnotations(@PathVariable("NetworkId") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
         INetwork network = null;
         
@@ -408,7 +407,7 @@ public class NetworkRestController {
      * @throws Exception
      */
     @RequestMapping(value = "rest/workspace/{workspaceid}/approvednetworks", method = RequestMethod.GET, produces = "application/xml")
-    public ResponseEntity<String> getWorkspaceApprovedNetworkList(@PathVariable("workspaceid") String workspaceId,
+    public ResponseEntity<String> getApprovedNetworks(@PathVariable("workspaceid") String workspaceId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
 
         IWorkSpace workspace = null;
@@ -463,7 +462,7 @@ public class NetworkRestController {
      * @throws Exception
      */
     @RequestMapping(value = "rest/network/{networkid}", method = RequestMethod.GET, produces = "application/xml")
-    public ResponseEntity<String> getNetworkXmlFromQstore(@PathVariable("networkid") String networkId,
+    public ResponseEntity<String> getNetwork(@PathVariable("networkid") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
 
         INetwork network = null;
@@ -506,7 +505,7 @@ public class NetworkRestController {
     }
 
     @RequestMapping(value = "rest/mynetworks", method = RequestMethod.GET, produces = "application/xml")
-    public ResponseEntity<String> getMyNetwork(HttpServletResponse response, String accept, Principal principal,
+    public ResponseEntity<String> getMyNetworks(HttpServletResponse response, String accept, Principal principal,
             HttpServletRequest req) throws RestException {
 
         IUser user = null;

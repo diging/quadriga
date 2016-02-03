@@ -122,16 +122,12 @@ public class DictionaryRestController {
     public ResponseEntity<String> listDictionaries(ModelMap model, Principal principal, HttpServletRequest req)
             throws RestException {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<IDictionary> dictionaryList = null;
-        VelocityEngine engine = null;
-
-        Template template = null;
 
         try {
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            dictionaryList = dictionaryManager.getDictionariesList(user.getUsername());
-            template = engine.getTemplate("velocitytemplates/dictionarylist.vm");
+            List<IDictionary> dictionaryList = dictionaryManager.getDictionariesList(user.getUsername());
+            Template template = engine.getTemplate("velocitytemplates/dictionarylist.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", dictionaryList);
             StringWriter writer = new StringWriter();
@@ -165,16 +161,12 @@ public class DictionaryRestController {
     public ResponseEntity<String> listWorkspaceDictionaries(@PathVariable("workspaceId") String workspaceId,
             ModelMap model, Principal principal, HttpServletRequest req) throws RestException {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<IWorkspaceDictionary> dictionaryList = null;
-        VelocityEngine engine = null;
-
-        Template template = null;
 
         try {
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            dictionaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, user.getUsername());
-            template = engine.getTemplate("velocitytemplates/workspacedictionarylist.vm");
+            List<IWorkspaceDictionary> dictionaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, user.getUsername());
+            Template template = engine.getTemplate("velocitytemplates/workspacedictionarylist.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", dictionaryList);
             StringWriter writer = new StringWriter();
@@ -208,22 +200,19 @@ public class DictionaryRestController {
             HttpServletRequest req) throws RestException {
 
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<IDictionaryItems> dictionaryItemsList = null;
-        VelocityEngine engine = null;
 
         // TODO details not getting retrieved
-        Template template = null;
 
         try {
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             logger.debug("Getting dictionary items list for dictionary id : " + dictionaryId);
-            dictionaryItemsList = dictionaryManager.getDictionariesItems(dictionaryId, user.getUsername());
+            List<IDictionaryItems> dictionaryItemsList = dictionaryManager.getDictionariesItems(dictionaryId, user.getUsername());
 
             if (dictionaryItemsList == null) {
                 throw new RestException(404);
             }
-            template = engine.getTemplate("velocitytemplates/dictionaryitemslist.vm");
+            Template template = engine.getTemplate("velocitytemplates/dictionaryitemslist.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             String updateFromWordPowerURL = wordPowerURL;
             context.put("list", dictionaryItemsList);
@@ -272,7 +261,6 @@ public class DictionaryRestController {
 
         String dictName = request.getParameter("name");
         String desc = request.getParameter("desc");
-        IDictionary dictionary = dictionaryFactory.createDictionaryObject();
 
         if (dictName == null || dictName.isEmpty()) {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary name", request);
@@ -303,7 +291,8 @@ public class DictionaryRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-
+        
+        IDictionary dictionary = dictionaryFactory.createDictionaryObject();
         dictionary.setDescription(desc);
         dictionary.setOwner(user);
         dictionary.setDictionaryName(dictName);
@@ -337,8 +326,8 @@ public class DictionaryRestController {
 
     /**
      * Rest interface for uploading XML for concept collection http://<<URL>:
-     * <PORT>>/quadriga/rest/syncconcepts/{conceptCollectionID}
-     * hhttp://localhost:8080/quadriga/rest/syncconcepts/
+     * <PORT>>/quadriga/rest/syncdictionary/{dictionaryID}
+     * hhttp://localhost:8080/quadriga/rest/syncdictionary/
      * 
      * @author Lohith Dwaraka
      * @param request
@@ -358,7 +347,7 @@ public class DictionaryRestController {
     @RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = {
             RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "rest/syncdictionary/{dictionaryID}", method = RequestMethod.POST)
-    public ResponseEntity<String> getCCXMLFromVogon(@PathVariable("dictionaryID") String dictionaryID,
+    public ResponseEntity<String> syncDictionary(@PathVariable("dictionaryID") String dictionaryID,
             HttpServletRequest request, HttpServletResponse response, @RequestBody String xml,
             @RequestHeader("Accept") String accept, Principal principal)
                     throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException,
