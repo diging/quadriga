@@ -113,9 +113,9 @@ public class RelationType {
      * @param rt : RelationType
      * @return PredicateType
      */
-    public PredicateType getPredicateType(RelationType rt){
+    public PredicateType getPredicateType(){
 		PredicateType  predicate = null;
-		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+		List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
 		Iterator <JAXBElement<?>> I2 = e3.iterator();
 		while(I2.hasNext()){
 			JAXBElement<?> element = (JAXBElement<?>) I2.next();
@@ -133,9 +133,9 @@ public class RelationType {
      * @param rt : RelationType
      * @return SubjectObjectType
      */
-	public SubjectObjectType getSubjectType(RelationType rt){
+	public SubjectObjectType getSubjectType(){
 		SubjectObjectType subjectType = null;
-		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+		List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
 		Iterator <JAXBElement<?>> I2 = e3.iterator();
 		while(I2.hasNext()){
 			JAXBElement<?> element = (JAXBElement<?>) I2.next();

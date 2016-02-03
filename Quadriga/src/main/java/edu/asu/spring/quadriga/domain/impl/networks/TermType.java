@@ -80,9 +80,9 @@ public class TermType {
      * @param tt
      * @return
      */
-    public String getTermInterpertation(TermType tt){
+    public String getTermInterpertation(){
     	String interpertation ="";
-    	List<JAXBElement<?>> e3 =tt.getIdOrCreatorOrCreationDate();
+    	List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
 		Iterator <JAXBElement<?>> I2 = e3.iterator();
 		while(I2.hasNext()){
 			JAXBElement<?> element = (JAXBElement<?>) I2.next();
@@ -99,9 +99,9 @@ public class TermType {
      * @param tt
      * @return
      */
-    public String getTermID(TermType tt){
+    public String getTermID(){
     	String id ="";
-    	List<JAXBElement<?>> e3 =tt.getIdOrCreatorOrCreationDate();
+    	List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
 		Iterator <JAXBElement<?>> I2 = e3.iterator();
 		while(I2.hasNext()){
 			JAXBElement<?> element = (JAXBElement<?>) I2.next();

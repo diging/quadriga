@@ -30,18 +30,7 @@ function changeLayout(json,networkid,path,type)
 $("input[type=button]").button().click(function(event) {
 	event.preventDefault();
 });</script>
-<script type="text/javascript">
-  $(function() {
-	  
-	var availableTags = [];
-	<c:forEach var="node" items="${nodeList}">
-		availableTags.push("${node.nodeName}");                                  
-	</c:forEach>
-    $( "#tags" ).autocomplete({
-      source: availableTags
-    });
-  });
-  </script>
+
 
 <body
 	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />

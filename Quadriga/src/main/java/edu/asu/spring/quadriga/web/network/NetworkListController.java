@@ -21,15 +21,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -44,6 +45,12 @@ public class NetworkListController {
 
 	@Autowired
 	INetworkManager networkManager;
+	
+	@Autowired
+    private INetworkTransformationManager transformationManager;
+    
+    @Autowired
+    private ID3Creator d3Creator;
 
 	@Autowired
 	@Qualifier("restTemplate")
@@ -157,12 +164,13 @@ public class NetworkListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork= transformationManager.getTransformedNetwork(networkId);
+		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		if(networkJSon!=null){
-			json = networkJSon.getJson();
+		if(transformedNetwork!=null){
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 
@@ -190,19 +198,16 @@ public class NetworkListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 
 		logger.info("Source reference ID " + networkManager.getSourceReferenceURL(networkId, networkManager.getLatestVersionOfNetwork(networkId)));
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		List<ID3Node> nodeList = null;
-		if(networkJSon!=null){
-			json = networkJSon.getJson();
-			nodeList =networkJSon.getNodeList();
+		if(transformedNetwork!=null){
+		    json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
-		model.addAttribute("nodeList",nodeList);
 		return "auth/editing/editnetworks";
 	}
 
