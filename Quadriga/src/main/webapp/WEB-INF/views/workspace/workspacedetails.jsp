@@ -398,7 +398,7 @@
                         <c:if test="${isDeactivated == false }">
                             <font color="#CCCCCC"
                                 title="The workspace is already activated.">
-                                Activate Workspace</a>&nbsp;&nbsp;
+                                Activate Workspace&nbsp;&nbsp;
                             </font>
                         </c:if>
 
@@ -411,8 +411,18 @@
                         <c:if test="${isDeactivated == true }">
                             <font color="#CCCCCC"
                                 title="The workspace is already deactivated.">
-                                Deactivate Workspace</a>&nbsp;&nbsp;
+                                Deactivate Workspace&nbsp;&nbsp;
                             </font>
+                        </c:if>
+
+                        <c:if test="${isArchived == true}">
+                            <a href="#"
+                               onclick="return confirmArchive(false);">Unarchive Workspace</a>&nbsp;&nbsp;
+                        </c:if>
+
+                        <c:if test="${isArchived == false}">
+                            <a href="#"
+                               onclick="return confirmArchive(true);">Archive Workspace</a>&nbsp;&nbsp;
                         </c:if>
 
                         <c:if test="${isDeactivated == true}">
@@ -589,6 +599,37 @@
 										}
 									});
 				}
+
+                function confirmArchive(isArchive) {
+                    isArchive = !!isArchive;
+                    var txt = isArchive ? 'Archive' : 'Unarchive';
+                    var pos = [ $(window).width() / 4, 50 ];
+                    var url = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}';
+                    var path = isArchive ? '/archiveWorkspace' : '/unarchiveWorkspace';
+                    var title = isArchive ? 'Archive Workspace' : 'Unarchive Workspace';
+                    path += '?projectid=${myprojectid}';
+                    $('#dialog-confirm')
+                            .html('Are you sure you want to ' + txt + ' this workspace?')
+                            .dialog({
+                                resizable : false,
+                                modal : true,
+                                title : title,
+                                height : 180,
+                                width : 650,
+                                position : pos,
+                                buttons : {
+                                    "Yes" : function() {
+                                        $(this).dialog('close');
+                                        location.href = url + path;
+                                        return false;
+                                    },
+                                    "No" : function() {
+                                        $(this).dialog('close');
+                                        return false;
+                                    }
+                                }
+                            });
+                }
 			</script> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"
