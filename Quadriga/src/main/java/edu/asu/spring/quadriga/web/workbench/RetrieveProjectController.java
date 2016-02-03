@@ -182,13 +182,9 @@ public class RetrieveProjectController
 
 		List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
-        // list inactive and archived workspaces
-        List<IWorkSpace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
-
         List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
 
-        int deactivatedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
-        deactivatedWSSize += deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
+        int deactivatedWSSize = deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
 
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);
