@@ -589,74 +589,8 @@
 										}
 									});
 				}
-			</script> <c:choose>
-				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
-					<form id="bitstream" method="POST"
-						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
-						<font size="2"><input type="submit"
-							onclick="submitClick();" value="Delete Dspace Files" /> <c:choose>
-								<c:when test="${empty dspaceKeys}"></c:when>
-							</c:choose></font> <br>
-						<table class="display dataTable" style="width: 100%">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Item</th>
-									<th>File</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="workspaceBitstream"
-									items="${workspacedetails.workspaceBitStreams}">
-									<tr bgcolor="#E0F0FF">
-										<td>
-											<div
-												id='checkbox_<c:out value="${workspaceBitstream.bitStream.id}"/>'
-												class='checkbox_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
-												<c:choose>
-													<c:when
-														test="${not((workspaceBitstream.bitStream.name == 'No Access to File') or (workspaceBitstream.bitStream.name == 'Wrong Dspace Authentication') or (workspaceBitstream.bitStream.name == 'Dspace is Down...')) }">
-														<c:choose>
-															<c:when
-																test="${not(workspaceBitstream.bitStream.name == 'Checking BitStream Access...')}">
-																<input type="checkbox" class="checkbox"
-																	name="bitstreamids"
-																	value="${workspaceBitstream.bitStream.id}" />
-															</c:when>
-														</c:choose>
-													</c:when>
-												</c:choose>
-											</div>
-										</td>
-										<td><div
-												class='item_<c:out value="${workspaceBitstream.bitStream.id}"/>'
-												id='item_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
-												<font size="1"><c:out
-														value="${workspaceBitstream.bitStream.itemName}"></c:out></font>
-											</div></td>
-										<td><div
-												class='bitstream_<c:out value="${workspaceBitstream.bitStream.id}"/>'
-												id='bitstream_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
-												<font size="1"><c:out
-														value="${workspaceBitstream.bitStream.name}"></c:out></font>
-											</div></td>
-									</tr>
-								</c:forEach>
-							</tbody>
-							<tfoot>
-								<tr>
-									<th></th>
-									<th>Item</th>
-									<th>File</th>
-								</tr>
-							</tfoot>
-						</table>
-					</form>
-				</c:when>
-				<c:otherwise>
-					<br>Workspace does not contain any files from dspace !
-				</c:otherwise>
-			</c:choose>
+			</script> 
+
 			<hr> <!-- Display Networks --> <c:choose>
 				<c:when test="${not empty networkList}">
 					<span class="byline">Networks belonging to this workspace</span>
