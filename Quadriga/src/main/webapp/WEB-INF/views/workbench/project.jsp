@@ -82,7 +82,7 @@
 					<c:out
 					value="${workspace.description}"></c:out>
 				</li>
-				 	<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Workspace
+	
 			<ul>
 				 
 			</c:forEach>
