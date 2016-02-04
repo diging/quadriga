@@ -63,8 +63,16 @@
 					<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses.png"> You are an Editor on this Project
 					(<a href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.projectId}">Remove me as Editor</a>)
 					</c:if>
+					
+			<hr>
+			<strong>Text files in this project:</strong>
+	
+			<div style="float:right;">
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addtextfiles">Add Textfile</a>
+			</div>
 			
-			<hr> <!--  Display associated workspace -->
+			
+			<hr> <!--  Display associated workspace -->			
 			
 			<strong>Workspaces in this project:</strong>
 			<ul>
@@ -87,6 +95,7 @@
 			</c:forEach>
 			</ul>
 			
+				
 			<div style="float:right;">
 				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add Workspace</a>
 			</div>
