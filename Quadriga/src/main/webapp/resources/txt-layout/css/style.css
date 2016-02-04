@@ -871,14 +871,14 @@
        font-size: 20px;
     }*/
     
-    li.dt:before {
+    /*li.dt:before {
        content:'\e032';
        font-family: 'Glyphicons Halflings';
        top: 20px;
        font-size: 20px;
-    }
+    }*/
     
-    li.ws, li.cc {
+    li.ws, li.cc, li.dt {
          position: relative;
          display: block;
          padding-left: 10px;
