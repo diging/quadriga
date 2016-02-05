@@ -1,7 +1,9 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.network.INetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
         return networkJSon;
     }
-    
-    @Override
+
+	@Override
     public ITransformedNetwork getTransformedNetwork(String networkId) throws QuadrigaStorageException {
 
         ITransformedNetwork networkJSon = null;
@@ -56,8 +58,41 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             return null;
         }
 
-        networkJSon = transformer.transformNetwork(networkTopNodesList); 
+        networkJSon = transformer.transformNetwork(networkTopNodesList);
 
         return networkJSon;
     }
+
+	@Override
+	public ITransformedNetwork getTransformedNetworkOfProject(String projectId)
+			throws QuadrigaStorageException {
+
+		List<INetwork> networkList = null;
+
+		List<INetworkNodeInfo> networkNodeInfoList = new ArrayList<INetworkNodeInfo>();
+
+		try {
+			networkList = networkManager.getNetworksInProject(projectId);
+		} catch (QuadrigaStorageException e) {
+			logger.error("DB Error while getting networks a project id", e);
+			return null;
+		}
+
+		for (INetwork network: networkList) {
+
+			try {
+				List<INetworkNodeInfo> localNetworkNodeInfoList =
+						networkManager.getNetworkTopNodes(network.getNetworkId());
+				if (localNetworkNodeInfoList != null) {
+					networkNodeInfoList.addAll(localNetworkNodeInfoList);
+				}
+			} catch (QuadrigaStorageException e) {
+				logger.error("DB Error while getting network top nodes for a network with id - " +
+						network.getNetworkId(), e);
+			}
+
+		}
+
+		return null;
+	}
 }
