@@ -45,18 +45,6 @@
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections">Delete</a></li>
 			</ul>
 		</li>
-		<!-- 
-		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
-		<ul>
-			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">
-			Add</a></li>
-			
-			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators">
-			Delete</a></li>
-			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/pen.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators">
-			Update</a></li>
-		</ul>
-		</li>
-		 -->
+		
 	</ul>
 </div>
