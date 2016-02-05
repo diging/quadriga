@@ -16,7 +16,7 @@
 	
 	$(function() 
 			{
-				    $( "#tabs" ).tabs();
+				   $( "#tabs" ).tabs();
 			});
 	
 	/* inactiveWS()
@@ -82,7 +82,6 @@
 					<c:out
 					value="${workspace.description}"></c:out>
 				</li>
-	
 			<ul>
 				 
 			</c:forEach>

@@ -20,7 +20,6 @@ div.projectDiv {
 input {
 	position: relative;
 	width: 125px;
-	height: 30px;
 }
 </style>
 
