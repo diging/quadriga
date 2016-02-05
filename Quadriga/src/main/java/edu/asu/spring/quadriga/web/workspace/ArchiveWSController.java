@@ -113,7 +113,7 @@ public class ArchiveWSController
 		archiveWorkspaceList = new ArrayList<ModifyWorkspace>();
 		workspaceId = new StringBuilder();
 
-        if(result.hasErrors())
+		if(result.hasErrors())
 		{
 			// retrieve the workspaces associated with the projects
 			archiveWorkspaceList = workspaceFormManager.getActiveWorkspaceList(projectid, userName);

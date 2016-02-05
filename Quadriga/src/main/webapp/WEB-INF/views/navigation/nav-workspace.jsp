@@ -18,7 +18,14 @@
    });
   });
 </script>
-
+<!--  Issue fixed by QUAD-55 Bharat Srikantan and Ajay Modi -->
+<div>
+	<ul>
+		<li>
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Projects </a>
+		</li>
+	</ul>
+</div>
 <h2 class="major">
 	<span>Menu</span>
 </h2>

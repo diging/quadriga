@@ -81,6 +81,10 @@
 	a.inText {
 		font-weight: normal;
 	}
+	
+	a>i.fa {
+	   color: #6b7770;
+	}
 
 	form
 	{
@@ -216,10 +220,6 @@
 			display: block;
 		}
 		
-	.user {
-		padding-left: 20px;
-		background: url('images/user.png') left no-repeat;
-	}
 	
 	.loggedInMsg {
 		float: left;
@@ -878,13 +878,21 @@
        font-size: 20px;
     }
     
-    li.ws:before
+    li.ws {
+         position: relative;
+         display: block;
+         padding-left: 10px;
+         margin-top: 0.8em;
+         border: 1px solid #dddddd;
+     }
+    
+    /*li.ws:before
     {
         content:"\e117";
         font-family: 'Glyphicons Halflings';
         top: 17px;
         font-size: 20px;
-    }
+    }*/
     
    
 		
@@ -916,16 +924,17 @@
 	}
 	
 		ul.workspaceToggleList li {
-			margin-left: 45px;
+			margin-left: 25px;
 			line-height: 20px;
+			margin-bottom: 8px;
 		}
 		
-		ul.workspaceToggleList li:before {
+		/*ul.workspaceToggleList li:before {
             content:"\e117";
             font-family: 'Glyphicons Halflings';
             margin-left: -22px;
             margin-right: 5px;
-        }
+        }*/
 
 /*********************************************************************************/
 /* Footer                                                                        */

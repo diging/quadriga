@@ -182,14 +182,14 @@ public class RetrieveProjectController
 
 		List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
-        List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
+		List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
 
-        int deactivatedWSSize = deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
+		int deactivatedWSSize = deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
 
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);
 		model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
-        model.getModelMap().put("deactivatedWSSize", deactivatedWSSize);
+		model.getModelMap().put("deactivatedWSSize", deactivatedWSSize);
 
 		if(projectSecurity.isProjectOwner(userName,projectid)){
 			model.getModelMap().put("owner", 1);
