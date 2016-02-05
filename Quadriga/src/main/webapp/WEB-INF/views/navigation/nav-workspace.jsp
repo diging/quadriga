@@ -40,6 +40,12 @@
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/activateworkspace">Activate</a></li>
 			</ul>
 		</li>
+		
+		
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/list.png"}'><a
+-					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/dictionaries">List</a></li>
+-				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/list.png"}'><a
+-					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/conceptcollections">List</a></li>
 		<!-- 
 		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
 		<ul>
@@ -54,4 +60,26 @@
 		</li>
 		 -->
 	</ul>
+</div>
+<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
+	<span>DICTIONARIES</span>
+</h5>
+<div>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/keys"> Manage DSpace</a>
+	<br>
+	<img src="/quadriga/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary"${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary>Add</a>
+	<img src="/quadriga/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary">Delete</a>
+</div>
+<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
+	<span>CONCEPT COLLECTIONS</span>
+</h5>
+<div>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/keys"> Manage DSpace</a>
+	<br>
+	<img src="/quadriga/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection">Add</a>
+	<img src="/quadriga/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections">Delete</a>
 </div>
