@@ -1,2 +1,4 @@
 /target/
 /buildNumber.properties
+/.idea/
+*.iml
