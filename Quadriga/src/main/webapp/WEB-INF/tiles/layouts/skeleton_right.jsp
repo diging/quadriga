@@ -22,6 +22,7 @@
 <link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css" rel="stylesheet" />
 
 <link	href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"	rel="stylesheet" />
+<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/font-awesome-4.5.0/css/font-awesome.min.css">
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/config.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel.min.js"></script>
@@ -75,7 +76,7 @@
 			<sec:authorize access="isAuthenticated()">
 				<div>
 					<div class="loggedInMsg">
-						Welcome <span class="user" style="margin-left: 5px;"><sec:authentication
+						Welcome <i class="fa fa-user"></i><span style="margin-left: 5px;"><sec:authentication
 								property="principal.username" /></span>!
 					</div>
 					<div class="loggedOutLink">

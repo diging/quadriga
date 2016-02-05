@@ -160,7 +160,8 @@
 				<h2>Concept Collection: ${concept.conceptCollectionName}</h2>
 				<div>${concept.description}</div>
 				<div style="text-align:right">
-		            <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${concept.conceptCollectionId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Concept Collection
+		            <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${concept.conceptCollectionId}"> 
+		              <i class="fa fa-pencil-square-o"></i> Edit Concept Collection
 		            </a>
 		        </div>
 				<br>
@@ -233,29 +234,33 @@
 					<h3 class="major">
 						<span>Collaborators</span>
 					</h3>
-					<ul class="collaborators">
+					<ul>
 					<c:if test="${not empty collaboratingUsers}">
 						<c:forEach var="collab" items="${collaboratingUsers}">
-							<li><c:out value="${collab.collaborator.userObj.name}"></c:out></li>
+							<li>
+							<i class="fa fa-user"></i> 
+							<c:out value="${collab.collaborator.userObj.name}"></c:out>
+							</li>
 						</c:forEach>
 					</c:if>
+					</ul>
 					<div style="border-top: dashed 1px #e7eae8; padding: 5px; margin-top: 15px;">
 							<ul class="colltools">
-								<li><img
-									src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"
-									style="vertical-align: middle; padding-bottom: 2px;"> <a
-									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators">Add</a></li>
-								<li><img
-									src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"
-									style="vertical-align: middle; padding-bottom: 2px;"> <a
-									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deletecollaborators">Delete</a></li>
-								<li><img
-									src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/pen.png"
-									style="vertical-align: middle; padding-bottom: 2px;"> <a
-									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/updatecollaborators">Update</a></li>
+								<li> <a
+									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators">
+								   <i class="fa fa-plus-circle"></i> Add</a>
+								</li>
+								<li> <a
+									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deletecollaborators">
+								   <i class="fa fa-minus-circle"></i> Delete</a>
+								</li>
+								<li> <a
+									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/updatecollaborators">
+								   <i class="fa fa-pencil"></i> Update</a>
+								</li>
 							</ul>
 						</div>
-					</ul>
+					
 				</section>
 			</td>
 	</tr>
