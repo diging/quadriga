@@ -604,10 +604,11 @@
                     isArchive = !!isArchive;
                     var txt = isArchive ? 'Archive' : 'Unarchive';
                     var pos = [ $(window).width() / 4, 50 ];
-                    var url = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}';
-                    var path = isArchive ? '/archiveWorkspace' : '/unarchiveWorkspace';
+                    var url = '${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}';
+                    var path = isArchive ? '/archiveworkspace' : '/unarchiveworkspace';
                     var title = isArchive ? 'Archive Workspace' : 'Unarchive Workspace';
-                    path += '?projectid=${myprojectid}';
+                    path += '/${workspaceid}';
+                    console.log(url + path)
                     $('#dialog-confirm')
                             .html('Are you sure you want to ' + txt + ' this workspace?')
                             .dialog({
