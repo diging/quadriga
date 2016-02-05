@@ -94,19 +94,15 @@ public class WorkspaceRestController {
 	@RequestMapping(value = "rest/projects/{project_id}/workspaces", method = RequestMethod.GET, produces = "application/xml")
 	public ResponseEntity<String> listWorkspaces(@PathVariable("project_id") String project_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
 	{
-		List<IWorkSpace> workspaceList = null;
-		VelocityEngine engine = null;
-		Template template = null;
-
 
 		try {
-			engine = restVelocityFactory.getVelocityEngine(req);
+		    VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 			//will use in future list workspaces need to be modified
 			String userId = principal.getName();
-			workspaceList = wsManager.listWorkspace(project_id,userId);
+			List<IWorkSpace> workspaceList = wsManager.listWorkspace(project_id,userId);
 
-			template = engine.getTemplate("velocitytemplates/workspaces.vm");
+			Template template = engine.getTemplate("velocitytemplates/workspaces.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", workspaceList);
 
@@ -141,19 +137,17 @@ public class WorkspaceRestController {
 	@RequestMapping(value = "rest/workspaces/{workspaces_id}", method = RequestMethod.GET, produces = "application/xml")
 	public ResponseEntity<String> workspaceDetails(@PathVariable("workspaces_id") String workspaces_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
 	{
-		VelocityEngine engine = null;
-		Template template = null;
 
 		try {
 			//will use in future list workspaces need to be modified
 			//List<IDictionary> dictionaryList =workspaceDictionaryManager.listWorkspaceDictionary(workspaces_id, userId);
 			//List<IConceptCollection> ccList = workspaceCCManager.listWorkspaceCC(workspaces_id, userId);
 			//workspace = wsManager.getWorkspaceDetails(workspaces_id,userId);
-			engine = restVelocityFactory.getVelocityEngine(req);
+		    VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 
 
-			template = engine.getTemplate("velocitytemplates/workspacesdetails.vm");
+			Template template = engine.getTemplate("velocitytemplates/workspacesdetails.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			
 			context.put("workspaceid", workspaces_id);

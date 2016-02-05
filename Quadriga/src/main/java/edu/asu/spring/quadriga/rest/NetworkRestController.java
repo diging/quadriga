@@ -167,25 +167,20 @@ public class NetworkRestController {
     @RequestMapping(value = "rest/networkstatus/{NetworkId}", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getNetworkStatus(@PathVariable("NetworkId") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
-        INetwork network = null;
-        
-        IUser user = null;
-        VelocityEngine engine = null;
-        Template template = null;
         
         try {
-            network = networkManager.getNetwork(networkId);
+            INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
                 String errorMsg = errorMessageRest.getErrorMsg("Network ID : " + networkId + " doesn't exist");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
             String status = networkManager.getNetworkStatusCode(network.getStatus()) + "";
             
-            user = userManager.getUser(principal.getName());
-            engine = restVelocityFactory.getVelocityEngine(req);
+            IUser user = userManager.getUser(principal.getName());
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
 
-            template = engine.getTemplate("velocitytemplates/networkstatus.vm");
+            Template template = engine.getTemplate("velocitytemplates/networkstatus.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             if (network.getStatus() == null)
                 context.put("status", INetworkStatus.UNKNOWN_CODE + "");
@@ -239,22 +234,18 @@ public class NetworkRestController {
     @RequestMapping(value = "rest/network/{NetworkId}/annotations", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getNetworkAnnotations(@PathVariable("NetworkId") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
-        INetwork network = null;
         
-        IUser user = null;
-        VelocityEngine engine = null;
-        Template template = null;
         try {
-            network = networkManager.getNetwork(networkId);
+            INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
                 String errorMsg = errorMessageRest.getErrorMsg("Network ID : " + networkId + " doesn't exist");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
-            user = userManager.getUser(principal.getName());
-            engine = restVelocityFactory.getVelocityEngine(req);
+            IUser user = userManager.getUser(principal.getName());
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
 
-            template = engine.getTemplate("velocitytemplates/networkannotations.vm");
+            Template template = engine.getTemplate("velocitytemplates/networkannotations.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("networkId", networkId);
             List<INetworkAnnotation> networkAnnoList = editingNetworkAnnoManager
@@ -291,27 +282,23 @@ public class NetworkRestController {
      * @param accept
      * @param principal
      * @return status
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/workspace/{workspaceid}/networks", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getWorkspaceNetworkList(@PathVariable("workspaceid") String workspaceId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
-        IWorkSpace workspace = null;
-        List<IWorkspaceNetwork> workspaceNetworkList = null;
-        VelocityEngine engine = null;
-        Template template = null;
         try {
-            workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
+            IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
             if (workspace == null) {
                 String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
 
-            workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceId);
+            List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceId);
             workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            template = engine.getTemplate("velocitytemplates/approvednetworks.vm");
+            Template template = engine.getTemplate("velocitytemplates/approvednetworks.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("workspaceNetworkList", workspaceNetworkList);
             StringWriter writer = new StringWriter();
@@ -347,29 +334,24 @@ public class NetworkRestController {
      * @param accept
      * @param principal
      * @return status
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/workspace/{workspaceid}/rejectednetworks", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getWorkspaceRejectedNetworkList(@PathVariable("workspaceid") String workspaceId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
 
-        IWorkSpace workspace = null;
-
-        List<IWorkspaceNetwork> workspaceNetworkList = null;
-        VelocityEngine engine = null;
-        Template template = null;
         try {
-            workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
+            IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
             if (workspace == null) {
                 String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
 
-            workspaceNetworkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
+            List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
             workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            template = engine.getTemplate("velocitytemplates/rejectednetworks.vm");
+            Template template = engine.getTemplate("velocitytemplates/rejectednetworks.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("workspaceNetworkList", workspaceNetworkList);
             StringWriter writer = new StringWriter();
@@ -404,29 +386,24 @@ public class NetworkRestController {
      * @param accept
      * @param principal
      * @return status
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/workspace/{workspaceid}/approvednetworks", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getApprovedNetworks(@PathVariable("workspaceid") String workspaceId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
 
-        IWorkSpace workspace = null;
-
-        List<IWorkspaceNetwork> workspaceNetworkList = null;
-        VelocityEngine engine = null;
-        Template template = null;
         try {
-            workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
+            IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
             if (workspace == null) {
                 String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
 
-            workspaceNetworkList = wsManager.getWorkspaceApprovedNetworkList(workspaceId);
+            List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceApprovedNetworkList(workspaceId);
             workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            template = engine.getTemplate("velocitytemplates/approvednetworks.vm");
+            Template template = engine.getTemplate("velocitytemplates/approvednetworks.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("workspaceNetworkList", workspaceNetworkList);
             StringWriter writer = new StringWriter();
@@ -451,25 +428,22 @@ public class NetworkRestController {
 
     /**
      * Rest interface for getting network XML for a particular Network ID.
-     * http://<<URL>:<PORT>>/quadriga/rest/network/xml/{networkid}
-     * http://localhost:8080/quadriga/rest/network/xml/NET_1huxp4w7p71o0
+     * http://<<URL>:<PORT>>/quadriga/rest/network/{networkid}
+     * http://localhost:8080/quadriga/rest/network/NET_1huxp4w7p71o0
      * 
      * @param networkName
      * @param response
      * @param accept
      * @param principal
      * @return status
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/network/{networkid}", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getNetwork(@PathVariable("networkid") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
 
-        INetwork network = null;
-        VelocityEngine engine = null;
-        Template template = null;
         try {
-            network = networkManager.getNetwork(networkId);
+            INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
                 String errorMsg = errorMessageRest.getErrorMsg("Network ID : " + networkId + " doesn't exist");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
@@ -480,9 +454,9 @@ public class NetworkRestController {
             if (networkXML.isEmpty() || networkXML == null) {
                 throw new RestException(404);
             }
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            template = engine.getTemplate("velocitytemplates/networkinfo.vm");
+            Template template = engine.getTemplate("velocitytemplates/networkinfo.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("status", status);
             context.put("networkxml", networkXML);
@@ -508,19 +482,14 @@ public class NetworkRestController {
     public ResponseEntity<String> getMyNetworks(HttpServletResponse response, String accept, Principal principal,
             HttpServletRequest req) throws RestException {
 
-        IUser user = null;
-
-        List<INetwork> networkList = null;
-        VelocityEngine engine = null;
-        Template template = null;
         try {
-            user = userManager.getUser(principal.getName());
+            IUser user = userManager.getUser(principal.getName());
 
-            networkList = networkManager.getNetworksOfOwner(user);
+            List<INetwork> networkList = networkManager.getNetworksOfOwner(user);
             networkList = networkManager.editNetworkStatusCode(networkList);
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            template = engine.getTemplate("velocitytemplates/mynetworks.vm");
+            Template template = engine.getTemplate("velocitytemplates/mynetworks.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("networkList", networkList);
             StringWriter writer = new StringWriter();
@@ -543,42 +512,36 @@ public class NetworkRestController {
 
     /**
      * Rest interface for getting network list belonging to a workspace http://<
-     * <URL>:<PORT>>/quadriga/rest/networkdetails/{networkid}
-     * http://localhost:8080/quadriga/rest/networkdetails/NET_1huxp4w7p71o0
+     * <URL>:<PORT>>/quadriga/rest/network/{networkid}/all
+     * http://localhost:8080/quadriga/rest/network/NET_1huxp4w7p71o0/all
      * 
      * @param networkName
      * @param response
      * @param accept
      * @param principal
      * @return status
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/network/{networkid}/all", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getNetworkDetails(@PathVariable("networkid") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
 
-        INetwork network = null;
-
-        IUser user = null;
-
-        VelocityEngine engine = null;
-        Template template = null;
         try {
-            network = networkManager.getNetwork(networkId);
+            INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
                 String errorMsg = errorMessageRest.getErrorMsg("Network ID : " + networkId + " doesn't exist");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
 
-            user = userManager.getUser(principal.getName());
+            IUser user = userManager.getUser(principal.getName());
             String networkXML = networkManager.getNetworkXML(networkId);
             String status = networkManager.getNetworkStatusCode(network.getStatus()) + "";
             if (networkXML.isEmpty() || networkXML == null) {
                 throw new RestException(404);
             }
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            template = engine.getTemplate("velocitytemplates/networkdetails.vm");
+            Template template = engine.getTemplate("velocitytemplates/networkdetails.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("status", status);
             context.put("networkxml", networkXML);

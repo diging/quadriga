@@ -56,20 +56,17 @@ public class ProjectRestController {
 	 * @param userId
 	 * @param model
 	 * @return
-	 * @throws Exception
+	 * @throws RestException
 	 */
 	@RequestMapping(value = "rest/projects", method = RequestMethod.GET, produces = "application/xml")
 	public ResponseEntity<String> listProjects(ModelMap model, Principal principal, HttpServletRequest req)
 			throws RestException {
-		List<IProject> projectList = null;
-		VelocityEngine engine = null;
-		Template template = null;
 		try {
-		    engine = restVelocityFactory.getVelocityEngine(req);
+		    VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 			String userId = principal.getName();
-			projectList = projectManager.getProjectList(userId);
-			template = engine.getTemplate("velocitytemplates/projectlist.vm");
+			List<IProject> projectList = projectManager.getProjectList(userId);
+			Template template = engine.getTemplate("velocitytemplates/projectlist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", projectList);
 			

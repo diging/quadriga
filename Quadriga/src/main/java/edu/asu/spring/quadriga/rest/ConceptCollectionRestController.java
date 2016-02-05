@@ -128,15 +128,12 @@ public class ConceptCollectionRestController {
     @RequestMapping(value = "rest/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listConceptCollections(ModelMap model, Principal principal, HttpServletRequest req)
             throws RestException {
-        List<IConceptCollection> collectionsList = null;
-        VelocityEngine engine = null;
-        Template template = null;
         try {
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             String userId = principal.getName();
-            collectionsList = conceptControllerManager.getCollectionsOwnedbyUser(userId);
-            template = engine.getTemplate("velocitytemplates/conceptcollections.vm");
+            List<IConceptCollection> collectionsList = conceptControllerManager.getCollectionsOwnedbyUser(userId);
+            Template template = engine.getTemplate("velocitytemplates/conceptcollections.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", collectionsList);
 
@@ -266,16 +263,13 @@ public class ConceptCollectionRestController {
     @RequestMapping(value = "rest/workspace/{workspaceId}/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listWorkspaceConceptCollections(@PathVariable("workspaceId") String workspaceId,
             ModelMap model, Principal principal, HttpServletRequest req) throws RestException {
-        List<IWorkspaceConceptCollection> collectionsList = null;
-        VelocityEngine engine = null;
-        Template template = null;
 
         try {
-            engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             String userId = principal.getName();
-            collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
-            template = engine.getTemplate("velocitytemplates/workspaceconceptcollections.vm");
+            List<IWorkspaceConceptCollection> collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+            Template template = engine.getTemplate("velocitytemplates/workspaceconceptcollections.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", collectionsList);
 
