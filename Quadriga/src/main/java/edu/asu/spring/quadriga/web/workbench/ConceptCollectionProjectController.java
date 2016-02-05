@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -65,6 +69,33 @@ public class ConceptCollectionProjectController {
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/conceptcollections";
 	}
+
+
+	@RequestMapping(value = "auth/workbench/{projectid}/conceptcollectionsJson", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public String listProjectConceptCollectionJson(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException, JSONException {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		String userId = user.getUsername();
+		List<IProjectConceptCollection> projectConceptCollectionList = null;
+		try {
+			//TODO: listProjectConceptCollection() needs to be modified 
+			projectConceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
+		} catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
+		}
+		
+		JSONArray ja = new JSONArray();
+        for(IProjectConceptCollection conceptCollection : projectConceptCollectionList){
+            JSONObject j = new JSONObject();
+            j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
+            j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
+            ja.put(j);
+        }
+        
+		return ja.toString();
+	}
+
 
 	//	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	//	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
