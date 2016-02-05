@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<sec:authentication var="principal" property="principal" />
 
 <script>
 	$(document).ready(function() {
@@ -12,6 +14,20 @@
 		$("ul.pagination1").quickPagination({
 			pageSize : "3"
 		});
+		
+		var bool = ${(principal.username.toLowerCase()) != 'admin' && owner !='1'};
+		if(bool){
+			$('.collabEdit').click(function (e) {
+		        e.preventDefault();
+		    });
+			
+			$(".collabEdit").css("color","#808080");
+			$('.addworkspace').click(function (e) {
+		        e.preventDefault();
+		    });
+			
+			$(".addworkspace").css("color","#808080");
+		}
 	});
 	
 	$(function() 
@@ -93,7 +109,7 @@
 			</ul>
 			
 			<div style="float:right;">
-				<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
+				<a class = "addworkspace" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
 			</div>
 			
 			<div style="clear:right;">
@@ -208,9 +224,9 @@
 				</c:if>
 				<div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
 				<ul class="colltools">
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle"></i> Add</a></li>
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-minus-circle"></i> Delete</a></li>
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil"></i> Update</a></li>
+					<li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle"></i> Add</a></li>
+					<li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-minus-circle"></i> Delete</a></li>
+					<li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil"></i> Update</a></li>
 				</ul>
 				</div>
 			</section>
