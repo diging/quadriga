@@ -579,7 +579,7 @@
 			margin-bottm: 5px;
 		}
 		
-		ul.collaborators li:before
+		/*ul.collaborators li:before
 		{
 			content: '';
 			display: block;
@@ -590,7 +590,7 @@
 			top: 50%;
 			margin-top: -8px;
 			background: url('images/user.png');
-		}
+		}*/
 	
 	ul.colltools li
 		{
@@ -864,21 +864,21 @@
             border: 1px solid #dddddd;
         }
         
-    li.cc:before {
+    /*li.cc:before {
        content:'\e032';
        font-family: 'Glyphicons Halflings';
        top: 20px;
        font-size: 20px;
-    }
+    }*/
     
-    li.dt:before {
+    /*li.dt:before {
        content:'\e032';
        font-family: 'Glyphicons Halflings';
        top: 20px;
        font-size: 20px;
-    }
+    }*/
     
-    li.ws {
+    li.ws, li.cc, li.dt {
          position: relative;
          display: block;
          padding-left: 10px;
