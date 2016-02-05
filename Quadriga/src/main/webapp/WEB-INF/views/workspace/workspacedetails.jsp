@@ -415,12 +415,12 @@
                             </font>
                         </c:if>
 
-                        <c:if test="${isArchived == true}">
+                        <c:if test="${!isDeactivated && isArchived}">
                             <a href="#"
                                onclick="return confirmArchive(false);">Unarchive Workspace</a>&nbsp;&nbsp;
                         </c:if>
 
-                        <c:if test="${isArchived == false}">
+                        <c:if test="${!isDeactivated && !isArchived}">
                             <a href="#"
                                onclick="return confirmArchive(true);">Archive Workspace</a>&nbsp;&nbsp;
                         </c:if>
