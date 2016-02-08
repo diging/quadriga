@@ -20,6 +20,8 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,9 +83,6 @@ public class NetworkRestController {
 	@Autowired
 	private IUserManager userManager;
 
-	@Autowired
-	private IEmailNotificationManager emailManager;
-
 
 	/**
 	 * Rest interface for uploading XML for networks
@@ -106,7 +105,7 @@ public class NetworkRestController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
-	public String getNetworkFromClients(HttpServletRequest request,
+	public ResponseEntity<String> getNetworkFromClients(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
 
@@ -117,54 +116,55 @@ public class NetworkRestController {
 		String workspaceid = request.getParameter("workspaceid");
 
 		if(workspaceid == null||workspaceid.isEmpty()){
-			response.setStatus(404);
-			return "Please provide correct workspace id.";
+			return new ResponseEntity<String>("Please provide correct workspace id.", HttpStatus.NOT_FOUND);
 		}
 		String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
 		if(projectid == null || projectid.isEmpty()){
-			response.setStatus(404);
-			return "Please provide correct workspace id.";
+			return new ResponseEntity<String>("Please provide correct workspace id.", HttpStatus.NOT_FOUND);
 		}
 
 		if(networkName == null ||  networkName.isEmpty()){
-			response.setStatus(404);
-			return "Please provide network name as a part of post parameters";
+			return new ResponseEntity<String>("Please provide network name as a part of post parameters", HttpStatus.NOT_FOUND);
 		}
 
 
 		xml=xml.trim();
 		if (xml.isEmpty()) {
-			response.setStatus(406);
-			return "Please provide XML in body of the post request.";
+			//TODO
+			//response.setStatus(406);
+			//return "Please provide XML in body of the post request.";
+			return new ResponseEntity<String>("Please provide XML in body of the post request.", HttpStatus.NOT_FOUND);
 
 		} else {
 			String res = null;
             try {
                 res = networkManager.storeNetworks(xml);
             } catch (QStoreStorageException e) {
-                logger.error(e.getMessage(), e);
-                return e.getMessage();
+                return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
 			if(res == null){
-				response.setStatus(406);
-				return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
+			    return new ResponseEntity<String>("Please provide correct XML in body of the post request. Qstore system is not accepting ur XML", HttpStatus.NOT_ACCEPTABLE);
 			}
 
 			networkId=networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,networkId,INetworkManager.VERSION_ZERO);
 
 			if(networkId.endsWith(INetworkManager.DSPACEERROR)){
-				response.setStatus(404);
-				return "Text files don't belong to this workspace.";
+				//TODO
+				//response.setStatus(404);
+				//return "Text files don't belong to this workspace.";
+				return new ResponseEntity<String>("Text files don't belong to this workspace.", HttpStatus.NOT_FOUND);
 			}
 
 			//TODO: Send email to all editors of a workspace
 			//TODO: Get the workspace editors from the workspaceid
 
 
+			//TODO - add http header to response entity
 			response.setStatus(200);
 			response.setContentType(accept);
 			response.setHeader("networkid",networkId );
-			return res;
+			//return res;
+			return new ResponseEntity<String>(res, HttpStatus.OK);
 		}
 
 	}

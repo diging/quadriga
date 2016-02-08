@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
@@ -77,21 +76,20 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class DictionaryRestController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DictionaryRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryRestController.class);
 
 	@Autowired
 	private IWorkspaceDictionaryManager workspaceDictionaryManager;
-	
+
 	@Autowired
-	private IWSSecurityChecker checkWSSecurity; 
-	
+	private IWSSecurityChecker checkWSSecurity;
+
 	@Autowired
 	private IUserManager usermanager;
 
 	@Autowired
 	private IRestMessage errorMessageRest;
-	
+
 	@Autowired
 	private IDictionaryManager dictionaryManager;
 
@@ -104,17 +102,14 @@ public class DictionaryRestController {
 	@Autowired
 	@Qualifier("updateFromWordPowerURLPath")
 	private String updateFromWordPowerURLPath;
-	
+
 	@Autowired
 	@Qualifier("wordPowerURL")
 	private String wordPowerURL;
-	
-	
-	
 
 	/**
-	 * Rest interface for the List Dictionary for the userId
-	 * http://<<URL>:<PORT>>/quadriga/rest/dictionaries
+	 * Rest interface for the List Dictionary for the userId http://<<URL>:
+	 * <PORT>>/quadriga/rest/dictionaries
 	 * http://localhost:8080/quadriga/rest/dictionaries
 	 * 
 	 * @author Lohith Dwaraka
@@ -124,11 +119,9 @@ public class DictionaryRestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/dictionaries", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
 	public ResponseEntity<String> listDictionaries(ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<IDictionary> dictionaryList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
@@ -137,35 +130,30 @@ public class DictionaryRestController {
 		try {
 			engine.init();
 			dictionaryList = dictionaryManager.getDictionariesList(user.getUsername());
-			template = engine
-					.getTemplate("velocitytemplates/dictionarylist.vm");
+			template = engine.getTemplate("velocitytemplates/dictionarylist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", dictionaryList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
-			
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
-			
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		} catch (MethodInvocationException e) {
-			
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		}
-	
+
 	}
 
-	
-	
 	/**
-	 * Rest interface for the List Dictionary for the userId
-	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceID>/dictionaries
-	 * hhttp://localhost:8080/quadriga/rest/workspace/WS_23048829469196290/dictionaries
+	 * Rest interface for the List Dictionary for the userId http://<<URL>:
+	 * <PORT>>/quadriga/rest/workspace/<workspaceID>/dictionaries
+	 * hhttp://localhost:8080/quadriga/rest/workspace/WS_23048829469196290/
+	 * dictionaries
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param userId
@@ -174,11 +162,9 @@ public class DictionaryRestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/workspace/{workspaceId}/dictionaries", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
-	public ResponseEntity<String> listWorkspaceDictionaries(@PathVariable("workspaceId") String workspaceId,ModelMap model, Principal principal, HttpServletRequest req)
-			throws Exception {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+	public ResponseEntity<String> listWorkspaceDictionaries(@PathVariable("workspaceId") String workspaceId,
+			ModelMap model, Principal principal, HttpServletRequest req) throws Exception {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<IWorkspaceDictionary> dictionaryList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
@@ -187,30 +173,25 @@ public class DictionaryRestController {
 		try {
 			engine.init();
 			dictionaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, user.getUsername());
-			template = engine
-					.getTemplate("velocitytemplates/dictionarylist.vm");
+			template = engine.getTemplate("velocitytemplates/dictionarylist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", dictionaryList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
-			
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
-			
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		} catch (MethodInvocationException e) {
-			
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		}
-	
+
 	}
-	
-	
+
 	/**
 	 * Rest interface for the List Dictionary items for the dictionary Id
 	 * http://<<URL>:<PORT>>/quadriga/rest/dictionaryDetails/{DictionaryID}
@@ -223,13 +204,10 @@ public class DictionaryRestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/dictionaryDetails/{dictionaryId}", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
-	public ResponseEntity<String> listDictionaryItems(
-			@PathVariable("dictionaryId") String dictionaryId, ModelMap model, HttpServletRequest req)
-					throws Exception {
+	public ResponseEntity<String> listDictionaryItems(@PathVariable("dictionaryId") String dictionaryId, ModelMap model,
+			HttpServletRequest req) throws Exception {
 
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<IDictionaryItems> dictionaryItemsList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
@@ -237,19 +215,15 @@ public class DictionaryRestController {
 
 		try {
 			engine.init();
-			logger.debug("Getting dictionary items list for dictionary id : "
-					+ dictionaryId);
-			dictionaryItemsList = dictionaryManager
-					.getDictionariesItems(dictionaryId,user.getUsername());
-			
-			
-			if( dictionaryItemsList == null){
+			logger.debug("Getting dictionary items list for dictionary id : " + dictionaryId);
+			dictionaryItemsList = dictionaryManager.getDictionariesItems(dictionaryId, user.getUsername());
+
+			if (dictionaryItemsList == null) {
 				throw new RestException(403);
 			}
-			template = engine
-					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
+			template = engine.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			String updateFromWordPowerURL=wordPowerURL;
+			String updateFromWordPowerURL = wordPowerURL;
 			context.put("list", dictionaryItemsList);
 			context.put("wordPowerURL", updateFromWordPowerURL);
 			context.put("path", updateFromWordPowerURLPath);
@@ -257,11 +231,9 @@ public class DictionaryRestController {
 			template.merge(context, writer);
 			return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
 		} catch (ResourceNotFoundException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
-
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		} catch (MethodInvocationException e) {
@@ -269,92 +241,90 @@ public class DictionaryRestController {
 			throw new RestException(403);
 		}
 	}
-	
-	
-	
-	
+
 	/**
-	 * Rest interface add a new dictionary with a list of dictionary
-	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/createdict
-	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/createdict
+	 * Rest interface add a new dictionary with a list of dictionary http://<
+	 * <URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/createdict
+	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/
+	 * createdict
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param userId
 	 * @param model
 	 * @return
-	 * @throws RestException 
-	 * @throws QuadrigaStorageException 
-	 * @throws QuadrigaAccessException 
+	 * @throws RestException
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
 	 * @throws Exception
 	 */
-	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST, paramIndex = 1, userRole = {
+			RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
 	@RequestMapping(value = "rest/workspace/{workspaceId}/createdict", method = RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<String> addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,HttpServletRequest request,
-			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept, ModelMap model, Principal principal) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
+	public ResponseEntity<String> addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,
+			HttpServletRequest request, HttpServletResponse response, @RequestBody String xml,
+			@RequestHeader("Accept") String accept, ModelMap model, Principal principal)
+					throws RestException, QuadrigaStorageException, QuadrigaAccessException {
 		IUser user = usermanager.getUser(principal.getName());
-		if(!checkWSSecurity.checkIsWorkspaceExists(workspaceId)){
-			logger.info("Workspace ID : "+workspaceId+" doesn't exist");
-			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist",request);
+		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist", request);
 			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
-		
-		
+
 		String dictName = request.getParameter("name");
 		String desc = request.getParameter("desc");
 		IDictionary dictionary = dictionaryFactory.createDictionaryObject();
 
-		if(dictName == null ||  dictName.isEmpty()){
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary name",request);
+		if (dictName == null || dictName.isEmpty()) {
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary name", request);
 			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
-		if( desc == null ||  desc.isEmpty()){
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary description",request);
+		if (desc == null || desc.isEmpty()) {
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary description", request);
 			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
-		logger.debug("XML : "+xml);
-		JAXBElement<QuadrigaDictDetailsReply> response1=null;
-		try{
+		logger.debug("XML : " + xml);
+		JAXBElement<QuadrigaDictDetailsReply> response1 = null;
+		try {
 			JAXBContext context = JAXBContext.newInstance(QuadrigaDictDetailsReply.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(xml.getBytes());
-			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
-		}catch(Exception e ){
-			logger.error("Error in unmarshalling",e);
-			String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling",request);
+			response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
+		} catch (Exception e) {
+			logger.error("Error in unmarshalling", e);
+			String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling", request);
 			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
-		if(response1 == null){
-			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid",request);
+		if (response1 == null) {
+			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
 			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
-		QuadrigaDictDetailsReply qReply= response1.getValue();
-		DictionaryItemList dictList =qReply.getDictionaryItemsList(); 
+		QuadrigaDictDetailsReply qReply = response1.getValue();
+		DictionaryItemList dictList = qReply.getDictionaryItemsList();
 		List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
-		if(dictionaryList.size()<1){
-			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid",request);
+		if (dictionaryList.size() < 1) {
+			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
 			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		}
-		
+
 		dictionary.setDescription(desc);
 		dictionary.setOwner(user);
 		dictionary.setDictionaryName(dictName);
-		
+
 		dictionaryManager.addNewDictionary(dictionary);
 		String dictId = dictionaryManager.getDictionaryId(dictName);
-		
+
 		Iterator<DictionaryItem> I = dictionaryList.iterator();
 
-		while(I.hasNext()){
+		while (I.hasNext()) {
 			DictionaryItem d = I.next();
-			try{
-				dictionaryManager.addNewDictionariesItems(dictId, d.getTerm(), d.getUri(), d.getPos(), user.getUserName());
+			try {
+				dictionaryManager.addNewDictionariesItems(dictId, d.getTerm(), d.getUri(), d.getPos(),
+						user.getUserName());
 				dictionaryManager.updateDictionariesItems(dictId, d.getUri(), d.getTerm(), d.getPos());
-			}catch(QuadrigaStorageException e){
-				logger.error("Errors in adding items",e);
-				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
+			} catch (QuadrigaStorageException e) {
+				logger.error("Errors in adding items", e);
+				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error", request);
 				HttpHeaders httpHeaders = new HttpHeaders();
 				httpHeaders.setContentType(MediaType.valueOf(accept));
 				return new ResponseEntity<String>(errorMsg, httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -366,11 +336,10 @@ public class DictionaryRestController {
 		httpHeaders.setContentType(MediaType.valueOf(accept));
 		return new ResponseEntity<String>(dictId, httpHeaders, HttpStatus.OK);
 	}
-	
-	
+
 	/**
-	 * Rest interface for uploading XML for concept collection
-	 * http://<<URL>:<PORT>>/quadriga/rest/syncconcepts/{conceptCollectionID}
+	 * Rest interface for uploading XML for concept collection http://<<URL>:
+	 * <PORT>>/quadriga/rest/syncconcepts/{conceptCollectionID}
 	 * hhttp://localhost:8080/quadriga/rest/syncconcepts/
 	 * 
 	 * @author Lohith Dwaraka
@@ -380,61 +349,63 @@ public class DictionaryRestController {
 	 * @param accept
 	 * @return
 	 * @throws QuadrigaException
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 * @throws JAXBException 
-	 * @throws QuadrigaAccessException 
-	 * @throws QuadrigaStorageException 
-	 * @throws RestException 
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 * @throws JAXBException
+	 * @throws QuadrigaAccessException
+	 * @throws QuadrigaStorageException
+	 * @throws RestException
 	 */
-	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
-	@ResponseBody
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST, paramIndex = 1, userRole = {
+			RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
 	@RequestMapping(value = "rest/syncdictionary/{dictionaryID}", method = RequestMethod.POST)
-	public ResponseEntity<String> getCCXMLFromVogon(@PathVariable("dictionaryID") String dictionaryID,HttpServletRequest request,
-			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, QuadrigaAccessException, QuadrigaStorageException, RestException {
+	public ResponseEntity<String> getCCXMLFromVogon(@PathVariable("dictionaryID") String dictionaryID,
+			HttpServletRequest request, HttpServletResponse response, @RequestBody String xml,
+			@RequestHeader("Accept") String accept, Principal principal)
+					throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException,
+					QuadrigaAccessException, QuadrigaStorageException, RestException {
 		IUser user = usermanager.getUser(principal.getName());
 		if (xml.equals("")) {
 			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
-			return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 		} else {
 
-			logger.debug("XML : "+xml);
-			
-			JAXBElement<QuadrigaDictDetailsReply> response1=null;
-			try{
+			logger.debug("XML : " + xml);
+
+			JAXBElement<QuadrigaDictDetailsReply> response1 = null;
+			try {
 				JAXBContext context = JAXBContext.newInstance(QuadrigaDictDetailsReply.class);
 				Unmarshaller unmarshaller = context.createUnmarshaller();
 				unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 				InputStream is = new ByteArrayInputStream(xml.getBytes());
-				response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
-			}catch(Exception e ){
-				logger.error("Error in unmarshalling",e);
+				response1 = unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
+			} catch (Exception e) {
+				logger.error("Error in unmarshalling", e);
 			}
-			if(response1 == null){
-				String errorMsg = errorMessageRest.getErrorMsg("Dictionaries XML is not valid",request);
-				return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			if (response1 == null) {
+				String errorMsg = errorMessageRest.getErrorMsg("Dictionaries XML is not valid", request);
+				return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 			}
-			QuadrigaDictDetailsReply qReply= response1.getValue();
-			DictionaryItemList dictList =qReply.getDictionaryItemsList(); 
+			QuadrigaDictDetailsReply qReply = response1.getValue();
+			DictionaryItemList dictList = qReply.getDictionaryItemsList();
 			List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
-			if(dictionaryList.size()<1){
-				String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid",request);
-				return new ResponseEntity<String>(errorMsg,HttpStatus.FORBIDDEN);
+			if (dictionaryList.size() < 1) {
+				String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid", request);
+				return new ResponseEntity<String>(errorMsg, HttpStatus.FORBIDDEN);
 			}
-			
 
 			Iterator<DictionaryItem> I = dictionaryList.iterator();
 
-			while(I.hasNext()){
+			while (I.hasNext()) {
 				DictionaryItem d = I.next();
-				try{
-					dictionaryManager.addNewDictionariesItems(dictionaryID, d.getTerm().trim(), d.getUri().trim(), d.getPos().trim(), user.getUserName());
+				try {
+					dictionaryManager.addNewDictionariesItems(dictionaryID, d.getTerm().trim(), d.getUri().trim(),
+							d.getPos().trim(), user.getUserName());
 					dictionaryManager.updateDictionariesItems(dictionaryID, d.getUri(), d.getTerm(), d.getPos());
-				}catch(QuadrigaStorageException e){
-					logger.error("Errors in adding items",e);
-					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
+				} catch (QuadrigaStorageException e) {
+					logger.error("Errors in adding items", e);
+					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error", request);
 					HttpHeaders httpHeaders = new HttpHeaders();
 					httpHeaders.setContentType(MediaType.valueOf(accept));
 					return new ResponseEntity<String>(errorMsg, httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -447,6 +418,5 @@ public class DictionaryRestController {
 			return new ResponseEntity<String>("Success", httpHeaders, HttpStatus.OK);
 		}
 	}
-	
 
 }
