@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
@@ -170,7 +171,7 @@ public class DictionaryProjectController {
 
 	@RequestMapping(value = "auth/workbench/{projectid}/dictionariesJson", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public String listProjectDictionaryJson(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException, JSONException {
+	public String listProjectDictionaryJson(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException, QuadrigaException {
 	    UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -188,11 +189,15 @@ public class DictionaryProjectController {
         JSONArray ja = new JSONArray();
         for(IProjectDictionary dictionary : dictionaryList){
             JSONObject j = new JSONObject();
-            j.put("id", dictionary.getDictionary().getDictionaryId());
-            j.put("name", dictionary.getDictionary().getDictionaryName());
-            ja.put(j);
+            try {
+                j.put("id", dictionary.getDictionary().getDictionaryId());
+                j.put("name", dictionary.getDictionary().getDictionaryName());
+                ja.put(j);
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                throw new QuadrigaException(e.getMessage(),e);
+            }
         }
-        
 		return ja.toString();
 	}
 		

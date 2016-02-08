@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
@@ -73,7 +74,7 @@ public class ConceptCollectionProjectController {
 
 	@RequestMapping(value = "auth/workbench/{projectid}/conceptcollectionsJson", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public String listProjectConceptCollectionJson(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException, JSONException {
+	public String listProjectConceptCollectionJson(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException, QuadrigaException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -88,9 +89,17 @@ public class ConceptCollectionProjectController {
 		JSONArray ja = new JSONArray();
         for(IProjectConceptCollection conceptCollection : projectConceptCollectionList){
             JSONObject j = new JSONObject();
-            j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
-            j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
-            ja.put(j);
+            try {
+                
+                j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
+                j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
+                ja.put(j);
+                
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                throw new QuadrigaException(e.getMessage(),e);
+            }
+            
         }
         
 		return ja.toString();
