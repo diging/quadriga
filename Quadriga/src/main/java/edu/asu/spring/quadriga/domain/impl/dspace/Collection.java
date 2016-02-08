@@ -21,7 +21,6 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
-import edu.asu.spring.quadriga.rest.DspaceRestController;
 
 /**
  * The class representation of the Collection got from Dspace repostiory. It also 
@@ -52,7 +51,7 @@ public class Collection implements ICollection{
 
 	private IItemFactory itemFactory;
 	private static final Logger logger = LoggerFactory
-			.getLogger(DspaceRestController.class);
+			.getLogger(Collection.class);
 
 	public Collection()
 	{

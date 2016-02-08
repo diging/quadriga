@@ -135,6 +135,7 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
 			ConceptCollectionDTO conceptcollectionsDTO = conceptCollectionDTOMapper.getConceptCollectionDTO(conceptCollection);
 			conceptcollectionsDTO.setConceptCollectionid(generateUniqueID());
 			sessionFactory.getCurrentSession().save(conceptcollectionsDTO);
+			conceptCollection.setConceptCollectionId(conceptcollectionsDTO.getConceptCollectionid());
 		}
 		catch(Exception e)
 		{
