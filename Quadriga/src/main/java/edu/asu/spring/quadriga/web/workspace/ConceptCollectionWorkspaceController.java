@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -23,6 +27,7 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -81,7 +86,47 @@ public class ConceptCollectionWorkspaceController {
 		model.addAttribute("workspaceId", workspaceId);
 		return "auth/workbench/workspace/conceptcollections";
 	}
+
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/conceptcollectionsJson", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public String listWorkspaceConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		String userId = user.getUsername();
+		logger.info("Concept collection list is empty buddy");
+		//List<IConceptCollection> conceptCollectionList = null;
+		List<IWorkspaceConceptCollection> conceptCollectionList = null;
+		
+		try {
+			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+		} catch (QuadrigaStorageException e) {
+			logger.error("Issue while accessing DB",e);
+		}
+		if(conceptCollectionList == null){
+			logger.info("Concept collection list is empty buddy");
+		}
+
+		JSONArray ja = new JSONArray();
+        for(IWorkspaceConceptCollection conceptCollection : conceptCollectionList){
+            JSONObject j = new JSONObject();
+            try {
+                j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
+                j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
+                ja.put(j);
+                
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                throw new QuadrigaException(e.getMessage(),e);
+            }
+            
+        }
+        
+		return ja.toString();
+	}
 	
+		
+		
 	/**
 	 * Retrieve the concept collections which are not associated to the given workspace
 	 * @param workspaceId

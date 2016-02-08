@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +17,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -191,6 +197,40 @@ public class DictionaryWorkspaceController {
 		model.addAttribute("workspaceId", workspaceId);
 		return "auth/workbench/workspace/dictionaries";
 	}
+	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
+    @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/dictionariesJson", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+    public String listWorkspaceDictionaryJson(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        String userId = user.getUsername();
+        
+        List<IWorkspaceDictionary> dicitonaryList = null;
+        try {
+            dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
+        } catch (QuadrigaStorageException e) {
+            logger.error("issue while adding dictionary " ,e);
+        }
+        if(dicitonaryList == null){
+            logger.info("Dictionar list is empty buddy");
+        }
+        
+        JSONArray ja = new JSONArray();
+        for(IWorkspaceDictionary dictionary : dicitonaryList){
+            JSONObject j = new JSONObject();
+            try {
+                j.put("id", dictionary.getDictionary().getDictionaryId());
+                j.put("name", dictionary.getDictionary().getDictionaryName());
+                ja.put(j);
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                throw new QuadrigaException(e.getMessage(),e);
+            }
+        }
+        
+        return ja.toString();
+    }
 	
 	/**
 	 * Retrieve all the dictionaries associated with workspace for deletion
