@@ -78,7 +78,7 @@
 </h5>
 <div id="projectDictionaries">
 	<img src="/quadriga/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;">
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary"${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary>Add</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary">Add</a>
 	<img src="/quadriga/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;">
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary">Delete</a>
 </div>
