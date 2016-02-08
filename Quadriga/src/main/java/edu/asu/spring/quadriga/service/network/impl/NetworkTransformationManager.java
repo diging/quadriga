@@ -67,7 +67,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 	public ITransformedNetwork getTransformedNetworkOfProject(String projectId)
 			throws QuadrigaStorageException {
 
-		List<INetwork> networkList = null;
+		List<INetwork> networkList;
+		ITransformedNetwork networkJSon;
 
 		List<INetworkNodeInfo> networkNodeInfoList = new ArrayList<INetworkNodeInfo>();
 
@@ -75,6 +76,10 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 			networkList = networkManager.getNetworksInProject(projectId);
 		} catch (QuadrigaStorageException e) {
 			logger.error("DB Error while getting networks a project id", e);
+			return null;
+		}
+
+		if (networkList == null) {
 			return null;
 		}
 
@@ -93,6 +98,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
 		}
 
-		return null;
+		networkJSon = transformer.transformNetwork(networkNodeInfoList);
+
+		return networkJSon;
 	}
 }
