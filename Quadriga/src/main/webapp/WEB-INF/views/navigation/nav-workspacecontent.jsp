@@ -19,55 +19,43 @@
 							.children('a').attr('href');
 				});
 	});
+	
+	$(document).ready(function(){
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+ "${workspacedetails.workspaceId}"+ "/dictionariesJson",
+			  type : "GET",
+	          success: function(data){
+	              $.each(data, function( index, value ) {
+	            	  $( "#workspaceDictionaries" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'>"+value['name']+"</a><br>");
+	              });
+	          }
+		  });
+		  
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+ "${workspacedetails.workspaceId}"+ "/conceptcollectionsJson",
+			  type : "GET",
+	          success: function(data){
+	              $.each(data, function( index, value ) {
+	            	 $( "#workspaceConceptCollections" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'>"+value['name']+"</a><br>");
+	              });
+	          }
+		  });
+	  });
 </script>
-<h2 class="major">
-	<span>Menu</span>
-</h2>
-<div id="workspacemenu">
-	<ul>
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Dictionary
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/dictionaries">List</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary">Delete</a></li>
-			</ul>
-		</li>
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collections
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/conceptcollections">List</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections">Delete</a></li>
-			</ul>
-		</li>
-		<!-- 
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addcollaborators">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletecollaborators">Delete</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/pen.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/updatecollaborators">Update</a></li>
-			</ul>
-		</li>
-		-->
-	</ul>
+
+<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
+	<span>DICTIONARIES</span>
+</h5>
+<div id="workspaceDictionaries">
+	<img src="/quadriga/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary">Add</a>
+	<img src="/quadriga/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary">Delete</a>
+</div>
+<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
+	<span>CONCEPT COLLECTIONS</span>
+</h5>
+<div id="workspaceConceptCollections">		
+	<img src="/quadriga/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection">Add</a>
+	<img src="/quadriga/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections">Delete</a>
 </div>
