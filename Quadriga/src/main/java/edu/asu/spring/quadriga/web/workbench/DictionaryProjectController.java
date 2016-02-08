@@ -1,9 +1,13 @@
 package edu.asu.spring.quadriga.web.workbench;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -162,7 +167,35 @@ public class DictionaryProjectController {
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
-	
+
+	@RequestMapping(value = "auth/workbench/{projectid}/dictionariesJson", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public String listProjectDictionaryJson(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException, JSONException {
+	    UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		String userId = user.getUsername();
+		List<IProjectDictionary> dictionaryList = null;
+		try {
+			// TODO: listProjectDictionary() is to be changed according to mapper
+			dictionaryList = projectDictionaryManager.listProjectDictionary(
+					projectid, userId);
+			dictionaryList.removeAll(Collections.singleton(null));
+
+		} catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
+		}
+		
+        JSONArray ja = new JSONArray();
+        for(IProjectDictionary dictionary : dictionaryList){
+            JSONObject j = new JSONObject();
+            j.put("id", dictionary.getDictionary().getDictionaryId());
+            j.put("name", dictionary.getDictionary().getDictionaryName());
+            ja.put(j);
+        }
+        
+		return ja.toString();
+	}
+		
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
 	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
