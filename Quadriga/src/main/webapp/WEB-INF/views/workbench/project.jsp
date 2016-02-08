@@ -16,7 +16,7 @@
 	
 	$(function() 
 			{
-				    $( "#tabs" ).tabs();
+				   $( "#tabs" ).tabs();
 			});
 	
 	/* inactiveWS()
@@ -40,12 +40,12 @@
 			<h2>Project: ${project.projectName}</h2>
 			<div>${project.description}</div>
 			<div style="text-align:right">
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project
 			</a>
 			</div>
 			
 			<div style="text-align:right">
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project URL
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project URL
 			</a>
 			</div>
 			
@@ -67,33 +67,35 @@
 			<hr> <!--  Display associated workspace -->
 			
 			<strong>Workspaces in this project:</strong>
+			<div style="float:right;">
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add Workspace</a>
+			</div>
+			
 			<ul>
 			<c:forEach var="workspace" items="${workspaceList}">
-				<li class="ws">
-				    <a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}">
-					<i class="fa fa-folder-open"></i>
-                    <c:out
+				<li class="ws with-icon">
+					<a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
 							value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
-						
+
+			
 					<c:out
 					value="${workspace.description}"></c:out>
 				</li>
+			<ul>
+				 
 			</c:forEach>
 			
 			<c:forEach var="workspace" items="${collabworkspacelist}">
-			<li  class="ws">
-			     <a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}">
-				 <i class="fa fa-folder-open"></i>
-				 <c:out
+			<li  class="ws with-icon"><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
 					value="${workspace.workspaceName}"></c:out></a> (Collaborator)<br> <c:out
 					value="${workspace.description}"></c:out></li>
 			</c:forEach>
 			</ul>
 			
 			<div style="float:right;">
-				<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add Workspace</a>
 			</div>
 			
 			<div style="clear:right;">
@@ -143,7 +145,11 @@
 				<c:choose>
 					<c:when test="${owner=='1'}">
 						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
+
+						<img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/archive.png"> Show Inactive Workspace
+
 						    <i class="fa fa-archive"></i> Show Inactive Workspace <span><c:out value="(${deactivatedWSSize})" /></span>
+
 						</a> 
 													
 					</c:when>
@@ -155,7 +161,7 @@
 				<c:if test="${owner=='1'}">
 					
 
-					<i class="fa fa-ban"></i> </span>
+					<span class="glyphicon glyphicon-ban-circle"></span>
 					<a href="#" onclick="return confirmProjectDeletion()">Delete
 						Project</a>
 				</c:if>
@@ -197,20 +203,19 @@
 					<span>Collaborators</span>
 				</h3>
 				<c:if test="${not empty project.projectCollaborators}">
-					<ul>
+					<ul class="collaborators">
 						<c:forEach var="projectcollaborator"
 							items="${project.projectCollaborators}">
-							<li>
-							<i class="fa fa-user"></i> <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
+							<li><c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
 							</li>
 						</c:forEach>
 					</ul>
 				</c:if>
 				<div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
 				<ul class="colltools">
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle"></i> Add</a></li>
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-minus-circle"></i> Delete</a></li>
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil"></i> Update</a></li>
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">Add</a></li>
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators">Delete</a></li>
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/pen.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators">Update</a></li>
 				</ul>
 				</div>
 			</section>
