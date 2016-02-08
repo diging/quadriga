@@ -170,4 +170,23 @@ public class WebsiteProjectController {
 		model.addAttribute("jsonstring",json);
 		return "sites/networks/visualize";
 	}
+
+	/**
+	 * This method will return a search page
+	 * @return
+	 * @exception QuadrigaStorageException
+	 */
+	@RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
+	public String getSearch(@PathVariable("projectUnixName") String projectUnixName)
+			throws QuadrigaStorageException {
+
+		IProject project = getProjectDetails(projectUnixName);
+		if (project == null) {
+			return "forbidden";
+		}
+
+
+
+		return "";
+	}
 }
