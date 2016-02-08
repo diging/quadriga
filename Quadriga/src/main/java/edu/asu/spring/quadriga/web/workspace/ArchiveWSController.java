@@ -49,7 +49,7 @@ public class ArchiveWSController
 	{
 		binder.setValidator(validator);
 	}
-	
+
 	/**
 	 * This calls workspaceManger to list the workspace associated with a project for archival process.
 	 * @param   model
@@ -112,7 +112,7 @@ public class ArchiveWSController
 		
 		archiveWorkspaceList = new ArrayList<ModifyWorkspace>();
 		workspaceId = new StringBuilder();
-		
+
 		if(result.hasErrors())
 		{
 			// retrieve the workspaces associated with the projects

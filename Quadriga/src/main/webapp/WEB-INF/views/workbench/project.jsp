@@ -145,7 +145,11 @@
 				<c:choose>
 					<c:when test="${owner=='1'}">
 						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
+
 						<img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/archive.png"> Show Inactive Workspace
+
+						    <i class="fa fa-archive"></i> Show Inactive Workspace <span><c:out value="(${deactivatedWSSize})" /></span>
+
 						</a> 
 													
 					</c:when>

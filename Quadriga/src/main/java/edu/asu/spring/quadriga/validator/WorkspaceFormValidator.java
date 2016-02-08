@@ -36,11 +36,13 @@ public class WorkspaceFormValidator implements Validator {
                 String internalId = workspace.getId();
                 if (internalId != null) {
                     isAllNull = false;
+                    break;
                 }
             }
+        }
+        if (isAllNull) {
             err.reject("workspace_selection.required");
         }
-
     }
 
 }
