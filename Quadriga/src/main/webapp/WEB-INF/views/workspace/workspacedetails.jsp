@@ -88,9 +88,10 @@
 					<font color="red"> <spring:message
 							code="workspace.delete.owner.editor.assigned" /></font>
 				</c:when>
-			</c:choose> <br /> <c:choose>
-								</c:when>
-				<c:otherwise>
+
+			</c:choose> <br /> 
+							
+			
 					<script>
 						$(document)
 								.ready(
@@ -104,12 +105,8 @@
 
 										});
 					</script>
-				</c:otherwise>
-			</c:choose>
-            </li> <c:choose>
-              
-
-                        <script>
+				
+			         <script>
 							function funConfirmDeletion() {
 								var pos = [ $(window).width() / 4, 50 ];
 								// Define the Dialog and its properties.
@@ -181,12 +178,8 @@
                                 Workspace</font>
                         </c:if>
 
-                    </div>
-
-
-                  
-                </c:when>
-            </c:choose> <br> <br>  <script>
+                
+              <script>
 				function confirmWorkspaceDeactivation() {
 					// Define the Dialog and its properties.
 					var pos = [ $(window).width() / 4, 50 ];
@@ -214,6 +207,7 @@
 									});
 				}
 			</script>
+			
 			<script>
 				function confirmWorkspaceActivation() {
 					// Define the Dialog and its properties.
