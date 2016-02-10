@@ -257,22 +257,4 @@ public class ArchiveWSController
 		return model;
 	}
 
-    @AccessPolicies({
-        @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-                RoleNames.ROLE_COLLABORATOR_ADMIN,
-                RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-                RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
-    @RequestMapping(value = "auth/workbench/{projectid}/showarchivedworkspace", method = RequestMethod.GET)
-    public String showArchivedWorkspaces(
-            @PathVariable("projectid") String projectId, Principal principal,
-            Model model) throws QuadrigaStorageException,
-            QuadrigaAccessException {
-        List<ModifyWorkspace> archivedWSList = workspaceFormManager
-                .getArchivedWorkspaceList(projectId, principal.getName());
-        model.addAttribute("archivedWSList", archivedWSList);
-        model.addAttribute("projectid", projectId);
-
-        return "auth/workbench/workspace/showArchivedWorkspace";
-    }
-
 }
