@@ -264,8 +264,10 @@ public class ListWSManager implements IListWSManager {
                 }
             }
 
-            for (Integer i : removeList) {
-                workspaceNetworkList.remove(i);
+            if(removeList!=null){
+                for (Integer i : removeList) {
+                    workspaceNetworkList.remove(i);
+                }
             }
         }
         return workspaceNetworkList;
