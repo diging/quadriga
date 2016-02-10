@@ -387,7 +387,7 @@
 							}
 						</script>
 
-                        <div id="dialog-confirm" title="Confirm ?"></div>
+						<div id="dialog-confirm" title="Confirm ?"></div>
 
                         <c:if test="${isDeactivated == true}">
                             <a href="#"
@@ -415,15 +415,15 @@
                             </font>
                         </c:if>
 
-                        <c:if test="${!isDeactivated && isArchived}">
-                            <a href="#"
-                               onclick="return confirmArchive(false);">Unarchive Workspace</a>&nbsp;&nbsp;
-                        </c:if>
+						<c:if test="${!isDeactivated && isArchived}">
+							<a href="#"
+							   onclick="return confirmArchive(false);">Unarchive Workspace</a>&nbsp;&nbsp;
+						</c:if>
 
-                        <c:if test="${!isDeactivated && !isArchived}">
-                            <a href="#"
-                               onclick="return confirmArchive(true);">Archive Workspace</a>&nbsp;&nbsp;
-                        </c:if>
+						<c:if test="${!isDeactivated && !isArchived}">
+							<a href="#"
+							   onclick="return confirmArchive(true);">Archive Workspace</a>&nbsp;&nbsp;
+						</c:if>
 
                         <c:if test="${isDeactivated == true}">
                             <a href="#"
