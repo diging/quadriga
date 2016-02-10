@@ -3,206 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
-<c:choose>
-	<c:when test="${not empty workspacedetails.workspaceBitStreams}">
-		<script>
-			function submitClick() {
-				if ($('input:checkbox').is(':checked')) {
-					$('#bitstream').submit();
-				} else {
-					$.alert("Please select atleast one file", "Oops !!!");
-					return;
-				}
-
-			}
-
-			$(document)
-					.ready(
-							function() {
-
-								function loadItemName() {
-									var divIDs = $("div[class^='item']") // find divs with ID attribute
-									.map(function() {
-										return this.id;
-									}) // convert to set of IDs
-									.get();
-
-									var i = 0;
-									var IDs = [];
-									for (i = 0; i < divIDs.length; i++) {
-										if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_item" />') {
-											IDs.push(divIDs[i]);
-										}
-									}
-
-									$
-											.each(
-													$.unique(IDs),
-													function() {
-														var collectionid = this
-																.split("_");
-														var ajaxCallback = getItemName(collectionid[1]);
-
-														//Do this once the data is available
-														ajaxCallback
-																.success(function(
-																		data) {
-																	//Load the new text in the corresponding div tag
-																	if (data != 'Loading...') {
-																		data = '<font size="1">'
-																				+ data
-																				+ '</font>';
-																		$(
-																				'.item_'
-																						+ collectionid[1])
-																				.html(
-																						data);
-																	}
-																});//End of ajax callback
-													});
-								}
-
-								loadItemName();
-
-								function loadBitStreamName() {
-									var divIDs = $("div[class^='bitstream']") // find divs with ID attribute
-									.map(function() {
-										return this.id;
-									}) // convert to set of IDs
-									.get();
-
-									var i = 0;
-									var IDs = [];
-									for (i = 0; i < divIDs.length; i++) {
-										if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_bitstream" />') {
-											IDs.push(divIDs[i]);
-										}
-									}
-
-									$
-											.each(
-													$.unique(IDs),
-													function() {
-														var collectionid = this
-																.split("_");
-														var ajaxCallback = getBitStreamName(collectionid[1]);
-
-														//Do this once the data is available
-														ajaxCallback
-																.success(function(
-																		data) {
-																	//Load the new text in the corresponding div tag
-																	if (data != 'Loading...') {
-																		if (data != 'No Access to File') {
-																			$(
-																					'.checkbox_'
-																							+ collectionid[1])
-																					.html(
-																							'<input type="checkbox" class="checkbox" name="bitstreamids" value="'+collectionid[1]+'" />');
-																		}
-																		data = '<font size="1">'
-																				+ data
-																				+ '</font>';
-																		$(
-																				'.bitstream_'
-																						+ collectionid[1])
-																				.html(
-																						data);
-
-																	}
-																});//End of ajax callback
-													});
-								}
-
-								loadBitStreamName();
-
-								/**
-								 * Function to check if there is any item name yet to be loaded.
-								 * If yes, then it will invoke the loadItemName() after a wait period of 5 seconds.
-								 * Author: Ram Kumar Kumaresan
-								 */
-								function checkItemDiv() {
-									var divIDs = $("div[id^='item']") // find divs with ID attribute
-									.map(function() {
-										return this.id;
-									}) // convert to set of IDs
-									.get();
-
-									var i = 0;
-									var IDs = [];
-									for (i = 0; i < divIDs.length; i++) {
-										if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_item" />') {
-											IDs.push(divIDs[i]);
-										}
-									}
-									if (IDs.length > 0) {
-										setTimeout(loadItemName, 5000);
-										setTimeout(checkItemDiv, 7000);
-									}
-								}
-								setTimeout(checkItemDiv, 1000);
-
-								/**
-								 * Function to check if there is any bitstream name yet to be loaded.
-								 * If yes, then it will invoke the loadItemName() after a wait period of 5 seconds.
-								 * Author: Ram Kumar Kumaresan
-								 */
-								function checkBitStreamDiv() {
-									var divIDs = $("div[id^='bitstream']") // find divs with ID attribute
-									.map(function() {
-										return this.id;
-									}) // convert to set of IDs
-									.get();
-
-									var i = 0;
-									var IDs = [];
-									for (i = 0; i < divIDs.length; i++) {
-										if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_bitstream" />') {
-											IDs.push(divIDs[i]);
-										}
-									}
-									if (IDs.length > 0) {
-										setTimeout(loadBitStreamName, 5000);
-										setTimeout(checkBitStreamDiv, 7000);
-									}
-								}
-								setTimeout(checkBitStreamDiv, 1000);
-							});
-
-			/*
-			 * Function used to make an ajax call to the controller, inorder to get the item name
-			 */
-			function getItemName(bitstreamid) {
-				return $
-						.ajax({
-							type : 'GET',
-							url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/itemstatus?bitstreamid='
-									+ bitstreamid,
-							error : function(jqXHR, textStatus, errorThrown) {
-								$('#item_' + bitstreamid).html(
-										"Server not responding...");
-							}
-						});
-			}
-
-			/*
-			 * Function used to make an ajax call to the controller, inorder to get the bitstream name
-			 */
-			function getBitStreamName(bitstreamid) {
-				return $
-						.ajax({
-							type : 'GET',
-							url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/bitstreamaccessstatus?bitstreamid='
-									+ bitstreamid,
-							error : function(jqXHR, textStatus, errorThrown) {
-								$('#bitstream_' + bitstreamid).html(
-										"Server not responding...");
-							}
-						});
-			}
-		</script>
-	</c:when>
-</c:choose>
 <script>
 	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
@@ -213,21 +13,7 @@
 			event.preventDefault();
 		});
 
-		$('#dspacePublicAccess').click(function publicAccess() {
-			if ($(this).is(':checked')) {
-				$("#username").val('');
-				$("#password").val('');
-				$("#username").attr("disabled", "disabled");
-				$("#username").attr("placeholder", "Input Disabled");
-				$("#password").attr("disabled", "disabled");
-				$("#password").attr("placeholder", "Input Disabled");
-			} else {
-				$("#username").removeAttr("disabled");
-				$("#username").attr("placeholder", "Username");
-				$("#password").removeAttr("disabled");
-				$("#password").attr("placeholder", "Password");
-			}
-		});
+		
 	});
 
 	$(document).ready(function() {
@@ -302,9 +88,10 @@
 					<font color="red"> <spring:message
 							code="workspace.delete.owner.editor.assigned" /></font>
 				</c:when>
-			</c:choose> <br /> <c:choose>
-				<c:when test="${empty dspaceKeys}">
-					<!-- Dspace Login popup -->
+
+			</c:choose> <br /> 
+							
+			
 					<script>
 						$(document)
 								.ready(
@@ -318,44 +105,8 @@
 
 										});
 					</script>
-				</c:when>
-				<c:otherwise>
-					<script>
-						$(document)
-								.ready(
-										function() {
-
-											$('a.login-window')
-													.click(
-															function() {
-																location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";
-															});
-
-										});
-					</script>
-				</c:otherwise>
-			</c:choose> <c:if test="${isDeactivated == false}">
-                <a href="#login-box" class="login-window"><input
-                    type="submit" value="Add text from Dspace"></a>
-                <!-- DSpace Login credentials -->
-                </a>
-            </c:if>
-            </li> <c:choose>
-                <c:when test="${empty dspaceKeys}">
-                    <!-- Allow the user to change the dspace login credentials -->
-                    <c:if test="${isDeactivated == false}">
-                        <a href="#change-login" class="change-login">Change
-                            Dspace Login<c:choose>
-                                <c:when
-                                    test="${not empty wrongDspaceLogin}">*</c:when>
-                            </c:choose>
-                    </c:if>
-                    </a>
-
-
-                    <div style="text-align: right">
-
-                        <script>
+				
+			         <script>
 							function funConfirmDeletion() {
 								var pos = [ $(window).width() / 4, 50 ];
 								// Define the Dialog and its properties.
@@ -427,114 +178,8 @@
                                 Workspace</font>
                         </c:if>
 
-                    </div>
-
-
-                    <div id="login-box" class="login-popup"
-                        title="Dspace Authentication">
-                        <form id="dspaceLogin" method="post"
-                            class="signin">
-                            <fieldset class="textbox">
-                                <label class="username"><span>Dspace
-                                        UserName:</span> <input id="username"
-                                    name="username" value="" type="text"
-                                    autocomplete="on"
-                                    placeholder="Username" /> </label> <label
-                                    class="password"><span>Dspace
-                                        Password: </span> <input id="password"
-                                    name="password" value=""
-                                    type="password"
-                                    placeholder="Password" /> </label>
-                            </fieldset>
-                            <label><input type="checkbox"
-                                name="dspacePublicAccess"
-                                id="dspacePublicAccess" value="public" /><font
-                                size="2">Use Public Access</font></label>
-                        </form>
-                        <font size="1">We recommend setting up
-                            Dspace Access keys <a
-                            href="${pageContext.servletContext.contextPath}/auth/workbench/keys">here</a>.
-                            It's more secure !
-                        </font>
-                    </div>
-                    <script>
-						$(document)
-								.ready(
-										function() {
-											$("#login-box")
-													.dialog(
-															{
-																autoOpen : false,
-																modal : false,
-																resizable : false,
-																buttons : {
-																	Login : function() {
-																		var bValid = true;
-																		var $username = $('#username');
-																		var $password = $('#password');
-
-																		if (!$(
-																				'#dspacePublicAccess')
-																				.is(
-																						':checked')) {
-																			if ($
-																					.trim($username
-																							.val()) === '') {
-																				$username
-																						.effect(
-																								"shake",
-																								{
-																									times : 1
-																								},
-																								300);
-																				$username
-																						.focus();
-																				bValid = false;
-																			}
-																			if ($
-																					.trim($password
-																							.val()) === '') {
-																				$password
-																						.effect(
-																								"shake",
-																								{
-																									times : 1
-																								},
-																								300);
-																				if (bValid)
-																					$password
-																							.focus();
-																				bValid = false;
-																			}
-																		}
-
-																		if (bValid) {
-																			$(
-																					'#dspaceLogin')
-																					.submit();
-																		}
-																	}
-																}
-															});
-
-											$('a.change-login')
-													.click(
-															function() {
-																$(
-																		'#dspaceLogin')
-																		.attr(
-																				'action',
-																				'${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/changedspacelogin');
-																$("#login-box")
-																		.dialog(
-																				"open");
-															});
-										})
-					</script>
-                </c:when>
-            </c:choose> <br> <br> <c:choose>
-				<c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when>
-			</c:choose> <script>
+                
+              <script>
 				function confirmWorkspaceDeactivation() {
 					// Define the Dialog and its properties.
 					var pos = [ $(window).width() / 4, 50 ];
@@ -562,6 +207,7 @@
 									});
 				}
 			</script>
+			
 			<script>
 				function confirmWorkspaceActivation() {
 					// Define the Dialog and its properties.
