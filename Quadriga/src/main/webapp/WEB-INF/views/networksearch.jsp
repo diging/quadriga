@@ -11,9 +11,11 @@
 		<div class="col-sm-6 search-wrapper" style="position: relative">
 			<form action="<c:url value="/sites/${project.unixName}/search" />" id="search-form"
 				method="post">
-				<div class="form-group">
+				<div class="form-group search-input">
 					<label for="search-term">Enter the search term</label>
 					<input type="text" class="form-control" id="search-term" autocomplete="off">
+					<span style="background: url('<c:url value="/resources/txt-layout/images/throbber.gif" />');"
+						  id="ajax-loader" class="search-loader"></span>
 				</div>
 			</form>
 			<div class="row" id="search-results-wrapper" style="display: none;">
@@ -30,15 +32,45 @@
 </div>
 <script>
 	function init() {
+		// ajax loader
+		var $loader = $('#ajax-loader');
 		var $searchInput = $('#search-term');
 		var $resWrapper = $('#search-results-wrapper');
 		var $items = $('#search-results-items');
 		var $list = $resWrapper.find('.list-group-item:first');
 		var $curReq;
 		var url = $('#search-form').attr('action'); // action URL
+
+		var loader = (function() {
+			// var isVisible = false;
+			var timeout;
+			var interval = 400;
+			var fn = function() {
+				if ($loader.is(':visible')) {
+					$loader.hide();
+				}
+			};
+			return {
+				show: function() {
+					$loader.css('display', 'inline-block');
+				},
+				hide: function() {
+					// clear timeout
+					clearTimeout(timeout);
+					timeout = setTimeout(fn, interval);
+				}
+			};
+		})();
+
+		// ajax loader
+		$(document).on({
+			ajaxStart: loader.show,
+			ajaxStop: loader.hide
+		});
+
 		var triggerChange = (function() {
 			var timeout;
-			var timeoutInt = 600;
+			var timeoutInt = 400;
 			var prevVal = '';
 			var change = function() {
 				$searchInput.trigger('change');
@@ -116,13 +148,21 @@
 				if ($xhr) {
 					$xhr.abort();
 				}
+
+				var searchVal = $searchInput.val();
+				if (searchVal.trim().length === 0) {
+					// do not make request
+					// send empty data
+					addTerms([]);
+					return;
+				}
 				// start a new request
 				$xhr = $.ajax({
 					method: 'post',
 					dataType: 'json',
 					url: url,
 					data: {
-						searchTerm: $searchInput.val()
+						searchTerm: searchVal
 					}
 				}).done(done).fail(fail).always(always);
 			};

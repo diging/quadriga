@@ -10,3 +10,16 @@
 .search-results > .list-group {
     margin-bottom: 0;
 }
+
+.search-wrapper .search-input {
+    position: relative;
+}
+
+.search-wrapper .search-loader {
+    width: 16px;
+    height: 16px;
+    display: none;
+    position: absolute;
+    top: 34px;
+    right: 10px;
+}
