@@ -40,7 +40,6 @@ import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
@@ -282,28 +281,6 @@ public class ListWSController
 		String userName = principal.getName();
 		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
 
-		
-		//Check bitstream access in dspace. 
-		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
-		if(this.getDspaceKeys() != null) {
-			model.addAttribute("dspaceKeys", "true");
-		}
-
-		//Check if the dspace authentication is correct.
-		List<IWorkspaceBitStream> workspaceBitStreams = null;
-		if(dspaceManager.validateDspaceCredentials(this.dspaceUsername, this.dspacePassword, this.dspaceKeys))
-		{
-			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
-		}
-		else
-		{	
-			//Set a flag to indicate the error in dspace login credentials.
-			model.addAttribute("wrongDspaceLogin", "true");
-			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), null, null, null);
-		}
-		
-		workspace.setWorkspaceBitStreams(workspaceBitStreams);
-		
 
 		//retrieve the collaborators associated with the workspace
 		List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
@@ -659,30 +636,6 @@ public class ListWSController
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 
-	/**
-	 * Handle the request to delete bitstream(s) from a workspace. Gets the list of authroized bistreams from Dspace for the user and deletes based on that authorization.
-	 * 
-	 * @param workspaceId					The id of the workspace from which the bitstream(s) are to deleted. 
-	 * @param bitstreamids					The id(s) of the bitstream(s) which are to deleted from the workspace.
-	 * @return								Return to the workspace page.
-	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
-	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
-	 * @author 								Ram Kumar Kumaresan
-	 * @throws QuadrigaException 
-	 * @throws QuadrigaAccessException 
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/deletebitstreams", method = RequestMethod.POST)
-	public String deleteBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException, QuadrigaAccessException{
-
-		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceId,principal.getName());
-		//Check bitstream access in dspace. 
-		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
-		List<IWorkspaceBitStream> workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
-
-		dspaceManager.deleteBitstreamFromWorkspace(workspaceId, bitstreamids, workspaceBitStreams, principal.getName());
-		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-	}
 	
 	@RequestMapping(value = "/auth/editing/getitemmetadata/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String viewDspaceMetaData(HttpServletRequest request,
