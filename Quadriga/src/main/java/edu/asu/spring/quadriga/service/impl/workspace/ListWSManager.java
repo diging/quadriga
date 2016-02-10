@@ -328,7 +328,7 @@ public class ListWSManager implements IListWSManager {
 
     @Override
     @Transactional
-    public boolean getArchiveState(String workspaceId) throws QuadrigaStorageException {
+    public boolean isWorkspaceArchived(String workspaceId) throws QuadrigaStorageException {
         WorkspaceDTO wsDTO = workspaceDao.getWorkspaceDTO(workspaceId.trim());
         return wsDTO != null && wsDTO.getIsarchived();
     }

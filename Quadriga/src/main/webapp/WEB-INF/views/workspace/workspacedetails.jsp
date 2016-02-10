@@ -600,38 +600,39 @@
 									});
 				}
 
-                function confirmArchive(isArchive) {
-                    isArchive = !!isArchive;
-                    var txt = isArchive ? 'Archive' : 'Unarchive';
-                    var pos = [ $(window).width() / 4, 50 ];
-                    var url = '${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}';
-                    var path = isArchive ? '/archiveworkspace' : '/unarchiveworkspace';
-                    var title = isArchive ? 'Archive Workspace' : 'Unarchive Workspace';
-                    path += '/${workspaceid}';
-                    console.log(url + path)
-                    $('#dialog-confirm')
-                            .html('Are you sure you want to ' + txt + ' this workspace?')
-                            .dialog({
-                                resizable : false,
-                                modal : true,
-                                title : title,
-                                height : 180,
-                                width : 650,
-                                position : pos,
-                                buttons : {
-                                    "Yes" : function() {
-                                        $(this).dialog('close');
-                                        location.href = url + path;
-                                        return false;
-                                    },
-                                    "No" : function() {
-                                        $(this).dialog('close');
-                                        return false;
-                                    }
-                                }
-                            });
-                }
-			</script> <c:choose>
+				function confirmArchive(isArchive) {
+					isArchive = !!isArchive;
+					var txt = isArchive ? 'Archive' : 'Unarchive';
+					var pos = [$(window).width() / 4, 50];
+					var url = '${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}';
+					var path = isArchive ? '/archiveworkspace' : '/unarchiveworkspace';
+					var title = isArchive ? 'Archive Workspace' : 'Unarchive Workspace';
+					path += '/${workspaceid}';
+					console.log(url + path)
+					$('#dialog-confirm')
+							.html('Are you sure you want to ' + txt + ' this workspace?')
+							.dialog({
+								resizable: false,
+								modal: true,
+								title: title,
+								height: 180,
+								width: 650,
+								position: pos,
+								buttons: {
+									"Yes": function () {
+										$(this).dialog('close');
+										location.href = url + path;
+										return false;
+									},
+									"No": function () {
+										$(this).dialog('close');
+										return false;
+									}
+								}
+							});
+				}
+			</script>
+			<c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 					<form id="bitstream" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">

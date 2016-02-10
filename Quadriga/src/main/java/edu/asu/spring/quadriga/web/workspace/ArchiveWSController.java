@@ -307,19 +307,16 @@ public class ArchiveWSController
 			,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/workbench/{projectId}/unarchiveworkspace/{workspaceId}", method = RequestMethod.GET)
 	public String unarchiveWorkspace(@PathVariable("workspaceId") String workspaceId,
-								   @PathVariable("projectId") String projectId,
-								   Principal principal, RedirectAttributes redirectAttributes)
-			throws QuadrigaStorageException, QuadrigaAccessException {
+									 @PathVariable("projectId") String projectId, Principal principal,
+									 RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
 		// archive the workspace
 		archiveWSManager.unArchiveWorkspace(workspaceId, principal.getName());
 
 		// add redirect attributes
 		redirectAttributes.addFlashAttribute("show_success_alert", true);
-		redirectAttributes.addFlashAttribute("success_alert_msg",
-				"The workspace has been successfully unarchived.");
+		redirectAttributes.addFlashAttribute("success_alert_msg", "The workspace has been successfully unarchived.");
 
-		return "redirect:/auth/workbench/workspace/workspacedetails/"
-				+ workspaceId;
+		return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
 	}
 
 }
