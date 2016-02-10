@@ -57,7 +57,7 @@
 	<authentication-manager alias="authenticationManager" erase-credentials="false">
 		<authentication-provider>
 	        <user-service>
-	       		<user name="admin" password="admin" authorities="ROLE_QUADRIGA_USER_ADMIN, ROLE_QUADRIGA_USER_STANDARD, ROLE_QUADRIGA_USER_COLLABORATOR" />
+	       		<user name="${quadriga.admin.username}" password="${quadriga.admin.password}" authorities="ROLE_QUADRIGA_USER_ADMIN, ROLE_QUADRIGA_USER_STANDARD, ROLE_QUADRIGA_USER_COLLABORATOR" />
 	        </user-service>
    		</authentication-provider>
 		<authentication-provider ref="authProvider"></authentication-provider>
