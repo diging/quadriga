@@ -185,8 +185,6 @@ public class WebsiteProjectController {
 			return "forbidden";
 		}
 
-
-
-		return "";
+		return "sites/search";
 	}
 }

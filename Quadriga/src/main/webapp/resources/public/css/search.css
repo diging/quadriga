@@ -1,0 +1,12 @@
+.search-wrapper {
+    position: relative;
+}
+
+.search-results {
+    position: absolute;
+    top: 60px;
+}
+
+.search-results > .list-group {
+    margin-bottom: 0;
+}
