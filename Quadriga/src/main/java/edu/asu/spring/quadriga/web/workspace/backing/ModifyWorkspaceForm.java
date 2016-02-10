@@ -19,4 +19,5 @@ public class ModifyWorkspaceForm
 	public void setWorkspaceList(List<ModifyWorkspace> workspaceList) {
 		this.workspaceList = workspaceList;
 	}
+
 }
