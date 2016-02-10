@@ -15,6 +15,11 @@
     position: relative;
 }
 
+/* Not to display IE clear */
+.search-wrapper .search-input::-ms-clear {
+    display: none;
+}
+
 .search-wrapper .search-loader {
     width: 16px;
     height: 16px;
