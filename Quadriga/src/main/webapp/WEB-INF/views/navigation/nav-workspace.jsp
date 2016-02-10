@@ -75,3 +75,7 @@
 		 -->
 	</ul>
 </div>
+
+<div>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Workspace Collections</a>
+</div>

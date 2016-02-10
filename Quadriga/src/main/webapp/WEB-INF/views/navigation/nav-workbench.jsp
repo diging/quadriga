@@ -25,3 +25,4 @@ $(function () {
 <div>
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/keys"><span class="glyphicon glyphicon-tree-deciduous"></span> Manage DSpace</a>
 </div>
+
