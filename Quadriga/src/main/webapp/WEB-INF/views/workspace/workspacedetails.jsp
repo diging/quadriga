@@ -138,7 +138,7 @@
 							}
 						</script>
 
-                        <div id="dialog-confirm" title="Confirm ?"></div>
+						<div id="dialog-confirm" title="Confirm ?"></div>
 
                         <c:if test="${isDeactivated == true}">
                             <a href="#"
@@ -149,7 +149,7 @@
                         <c:if test="${isDeactivated == false }">
                             <font color="#CCCCCC"
                                 title="The workspace is already activated.">
-                                Activate Workspace</a>&nbsp;&nbsp;
+                                Activate Workspace&nbsp;&nbsp;
                             </font>
                         </c:if>
 
@@ -162,9 +162,19 @@
                         <c:if test="${isDeactivated == true }">
                             <font color="#CCCCCC"
                                 title="The workspace is already deactivated.">
-                                Deactivate Workspace</a>&nbsp;&nbsp;
+                                Deactivate Workspace&nbsp;&nbsp;
                             </font>
                         </c:if>
+
+						<c:if test="${!isDeactivated && isArchived}">
+							<a href="#"
+							   onclick="return confirmArchive(false);">Unarchive Workspace</a>&nbsp;&nbsp;
+						</c:if>
+
+						<c:if test="${!isDeactivated && !isArchived}">
+							<a href="#"
+							   onclick="return confirmArchive(true);">Archive Workspace</a>&nbsp;&nbsp;
+						</c:if>
 
                         <c:if test="${isDeactivated == true}">
                             <a href="#"
@@ -235,8 +245,107 @@
 										}
 									});
 				}
-			</script> 
 
+				function confirmArchive(isArchive) {
+					isArchive = !!isArchive;
+					var txt = isArchive ? 'Archive' : 'Unarchive';
+					var pos = [$(window).width() / 4, 50];
+					var url = '${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}';
+					var path = isArchive ? '/archiveworkspace' : '/unarchiveworkspace';
+					var title = isArchive ? 'Archive Workspace' : 'Unarchive Workspace';
+					path += '/${workspaceid}';
+					console.log(url + path)
+					$('#dialog-confirm')
+							.html('Are you sure you want to ' + txt + ' this workspace?')
+							.dialog({
+								resizable: false,
+								modal: true,
+								title: title,
+								height: 180,
+								width: 650,
+								position: pos,
+								buttons: {
+									"Yes": function () {
+										$(this).dialog('close');
+										location.href = url + path;
+										return false;
+									},
+									"No": function () {
+										$(this).dialog('close');
+										return false;
+									}
+								}
+							});
+				}
+			</script>
+			<c:choose>
+				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
+					<form id="bitstream" method="POST"
+						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
+						<font size="2"><input type="submit"
+							onclick="submitClick();" value="Delete Dspace Files" /> <c:choose>
+								<c:when test="${empty dspaceKeys}"></c:when>
+							</c:choose></font> <br>
+						<table class="display dataTable" style="width: 100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Item</th>
+									<th>File</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="workspaceBitstream"
+									items="${workspacedetails.workspaceBitStreams}">
+									<tr bgcolor="#E0F0FF">
+										<td>
+											<div
+												id='checkbox_<c:out value="${workspaceBitstream.bitStream.id}"/>'
+												class='checkbox_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
+												<c:choose>
+													<c:when
+														test="${not((workspaceBitstream.bitStream.name == 'No Access to File') or (workspaceBitstream.bitStream.name == 'Wrong Dspace Authentication') or (workspaceBitstream.bitStream.name == 'Dspace is Down...')) }">
+														<c:choose>
+															<c:when
+																test="${not(workspaceBitstream.bitStream.name == 'Checking BitStream Access...')}">
+																<input type="checkbox" class="checkbox"
+																	name="bitstreamids"
+																	value="${workspaceBitstream.bitStream.id}" />
+															</c:when>
+														</c:choose>
+													</c:when>
+												</c:choose>
+											</div>
+										</td>
+										<td><div
+												class='item_<c:out value="${workspaceBitstream.bitStream.id}"/>'
+												id='item_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
+												<font size="1"><c:out
+														value="${workspaceBitstream.bitStream.itemName}"></c:out></font>
+											</div></td>
+										<td><div
+												class='bitstream_<c:out value="${workspaceBitstream.bitStream.id}"/>'
+												id='bitstream_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
+												<font size="1"><c:out
+														value="${workspaceBitstream.bitStream.name}"></c:out></font>
+											</div></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+							<tfoot>
+								<tr>
+									<th></th>
+									<th>Item</th>
+									<th>File</th>
+								</tr>
+							</tfoot>
+						</table>
+					</form>
+				</c:when>
+				<c:otherwise>
+					<br>Workspace does not contain any files from dspace !
+				</c:otherwise>
+			</c:choose>
 			<hr> <!-- Display Networks --> <c:choose>
 				<c:when test="${not empty networkList}">
 					<span class="byline">Networks belonging to this workspace</span>
