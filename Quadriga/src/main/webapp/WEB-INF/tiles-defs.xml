@@ -770,11 +770,10 @@
 			value="/WEB-INF/views/editing/networkvisual.jsp" />
 	</definition>
 	
-	<definition name="sites/networks/visualize" extends="base.definition.rightnav">
+	<definition name="sites/networks/visualize" extends="base.definition.public">
 		<put-attribute name="currentPage" value="networks" />
-		<put-attribute name="title" value="Quadriga Networks Visualize" />
-		<put-attribute name="right-navigation" 
-		value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
+		 <put-attribute name="title" value="Quadriga Networks Visualize" />
+		<!--<put-attribute name="right-navigation" value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>  -->
 		<put-attribute name="content"
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
