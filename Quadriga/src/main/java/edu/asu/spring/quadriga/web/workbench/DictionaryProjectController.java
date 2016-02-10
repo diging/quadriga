@@ -169,38 +169,6 @@ public class DictionaryProjectController {
 		return "auth/workbench/project/dictionaries";
 	}
 
-	@RequestMapping(value = "auth/workbench/{projectid}/dictionariesJson", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public String listProjectDictionaryJson(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException, QuadrigaException {
-	    UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		String userId = user.getUsername();
-		List<IProjectDictionary> dictionaryList = null;
-		try {
-			// TODO: listProjectDictionary() is to be changed according to mapper
-			dictionaryList = projectDictionaryManager.listProjectDictionary(
-					projectid, userId);
-			dictionaryList.removeAll(Collections.singleton(null));
-
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
-		}
-		
-        JSONArray ja = new JSONArray();
-        for(IProjectDictionary dictionary : dictionaryList){
-            JSONObject j = new JSONObject();
-            try {
-                j.put("id", dictionary.getDictionary().getDictionaryId());
-                j.put("name", dictionary.getDictionary().getDictionaryName());
-                ja.put(j);
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                throw new QuadrigaException(e.getMessage(),e);
-            }
-        }
-		return ja.toString();
-	}
-		
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
 	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {

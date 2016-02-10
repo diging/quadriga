@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.web.workbench;
 
+import java.security.Principal;
 import java.util.Iterator;
 import java.util.List;
 
@@ -69,40 +70,6 @@ public class ConceptCollectionProjectController {
 		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/conceptcollections";
-	}
-
-
-	@RequestMapping(value = "auth/workbench/{projectid}/conceptcollectionsJson", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public String listProjectConceptCollectionJson(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException, QuadrigaException {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		String userId = user.getUsername();
-		List<IProjectConceptCollection> projectConceptCollectionList = null;
-		try {
-			//TODO: listProjectConceptCollection() needs to be modified 
-			projectConceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
-		}
-		
-		JSONArray ja = new JSONArray();
-        for(IProjectConceptCollection conceptCollection : projectConceptCollectionList){
-            JSONObject j = new JSONObject();
-            try {
-                
-                j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
-                j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
-                ja.put(j);
-                
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                throw new QuadrigaException(e.getMessage(),e);
-            }
-            
-        }
-        
-		return ja.toString();
 	}
 
 

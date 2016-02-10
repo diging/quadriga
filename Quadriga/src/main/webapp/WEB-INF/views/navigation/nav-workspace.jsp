@@ -17,7 +17,7 @@
   });
   
   $(document).ready(function(){
-	  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workbench/"+ "${project.projectId}"+ "/dictionariesJson",
+	  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/"+ "${project.projectId}"+ "/dictionaries.json",
 		  type : "GET",
           success: function(data){
               $.each(data, function( index, value ) {
@@ -26,7 +26,7 @@
           }
 	  });
 	  
-	  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workbench/"+ "${project.projectId}"+ "/conceptcollectionsJson",
+	  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/"+ "${project.projectId}"+ "/conceptcollections.json",
 		  type : "GET",
           success: function(data){
               $.each(data, function( index, value ) {
