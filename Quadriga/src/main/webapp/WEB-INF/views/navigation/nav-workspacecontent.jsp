@@ -21,7 +21,7 @@
 	});
 	
 	$(document).ready(function(){
-		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+ "${workspacedetails.workspaceId}"+ "/dictionariesJson",
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workspace/rest"+ "${workspacedetails.workspaceId}"+ "/dictionaries.json",
 			  type : "GET",
 	          success: function(data){
 	              $.each(data, function( index, value ) {
@@ -30,7 +30,7 @@
 	          }
 		  });
 		  
-		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+ "${workspacedetails.workspaceId}"+ "/conceptcollectionsJson",
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workspace/rest"+ "${workspacedetails.workspaceId}"+ "/conceptcollections.json",
 			  type : "GET",
 	          success: function(data){
 	              $.each(data, function( index, value ) {
@@ -38,7 +38,7 @@
 	              });
 	          }
 		  });
-	  });
+	});
 </script>
 
 <h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">

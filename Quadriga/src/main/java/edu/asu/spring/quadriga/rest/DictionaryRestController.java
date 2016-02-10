@@ -23,13 +23,19 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +46,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
@@ -213,6 +220,37 @@ public class DictionaryRestController {
 	
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
+    @RequestMapping(value = "auth/rest/workspace/{workspaceid}/dictionaries.json", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<String> listWorkspaceDictionaryJson(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
+        String userId = principal.getName();
+        
+        List<IWorkspaceDictionary> dicitonaryList = null;
+        try {
+            dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
+        } catch (QuadrigaStorageException e) {
+            logger.error("issue while adding dictionary " ,e);
+        }
+        if(dicitonaryList == null){
+            logger.info("Dictionar list is empty buddy");
+        }
+        
+        JSONArray ja = new JSONArray();
+        for(IWorkspaceDictionary dictionary : dicitonaryList){
+            JSONObject j = new JSONObject();
+            try {
+                j.put("id", dictionary.getDictionary().getDictionaryId());
+                j.put("name", dictionary.getDictionary().getDictionaryName());
+                ja.put(j);
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                throw new QuadrigaException(e.getMessage(),e);
+            }
+        }
+        
+        return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
+    }
 	
 	/**
 	 * Rest interface for the List Dictionary items for the dictionary Id

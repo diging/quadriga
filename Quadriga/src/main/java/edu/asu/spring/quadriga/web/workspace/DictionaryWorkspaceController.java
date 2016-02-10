@@ -198,40 +198,6 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/dictionaries";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
-    @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/dictionariesJson", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-    public String listWorkspaceDictionaryJson(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        String userId = user.getUsername();
-        
-        List<IWorkspaceDictionary> dicitonaryList = null;
-        try {
-            dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
-        } catch (QuadrigaStorageException e) {
-            logger.error("issue while adding dictionary " ,e);
-        }
-        if(dicitonaryList == null){
-            logger.info("Dictionar list is empty buddy");
-        }
-        
-        JSONArray ja = new JSONArray();
-        for(IWorkspaceDictionary dictionary : dicitonaryList){
-            JSONObject j = new JSONObject();
-            try {
-                j.put("id", dictionary.getDictionary().getDictionaryId());
-                j.put("name", dictionary.getDictionary().getDictionaryName());
-                ja.put(j);
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                throw new QuadrigaException(e.getMessage(),e);
-            }
-        }
-        
-        return ja.toString();
-    }
-	
 	/**
 	 * Retrieve all the dictionaries associated with workspace for deletion
 	 * @param workspaceId
