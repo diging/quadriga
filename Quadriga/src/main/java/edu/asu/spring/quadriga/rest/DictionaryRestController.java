@@ -402,6 +402,21 @@ public class DictionaryRestController {
         response.setContentType(accept);
         return dictId;
     }
+    
+    /**
+     * Rest interface to get dictionaries related to project
+     * http://<<URL>:<PORT>>/quadriga/auth/rest/<projectid>/dictionaries.json
+     * http://localhost:8080/quadriga/auth/rest/PROJ_bb7ad41b-3e85-4309-b2ff-47d644307b9b/dictionaries.json
+     * 
+     * 
+     * @author Ajay Modi & Bharath Srikantan
+     * @param projectid
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     */
 
     @RequestMapping(value = "auth/rest/{projectid}/dictionaries.json", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody

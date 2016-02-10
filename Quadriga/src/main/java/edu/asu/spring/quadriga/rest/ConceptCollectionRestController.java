@@ -182,6 +182,21 @@ public class ConceptCollectionRestController {
         }
 
     }
+    
+    /**
+     * Rest interface to get conceptcollections related to project
+     * http://<<URL>:<PORT>>/quadriga/auth/rest/<projectid>/conceptcollections.json
+     * http://localhost:8080/quadriga/auth/rest/PROJ_bb7ad41b-3e85-4309-b2ff-47d644307b9b/conceptcollections.json
+     * 
+     * 
+     * @author Ajay Modi & Bharath Srikantan
+     * @param projectid
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     */
 
     @RequestMapping(value = "auth/rest/{projectid}/conceptcollections.json", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
