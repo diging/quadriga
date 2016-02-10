@@ -94,8 +94,8 @@
 			</c:forEach>
 			</ul>
 			
-			<div style="float:right;">
-				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add Workspace</a>
+			<div style="float:right;">				
+				 <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
 			</div>
 			
 			<div style="clear:right;">
