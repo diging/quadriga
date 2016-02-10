@@ -10,19 +10,27 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.context.Theme;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -173,11 +181,11 @@ public class WebsiteProjectController {
 
 	/**
 	 * This method will return a search page
-	 * @return
+	 * @return view
 	 * @exception QuadrigaStorageException
 	 */
 	@RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
-	public String getSearch(@PathVariable("projectUnixName") String projectUnixName)
+	public String getSearch(@PathVariable("projectUnixName") String projectUnixName, Model model)
 			throws QuadrigaStorageException {
 
 		IProject project = getProjectDetails(projectUnixName);
@@ -185,6 +193,54 @@ public class WebsiteProjectController {
 			return "forbidden";
 		}
 
+		model.addAttribute("project", project);
 		return "sites/search";
 	}
+
+	/**
+	 * This method returns json data for search term
+	 * @return
+	 * @throws JSONException
+	 */
+	@RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST,
+		produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm) throws JSONException {
+		// not searching for the project
+		// best if the project is strored somewhere in the session
+		List<String> list = searchTerms(searchTerm);
+		JSONObject obj = new JSONObject();
+		obj.put("terms", list);
+		// status 200
+
+		/*try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// e.printStackTrace();
+		}*/
+		obj.put("status", 200);
+
+		return new ResponseEntity<String>(obj.toString(), HttpStatus.OK);
+	}
+
+
+	private static List<String> searchTerms(String term) {
+		term = term.toLowerCase().trim();
+		List<String> result = new ArrayList<String>();
+
+		if (term.isEmpty()) {
+			return result;
+		}
+
+		for (String s: TEST_SEARCH_TERMS) {
+			String formattedStr = s.trim().toLowerCase();
+			if (formattedStr.startsWith(term)) {
+				result.add(s);
+			}
+		}
+
+		return result;
+	}
+
+	private static final List<String> TEST_SEARCH_TERMS = Arrays.asList("Animal", "Ant", "Andrew", "Beau", "Bold");
 }
