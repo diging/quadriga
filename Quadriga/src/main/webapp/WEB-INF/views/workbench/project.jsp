@@ -15,18 +15,25 @@
 			pageSize : "3"
 		});
 		
-		var bool = ${(principal.username.toLowerCase()) != 'admin' && owner !='1'};
+		var bool = ${(principal.username.toLowerCase()) != quadriga.admin.username.toLowerCase() && owner !='1'};
 		if(bool){
 			$('.collabEdit').click(function (e) {
 		        e.preventDefault();
 		    });
 			
 			$(".collabEdit").css("color","#808080");
+			
 			$('.addworkspace').click(function (e) {
 		        e.preventDefault();
 		    });
 			
 			$(".addworkspace").css("color","#808080");
+			
+			$('.editProject').click(function (e) {
+		        e.preventDefault();
+		    });
+			
+			$(".editProject").css("color","#808080");
 		}
 	});
 	
@@ -56,12 +63,12 @@
 			<h2>Project: ${project.projectName}</h2>
 			<div>${project.description}</div>
 			<div style="text-align:right">
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project
+			<a class = "editProject" href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project
 			</a>
 			</div>
 			
 			<div style="text-align:right">
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project URL
+			<a class = "editProject" href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project URL
 			</a>
 			</div>
 			
