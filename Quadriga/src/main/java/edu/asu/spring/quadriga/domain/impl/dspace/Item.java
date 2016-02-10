@@ -50,7 +50,7 @@ public class Item implements IItem{
 	private IBitStreamFactory bitstreamFactory;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(Collection.class);
+			.getLogger(Item.class);
 
 	public Item()
 	{

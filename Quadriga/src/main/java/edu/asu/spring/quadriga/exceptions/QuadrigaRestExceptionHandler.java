@@ -26,46 +26,43 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 
 @ControllerAdvice
 public class QuadrigaRestExceptionHandler {
-	@Autowired
-	private IRestVelocityFactory restVelocityFactory;
-	private static final Logger logger = LoggerFactory.getLogger(QuadrigaRestExceptionHandler.class);
-	@Resource(name = "errorMessages")
-	private Properties errorProperties;
-	@RequestMapping(produces="application/xml")
-	@ExceptionHandler(RestException.class)
-	public ResponseEntity<String> handleRestException(RestException ex, HttpServletRequest req, HttpServletResponse res) {
-        logger.error("Exception:", ex);
-		VelocityEngine engine=null;
-		Template template = null;
-		StringWriter sw = new StringWriter();
-		int errorcode= ex.getErrorcode();
-		try {
-			engine = restVelocityFactory.getVelocityEngine(req);
-			engine.init();
-			if(errorcode==0)
-				errorcode=500;
-			res.setStatus(errorcode);
-			template = engine
-					.getTemplate("velocitytemplates/resterror.vm");
-			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("status", "ERROR");
-			context.put("ErrorCode",errorcode);
-			context.put("message",errorProperties.getProperty("error_message_"+errorcode));
-			context.put("exception",ex.getMessage());
-			template.merge(context, sw);
-			return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
-		} catch (ResourceNotFoundException e) {
-			logger.error("Exception:", e);
-		} catch (ParseErrorException e) {
-			logger.error("Exception:", e);
-		} catch (MethodInvocationException e) {
-			logger.error("Exception:", e);
-		}  
-		catch (Exception e) {
-			logger.error("Exception:", e);
-		}
-		return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
-	}
+    @Autowired
+    private IRestVelocityFactory restVelocityFactory;
+    private static final Logger logger = LoggerFactory.getLogger(QuadrigaRestExceptionHandler.class);
+    @Resource(name = "errorMessages")
+    private Properties errorProperties;
 
+    @RequestMapping(produces = "application/xml")
+    @ExceptionHandler(RestException.class)
+    public ResponseEntity<String> handleRestException(RestException ex, HttpServletRequest req,
+            HttpServletResponse res) {
+        logger.error("Exception:", ex);
+        StringWriter sw = new StringWriter();
+        int errorcode = ex.getErrorcode();
+        try {
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            engine.init();
+            if (errorcode == 0)
+                errorcode = 500;
+            res.setStatus(errorcode);
+            Template template = engine.getTemplate("velocitytemplates/resterror.vm");
+            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            context.put("status", "ERROR");
+            context.put("ErrorCode", errorcode);
+            context.put("message", errorProperties.getProperty("error_message_" + errorcode));
+            context.put("exception", ex.getMessage());
+            template.merge(context, sw);
+            return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            logger.error("Exception:", e);
+        } catch (ParseErrorException e) {
+            logger.error("Exception:", e);
+        } catch (MethodInvocationException e) {
+            logger.error("Exception:", e);
+        } catch (Exception e) {
+            logger.error("Exception:", e);
+        }
+        return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+    }
 
 }
