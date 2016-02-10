@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceFormManager;
 public class ListArchivedWSController {
 
     @Autowired
-    ModifyWorkspaceFormManager workspaceFormManager;
+    private ModifyWorkspaceFormManager workspaceFormManager;
     
     @AccessPolicies({
         @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
@@ -39,10 +39,6 @@ public class ListArchivedWSController {
                 .getArchivedWorkspaceList(projectId, principal.getName());
         model.addAttribute("archivedWSList", archivedWSList);
         model.addAttribute("listArchivedWSProjectid", projectId);
-
         return "auth/workbench/workspace/showArchivedWorkspace";
-        
-        
     }
-
 }
