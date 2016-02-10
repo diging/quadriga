@@ -84,7 +84,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 					networkNodeInfoList.addAll(localNetworkNodeInfoList);
 				}
 			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException("Database Error while getting network top nodes for a network with id - " +
+				throw new QuadrigaStorageException("Database Error while getting network top nodes for a network with ID: " +
 						network.getNetworkId(), e);
 			}
 		}
