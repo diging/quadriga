@@ -23,11 +23,19 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +46,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
@@ -253,6 +262,43 @@ public class ConceptCollectionRestController {
 			return "Success";
 		}
 	}
+	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
+    @RequestMapping(value = "auth/rest/workspace/{workspaceid}/conceptcollections.json", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<String> listWorkspaceConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
+        String userId = principal.getName();
+        logger.info("Concept collection list is empty buddy");
+        //List<IConceptCollection> conceptCollectionList = null;
+        List<IWorkspaceConceptCollection> conceptCollectionList = null;
+        
+        try {
+            conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+        } catch (QuadrigaStorageException e) {
+            logger.error("Issue while accessing DB",e);
+        }
+        if(conceptCollectionList == null){
+            logger.info("Concept collection list is empty buddy");
+        }
+
+        JSONArray ja = new JSONArray();
+        for(IWorkspaceConceptCollection conceptCollection : conceptCollectionList){
+            JSONObject j = new JSONObject();
+            try {
+                j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
+                j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
+                ja.put(j);
+                
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                throw new QuadrigaException(e.getMessage(),e);
+            }
+            
+        }
+        
+        return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
+    }
+	    
 
 	/**
 	 *

@@ -87,46 +87,7 @@ public class ConceptCollectionWorkspaceController {
 		return "auth/workbench/workspace/conceptcollections";
 	}
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
-	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/conceptcollectionsJson", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public String listWorkspaceConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		String userId = user.getUsername();
-		logger.info("Concept collection list is empty buddy");
-		//List<IConceptCollection> conceptCollectionList = null;
-		List<IWorkspaceConceptCollection> conceptCollectionList = null;
-		
-		try {
-			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
-		} catch (QuadrigaStorageException e) {
-			logger.error("Issue while accessing DB",e);
-		}
-		if(conceptCollectionList == null){
-			logger.info("Concept collection list is empty buddy");
-		}
-
-		JSONArray ja = new JSONArray();
-        for(IWorkspaceConceptCollection conceptCollection : conceptCollectionList){
-            JSONObject j = new JSONObject();
-            try {
-                j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
-                j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
-                ja.put(j);
-                
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                throw new QuadrigaException(e.getMessage(),e);
-            }
-            
-        }
-        
-		return ja.toString();
-	}
 	
-		
-		
 	/**
 	 * Retrieve the concept collections which are not associated to the given workspace
 	 * @param workspaceId

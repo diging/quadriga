@@ -5,6 +5,8 @@
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
+<link 
+	rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">	
 <script type="text/javascript">
 	$(function() {
 		$('#workspacemenu').jstree().on(
@@ -21,7 +23,7 @@
 	});
 	
 	$(document).ready(function(){
-		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workspace/rest"+ "${workspacedetails.workspaceId}"+ "/dictionaries.json",
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/workspace/"+ "${workspacedetails.workspaceId}"+ "/dictionaries.json",
 			  type : "GET",
 	          success: function(data){
 	              $.each(data, function( index, value ) {
@@ -30,7 +32,7 @@
 	          }
 		  });
 		  
-		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/workspace/rest"+ "${workspacedetails.workspaceId}"+ "/conceptcollections.json",
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/workspace/"+ "${workspacedetails.workspaceId}"+ "/conceptcollections.json",
 			  type : "GET",
 	          success: function(data){
 	              $.each(data, function( index, value ) {
@@ -45,17 +47,13 @@
 	<span>DICTIONARIES</span>
 </h5>
 <div id="workspaceDictionaries">
-	<img src="/quadriga/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;">
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary">Add</a>
-	<img src="/quadriga/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;">
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary">Delete</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
 <h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
 	<span>CONCEPT COLLECTIONS</span>
 </h5>
 <div id="workspaceConceptCollections">		
-	<img src="/quadriga/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;">
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection">Add</a>
-	<img src="/quadriga/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;">
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections">Delete</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
