@@ -30,7 +30,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             throws QuadrigaStorageException {
 
         ITransformedNetwork networkJSon = null;
-
         List<INetworkNodeInfo> oldNetworkTopNodesList = null;
 
         try {
@@ -40,7 +39,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         networkJSon = transformer.transformNetwork(oldNetworkTopNodesList);
-
         return networkJSon;
     }
 
@@ -68,23 +66,17 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 			throws QuadrigaStorageException {
 
 		List<INetwork> networkList;
-		ITransformedNetwork networkJSon;
-
-		List<INetworkNodeInfo> networkNodeInfoList = new ArrayList<INetworkNodeInfo>();
-
 		try {
 			networkList = networkManager.getNetworksInProject(projectId);
 		} catch (QuadrigaStorageException e) {
-			logger.error("DB Error while getting networks a project id", e);
-			return null;
+			throw new QuadrigaStorageException("Database Error while getting networks a project with ID: " + projectId, e);
 		}
-
 		if (networkList == null) {
 			return null;
 		}
 
+		List<INetworkNodeInfo> networkNodeInfoList = new ArrayList<INetworkNodeInfo>();
 		for (INetwork network: networkList) {
-
 			try {
 				List<INetworkNodeInfo> localNetworkNodeInfoList =
 						networkManager.getNetworkTopNodes(network.getNetworkId());
@@ -92,14 +84,12 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 					networkNodeInfoList.addAll(localNetworkNodeInfoList);
 				}
 			} catch (QuadrigaStorageException e) {
-				logger.error("DB Error while getting network top nodes for a network with id - " +
+				throw new QuadrigaStorageException("Database Error while getting network top nodes for a network with id - " +
 						network.getNetworkId(), e);
 			}
-
 		}
 
-		networkJSon = transformer.transformNetwork(networkNodeInfoList);
-
+		ITransformedNetwork networkJSon = transformer.transformNetwork(networkNodeInfoList);
 		return networkJSon;
 	}
 }
