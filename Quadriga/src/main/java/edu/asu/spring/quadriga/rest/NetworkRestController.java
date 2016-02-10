@@ -36,6 +36,7 @@ import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
@@ -137,8 +138,14 @@ public class NetworkRestController {
 			return "Please provide XML in body of the post request.";
 
 		} else {
-			String res=networkManager.storeXMLQStore(xml);
-			if(res.equals("")){
+			String res = null;
+            try {
+                res = networkManager.storeNetworks(xml);
+            } catch (QStoreStorageException e) {
+                logger.error(e.getMessage(), e);
+                return e.getMessage();
+            }
+			if(res == null){
 				response.setStatus(406);
 				return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 			}
@@ -671,8 +678,15 @@ public class NetworkRestController {
 
 			} else {
 
-				String res=networkManager.storeXMLQStore(xml);
-				if(res.equals("")){
+				String res;
+                try {
+                    res = networkManager.storeNetworks(xml);
+                } catch (QStoreStorageException e) {
+                    response.setStatus(500);
+                    logger.error(e.getMessage(), e);
+                    return e.getMessage();
+                }
+				if(res == null) {
 					response.setStatus(500);
 					return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 				}
