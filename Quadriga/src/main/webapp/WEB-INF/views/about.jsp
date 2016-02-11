@@ -1,12 +1,48 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ page isELIgnored="false" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  	<title>About Project ${project} }</title>
+</head>
 
-<!-- Content -->
+<body>
+	<h1> About Project </h1>
+	
+	${aboutProject }
 
-<article class="is-page-content">
-
-<span class="byline">Page Under Construction..Visit again to know us...</span>
 
 
-</article>
+
+
+
+
+</body>
+</html>
+
+
+<script>
+
+/*approaches to the problem
+
+1. Use HtmlRaw
+Controller:
+public ActionResult HtmlRaw()
+        {
+
+            ViewBag.Message = "C\nC++\nC#\nJava Script";
+            return View();
+        }
+View:
+@Html.Raw(Server.HtmlEncode(@ViewBag.Message).Replace("\n", "<br/>"))
+
+2. use <pre> tag
+
+
+
+
+
+*/
+</script>
