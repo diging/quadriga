@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
@@ -16,6 +18,7 @@ import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.ITextFileService;
 
+@PropertySource(value = "classpath:/user.properties")
 @Service
 public class TextFileService implements ITextFileService {
 
@@ -27,6 +30,9 @@ public class TextFileService implements ITextFileService {
 	
 	@Autowired
 	private IProjectWorkspaceDAO projWSDAO;
+	
+	@Autowired
+    private Environment env;
 
 	@Override
 	public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
@@ -64,8 +70,8 @@ public class TextFileService implements ITextFileService {
 	
 	private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
 		
-		
-		String filePath = "/Users/nischalsamji/" + txtFile.getRefId();
+		String saveDir = env.getProperty("textfile.location");
+		String filePath = saveDir + "/" + txtFile.getRefId();
 		File dirFile = new File(filePath);
 		dirFile.mkdir();
 		
