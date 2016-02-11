@@ -44,7 +44,7 @@ public class TextFileService implements ITextFileService {
 	private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
 		
 		
-		String filePath = "T:\\" + txtFile.getRefId();
+		String filePath = "Get Path from POM" + txtFile.getRefId();
 		File dirFile = new File(filePath);
 		dirFile.mkdir();
 		
