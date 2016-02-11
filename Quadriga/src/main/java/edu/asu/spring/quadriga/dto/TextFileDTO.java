@@ -25,12 +25,17 @@ public class TextFileDTO implements Serializable {
 
         
         //@JoinColumn(name = "projectid", referencedColumnName = "project_id")
-        @Column(name = "projectid")
-        private String projectId;
-        @Basic(optional = false)
         @Id
+        @Basic(optional = false)
         @Column(name = "refid")
         private String refId;
+        
+        @Basic(optional = false)
+        @Column(name = "projectid")
+        private String projectId;
+        
+        
+
         @Basic(optional = false)
         @Column(name = "filename")
         private String filename;

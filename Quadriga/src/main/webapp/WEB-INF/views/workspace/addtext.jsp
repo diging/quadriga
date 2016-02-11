@@ -22,14 +22,15 @@ function submitClick(id){
 					<span class="byline">Please fill in the following
 						information:</span>
 				</header>
-				<table style="width: 100%">
+				
+		  		<table style="width: 100%">
 					<tr>
 						<td style="width: 170px">Name:</td>
 						<td><form:input path="fileName" size="60" id="fileName" /></td>
 						<td><form:errors path="fileName" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
-						<td style="vertical-align: top">Description:</td>
+						<td style="vertical-align: top">Add File Content:</td>
 						<td><form:textarea path="fileContent" cols="44" rows="6"
 								id="fileContent" /></td>
 						<td><form:errors path="fileContent" class="ui-state-error-text"></form:errors></td>
@@ -41,7 +42,16 @@ function submitClick(id){
 						<td><input type="hidden" id="workspaceId"
 							value=<c:out value="${workspaceId}"></c:out> /></td>
 					</tr>
-				</table>		  
+					<tr>
+						<td><input type="hidden" id="success"
+							value=<c:out value="${success}"></c:out> /></td>
+					</tr>
+				</table>
+				
+		  <c:if test="${success == '1'}">
+		  <span class="byline">Textfile saved successfully.</span>
+		  </c:if>
+		  		  
 	</form:form>
 </article>
 

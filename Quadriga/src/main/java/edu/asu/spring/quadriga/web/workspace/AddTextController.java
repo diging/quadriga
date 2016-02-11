@@ -39,6 +39,7 @@ public class AddTextController {
             ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
             model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
             model.getModelMap().put("workspaceId", workspaceid );
+            model.getModelMap().put("success", "0" );
             return model;
     }
     
@@ -52,8 +53,10 @@ public class AddTextController {
                    
             ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
             model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
-            txtFileService.saveTextFile(txtFile);
             model.getModelMap().put("workspaceId", workspaceid );
+            txtFile.setWorkspaceId(workspaceid);
+            txtFileService.saveTextFile(txtFile);
+            model.getModelMap().put("success", "1" );
             return model;
     }
     

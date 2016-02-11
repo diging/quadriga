@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
+import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
+import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -22,25 +24,44 @@ public class TextFileService implements ITextFileService {
 
 	@Autowired
 	private ITextFileDAO txtFileDAO;
+	
+	@Autowired
+	private IProjectWorkspaceDAO projWSDAO;
 
 	@Override
 	public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
 
 		UUID refId = UUID.randomUUID();
 		txtFile.setRefId(refId.toString());
+		txtFile.setProjectId(projWSDAO.getCorrespondingProjectID(txtFile.getWorkspaceId()));
+		
+		txtFileDTO.setFilename(txtFile.getFileName());
+        txtFileDTO.setProjectId(txtFile.getProjectId());
+        txtFileDTO.setRefId(txtFile.getRefId());
+        txtFileDTO.setWorkspaceId(txtFile.getWorkspaceId());
+
+        txtFileDAO.saveTextFileDTO(txtFileDTO);
+		
+		
 		
 		saveTextFileLocal(txtFile);
-
-		txtFileDTO.setFilename(txtFile.getFileName());
-		txtFileDTO.setProjectId(txtFile.getProjectId());
-		txtFileDTO.setRefId("refid");
-		txtFileDTO.setWorkspaceId("wsId");
-
-		// txtFileDAO.saveTextFileDTO(txtFileDTO);
-
+		//saveTextFileDB(txtFile);
+		
 		return true;
 	}
 
+	
+	private boolean saveTextFileDB(ITextFile txtFile) throws QuadrigaStorageException{
+	    txtFileDTO.setFilename(txtFile.getFileName());
+        txtFileDTO.setProjectId(txtFile.getProjectId());
+        txtFileDTO.setRefId(txtFile.getRefId());
+        txtFileDTO.setWorkspaceId(txtFile.getWorkspaceId());
+
+        txtFileDAO.saveTextFileDTO(txtFileDTO);
+	    return true;
+	}
+	
+	
 	private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
 		
 		
