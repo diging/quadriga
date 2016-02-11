@@ -65,12 +65,7 @@
 					</c:if>
 					
 			<hr>
-			<strong>Text files in this project:</strong>
-	
-			<div style="float:right;">
-				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addtextfiles">Add Textfile</a>
-			</div>
-			
+					
 			
 			<hr> <!--  Display associated workspace -->			
 			

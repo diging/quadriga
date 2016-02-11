@@ -1,8 +1,12 @@
 package edu.asu.spring.quadriga.web.workspace;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
@@ -20,10 +24,11 @@ public class AddTextController {
     private ITextFileFactory textFileFactory;
     
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
-    public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException, QuadrigaAccessException
+    @RequestMapping(value="auth/workbench/workspace/addtext", method=RequestMethod.GET)
+    public ModelAndView addTextFileForm(@PathVariable("projectid") String projectid, HttpServletResponse resp) throws QuadrigaStorageException, QuadrigaAccessException
     {
-            ModelAndView model;        
-            model = new ModelAndView("auth/workbench/workspace/addtext");
+                   
+            ModelAndView model = new ModelAndView("auth/workspace/workbench/addtext");
             model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
             model.getModelMap().put("projectid", projectid);
             model.getModelMap().put("success", 0);
