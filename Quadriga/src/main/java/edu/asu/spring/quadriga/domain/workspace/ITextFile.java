@@ -20,5 +20,9 @@ public interface ITextFile {
 
     public abstract void setFileName(String fileName);
     
+    public abstract String getFileContent();
+    
+    public abstract void setFileContent(String fileContent);
+
     
 }

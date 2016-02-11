@@ -11,47 +11,38 @@ $(function() {
 });
 
 function submitClick(id){
-	location.href = "${pageContext.servletContext.contextPath}/auth/workbench/projects/${wsprojectid}";
+	location.href = "${pageContext.servletContext.contextPath}/auth/workbench/projects/${workspaceId}";
 }
 </script>
 <article class="is-page-content">
 	<form:form commandName="textfile" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/addtextfile">
-		<c:choose>
-		  <c:when test="${success == '0'}">
-				<header>
-					<h2>Add a new Textfile</h2>
+		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/addtext">
+		
+					<h2>Add Text to Workspace</h2>
 					<span class="byline">Please fill in the following
 						information:</span>
 				</header>
 				<table style="width: 100%">
 					<tr>
-						<td style="width: 170px">Filename:</td>
-						<td><form:input path="FileName" size="60" id="fileName" /></td>
+						<td style="width: 170px">Name:</td>
+						<td><form:input path="fileName" size="60" id="fileName" /></td>
 						<td><form:errors path="fileName" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
-						<td style="vertical-align: top">Content:</td>
-						<td><form:textarea path="description" cols="44" rows="6"
-								id="description" /></td>
-						<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
+						<td style="vertical-align: top">Description:</td>
+						<td><form:textarea path="fileContent" cols="44" rows="6"
+								id="fileContent" /></td>
+						<td><form:errors path="fileContent" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
 						<td><input type="submit" value="Save Textfile"></td>
 					</tr>
 					<tr>
-						<td><input type="hidden" id="textrefid"
-							value=<c:out value="${wsprojectid}"></c:out> /></td>
+						<td><input type="hidden" id="workspaceId"
+							value=<c:out value="${workspaceId}"></c:out> /></td>
 					</tr>
-				</table>
-			</c:when>
-		  <c:when test="${success == '1'}">
-		  <span class="byline">Textfile saved successfully.</span>
-		<ul>
-					<li><input type="button" onClick="submitClick(this.id);"
-						value='Okay'></li>
-				</ul>
-		  </c:when>
-		</c:choose>
+				</table>		  
 	</form:form>
 </article>
+
+<!-- /Content -->

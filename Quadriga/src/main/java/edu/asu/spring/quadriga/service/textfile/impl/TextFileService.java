@@ -15,47 +15,54 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.ITextFileService;
 
 @Service
-public class TextFileService implements ITextFileService{
+public class TextFileService implements ITextFileService {
 
 	@Autowired
 	private TextFileDTO txtFileDTO;
-	
-	
+
 	@Autowired
 	private ITextFileDAO txtFileDAO;
-	
-    @Override
-    public boolean saveTextFile(String prjId, String wsId, String fileName, String fileContent ) throws QuadrigaStorageException, IOException {
-        
-    	saveTextFileLocal();
-               
-        txtFileDTO.setFilename("testFile");
-        txtFileDTO.setProjectId(prjId);
-        txtFileDTO.setRefId("refid");
-        txtFileDTO.setWorkspaceId("wsId");
-        
-        txtFileDAO.saveTextFileDTO(txtFileDTO);
-        
-        
-        return true;
-    }
-    
-    private boolean saveTextFileLocal() throws IOException{
-    	UUID refId = UUID.randomUUID();
-        String filePath =  "PathfromPOM" + refId;
-        File dirFile = new File(filePath);
-        dirFile.mkdir();
-        File txtFile = new File(dirFile + "fileName" + ".txt");
-        FileWriter fw =  new FileWriter(txtFile);
-        fw.write("meow!!!");
-        File propFile = new File(dirFile + "meta.properties");
-        FileWriter propFw =  new FileWriter(propFile);
-        fw.write("meow!!!");
-        
-        
-        return true;
-    	
-    }
-    
-    
+
+	@Override
+	public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
+
+		UUID refId = UUID.randomUUID();
+		txtFile.setRefId(refId.toString());
+		
+		saveTextFileLocal(txtFile);
+
+		txtFileDTO.setFilename(txtFile.getFileName());
+		txtFileDTO.setProjectId(txtFile.getProjectId());
+		txtFileDTO.setRefId("refid");
+		txtFileDTO.setWorkspaceId("wsId");
+
+		// txtFileDAO.saveTextFileDTO(txtFileDTO);
+
+		return true;
+	}
+
+	private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
+		
+		
+		String filePath = "T:\\" + txtFile.getRefId();
+		File dirFile = new File(filePath);
+		dirFile.mkdir();
+		
+		File saveTxtFile = new File(filePath + "\\fileName" + ".txt");
+		FileWriter fw = new FileWriter(saveTxtFile);
+		fw.write(txtFile.getFileContent());		
+		File propFile = new File(filePath + "\\meta.properties");
+		FileWriter propFw = new FileWriter(propFile);		
+		propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
+		propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
+		propFw.write("Reference Id:" + txtFile.getRefId() + "\n");
+		
+		
+		fw.close();
+		propFw.close();
+
+		return true;
+
+	}
+
 }

@@ -23,11 +23,12 @@ public class TextFileDTO implements Serializable {
    
         private static final long serialVersionUID = -1798070786993154676L;
 
-        @Id
-        @JoinColumn(name = "projectid", referencedColumnName = "project_id")
+        
+        //@JoinColumn(name = "projectid", referencedColumnName = "project_id")
         @Column(name = "projectid")
         private String projectId;
         @Basic(optional = false)
+        @Id
         @Column(name = "refid")
         private String refId;
         @Basic(optional = false)

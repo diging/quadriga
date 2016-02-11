@@ -309,6 +309,15 @@
 			value="/WEB-INF/views/workspace/bitstreams.jsp" />
 	</definition>
 	
+	<!--  add/ textfile pages -START -->
+	<definition name="auth/workbench/workspace/addtext"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Add Text" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/addtext.jsp" />
+	</definition>
+	
+	
 	<!--  add/update/delete workspace pages -START -->
 	<definition name="auth/workbench/workspace/addworkspace"
 		extends="base.definition.workbench">
