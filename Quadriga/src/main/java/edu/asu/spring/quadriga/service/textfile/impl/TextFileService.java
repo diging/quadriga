@@ -44,14 +44,14 @@ public class TextFileService implements ITextFileService {
 	private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
 		
 		
-		String filePath = "Get Path from POM" + txtFile.getRefId();
+		String filePath = "/Users/nischalsamji/" + txtFile.getRefId();
 		File dirFile = new File(filePath);
 		dirFile.mkdir();
 		
-		File saveTxtFile = new File(filePath + "\\fileName" + ".txt");
+		File saveTxtFile = new File(filePath + "/" + txtFile.getFileName() + ".txt");
 		FileWriter fw = new FileWriter(saveTxtFile);
 		fw.write(txtFile.getFileContent());		
-		File propFile = new File(filePath + "\\meta.properties");
+		File propFile = new File(filePath + "/meta.properties");
 		FileWriter propFw = new FileWriter(propFile);		
 		propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
 		propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
