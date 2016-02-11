@@ -48,8 +48,6 @@ public class AddWSController
 	@Autowired
 	WorkspaceValidator validator;
 	
-	@Autowired
-	ITextFileService tfs;
 	/**
 	 * Attach the custom validator to the Spring context
 	 */
@@ -72,7 +70,6 @@ public class AddWSController
 	public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
-		    tfs.saveTextFile();
 			model = new ModelAndView("auth/workbench/workspace/addworkspace");
 			model.getModelMap().put("workspace", workspaceFactory.createWorkspaceObject());
 			model.getModelMap().put("wsprojectid", projectid);

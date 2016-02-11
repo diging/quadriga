@@ -8,39 +8,49 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class TextHandlerDTO {
+import org.springframework.stereotype.Component;
 
-    @Entity
-    @Table(name = "tbl_textfiles")
-    public class TextFileEntity implements Serializable {
+
+@Entity
+@Table(name = "tbl_textfiles")
+@XmlRootElement
+@Component
+public class TextFileDTO implements Serializable {
+
+    
+   
         private static final long serialVersionUID = -1798070786993154676L;
 
         @Id
         @JoinColumn(name = "projectid", referencedColumnName = "project_id")
         @Column(name = "projectid")
-        private String projectid;
+        private String projectId;
         @Basic(optional = false)
         @Column(name = "refid")
-        private String refid;
+        private String refId;
         @Basic(optional = false)
         @Column(name = "filename")
         private String filename;
-
-        public String getProjectid() {
-            return projectid;
+        @Basic(optional = false)
+        @Column(name = "wsid")
+        private String workspaceId;
+        
+        public String getProjectId() {
+            return projectId;
         }
 
-        public void setProjectid(String project) {
-            this.projectid = project;
+        public void setProjectId(String project) {
+            this.projectId = project;
         }
 
-        public String getRefid() {
-            return refid;
+        public String getRefId() {
+            return refId;
         }
 
-        public void setRefid(String refid) {
-            this.refid = refid;
+        public void setRefId(String refid) {
+            this.refId = refid;
         }
 
         public String getFilename() {
@@ -51,6 +61,14 @@ public class TextHandlerDTO {
             this.filename = filename;
         }
 
-    }
+		public String getWorkspaceId() {
+			return workspaceId;
+		}
+
+		public void setWorkspaceId(String workspaceId) {
+			this.workspaceId = workspaceId;
+		}
+
+    
 
 }

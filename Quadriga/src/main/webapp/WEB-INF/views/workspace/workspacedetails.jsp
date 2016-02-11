@@ -591,9 +591,9 @@
 				}
 			</script> 
 
-			<strong>Text files in this project:</strong>
+			<strong>Text files in this Workspace:</strong>
 				<div style="float:right;">
-				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workspace/addtext">Add Textfile</a>
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/addtext">Add Textfile</a>
 			</div>
 			<hr> <!-- Display Networks --> <c:choose>
 				<c:when test="${not empty networkList}">
