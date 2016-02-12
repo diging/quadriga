@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<sec:authentication var="principal" property="principal" />
 
 <script>
 	$(document).ready(function() {
@@ -12,6 +14,7 @@
 		$("ul.pagination1").quickPagination({
 			pageSize : "3"
 		});
+		
 		var bool = ${(principal.username.toLowerCase()) != quadriga.admin.username.toLowerCase() && owner !='1'};
 		if(bool){
 			$('.collabEdit').click(function (e) {
@@ -86,7 +89,7 @@
 			<hr> <!--  Display associated workspace -->
 			
 			<strong>Workspaces in this project:</strong>
-			<div style="float:right;"><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
+			<div style="float:right;"><a class = "addworkspace" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
 			</div>
 			<ul>
 			<c:forEach var="workspace" items="${workspaceList}">
@@ -114,7 +117,7 @@
 			</ul>
 			
 			<div style="float:right;">
-				<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
+				<a class="addworkspace" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
 			</div>
 			
 			<div style="clear:right;">
