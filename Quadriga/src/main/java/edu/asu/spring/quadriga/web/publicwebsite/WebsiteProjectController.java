@@ -16,10 +16,13 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import edu.asu.spring.quadriga.profile.ISearchResult;
+import edu.asu.spring.quadriga.profile.IService;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -59,6 +62,12 @@ public class WebsiteProjectController {
 	
 	@Autowired
     private Environment env;
+
+	@Autowired
+	@Qualifier("conceptPowerService")
+	private IService service;
+
+	private static final int MAX_JSON_RESULTS = 5;
 
 	
 	public IRetrieveProjectManager getProjectManager() {
@@ -199,48 +208,33 @@ public class WebsiteProjectController {
 
 	/**
 	 * This method returns json data for search term
-	 * @return
+	 * @return json
 	 * @throws JSONException
 	 */
 	@RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST,
 		produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm) throws JSONException {
-		// not searching for the project
-		// best if the project is strored somewhere in the session
-		List<String> list = searchTerms(searchTerm);
-		JSONObject obj = new JSONObject();
-		obj.put("terms", list);
-		// status 200
+		List<ISearchResult> searchResults = service.search(searchTerm);
+		List<JSONObject> jsonResults = new ArrayList<JSONObject>();
 
-		/*try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// e.printStackTrace();
-		}*/
-		obj.put("status", 200);
-
-		return new ResponseEntity<String>(obj.toString(), HttpStatus.OK);
-	}
-
-
-	private static List<String> searchTerms(String term) {
-		term = term.toLowerCase().trim();
-		List<String> result = new ArrayList<String>();
-
-		if (term.isEmpty()) {
-			return result;
-		}
-
-		for (String s: TEST_SEARCH_TERMS) {
-			String formattedStr = s.trim().toLowerCase();
-			if (formattedStr.startsWith(term)) {
-				result.add(s);
+		if (searchResults != null) {
+			int index = 0;
+			for (ISearchResult result: searchResults) {
+				index++;
+				JSONObject jsonResult = new JSONObject();
+				jsonResult.put("id", result.getId());
+				jsonResult.put("name", result.getName());
+				jsonResults.add(jsonResult);
+				if (index >= MAX_JSON_RESULTS) {
+					break;
+				}
 			}
 		}
 
-		return result;
-	}
+		JSONObject jsonResponse = new JSONObject();
+		jsonResponse.put("terms", jsonResults);
 
-	private static final List<String> TEST_SEARCH_TERMS = Arrays.asList("Animal", "Ant", "Andrew", "Beau", "Bold");
+		return new ResponseEntity<String>(jsonResponse.toString(), HttpStatus.OK);
+	}
 }

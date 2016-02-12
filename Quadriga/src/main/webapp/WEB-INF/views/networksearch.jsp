@@ -38,7 +38,6 @@
 		var $resWrapper = $('#search-results-wrapper');
 		var $items = $('#search-results-items');
 		var $list = $resWrapper.find('.list-group-item:first');
-		var $curReq;
 		var url = $('#search-form').attr('action'); // action URL
 
 		var loader = (function() {
@@ -72,12 +71,13 @@
 			var timeout;
 			var timeoutInt = 400;
 			var prevVal = '';
+			var minChars = 3;
 			var change = function() {
-				$searchInput.trigger('change');
+				$searchInput.trigger('textChange');
 			};
 			return function(ev) {
 				var val = $searchInput.val().trim();
-				if (val === prevVal) {
+				if (val === prevVal || val.length < minChars) {
 					return;
 				}
 				prevVal = val;
@@ -89,28 +89,24 @@
 		})();
 
 		var reqSuccess = function(data) {
-			if (data && data.status === 200 && data.terms) {
-				addTerms(data.terms);
-			}
+			var terms = data.terms || [];
+			addTerms(terms);
 		};
 
 		var reqFail = function(err) {
 			// triggered even when abort is called
-			console.log(err);
+			// console.log(err);
 		};
 
 		var reqAlways = function(obj) {
 			// this triggered always
 		};
 
-
-		/**
-		 * This function adds all the search terms to the search results dom
-		 * @param terms 	array of terms
-		 */
 		var addTerms = (function() {
 			// clear all the terms
 			var $a = $('#search-item-template');
+			var maxResults = 5;
+
 			return function(terms) {
 				// if terms are empty hide the search wrapper
 				if (terms && terms.length === 0) {
@@ -119,10 +115,11 @@
 				}
 
 				var $link;
+				var maxNum = Math.min(terms.length, maxResults);
 				$items.html('');
-				for (var i = 0; i < terms.length; i++) {
+				for (var i = 0; i < maxNum; i++) {
 					$link = $a.clone();
-					$link.text(terms[i]);
+					$link.text(terms[i].name);
 					$items.append($link);
 				}
 				$resWrapper.show();
@@ -171,7 +168,7 @@
 		// custom event for value change
 		// check if change works for input
 		$searchInput.on('keyup', triggerChange)
-				.on('change', onChange);
+				.on('textChange', onChange);
 	}
 	window.onload = init;
 </script>

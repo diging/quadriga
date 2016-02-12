@@ -3,6 +3,7 @@
 }
 
 .search-results {
+    overflow: hidden;
     position: absolute;
     top: 60px;
 }
