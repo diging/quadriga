@@ -28,33 +28,17 @@
 </header>
 
 
-<!-- <input type="checkbox"  id="chkboxall" checked > All  -->
-<!-- <input type="checkbox" id="chkboxall" checked>
-All
-<div id="users">
-	<input type="checkbox" id="chkboxowner" class="users" checked>
-	Owner <input type="checkbox" id="chkboxcollaborator" class="users"
-		checked> Collaborator <input type="checkbox"
-		id="chkboxwsowner" class="users" checked> Workspace Owner <input
-		type="checkbox" id="chkboxwscollaborator" class="users" checked>
-	Workspace Collaborator
+<!--  if there are projects -->
+<c:if test="${not empty projects}">
+<div style="float:right; margin-bottom: 10px;">
+    <a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject"><i class="fa fa-plus-circle"></i> Add Project</a>
 </div>
-
-<div id="alljstree"></div>
-
-<div id="asownerjstree"></div>
-
-<div id="ascollaboratorjstree"></div>
-
-<div id="aswsownerjstree"></div>
-
-<div id="aswscollaboratorjstree"></div>
- -->
-
+<div style="clear: right;"></div>
 
 <c:forEach items="${projects}" var="project">
 <div class="projectList">
-<img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/project-new.png"> 
+<i class="fa fa-th-list" ></i>
+<!-- <img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/project-new.png"> -->
 <c:choose>
 <c:when test="${accessibleProjects[project.projectId]}">
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}">${project.projectName}</a> 
@@ -75,7 +59,7 @@ ${project.projectName} <span style="font-size: 12px"><span title="No access" cla
 	<div style="display: none" class="toggled">
 	<ul class="workspaceToggleList">
 	<c:forEach items="${project.projectWorkspaces}" var="ws">
-		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${ws.workspace.workspaceId}">${ws.workspace.workspaceName}</a>
+		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${ws.workspace.workspaceId}"><i class="fa fa-folder-open"></i> ${ws.workspace.workspaceName}</a>
 			<br>${ws.workspace.description}
 		</li>
 	</c:forEach>
@@ -89,12 +73,19 @@ ${project.projectName} <span style="font-size: 12px"><span title="No access" cla
 </c:forEach>
 
 <div style="float:right;">
-	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">Add Project</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject"><i class="fa fa-plus-circle"></i> Add Project</a>
 </div>
 <div style="clear: right;"></div>
+</c:if>
+<!--  end if there are projects -->
 
+<!--  if there are no projects -->
+<c:if test="${empty projects}">
 
-
+    <p>
+    You don't have any projects yet. You should <a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject"><i class="fa fa-plus-circle"></i> create one</a>!
+    </p>
+</c:if>
 
 
 

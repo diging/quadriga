@@ -1,11 +1,9 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,10 +13,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -31,30 +27,14 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.factory.networks.INetworkFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
@@ -64,8 +44,6 @@ import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
@@ -82,14 +60,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
-import edu.asu.spring.quadriga.service.network.IJITNetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
-import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
-import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
-import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
+import edu.asu.spring.quadriga.service.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
@@ -103,60 +76,26 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  * @author : Lohith Dwaraka
  */
 
-@PropertySource(value = "classpath:/user.properties")
 @Service
 public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkManager {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkManager.class);
 
     @Autowired
-    @Qualifier("qStoreURL")
-    private String qStoreURL;
+    private IQStoreConnector qStoreConnector;
+    
+    @Autowired
+    private IRestVelocityFactory restVelocityFactory;
 
     @Autowired
-    private INodeObjectWithStatementFactory nodeObjectWithStatementFactory;
-
-    @Autowired
-    IRestVelocityFactory restVelocityFactory;
-
-    @Autowired
-    private IJITNetworkManager jitNetworkManager;
-
-    @Autowired
-    private ID3NetworkManager d3NetworkManager;
-
-    @Autowired
-    IConceptCollectionManager conceptCollectionManager;
+    private IConceptCollectionManager conceptCollectionManager;
 
     @Autowired
     private IListWSManager wsManager;
 
     @Autowired
     private INetworkMapper networkmapper;
-
-    @Autowired
-    @Qualifier("qStoreURL_Add")
-    private String qStoreURL_Add;
-
-    @Autowired
-    @Qualifier("restTemplate")
-    RestTemplate restTemplate;
-
-    @Autowired
-    @Qualifier("qStoreURL_Get_POST")
-    private String qStoreURL_Get_POST;
-
-    @Autowired
-    @Qualifier("qStoreURL_Get")
-    private String qStoreURL_Get;
-
-    @Autowired
-    @Qualifier("jaxbMarshaller")
-    Jaxb2Marshaller jaxbMarshaller;
-
-    @Autowired
-    private INetworkFactory networkFactory;
-
+    
     @Autowired
     private IWorkspaceShallowMapper workspaceShallowMapper;
 
@@ -166,110 +105,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Autowired
     private INetworkDAO dbConnect;
 
-    @Autowired
-    private Environment env;
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getQStoreAddURL() {
-        return qStoreURL + qStoreURL_Add;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getQStoreGetURL() {
-        return qStoreURL + qStoreURL_Get;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getQStoreGetPOSTURL() {
-        return qStoreURL + qStoreURL_Get_POST;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
-    public INetworkJSon getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException {
-
-        INetworkJSon networkJSon = null;
-
-        List<INetworkNodeInfo> networkTopNodesList = null;
-
-        try {
-            networkTopNodesList = getNetworkTopNodes(networkId);
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while getting network top nodes", e);
-        }
-
-        if (jqueryType.equals(INetworkManager.D3JQUERY)) {
-            networkJSon = d3NetworkManager.parseNetworkForD3Jquery(networkTopNodesList);
-        } else if (jqueryType.equals(INetworkManager.JITJQUERY)) {
-            String jitJSon = jitNetworkManager.parseNetworkForJITJquery(networkTopNodesList);
-            if (networkJSon == null) {
-                networkJSon = new NetworkJSon(jitJSon, null);
-            }
-        }
-
-        return networkJSon;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public List<INodeObjectWithStatement> parseEachStatement(String relationEventId, String statementType,
-            String statementId, List<List<Object>> relationEventPredicateMapping,
-            List<INodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException {
-        ElementEventsType elementEventType = getElementEventTypeFromCreationEventTypeID(relationEventId);
-        List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
-        Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-
-        while (creationEventIterator.hasNext()) {
-            CreationEvent creationEvent = creationEventIterator.next();
-            // Check if event is Appellation event
-            if (creationEvent instanceof AppellationEventType) {
-                // Do nothing, we don't need to display appellation events on
-                // UI.
-            }
-            // Check if event is Relation event
-            if (creationEvent instanceof RelationEventType) {
-                // Trying to get a list of objects in the relations event type
-                // object
-                // First get PredicateType
-                // Then go recursively to subject and object
-                JsonObject jsonObject = new JsonObject();
-                RelationEventType relationEventType = (RelationEventType) creationEvent;
-                jsonObject.setIsRelationEventObject(true);
-                jsonObject.setRelationEventObject(parseThroughRelationEvent(relationEventType,
-                        new RelationEventObject(), relationEventPredicateMapping));
-
-                // This would help us in forming the json string as per
-                // requirement.
-                nodeObjectWithStatementList = prepareNodeObjectContent(jsonObject.getRelationEventObject(),
-                        nodeObjectWithStatementList, statementId);
-
-            }
-        }
-
-        return nodeObjectWithStatementList;
-    }
-
     /**
      * 
      * {@inheritDoc}
@@ -277,13 +112,12 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     public ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
             throws JAXBException, QStoreStorageException {
-        String xml = getCreationEventXmlStringFromQstore(relationEventId);
+        String xml = qStoreConnector.getCreationEvent(relationEventId);
         ElementEventsType elementEventType = null;
         if (xml == null) {
             throw new QStoreStorageException(
-                    "Some issue retriving data from Qstore, Please check the logs related to Qstore");
+                    "Some issue retriving data from Qstore. Please check the logs related to Qstore.");
         } else {
-
             // Initialize ElementEventsType object for relation event
             elementEventType = unMarshalXmlToElementEventsType(xml);
         }
@@ -320,15 +154,15 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             RelationEventObject relationEventObject, List<List<Object>> relationEventPredicateMapping) {
 
         // Get RelationType of the RelationEventType
-        RelationType relationType = relationEventType.getRelation(relationEventType);
+        RelationType relationType = relationEventType.getRelation();
 
         // Handle Predicate of the RelationType
-        PredicateType predicateType = relationType.getPredicateType(relationType);
+        PredicateType predicateType = relationType.getPredicateType();
         relationEventObject.setPredicateObject(
                 parseThroughPredicate(relationEventType, predicateType, relationEventPredicateMapping));
 
         // Handle Subject of the RelationType
-        SubjectObjectType subjectType = relationType.getSubjectType(relationType);
+        SubjectObjectType subjectType = relationType.getSubjectType();
         SubjectObject subjectObject = parseThroughSubject(relationEventType, subjectType,
                 relationEventPredicateMapping);
         relationEventObject.setSubjectObject(subjectObject);
@@ -354,19 +188,19 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         AppellationEventType appellationEvent = predicateType.getAppellationEvent();
         String nodeId = appellationEvent.getAppellationEventID();
         PredicateObject predicateObject = null;
-        List<TermType> termTypeList = appellationEvent.getTerms(appellationEvent);
+        List<TermType> termTypeList = appellationEvent.getTerms();
         Iterator<TermType> termTypeIterator = termTypeList.iterator();
         while (termTypeIterator.hasNext()) {
             TermType tt = termTypeIterator.next();
             AppellationEventObject appellationEventObject = new AppellationEventObject();
             appellationEventObject
-                    .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)) + "_"
+                    .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()) + "_"
                             + shortUUID());
             if (nodeId != null) {
                 appellationEventObject.setTermId(nodeId + "_" + shortUUID());
                 // appellationEventObject.setTermId(nodeId);
             } else {
-                appellationEventObject.setTermId(tt.getTermID(tt) + "_" + shortUUID());
+                appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
             }
             predicateObject = new PredicateObject();
             predicateObject.setAppellationEventObject(appellationEventObject);
@@ -505,17 +339,17 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         } else {
             String nodeId = appellationEventType.getAppellationEventID();
-            List<TermType> termTypeList = appellationEventType.getTerms(appellationEventType);
+            List<TermType> termTypeList = appellationEventType.getTerms();
             Iterator<TermType> termTypeIterator = termTypeList.iterator();
             while (termTypeIterator.hasNext()) {
                 TermType tt = termTypeIterator.next();
                 AppellationEventObject appellationEventObject = new AppellationEventObject();
                 appellationEventObject
-                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()));
                 if (nodeId != null) {
                     appellationEventObject.setTermId(nodeId);
                 } else {
-                    appellationEventObject.setTermId(tt.getTermID(tt) + "_" + shortUUID());
+                    appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
                 }
                 subjectObject.setAppellationEventObject(appellationEventObject);
             }
@@ -568,151 +402,27 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         } else {
             String nodeId = appellationEventType.getAppellationEventID();
-            List<TermType> termTypeList = appellationEventType.getTerms(appellationEventType);
+            List<TermType> termTypeList = appellationEventType.getTerms();
             Iterator<TermType> termTypeIterator = termTypeList.iterator();
             while (termTypeIterator.hasNext()) {
                 TermType tt = termTypeIterator.next();
                 AppellationEventObject appellationEventObject = new AppellationEventObject();
                 appellationEventObject
-                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()));
                 if (nodeId != null) {
                     appellationEventObject.setTermId(nodeId);
                 } else {
-                    appellationEventObject.setTermId(tt.getTermID(tt) + "_" + shortUUID());
+                    appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
                 }
                 objectTypeObject.setAppellationEventObject(appellationEventObject);
-                logger.debug("subjectType Term : " + tt.getTermInterpertation(tt));
+                logger.debug("subjectType Term : " + tt.getTermInterpertation());
             }
         }
         return objectTypeObject;
 
     }
 
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public List<INodeObjectWithStatement> prepareNodeObjectContent(RelationEventObject relationEventObject,
-            List<INodeObjectWithStatement> nodeObjectWithStatementList, String statementId) {
-
-        // Get predicate Object structure
-        PredicateObject predicateObject = relationEventObject.getPredicateObject();
-        NodeObject nodeObject = getPredicateNodeObjectContent(predicateObject, new NodeObject());
-
-        // Get Subject Object into temp structure
-        SubjectObject subjectObject = relationEventObject.getSubjectObject();
-        ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
-        if (subjectObject.getIsRelationEventObject()) {
-            nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-            nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
-            if (subjectObject.isRemoteLink()) {
-                nodeObject.setSubjectRemoteLink(true);
-            }
-            logger.debug(
-                    "Subject Predicate node : " + subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-
-            // Get Object into temp structure
-            if (objectTypeObject.getIsRelationEventObject()) {
-                nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-                nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
-                if (objectTypeObject.isRemoteLink()) {
-                    nodeObject.setObjectRemoteLink(true);
-                }
-                nodeObjectWithStatementList.add(nodeObjectWithStatementFactory
-                        .getNodeObjectWithStatementFactory(nodeObject, statementId, false));
-                logger.debug("Object Predicate node : "
-                        + objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-            } else {
-
-                AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-                nodeObject.setObject(appellationEventObject1.getNode());
-                nodeObject.setObjectId(appellationEventObject1.getTermId());
-                if (objectTypeObject.isRemoteLink()) {
-                    nodeObject.setObjectRemoteLink(true);
-                }
-                nodeObjectWithStatementList.add(nodeObjectWithStatementFactory
-                        .getNodeObjectWithStatementFactory(nodeObject, statementId, false));
-
-                logger.debug("Object Predicate : " + appellationEventObject1.getNode());
-            }
-
-            nodeObjectWithStatementList = prepareNodeObjectContent(subjectObject.getRelationEventObject(),
-                    nodeObjectWithStatementList, statementId);
-
-        } else {
-
-            AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
-            nodeObject.setSubject(appellationEventObject1.getNode());
-            nodeObject.setSubjectId(appellationEventObject1.getTermId());
-            if (subjectObject.isRemoteLink()) {
-                nodeObject.setSubjectRemoteLink(true);
-            }
-            logger.debug("Subject Predicate : " + appellationEventObject1.getNode());
-        }
-
-        // Get Object into temp structure
-        if (objectTypeObject.getIsRelationEventObject()) {
-            nodeObjectWithStatementList = prepareNodeObjectContent(objectTypeObject.getRelationEventObject(),
-                    nodeObjectWithStatementList, statementId);
-        } else {
-            AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-            nodeObject.setObject(appellationEventObject1.getNode());
-            nodeObject.setObjectId(appellationEventObject1.getTermId());
-            if (objectTypeObject.isRemoteLink()) {
-                nodeObject.setObjectRemoteLink(true);
-            }
-            nodeObjectWithStatementList.add(
-                    nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject, statementId, false));
-            logger.debug("Object Predicate : " + appellationEventObject1.getNode());
-        }
-
-        return nodeObjectWithStatementList;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public NodeObject getPredicateNodeObjectContent(PredicateObject predicateObject, NodeObject nodeObject) {
-        AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
-        // Store predicate detail in our temporary structure
-        nodeObject.setRelationEventId(predicateObject.getRelationEventID());
-
-        nodeObject.setPredicate(appellationEventObject.getNode());
-        nodeObject.setPredicateId(appellationEventObject.getTermId());
-
-        return nodeObject;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getPredicateNameFromStackOfAE(String relationEventId, String predicateName,
-            List<List<Object>> relationEventPredicateMapping) {
-        Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
-
-        while (relationEventPredicateMappingIterator.hasNext()) {
-            List<Object> objectList = relationEventPredicateMappingIterator.next();
-            Iterator<Object> I1 = objectList.iterator();
-            while (I1.hasNext()) {
-                Object object = I1.next();
-                if (object instanceof String[]) {
-                    String pairs[] = (String[]) object;
-                    if (pairs[0].equals(relationEventId)) {
-                        String predicateNameLocal = pairs[1];
-                        return predicateNameLocal;
-                    }
-                }
-            }
-        }
-        return "";
-
-    }
-
+    
     /**
      * Check if we have bit streams in the network XML
      * 
@@ -743,40 +453,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return false;
     }
 
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getCreationEventXmlStringFromQstore(String id) throws JAXBException {
-        // Message converters for JAXb to understand the xml
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new StringHttpMessageConverter());
-        org.springframework.oxm.Marshaller marshaler = jaxbMarshaller;
-        org.springframework.oxm.Unmarshaller unmarshaler = jaxbMarshaller;
-        messageConverters.add(new MarshallingHttpMessageConverter(marshaler, unmarshaler));
-
-        restTemplate.setMessageConverters(messageConverters);
-
-        // Setting up the http header accept type
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
-        ResponseEntity<String> response = null;
-        try {
-            logger.debug("URL : " + getQStoreGetURL() + id);
-            // Get the XML from QStore
-            response = restTemplate.exchange(getQStoreGetURL() + id, HttpMethod.GET, new HttpEntity<String[]>(headers),
-                    String.class);
-        } catch (Exception e) {
-            e.getMessage();
-        }
-        return response.getBody().toString();
-    }
 
     /**
      * 
@@ -789,86 +465,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return Long.toString(l, Character.MAX_RADIX);
     }
 
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
-        String res = "";
-        // add message converters
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        RestTemplate restTemplate = new RestTemplate();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-
-        // prepare http headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
-        HttpEntity<String> request = new HttpEntity<String>(XML, headers);
-
-        try {
-            // add xml in QStore
-            String url = getQStoreAddURL();
-            res = restTemplate.postForObject(url, request, String.class);
-        } catch (Exception e) {
-            logger.error("QStore not accepting the xml, please check with the server logs.", e);
-            // res = e.getMessage();
-            return res;
-        }
-        return res;
-    }
-
-    private String getAuthHeader() {
-        String auth = env.getProperty("qstore.admin.username") + ":" + env.getProperty("qstore.admin.password");
-        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
-        return "Basic " + new String(encodedAuth);
-    }
-
-    /**
-     * 
-     * {@inheritDoc} QStore allows us to get network XML for specific
-     * {@link RelationEventType} and also List of {@link RelationEventType}
-     * embedded in XML.
-     * 
-     */
-    @Override
-    public String getNetworkXMLFromQStoreForAListOfCStatements(String xml) {
-        String res = "";
-        // Add message converters for JAxb
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        RestTemplate restTemplate = new RestTemplate();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-        // Add http header
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
-
-        HttpEntity<String> request = new HttpEntity<String>(xml, headers);
-
-        try {
-            // Get complete network xml from QStore
-            res = restTemplate.postForObject(getQStoreGetPOSTURL(), request, String.class);
-        } catch (Exception e) {
-            logger.error("QStore not accepting the xml, please check with the server logs.", e);
-            // res = e.getMessage();
-            return res;
-        }
-        return res;
-    }
-
+    
     @Override
     @Transactional
     public String getNetworkXML(String networkId) throws Exception {
@@ -885,7 +482,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             writer = new StringWriter();
             template.merge(context, writer);
             logger.debug("XML : " + writer.toString());
-            networkXML = getNetworkXMLFromQStoreForAListOfCStatements(writer.toString());
+            networkXML = qStoreConnector.getStatements(writer.toString());
         } catch (ResourceNotFoundException e) {
 
             logger.error("Exception:", e);
@@ -901,6 +498,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         }
         networkXML = networkXML.substring(networkXML.indexOf("element_events") - 1, networkXML.length());
         return networkXML;
+    }
+    
+    @Override
+    public String storeNetworks(String xml) throws QStoreStorageException {
+        return qStoreConnector.store(xml);
     }
 
     /**
@@ -1162,40 +764,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             logger.error("DB Error while fetching project, Workspace and network details", e);
         }
         return core.toString(SUCCESS);
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
-    public INetworkJSon getJsonForOldNetworks(String networkId, String jqueryType, String versionID)
-            throws QuadrigaStorageException {
-
-        INetworkJSon networkJSon = null;
-
-        List<INetworkNodeInfo> oldNetworkTopNodesList = null;
-
-        try {
-            oldNetworkTopNodesList = getNetworkTopNodesByVersion(networkId, Integer.parseInt(versionID));
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while getting network top nodes", e);
-        }
-
-        if (jqueryType.equals(INetworkManager.D3JQUERY)) {
-            networkJSon = d3NetworkManager.parseNetworkForD3Jquery(oldNetworkTopNodesList);
-
-        } else if (jqueryType.equals(INetworkManager.JITJQUERY)) {
-            String jitJSon = jitNetworkManager.parseNetworkForJITJquery(oldNetworkTopNodesList);
-            if (networkJSon == null) {
-                networkJSon = new NetworkJSon(jitJSon, null);
-            }
-        }
-
-        return networkJSon;
     }
 
     /**

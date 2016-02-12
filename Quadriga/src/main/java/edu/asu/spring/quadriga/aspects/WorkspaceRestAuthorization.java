@@ -57,8 +57,7 @@ public class WorkspaceRestAuthorization implements IAuthorization
 		//fetch the details of the workspace
 		workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
 		if(workspace ==null){
-
-			return haveAccess;
+			throw new QuadrigaAccessException();
 		}
 		//check if the logged in user is workspace owner
 		if(workspace.getOwner()!=null)

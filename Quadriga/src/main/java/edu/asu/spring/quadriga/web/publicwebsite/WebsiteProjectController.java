@@ -27,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @PropertySource(value = "classpath:/user.properties")
@@ -40,6 +42,12 @@ public class WebsiteProjectController {
 	
 	@Autowired
 	private INetworkManager networkmanager;
+	
+	@Autowired
+    private INetworkTransformationManager transformationManager;
+    
+    @Autowired
+    private ID3Creator d3Creator;
 	
 	@Autowired
     private Environment env;
@@ -151,14 +159,47 @@ public class WebsiteProjectController {
 		IProject project = getProjectDetails(unixName);
 		model.addAttribute("project", project);
 		
-		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		if(networkJSon!=null){
-			json = networkJSon.getJson();
+		if(transformedNetwork!=null){
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
+		return "sites/networks/visualize";
+	}
+
+	/**
+	 * This method gives the visualization of all the networks in a project
+	 * @param projectUnixName	The project unix name
+	 * @param model				Model
+	 * @return view
+	 * @throws JAXBException
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
+	public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName,
+									   Model model)
+			throws JAXBException, QuadrigaStorageException {
+		IProject project = getProjectDetails(projectUnixName);
+
+		if (project == null) {
+			return "auth/accessissue";
+		}
+
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetworkOfProject(project.getProjectId());
+
+		String json = null;
+		if (transformedNetwork != null) {
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+		}
+
+		model.addAttribute("jsonstring", json);
+		model.addAttribute("networkid", "\"\"");
+		model.addAttribute("project", project);
+
 		return "sites/networks/visualize";
 	}
 }

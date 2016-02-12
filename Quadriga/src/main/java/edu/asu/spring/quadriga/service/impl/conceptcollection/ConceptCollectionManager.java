@@ -213,7 +213,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     public String getConceptLemmaFromConceptId(String id) {
 
         Map<String, String> vars = new HashMap<String, String>();
-        vars.put("name", id);
+        vars.put("name", id.trim());
         String lemma = id;
         ConceptpowerReply rep = restTemplate.getForObject(conceptURL
                 + updateURL + "{name}", ConceptpowerReply.class, vars);

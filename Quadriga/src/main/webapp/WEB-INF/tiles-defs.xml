@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" 
-	"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+	"http://tiles.apache.org/dtds/tiles-config_3_0_1.dtd">
 <tiles-definitions>
 
 	<!-- Base definitions -->
@@ -205,10 +205,8 @@
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>
 	<!-- changing the skeleton to have left navigation -->
-	<definition name="auth/workbench" extends="base.definition.workbench.nav">
+	<definition name="auth/workbench" extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Workbench" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workbench.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/workbench.jsp" />
 	</definition>

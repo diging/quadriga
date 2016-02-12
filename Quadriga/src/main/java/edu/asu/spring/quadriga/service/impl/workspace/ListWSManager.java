@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
+import org.springframework.util.StringUtils;
 
 /**
  * Class implements {@link IListWSManager} to display the active,archived and
@@ -263,8 +264,10 @@ public class ListWSManager implements IListWSManager {
                 }
             }
 
-            for (Integer i : removeList) {
-                workspaceNetworkList.remove(i);
+            if(removeList!=null){
+                for (Integer i : removeList) {
+                    workspaceNetworkList.remove(i);
+                }
             }
         }
         return workspaceNetworkList;
@@ -325,4 +328,10 @@ public class ListWSManager implements IListWSManager {
         return false;
     }
 
+    @Override
+    @Transactional
+    public boolean isWorkspaceArchived(String workspaceId) throws QuadrigaStorageException {
+        WorkspaceDTO wsDTO = workspaceDao.getWorkspaceDTO(workspaceId.trim());
+        return wsDTO != null && wsDTO.getIsarchived();
+    }
 }

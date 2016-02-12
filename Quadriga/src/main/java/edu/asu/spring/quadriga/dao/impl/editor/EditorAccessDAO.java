@@ -44,7 +44,7 @@ public class EditorAccessDAO extends BaseDAO implements IEditorAccessDAO
 		if(!isEditor)
 		{
 			query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(ws.workspaceEditorDTOPK.workspaceid) FROM WorkspaceEditorDTO ws WHERE ws.workspaceEditorDTOPK.editor =:userName");
-			query.setParameter("username", userName);
+			query.setParameter("userName", userName);
 			count = ((Number)query.iterate().next()).intValue();
 			if(count > 0)
 			{
