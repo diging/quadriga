@@ -220,7 +220,7 @@ public class WebsiteProjectController {
 
 		if (searchResults != null) {
 			int index = 0;
-			for (ISearchResult result: searchResults) {
+			for (ISearchResult result : searchResults) {
 				index++;
 				JSONObject jsonResult = new JSONObject();
 				jsonResult.put("id", result.getId());
@@ -236,5 +236,37 @@ public class WebsiteProjectController {
 		jsonResponse.put("terms", jsonResults);
 
 		return new ResponseEntity<String>(jsonResponse.toString(), HttpStatus.OK);
+	}
+
+	/*
+	 * This method gives the visualization of all the networks in a project
+	 * @param projectUnixName	The project unix name
+	 * @param model				Model
+	 * @return view
+	 * @throws JAXBException
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
+	public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName,
+									   Model model)
+			throws JAXBException, QuadrigaStorageException {
+		IProject project = getProjectDetails(projectUnixName);
+
+		if (project == null) {
+			return "auth/accessissue";
+		}
+
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetworkOfProject(project.getProjectId());
+
+		String json = null;
+		if (transformedNetwork != null) {
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+		}
+
+		model.addAttribute("jsonstring", json);
+		model.addAttribute("networkid", "\"\"");
+		model.addAttribute("project", project);
+
+		return "sites/networks/visualize";
 	}
 }
