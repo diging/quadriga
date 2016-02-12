@@ -441,7 +441,6 @@ public class DictionaryRestController {
      */
 
     @RequestMapping(value = "auth/rest/{projectid}/dictionaries.json", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
     public ResponseEntity<String> listProjectDictionaryJson(
             HttpServletRequest req,
             @PathVariable("projectid") String projectid, Model model,
@@ -454,25 +453,30 @@ public class DictionaryRestController {
             // mapper
             dictionaryList = projectDictionaryManager.listProjectDictionary(
                     projectid, userId);
+            
             dictionaryList.removeAll(Collections.singleton(null));
+            JSONArray ja = new JSONArray();
+            
+            if(dictionaryList!=null){
+                for (IProjectDictionary dictionary : dictionaryList) {
+                    JSONObject j = new JSONObject();
+                    try {
+                        j.put("id", dictionary.getDictionary().getDictionaryId());
+                        j.put("name", dictionary.getDictionary().getDictionaryName());
+                        ja.put(j);
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        throw new QuadrigaException(e.getMessage(), e);
+                    }
+                }
+            }
+                 
+            return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
 
         } catch (QuadrigaStorageException e) {
             throw new QuadrigaStorageException();
         }
 
-        JSONArray ja = new JSONArray();
-        for (IProjectDictionary dictionary : dictionaryList) {
-            JSONObject j = new JSONObject();
-            try {
-                j.put("id", dictionary.getDictionary().getDictionaryId());
-                j.put("name", dictionary.getDictionary().getDictionaryName());
-                ja.put(j);
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                throw new QuadrigaException(e.getMessage(), e);
-            }
-        }
-        return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
     }
 
 

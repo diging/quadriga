@@ -493,30 +493,32 @@ public class ConceptCollectionRestController {
             // TODO: listProjectConceptCollection() needs to be modified
             projectConceptCollectionList = projectConceptCollectionManager
                     .listProjectConceptCollection(projectid, userId);
+            
+            JSONArray ja = new JSONArray();
+            
+            if(projectConceptCollectionList!=null){
+                for (IProjectConceptCollection conceptCollection : projectConceptCollectionList) {
+                    JSONObject j = new JSONObject();
+                    try {
+
+                        j.put("id", conceptCollection.getConceptCollection()
+                                .getConceptCollectionId());
+                        j.put("name", conceptCollection.getConceptCollection()
+                                .getConceptCollectionName());
+                        ja.put(j);
+
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        throw new QuadrigaException(e.getMessage(), e);
+                    }
+
+                }
+            }
+            
+            return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
+            
         } catch (QuadrigaStorageException e) {
             throw new QuadrigaStorageException();
         }
-
-        JSONArray ja = new JSONArray();
-        for (IProjectConceptCollection conceptCollection : projectConceptCollectionList) {
-            JSONObject j = new JSONObject();
-            try {
-
-                j.put("id", conceptCollection.getConceptCollection()
-                        .getConceptCollectionId());
-                j.put("name", conceptCollection.getConceptCollection()
-                        .getConceptCollectionName());
-                ja.put(j);
-
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                throw new QuadrigaException(e.getMessage(), e);
-            }
-
-        }
-
-        return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
     }
-
-
 }
