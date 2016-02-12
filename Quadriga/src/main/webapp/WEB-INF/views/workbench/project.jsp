@@ -12,6 +12,25 @@
 		$("ul.pagination1").quickPagination({
 			pageSize : "3"
 		});
+		var bool = ${(principal.username.toLowerCase()) != quadriga.admin.username.toLowerCase() && owner !='1'};
+		if(bool){
+			$('.collabEdit').click(function (e) {
+				e.preventDefault();
+			});
+			
+			$(".collabEdit").css("color","#808080");
+			
+			$('.addworkspace').click(function (e) {
+				e.preventDefault();
+			 });
+			
+			$(".addworkspace").css("color","#808080");
+			
+			$('.editProject').click(function (e) {
+				 e.preventDefault();
+			});
+			$(".editProject").css("color","#808080");
+		}
 	});
 	
 	$(function() 
@@ -40,12 +59,12 @@
 			<h2>Project: ${project.projectName}</h2>
 			<div>${project.description}</div>
 			<div style="text-align:right">
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project
+			<a class = "editProject" href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project
 			</a>
 			</div>
 			
 			<div style="text-align:right">
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project URL
+			<a class = "editProject" href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project URL
 			</a>
 			</div>
 			
@@ -210,9 +229,9 @@
 				</c:if>
 				<div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
 				<ul class="colltools">
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle"></i> Add</a></li>
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-minus-circle"></i> Delete</a></li>
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil"></i> Update</a></li>
+					<li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle"></i> Add</a></li>
+					<li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-minus-circle"></i> Delete</a></li>
+					<li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil"></i> Update</a></li>
 				</ul>
 				</div>
 			</section>
