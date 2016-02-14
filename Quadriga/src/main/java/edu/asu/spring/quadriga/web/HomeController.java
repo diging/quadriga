@@ -122,6 +122,21 @@ public class HomeController {
         return "auth/home";
     }
 
+    @RequestMapping(value = "sites", method = RequestMethod.GET)
+    public String showQuadrigaPublicPages(Locale locale, Model model) {
+        Date date = new Date();
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
+                DateFormat.LONG, locale);
+
+        String formattedDate = dateFormat.format(date);
+        // Get the LDAP-authenticated userid
+        //String sUserId = principal.getName();
+        //model.addAttribute("username", sUserId);
+        model.addAttribute("serverTime", formattedDate);
+        return "sites";
+    }
+
+    
     @RequestMapping(value = "auth/about", method = RequestMethod.GET)
     public String aboutQuadriga(Locale locale, Model model, Principal principal) {
         Date date = new Date();
