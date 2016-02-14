@@ -61,6 +61,13 @@
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
 	
+	<!-- Sites pages -->
+	<definition name="sites" extends="base.definition.nonav">
+		<put-attribute name="title" value="Quadriga - Public Sites" />
+		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
+	</definition>
+
+
 	<!-- About page -->
 	<definition name="auth/about" extends="base.definition.nonav">
 	    <put-attribute name="title" value="Quadruga - Introduction" />
