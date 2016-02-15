@@ -170,4 +170,36 @@ public class WebsiteProjectController {
 		model.addAttribute("jsonstring",json);
 		return "sites/networks/visualize";
 	}
+
+	/**
+	 * This method gives the visualization of all the networks in a project
+	 * @param projectUnixName	The project unix name
+	 * @param model				Model
+	 * @return view
+	 * @throws JAXBException
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
+	public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName,
+									   Model model)
+			throws JAXBException, QuadrigaStorageException {
+		IProject project = getProjectDetails(projectUnixName);
+
+		if (project == null) {
+			return "auth/accessissue";
+		}
+
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetworkOfProject(project.getProjectId());
+
+		String json = null;
+		if (transformedNetwork != null) {
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+		}
+
+		model.addAttribute("jsonstring", json);
+		model.addAttribute("networkid", "\"\"");
+		model.addAttribute("project", project);
+
+		return "sites/networks/visualize";
+	}
 }
