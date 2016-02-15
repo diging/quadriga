@@ -36,6 +36,7 @@ public class TextFileService implements ITextFileService {
 
     /* (non-Javadoc)
      * @see edu.asu.spring.quadriga.service.textfile.ITextFileService#saveTextFile(edu.asu.spring.quadriga.domain.workspace.ITextFile)
+     * Service layer method to handle Text Management Operations
      */
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
@@ -50,6 +51,7 @@ public class TextFileService implements ITextFileService {
 
     /**
      * @param txtFile
+     *          TextFile object to be updated in the database
      * @return
      * @throws QuadrigaStorageException
      */
@@ -65,6 +67,7 @@ public class TextFileService implements ITextFileService {
 
     /**
      * @param txtFile
+     *          TextFile object to be updated in the FileSystem
      * @return
      * @throws IOException
      */

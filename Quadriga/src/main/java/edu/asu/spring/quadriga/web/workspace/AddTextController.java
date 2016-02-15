@@ -50,9 +50,10 @@ public class AddTextController {
     }
 
     /**
-     * Method to generate a view to generate a
+     * Method to generate a view to generate a view to add new text file.
      * 
      * @param workspaceid
+     *            Path Variable to retrieve the associated Workspace id
      * @return
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
@@ -77,9 +78,13 @@ public class AddTextController {
 
     /**
      * @param resp
+     *            Generic HTTP Response Object
      * @param txtFile
+     *            Web backing domain object to store the Text Details
      * @param result
+     *            Generic BingingResults object to hold validation errors
      * @param workspaceid
+     *            Path Variable to retrieve the associated Workspace id
      * @return
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException

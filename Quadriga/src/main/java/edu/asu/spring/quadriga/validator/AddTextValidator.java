@@ -17,6 +17,8 @@ public class AddTextValidator implements Validator {
 
     /* (non-Javadoc)
      * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
+     * This method validates the input from the Add Text Web page
+     * 
      */
     @Override
     public void validate(Object arg0, Errors err) {
