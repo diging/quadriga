@@ -4,7 +4,7 @@
 
 <article class="is-page-content">
 	<form:form commandName="textfile" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/addtext">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myProjectId}/${workspaceId}/addtext">
 				<header>
 					<h2>Add Text to Workspace</h2>
 					<span class="byline">Please fill in the following

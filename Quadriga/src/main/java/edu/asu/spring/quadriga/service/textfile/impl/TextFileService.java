@@ -42,7 +42,6 @@ public class TextFileService implements ITextFileService {
 
         UUID refId = UUID.randomUUID();
         txtFile.setRefId(refId.toString());
-        txtFile.setProjectId(projWSDAO.getCorrespondingProjectID(txtFile.getWorkspaceId()));
         saveTextFileLocal(txtFile);
         saveTextFileDB(txtFile);
 

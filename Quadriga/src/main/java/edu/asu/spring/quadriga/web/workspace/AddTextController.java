@@ -50,19 +50,27 @@ public class AddTextController {
     }
 
     /**
-     * Method to generate a view to generate a 
+     * Method to generate a view to generate a
+     * 
      * @param workspaceid
      * @return
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @RequestMapping(value = "/auth/workbench/workspace/{workspaceid}/addtext", method = RequestMethod.GET)
-    public ModelAndView addTextFileForm(@PathVariable("workspaceid") String workspaceid)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+    @AccessPolicies({
+            @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
+                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }),
+            @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
+                    RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+                    RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
+    @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/addtext", method = RequestMethod.GET)
+    public ModelAndView addTextFileForm(@PathVariable("workspaceid") String workspaceid,
+            @PathVariable("projectid") String projid) throws QuadrigaStorageException, QuadrigaAccessException {
 
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
         model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
         model.getModelMap().put("workspaceId", workspaceid);
+        model.getModelMap().put("myProjectId", projid);
         model.getModelMap().put("success", "0");
         return model;
     }
@@ -77,21 +85,30 @@ public class AddTextController {
      * @throws QuadrigaAccessException
      * @throws IOException
      */
-    @RequestMapping(value = "/auth/workbench/workspace/{workspaceid}/addtext", method = RequestMethod.POST)
+    @AccessPolicies({
+            @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 4, userRole = {
+                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }),
+            @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
+                    RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+                    RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
+    @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/addtext", method = RequestMethod.POST)
     public ModelAndView saveTextFileForm(HttpServletResponse resp,
             @Validated @ModelAttribute("textfile") TextFile txtFile, BindingResult result,
-            @PathVariable("workspaceid") String workspaceid)
+            @PathVariable("workspaceid") String workspaceid, @PathVariable("projectid") String projid)
                     throws QuadrigaStorageException, QuadrigaAccessException, IOException {
 
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
         if (result.hasErrors()) {
             model.getModelMap().put("textfile", txtFile);
             model.getModelMap().put("workspaceId", workspaceid);
+            model.getModelMap().put("myProjectId", projid);
             model.getModelMap().put("success", "0");
         } else {
             model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
             model.getModelMap().put("workspaceId", workspaceid);
+            model.getModelMap().put("myProjectId", projid);
             txtFile.setWorkspaceId(workspaceid);
+            txtFile.setProjectId(projid);
             txtFileService.saveTextFile(txtFile);
             model.getModelMap().put("success", "1");
         }
