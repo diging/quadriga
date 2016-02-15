@@ -9,11 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
@@ -28,6 +24,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
 import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
 import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceFormManager;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ArchiveWSController 
@@ -152,6 +149,41 @@ public class ArchiveWSController
       return model; 
 
 	}
+
+	/**
+	 * This calls the workspace manager to archive the workspace
+	 * It takes workspaceId and projectId as parameters
+	 * @param workspaceId
+	 * @param principal
+	 * @param redirectAttributes
+	 * @param model
+	 * @return view
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
+	@AccessPolicies({
+			@ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {
+					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR
+			})
+			,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
+	@RequestMapping(value = "auth/workbench/{projectId}/archiveworkspace/{workspaceId}", method = RequestMethod.GET)
+	public String archiveWorkspace(@PathVariable("workspaceId") String workspaceId,
+								   @PathVariable("projectId") String projectId,
+								   Principal principal, RedirectAttributes redirectAttributes)
+			throws QuadrigaStorageException, QuadrigaAccessException {
+		// archive the workspace
+		archiveWSManager.archiveWorkspace(workspaceId, principal.getName());
+
+		// add redirect attributes
+		redirectAttributes.addFlashAttribute("show_success_alert", true);
+		redirectAttributes.addFlashAttribute("success_alert_msg",
+				"The workspace has been successfully archived.");
+
+		return "redirect:/auth/workbench/workspace/workspacedetails/"
+				+ workspaceId;
+	}
 	
 	/**
 	 * This calls workspaceManger to list the archived workspace associated with a project for unarchival process.
@@ -254,6 +286,37 @@ public class ArchiveWSController
 			model.getModelMap().put("wsprojectid", projectid);			
 		}
 		return model;
+	}
+
+	/**
+	 * This calls the workspace manager to unarchive the workspace
+	 * It takes workspaceId and projectId as parameters
+	 * @param workspaceId
+	 * @param principal
+	 * @param redirectAttributes
+	 * @return view
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
+	@AccessPolicies({
+			@ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {
+					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR
+			})
+			,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
+	@RequestMapping(value = "auth/workbench/{projectId}/unarchiveworkspace/{workspaceId}", method = RequestMethod.GET)
+	public String unarchiveWorkspace(@PathVariable("workspaceId") String workspaceId,
+									 @PathVariable("projectId") String projectId, Principal principal,
+									 RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
+		// archive the workspace
+		archiveWSManager.unArchiveWorkspace(workspaceId, principal.getName());
+
+		// add redirect attributes
+		redirectAttributes.addFlashAttribute("show_success_alert", true);
+		redirectAttributes.addFlashAttribute("success_alert_msg", "The workspace has been successfully unarchived.");
+
+		return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
 	}
 
 }

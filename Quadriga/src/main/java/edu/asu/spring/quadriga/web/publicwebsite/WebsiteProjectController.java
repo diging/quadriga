@@ -175,15 +175,36 @@ public class WebsiteProjectController {
 		return "sites/networks/visualize";
 	}
 
-	@RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
-	public String showAbout(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal) throws QuadrigaStorageException {
-		IProject project = getProjectDetails(unixName);
-		String projectid = project.getProjectId();
-		String aboutProject = "<i>This line describes project in italics</i><br> <b>This is bold</b>";
-		List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
-		model.addAttribute("project", project);
-		model.addAttribute("aboutProject", aboutProject);
-		return "sites/about";
-	}
+	/**
+	 * This method gives the visualization of all the networks in a project
+	 * 
+	 * @param projectUnixName
+	 *            The project unix name
+	 * @param model
+	 *            Model
+	 * @return view
+	 * @throws JAXBException
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
+	public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName, Model model) throws JAXBException, QuadrigaStorageException {
+		IProject project = getProjectDetails(projectUnixName);
 
+		if (project == null) {
+			return "auth/accessissue";
+		}
+
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetworkOfProject(project.getProjectId());
+
+		String json = null;
+		if (transformedNetwork != null) {
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+		}
+
+		model.addAttribute("jsonstring", json);
+		model.addAttribute("networkid", "\"\"");
+		model.addAttribute("project", project);
+
+		return "sites/networks/visualize";
+	}
 }
