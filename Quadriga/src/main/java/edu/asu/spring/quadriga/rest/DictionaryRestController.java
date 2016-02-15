@@ -136,7 +136,7 @@ public class DictionaryRestController {
      * @param userId
      * @param model
      * @return
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/dictionaries", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listDictionaries(ModelMap model, Principal principal, HttpServletRequest req)
@@ -175,7 +175,7 @@ public class DictionaryRestController {
      * @param userId
      * @param model
      * @return
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/workspace/{workspaceId}/dictionaries", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listWorkspaceDictionaries(@PathVariable("workspaceId") String workspaceId,
@@ -204,41 +204,52 @@ public class DictionaryRestController {
 
     }
 
-
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 2, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    /**
+     * Rest interface to get dictionaries related to workspace
+     * http://<<URL>:<PORT>>/quadriga/auth/rest/workspace/<workspaceid>/dictionaries.json
+     * http://<<URL>:<PORT>>/quadriga/auth/rest/workspace/e23a8585-20bc-458e-ab7d-c758962b11aa/dictionaries.json
+     * 
+     * 
+     * @author Ajay Modi & Bharath Srikantan
+     * @param req
+     * @param model
+     * @param principal
+     * @return
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 2, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "auth/rest/workspace/{workspaceid}/dictionaries.json", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
     public ResponseEntity<String> listWorkspaceDictionaryJson(
             HttpServletRequest req,
             @PathVariable("workspaceid") String workspaceId, Model model,
-            Principal principal) throws QuadrigaStorageException,
-            QuadrigaAccessException, QuadrigaException {
+            Principal principal) {
         String userId = principal.getName();
 
         List<IWorkspaceDictionary> dicitonaryList = null;
+        JSONArray ja = new JSONArray();
+        
         try {
             dicitonaryList = workspaceDictionaryManager
                     .listWorkspaceDictionary(workspaceId, userId);
-        } catch (QuadrigaStorageException e) {
-            logger.error("issue while adding dictionary ", e);
-        }
-        if (dicitonaryList == null) {
-            logger.info("Dictionar list is empty buddy");
-        }
-
-        JSONArray ja = new JSONArray();
-        for (IWorkspaceDictionary dictionary : dicitonaryList) {
-            JSONObject j = new JSONObject();
-            try {
-                j.put("id", dictionary.getDictionary().getDictionaryId());
-                j.put("name", dictionary.getDictionary().getDictionaryName());
-                ja.put(j);
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                throw new QuadrigaException(e.getMessage(), e);
+            if(dicitonaryList!=null){
+                    
+                for (IWorkspaceDictionary dictionary : dicitonaryList) {
+                    JSONObject j = new JSONObject();
+                        j.put("id", dictionary.getDictionary().getDictionaryId());
+                        j.put("name", dictionary.getDictionary().getDictionaryName());
+                        ja.put(j);
+                        
+                }
+                
             }
         }
-
+        catch(JSONException e){
+            logger.error("JSONException:", e);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        catch(QuadrigaStorageException e){
+            logger.error("QuadrigaStorageException:", e);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
     }
 
@@ -251,7 +262,7 @@ public class DictionaryRestController {
      * @param dictionaryId
      * @param model
      * @return
-     * @throws Exception
+     * @throws RestException
      */
     @RequestMapping(value = "rest/dictionaryDetails/{dictionaryId}", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listDictionaryItems(@PathVariable("dictionaryId") String dictionaryId, ModelMap model,
@@ -476,16 +487,13 @@ public class DictionaryRestController {
      * @param model
      * @param principal
      * @return
-     * @throws QuadrigaStorageException
-     * @throws QuadrigaAccessException
      */
 
     @RequestMapping(value = "auth/rest/{projectid}/dictionaries.json", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> listProjectDictionaryJson(
             HttpServletRequest req,
             @PathVariable("projectid") String projectid, Model model,
-            Principal principal) throws QuadrigaStorageException,
-            QuadrigaException {
+            Principal principal) {
         String userId = principal.getName();
         List<IProjectDictionary> dictionaryList = null;
         try {
@@ -494,7 +502,6 @@ public class DictionaryRestController {
             dictionaryList = projectDictionaryManager.listProjectDictionary(
                     projectid, userId);
             
-            dictionaryList.removeAll(Collections.singleton(null));
             JSONArray ja = new JSONArray();
             
             if(dictionaryList!=null){
@@ -506,7 +513,8 @@ public class DictionaryRestController {
                         ja.put(j);
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
-                        throw new QuadrigaException(e.getMessage(), e);
+                        logger.error("JSONException:", e);
+                        return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                     }
                 }
             }
@@ -514,7 +522,8 @@ public class DictionaryRestController {
             return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
 
         } catch (QuadrigaStorageException e) {
-            throw new QuadrigaStorageException();
+            logger.error("QuadrigaStorageException:", e);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
