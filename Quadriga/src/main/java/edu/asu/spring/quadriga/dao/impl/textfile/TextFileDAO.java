@@ -16,41 +16,48 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
 public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
-	
-	
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	
-	private static final Logger logger = LoggerFactory.getLogger(TextFileDAO.class);
-	
-	@Override
-	public TextFileDTO getTextFileDTO(String wsId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public TextFileDTO getTextFileDTObyProjId(String projId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Autowired
+    private SessionFactory sessionFactory;
 
-	@Transactional
-	@Override
-	public boolean saveTextFileDTO(TextFileDTO txtFileDTO) throws QuadrigaStorageException {
-		try {
+    private static final Logger logger = LoggerFactory.getLogger(TextFileDAO.class);
+
+    @Override
+    public TextFileDTO getTextFileDTO(String wsId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public TextFileDTO getTextFileDTObyProjId(String projId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.dao.textfile.ITextFileDAO#saveTextFileDTO(edu.asu.spring.quadriga.dto.TextFileDTO)
+     * Method to save text file properties in the db.
+     * 
+     */
+    @Transactional
+    @Override
+    public boolean saveTextFileDTO(TextFileDTO txtFileDTO) throws QuadrigaStorageException {
+        try {
             sessionFactory.getCurrentSession().save(txtFileDTO);
             return true;
         } catch (Exception e) {
             logger.error("Error in adding the Text File: ", e);
             throw new QuadrigaStorageException(e);
         }
-	}
+    }
 
-	@Override
-	public TextFileDTO getDTO(String id) {
-		return getDTO(TextFileDTO.class, id);
-	}
+    /* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.dao.impl.BaseDAO#getDTO(java.lang.String)
+     * Returns a Text DTO for db operations
+     */
+    @Override
+    public TextFileDTO getDTO(String id) {
+        return getDTO(TextFileDTO.class, id);
+    }
 
 }

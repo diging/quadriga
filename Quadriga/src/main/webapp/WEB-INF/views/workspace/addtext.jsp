@@ -1,23 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<!-- Content -->
-<script>
-$(function() {
-	$("input[type=submit]").button().click(function(event){
-	});
-	$("input[type=button]").button().click(function(event){
-	});
-});
 
-function submitClick(id){
-	location.href = "${pageContext.servletContext.contextPath}/auth/workbench/projects/${workspaceId}";
-}
-</script>
 <article class="is-page-content">
 	<form:form commandName="textfile" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/addtext">
-		
+				<header>
 					<h2>Add Text to Workspace</h2>
 					<span class="byline">Please fill in the following
 						information:</span>

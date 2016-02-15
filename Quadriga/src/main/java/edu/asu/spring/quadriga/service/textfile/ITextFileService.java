@@ -8,9 +8,7 @@ import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface ITextFileService {
-    
-    boolean saveTextFile(ITextFile txtfile) throws QuadrigaStorageException,
-			IOException;
-        
+
+    boolean saveTextFile(ITextFile txtfile) throws QuadrigaStorageException, IOException;
 
 }

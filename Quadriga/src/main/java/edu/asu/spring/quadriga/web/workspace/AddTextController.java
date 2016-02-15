@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
@@ -41,12 +40,22 @@ public class AddTextController {
     @Autowired
     private AddTextValidator txtValidator;
 
+    /**
+     * @param binder
+     */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
 
         binder.setValidator(txtValidator);
     }
 
+    /**
+     * Method to generate a view to generate a 
+     * @param workspaceid
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     */
     @RequestMapping(value = "/auth/workbench/workspace/{workspaceid}/addtext", method = RequestMethod.GET)
     public ModelAndView addTextFileForm(@PathVariable("workspaceid") String workspaceid)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -58,6 +67,16 @@ public class AddTextController {
         return model;
     }
 
+    /**
+     * @param resp
+     * @param txtFile
+     * @param result
+     * @param workspaceid
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     * @throws IOException
+     */
     @RequestMapping(value = "/auth/workbench/workspace/{workspaceid}/addtext", method = RequestMethod.POST)
     public ModelAndView saveTextFileForm(HttpServletResponse resp,
             @Validated @ModelAttribute("textfile") TextFile txtFile, BindingResult result,

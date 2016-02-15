@@ -22,74 +22,74 @@ import edu.asu.spring.quadriga.service.textfile.ITextFileService;
 @Service
 public class TextFileService implements ITextFileService {
 
-	@Autowired
-	private TextFileDTO txtFileDTO;
+    @Autowired
+    private TextFileDTO txtFileDTO;
 
-	@Autowired
-	private ITextFileDAO txtFileDAO;
-	
-	@Autowired
-	private IProjectWorkspaceDAO projWSDAO;
-	
-	@Autowired
+    @Autowired
+    private ITextFileDAO txtFileDAO;
+
+    @Autowired
+    private IProjectWorkspaceDAO projWSDAO;
+
+    @Autowired
     private Environment env;
 
-	@Override
-	public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
+    /* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.service.textfile.ITextFileService#saveTextFile(edu.asu.spring.quadriga.domain.workspace.ITextFile)
+     */
+    @Override
+    public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
 
-		UUID refId = UUID.randomUUID();
-		txtFile.setRefId(refId.toString());
-		txtFile.setProjectId(projWSDAO.getCorrespondingProjectID(txtFile.getWorkspaceId()));
-		
-		txtFileDTO.setFilename(txtFile.getFileName());
+        UUID refId = UUID.randomUUID();
+        txtFile.setRefId(refId.toString());
+        txtFile.setProjectId(projWSDAO.getCorrespondingProjectID(txtFile.getWorkspaceId()));
+        saveTextFileLocal(txtFile);
+        saveTextFileDB(txtFile);
+
+        return true;
+    }
+
+    /**
+     * @param txtFile
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    private boolean saveTextFileDB(ITextFile txtFile) throws QuadrigaStorageException {
+        txtFileDTO.setFilename(txtFile.getFileName());
         txtFileDTO.setProjectId(txtFile.getProjectId());
         txtFileDTO.setRefId(txtFile.getRefId());
         txtFileDTO.setWorkspaceId(txtFile.getWorkspaceId());
 
         txtFileDAO.saveTextFileDTO(txtFileDTO);
-		
-		
-		
-		saveTextFileLocal(txtFile);
-		//saveTextFileDB(txtFile);
-		
-		return true;
-	}
+        return true;
+    }
 
-	
-	private boolean saveTextFileDB(ITextFile txtFile) throws QuadrigaStorageException{
-	    txtFileDTO.setFilename(txtFile.getFileName());
-        txtFileDTO.setProjectId(txtFile.getProjectId());
-        txtFileDTO.setRefId(txtFile.getRefId());
-        txtFileDTO.setWorkspaceId(txtFile.getWorkspaceId());
+    /**
+     * @param txtFile
+     * @return
+     * @throws IOException
+     */
+    private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
 
-        txtFileDAO.saveTextFileDTO(txtFileDTO);
-	    return true;
-	}
-	
-	
-	private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
-		
-		String saveDir = env.getProperty("textfile.location");
-		String filePath = saveDir + "/" + txtFile.getRefId();
-		File dirFile = new File(filePath);
-		dirFile.mkdir();
-		
-		File saveTxtFile = new File(filePath + "/" + txtFile.getFileName() + ".txt");
-		FileWriter fw = new FileWriter(saveTxtFile);
-		fw.write(txtFile.getFileContent());		
-		File propFile = new File(filePath + "/meta.properties");
-		FileWriter propFw = new FileWriter(propFile);		
-		propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
-		propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
-		propFw.write("Reference Id:" + txtFile.getRefId() + "\n");
-		
-		
-		fw.close();
-		propFw.close();
+        String saveDir = env.getProperty("textfile.location");
+        String filePath = saveDir + "/" + txtFile.getRefId();
+        File dirFile = new File(filePath);
+        dirFile.mkdir();
 
-		return true;
+        File saveTxtFile = new File(filePath + "/" + txtFile.getFileName() + ".txt");
+        FileWriter fw = new FileWriter(saveTxtFile);
+        fw.write(txtFile.getFileContent());
+        File propFile = new File(filePath + "/meta.properties");
+        FileWriter propFw = new FileWriter(propFile);
+        propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
+        propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
+        propFw.write("Reference Id:" + txtFile.getRefId() + "\n");
 
-	}
+        fw.close();
+        propFw.close();
+
+        return true;
+
+    }
 
 }
