@@ -122,6 +122,12 @@ public class HomeController {
         return "auth/home";
     }
 
+    /**
+     * This method is used to access the public page -sites that enlists the public pages of all the projects 
+     * @param locale
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "sites", method = RequestMethod.GET)
     public String showQuadrigaPublicPages(Locale locale, Model model) {
         Date date = new Date();
@@ -129,9 +135,6 @@ public class HomeController {
                 DateFormat.LONG, locale);
 
         String formattedDate = dateFormat.format(date);
-        // Get the LDAP-authenticated userid
-        //String sUserId = principal.getName();
-        //model.addAttribute("username", sUserId);
         model.addAttribute("serverTime", formattedDate);
         return "sites";
     }
