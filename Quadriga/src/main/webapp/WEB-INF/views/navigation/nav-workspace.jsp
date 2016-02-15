@@ -84,4 +84,4 @@
 	</ul>
 </div>
 <hr>
-<a href=""><i class="fa fa-cog"></i> Public Page Settings</a>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/addpublicpage"><i class="fa fa-cog"></i> Public Page Settings</a>

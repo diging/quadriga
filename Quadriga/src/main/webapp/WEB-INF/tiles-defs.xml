@@ -262,6 +262,16 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/updatecollaborators.jsp" />
 	</definition>
+	<!-- Adding Public page settings -start -->
+	<definition name="auth/workbench/addpublicpage"
+		extends="base.definition.workbench.nav">
+		<put-attribute name="title" value="Quadriga Workbench - Add Public Page Settings" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-publicpage.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workbench/addpublicpage.jsp" />
+	</definition>		
+	<!-- Adding Public Page settings END -->
 	<!-- Add/Update/Delete Project Collaborator END -->
 
 	<definition name="auth/workbench/showCollaborators" extends="base.definition.workbench">
@@ -331,6 +341,14 @@
 			value="/WEB-INF/views/workspace/deleteworkspace.jsp" />
 	</definition>
 	<!--  add/update/delete workspace pages -END -->
+	<!-- Adding Public page settings -start -->
+	<definition name="auth/workbench/workspace/addpublicpage"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Add Public Page Settings" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/addpublicpage.jsp" />
+	</definition>		
+	<!-- Adding Public Page settings END -->
 	<!--  archive/activate workspace pages -START -->
 	<definition name="auth/workbench/workspace/archiveworkspace"
 		extends="base.definition.workbench">
@@ -366,6 +384,7 @@
 	</definition>
 	
 	<!--  archive/activate workspace pages -END -->
+	
 	<definition name="auth/workbench/workspace/addcollaborators"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="Add Collaborators" />
