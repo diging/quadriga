@@ -67,6 +67,8 @@
 			<hr> <!--  Display associated workspace -->
 			
 			<strong>Workspaces in this project:</strong>
+			<div style="float:right;"><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
+			</div>
 			<ul>
 			<c:forEach var="workspace" items="${workspaceList}">
 				<li class="ws">
