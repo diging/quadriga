@@ -59,20 +59,10 @@ function d3visualize(graph, networkId, path,type) {
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
 			.append('svg:g');
-	
-
 
 	var div1 = d3.select("#allannot_details");
 
 	d3.select("#chart").on("click", function(){return div1.style("visibility", "visible");});
-
-	/*var expand = d3.select("#chart")
-				.on("click", function(){
-
-					$("chart").show();
-					$("allannot_details").hide();
-				});*/
-
 
 	// Prepare the arrow
 	vis.append("defs").selectAll("marker")
@@ -215,10 +205,7 @@ function d3visualize(graph, networkId, path,type) {
 
 	function  redraw() {
 		console.log("here", d3.event.translate, d3.event.scale);
-		vis.attr("transform",
-				//Fix for QUAD-72: Commented translate behavior
-				//"translate(" + d3.event.translate + ")"
-				//+ 
+		vis.attr("transform", 
 				" scale(" + d3.event.scale + ")");
 	};
 //	Works on loading the network and placing the nodes randomly for view
