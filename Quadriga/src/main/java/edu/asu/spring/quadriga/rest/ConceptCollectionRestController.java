@@ -199,30 +199,30 @@ public class ConceptCollectionRestController {
         try {
             conceptCollectionList = workspaceCCManager.listWorkspaceCC(
                     workspaceId, userId);    
-    
-            if(conceptCollectionList!=null){
                 
-                for (IWorkspaceConceptCollection conceptCollection : conceptCollectionList) {
-                    JSONObject j = new JSONObject();
-                    try {
-                        j.put("id", conceptCollection.getConceptCollection()
-                                .getConceptCollectionId());
-                        j.put("name", conceptCollection.getConceptCollection()
-                                .getConceptCollectionName());
-                        ja.put(j);
-        
-                    } catch (JSONException e) {
-                        logger.error("JSONException:", e);
-                        return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                }
-            }
-            
         }catch (QuadrigaStorageException e) {
             logger.error("QuadrigaStorageException:", e);
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    
+        if(conceptCollectionList!=null){
             
+            for (IWorkspaceConceptCollection conceptCollection : conceptCollectionList) {
+                JSONObject j = new JSONObject();
+                try {
+                    j.put("id", conceptCollection.getConceptCollection()
+                            .getConceptCollectionId());
+                    j.put("name", conceptCollection.getConceptCollection()
+                            .getConceptCollectionName());
+                    ja.put(j);
+    
+                } catch (JSONException e) {
+                    logger.error("JSONException:", e);
+                    return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+        }
+        
         return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
     }
     
@@ -540,37 +540,39 @@ public class ConceptCollectionRestController {
             Principal principal) {
         String userId = principal.getName();
         List<IProjectConceptCollection> projectConceptCollectionList = null;
-        try {
-            // TODO: listProjectConceptCollection() needs to be modified
+        // TODO: listProjectConceptCollection() needs to be modified
+        try{
             projectConceptCollectionList = projectConceptCollectionManager
-                    .listProjectConceptCollection(projectid, userId);
-            
-            JSONArray ja = new JSONArray();
-            
-            if(projectConceptCollectionList!=null){
-                for (IProjectConceptCollection conceptCollection : projectConceptCollectionList) {
-                    JSONObject j = new JSONObject();
-                    try {
-
-                        j.put("id", conceptCollection.getConceptCollection()
-                                .getConceptCollectionId());
-                        j.put("name", conceptCollection.getConceptCollection()
-                                .getConceptCollectionName());
-                        ja.put(j);
-
-                    } catch (JSONException e) {
-                        logger.error("JSONException:", e);
-                        return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-
-                }
-            }
-            
-            return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
-            
-        } catch (QuadrigaStorageException e) {
+                .listProjectConceptCollection(projectid, userId);
+        }catch (QuadrigaStorageException e) {
             logger.error("QuadrigaStorageException:", e);
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        
+            
+        JSONArray ja = new JSONArray();
+            
+        if(projectConceptCollectionList!=null){
+            for (IProjectConceptCollection conceptCollection : projectConceptCollectionList) {
+                JSONObject j = new JSONObject();
+                try {
+
+                    j.put("id", conceptCollection.getConceptCollection()
+                            .getConceptCollectionId());
+                    j.put("name", conceptCollection.getConceptCollection()
+                            .getConceptCollectionName());
+                    ja.put(j);
+
+                } catch (JSONException e) {
+                    logger.error("JSONException:", e);
+                    return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+            }
+        
+        }
+        
+        return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
+            
     }
 }

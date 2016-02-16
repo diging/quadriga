@@ -225,31 +225,33 @@ public class DictionaryRestController {
         String userId = principal.getName();
 
         List<IWorkspaceDictionary> dicitonaryList = null;
-        JSONArray ja = new JSONArray();
         
-        try {
+        try{
             dicitonaryList = workspaceDictionaryManager
-                    .listWorkspaceDictionary(workspaceId, userId);
-            if(dicitonaryList!=null){
-                    
-                for (IWorkspaceDictionary dictionary : dicitonaryList) {
-                    JSONObject j = new JSONObject();
-                        j.put("id", dictionary.getDictionary().getDictionaryId());
-                        j.put("name", dictionary.getDictionary().getDictionaryName());
-                        ja.put(j);
-                        
-                }
-                
-            }
-        }
-        catch(JSONException e){
-            logger.error("JSONException:", e);
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                .listWorkspaceDictionary(workspaceId, userId);
         }
         catch(QuadrigaStorageException e){
             logger.error("QuadrigaStorageException:", e);
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        
+        JSONArray ja = new JSONArray();
+        
+        if(dicitonaryList!=null){
+            for (IWorkspaceDictionary dictionary : dicitonaryList) {
+                JSONObject j = new JSONObject();
+                try {
+                    j.put("id", dictionary.getDictionary().getDictionaryId());
+                    j.put("name", dictionary.getDictionary().getDictionaryName());
+                    ja.put(j);
+                    
+                } catch(JSONException e){
+                    logger.error("JSONException:", e);
+                    return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }             
+            }
+        }
+        
         return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
     }
 
@@ -496,35 +498,35 @@ public class DictionaryRestController {
             Principal principal) {
         String userId = principal.getName();
         List<IProjectDictionary> dictionaryList = null;
-        try {
             // TODO: listProjectDictionary() is to be changed according to
             // mapper
+        try {
             dictionaryList = projectDictionaryManager.listProjectDictionary(
                     projectid, userId);
-            
-            JSONArray ja = new JSONArray();
-            
-            if(dictionaryList!=null){
-                for (IProjectDictionary dictionary : dictionaryList) {
-                    JSONObject j = new JSONObject();
-                    try {
-                        j.put("id", dictionary.getDictionary().getDictionaryId());
-                        j.put("name", dictionary.getDictionary().getDictionaryName());
-                        ja.put(j);
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        logger.error("JSONException:", e);
-                        return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                }
-            }
-                 
-            return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
-
         } catch (QuadrigaStorageException e) {
+            // TODO Auto-generated catch block
             logger.error("QuadrigaStorageException:", e);
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        
+        JSONArray ja = new JSONArray();
+        
+        if(dictionaryList!=null){
+            for (IProjectDictionary dictionary : dictionaryList) {
+                JSONObject j = new JSONObject();
+                try {
+                    j.put("id", dictionary.getDictionary().getDictionaryId());
+                    j.put("name", dictionary.getDictionary().getDictionaryName());
+                    ja.put(j);
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    logger.error("JSONException:", e);
+                    return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+        }
+             
+        return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
 
     }
 }

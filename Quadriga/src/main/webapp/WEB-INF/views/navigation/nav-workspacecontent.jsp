@@ -5,8 +5,6 @@
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
-<link 
-	rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">	
 <script type="text/javascript">
 	$(function() {
 		$('#workspacemenu').jstree().on(
@@ -44,14 +42,14 @@
 </script>
 
 <h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
-	<span>DICTIONARIES</span>
+	<span>Dictionaries</span>
 </h5>
 <div id="workspaceDictionaries">
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a>
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
 <h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
-	<span>CONCEPT COLLECTIONS</span>
+	<span>Concept Collections</span>
 </h5>
 <div id="workspaceConceptCollections">		
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a>
