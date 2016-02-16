@@ -67,8 +67,6 @@
 			<hr> <!--  Display associated workspace -->
 			
 			<strong>Workspaces in this project:</strong>
-			<div style="float:right;"><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
-			</div>
 			<ul>
 			<c:forEach var="workspace" items="${workspaceList}">
 				<li class="ws">
@@ -144,10 +142,18 @@
 				<hr>
 				<c:choose>
 					<c:when test="${owner=='1'}">
-						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
-						    <i class="fa fa-archive"></i> Show Inactive Workspace <span><c:out value="(${deactivatedWSSize})" /></span>
-						</a> 
-													
+						<ul>
+						<li>
+							<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
+						    	<i class="fa fa-archive"></i> Show Inactive Workspace <span><c:out value="(${deactivatedWSSize})" /></span>
+							</a> 
+						</li>
+						<li>
+							<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showarchivedworkspace">
+						    	<i class="fa fa-archive"></i> Show Archived Workspace <span><c:out value="(${archivedWSSize})" /></span>
+							</a>
+						</li>
+						</ul>						
 					</c:when>
 				
 				</c:choose>
