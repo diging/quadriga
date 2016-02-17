@@ -8,11 +8,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <title><tiles:insertAttribute name="title" /></title>
 
+ 	
     <!-- Bootstrap core CSS -->
     <link href="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -28,9 +30,7 @@
 
   <body>
   <tiles:importAttribute name="currentPage" scope="request" />
-  
-
-    <div class="container">
+      <div class="container">
 
       <!-- Static navbar -->
       <nav class="navbar navbar-default navbar-colored">
@@ -48,17 +48,51 @@
             <ul class="nav navbar-nav">
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <tiles:insertAttribute name="navigation" />  
+              <tiles:insertAttribute name="navigation" />  		
+            
             </ul>
+
             
           </div><!--/.nav-collapse -->
+    
+    
         </div><!--/.container-fluid -->
+
+
+
       </nav>
+     
+    <tiles:insertAttribute name="content" />
+<%-- 
+ <tiles:insertAttribute name="content-visual" /> is  added for displaying content which is
+  specific only to publicnetworkvisual.jsp page.  --%>
+  
 
-      <tiles:insertAttribute name="content" />
 
-
-    </div> <!-- /container -->
+					<div class="row">
+ <div class="8u skel-cell-mainContent">
+							<div class="content content-left">
+								<!-- Content -->
+								<article class="is-page-content">
+									<tiles:insertAttribute name="content-visual" />
+								</article>
+								<!-- /Content -->
+ 							</div>
+ 						</div>
+						<div class="4u">
+							<div class="sidebar">
+								<!-- Sidebar -->
+								<!-- Recent Posts -->
+								<tiles:insertAttribute name="right-navigation" />
+								<!-- /Recent Posts -->
+								<!-- /Sidebar -->
+							</div>
+						</div> 
+					</div> <!-- end of row -->
+ 
+    </div> 
+    
+    <!-- /container -->
 
 
     <!-- Bootstrap core JavaScript
@@ -66,8 +100,23 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+     <script src="../../dist/js/bootstrap.min.js"></script>
+     
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/config.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel-ui.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/networkvisualize.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-ui.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkspublic.js"></script>
+  <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script> 
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+     
+     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
