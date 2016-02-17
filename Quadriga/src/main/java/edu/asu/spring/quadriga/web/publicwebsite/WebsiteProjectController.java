@@ -225,6 +225,7 @@ public class WebsiteProjectController {
 				JSONObject jsonResult = new JSONObject();
 				jsonResult.put("id", result.getId());
 				jsonResult.put("name", result.getName());
+				jsonResult.put("description", result.getDescription());
 				jsonResults.add(jsonResult);
 				if (index >= MAX_JSON_RESULTS) {
 					break;

@@ -23,7 +23,10 @@
 					<div class="list-group" id="search-results-items">
 					</div>
 					<div style="display: none;">
-						<a href="#" class="list-group-item" id="search-item-template"></a>
+						<a href="#" class="list-group-item" id="search-item-template">
+							<span class="search-name text-primary"><strong></strong></span>
+							<span class="search-desc text-muted"></span>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -119,7 +122,10 @@
 				$items.html('');
 				for (var i = 0; i < maxNum; i++) {
 					$link = $a.clone();
-					$link.text(terms[i].name);
+					$link.attr('id', '');
+					$link.find('.search-name strong').text(terms[i].name);
+					$link.attr('href', terms[i].id);
+					$link.find('.search-desc').text(terms[i].description);
 					$items.append($link);
 				}
 				$resWrapper.show();
