@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <sec:authentication var="principal" property="principal" />
 
@@ -15,46 +15,11 @@
             pageSize : "3"
         });
         
-        var bool = ${(principal.username.toLowerCase()) != quadriga.admin.username.toLowerCase() && owner !='1'};
-        if(bool){
-            $('.collabEdit').click(function (e) {
-                e.preventDefault();
-            });
-            
-            $(".collabEdit").css("color","#808080");
-            
-            $('.addworkspace').click(function (e) {
-                e.preventDefault();
-            });
-            
-            $(".addworkspace").css("color","#808080");
-            
-            $('.editProject').click(function (e) {
-                e.preventDefault();
-            });
-            
-            $(".editProject").css("color","#808080");
-        }
+        
     });
-    
-    $(function() 
-            {
-                    $( "#tabs" ).tabs();
-            });
-    
-    /* inactiveWS()
-    {
-        location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showInactiveWorkspace';
-    } */
     
 </script>
 
-<style>
-   .tabs
-   {
-    font-size: 80%;
-   }
-</style>
 
 <table style="width: 100%">
     <tr>
@@ -237,6 +202,7 @@
                         </c:forEach>
                     </ul>
                 </c:if>
+                <c:if test="${owner=='1' or isProjectAdmin}">
                 <div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
                 <ul class="colltools">
                     <li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle"></i> Add</a></li>
@@ -244,6 +210,7 @@
                     <li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil"></i> Update</a></li>
                 </ul>
                 </div>
+                </c:if>
             </section>
         </td>
     </tr>
