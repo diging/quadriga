@@ -92,7 +92,7 @@ public class UserController {
 	 * @return	Return to the user management page of the quadriga	
 	 * @throws QuadrigaStorageException 
 	 */
-	@RequestMapping(value = "auth/users/access/{accessRights}", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/users/access/{accessRights:.+}", method = RequestMethod.GET)
 	@Transactional
 	public String userAccessHandler(@PathVariable("accessRights") String sAccessRights, ModelMap model, Principal principal) throws QuadrigaStorageException
 	{

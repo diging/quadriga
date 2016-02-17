@@ -27,6 +27,7 @@
 		});
 
 		function jqEnableAll(name, flag) {
+			name = name.replace(/\./g,"\\.");
 			if (flag == 1) {
 				//Allow is selected. Enable user roles check boxes
 				$("input." + name).removeAttr("disabled");
@@ -45,10 +46,10 @@
 		} */
 		
 		function submitClick(id) {
-
+			var temp_id = id.replace(/\./g,"\\.");
 			//Check if Allow or Deny is selected
 			var selectedAccess = $(
-					"input[type='radio'][name='" + id + "']:checked").map(
+					"input[type='radio'][name='" + temp_id + "']:checked").map(
 					function() {
 						return this.value;
 					}).get();
@@ -58,7 +59,7 @@
 			}
 
 			//If Allow is selected, atleast one role should be selected
-			var checkedVals = $('.' + id + ':checkbox:checked').map(function() {
+			var checkedVals = $('.' + temp_id + ':checkbox:checked').map(function() {
 				return this.value;
 			}).get();
 			if (checkedVals.length == 0 && selectedAccess == 'approve') {
