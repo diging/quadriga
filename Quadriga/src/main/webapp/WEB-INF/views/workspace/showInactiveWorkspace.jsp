@@ -40,4 +40,4 @@ $(document).ready(function() {
 <br>
 <input type="button" value="Go Back"
     onclick="
-location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectid}'" />
+location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}'" />
