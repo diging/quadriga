@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!-- Content -->
 
 <header>
@@ -12,11 +13,11 @@
 
 	<script>
 	<!-- Script for UI validation of user requests -->
-		$(document).ready(function() {
+		/*$(document).ready(function() {
 			$("input[type=submit]").button().click(function(event) {
 				event.preventDefault();
 			});
-		});
+		});*/
 
 		$(document).ready(function() {
 			activeTable = $('.dataTable').dataTable({
@@ -84,29 +85,25 @@
 	<c:if test="${not empty userRequestsList}">
 		<h3>User Requests to access Quadriga</h3>
 		<c:forEach var="user" items="${userRequestsList}">
-    User Name: <c:out value="${user.userName}"></c:out>
-			<br>
-			<input type="radio"
-				onclick="jqEnableAll('<c:out value="${user.userName}"></c:out>',1);"
-				name="<c:out value="${user.userName}"></c:out>" value="approve">Approve&nbsp;&nbsp;<input
-				type="checkbox" class="<c:out value="${user.userName}"></c:out>"
-				name="admin" value="role3" disabled="disabled">Admin&nbsp;<input
-				type="checkbox" class="<c:out value="${user.userName}"></c:out>"
-				name="standard" value="role4" disabled="disabled">Standard User&nbsp;<input
-				type="checkbox" class="<c:out value="${user.userName}"></c:out>"
-				name="restricted" value="role6" disabled="disabled">Restricted User&nbsp;<input
-				type="checkbox" class="<c:out value="${user.userName}"></c:out>"
-				name="collaborator" value="role5" disabled="disabled">Collaborator&nbsp;
-	<br>
-			<input type="radio" name="<c:out value="${user.userName}"></c:out>"
-				value="deny"
-				onclick="jqEnableAll('<c:out value="${user.userName}"></c:out>',0);">Deny
-	<br>
-			<font size="1"> <input type="submit"
-				id="<c:out value="${user.userName}"></c:out>"
-				onclick="submitClick(this.id);" value="Submit"></font>
-			<br>
-			<br>
+		
+		User Name: <c:out value="${user.userName}"></c:out>
+		<form:form commandName="approveAccount" method="POST"
+        action="${pageContext.servletContext.contextPath}/auth/users/access/handleRequest">
+        <form:input type="hidden" path="username" value="${user.userName}" />
+        <form:radiobutton
+                onclick="jqEnableAll('',1);"
+                path="action" value="approve" />Approve&nbsp;&nbsp;
+        <form:checkboxes items="${userRoles}" path="roles" itemLabel="displayName" itemValue="DBid" /> 
+        <p>
+        <form:radiobutton path="action"
+                value="deny"
+                onclick="jqEnableAll('',0);" />Deny 
+        <br>
+        <input type="submit" value="Submit" ></input>
+        </form:form>
+		
+    			<br>
+			
 		</c:forEach>
 	</c:if>
 	<br> <br>
