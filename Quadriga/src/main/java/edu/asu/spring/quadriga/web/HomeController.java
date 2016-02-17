@@ -3,7 +3,10 @@ package edu.asu.spring.quadriga.web;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -11,6 +14,7 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +26,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.impl.Profile;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.IService;
@@ -33,6 +39,7 @@ import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
 import edu.asu.spring.quadriga.web.profile.impl.AuthorityFileSearchService;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
@@ -47,6 +54,9 @@ public class HomeController {
 
     @Autowired
     private IUserProfileManager profileManager;
+
+	@Autowired 
+	private IRetrieveProjectManager projectManager;
 
     @Autowired
     private IUserManager userManager;
@@ -127,18 +137,20 @@ public class HomeController {
      * @param locale
      * @param model
      * @return
+     * @throws QuadrigaStorageException 
      */
     @RequestMapping(value = "sites", method = RequestMethod.GET)
-    public String showQuadrigaPublicPages(Locale locale, Model model) {
+    public String showQuadrigaPublicPages(Locale locale, Model model) throws QuadrigaStorageException {
         Date date = new Date();
         DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
                 DateFormat.LONG, locale);
 
+		List<IProject> publicProjectList = projectManager.getProjectListByAccessibility("PUBLIC");
         String formattedDate = dateFormat.format(date);
         model.addAttribute("serverTime", formattedDate);
+        model.addAttribute("publicProjectList", publicProjectList);
         return "sites";
     }
-
     
     @RequestMapping(value = "auth/about", method = RequestMethod.GET)
     public String aboutQuadriga(Locale locale, Model model, Principal principal) {
