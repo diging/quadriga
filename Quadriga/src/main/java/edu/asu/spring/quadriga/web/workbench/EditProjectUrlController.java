@@ -47,7 +47,7 @@ public class EditProjectUrlController {
     @Resource(name = "projectconstants")
     private Properties messages;
 
-    private static final Logger logger = LoggerFactory.getLogger(ModifyProjectController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EditProjectUrlController.class);
 
     /**
      * Attach the custom validator to the Spring context
@@ -58,7 +58,7 @@ public class EditProjectUrlController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }) })
     @RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.GET)
     public String editProjectPageURL(@PathVariable("projectid") String projectid, Principal principal, ModelMap model)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -69,7 +69,7 @@ public class EditProjectUrlController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }) })
     @RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.POST)
     public String editProjectPageURL(@Validated @ModelAttribute("project") Project project, BindingResult result,
             @PathVariable("projectid") String projectid, Principal principal, ModelMap model,
