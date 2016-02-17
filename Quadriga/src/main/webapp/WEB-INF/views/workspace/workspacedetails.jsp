@@ -364,14 +364,14 @@
 							<c:forEach var="network" items="${networkList}">
 								<tr>
 									<td width="25%" align="center"><input name="items"
-										type="hidden" value="<c:out value="${network.name}"></c:out>" />
-										<c:out value="${network.name}"></c:out></td>
+										type="hidden" value="<c:out value="${network.network.networkName}"></c:out>" />
+										<c:out value="${network.network.networkName}"></c:out></td>
 									<td width="25%" align="center"><c:out
-											value="${network.creator.userName}"></c:out></td>
+											value="${network.network.creator.userName}"></c:out></td>
 									<td width="25%" align="center"><c:out
-											value="${network.status}"></c:out></td>
+											value="${network.network.status}"></c:out></td>
 									<td width="25%" align="center"><input type=button
-										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
+										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.network.networkId}'"
 										value='View'></td>
 								</tr>
 							</c:forEach>
