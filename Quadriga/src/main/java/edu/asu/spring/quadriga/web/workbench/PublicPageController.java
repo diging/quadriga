@@ -53,48 +53,16 @@ public class PublicPageController {
     }
 
     /**
-     * This method is called during the load of add project request form
+     * This method is called during the load of Public page settings form
      * 
      * @return model - model object
      */
     @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN')")
     @RequestMapping(value = "auth/workbench/addpublicpage", method = RequestMethod.GET)
-    public ModelAndView addProjectRequestForm() {
+    public ModelAndView publicPageSettingsForm() {
         ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
         model.getModelMap().put("project", projectFactory.createProjectObject());
-        model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
         return model;
     }
 
-    /**
-     * This method call the user manager to insert the record in the database on
-     * form submission
-     * 
-     * @param project
-     *            - object containing the form details.
-     * @param result
-     *            - object containing the errors.
-     * @param principal
-     * @return model - model object
-     * @throws QuadrigaStorageException
-     */
-    @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN')")
-    @RequestMapping(value = "auth/workbench/addpublicpage", method = RequestMethod.POST)
-    public ModelAndView addProjectRequest(@Validated @ModelAttribute("project") Project project, BindingResult result,
-            Principal principal, RedirectAttributes redirectAttribtutes) throws QuadrigaStorageException {
-        ModelAndView model;
-        if (result.hasErrors()) {
-            model = new ModelAndView("auth/workbench/addpublicpage");
-            model.getModelMap().put("project", project);
-            model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
-            return model;
-        }
-        model = new ModelAndView("redirect:/auth/workbench");
-        IUser user = userManager.getUser(principal.getName());
-        project.setOwner(user);
-        projectManager.addNewProject(project, principal.getName());
-        redirectAttribtutes.addFlashAttribute("show_success_alert", true);
-        redirectAttribtutes.addFlashAttribute("success_alert_msg", "Project created successfully.");
-        return model;
-    }
 }

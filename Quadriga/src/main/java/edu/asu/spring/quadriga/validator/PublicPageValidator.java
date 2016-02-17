@@ -25,8 +25,8 @@ public class PublicPageValidator implements Validator {
     }
 
     /**
-     * This method validates the entered ProjectName, Description, Project
-     * access and Unix Name. Validates if the values are available or not. If
+     * This method validates the entered ProjectName, Description.
+     * Validates if the values are available or not. If
      * values are not available error is thrown
      * 
      * @param obj

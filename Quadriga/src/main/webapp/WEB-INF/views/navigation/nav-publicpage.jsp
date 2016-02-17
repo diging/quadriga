@@ -13,4 +13,4 @@
 	<span>Menu</span>
 </h2>
 <i class="fa fa-cog"></i> Main Page Settings<br>
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/addpublicpage"><i class="fa fa-info-circle"></i> About Page</a>
+<a href="${pageContext.servletContext.contextPath}/auth/public/publicwebsiteabout"><i class="fa fa-info-circle"></i> About Page</a>
