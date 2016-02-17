@@ -63,8 +63,11 @@
 					<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses.png"> You are an Editor on this Project
 					(<a href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.projectId}">Remove me as Editor</a>)
 					</c:if>
+					
+			<hr>
+					
 			
-			<hr> <!--  Display associated workspace -->
+			<hr> <!--  Display associated workspace -->			
 			
 			<strong>Workspaces in this project:</strong>
 			<ul>
@@ -92,6 +95,7 @@
 			</c:forEach>
 			</ul>
 			
+				
 			<div style="float:right;">
 				<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
 			</div>

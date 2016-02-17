@@ -8,14 +8,11 @@
 		$("input[type=button]").button().click(function(event) {
 			return;
 		});
-
 		$("input[type=submit]").button().click(function(event) {
 			event.preventDefault();
 		});
-
 		
 	});
-
 	$(document).ready(function() {
 		activeTable = $('.dataTable').dataTable({
 			"bJQueryUI" : true,
@@ -96,13 +93,11 @@
 						$(document)
 								.ready(
 										function() {
-
 											$('a.login-window')
 													.click(
 															function() {
 																location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";
 															});
-
 										});
 					</script>
 				
@@ -245,7 +240,6 @@
 										}
 									});
 				}
-
 				function confirmArchive(isArchive) {
 					isArchive = !!isArchive;
 					var txt = isArchive ? 'Archive' : 'Unarchive';
@@ -346,6 +340,11 @@
 					<br>Workspace does not contain any files from dspace !
 				</c:otherwise>
 			</c:choose>
+			<hr>
+			<strong>Text files in this Workspace:</strong>
+				<div style="float:right;">
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/addtext">Add Textfile</a>
+			</div>
 			<hr> <!-- Display Networks --> <c:choose>
 				<c:when test="${not empty networkList}">
 					<span class="byline">Networks belonging to this workspace</span>
@@ -420,10 +419,3 @@
 		</td>
 	</tr>
 </table>
-
-
-
-
-
-
-
