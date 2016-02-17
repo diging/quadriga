@@ -86,6 +86,29 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
 	}
 
 
+	/**
+	 * Meghana
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProjectDTO> getAllProjectsDTOByAccessibility(String accessibility) throws QuadrigaStorageException 
+	{
+		List<ProjectDTO> projectDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.accessibility = :accessibility");
+			
+			projectDTOList =  query.list();
+
+			return projectDTOList;
+		}
+		catch(Exception e)
+		{
+			logger.info("Retrieve project details method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
 
 	@Override
 	@SuppressWarnings("unchecked")
