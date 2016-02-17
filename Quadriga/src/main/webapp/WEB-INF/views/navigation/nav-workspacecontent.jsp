@@ -25,7 +25,7 @@
 			  type : "GET",
 	          success: function(data){
 	              $.each(data, function( index, value ) {
-	            	  $( "#workspaceDictionaries" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'>"+value['name']+"</a><br>");
+	            	  $( "#workspaceDictionaries" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'><i class='fa fa-book'></i> "+value['name']+"</a><br>");
 	              });
 	          }
 		  });
@@ -34,7 +34,7 @@
 			  type : "GET",
 	          success: function(data){
 	              $.each(data, function( index, value ) {
-	            	 $( "#workspaceConceptCollections" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'>"+value['name']+"</a><br>");
+	            	 $( "#workspaceConceptCollections" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'><i class='fa fa-list-alt'></i> "+value['name']+"</a><br>");
 	              });
 	          }
 		  });

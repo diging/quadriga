@@ -21,7 +21,7 @@
 		  type : "GET",
           success: function(data){
               $.each(data, function( index, value ) {
-            	  $( "#projectDictionaries" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'>"+value['name']+"</a><br>");
+            	  $( "#projectDictionaries" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'><i class='fa fa-book'></i> "+value['name']+"</a><br>");
               });
           }
 	  });
@@ -30,7 +30,7 @@
 		  type : "GET",
           success: function(data){
               $.each(data, function( index, value ) {
-            	 $( "#projectConceptCollections" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'>"+value['name']+"</a><br>");
+            	 $( "#projectConceptCollections" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'><i class='fa fa-list-alt'></i> "+value['name']+"</a><br>");
               });
           }
 	  });
