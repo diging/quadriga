@@ -1,10 +1,7 @@
 package edu.asu.spring.quadriga.domain.impl.workspace;
 
-import org.springframework.stereotype.Component;
-
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
-@Component
 public class TextFile implements ITextFile {
 
     private String fileName;

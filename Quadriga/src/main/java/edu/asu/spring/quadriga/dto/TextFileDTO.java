@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table(name = "tbl_textfiles")
 @XmlRootElement
-@Component
 public class TextFileDTO implements Serializable {
 
     

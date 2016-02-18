@@ -341,7 +341,7 @@
 				</c:otherwise>
 			</c:choose>
 			<hr>
-			<strong>Text files in this Workspace:</strong>
+			<strong>Text files in this workspace:</strong>
 				<div style="float:right;">
 				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/addtext">Add Textfile</a>
 			</div>

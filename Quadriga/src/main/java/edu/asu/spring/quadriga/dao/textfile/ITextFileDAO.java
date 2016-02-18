@@ -1,9 +1,10 @@
 package edu.asu.spring.quadriga.dao.textfile;
 
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface ITextFileDAO {
+public interface ITextFileDAO extends IBaseDAO<TextFileDTO>{
 
     public abstract TextFileDTO getTextFileDTO(String wsId);
 
