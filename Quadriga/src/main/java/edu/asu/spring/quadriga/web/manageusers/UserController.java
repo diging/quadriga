@@ -3,12 +3,9 @@ package edu.asu.spring.quadriga.web.manageusers;
 import java.security.Principal;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,45 +35,7 @@ public class UserController {
 	@Autowired
 	private IQuadrigaRoleManager rolemanager;
 
-	public IUserManager getUsermanager() {
-		return usermanager;
-	}
-
-	public void setUsermanager(IUserManager usermanager) {
-		this.usermanager = usermanager;
-	}
-
-	/**
-	 * Admins are provided with the list of open user requets, active users and inactive users 
-	 * 
-	 * @return 	Return to the user management page of the quadriga
-	 */
-	@RequestMapping(value = "auth/users/manage", method = RequestMethod.GET)
-	public String manageUsers(ModelMap model, Principal principal) throws QuadrigaStorageException
-	{
-		//Get all User Requests
-		List<IUser> userRequestsList = usermanager.getUserRequests();
-		model.addAttribute("userRequestsList", userRequestsList);
-
-		//Get all Active Users
-		List<IUser> activeUserList = usermanager.getAllActiveUsers();
-		model.addAttribute("activeUserList", activeUserList);
-
-		//Get all Inactive Users
-		List<IUser> inactiveUserList = usermanager.getAllInActiveUsers();
-		model.addAttribute("inactiveUserList", inactiveUserList);
-
-		//Get all Quadriga roles
-		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles(IQuadrigaRoleManager.MAIN_ROLES);
-		model.addAttribute("quadrigaroles",quadrigaRoles);
-		model.addAttribute("quadrolessize",quadrigaRoles.size());
-		
-		model.addAttribute("userRoles", rolemanager.getSelectableQuarigaRoles(IQuadrigaRoleManager.MAIN_ROLES));
-        model.addAttribute("approveAccount", new ApproveAccount());
-        
-
-		return "auth/users/manage";
-	}
+	
 
 	/**
 	 * Admins are provided with the list of open user requests
@@ -134,31 +93,6 @@ public class UserController {
 
 		return "redirect:/auth/users/manage";
 
-	}
-	
-	@RequestMapping(value = "auth/users/access/handleRequest", method = RequestMethod.POST)
-    public String handleApprovalRequest(@Valid ApproveAccount account, Model model, Principal principal) throws QuadrigaStorageException {
-	    
-	    if(account.getAction().equalsIgnoreCase("approve")) {
-            //User Request has been approved by the admin
-            StringBuilder sRoles = new StringBuilder();
-            String[] roles = account.getRoles();
-            for(int i = 0; i < roles.length; i++) {
-                if(i==0){
-                    sRoles.append(roles[i]);
-                } else {
-                    sRoles.append(",");
-                    sRoles.append(roles[i]);
-                }
-            }
-            usermanager.approveUserRequest(account.getUsername(), sRoles.toString(), principal.getName());
-        }
-        else {
-            //User Request denied by the admin
-            usermanager.denyUserRequest(account.getUsername(), principal.getName());
-        }
-	    
-	    return "redirect:/auth/users/manage";
 	}
 
 	/**

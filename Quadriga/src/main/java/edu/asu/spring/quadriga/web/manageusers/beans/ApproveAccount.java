@@ -1,5 +1,11 @@
 package edu.asu.spring.quadriga.web.manageusers.beans;
 
+/**
+ * Backing bean for approval or rejection of account requests.
+ * 
+ * @author jdamerow
+ *
+ */
 public class ApproveAccount {
 
     private String username;

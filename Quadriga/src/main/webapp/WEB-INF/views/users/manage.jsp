@@ -2,6 +2,7 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!-- Content -->
 
 <header>
@@ -13,12 +14,7 @@
 
 	<script>
 	<!-- Script for UI validation of user requests -->
-		/*$(document).ready(function() {
-			$("input[type=submit]").button().click(function(event) {
-				event.preventDefault();
-			});
-		});*/
-
+		
 		$(document).ready(function() {
 			activeTable = $('.dataTable').dataTable({
 				"bJQueryUI" : true,
@@ -76,16 +72,12 @@
 		
 	</script>
 	
-		<br> <br>
-		<a href='${pageContext.servletContext.contextPath}/auth/users/updateroles'>Update Roles</a>
-	<br><br>
-
-		<sec:authorize
+		
+    	<sec:authorize
 				access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN')">
 	<c:if test="${not empty userRequestsList}">
 		<h3>User Requests to access Quadriga</h3>
 		<c:forEach var="user" items="${userRequestsList}">
-		
 		User Name: <c:out value="${user.userName}"></c:out>
 		<form:form commandName="approveAccount" method="POST"
         action="${pageContext.servletContext.contextPath}/auth/users/access/handleRequest">
@@ -101,16 +93,17 @@
         <br>
         <input type="submit" value="Submit" ></input>
         </form:form>
-		
-    			<br>
 			
 		</c:forEach>
 	</c:if>
-	<br> <br>
 	
 	
 	<c:if test="${not empty activeUserList}">
 		<h3>Current Active Users</h3>
+		<a style="margin-bottom: 15px; " class="btn btn-warning" href='${pageContext.servletContext.contextPath}/auth/users/updateroles'>Update Roles</a>
+    
+       
+		
 		<table class="display dataTable" width="100%">
 			<thead>
 				<tr>
