@@ -78,7 +78,7 @@ public class WebsiteProjectController {
 		this.projectManager = projectManager;
 	}
 	
-	private IProject getProjectDetails(String name) throws QuadrigaStorageException{
+	private IProject getProjectDetails(String name) throws QuadrigaStorageException {
 		return projectManager.getProjectDetailsByUnixName(name);
 	}
 
@@ -177,6 +177,9 @@ public class WebsiteProjectController {
 		model.addAttribute("project", project);
 		
 		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+
+		// test the transformed networks
+
 		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
@@ -189,57 +192,6 @@ public class WebsiteProjectController {
 	}
 
 	/**
-	 * This method will return a search page
-	 * @return view
-	 * @exception QuadrigaStorageException
-	 */
-	@RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
-	public String getSearch(@PathVariable("projectUnixName") String projectUnixName, Model model)
-			throws QuadrigaStorageException {
-
-		IProject project = getProjectDetails(projectUnixName);
-		if (project == null) {
-			return "forbidden";
-		}
-
-		model.addAttribute("project", project);
-		return "sites/search";
-	}
-
-	/**
-	 * This method returns json data for search term
-	 * @return json
-	 * @throws JSONException
-	 */
-	@RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST,
-		produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm) throws JSONException {
-		List<ISearchResult> searchResults = service.search(searchTerm);
-		List<JSONObject> jsonResults = new ArrayList<JSONObject>();
-
-		if (searchResults != null) {
-			int index = 0;
-			for (ISearchResult result : searchResults) {
-				index++;
-				JSONObject jsonResult = new JSONObject();
-				jsonResult.put("id", result.getId());
-				jsonResult.put("name", result.getName());
-				jsonResult.put("description", result.getDescription());
-				jsonResults.add(jsonResult);
-				if (index >= MAX_JSON_RESULTS) {
-					break;
-				}
-			}
-		}
-
-		JSONObject jsonResponse = new JSONObject();
-		jsonResponse.put("terms", jsonResults);
-
-		return new ResponseEntity<String>(jsonResponse.toString(), HttpStatus.OK);
-	}
-
-	/*
 	 * This method gives the visualization of all the networks in a project
 	 * @param projectUnixName	The project unix name
 	 * @param model				Model
@@ -270,4 +222,5 @@ public class WebsiteProjectController {
 
 		return "sites/networks/visualize";
 	}
+
 }
