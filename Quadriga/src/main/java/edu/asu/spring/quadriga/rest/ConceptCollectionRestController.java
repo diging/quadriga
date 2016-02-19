@@ -23,24 +23,32 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
@@ -48,11 +56,13 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.QuadrigaConceptReply;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.Workspace;
+import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -61,6 +71,7 @@ import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -94,11 +105,16 @@ public class ConceptCollectionRestController {
     @Autowired
     private IConceptCollectionManager conceptControllerManager;
 
+    private IConceptCollection collection;
+
     @Autowired
     private IConceptCollectionFactory collectionFactory;
 
     @Autowired
     private IWSSecurityChecker checkWSSecurity;
+
+    @Autowired
+    private IConceptFactory conFact;
 
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
@@ -110,6 +126,9 @@ public class ConceptCollectionRestController {
     @Autowired
     @Qualifier("updateConceptPowerURLPath")
     private String updateConceptPowerURLPath;
+
+    @Autowired
+    private IProjectConceptCollectionManager projectConceptCollectionManager;
 
     /**
      * Rest interface for the getting list of concept collections of a user
@@ -154,10 +173,63 @@ public class ConceptCollectionRestController {
 
     }
 
+
     /**
-     * Rest interface for uploading XML for concept collection http://<<URL>:
-     * <PORT>>/quadriga/rest/syncconcepts/{conceptCollectionID}
-     * hhttp://localhost:8080/quadriga/rest/syncconcepts/
+     * Rest interface to get conceptcollections related to workspace
+     * http://<<URL>:<PORT>>/quadriga/auth/rest/workspace/{workspaceid}/conceptcollections.json
+     * http://localhost:8080/quadriga/auth/rest/workspace/e23a8585-20bc-458e-ab7d-c758962b11aa/conceptcollections.json
+     * 
+     * 
+     * @author Ajay Modi & Bharath Srikantan
+     * @param workspaceid
+     * @param model
+     * @param principal
+     * @return
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/rest/workspace/{workspaceid}/conceptcollections.json", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<String> listWorkspaceConceptCollection(
+            @PathVariable("workspaceid") String workspaceId, Model model,
+            Principal principal) {
+        String userId = principal.getName();
+        
+        List<IWorkspaceConceptCollection> conceptCollectionList = null;
+        JSONArray ja = new JSONArray();
+        try {
+            conceptCollectionList = workspaceCCManager.listWorkspaceCC(
+                    workspaceId, userId);    
+                
+        }catch (QuadrigaStorageException e) {
+            logger.error("QuadrigaStorageException:", e);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    
+        if(conceptCollectionList!=null){
+            
+            for (IWorkspaceConceptCollection conceptCollection : conceptCollectionList) {
+                JSONObject j = new JSONObject();
+                try {
+                    j.put("id", conceptCollection.getConceptCollection()
+                            .getConceptCollectionId());
+                    j.put("name", conceptCollection.getConceptCollection()
+                            .getConceptCollectionName());
+                    ja.put(j);
+    
+                } catch (JSONException e) {
+                    logger.error("JSONException:", e);
+                    return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+        }
+        
+        return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
+    }
+    
+    /**
+     * Rest interface for uploading XML for concept collection 
+     * http://<<URL>:<PORT>>/quadriga/rest/syncconcepts/{conceptCollectionID}
+     * http://localhost:8080/quadriga/rest/syncconcepts/
      * 
      * @author Lohith Dwaraka
      * @param request
@@ -181,9 +253,8 @@ public class ConceptCollectionRestController {
      * @throws QuadrigaStorageException
      * @throws RestException
      */
-    @RestAccessPolicies({
-            @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST, paramIndex = 1, userRole = {
-                    RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
+    @RestAccessPolicies({@ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST, paramIndex = 1, userRole = { 
+            RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
     public ResponseEntity<String> addConceptsToConceptCollection(
             @PathVariable("conceptCollectionID") String conceptCollectionId, HttpServletRequest request,
@@ -448,5 +519,60 @@ public class ConceptCollectionRestController {
         }
 
     }
+    
+    
+    /**
+     * Rest interface to get conceptcollections related to project
+     * http://<<URL>:<PORT>>/quadriga/auth/rest/<projectid>/conceptcollections.json
+     * http://localhost:8080/quadriga/auth/rest/PROJ_bb7ad41b-3e85-4309-b2ff-47d644307b9b/conceptcollections.json
+     * 
+     * 
+     * @author Ajay Modi & Bharath Srikantan
+     * @param projectid
+     * @param model
+     * @param principal
+     * @return
+     */
 
+    @RequestMapping(value = "auth/rest/{projectid}/conceptcollections.json", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> listProjectConceptCollectionJson(
+            @PathVariable("projectid") String projectid, Model model,
+            Principal principal) {
+        String userId = principal.getName();
+        List<IProjectConceptCollection> projectConceptCollectionList = null;
+        // TODO: listProjectConceptCollection() needs to be modified
+        try{
+            projectConceptCollectionList = projectConceptCollectionManager
+                .listProjectConceptCollection(projectid, userId);
+        }catch (QuadrigaStorageException e) {
+            logger.error("QuadrigaStorageException:", e);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+            
+        JSONArray ja = new JSONArray();
+            
+        if(projectConceptCollectionList!=null){
+            for (IProjectConceptCollection conceptCollection : projectConceptCollectionList) {
+                JSONObject j = new JSONObject();
+                try {
+
+                    j.put("id", conceptCollection.getConceptCollection()
+                            .getConceptCollectionId());
+                    j.put("name", conceptCollection.getConceptCollection()
+                            .getConceptCollectionName());
+                    ja.put(j);
+
+                } catch (JSONException e) {
+                    logger.error("JSONException:", e);
+                    return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+            }
+        
+        }
+        
+        return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
+            
+    }
 }
