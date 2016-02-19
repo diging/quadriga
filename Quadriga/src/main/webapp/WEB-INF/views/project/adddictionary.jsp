@@ -88,7 +88,6 @@
 		<c:when test="${not empty dictinarylist}">
 
 			<form method="POST">
-
 				<input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"
 	value='Okay'/>
