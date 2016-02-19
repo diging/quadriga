@@ -122,23 +122,6 @@ public class HomeController {
         return "auth/home";
     }
 
-    /**
-     * This method is used to access the public page -sites that enlists the public pages of all the projects 
-     * @param locale
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "sites", method = RequestMethod.GET)
-    public String showQuadrigaPublicPages(Locale locale, Model model) {
-        Date date = new Date();
-        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-                DateFormat.LONG, locale);
-
-        String formattedDate = dateFormat.format(date);
-        model.addAttribute("serverTime", formattedDate);
-        return "sites";
-    }
-
     
     @RequestMapping(value = "auth/about", method = RequestMethod.GET)
     public String aboutQuadriga(Locale locale, Model model, Principal principal) {
