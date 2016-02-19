@@ -26,8 +26,6 @@ public class UserValidator implements Validator {
 		
 		User user = (User)obj;
 		
-		System.out.println("User details :"+user.getUserName());
-		
 		String userName = user.getUserName();
 		
 		if(err.getFieldError("userName") == null)

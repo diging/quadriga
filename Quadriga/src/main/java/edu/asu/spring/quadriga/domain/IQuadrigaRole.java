@@ -69,4 +69,8 @@ public interface IQuadrigaRole
 	 */
 	public abstract String getDescription();
 
+    public abstract void setSelectable(boolean selectable);
+
+    public abstract boolean isSelectable();
+
 }
