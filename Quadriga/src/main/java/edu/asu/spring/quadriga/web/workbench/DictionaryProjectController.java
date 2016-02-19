@@ -67,7 +67,6 @@ public class DictionaryProjectController {
 			model.addAttribute("dictinarylist", dictionaryList);
 			IProject project = projectManager.getProjectDetails(projectid);
 			model.addAttribute("project", project);
-			model.addAttribute("projectid", projectid);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
 			logger.error(" ----" + e.getMessage());
@@ -102,7 +101,6 @@ public class DictionaryProjectController {
 			model.addAttribute("dicitonaryList", dicitonaryList);
 			IProject project = projectManager.getProjectDetails(projectid);
 			model.addAttribute("project", project);
-			model.addAttribute("projectid", projectid);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
 			for (int i = 0; i < values.length; i++) {
@@ -136,7 +134,6 @@ public class DictionaryProjectController {
 		model.addAttribute("dicitonaryList", dicitonaryList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
-		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
 
@@ -159,7 +156,6 @@ public class DictionaryProjectController {
 		model.addAttribute("dicitonaryList", dicitonaryList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
-		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
 	
@@ -184,7 +180,6 @@ public class DictionaryProjectController {
 		model.addAttribute("dicitonaryList", dicitonaryList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
-		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/deletedictionaries";
 	}
 	
@@ -214,7 +209,6 @@ public class DictionaryProjectController {
 			model.addAttribute("dicitonaryList", dicitonaryList);
 			IProject project = projectManager.getProjectDetails(projectid);
 			model.addAttribute("project", project);
-			model.addAttribute("projectid", projectid);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
 			for (int i = 0; i < values.length; i++) {
@@ -247,7 +241,6 @@ public class DictionaryProjectController {
 		model.addAttribute("dicitonaryList", dicitonaryList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
-		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
 }
