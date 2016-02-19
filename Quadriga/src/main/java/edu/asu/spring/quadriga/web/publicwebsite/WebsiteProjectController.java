@@ -14,6 +14,8 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -201,5 +203,43 @@ public class WebsiteProjectController {
 		model.addAttribute("project", project);
 
 		return "sites/networks/visualize";
+	}
+	
+	/**
+	 * This method gives the visualization of  how often concepts appear in the networks
+	 * @author Bharath Srikantan
+	 * @param projectUnixName	The project unix name
+	 * @param model				Model
+	 * @return view
+	 * @throws JAXBException
+	 * @throws QuadrigaStorageException
+	 * @throws JSONException 
+	 */
+	@RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
+	public String showProjectStatistics(@PathVariable("projectUnixName") String projectUnixName,
+									   Model model)throws JAXBException, QuadrigaStorageException, JSONException {
+		IProject project = getProjectDetails(projectUnixName);
+
+		if (project == null) {
+			return "auth/accessissue";
+		}
+
+//		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetworkOfProject(project.getProjectId());
+		JSONObject jo = new JSONObject();
+		jo.put("concept1", "10");
+		jo.put("concept2", "15");
+		jo.put("concept3", "60");
+		jo.put("concept4", "35");
+		jo.put("concept5", "70");
+		jo.put("concept6", "16");
+
+	//	String json = null;
+		System.out.println("Json obj "+jo);
+
+		model.addAttribute("jsonstring", jo);
+		model.addAttribute("networkid", "\"\"");
+		model.addAttribute("project", project);
+
+		return "sites/project/statistics";
 	}
 }
