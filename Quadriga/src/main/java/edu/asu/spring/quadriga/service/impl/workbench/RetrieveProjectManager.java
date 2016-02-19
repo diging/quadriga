@@ -56,6 +56,18 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	}
 	
 	/**
+	 * 
+	 */
+	@Override
+	@Transactional
+	public List<IProject> getProjectListByAccessibility(String accessibility) throws QuadrigaStorageException
+	{
+		List<IProject> projectList;
+		projectList =  projectShallowMapper.getProjectList(accessibility);
+		return projectList;
+	}
+	
+	/**
 	 * This method retrieves the list of projects associated with the logged in user as a collaborator. 
 	 * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
 	 * @param sUserName - logged in user name.
