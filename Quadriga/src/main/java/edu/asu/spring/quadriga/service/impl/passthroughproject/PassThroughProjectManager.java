@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,10 @@ import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDocumentReader;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IExternalWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -62,6 +61,9 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     
     @Resource(name = "projectconstants")
     private Properties messages;
+    
+    @Autowired
+    private IPassThroughProjectDocumentReader passThroughProjectDocumentReader;
 
     @Override
     @Transactional
@@ -144,8 +146,9 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     public String callQStore(String workspaceId, String xml, IUser user) throws ParserConfigurationException,
             SAXException, IOException, JAXBException, QuadrigaStorageException, QuadrigaAccessException {
         // TODO Auto-generated method stub -- Karthik
+    	String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
         String networkName = "VogenWeb_Details";
-        String responseFromQStore = networkManager.storeXMLQStore(xml);
+        String responseFromQStore = networkManager.storeXMLQStore(annotatedText);
         String networkId = networkManager.storeNetworkDetails(responseFromQStore, user, networkName, workspaceId,
                 INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
         return networkId;
