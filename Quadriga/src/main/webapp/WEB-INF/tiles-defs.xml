@@ -375,7 +375,12 @@
 			value="/WEB-INF/views/workspace/showInactiveWorkspace.jsp" />
 	</definition>
 
-	<!-- archive/activate workspace pages -END -->
+	<definition name="auth/workbench/workspace/showArchivedWorkspace" extends="base.definition.workbench">
+		<put-attribute name="title" value="List of Archived Workspaces" />
+		<put-attribute name="content" value="/WEB-INF/views/workspace/showArchivedWorkspace.jsp"/>
+	</definition>
+	
+	<!--  archive/activate workspace pages -END -->
 	<definition name="auth/workbench/workspace/addcollaborators"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="Add Collaborators" />
