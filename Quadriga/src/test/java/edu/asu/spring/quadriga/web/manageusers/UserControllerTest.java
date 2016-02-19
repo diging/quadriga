@@ -99,30 +99,7 @@ public class UserControllerTest {
 	}
 
 
-	/**
-	 * This method tests if the appropriate paths are returned. It also checks if the correct
-	 * number of users are returned for cases where the status are active, inactive and open requests.
-	 * @throws QuadrigaStorageException 
-	 * 
-	 */
-	@Test
-	public void testManageUsers() throws QuadrigaStorageException {
-	    //Check the return value
-		assertEquals(userContoller.manageUsers(model, principal),"auth/users/manage");
-
-		//User Requests
-		List<IUser> userRequestsList = (List<IUser>) model.get("userRequestsList");
-		assertEquals(3, userRequestsList.size());
-
-		//Active Users
-		List<IUser> activeList = (List<IUser>) model.get("activeUserList");
-		assertEquals(2,activeList.size());
-
-		//Inactive Users
-		List<IUser> inactiveList = (List<IUser>) model.get("inactiveUserList");
-		assertEquals(1,inactiveList.size());
-	}
-
+	
 	/**
 	 * This method tests if the appropriate path is returned and also evaluates the number of 
 	 * open requests and also checks if the correct path is returned.
