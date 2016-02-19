@@ -131,26 +131,6 @@ public class HomeController {
 
         return "auth/home";
     }
-
-    /**
-     * This method is used to access the public page -sites that enlists the public pages of all the projects 
-     * @param locale
-     * @param model
-     * @return
-     * @throws QuadrigaStorageException 
-     */
-    @RequestMapping(value = "sites", method = RequestMethod.GET)
-    public String showQuadrigaPublicPages(Locale locale, Model model) throws QuadrigaStorageException {
-        Date date = new Date();
-        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-                DateFormat.LONG, locale);
-
-		List<IProject> publicProjectList = projectManager.getProjectListByAccessibility("PUBLIC");
-        String formattedDate = dateFormat.format(date);
-        model.addAttribute("serverTime", formattedDate);
-        model.addAttribute("publicProjectList", publicProjectList);
-        return "sites";
-    }
     
     @RequestMapping(value = "auth/about", method = RequestMethod.GET)
     public String aboutQuadriga(Locale locale, Model model, Principal principal) {
