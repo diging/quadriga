@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * This Controller is used to perform all the changes related to Quadriga public sites
- * @author Charan1312
+ * @author Charan Thej Aware
  *
  */
 

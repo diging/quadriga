@@ -1,6 +1,4 @@
-<li >
-	<ul> Quadriga Network Projects </ul>
-</li>
-<li ${currentPage == "home" ? "class=\"active\"" : ""}><a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">Home</a></li>
+ <li style="color:red"> <h4> <b> Quadriga Network Projects </b> </h4></li>
+ 
 
 
