@@ -8,6 +8,8 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,72 +23,77 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by vikranthdoosa on 2/19/16.
+ * This controller searches for concept terms
+ * and returns json as response and also a combined network of searched terms
+ *
+ * @author Vikranth Doosa
  */
 @Controller
 public class NetworkSearchController {
 
-	@Autowired
-	IRetrieveProjectManager projectManager;
+    @Autowired
+    IRetrieveProjectManager projectManager;
 
-	@Qualifier("conceptPowerService")
-	@Autowired
-	IService service;
+    @Qualifier("conceptPowerService")
+    @Autowired
+    IService service;
 
-	private static String defaultJsonErrorMsg = "{\"status\" : 500," +
-			" \"message\": \"Unable to get the search terms\"}";
+    private static String defaultJsonErrorMsg = "{\"status\" : 500," +
+            " \"message\": \"Unable to get the search terms\"}";
 
-	/**
-	 * This method will return a search page
-	 *
-	 * @return view
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
-	public String getSearch(@PathVariable("projectUnixName") String projectUnixName, Model model)
-			throws QuadrigaStorageException {
+    private static final Logger logger = LoggerFactory.getLogger(NetworkSearchController.class);
 
-		IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
-		if (project == null) {
-			return "forbidden";
-		}
+    /**
+     * This method will return a search page
+     *
+     * @return view
+     * @throws QuadrigaStorageException
+     */
+    @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
+    public String getSearch(@PathVariable("projectUnixName") String projectUnixName, Model model)
+            throws QuadrigaStorageException {
 
-		model.addAttribute("project", project);
-		return "sites/search";
-	}
+        IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
+        if (project == null) {
+            return "forbidden";
+        }
 
-	/**
-	 * This method returns json data for search term
-	 *
-	 * @return json
-	 * @throws JSONException
-	 */
-	@RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm) {
-		List<ISearchResult> searchResults = service.search(searchTerm);
-		List<JSONObject> jsonResults = new ArrayList<JSONObject>();
+        model.addAttribute("project", project);
+        return "sites/search";
+    }
 
-		try {
-			if (searchResults != null) {
-				for (ISearchResult result : searchResults) {
-					JSONObject jsonResult = new JSONObject();
-					jsonResult.put("id", result.getId());
-					jsonResult.put("name", result.getName());
-					jsonResult.put("description", result.getDescription());
-					jsonResults.add(jsonResult);
-				}
-			}
+    /**
+     * This method returns json data for search term
+     *
+     * @return json
+     */
+    @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm) {
+        List<ISearchResult> searchResults = service.search(searchTerm);
+        List<JSONObject> jsonResults = new ArrayList<JSONObject>();
 
-			JSONObject jsonResponse = new JSONObject();
-			jsonResponse.put("terms", jsonResults);
+        try {
+            if (searchResults != null) {
+                for (ISearchResult result : searchResults) {
+                    JSONObject jsonResult = new JSONObject();
+                    jsonResult.put("id", result.getId());
+                    jsonResult.put("name", result.getName());
+                    jsonResult.put("description", result.getDescription());
+                    jsonResults.add(jsonResult);
+                }
+            }
 
-			return new ResponseEntity<String>(jsonResponse.toString(), HttpStatus.OK);
-		} catch (JSONException e) {
-			// Exception
-		}
-		return new ResponseEntity<String>(defaultJsonErrorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("terms", jsonResults);
+
+            return new ResponseEntity<String>(jsonResponse.toString(), HttpStatus.OK);
+        } catch (JSONException e) {
+            // Exception
+            logger.error("Json exception while adding the results", e);
+        }
+        return new ResponseEntity<String>(defaultJsonErrorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }
