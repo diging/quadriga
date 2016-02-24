@@ -42,7 +42,7 @@ IProjectConceptCollectionShallowMapper {
 			IProject project, ProjectDTO projectDTO)
 					throws QuadrigaStorageException {
 		List<IProjectConceptCollection> projectCCList = null;
-		if(project != null){
+		if(project != null && projectDTO != null){
 			projectCCList = new ArrayList<IProjectConceptCollection>();
 			List<ProjectConceptCollectionDTO> projectCCDTOList = projectDTO.getProjectConceptCollectionDTOList();
 			if(projectCCDTOList != null){
