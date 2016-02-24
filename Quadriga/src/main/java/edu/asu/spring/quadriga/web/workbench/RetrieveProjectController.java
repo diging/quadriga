@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
-import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceFormManager;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
@@ -26,6 +23,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -46,32 +44,9 @@ public class RetrieveProjectController
 
 	@Autowired
 	private IProjectSecurityChecker projectSecurity;
-
+	
 	@Autowired
 	private IListWSManager wsManager;
-
-	public IListWSManager getWsManager() {
-		return wsManager;
-	}
-
-	public void setWsManager(IListWSManager wsManager) {
-		this.wsManager = wsManager;
-	}
-
-	public IRetrieveProjectManager getProjectManager(){
-		return projectManager;
-
-	}
-
-	public void setProjectManager(IRetrieveProjectManager projectManager){
-
-		this.projectManager = projectManager;
-	}
-
-	public void setProjectSecurity(IProjectSecurityChecker projectSecurity){
-
-		this.projectSecurity = projectSecurity;
-	}
 
 	/**
 	 *this method acts as a controller for handling all the activities on the workbench
@@ -168,9 +143,9 @@ public class RetrieveProjectController
 		return model;
 	}
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR} )})
 	@RequestMapping(value="auth/workbench/projects/{projectid}", method = RequestMethod.GET)
-	public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, NoSuchRoleException
 	{
 		ModelAndView model = new ModelAndView("auth/workbench/project");
 
@@ -205,6 +180,12 @@ public class RetrieveProjectController
 			model.getModelMap().put("editoraccess", 1);
 		}else{
 			model.getModelMap().put("editoraccess", 0);
+		}
+		if (projectSecurity.isCollaborator(userName, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, project.getProjectId())) {
+		    model.getModelMap().put("isProjectAdmin", true);
+		}
+		else {
+		    model.getModelMap().put("isProjectAdmin", false);
 		}
 		return model;
 	}

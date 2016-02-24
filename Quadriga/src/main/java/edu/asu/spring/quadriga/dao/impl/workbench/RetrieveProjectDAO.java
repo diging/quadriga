@@ -73,7 +73,7 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
 			query.setParameter("projectid", projectId);
 			
 			projectDTOList =  query.list();
-			if(projectDTOList != null){
+			if(projectDTOList != null && projectDTOList.size() > 0){
 			projectDTO = projectDTOList.get(0);
 			}
 			return projectDTO;
