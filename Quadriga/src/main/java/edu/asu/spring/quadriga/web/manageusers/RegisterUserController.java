@@ -43,10 +43,13 @@ public class RegisterUserController {
         }
         
         boolean success = false;
+        String username = request.getUsername();
         try {
+        	request.setUsername(username.toLowerCase());
             success = usermanager.addNewUser(request);
         } catch (UsernameExistsException e) {
            model.addAttribute("errormsg_username_in_use", "Username already in use.");
+           request.setUsername(username);
            request.setPassword("");
            request.setRepeatedPassword("");
            model.addAttribute("request", request);
