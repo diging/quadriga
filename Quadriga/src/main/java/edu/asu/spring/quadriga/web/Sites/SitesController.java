@@ -9,6 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+/**
+ * This Controller is used to perform all the changes related to Quadriga public sites
+ * @author Charan Thej Aware
+ *
+ */
+
 @Controller
 public class SitesController {
 	

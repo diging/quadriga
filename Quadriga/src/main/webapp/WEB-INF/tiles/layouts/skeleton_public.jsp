@@ -46,6 +46,7 @@
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+              <tiles:insertAttribute name="navigationSites" />  
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <tiles:insertAttribute name="navigation" />  
