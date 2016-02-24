@@ -41,7 +41,7 @@ IProjectDictionaryShallowMapper {
 	public List<IProjectDictionary> getProjectDictionaryList(IProject project,
 			ProjectDTO projectDTO) throws QuadrigaStorageException {
 		List<IProjectDictionary> projectDictionaryList = null;
-		if(project != null){
+		if(project != null && projectDTO != null){
 			projectDictionaryList = new ArrayList<IProjectDictionary>();
 			List<ProjectDictionaryDTO> projectDictionaryDTOList = projectDTO.getProjectDictionaryDTOList();
 			if(projectDictionaryDTOList != null){
