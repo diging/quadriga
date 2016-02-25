@@ -11,7 +11,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
-import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
@@ -44,10 +43,9 @@ public class TextFileService implements ITextFileService {
 
         UUID refId = UUID.randomUUID();
         txtFile.setRefId(refId.toString());
-        saveTextFileLocal(txtFile);
-        saveTextFileDB(txtFile);
-
-        return true;
+        boolean fsStatus = saveTextFileLocal(txtFile);
+        boolean dbStatus = saveTextFileDB(txtFile);
+        return fsStatus && dbStatus;
     }
 
     /**
@@ -62,9 +60,7 @@ public class TextFileService implements ITextFileService {
         txtFileDTO.setProjectId(txtFile.getProjectId());
         txtFileDTO.setRefId(txtFile.getRefId());
         txtFileDTO.setWorkspaceId(txtFile.getWorkspaceId());
-
-        txtFileDAO.saveTextFileDTO(txtFileDTO);
-        return true;
+        return txtFileDAO.saveTextFileDTO(txtFileDTO);
     }
 
     /**
@@ -83,23 +79,27 @@ public class TextFileService implements ITextFileService {
         if (!dirFile.exists()) {
             dirFile.mkdir();
         }
-        String fileName = txtFile.getFileName();        
-        if(fileName.contains(".")){
-           saveTxtFile = new File(filePath + "/" + fileName); 
-        }else{
-        saveTxtFile = new File(filePath + "/" + fileName + ".txt");
+        String fileName = txtFile.getFileName();
+        if (fileName.contains(".")) {
+            saveTxtFile = new File(filePath + "/" + fileName);
+        } else {
+            saveTxtFile = new File(filePath + "/" + fileName + ".txt");
         }
         FileWriter fw = new FileWriter(saveTxtFile);
         fw.write(txtFile.getFileContent());
         File propFile = new File(filePath + "/meta.properties");
         FileWriter propFw = new FileWriter(propFile);
-        propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
-        propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
-        propFw.write("Reference Id:" + txtFile.getRefId() + "\n");
-        fw.close();
-        propFw.close();
-
-        return true;
+        try {
+            propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
+            propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
+            propFw.write("Reference Id:" + txtFile.getRefId() + "\n");
+            fw.close();
+            propFw.close();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
 
     }
 

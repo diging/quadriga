@@ -60,7 +60,7 @@ public class AddTextController {
      */
     @AccessPolicies({
             @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
-                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }),
+                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR}),
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
                     RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
@@ -92,7 +92,7 @@ public class AddTextController {
      */
     @AccessPolicies({
             @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 4, userRole = {
-                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }),
+                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }),
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
                     RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
@@ -114,8 +114,11 @@ public class AddTextController {
             model.getModelMap().put("myProjectId", projid);
             txtFile.setWorkspaceId(workspaceid);
             txtFile.setProjectId(projid);
-            txtFileService.saveTextFile(txtFile);
-            model.getModelMap().put("success", "1");
+            if(txtFileService.saveTextFile(txtFile))
+                model.getModelMap().put("success", "1");
+            else{
+                model.getModelMap().put("success", "2");
+            }
         }
         return model;
     }
