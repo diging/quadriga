@@ -1,1 +1,5 @@
-<li ${currentPage == "home" ? "class=\"active\"" : ""}><a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">Home</a></li>
+<li ${currentPage == "home" ? "class=\"active\"" : ""}><a href="">Home</a></li>
+ 
+ 
+
+

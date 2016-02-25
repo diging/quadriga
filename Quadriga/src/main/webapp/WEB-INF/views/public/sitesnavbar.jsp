@@ -1,4 +1,5 @@
- <li style="color:red"> <h4> <b> Quadriga Network Projects </b> </h4></li>
+<li ${currentPage == "sites" ? "class=\"active\"" : ""}> <a href="">Quadriga Network Projects</a></li>
+ 
  
 
 
