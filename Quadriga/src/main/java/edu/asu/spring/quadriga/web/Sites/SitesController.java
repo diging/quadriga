@@ -1,13 +1,17 @@
 package edu.asu.spring.quadriga.web.Sites;
 
-import java.text.DateFormat;
-import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 /**
  * This Controller is used to perform all the changes related to Quadriga public sites
@@ -18,20 +22,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class SitesController {
 	
+
+	@Autowired 
+	private IProjectShallowMapper projectMapper;
+	
     /**
      * This method is used to access the public page -sites that enlists the public pages of all the projects 
      * @param locale
      * @param model
      * @return
+     * @throws QuadrigaStorageException 
      */
     @RequestMapping(value = "sites", method = RequestMethod.GET)
-    public String showQuadrigaPublicPages(Locale locale, Model model) {
-        Date date = new Date();
-        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-                DateFormat.LONG, locale);
-
-        String formattedDate = dateFormat.format(date);
-        model.addAttribute("serverTime", formattedDate);
+    public String showQuadrigaPublicPages(Model model) throws QuadrigaStorageException {
+    	List<IProject> projectList = projectMapper.getProjectListByAccesibility("PUBLIC");
+        model.addAttribute("projectList", projectList);
         return "sites";
     }
 

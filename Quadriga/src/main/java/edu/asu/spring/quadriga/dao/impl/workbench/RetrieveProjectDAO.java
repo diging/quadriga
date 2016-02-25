@@ -97,7 +97,8 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.accessibility = :accessibility");
-			
+			query.setParameter("accessibility", accessibility);
+
 			projectDTOList =  query.list();
 
 			return projectDTOList;
