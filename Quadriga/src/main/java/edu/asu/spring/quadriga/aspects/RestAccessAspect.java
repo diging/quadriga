@@ -61,7 +61,7 @@ public class RestAccessAspect {
 
         // retrieve the logged in User name
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName();
+        String userName = auth.getName().toLowerCase();
         
         if(userName == null || "".equals(userName)){
             throw new RestException(401);
