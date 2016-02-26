@@ -62,13 +62,6 @@ public class WebsiteProjectController {
 	
 	@Autowired
     private Environment env;
-
-	@Autowired
-	@Qualifier("conceptPowerService")
-	private IService service;
-
-	private static final int MAX_JSON_RESULTS = 5;
-
 	
 	public IRetrieveProjectManager getProjectManager() {
 		return projectManager;
