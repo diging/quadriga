@@ -17,19 +17,61 @@
     <!-- Custom styles for this template -->
     <link href="${pageContext.servletContext.contextPath}/resources/public/css/navbar.css" rel="stylesheet">
   
-  
-		<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.1/css/jquery.dataTables.css">
-		<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.1/jquery.dataTables.min.js"></script>
-		
+	<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.1/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.1/jquery.dataTables.min.js"></script>
+
+	<script type="text/javascript" charset="utf8">
+			$(document).ready(function(){
+			  $('#example').dataTable({
+				"sPaginationType" : "full_numbers",
+				"bLengthChange": false,
+				"bAutoWidth" : false
+			  });
+			});
+			
+			$(document).ready(function() {
+			    // Configure/customize these variables.
+			    var showChar = 100;  // How many characters are shown by default
+			    var ellipsestext = "...";
+			    var moretext = "Show more >";
+			    var lesstext = "Show less";
+			    
+			    $('.more').each(function() {
+			        var content = $(this).html();
+			        if(content.length > showChar) {
+			            var c = content.substr(0, showChar);
+			            var h = content.substr(showChar, content.length - showChar);			 
+			            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+			 
+			            $(this).html(html);
+			        }
+			    });
+			 
+			    $(".morelink").click(function(){
+			        if($(this).hasClass("less")) {
+			            $(this).removeClass("less");
+			            $(this).html(moretext);
+			        } else {
+			            $(this).addClass("less");
+			            $(this).html(lesstext);
+			        }
+			        $(this).parent().prev().toggle();
+			        $(this).prev().toggle();
+			        return false;
+			    });
+			});
+			
+		</script>
+		<style type="text/css">
+			.morecontent span {  display: none; }
+			.morelink {  display: block; }
+		</style>				
   </head>
 
   <body>
   <tiles:importAttribute name="currentPage" scope="request" />
-  
-
     <div class="container">
-
       <!-- Static navbar -->
       <nav class="navbar navbar-default navbar-colored">
         <div class="container-fluid">
@@ -52,9 +94,7 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
-
       <tiles:insertAttribute name="content" />
     </div> <!-- /container -->
-
   </body>
 </html>
