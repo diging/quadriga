@@ -809,7 +809,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         List<String[]> networkDetailsCache = newNetworkDetailCache.getNetworkDetailsCache();
         // Add network statements for networks
-        for (String node[] : networkDetailsCache) {
+        for (String[] node : networkDetailsCache) {
             try {
                 String rowid = generateUniqueID();
                 dbConnect.addNetworkStatement(rowid, networkId, node[0], node[1], node[2], user, version);
