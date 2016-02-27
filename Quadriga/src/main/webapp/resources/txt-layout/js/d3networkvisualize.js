@@ -619,16 +619,16 @@ function d3init(graph, networkId, path,type) {
 		if(d.group==1){
 
 			html = "<div id='popup' title='Annotation' >" +
-			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
-			"</br>" +
-			"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
-			"</br>" +
+			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " 
 			"</div>";
 		}
 		// Annotate on node
 		else{
 			html = "<div id='popup' title='Annotation'>" +
 			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
+			"</br>" +
+			"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
+			"</br>" +
 			"</div>";
 		}				
 		$('#inner-details').html(html);	
