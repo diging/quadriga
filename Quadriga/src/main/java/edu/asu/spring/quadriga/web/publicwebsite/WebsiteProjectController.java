@@ -203,23 +203,5 @@ public class WebsiteProjectController {
 		return "sites/networks/visualize";
 	}
 
-	/**
-	 * This method gives the the projectblog
-	 * @param projectUnixName	The project unix name
-	 * @param model				Model
-	 * @return view
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "sites/{projectUnixName}/projectblog", method = RequestMethod.GET)
-	public String projectblog(@PathVariable("projectUnixName") String projectUnixName,
-									   Model model)
-			throws QuadrigaStorageException {
-		IProject project = getProjectDetails(projectUnixName);
 
-		if (project == null) {
-			return "forbidden";
-		}
-
-		return "sites/projectblog";
-	}
 }
