@@ -652,7 +652,7 @@ function d3init(graph, networkId, path,type) {
 			"<form id='annot_form' action=" + path
 			+ "/auth/editing/saveAnnotation/";
 			html1 += networkId + " method='POST' >";
-			html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
+			html1 += "<textarea name='annotText' id='"+text1ID+"' cols='20' rows='5'></textarea>";
 			html1 += "<input  type='hidden' name='nodeid' id='nodeid' value="
 				+ d.id + " />";
 			html1 += "<input  type='hidden' name='nodename' id='nodename' value="
