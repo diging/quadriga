@@ -1,10 +1,3 @@
-/**
- * This controller is to map project/about page for public website. 
- * A formatted string is sent to jsp which is displayed in the correct HTML format  
- * 
- * @author Rajat Aggarwal
- *
- */
 
 package edu.asu.spring.quadriga.web.publicwebsite;
 
@@ -20,6 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+
+/**
+ * This controller is to map project/about page for public website. A formatted string is sent to jsp which is displayed in the correct HTML format
+ * 
+ * @author Rajat Aggarwal
+ *
+ */
 
 @Controller
 public class WebsiteAboutController {
