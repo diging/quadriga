@@ -18,12 +18,15 @@ public interface INetworkTransformationManager {
     public abstract ITransformedNetwork getTransformedNetwork(String networkId,
             String versionID) throws QuadrigaStorageException;
 
-	/**
-	 * Method to retrieve transformed network of all networks given a project id
-	 * @param projectId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	ITransformedNetwork getTransformedNetworkOfProject(String projectId)
-			throws QuadrigaStorageException;
+    /**
+     * Method to retrieve transformed network of all networks given a project id
+     * @param projectId
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    ITransformedNetwork getTransformedNetworkOfProject(String projectId)
+            throws QuadrigaStorageException;
+
+    ITransformedNetwork searchTransformedNetworkOfProject(String projectId, String conceptId)
+            throws QuadrigaStorageException;
 }
