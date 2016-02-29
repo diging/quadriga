@@ -206,7 +206,7 @@ public class EditingListController {
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=1,userRole={})})
 	@RequestMapping(value = "auth/editing/visualize/{networkId}", method = RequestMethod.GET)
-	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, QuadrigaAccessException {
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
 			return "auth/accessissue";
