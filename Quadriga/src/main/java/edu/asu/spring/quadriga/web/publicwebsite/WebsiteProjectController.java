@@ -10,7 +10,13 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -26,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -34,6 +41,7 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.transform.Link;
 
 @PropertySource(value = "classpath:/user.properties")
 @Controller
@@ -205,6 +213,24 @@ public class WebsiteProjectController {
 		return "sites/networks/visualize";
 	}
 	
+	public static JSONObject sortByValue(Map<String, Integer> map) throws JSONException {
+        List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(map.entrySet());
+    
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+    
+            public int compare(Map.Entry<String, Integer> m1, Map.Entry<String, Integer> m2) {
+                return (m2.getValue()).compareTo(m1.getValue());
+            }
+        });
+   
+        JSONObject jo = new JSONObject();
+        for (int k = 0; k< (list.size()>10?10:list.size()); k++){
+            Map.Entry<String, Integer> entry = list.get(k); 
+            jo.put(entry.getKey(), entry.getValue());
+        }
+        return jo;
+    }
+	
 	/**
 	 * This method gives the visualization of  how often concepts appear in the networks
 	 * @author Bharath Srikantan
@@ -223,19 +249,37 @@ public class WebsiteProjectController {
 		if (project == null) {
 			return "auth/accessissue";
 		}
-
-//		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetworkOfProject(project.getProjectId());
-		JSONObject jo = new JSONObject();
-		jo.put("concept1", "10");
-		jo.put("concept2", "15");
-		jo.put("concept3", "60");
-		jo.put("concept4", "35");
-		jo.put("concept5", "70");
-		jo.put("concept6", "16");
-
-	//	String json = null;
-		System.out.println("Json obj "+jo);
-
+		
+		
+        String projectid = project.getProjectId();
+        List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
+        HashMap<String,Integer> top10Concepts = new HashMap<String, Integer>();
+        JSONObject jo = new JSONObject();
+        //List<String> networkNames = null;
+        if(!Networks.isEmpty()){
+            
+            for (int i = 0; i < Networks.size(); i++) {
+                Network n  = (Network) Networks.get(i);
+                ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(n.getNetworkId());
+                String json = null;
+                if(transformedNetwork!=null){
+                    List<Link> links = transformedNetwork.getLinks();
+                    for(int itr=0; itr< links.size(); itr++){
+                        String url = links.get(itr).getSubject().getConceptId();//links.get(itr);
+                        if(top10Concepts.containsKey(url)){
+                            top10Concepts.put(url, top10Concepts.get(url)+1);
+                        }else{
+                            top10Concepts.put(url, 1);
+                        }
+                    }
+                    
+                }
+             
+            }
+            
+            jo = sortByValue(top10Concepts);
+        }
+        
 		model.addAttribute("jsonstring", jo);
 		model.addAttribute("networkid", "\"\"");
 		model.addAttribute("project", project);
