@@ -702,6 +702,12 @@
 	   <put-attribute name="currentPage" value="networks" />
 		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp"/>
 	</definition>
+
+    <!-- Site search -->
+    <definition name="sites/search" extends="base.definition.public">
+        <put-attribute name="currentPage" value="networksearch" />
+        <put-attribute name="content" value="/WEB-INF/views/networksearch.jsp"/>
+    </definition>
 	
 	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks">
 		<put-attribute name="title" value="Quadriga Networks visualize" />
@@ -799,20 +805,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
-
-
-   
-
-
-
-
-
-	
-	
-
-
-   	
-
 	<definition name="auth/editing/history" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Networks Edit" />
 		<put-attribute name="content"
