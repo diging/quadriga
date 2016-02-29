@@ -155,11 +155,8 @@ public class EventParser {
     
     private PredicateNode parsePredicateEvent(AppellationEventType appellationEvent, String statementId) {
         PredicateNode predNode = new PredicateNode();
-        
         parseNode(appellationEvent, predNode, statementId);
-        
         predNode.setId(UUID.randomUUID().toString());
-        
         return predNode;
     }
     
@@ -175,6 +172,7 @@ public class EventParser {
         
         if (node.getConceptId() != null) {
             node.setLabel(conceptCollectionManager.getConceptLemmaFromConceptId(node.getConceptId()));
+            node.setDescription(conceptCollectionManager.getConceptDescriptionFromConceptId(node.getConceptId()));
         }
         
         node.getStatementIds().add(statementId);

@@ -224,6 +224,27 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     }
 
     /**
+     * This method returns Description for the given concept
+     * 
+     * @param id
+     *            - item id
+     * @return String - Description associated with concept
+     */
+    @Override
+    public String getConceptDescriptionFromConceptId(String id) {
+
+        Map<String, String> vars = new HashMap<String, String>();
+        vars.put("name", id.trim());
+        String desc = id;
+        ConceptpowerReply rep = restTemplate.getForObject(conceptURL
+                + updateURL + "{name}", ConceptpowerReply.class, vars);
+        if (rep.getConceptEntry().size() == 0) {
+            return desc;
+        }
+        return rep.getConceptEntry().get(0).getDescription();
+    }
+    
+    /**
      * This method adds the items to the concept collection
      * 
      * @param lemma
