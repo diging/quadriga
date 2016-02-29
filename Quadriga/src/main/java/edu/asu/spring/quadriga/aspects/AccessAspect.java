@@ -58,7 +58,7 @@ public class AccessAspect
 		
 		//retrieve the logged in User name
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String userName = auth.getName();
+		String userName = auth.getName().toLowerCase();
 		//Loop through all the access policies specified
 		ElementAccessPolicy[] policies = checks.value();
 		
