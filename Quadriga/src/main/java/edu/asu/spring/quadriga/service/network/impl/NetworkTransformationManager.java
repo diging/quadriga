@@ -9,6 +9,7 @@ import edu.asu.spring.quadriga.transform.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
@@ -111,7 +112,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                     // search for concept id
                     Node searchNode = null;
                     for (Node node: transformedNetwork.getNodes().values()) {
-                        if (node.getConceptId().contains(conceptId)) {
+                        if (node.getConceptId().equals(conceptId)) {
                             searchNode = node;
                             break;
                         }
@@ -121,19 +122,24 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                         continue;
                     }
 
-                    String statementId = searchNode.getStatementIds().get(0);
+                    Set<String> searchStatements = new HashSet<String>(searchNode.getStatementIds());
+                    // String statementId = searchNode.getStatementIds().get(0);
                     Set<Node> associatedNodes = new HashSet<Node>();
                     for (Map.Entry<String, Node> entry: transformedNetwork.getNodes().entrySet()) {
                         // check if first statementId is in all the nodes
                         Node n = entry.getValue();
-                        if (n.getStatementIds().contains(statementId)) {
-                            searchNodes.put(entry.getKey(), n);
-                            associatedNodes.add(n);
+                        for (String statementId: n.getStatementIds()) {
+                            if (searchStatements.contains(statementId)) {
+                                searchNodes.put(entry.getKey(), n);
+                                associatedNodes.add(n);
+                            }
                         }
                     }
 
                     // find all the links associated with the searched nodes
+                    // using depth first search
                     for (Link link: transformedNetwork.getLinks()) {
+                        // it may be in source or target
                         if (associatedNodes.contains(link.getSubject())) {
                             searchLinks.add(link);
                         }
