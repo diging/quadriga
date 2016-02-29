@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
@@ -24,6 +23,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -44,37 +44,13 @@ public class RetrieveProjectController
 
 	@Autowired
 	private IProjectSecurityChecker projectSecurity;
-
+	
 	@Autowired
 	private IListWSManager wsManager;
 
-	public IListWSManager getWsManager() {
-		return wsManager;
-	}
-
-	public void setWsManager(IListWSManager wsManager) {
-		this.wsManager = wsManager;
-	}
-
-	public IRetrieveProjectManager getProjectManager(){
-		return projectManager;
-
-	}
-
-	public void setProjectManager(IRetrieveProjectManager projectManager){
-
-		this.projectManager = projectManager;
-	}
-
-	public void setProjectSecurity(IProjectSecurityChecker projectSecurity){
-
-		this.projectSecurity = projectSecurity;
-	}
-
 	/**
 	 *this method acts as a controller for handling all the activities on the workbench
-	 *home page 
-	 * @param 	model maps projectlist to view (jsp page) 
+	 *home page
 	 * @param   principal
 	 * @return 	string for workbench url 
 	 * @throws  QuadrigaStorageException
@@ -167,9 +143,9 @@ public class RetrieveProjectController
 		return model;
 	}
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR} )})
 	@RequestMapping(value="auth/workbench/projects/{projectid}", method = RequestMethod.GET)
-	public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, NoSuchRoleException
 	{
 		ModelAndView model = new ModelAndView("auth/workbench/project");
 
@@ -181,9 +157,20 @@ public class RetrieveProjectController
 
 		List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
+		List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
+		
+		List<IWorkSpace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
+
+		int deactivatedWSSize = deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
+		
+		int archivedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
+
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);
 		model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
+		model.getModelMap().put("deactivatedWSSize", deactivatedWSSize);
+		model.getModelMap().put("archivedWSSize", archivedWSSize);
+
 		if(projectSecurity.isProjectOwner(userName,projectid)){
 			model.getModelMap().put("owner", 1);
 		}else{
@@ -193,6 +180,12 @@ public class RetrieveProjectController
 			model.getModelMap().put("editoraccess", 1);
 		}else{
 			model.getModelMap().put("editoraccess", 0);
+		}
+		if (projectSecurity.isCollaborator(userName, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, project.getProjectId())) {
+		    model.getModelMap().put("isProjectAdmin", true);
+		}
+		else {
+		    model.getModelMap().put("isProjectAdmin", false);
 		}
 		return model;
 	}

@@ -39,19 +39,13 @@ public class DictionaryAuthorizationTest {
     @InjectMocks
     private DictionaryAuthorization authorization;
     
-    private IDictionaryFactory dictionaryFactory;
     private List<IDictionaryCollaborator> collaborators;
     
     @Before
     public void init() throws QuadrigaStorageException {
         dictionaryManager = Mockito.mock(IDictionaryManager.class);
-        dictionaryFactory = new DictionaryFactory();
         
         MockitoAnnotations.initMocks(this);
-        
-        Field fieldToSet = ReflectionUtils.findField(DictionaryAuthorization.class, "dictionaryFactory");
-        ReflectionUtils.makeAccessible(fieldToSet);
-        ReflectionUtils.setField(fieldToSet, authorization, dictionaryFactory);
         
         IDictionary dictionary = new Dictionary();
         final IUser owner = new User();

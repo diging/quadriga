@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" 
-	"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+	"http://tiles.apache.org/dtds/tiles-config_3_0_1.dtd">
 <tiles-definitions>
 
 	<!-- Base definitions -->
@@ -205,10 +205,8 @@
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>
 	<!-- changing the skeleton to have left navigation -->
-	<definition name="auth/workbench" extends="base.definition.workbench.nav">
+	<definition name="auth/workbench" extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Workbench" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workbench.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/workbench.jsp" />
 	</definition>
@@ -365,6 +363,10 @@
 	<definition name="auth/workbench/workspace/showInactiveWorkspace" extends="base.definition.workbench">
 		<put-attribute name="title" value="List of Deactivated Workspaces" />
 		<put-attribute name="content" value="/WEB-INF/views/workspace/showInactiveWorkspace.jsp"/>
+	</definition>
+	<definition name="auth/workbench/workspace/showArchivedWorkspace" extends="base.definition.workbench">
+		<put-attribute name="title" value="List of Archived Workspaces" />
+		<put-attribute name="content" value="/WEB-INF/views/workspace/showArchivedWorkspace.jsp"/>
 	</definition>
 	
 	<!--  archive/activate workspace pages -END -->
@@ -689,6 +691,12 @@
 	   <put-attribute name="currentPage" value="networks" />
 		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp"/>
 	</definition>
+
+    <!-- Site search -->
+    <definition name="sites/search" extends="base.definition.public">
+        <put-attribute name="currentPage" value="networksearch" />
+        <put-attribute name="content" value="/WEB-INF/views/networksearch.jsp"/>
+    </definition>
 	
 	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks">
 		<put-attribute name="title" value="Quadriga Networks visualize" />
@@ -780,9 +788,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
-	
-
-	
 	
 	<definition name="auth/editing/history" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Networks Edit" />

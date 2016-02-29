@@ -204,7 +204,7 @@ public class ConceptCollectionDeepMapperTest {
         collabList.add(collaboratorDTO2);
         collabList.add(collaboratorDTO3);
 
-        QuadrigaRole collaboratorRole = new QuadrigaRole();
+        IQuadrigaRole collaboratorRole = new QuadrigaRole();
         collaboratorRole.setId("id");
         setMockConditionsCollaboratorListTest(collaboratorRole);
 
@@ -233,7 +233,7 @@ public class ConceptCollectionDeepMapperTest {
 
     }
 
-    private void setMockConditionsCollaboratorListTest(QuadrigaRole collaboratorRole) throws QuadrigaStorageException {
+    private void setMockConditionsCollaboratorListTest(IQuadrigaRole collaboratorRole) throws QuadrigaStorageException {
 
         Mockito.when(mockedRoleManager.getQuadrigaRoleByDbId(Matchers.eq(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES),
                 Matchers.anyString())).thenReturn(collaboratorRole);

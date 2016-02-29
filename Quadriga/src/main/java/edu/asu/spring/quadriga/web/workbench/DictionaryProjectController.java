@@ -1,9 +1,13 @@
 package edu.asu.spring.quadriga.web.workbench;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -21,6 +26,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
@@ -67,7 +73,6 @@ public class DictionaryProjectController {
 			model.addAttribute("dictinarylist", dictionaryList);
 			IProject project = projectManager.getProjectDetails(projectid);
 			model.addAttribute("project", project);
-			model.addAttribute("projectid", projectid);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
 			logger.error(" ----" + e.getMessage());
@@ -102,7 +107,6 @@ public class DictionaryProjectController {
 			model.addAttribute("dicitonaryList", dicitonaryList);
 			IProject project = projectManager.getProjectDetails(projectid);
 			model.addAttribute("project", project);
-			model.addAttribute("projectid", projectid);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
 			for (int i = 0; i < values.length; i++) {
@@ -136,7 +140,6 @@ public class DictionaryProjectController {
 		model.addAttribute("dicitonaryList", dicitonaryList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
-		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
 
@@ -159,10 +162,9 @@ public class DictionaryProjectController {
 		model.addAttribute("dicitonaryList", dicitonaryList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
-		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
-	
+
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
 	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
@@ -184,7 +186,6 @@ public class DictionaryProjectController {
 		model.addAttribute("dicitonaryList", dicitonaryList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
-		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/deletedictionaries";
 	}
 	
@@ -214,7 +215,6 @@ public class DictionaryProjectController {
 			model.addAttribute("dicitonaryList", dicitonaryList);
 			IProject project = projectManager.getProjectDetails(projectid);
 			model.addAttribute("project", project);
-			model.addAttribute("projectid", projectid);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
 			for (int i = 0; i < values.length; i++) {
@@ -247,7 +247,6 @@ public class DictionaryProjectController {
 		model.addAttribute("dicitonaryList", dicitonaryList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
-		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
 }

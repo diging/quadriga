@@ -1,11 +1,9 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,10 +13,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -31,30 +27,14 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.factory.networks.INetworkFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
@@ -80,10 +60,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.network.INetworkTransformer;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
+import edu.asu.spring.quadriga.service.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
@@ -97,54 +76,26 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  * @author : Lohith Dwaraka
  */
 
-@PropertySource(value = "classpath:/user.properties")
 @Service
 public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkManager {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkManager.class);
 
     @Autowired
-    @Qualifier("qStoreURL")
-    private String qStoreURL;
+    private IQStoreConnector qStoreConnector;
+    
+    @Autowired
+    private IRestVelocityFactory restVelocityFactory;
 
     @Autowired
-    IRestVelocityFactory restVelocityFactory;
-
-    @Autowired
-    private INetworkTransformer d3NetworkManager;
-
-    @Autowired
-    IConceptCollectionManager conceptCollectionManager;
+    private IConceptCollectionManager conceptCollectionManager;
 
     @Autowired
     private IListWSManager wsManager;
 
     @Autowired
     private INetworkMapper networkmapper;
-
-    @Autowired
-    @Qualifier("qStoreURL_Add")
-    private String qStoreURL_Add;
-
-    @Autowired
-    @Qualifier("restTemplate")
-    RestTemplate restTemplate;
-
-    @Autowired
-    @Qualifier("qStoreURL_Get_POST")
-    private String qStoreURL_Get_POST;
-
-    @Autowired
-    @Qualifier("qStoreURL_Get")
-    private String qStoreURL_Get;
-
-    @Autowired
-    @Qualifier("jaxbMarshaller")
-    Jaxb2Marshaller jaxbMarshaller;
-
-    @Autowired
-    private INetworkFactory networkFactory;
-
+    
     @Autowired
     private IWorkspaceShallowMapper workspaceShallowMapper;
 
@@ -154,36 +105,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Autowired
     private INetworkDAO dbConnect;
 
-    @Autowired
-    private Environment env;
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getQStoreAddURL() {
-        return qStoreURL + qStoreURL_Add;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getQStoreGetURL() {
-        return qStoreURL + qStoreURL_Get;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getQStoreGetPOSTURL() {
-        return qStoreURL + qStoreURL_Get_POST;
-    }
-
     /**
      * 
      * {@inheritDoc}
@@ -191,13 +112,12 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     public ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
             throws JAXBException, QStoreStorageException {
-        String xml = getCreationEventXmlStringFromQstore(relationEventId);
+        String xml = qStoreConnector.getCreationEvent(relationEventId);
         ElementEventsType elementEventType = null;
         if (xml == null) {
             throw new QStoreStorageException(
-                    "Some issue retriving data from Qstore, Please check the logs related to Qstore");
+                    "Some issue retriving data from Qstore. Please check the logs related to Qstore.");
         } else {
-
             // Initialize ElementEventsType object for relation event
             elementEventType = unMarshalXmlToElementEventsType(xml);
         }
@@ -533,40 +453,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return false;
     }
 
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String getCreationEventXmlStringFromQstore(String id) throws JAXBException {
-        // Message converters for JAXb to understand the xml
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new StringHttpMessageConverter());
-        org.springframework.oxm.Marshaller marshaler = jaxbMarshaller;
-        org.springframework.oxm.Unmarshaller unmarshaler = jaxbMarshaller;
-        messageConverters.add(new MarshallingHttpMessageConverter(marshaler, unmarshaler));
-
-        restTemplate.setMessageConverters(messageConverters);
-
-        // Setting up the http header accept type
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
-        ResponseEntity<String> response = null;
-        try {
-            logger.debug("URL : " + getQStoreGetURL() + id);
-            // Get the XML from QStore
-            response = restTemplate.exchange(getQStoreGetURL() + id, HttpMethod.GET, new HttpEntity<String[]>(headers),
-                    String.class);
-        } catch (Exception e) {
-            e.getMessage();
-        }
-        return response.getBody().toString();
-    }
 
     /**
      * 
@@ -579,86 +465,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return Long.toString(l, Character.MAX_RADIX);
     }
 
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
-        String res = "";
-        // add message converters
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        RestTemplate restTemplate = new RestTemplate();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-
-        // prepare http headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
-        HttpEntity<String> request = new HttpEntity<String>(XML, headers);
-
-        try {
-            // add xml in QStore
-            String url = getQStoreAddURL();
-            res = restTemplate.postForObject(url, request, String.class);
-        } catch (Exception e) {
-            logger.error("QStore not accepting the xml, please check with the server logs.", e);
-            // res = e.getMessage();
-            return res;
-        }
-        return res;
-    }
-
-    private String getAuthHeader() {
-        String auth = env.getProperty("qstore.admin.username") + ":" + env.getProperty("qstore.admin.password");
-        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
-        return "Basic " + new String(encodedAuth);
-    }
-
-    /**
-     * 
-     * {@inheritDoc} QStore allows us to get network XML for specific
-     * {@link RelationEventType} and also List of {@link RelationEventType}
-     * embedded in XML.
-     * 
-     */
-    @Override
-    public String getNetworkXMLFromQStoreForAListOfCStatements(String xml) {
-        String res = "";
-        // Add message converters for JAxb
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        RestTemplate restTemplate = new RestTemplate();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-        // Add http header
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
-
-        HttpEntity<String> request = new HttpEntity<String>(xml, headers);
-
-        try {
-            // Get complete network xml from QStore
-            res = restTemplate.postForObject(getQStoreGetPOSTURL(), request, String.class);
-        } catch (Exception e) {
-            logger.error("QStore not accepting the xml, please check with the server logs.", e);
-            // res = e.getMessage();
-            return res;
-        }
-        return res;
-    }
-
+    
     @Override
     @Transactional
     public String getNetworkXML(String networkId) throws Exception {
@@ -675,7 +482,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             writer = new StringWriter();
             template.merge(context, writer);
             logger.debug("XML : " + writer.toString());
-            networkXML = getNetworkXMLFromQStoreForAListOfCStatements(writer.toString());
+            networkXML = qStoreConnector.getStatements(writer.toString());
         } catch (ResourceNotFoundException e) {
 
             logger.error("Exception:", e);
@@ -691,6 +498,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         }
         networkXML = networkXML.substring(networkXML.indexOf("element_events") - 1, networkXML.length());
         return networkXML;
+    }
+    
+    @Override
+    public String storeNetworks(String xml) throws QStoreStorageException {
+        return qStoreConnector.store(xml);
     }
 
     /**
@@ -997,7 +809,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         List<String[]> networkDetailsCache = newNetworkDetailCache.getNetworkDetailsCache();
         // Add network statements for networks
-        for (String node[] : networkDetailsCache) {
+        for (String[] node : networkDetailsCache) {
             try {
                 String rowid = generateUniqueID();
                 dbConnect.addNetworkStatement(rowid, networkId, node[0], node[1], node[2], user, version);

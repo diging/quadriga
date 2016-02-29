@@ -27,7 +27,7 @@
 <h2>Project: ${project.projectName}</h2>
 <hr />
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}'"
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"
 	value='Okay'>
 
 <c:choose>
