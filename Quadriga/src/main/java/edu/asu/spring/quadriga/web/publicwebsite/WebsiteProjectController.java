@@ -233,17 +233,16 @@ public class WebsiteProjectController {
 	
 	/**
 	 * This method gives the visualization of  how often concepts appear in the networks
-	 * @author Bharath Srikantan
+	 * @author Bharath Srikantan & Ajay Modi
 	 * @param projectUnixName	The project unix name
 	 * @param model				Model
 	 * @return view
 	 * @throws JAXBException
 	 * @throws QuadrigaStorageException
-	 * @throws JSONException 
 	 */
 	@RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
 	public String showProjectStatistics(@PathVariable("projectUnixName") String projectUnixName,
-									   Model model)throws JAXBException, QuadrigaStorageException, JSONException {
+									   Model model)throws JAXBException, QuadrigaStorageException {
 		IProject project = getProjectDetails(projectUnixName);
 
 		if (project == null) {
@@ -255,6 +254,8 @@ public class WebsiteProjectController {
         List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
         HashMap<String,Integer> top10Concepts = new HashMap<String, Integer>();
         JSONObject jo = new JSONObject();
+        StringBuffer errorMsg = new StringBuffer();
+        StringBuffer successMsg = new StringBuffer();
         //List<String> networkNames = null;
         if(!Networks.isEmpty()){
             
@@ -265,7 +266,7 @@ public class WebsiteProjectController {
                 if(transformedNetwork!=null){
                     List<Link> links = transformedNetwork.getLinks();
                     for(int itr=0; itr< links.size(); itr++){
-                        String url = links.get(itr).getSubject().getConceptId();//links.get(itr);
+                        String url = links.get(itr).getSubject().getConceptId();
                         if(top10Concepts.containsKey(url)){
                             top10Concepts.put(url, top10Concepts.get(url)+1);
                         }else{
@@ -276,14 +277,27 @@ public class WebsiteProjectController {
                 }
              
             }
-            
-            jo = sortByValue(top10Concepts);
-        }
-        
-		model.addAttribute("jsonstring", jo);
-		model.addAttribute("networkid", "\"\"");
-		model.addAttribute("project", project);
+            try {
+                jo = sortByValue(top10Concepts);
+                model.addAttribute("show_success_alert", true);
+                successMsg.append("Top10 Concepts from network fetched successfully");
+                successMsg.append("\n");
+                System.out.print(jo.toString());
+                model.addAttribute("jsonstring", jo);
+                model.addAttribute("networkid", "\"\"");
+                model.addAttribute("project", project);
 
+            }catch(JSONException e){
+                model.addAttribute("show_error_alert", true);
+                errorMsg.append(e.getMessage());
+                errorMsg.append("\n");
+                
+            }
+        }
+
+        model.addAttribute("success_alert_msg", successMsg.toString());
+        model.addAttribute("error_alert_msg", errorMsg.toString());
+        
 		return "sites/project/statistics";
 	}
 }
