@@ -170,8 +170,8 @@ public class EventParser {
             label.append(" ");
         }
         node.setId(event.getAppellationEventID());
-       
-        node.setConceptId(label.toString());
+
+        node.setConceptId(label.toString().trim());
         
         if (node.getConceptId() != null) {
             node.setLabel(conceptCollectionManager.getConceptLemmaFromConceptId(node.getConceptId()));
