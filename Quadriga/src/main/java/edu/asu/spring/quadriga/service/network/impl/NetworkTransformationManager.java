@@ -97,7 +97,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         if (networkList == null) {
             return null;
         }
-        
+
         Map<String, Node> searchNodes = new HashMap<String, Node>();
         List<Link> searchLinks = new ArrayList<Link>();
         for (INetwork network : networkList) {
