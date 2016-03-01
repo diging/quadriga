@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -49,6 +50,8 @@ public class NetworkTransformer implements INetworkTransformer {
 		Map<String, Node> nodes = new HashMap<String, Node>();
         List<Link> links = new ArrayList<Link>();
         
+        Date start = new Date();
+        logger.info("========> Start: " + start);
 		if(networkTopNodesList!=null){
 
 			if( networkTopNodesList.size()>0 ){
@@ -71,6 +74,9 @@ public class NetworkTransformer implements INetworkTransformer {
 		}else{
 			return null;
 		}
+		Date end = new Date();
+		logger.info("=========> End: " + end);
+		logger.info("Total: " + (end.getTime() - start.getTime()));
 
 		ITransformedNetwork networkJson = new TransformedNetwork(nodes, links);
 
