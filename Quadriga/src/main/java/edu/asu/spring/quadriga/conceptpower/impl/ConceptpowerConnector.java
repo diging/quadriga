@@ -8,6 +8,7 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +17,7 @@ import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 
 /**
  * This class provides functionality to search Conceptpower.
- * @author Julia Damerow
+ * @author Julia Damerow, satyaswaroop
  *
  */
 @Service
@@ -42,6 +43,7 @@ public class ConceptpowerConnector implements IConceptpowerConnector {
      * @see edu.asu.spring.quadriga.conceptpower.impl.IConceptpowerConnector#search(java.lang.String, java.lang.String)
      */
     @Override
+    @Cacheable(value="concepts")
     public ConceptpowerReply search(String item, String pos) {
         Map<String, String> vars = new HashMap<String, String>();
         vars.put("name", item);
@@ -55,12 +57,11 @@ public class ConceptpowerConnector implements IConceptpowerConnector {
      * @see edu.asu.spring.quadriga.conceptpower.impl.IConceptpowerConnector#getById(java.lang.String)
      */
     @Override
+    @Cacheable(value="concepts", key="#id")
     public ConceptpowerReply getById(String id) {
         Map<String, String> vars = new HashMap<String, String>();
         //vars.put("name", id);
         String url = conceptURL + idUrl + id.trim();
-        String test = restTemplate.getForObject(url, String.class, vars);
-
         return restTemplate.getForObject(url, ConceptpowerReply.class, vars);
     }
 }
