@@ -23,6 +23,14 @@ import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 
+/**
+ * Class responsible for transforming networks retrieved from QStore into that have 
+ * Appellation and Relation Events into S-P-O networks that are collapsed for S and O nodes,
+ * but have unique P nodes.
+ * 
+ * @author jdamerow
+ *
+ */
 @Service
 public class NetworkTransformer implements INetworkTransformer {
 
