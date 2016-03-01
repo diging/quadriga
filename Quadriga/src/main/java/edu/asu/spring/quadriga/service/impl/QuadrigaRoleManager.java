@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +144,16 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	@Override
 	public List<IQuadrigaRole> getQuadrigaRoles(String type) {
 		return rolesMap.get(type);
+	}
+	
+	@Override
+    public List<IQuadrigaRole> getSelectableQuarigaRoles(String type) {
+	    List<IQuadrigaRole> selectableRoles = new ArrayList<IQuadrigaRole>();
+	    for (IQuadrigaRole role : rolesMap.get(type)) {
+	        if (role.isSelectable())
+	            selectableRoles.add(role);
+	    }
+	    return selectableRoles;
 	}
 
 }

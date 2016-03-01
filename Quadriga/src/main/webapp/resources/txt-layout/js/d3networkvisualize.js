@@ -46,8 +46,8 @@ function d3init(graph, networkId, path,type) {
 
 
 	var vis = d3.select("#chart").append("svg:svg")
-			.attr("width", width)
-			.attr("height", height)
+			//.attr("width", width)
+			//.attr("height", height)
 			.append('svg:g')
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
@@ -214,8 +214,7 @@ function d3init(graph, networkId, path,type) {
 	function  redraw() {
 		console.log("here", d3.event.translate, d3.event.scale);
 		vis.attr("transform",
-				"translate(" + d3.event.translate + ")"
-				+ " scale(" + d3.event.scale + ")");
+				" scale(" + d3.event.scale + ")");
 	};
 //	Works on loading the network and placing the nodes randomly for view
 

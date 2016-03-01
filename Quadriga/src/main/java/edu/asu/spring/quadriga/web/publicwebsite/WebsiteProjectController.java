@@ -15,23 +15,31 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import edu.asu.spring.quadriga.profile.ISearchResult;
+import edu.asu.spring.quadriga.profile.IService;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.context.Theme;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -63,7 +71,6 @@ public class WebsiteProjectController {
 	
 	@Autowired
     private Environment env;
-
 	
 	public IRetrieveProjectManager getProjectManager() {
 		return projectManager;
@@ -73,7 +80,7 @@ public class WebsiteProjectController {
 		this.projectManager = projectManager;
 	}
 	
-	private IProject getProjectDetails(String name) throws QuadrigaStorageException{
+	private IProject getProjectDetails(String name) throws QuadrigaStorageException {
 		return projectManager.getProjectDetailsByUnixName(name);
 	}
 
@@ -172,6 +179,9 @@ public class WebsiteProjectController {
 		model.addAttribute("project", project);
 		
 		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+
+		// test the transformed networks
+
 		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
