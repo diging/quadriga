@@ -24,9 +24,9 @@ import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 
 /**
- * Class responsible for transforming networks retrieved from QStore into that have 
- * Appellation and Relation Events into S-P-O networks that are collapsed for S and O nodes,
- * but have unique P nodes.
+ * Class responsible for transforming networks retrieved from QStore into that
+ * have Appellation and Relation Events into S-P-O networks that are collapsed
+ * for S and O nodes, but have unique P nodes.
  * 
  * @author jdamerow
  *
@@ -34,53 +34,55 @@ import edu.asu.spring.quadriga.transform.Node;
 @Service
 public class NetworkTransformer implements INetworkTransformer {
 
-	@Autowired
-	private INetworkManager networkManager;
+    @Autowired
+    private INetworkManager networkManager;
 
-	@Autowired
-	private IConceptCollectionManager conceptCollectionManager;
+    @Autowired
+    private IConceptCollectionManager conceptCollectionManager;
 
-	@Autowired
-	private EventParser parser;
+    @Autowired
+    private EventParser parser;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(NetworkTransformer.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(NetworkTransformer.class);
 
-
-	/**
-	 * 
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ITransformedNetwork transformNetwork(List<INetworkNodeInfo> networkTopNodesList){
-		Map<String, Node> nodes = new HashMap<String, Node>();
+    /**
+     * 
+     * {@inheritDoc}
+     */
+    @Override
+    public ITransformedNetwork transformNetwork(
+            List<INetworkNodeInfo> networkTopNodesList) {
+        Map<String, Node> nodes = new HashMap<String, Node>();
         List<Link> links = new ArrayList<Link>();
-        
-        if(networkTopNodesList!=null){
 
-			if( networkTopNodesList.size()>0 ){
-				Iterator <INetworkNodeInfo> topNodeIterator = networkTopNodesList.iterator();
-				while(topNodeIterator.hasNext()){
-					INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
-					if(networkNodeInfo.getStatementType().equals(INetworkManager.RELATIONEVENT)){					    
-					    try {
-                            parser.parseStatement(networkNodeInfo.getId(), nodes, links);
+        if (networkTopNodesList != null) {
+
+            if (networkTopNodesList.size() > 0) {
+                Iterator<INetworkNodeInfo> topNodeIterator = networkTopNodesList
+                        .iterator();
+                while (topNodeIterator.hasNext()) {
+                    INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
+                    if (networkNodeInfo.getStatementType().equals(
+                            INetworkManager.RELATIONEVENT)) {
+                        try {
+                            parser.parseStatement(networkNodeInfo.getId(),
+                                    nodes, links);
                         } catch (JAXBException e) {
-                            logger.error("Issue while parsing the JAXB object",e);
+                            logger.error("Issue while parsing the JAXB object",
+                                    e);
                         } catch (QStoreStorageException e) {
-                            logger.error("QStore retrieve error",e);
+                            logger.error("QStore retrieve error", e);
                         }
-					}
-				}
-			}else{
-				return null;
-			}
-		}else{
-			return null;
-		}
-		
+                    }
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+
         return new TransformedNetwork(nodes, links);
-	}
+    }
 }
-
-
