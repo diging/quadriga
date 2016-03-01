@@ -5,9 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.codehaus.jettison.json.JSONException;
 import org.junit.Before;
@@ -17,9 +15,8 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
@@ -42,11 +39,11 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 public class ConceptCollectionManagerTest {
 
     @Mock
-    private RestTemplate mockedRestTemplate = Mockito.mock(RestTemplate.class);
-
-    @Mock
     private IConceptCollectionDeepMapper mockedConceptCollectionDeepMapper = Mockito
             .mock(IConceptCollectionDeepMapper.class);
+    
+    @Mock
+    private IConceptpowerConnector cpConnector;
 
     @Mock
     private IProjectShallowMapper mockedProjectShallowMapper = Mockito.mock(IProjectShallowMapper.class);
@@ -63,18 +60,10 @@ public class ConceptCollectionManagerTest {
     @Mock
     private IConceptCollectionDAO mockedccDao = Mockito.mock(IConceptCollectionDAO.class);
 
-    private String conceptURL = "conceptURL";
-
-    private String searchURL = "searchURL";
-
-    private String updateURL = "updateURL";
-
     @InjectMocks
     private ConceptCollectionManager conceptCollectionManagerUnderTest;
 
     private Concept concept;
-
-    private Map<String, String> vars2;
 
     @Before
     public void setUp() throws QuadrigaStorageException {
@@ -86,26 +75,6 @@ public class ConceptCollectionManagerTest {
         conceptEntries.add(entry);
         ConceptpowerReply rep = new ConceptpowerReply();
         rep.setConceptEntry(conceptEntries);
-
-        ReflectionTestUtils.setField(conceptCollectionManagerUnderTest, "conceptURL", conceptURL);
-        ReflectionTestUtils.setField(conceptCollectionManagerUnderTest, "searchURL", searchURL);
-        ReflectionTestUtils.setField(conceptCollectionManagerUnderTest, "updateURL", updateURL);
-
-        Map<String, String> vars = new HashMap<String, String>();
-        vars.put("name", "item");
-        vars.put("pos", "pos");
-
-        vars2 = new HashMap<String, String>();
-        vars2.put("name", "id");
-
-        Mockito.when(mockedRestTemplate.getForObject(Matchers.eq(conceptURL + searchURL + "{name}/{pos}"),
-                Matchers.eq(ConceptpowerReply.class), Matchers.eq(vars))).thenReturn(rep);
-
-        Mockito.when(mockedRestTemplate.getForObject(Matchers.eq(conceptURL + searchURL + "{name}"),
-                Matchers.eq(ConceptpowerReply.class), Matchers.eq(vars2))).thenReturn(rep);
-
-        Mockito.when(mockedRestTemplate.getForObject(Matchers.eq(conceptURL + updateURL + "{name}"),
-                Matchers.eq(ConceptpowerReply.class), Matchers.eq(vars2))).thenReturn(rep);
 
         Project project = new Project();
         project.setCreatedBy("createdBy");
@@ -123,6 +92,9 @@ public class ConceptCollectionManagerTest {
         List<IProject> ccProjectsList2 = new ArrayList<IProject>();
         ccProjectsList2.add(project);
         ccProjectsList2.add(project2);
+        
+        Mockito.when(cpConnector.search("item", "pos")).thenReturn(rep);
+        Mockito.when(cpConnector.getById("id")).thenReturn(rep);
 
         Mockito.when(mockedProjectShallowMapper.getProjectList("username")).thenReturn(ccProjectsList2);
         Mockito.when(mockedProjectShallowMapper.getCollaboratorProjectListOfUser("ccId")).thenReturn(ccProjectsList);
@@ -156,11 +128,12 @@ public class ConceptCollectionManagerTest {
 
         ConceptpowerReply reply = conceptCollectionManagerUnderTest.search("item", "pos");
         assertNotNull(reply);
+        assertEquals(1, reply.getConceptEntry().size());
+        assertEquals("test-lemma", reply.getConceptEntry().get(0).getLemma());
     }
 
     @Test
     public void testSearchNegative() {
-
         ConceptpowerReply reply = conceptCollectionManagerUnderTest.search(null, null);
         assertNull(reply);
     }
@@ -176,10 +149,9 @@ public class ConceptCollectionManagerTest {
         List<ConceptpowerReply.ConceptEntry> conceptEntries2 = new ArrayList<ConceptpowerReply.ConceptEntry>();
         ConceptpowerReply repWithNoEntries = new ConceptpowerReply();
         repWithNoEntries.setConceptEntry(conceptEntries2);
-        Mockito.when(mockedRestTemplate.getForObject(Matchers.eq(conceptURL + updateURL + "{name}"),
-                Matchers.eq(ConceptpowerReply.class), Matchers.eq(vars2))).thenReturn(repWithNoEntries);
-        String result = conceptCollectionManagerUnderTest.getConceptLemmaFromConceptId("id");
-        assertEquals("id", result);
+        Mockito.when(cpConnector.getById("id2")).thenReturn(repWithNoEntries);
+        String result = conceptCollectionManagerUnderTest.getConceptLemmaFromConceptId("id2");
+        assertEquals("id2", result);
     }
 
     private void mockConceptCollectionDeepMapper(IConceptCollection returnType) throws QuadrigaStorageException {
