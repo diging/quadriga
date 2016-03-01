@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.transform.Link;
+import edu.asu.spring.quadriga.transform.Node;
 
 @PropertySource(value = "classpath:/user.properties")
 @Controller
@@ -213,7 +215,7 @@ public class WebsiteProjectController {
 		return "sites/networks/visualize";
 	}
 	
-	public static JSONObject sortByValue(Map<String, Integer> map) throws JSONException {
+	public static JSONArray sortByValue(Map<String, Integer> map, Map<String, String[]> map2) throws JSONException {
         List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(map.entrySet());
     
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
@@ -222,13 +224,20 @@ public class WebsiteProjectController {
                 return (m2.getValue()).compareTo(m1.getValue());
             }
         });
-   
-        JSONObject jo = new JSONObject();
+        
+        JSONArray obj = new JSONArray();
+       
         for (int k = 0; k< (list.size()>10?10:list.size()); k++){
-            Map.Entry<String, Integer> entry = list.get(k); 
-            jo.put(entry.getKey(), entry.getValue());
+            Map.Entry<String, Integer> entry = list.get(k);
+            String[] temp = map2.get(entry.getKey());
+            JSONObject jo = new JSONObject();
+            jo.put("conceptId",entry.getKey());
+            jo.put("description", temp[0]);
+            jo.put("label", temp[1]);
+            jo.put("frequency", entry.getValue());
+            obj.put(jo);
         }
-        return jo;
+        return obj;
     }
 	
 	/**
@@ -253,7 +262,8 @@ public class WebsiteProjectController {
         String projectid = project.getProjectId();
         List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
         HashMap<String,Integer> top10Concepts = new HashMap<String, Integer>();
-        JSONObject jo = new JSONObject();
+        HashMap<String,String[]> top10ConceptsDetails = new HashMap<String, String[]>();
+        JSONArray jo = new JSONArray();
         StringBuffer errorMsg = new StringBuffer();
         StringBuffer successMsg = new StringBuffer();
         //List<String> networkNames = null;
@@ -266,11 +276,15 @@ public class WebsiteProjectController {
                 if(transformedNetwork!=null){
                     List<Link> links = transformedNetwork.getLinks();
                     for(int itr=0; itr< links.size(); itr++){
-                        String url = links.get(itr).getSubject().getConceptId();
+                        Node s = links.get(itr).getSubject();
+                        String url = s.getConceptId();
+                        String des = s.getDescription();
+                        String lbl = s.getLabel(); 
                         if(top10Concepts.containsKey(url)){
                             top10Concepts.put(url, top10Concepts.get(url)+1);
                         }else{
                             top10Concepts.put(url, 1);
+                            top10ConceptsDetails.put(url, new String[] {des, lbl});
                         }
                     }
                     
@@ -278,7 +292,7 @@ public class WebsiteProjectController {
              
             }
             try {
-                jo = sortByValue(top10Concepts);
+                jo = sortByValue(top10Concepts, top10ConceptsDetails);
                 model.addAttribute("show_success_alert", true);
                 successMsg.append("Top10 Concepts from network fetched successfully");
                 successMsg.append("\n");
