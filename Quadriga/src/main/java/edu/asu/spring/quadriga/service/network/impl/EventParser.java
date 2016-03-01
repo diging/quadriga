@@ -86,25 +86,13 @@ public class EventParser {
 
     
     public void parseStatement(String relationEventId, Map<String, Node> nodes, List<Link> links) throws JAXBException, QStoreStorageException {
-        Date start = new Date();
-        logger.info("========> Start retrieving: " + start);
         ElementEventsType elementEventType = getElementEventTypeFromCreationEventTypeID(relationEventId);
         List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
         Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-        Date end = new Date();
-        logger.info("=========> End retrieving: " + end);
-        logger.info("Total retrieving: " + (end.getTime() - start.getTime()));
-        
+         
         while (creationEventIterator.hasNext()) {
-            Date beforeNext = new Date();
             CreationEvent event = creationEventIterator.next();
-            Date afterNext = new Date();
-            logger.info("Total next: " + (afterNext.getTime() - beforeNext.getTime()));
-            
-            Date beforeParse = new Date();
             parseSubjectOrObjectEvent(event, relationEventId, nodes, links);
-            Date afterParse = new Date();
-            logger.info("Total parse: " + (afterParse.getTime() - beforeParse.getTime()));
         }
         
     }
