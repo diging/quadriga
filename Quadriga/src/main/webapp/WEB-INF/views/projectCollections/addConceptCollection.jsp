@@ -32,7 +32,7 @@
 
 	<form:form method="POST" action="addCollectionsForm">
 		<header>
-			<h2> Add concept collection </h2>
+			<h2>Add concept collection</h2>
 		</header>
 		
 		<table>
