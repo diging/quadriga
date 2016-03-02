@@ -1,5 +1,3 @@
-
-
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec"
@@ -34,6 +32,10 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+<style> 
+li{
+list-style-type: none;}
+</style>
 </head>
 
 <body>
@@ -75,24 +77,21 @@
 		</nav>
 
 
-		<%-- 
- <tiles:insertAttribute name="content" /> is  added for displaying content which is
-  specific only to publicnetworkvisual.jsp page.  --%>
 
 
 			<div  class="col-md-8" style="text-align:center">				
 					<div class="content content=left">
 					<!-- Content -->
-					<article class="is-page-content">
+					
 						<tiles:insertAttribute name="content" />
-					</article>
+					
 					<!-- /Content -->				
 			</div>
 			</div>
-			<div  class="col-md-4" style="text-align:right">
+			<div  class="col-md-4" style="text-align:center">
 					<!-- Sidebar -->
 					<!-- Recent Posts -->
-					<div class="sidebar"><tiles:insertAttribute name="right-navigation" /></div>
+					<tiles:insertAttribute name="right-navigation" />
 					<!-- /Recent Posts -->
 					<!-- /Sidebar -->
 			</div>
@@ -113,34 +112,12 @@
 				|| document
 						.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
 	</script>
-	<script src="../../dist/js/bootstrap.min.js"></script>
-
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/config.js"></script>
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel.min.js"></script>
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel-ui.min.js"></script>
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/networkvisualize.js"></script>
-	 <script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-ui.js"></script>
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkspublic.js"></script>
-	<!--  <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>-->
-	<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
-	<script
-		src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
-	<script
-		src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-	<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+	<!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+	
+	<script
+		  src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkspublic.js"></script> 
+	
+	
 </body>
 </html>
