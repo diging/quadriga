@@ -9,6 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <title><tiles:insertAttribute name="title" /></title>
 
     <!-- Bootstrap core CSS -->
@@ -16,62 +18,20 @@
 
     <!-- Custom styles for this template -->
     <link href="${pageContext.servletContext.contextPath}/resources/public/css/navbar.css" rel="stylesheet">
-  
-	<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.1/css/jquery.dataTables.css">
-	<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
-	<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.1/jquery.dataTables.min.js"></script>
 
-	<script type="text/javascript" charset="utf8">
-			$(document).ready(function(){
-			  $('#example').dataTable({
-				"sPaginationType" : "full_numbers",
-				"bLengthChange": false,
-				"bAutoWidth" : false
-			  });
-			});
-			
-			$(document).ready(function() {
-			    // Configure/customize these variables.
-			    var showChar = 100;  // How many characters are shown by default
-			    var ellipsestext = "...";
-			    var moretext = "Show more >";
-			    var lesstext = "Show less";
-			    
-			    $('.more').each(function() {
-			        var content = $(this).html();
-			        if(content.length > showChar) {
-			            var c = content.substr(0, showChar);
-			            var h = content.substr(showChar, content.length - showChar);			 
-			            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
-			 
-			            $(this).html(html);
-			        }
-			    });
-			 
-			    $(".morelink").click(function(){
-			        if($(this).hasClass("less")) {
-			            $(this).removeClass("less");
-			            $(this).html(moretext);
-			        } else {
-			            $(this).addClass("less");
-			            $(this).html(lesstext);
-			        }
-			        $(this).parent().prev().toggle();
-			        $(this).prev().toggle();
-			        return false;
-			    });
-			});
-			
-		</script>
-		<style type="text/css">
-			.morecontent span {  display: none; }
-			.morelink {  display: block; }
-		</style>				
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
   <body>
   <tiles:importAttribute name="currentPage" scope="request" />
+  
+
     <div class="container">
+
       <!-- Static navbar -->
       <nav class="navbar navbar-default navbar-colored">
         <div class="container-fluid">
@@ -82,11 +42,10 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">${project.projectName}</a>
+            <a class="navbar-brand" href="">Quadriga Network Sites</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <tiles:insertAttribute name="navigationSites" /> 
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <tiles:insertAttribute name="navigation" />  
@@ -94,7 +53,20 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
+
       <tiles:insertAttribute name="content" />
+
+
     </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
