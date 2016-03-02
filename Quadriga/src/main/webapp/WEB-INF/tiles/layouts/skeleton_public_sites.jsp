@@ -42,11 +42,10 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">${project.projectName}</a>
+            <a class="navbar-brand" href="">Quadriga Network Sites</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <tiles:insertAttribute name="navigationSites" /> 
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <tiles:insertAttribute name="navigation" />  
