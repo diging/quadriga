@@ -67,8 +67,8 @@
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections">Delete</a></li>
 			</ul>
 		</li>
-		<!-- 
-		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
+		
+		<!-- <li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
 		<ul>
 			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">
 			Add</a></li>
@@ -79,6 +79,11 @@
 			Update</a></li>
 		</ul>
 		</li>
-		 -->
-	</ul>
+	</ul> -->
 </div>
+<hr>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/publicPageContent"><i class="fa fa-cog">   Public Page Settings</a></i>
+		
+		
+		
+		
