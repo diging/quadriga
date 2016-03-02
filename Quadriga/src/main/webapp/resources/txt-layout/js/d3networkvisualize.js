@@ -634,7 +634,7 @@ function d3init(graph, networkId, path,type) {
 		$('#inner-details').html(html);	
 		// This function annotate for node
 		// This works on annot_node tag in the pop.
-		$('#annot_relation').click(function() {
+		$('#annot_node,#annot_relation').click(function() {
 			//Type = node
 			var type1 ="node";
 
