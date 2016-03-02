@@ -634,7 +634,7 @@ function d3init(graph, networkId, path,type) {
 		$('#inner-details').html(html);	
 		// This function annotate for node
 		// This works on annot_node tag in the pop.
-		$('#annot_node').click(function() {
+		$('#annot_relation').click(function() {
 			//Type = node
 			var type1 ="node";
 
@@ -671,7 +671,7 @@ function d3init(graph, networkId, path,type) {
 
 
 			// Saves the relation annotation to DB
-			$('#annot_submit').click(function(event) {
+			$('#annot_relation,#annot_submit').click(function(event) {
 				var annottext = $('#'+text1ID+'').val();  
 				var objecttype = "node";
 				$.ajax({
@@ -690,6 +690,9 @@ function d3init(graph, networkId, path,type) {
 				event.preventDefault();
 
 			});
+			
+			
+			
 
 
 			$('#annot_details').html(content);
@@ -704,6 +707,8 @@ function d3init(graph, networkId, path,type) {
 			});
 		});
 
+		
+		
 
 		$('#annot_relation').click(function() {
 			var objecttype = "relation";
