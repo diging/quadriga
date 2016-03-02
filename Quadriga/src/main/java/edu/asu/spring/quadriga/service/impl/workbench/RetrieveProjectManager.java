@@ -28,7 +28,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Autowired
 	private IProjectShallowMapper projectShallowMapper;	
 
-
 	@Autowired
 	private IProjectDeepMapper projectDeepMapper;	
 
@@ -56,15 +55,17 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	}
 	
 	/**
-	 * 
-	 */
+     * This method retrieves the list of projects associated with the accessibility of the project. 
+     * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
+     * @param accessibility - accessibility of the project.
+     * @return List<IProject> - list of projects associated with the accessibility of the project.
+     * @throws QuadrigaStorageException
+     */
 	@Override
 	@Transactional
 	public List<IProject> getProjectListByAccessibility(String accessibility) throws QuadrigaStorageException
 	{
-		List<IProject> projectList;
-		projectList =  projectShallowMapper.getProjectList(accessibility);
-		return projectList;
+		return projectShallowMapper.getProjectList(accessibility);
 	}
 	
 	/**

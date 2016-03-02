@@ -55,10 +55,7 @@ public class HomeController {
     @Autowired
     private IUserProfileManager profileManager;
 
-	@Autowired 
-	private IRetrieveProjectManager projectManager;
-
-    @Autowired
+	@Autowired
     private IUserManager userManager;
 
     @Autowired
