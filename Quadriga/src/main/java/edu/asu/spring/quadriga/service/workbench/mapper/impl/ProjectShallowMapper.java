@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.impl.workbench.RetrieveProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
@@ -216,6 +217,38 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 	public List<IProject> getProjectListByCollaboratorRole(String userName,
 			String collaboratorRole) throws QuadrigaStorageException{
 		List<ProjectDTO> projectDTOList = dbConnect.getProjectDTOListByCollaboratorRole(userName,collaboratorRole);
+		List<IProject> projectList = null;
+		if(projectDTOList!=null){
+			for(ProjectDTO projectDTO : projectDTOList){
+				if(projectList == null){
+					projectList = new ArrayList<IProject>();
+				}
+				IProject projectProxy = new ProjectProxy(projectManager);
+				projectProxy.setProjectId(projectDTO.getProjectid());
+				projectProxy.setProjectName(projectDTO.getProjectname());
+				projectProxy.setDescription(projectDTO.getDescription());
+				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+				projectProxy.setUnixName(projectDTO.getUnixname());
+				projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setCreatedBy(projectDTO.getCreatedby());
+				projectProxy.setCreatedDate(projectDTO.getCreateddate());
+				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
+				projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
+				projectList.add(projectProxy);
+			}
+		}
+		
+		return projectList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IProject> getProjectListByAccesibility(String accessibility)
+			throws QuadrigaStorageException{
+		List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOByAccessibility(accessibility);
 		List<IProject> projectList = null;
 		if(projectDTOList!=null){
 			for(ProjectDTO projectDTO : projectDTOList){

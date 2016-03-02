@@ -35,6 +35,7 @@ public interface IProjectShallowMapper {
 	 */
 	public abstract IProject getProjectDetails(String projectId)
 			throws QuadrigaStorageException;
+	
 
 	/**
 	 * This class should get a {@link List} of {@link IProject} of domain class type {@link ProjectProxy} to which the user is collaborator based on username.
@@ -82,5 +83,13 @@ public interface IProjectShallowMapper {
 	public abstract IProject getProjectDetails(ProjectDTO projectDTO)
 			throws QuadrigaStorageException;
 
+	/**
+	 * 
+	 * @param accesibility
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract List<IProject> getProjectListByAccesibility(String accesibility)
+			throws QuadrigaStorageException;
 	
 }
