@@ -47,10 +47,9 @@
 	</definition>
 	
 	<definition name="base.definition.public"
-        template="/WEB-INF/tiles/layouts/skeleton_public.jsp">
+        template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp">
         <put-attribute name="title" value="" />
-        <put-attribute name="navigation"
-            value="/WEB-INF/views/public/navbar.jsp" />
+        <put-attribute name="navigation" value="" />  	
         <put-attribute name="footer" value="/tiles/credits.jsp" />
         <put-attribute name="currentPage" value="home" />
     </definition>
@@ -61,9 +60,17 @@
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
 	
+	<!-- Sites pages -->
+	<definition name="sites" extends="base.definition.public">
+		<put-attribute name="title" value="Quadriga - Public Sites" />
+        <put-attribute name="navigation" value="/WEB-INF/views/public/sitesnavbarleft.jsp"  />          
+		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
+	</definition>
+
+
 	<!-- About page -->
 	<definition name="auth/about" extends="base.definition.nonav">
-	    <put-attribute name="title" value="Quadruga - Introduction" />
+	    <put-attribute name="title" value="Quadriga - Introduction" />
 		<put-attribute name="content" value="/WEB-INF/views/about.jsp"/>
 		<put-attribute name="currentPage" value="about" />
 	</definition>
