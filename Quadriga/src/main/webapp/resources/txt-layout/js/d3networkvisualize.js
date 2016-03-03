@@ -46,8 +46,8 @@ function d3init(graph, networkId, path,type) {
 
 
 	var vis = d3.select("#chart").append("svg:svg")
-			//.attr("width", width)
-			//.attr("height", height)
+			.attr("width", width)
+			.attr("height", height)
 			.append('svg:g')
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
@@ -618,22 +618,22 @@ function d3init(graph, networkId, path,type) {
 		if(d.group==1){
 
 			html = "<div id='popup' title='Annotation' >" +
-			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
-			"</br>" +
-			"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
-			"</br>" +
+			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +			
 			"</div>";
 		}
 		// Annotate on node
 		else{
 			html = "<div id='popup' title='Annotation'>" +
 			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
+			"</br>" +
+			"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
+			"</br>" +
 			"</div>";
 		}				
 		$('#inner-details').html(html);	
 		// This function annotate for node
 		// This works on annot_node tag in the pop.
-		$('#annot_node').click(function() {
+		$('#annot_node,#annot_relation').click(function() {
 			//Type = node
 			var type1 ="node";
 
