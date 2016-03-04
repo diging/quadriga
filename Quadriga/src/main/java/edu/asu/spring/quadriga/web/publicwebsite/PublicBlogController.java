@@ -44,7 +44,17 @@ public class PublicBlogController {
 		}
 		// Creating Dummy Object
 		List dummyList = new ArrayList ();
-		for(int i=1; i<=10; i++)
+		HashMap <String, String> map = new HashMap<String, String>();
+		map.put("title", "Article: Apple’s iPhone Blunder");
+		map.put("text", "<b> Can the United States <b> government compel Apple to help break into the phone of Syed Rizwan Farook, who, along with his wife Tafsheen Malil, gunned down fourteen innocent people last December at the Inland Regional Center in San Bernardino? That question has sparked fireworks in recent days. The dispute arises because Apple has equipped its new iPhones with encryption settings that erase the data contained on the phone whenever ten false password entries have been made. It was agreed on all sides that only Apple has the technology that might overcome the encryption device. [...]");
+		map.put("date", "February 22, 2016");
+		map.put("author", "Daniel T. Richards ");
+
+		dummyList.add(map);
+
+
+
+/*		for(int i=1; i<=10; i++)
 		{
 			HashMap <String, String> map = new HashMap<String, String>();
 			map.put("title", "Title "+i);
@@ -53,7 +63,7 @@ public class PublicBlogController {
 			map.put("author", "Author "+i);
 
 			dummyList.add(map);
-		}
+		} */
 	    model.addAttribute("blockentrylist", dummyList);
 
 		return "sites/projectblog";
