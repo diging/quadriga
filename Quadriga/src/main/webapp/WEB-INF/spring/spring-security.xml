@@ -40,7 +40,7 @@
 		<intercept-url pattern="/**" access="denyAll" />
 		
 		<form-login login-page="/login" default-target-url="/auth/welcome"
-			authentication-failure-url="/loginfailed" />
+			authentication-failure-url="/loginfailed" authentication-success-handler-ref="authSuccessHandler" />
 		<logout logout-success-url="/logout" invalidate-session="true" />
 	</http>
 	
