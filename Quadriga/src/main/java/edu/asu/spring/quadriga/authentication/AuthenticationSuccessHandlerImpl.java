@@ -33,6 +33,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
             String userName = quadrigaUserDetails.getUsername();
             quadrigaUserDetails.setUsername(userName.toLowerCase());
         }
-        response.sendRedirect("/quadriga/auth/welcome");
+        response.sendRedirect(request.getContextPath() + "/auth/welcome");
     }
 }
