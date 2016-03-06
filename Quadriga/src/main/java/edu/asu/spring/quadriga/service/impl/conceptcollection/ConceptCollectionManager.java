@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -60,24 +61,11 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     @Autowired
     private IConceptFactory conceptFactory;
 
-    @Inject
-    @Named("restTemplate")
-    private RestTemplate restTemplate;
-
-    @Autowired
-    @Qualifier("conceptPowerURL")
-    private String conceptURL;
-
-    @Autowired
-    @Qualifier("searchConceptPowerURLPath")
-    private String searchURL;
-
-    @Autowired
-    @Qualifier("updateConceptPowerURLPath")
-    private String updateURL;
-
     @Autowired
     private IConceptCollectionDeepMapper conceptCollectionDeepMapper;
+    
+    @Autowired
+    private IConceptpowerConnector conceptpowerConnector;
 
     @Autowired
     private IQuadrigaRoleManager roleMapper;
@@ -159,12 +147,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
         if (item == null || item.isEmpty() || pos == null || pos.isEmpty())
             return null;
 
-        Map<String, String> vars = new HashMap<String, String>();
-        vars.put("name", item);
-        vars.put("pos", pos);
-
-        return restTemplate.getForObject(conceptURL + searchURL
-                + "{name}/{pos}", ConceptpowerReply.class, vars);
+        return conceptpowerConnector.search(item, pos);
     }
 
     /**
@@ -183,12 +166,8 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     public void update(String[] ids, IConceptCollection collection,
             String username) throws QuadrigaStorageException {
         for (String id : ids) {
-            Map<String, String> vars = new HashMap<String, String>();
-            vars.put("name", id);
-
             if ((id != null && !id.isEmpty())) {
-                ConceptpowerReply rep = restTemplate.getForObject(conceptURL + updateURL
-                        + "{name}", ConceptpowerReply.class, vars);
+                ConceptpowerReply rep = conceptpowerConnector.getById(id);
 
                 IConcept concept = conceptFactory.createConceptObject();
                 concept.setConceptId(id);
@@ -215,8 +194,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
         Map<String, String> vars = new HashMap<String, String>();
         vars.put("name", id.trim());
         String lemma = id;
-        ConceptpowerReply rep = restTemplate.getForObject(conceptURL
-                + updateURL + "{name}", ConceptpowerReply.class, vars);
+        ConceptpowerReply rep = conceptpowerConnector.getById(id);
         if (rep.getConceptEntry().size() == 0) {
             return lemma;
         }
