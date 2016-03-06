@@ -805,6 +805,12 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
+	
+	<definition name="sites/project/statistics" extends="base.definition.rightnav">
+		<put-attribute name="currentPage" value="statistics" />
+		<put-attribute name="title" value="Concepts in Network" />
+		<put-attribute name="content" value="/WEB-INF/views/publicnetworkvisual.jsp" />
+	</definition>
 
 	<definition name="auth/editing/history" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Networks Edit" />
