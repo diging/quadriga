@@ -63,7 +63,7 @@ public class RestAccessAspect {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName().toLowerCase();
 
-        if (userName == null || "".equals(userName)) {
+        if (userName == null || userName.isEmpty()) {
             throw new RestException(401);
         }
 
