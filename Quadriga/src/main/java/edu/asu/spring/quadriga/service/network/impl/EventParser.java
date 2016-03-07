@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,8 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
@@ -82,7 +85,7 @@ public class EventParser {
     private Environment env;
     
     @Autowired
-    private IConceptCollectionManager conceptCollectionManager;
+    private IConceptpowerConnector conceptPowerConnector;
 
     
     public void parseStatement(String relationEventId, Map<String, Node> nodes, List<Link> links) throws JAXBException, QStoreStorageException {
@@ -176,8 +179,17 @@ public class EventParser {
         node.setConceptId(label.toString());
         
         if (node.getConceptId() != null) {
-            node.setLabel(conceptCollectionManager.getConceptLemmaFromConceptId(node.getConceptId()));
-            node.setDescription(conceptCollectionManager.getConceptDescriptionFromConceptId(node.getConceptId()));
+            String id = node.getConceptId();
+            
+            ConceptpowerReply re = conceptPowerConnector.getById(id);
+            String lemma = id;
+            if (re.getConceptEntry().size() == 0) {
+                node.setLabel(lemma);
+                node.setDescription(lemma);
+            }else{
+                node.setLabel(re.getConceptEntry().get(0).getLemma());
+                node.setDescription(re.getConceptEntry().get(0).getDescription());
+            }  
         }
         
         node.getStatementIds().add(statementId);

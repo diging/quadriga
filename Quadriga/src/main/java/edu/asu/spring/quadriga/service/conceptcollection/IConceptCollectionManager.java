@@ -127,8 +127,5 @@ public interface IConceptCollectionManager {
 
 
 	public abstract String getProjectsTree(String userName,String ccId) throws JSONException;
-
-
-    String getConceptDescriptionFromConceptId(String id);
 	
 }
