@@ -61,6 +61,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
@@ -83,6 +84,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private IQStoreConnector qStoreConnector;
+    
+    @Autowired
+    private INetworkXMLParser networkXMLParser;
     
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
@@ -502,6 +506,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     
     @Override
     public String storeNetworks(String xml) throws QStoreStorageException {
+    	networkXMLParser.storeText(xml);
         return qStoreConnector.store(xml);
     }
 
