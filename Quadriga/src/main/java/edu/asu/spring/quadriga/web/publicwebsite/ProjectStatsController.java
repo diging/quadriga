@@ -9,16 +9,8 @@ package edu.asu.spring.quadriga.web.publicwebsite;
  */
 
 
-import java.security.Principal;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
@@ -33,49 +25,46 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import edu.asu.spring.quadriga.domain.IConceptStats;
-import edu.asu.spring.quadriga.domain.impl.ConceptStats;
-import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.transform.Link;
-import edu.asu.spring.quadriga.transform.Node;
 
 @PropertySource(value = "classpath:/user.properties")
 @Controller
 public class ProjectStatsController {
-	
-	@Autowired 
+
+	@Autowired
 	private IRetrieveProjectManager projectManager;
-	
+
 	@Autowired
 	private INetworkManager networkmanager;
-	
+
 	@Autowired
-    private INetworkTransformationManager transformationManager;
-    	
+	private INetworkTransformationManager transformationManager;
+
+	@Autowired
+	private ProjectStats ps;
+
 	public IRetrieveProjectManager getProjectManager() {
 		return projectManager;
 	}
-	
-	private IProject getProjectDetails(String name) throws QuadrigaStorageException {
+
+	private IProject getProjectDetails(String name)
+	        throws QuadrigaStorageException {
 		return projectManager.getProjectDetailsByUnixName(name);
 	}
 
-	
 	private JSONArray getProjectStatsJson(List<IConceptStats> gtc)
 	        throws JSONException {
 		JSONArray obj = new JSONArray();
 
-		Properties p = System.getProperties();
-		p.list(System.out);
-
-		int len = gtc.size() > 10 ? 10 : gtc.size();
+		int cnt = System.getProperty("topCount") == null ? 0 : Integer
+		        .parseInt(System.getProperty("topCount"));
+		int len = gtc.size() > cnt ? cnt : gtc.size();
 
 		for (int k = 0; k < len; k++) {
 			JSONObject jo = new JSONObject();
@@ -90,10 +79,14 @@ public class ProjectStatsController {
 	}
 
 	/**
-	 * This method gives the visualization of  how often concepts appear in the networks
+	 * This method gives the visualization of how often concepts appear in the
+	 * networks
+	 * 
 	 * @author Bharath Srikantan & Ajay Modi
-	 * @param projectUnixName	The project unix name
-	 * @param model				Model
+	 * @param projectUnixName
+	 *            The project unix name
+	 * @param model
+	 *            Model
 	 * @return view
 	 * @throws JAXBException
 	 * @throws QuadrigaStorageException
@@ -116,7 +109,6 @@ public class ProjectStatsController {
 		StringBuffer errorMsg = new StringBuffer();
 
 		if (!Networks.isEmpty()) {
-			ProjectStats ps = new ProjectStats();
 			gtc = ps.getTopConcepts(Networks);
 
 			try {

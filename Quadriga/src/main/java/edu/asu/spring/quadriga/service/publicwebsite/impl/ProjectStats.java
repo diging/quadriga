@@ -20,9 +20,9 @@ import edu.asu.spring.quadriga.transform.Node;
 public class ProjectStats implements IProjectStats {
 
 	@Autowired
-    private INetworkTransformationManager transformationManager;
-    
-    @Override
+	private INetworkTransformationManager transformationManager;
+
+	@Override
 	public List<IConceptStats> getTopConcepts(List<INetwork> Networks)
 	        throws QuadrigaStorageException {
 		HashMap<String, ConceptStats> cStats = new HashMap<String, ConceptStats>();
