@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
@@ -31,6 +32,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import edu.asu.spring.quadriga.domain.IConceptStats;
+import edu.asu.spring.quadriga.domain.impl.ConceptStats;
 import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -38,6 +41,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
@@ -64,29 +68,22 @@ public class ProjectStatsController {
 	}
 
 	
-	public static JSONArray sortByValue(Map<String, Integer> map,
-	        Map<String, String[]> map2) throws JSONException {
-		List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(
-		        map.entrySet());
-
-		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-
-			public int compare(Map.Entry<String, Integer> m1,
-			        Map.Entry<String, Integer> m2) {
-				return (m2.getValue()).compareTo(m1.getValue());
-			}
-		});
-
+	private JSONArray getProjectStatsJson(List<IConceptStats> gtc)
+	        throws JSONException {
 		JSONArray obj = new JSONArray();
 
-		for (int k = 0; k < (list.size() > 10 ? 10 : list.size()); k++) {
-			Map.Entry<String, Integer> entry = list.get(k);
-			String[] temp = map2.get(entry.getKey());
+		Properties p = System.getProperties();
+		p.list(System.out);
+
+		int len = gtc.size() > 10 ? 10 : gtc.size();
+
+		for (int k = 0; k < len; k++) {
 			JSONObject jo = new JSONObject();
-			jo.put("conceptId", entry.getKey());
-			jo.put("description", temp[0]);
-			jo.put("label", temp[1]);
-			jo.put("frequency", entry.getValue());
+			IConceptStats c = gtc.get(k);
+			jo.put("conceptId", c.getConceptId());
+			jo.put("description", c.getDescription());
+			jo.put("label", c.getLemma());
+			jo.put("frequency", c.getCount());
 			obj.put(jo);
 		}
 		return obj;
@@ -114,38 +111,16 @@ public class ProjectStatsController {
 		String projectid = project.getProjectId();
 		List<INetwork> Networks = networkmanager
 		        .getNetworksInProject(projectid);
-		HashMap<String, Integer> top10Concepts = new HashMap<String, Integer>();
-		HashMap<String, String[]> top10ConceptsDetails = new HashMap<String, String[]>();
+		List<IConceptStats> gtc = new ArrayList<IConceptStats>();
 		JSONArray jo = new JSONArray();
 		StringBuffer errorMsg = new StringBuffer();
-		// List<String> networkNames = null;
+
 		if (!Networks.isEmpty()) {
+			ProjectStats ps = new ProjectStats();
+			gtc = ps.getTopConcepts(Networks);
 
-			for (int i = 0; i < Networks.size(); i++) {
-				Network n = (Network) Networks.get(i);
-				ITransformedNetwork transformedNetwork = transformationManager
-				        .getTransformedNetwork(n.getNetworkId());
-				if (transformedNetwork != null) {
-					List<Link> links = transformedNetwork.getLinks();
-					for (int itr = 0; itr < links.size(); itr++) {
-						Node s = links.get(itr).getSubject();
-						String url = s.getConceptId();
-						String des = s.getDescription();
-						String lbl = s.getLabel();
-						if (top10Concepts.containsKey(url)) {
-							top10Concepts.put(url, top10Concepts.get(url) + 1);
-						} else {
-							top10Concepts.put(url, 1);
-							top10ConceptsDetails.put(url, new String[] { des,
-							        lbl });
-						}
-					}
-
-				}
-
-			}
 			try {
-				jo = sortByValue(top10Concepts, top10ConceptsDetails);
+				jo = getProjectStatsJson(gtc);
 				model.addAttribute("jsonstring", jo);
 				model.addAttribute("networkid", "\"\"");
 				model.addAttribute("project", project);
@@ -154,7 +129,6 @@ public class ProjectStatsController {
 				model.addAttribute("show_error_alert", true);
 				errorMsg.append(e.getMessage());
 				errorMsg.append("\n");
-
 			}
 		}
 
