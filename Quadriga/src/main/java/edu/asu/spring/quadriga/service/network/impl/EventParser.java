@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +44,6 @@ import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
@@ -180,19 +178,28 @@ public class EventParser {
 		if (node.getConceptId() != null) {
 			String id = node.getConceptId();
 			ConceptpowerReply re = conceptPowerConnector.getById(id);
-			String lemma = id;
-			if (re.getConceptEntry().size() == 0) {
-				node.setLabel(lemma);
-				node.setDescription(lemma);
-			} else {
-				node.setLabel(re.getConceptEntry().get(0).getLemma());
-				node.setDescription(re.getConceptEntry().get(0)
-				        .getDescription());
-			}
+			node.setLabel(getLemma(re, id));
+			node.setDescription(getDesc(re, id));
 		}
 		node.getStatementIds().add(statementId);
 	}
     
+    private String getLemma(ConceptpowerReply re, String id){
+        String lemma = id;
+        if (re.getConceptEntry().size() != 0) {
+            return re.getConceptEntry().get(0).getLemma();
+        }
+        return lemma;
+    }
+
+    private String getDesc(ConceptpowerReply re, String id){
+        String desc = id;
+        if (re.getConceptEntry().size() != 0) {
+            return re.getConceptEntry().get(0).getDescription();
+        }
+        return desc;
+    }    
+
     private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
             throws JAXBException, QStoreStorageException {
         String xml = getCreationEventXmlStringFromQstore(relationEventId);
