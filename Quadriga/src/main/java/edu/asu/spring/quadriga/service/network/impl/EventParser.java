@@ -168,32 +168,30 @@ public class EventParser {
         return predNode;
     }
     
-    private void parseNode(AppellationEventType event, Node node, String statementId) {
-        StringBuffer label = new StringBuffer();
-        for (TermType type : event.getTerms()) {
-            label.append(type.getTermInterpertation());
-            label.append(" ");
-        }
-        node.setId(event.getAppellationEventID());
-        
-        node.setConceptId(label.toString());
-        
-        if (node.getConceptId() != null) {
-            String id = node.getConceptId();
-            
-            ConceptpowerReply re = conceptPowerConnector.getById(id);
-            String lemma = id;
-            if (re.getConceptEntry().size() == 0) {
-                node.setLabel(lemma);
-                node.setDescription(lemma);
-            }else{
-                node.setLabel(re.getConceptEntry().get(0).getLemma());
-                node.setDescription(re.getConceptEntry().get(0).getDescription());
-            }  
-        }
-        
-        node.getStatementIds().add(statementId);
-    }
+	private void parseNode(AppellationEventType event, Node node,
+	        String statementId) {
+		StringBuffer label = new StringBuffer();
+		for (TermType type : event.getTerms()) {
+			label.append(type.getTermInterpertation());
+			label.append(" ");
+		}
+		node.setId(event.getAppellationEventID());
+		node.setConceptId(label.toString());
+		if (node.getConceptId() != null) {
+			String id = node.getConceptId();
+			ConceptpowerReply re = conceptPowerConnector.getById(id);
+			String lemma = id;
+			if (re.getConceptEntry().size() == 0) {
+				node.setLabel(lemma);
+				node.setDescription(lemma);
+			} else {
+				node.setLabel(re.getConceptEntry().get(0).getLemma());
+				node.setDescription(re.getConceptEntry().get(0)
+				        .getDescription());
+			}
+		}
+		node.getStatementIds().add(statementId);
+	}
     
     private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
             throws JAXBException, QStoreStorageException {
