@@ -175,7 +175,7 @@ public class EventParser {
             label.append(" ");
         }
         node.setId(event.getAppellationEventID());
-       
+        
         node.setConceptId(label.toString());
         
         if (node.getConceptId() != null) {

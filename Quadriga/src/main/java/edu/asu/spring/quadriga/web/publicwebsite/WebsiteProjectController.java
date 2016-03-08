@@ -227,16 +227,16 @@ public class WebsiteProjectController {
 	
 	public static JSONArray sortByValue(Map<String, Integer> map, Map<String, String[]> map2) throws JSONException {
         List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(map.entrySet());
-    
+        
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-    
+            
             public int compare(Map.Entry<String, Integer> m1, Map.Entry<String, Integer> m2) {
                 return (m2.getValue()).compareTo(m1.getValue());
             }
         });
         
         JSONArray obj = new JSONArray();
-       
+        
         for (int k = 0; k< (list.size()>10?10:list.size()); k++){
             Map.Entry<String, Integer> entry = list.get(k);
             String[] temp = map2.get(entry.getKey());
@@ -249,7 +249,7 @@ public class WebsiteProjectController {
         }
         return obj;
     }
-	
+    
 	/**
 	 * This method gives the visualization of  how often concepts appear in the networks
 	 * @author Bharath Srikantan & Ajay Modi
@@ -261,7 +261,7 @@ public class WebsiteProjectController {
 	 */
 	@RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
 	public String showProjectStatistics(@PathVariable("projectUnixName") String projectUnixName,
-									   Model model)throws JAXBException, QuadrigaStorageException {
+        Model model)throws JAXBException, QuadrigaStorageException {
 		IProject project = getProjectDetails(projectUnixName);
 
 		if (project == null) {
@@ -278,7 +278,7 @@ public class WebsiteProjectController {
         StringBuffer successMsg = new StringBuffer();
         //List<String> networkNames = null;
         if(!Networks.isEmpty()){
-            
+
             for (int i = 0; i < Networks.size(); i++) {
                 Network n  = (Network) Networks.get(i);
                 ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(n.getNetworkId());
@@ -299,14 +299,10 @@ public class WebsiteProjectController {
                     }
                     
                 }
-             
+
             }
             try {
                 jo = sortByValue(top10Concepts, top10ConceptsDetails);
-                model.addAttribute("show_success_alert", true);
-                successMsg.append("Top10 Concepts from network fetched successfully");
-                successMsg.append("\n");
-                System.out.print(jo.toString());
                 model.addAttribute("jsonstring", jo);
                 model.addAttribute("networkid", "\"\"");
                 model.addAttribute("project", project);
@@ -319,9 +315,8 @@ public class WebsiteProjectController {
             }
         }
 
-        model.addAttribute("success_alert_msg", successMsg.toString());
         model.addAttribute("error_alert_msg", errorMsg.toString());
         
-		return "sites/project/statistics";
-	}
+        return "sites/project/statistics";
+    }
 }
