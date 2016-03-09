@@ -23,9 +23,6 @@ import edu.asu.spring.quadriga.service.textfile.ITextFileService;
 public class TextFileService implements ITextFileService {
 
     @Autowired
-    private TextFileDTO txtFileDTO;
-
-    @Autowired
     private ITextFileDAO txtFileDAO;
 
     @Autowired
@@ -34,9 +31,13 @@ public class TextFileService implements ITextFileService {
     @Autowired
     private Environment env;
 
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.service.textfile.ITextFileService#saveTextFile(edu.asu.spring.quadriga.domain.workspace.ITextFile)
-     * Service layer method to handle Text Management Operations
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.service.textfile.ITextFileService#saveTextFile(
+     * edu.asu.spring.quadriga.domain.workspace.ITextFile) Service layer method
+     * to handle Text Management Operations
      */
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
@@ -51,11 +52,12 @@ public class TextFileService implements ITextFileService {
 
     /**
      * @param txtFile
-     *          TextFile object to be updated in the database
+     *            TextFile object to be updated in the database
      * @return
      * @throws QuadrigaStorageException
      */
     private boolean saveTextFileDB(ITextFile txtFile) throws QuadrigaStorageException {
+        TextFileDTO txtFileDTO = new TextFileDTO();
         txtFileDTO.setFilename(txtFile.getFileName());
         txtFileDTO.setProjectId(txtFile.getProjectId());
         txtFileDTO.setRefId(txtFile.getRefId());
@@ -67,18 +69,26 @@ public class TextFileService implements ITextFileService {
 
     /**
      * @param txtFile
-     *          TextFile object to be updated in the FileSystem
+     *            TextFile object to be updated in the FileSystem
      * @return
      * @throws IOException
      */
     private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
 
         String saveDir = env.getProperty("textfile.location");
+        System.out.println(env.getProperty("textfile.location"));
         String filePath = saveDir + "/" + txtFile.getRefId();
+        File saveTxtFile;
         File dirFile = new File(filePath);
-        dirFile.mkdir();
-
-        File saveTxtFile = new File(filePath + "/" + txtFile.getFileName() + ".txt");
+        if (!dirFile.exists()) {
+            dirFile.mkdir();
+        }
+        String fileName = txtFile.getFileName();        
+        if(fileName.contains(".")){
+           saveTxtFile = new File(filePath + "/" + fileName); 
+        }else{
+        saveTxtFile = new File(filePath + "/" + fileName + ".txt");
+        }
         FileWriter fw = new FileWriter(saveTxtFile);
         fw.write(txtFile.getFileContent());
         File propFile = new File(filePath + "/meta.properties");
@@ -86,7 +96,6 @@ public class TextFileService implements ITextFileService {
         propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
         propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
         propFw.write("Reference Id:" + txtFile.getRefId() + "\n");
-
         fw.close();
         propFw.close();
 

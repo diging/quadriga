@@ -28,7 +28,7 @@ public class AddTextValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "fileName", "filename.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "fileContent", "filecontent.required");
-        if (!filename.isEmpty() && !filename.matches("[a-z0-9_-]{3,30}$")) {
+        if (!filename.isEmpty() && !(filename.matches("[a-zA-Z0-9_-]{3,30}$")||(filename.matches("[a-zA-Z0-9_-]{3,30}[.][a-zA-Z]{2,4}$")))) {
             err.rejectValue("fileName", "filename.proper");
         }
 
