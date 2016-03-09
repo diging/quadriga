@@ -1,4 +1,3 @@
-
 /**
  * @Author : Sowjanya Ambati
  * @Author : Dwaraka Lohith
@@ -625,4 +624,3 @@ function d3visualize(graph, networkId, path,type) {
 	}
 
 }
-
