@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.domain;
 import java.util.List;
 
 /**
- * Interface to implement user profile
+ * Interface to implement stats of concept.
  *
  */
 public interface IConceptStats {

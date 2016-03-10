@@ -1,4 +1,5 @@
 package edu.asu.spring.quadriga.service.publicwebsite.impl;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,14 @@ import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManage
 import edu.asu.spring.quadriga.service.publicwebsite.IProjectStats;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
+
+/**
+ * This class represents business logic for getting top concepts from the given
+ * list of networks.
+ *
+ * @author ajaymodi
+ *
+ */
 
 @Service
 public class ProjectStats implements IProjectStats {

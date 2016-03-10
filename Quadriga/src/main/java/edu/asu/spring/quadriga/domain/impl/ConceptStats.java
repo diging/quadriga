@@ -9,6 +9,16 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IConceptStats;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 
+/**
+ * This class represents one concept with limited properties. It provides
+ * existing properties of concept in terms of concept id, description and lemma
+ * of the concept. Apart from that, it also provides frequency of concept
+ * appears in a certain object.
+ *
+ * @author ajaymodi
+ *
+ */
+
 @Service
 public class ConceptStats implements IConceptStats
 {

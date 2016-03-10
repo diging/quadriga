@@ -1,10 +1,9 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
 /**
- * This controller has all the mappings required to view the external website of a project, view all the networks in that project
- * and visualize the networks 
+ * This controller has all the mappings required to view the statistics of the project
  * 
- * @author Sayalee Mehendale
+ * @author ajaymodi
  *
  */
 
