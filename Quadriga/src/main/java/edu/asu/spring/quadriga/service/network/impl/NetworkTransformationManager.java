@@ -23,75 +23,75 @@ import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 @Service
 public class NetworkTransformationManager implements INetworkTransformationManager {
 
-	private static final Logger logger = LoggerFactory.getLogger(NetworkTransformationManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(NetworkTransformationManager.class);
 
-	@Autowired
-	private INetworkManager networkManager;
+    @Autowired
+    private INetworkManager networkManager;
 
-	@Autowired
-	private NetworkTransformer transformer;
+    @Autowired
+    private NetworkTransformer transformer;
 
-	@Override
-	public ITransformedNetwork getTransformedNetwork(String networkId, String versionID)
-			throws QuadrigaStorageException {
+    @Override
+    public ITransformedNetwork getTransformedNetwork(String networkId, String versionID)
+            throws QuadrigaStorageException {
 
-		ITransformedNetwork networkJSon = null;
-		List<INetworkNodeInfo> oldNetworkTopNodesList = null;
+        ITransformedNetwork networkJSon = null;
+        List<INetworkNodeInfo> oldNetworkTopNodesList = null;
 
-		try {
-			oldNetworkTopNodesList = networkManager.getNetworkTopNodesByVersion(networkId, Integer.parseInt(versionID));
-		} catch (QuadrigaStorageException e) {
-			logger.error("DB Error while getting network top nodes", e);
-		}
+        try {
+            oldNetworkTopNodesList = networkManager.getNetworkTopNodesByVersion(networkId, Integer.parseInt(versionID));
+        } catch (QuadrigaStorageException e) {
+            logger.error("DB Error while getting network top nodes", e);
+        }
 
-		networkJSon = transformer.transformNetwork(oldNetworkTopNodesList);
-		return networkJSon;
-	}
+        networkJSon = transformer.transformNetwork(oldNetworkTopNodesList);
+        return networkJSon;
+    }
 
-	@Override
-	public ITransformedNetwork getTransformedNetwork(String networkId) throws QuadrigaStorageException {
+    @Override
+    public ITransformedNetwork getTransformedNetwork(String networkId) throws QuadrigaStorageException {
 
-		ITransformedNetwork networkJSon = null;
+        ITransformedNetwork networkJSon = null;
 
-		List<INetworkNodeInfo> networkTopNodesList = null;
+        List<INetworkNodeInfo> networkTopNodesList = null;
 
-		try {
-			networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
-		} catch (QuadrigaStorageException e) {
-			logger.error("DB Error while getting network top nodes", e);
-			return null;
-		}
+        try {
+            networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
+        } catch (QuadrigaStorageException e) {
+            logger.error("DB Error while getting network top nodes", e);
+            return null;
+        }
 
-		networkJSon = transformer.transformNetwork(networkTopNodesList);
+        networkJSon = transformer.transformNetwork(networkTopNodesList);
 
-		return networkJSon;
-	}
+        return networkJSon;
+    }
 
-	@Override
-	public ITransformedNetwork getTransformedNetworkOfProject(String projectId)
-			throws QuadrigaStorageException {
+    @Override
+    public ITransformedNetwork getTransformedNetworkOfProject(String projectId)
+            throws QuadrigaStorageException {
 
-		List<INetwork> networkList = getNetworkList(projectId);
+        List<INetwork> networkList = getNetworkList(projectId);
 
-		if (networkList == null) {
-			return null;
-		}
+        if (networkList == null) {
+            return null;
+        }
 
-		List<INetworkNodeInfo> networkNodeInfoList = new ArrayList<INetworkNodeInfo>();
-		for (INetwork network : networkList) {
-			try {
-				List<INetworkNodeInfo> localNetworkNodeInfoList =
-						networkManager.getNetworkTopNodes(network.getNetworkId());
-				if (localNetworkNodeInfoList != null) {
-					networkNodeInfoList.addAll(localNetworkNodeInfoList);
-				}
-			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException("Database Error while getting network top nodes for a network with ID: " +
-						network.getNetworkId(), e);
-			}
-		}
+        List<INetworkNodeInfo> networkNodeInfoList = new ArrayList<INetworkNodeInfo>();
+        for (INetwork network : networkList) {
+            try {
+                List<INetworkNodeInfo> localNetworkNodeInfoList =
+                        networkManager.getNetworkTopNodes(network.getNetworkId());
+                if (localNetworkNodeInfoList != null) {
+                    networkNodeInfoList.addAll(localNetworkNodeInfoList);
+                }
+            } catch (QuadrigaStorageException e) {
+                throw new QuadrigaStorageException("Database Error while getting network top nodes for a network with ID: " +
+                        network.getNetworkId(), e);
+            }
+        }
 
-		ITransformedNetwork transformedNetwork = transformer.transformNetwork(networkNodeInfoList);
+        ITransformedNetwork transformedNetwork = transformer.transformNetwork(networkNodeInfoList);
 
         // combine all the nodes except predicate nodes
 
@@ -132,18 +132,18 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         // return new network with updated nodes and links
-		return new TransformedNetwork(updatedNodes, links);
-	}
+        return new TransformedNetwork(updatedNodes, links);
+    }
 
-	private List<INetwork> getNetworkList(String projectId) throws QuadrigaStorageException {
-		List<INetwork> networkList;
-		try {
-			networkList = networkManager.getNetworksInProject(projectId);
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException("Database error while getting networks of a project" +
-					" with id: " + projectId, e);
-		}
+    private List<INetwork> getNetworkList(String projectId) throws QuadrigaStorageException {
+        List<INetwork> networkList;
+        try {
+            networkList = networkManager.getNetworksInProject(projectId);
+        } catch (QuadrigaStorageException e) {
+            throw new QuadrigaStorageException("Database error while getting networks of a project" +
+                    " with id: " + projectId, e);
+        }
 
-		return networkList;
-	}
+        return networkList;
+    }
 }
