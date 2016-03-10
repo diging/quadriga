@@ -10,10 +10,10 @@
 
 	<properties>
 		<java-version>1.7</java-version>
-		<org.springframework-version>3.2.13.RELEASE</org.springframework-version>
+		<org.springframework-version>4.2.5.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.7.3</org.aspectj-version>
 		<org.slf4j-version>1.7.5</org.slf4j-version>
-		<spring-security-version>3.2.7.RELEASE</spring-security-version>
+		<spring-security-version>4.0.4.RELEASE</spring-security-version>
 		<!-- Deploy Properties -->
 		<tomcat.deploy.path>http://localhost:8080/manager/</tomcat.deploy.path>
 		<deploy.path.test>quadriga-test</deploy.path.test>
@@ -54,35 +54,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
-			<version>3.0.0.RELEASE</version>
-		</dependency>
-
-
-		<!-- LDAP connection -->
-		<dependency>
-			<groupId>org.springframework.ldap</groupId>
-			<artifactId>spring-ldap-core</artifactId>
-			<version>2.0.2.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ldap</groupId>
-			<artifactId>spring-ldap-core-tiger</artifactId>
-			<version>2.0.2.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ldap</groupId>
-			<artifactId>spring-ldap-odm</artifactId>
-			<version>2.0.2.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ldap</groupId>
-			<artifactId>spring-ldap-ldif-core</artifactId>
-			<version>2.0.2.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ldap</groupId>
-			<artifactId>spring-ldap-ldif-batch</artifactId>
-			<version>2.0.2.RELEASE</version>
+			<version>${org.springframework-version}</version>
 		</dependency>
 
 
@@ -253,11 +225,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-oxm</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
@@ -349,11 +316,11 @@
 			<version>5.0.1.Final</version>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-dao</artifactId>
 			<version>2.0.8</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
