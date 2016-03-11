@@ -4,6 +4,9 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import org.codehaus.jettison.json.JSONException;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +41,12 @@ public class NetworkSearchController {
     @Qualifier("conceptPowerService")
     @Autowired
     IService service;
+
+    @Autowired
+    private ID3Creator d3Creator;
+
+    @Autowired
+    private INetworkTransformationManager transformationManager;
 
     private static String defaultJsonErrorMsg = "{\"status\" : 500," +
             " \"message\": \"Unable to get the search terms\"}";
@@ -94,6 +104,32 @@ public class NetworkSearchController {
             logger.error("Json exception while adding the results", e);
         }
         return new ResponseEntity<String>(defaultJsonErrorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
+    public String getSearchTransformedNetwork(@PathVariable("projectUnixName") String projectUnixName,
+                                              @RequestParam("conceptId") String conceptId,
+                                              Model model)
+        throws JAXBException, QuadrigaStorageException {
+
+        IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
+        if (project == null) {
+            return "forbidden";
+        }
+
+        ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetwork(
+                project.getProjectId(), conceptId);
+
+        String json = null;
+        if (transformedNetwork != null) {
+            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+        }
+
+        model.addAttribute("jsonstring", json);
+        model.addAttribute("networkid", "\"\"");
+        model.addAttribute("project", project);
+
+        return "sites/networks/searchednetwork";
     }
 
 }
