@@ -205,7 +205,7 @@ public class ConceptcollectionController {
     public String conceptSearchHandler(
             @PathVariable("collection_id") String collection_id,
             HttpServletRequest req, ModelMap model)
-            throws QuadrigaStorageException {
+            throws QuadrigaStorageException, QuadrigaAccessException {
 
         ConceptpowerReply conReply = conceptControllerManager.search(
                 req.getParameter("name"), req.getParameter("pos"));

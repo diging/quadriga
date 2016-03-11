@@ -89,7 +89,7 @@ public class ModifyConceptCollectionController
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 3, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.POST)
 	public ModelAndView updateConceptCollectionDetails(@Validated @ModelAttribute("collection")ConceptCollection collection,BindingResult result,
-			@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException
+			@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		String userName;
