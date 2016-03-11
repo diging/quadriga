@@ -82,8 +82,5 @@
 	</ul> -->
 </div>
 <hr>
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/publicPageContent"><i class="fa fa-cog">   Public Page Settings</a></i>
-		
-		
-		
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/publicPageContent"> <i class="fa fa-cog"> </i>  Public Page Settings</a>
 		
