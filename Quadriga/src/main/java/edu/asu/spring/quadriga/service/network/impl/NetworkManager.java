@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
@@ -55,6 +56,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -84,10 +86,10 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private IQStoreConnector qStoreConnector;
-    
+
     @Autowired
     private INetworkXMLParser networkXMLParser;
-    
+
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
 
@@ -99,7 +101,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private INetworkMapper networkmapper;
-    
+
     @Autowired
     private IWorkspaceShallowMapper workspaceShallowMapper;
 
@@ -426,7 +428,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     }
 
-    
     /**
      * Check if we have bit streams in the network XML
      * 
@@ -457,7 +458,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return false;
     }
 
-
     /**
      * 
      * {@inheritDoc}
@@ -469,7 +469,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return Long.toString(l, Character.MAX_RADIX);
     }
 
-    
     @Override
     @Transactional
     public String getNetworkXML(String networkId) throws Exception {
@@ -503,10 +502,15 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         networkXML = networkXML.substring(networkXML.indexOf("element_events") - 1, networkXML.length());
         return networkXML;
     }
-    
+
+    @Override
+    public String storeText(String xml, String projectid, String workspaceid) throws NetworkXMLParseException, QuadrigaStorageException, IOException {
+        return networkXMLParser.storeText(xml, projectid, workspaceid);
+
+    }
+
     @Override
     public String storeNetworks(String xml) throws QStoreStorageException {
-    	networkXMLParser.storeText(xml);
         return qStoreConnector.store(xml);
     }
 
