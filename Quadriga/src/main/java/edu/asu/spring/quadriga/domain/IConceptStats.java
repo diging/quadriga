@@ -23,7 +23,5 @@ public interface IConceptStats {
 	public abstract Integer getCount();
 
 	public abstract void setCount(Integer count);
-
-	public abstract List<IConceptStats> getSortedList(List<IConceptStats> csList);
 	
 }

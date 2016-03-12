@@ -1,16 +1,6 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
-/**
- * This controller has all the mappings required to view the statistics of the project
- * 
- * @author ajaymodi
- *
- */
-
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
@@ -19,6 +9,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +19,16 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+
+/**
+ * This controller has all the mappings required to view the statistics of the
+ * project
+ * 
+ * @author ajaymodi
+ *
+ */
 
 @PropertySource(value = "classpath:/user.properties")
 @Controller
@@ -43,38 +41,28 @@ public class ProjectStatsController {
 	private INetworkManager networkmanager;
 
 	@Autowired
-	private INetworkTransformationManager transformationManager;
+	private ProjectStats projectStats;
 
 	@Autowired
-	private ProjectStats ps;
+	private Environment env;
 
-	public IRetrieveProjectManager getProjectManager() {
-		return projectManager;
-	}
-
-	private IProject getProjectDetails(String name)
-	        throws QuadrigaStorageException {
-		return projectManager.getProjectDetailsByUnixName(name);
-	}
-
-	private JSONArray getProjectStatsJson(List<IConceptStats> gtc)
+	private JSONArray getProjectStatsJson(List<IConceptStats> topConcepts)
 	        throws JSONException {
-		JSONArray obj = new JSONArray();
+		JSONArray jsonArray = new JSONArray();
 
-		int cnt = System.getProperty("topCount") == null ? 0 : Integer
-		        .parseInt(System.getProperty("topCount"));
-		int len = gtc.size() > cnt ? cnt : gtc.size();
+		int cnt = Integer.parseInt(env.getProperty("project.stats.topcount"));
+		int len = topConcepts.size() > cnt ? cnt : topConcepts.size();
 
-		for (int k = 0; k < len; k++) {
-			JSONObject jo = new JSONObject();
-			IConceptStats c = gtc.get(k);
-			jo.put("conceptId", c.getConceptId());
-			jo.put("description", c.getDescription());
-			jo.put("label", c.getLemma());
-			jo.put("frequency", c.getCount());
-			obj.put(jo);
+		for (int i = 0; i < len; i++) {
+			JSONObject jsonObject = new JSONObject();
+			IConceptStats conceptStats = topConcepts.get(i);
+			jsonObject.put("conceptId", conceptStats.getConceptId());
+			jsonObject.put("description", conceptStats.getDescription());
+			jsonObject.put("label", conceptStats.getLemma());
+			jsonObject.put("frequency", conceptStats.getCount());
+			jsonArray.put(jsonObject);
 		}
-		return obj;
+		return jsonArray;
 	}
 
 	/**
@@ -94,36 +82,37 @@ public class ProjectStatsController {
 	public String showProjectStatistics(
 	        @PathVariable("projectUnixName") String projectUnixName, Model model)
 	        throws JAXBException, QuadrigaStorageException {
-		IProject project = getProjectDetails(projectUnixName);
+		IProject project = projectManager
+		        .getProjectDetailsByUnixName(projectUnixName);
 
 		if (project == null) {
 			return "auth/accessissue";
 		}
 
-		String projectid = project.getProjectId();
-		List<INetwork> Networks = networkmanager
-		        .getNetworksInProject(projectid);
-		List<IConceptStats> gtc = new ArrayList<IConceptStats>();
-		JSONArray jo = new JSONArray();
-		StringBuffer errorMsg = new StringBuffer();
+		String projectId = project.getProjectId();
+		List<INetwork> networks = networkmanager
+		        .getNetworksInProject(projectId);
+		List<IConceptStats> topConcepts = null;
+		JSONArray jArray = null;
 
-		if (!Networks.isEmpty()) {
-			gtc = ps.getTopConcepts(Networks);
+		if (!networks.isEmpty()) {
+			topConcepts = projectStats.getTopConcepts(networks);
 
 			try {
-				jo = getProjectStatsJson(gtc);
-				model.addAttribute("jsonstring", jo);
+				jArray = getProjectStatsJson(topConcepts);
+				model.addAttribute("jsonstring", jArray);
 				model.addAttribute("networkid", "\"\"");
 				model.addAttribute("project", project);
 
 			} catch (JSONException e) {
+
+				StringBuffer errorMsg = new StringBuffer();
 				model.addAttribute("show_error_alert", true);
 				errorMsg.append(e.getMessage());
 				errorMsg.append("\n");
+				model.addAttribute("error_alert_msg", errorMsg.toString());
 			}
 		}
-
-		model.addAttribute("error_alert_msg", errorMsg.toString());
 
 		return "sites/project/statistics";
 	}

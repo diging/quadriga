@@ -19,7 +19,6 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcep
  *
  */
 
-@Service
 public class ConceptStats implements IConceptStats
 {
 
@@ -96,17 +95,9 @@ public class ConceptStats implements IConceptStats
 			return false;
 		return true;
 	}
-
-	@Override
-	public List<IConceptStats> getSortedList(List<IConceptStats> csList) {
-		Collections.sort(csList, new Comparator<IConceptStats>() {
-			public int compare(IConceptStats o1, IConceptStats o2) {
-				if (o1.getCount() == o2.getCount())
-					return 0;
-				return o1.getCount() < o2.getCount() ? 1 : -1;
-			}
-		});
-		return csList;
+		
+	public void incCount() {
+		this.count = this.getCount() + 1;
 	}
 		
 }
