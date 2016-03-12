@@ -110,7 +110,7 @@ public class NetworkSearchController {
     public String getSearchTransformedNetwork(@PathVariable("projectUnixName") String projectUnixName,
                                               @RequestParam("conceptId") String conceptId,
                                               Model model)
-        throws JAXBException, QuadrigaStorageException {
+        throws QuadrigaStorageException {
 
         IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
         if (project == null) {

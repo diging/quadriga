@@ -167,16 +167,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             }
         }
 
-        // Include all the links which have thier statement ids
+        // Include only those links which have their statement ids
         // in statement search set
         List<Link> finalLinks = new ArrayList<Link>();
         for (Link link: transformedNetwork.getLinks()) {
-            for (String statementId: link.getStatementIds()) {
-                if (statementIdSearchSet.contains(statementId)) {
-                    // statement id match
-                    // adding to the final link list
-                    finalLinks.add(link);
-                }
+            if (statementIdSearchSet.contains(link.getStatementId())) {
+                // statement id match
+                // add to the final link list
+                finalLinks.add(link);
             }
         }
 

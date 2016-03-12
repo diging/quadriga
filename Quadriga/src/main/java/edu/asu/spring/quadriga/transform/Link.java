@@ -10,12 +10,7 @@ public class Link {
     private Node subject;
     private Node object;
     private String label;
-    private List<String> statementIds;
-
-    public Link() {
-        // create a new hash set for statement ids
-        statementIds = new ArrayList<String>();
-    }
+    private String statementId;
     
     public Node getSubject() {
         return subject;
@@ -41,11 +36,11 @@ public class Link {
         this.label = label;
     }
 
-    public List<String> getStatementIds() {
-        return statementIds;
+    public String getStatementId() {
+        return statementId;
     }
 
-    public void addStatementId(String statementId) {
-        statementIds.add(statementId);
+    public void setStatementId(String statementId) {
+        this.statementId = statementId;
     }
 }
