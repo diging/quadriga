@@ -158,32 +158,32 @@ public class EventParser {
         
         return null;
     }
-    
+
     private PredicateNode parsePredicateEvent(AppellationEventType appellationEvent, String statementId) {
         PredicateNode predNode = new PredicateNode();
         parseNode(appellationEvent, predNode, statementId);
         predNode.setId(UUID.randomUUID().toString());
         return predNode;
     }
-    
-	private void parseNode(AppellationEventType event, Node node,
-	        String statementId) {
-		StringBuffer label = new StringBuffer();
-		for (TermType type : event.getTerms()) {
-			label.append(type.getTermInterpertation());
-			label.append(" ");
-		}
-		node.setId(event.getAppellationEventID());
-		node.setConceptId(label.toString());
-		if (node.getConceptId() != null) {
-			String id = node.getConceptId();
-			ConceptpowerReply re = conceptPowerConnector.getById(id);
-			node.setLabel(getLemma(re, id));
-			node.setDescription(getDesc(re, id));
-		}
-		node.getStatementIds().add(statementId);
-	}
-    
+
+    private void parseNode(AppellationEventType event, Node node,
+                           String statementId) {
+        StringBuffer label = new StringBuffer();
+        for (TermType type : event.getTerms()) {
+            label.append(type.getTermInterpertation());
+            label.append(" ");
+        }
+        node.setId(event.getAppellationEventID());
+        node.setConceptId(label.toString());
+        if (node.getConceptId() != null) {
+            String id = node.getConceptId();
+            ConceptpowerReply re = conceptPowerConnector.getById(id);
+            node.setLabel(getLemma(re, id));
+            node.setDescription(getDesc(re, id));
+        }
+        node.getStatementIds().add(statementId);
+    }
+
     private String getLemma(ConceptpowerReply re, String id){
         String lemma = id;
         if (re.getConceptEntry().size() != 0) {
