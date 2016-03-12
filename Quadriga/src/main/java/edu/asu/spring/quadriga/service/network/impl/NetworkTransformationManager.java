@@ -97,14 +97,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         List<Link> links = transformedNetwork.getLinks();
 
         Map<String, Node> updatedNodes = new HashMap<String, Node>();
-        int index = 0;
-        for (Node node: nodes.values()) {
+        for (Map.Entry<String, Node> entry: nodes.entrySet()) {
+            Node node = entry.getValue();
             // if the node is predicate node
             // add to the updated nodes map
             if (node instanceof PredicateNode) {
-                // the key does not matter
-                // as it is never being used
-                updatedNodes.put(String.valueOf(++index), node);
+                // used the original key to store the
+                // predicate node
+                updatedNodes.put(entry.getKey(), node);
                 continue;
             }
 
