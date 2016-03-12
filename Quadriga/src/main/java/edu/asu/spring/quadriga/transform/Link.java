@@ -1,10 +1,21 @@
 package edu.asu.spring.quadriga.transform;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class Link {
 
     private Node subject;
     private Node object;
     private String label;
+    private List<String> statementIds;
+
+    public Link() {
+        // create a new hash set for statement ids
+        statementIds = new ArrayList<String>();
+    }
     
     public Node getSubject() {
         return subject;
@@ -30,4 +41,11 @@ public class Link {
         this.label = label;
     }
 
+    public List<String> getStatementIds() {
+        return statementIds;
+    }
+
+    public void addStatementId(String statementId) {
+        statementIds.add(statementId);
+    }
 }

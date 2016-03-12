@@ -10,7 +10,6 @@ import edu.asu.spring.quadriga.transform.PredicateNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
@@ -143,55 +142,41 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             return null;
         }
 
+        // get the transformed network of all the networks in a project
         ITransformedNetwork transformedNetwork = getTransformedNetworkOfProject(projectId);
-        // separate each statement id and include all the list of nodes in the statement id
-        Map<String, Set<Node>> statementIdMap = getStatementIdNodeMap(transformedNetwork.getNodes());
 
         // Filter the nodes with the concept id
-        List<Node> searchNodes = new ArrayList<Node>();
+        // add all the statement ids to a set
+        Set<String> statementIdSearchSet = new HashSet<String>();
         for (Node node: transformedNetwork.getNodes().values()) {
             if (conceptId.equals(node.getConceptId())) {
-                searchNodes.add(node);
+                statementIdSearchSet.addAll(node.getStatementIds());
             }
         }
 
-        // include only those statements which have the search node
-        Iterator<Map.Entry<String, Set<Node>>> it = statementIdMap.entrySet().iterator();
-        Set<Node> searchedNodeSet = new HashSet<Node>();
-        while (it.hasNext()) {
-            boolean isNodeExists = false;
-            Set<Node> nodeSet = it.next().getValue();
-            // search if the node exists
-            for (Node node: searchNodes) {
-                if (nodeSet.contains(node)) {
-                    // include this statement
-                    isNodeExists = true;
+        // Include only those nodes which have their statement ids
+        // in statement search set
+        Map<String, Node> finalNodes = new HashMap<String, Node>();
+        for (Map.Entry<String, Node> entry: transformedNetwork.getNodes().entrySet()) {
+            Node node = entry.getValue();
+            for (String statementId: node.getStatementIds()) {
+                if (statementIdSearchSet.contains(statementId)) {
+                    // statement id match. Add it to the final nodes map
+                    finalNodes.put(entry.getKey(), node);
                 }
             }
-            // remove the statement if it is not present
-            if (!isNodeExists) {
-                it.remove();
-            } else {
-                searchedNodeSet.addAll(nodeSet);
-            }
         }
 
-        // now include the statements
-        Map<String, Node> finalNodes = new HashMap<String, Node>();
-        int index = 0;
-        for (Node n: searchedNodeSet) {
-            finalNodes.put(String.valueOf(++index), n);
-        }
-        // final links
-        List<Link> finalLinks = transformedNetwork.getLinks();
-        Iterator<Link> linkIterator = finalLinks.iterator();
-        while (linkIterator.hasNext()) {
-            Link link = linkIterator.next();
-            // if the subject or object does not exist in any links
-            // remove that link
-            if (!searchedNodeSet.contains(link.getSubject()) ||
-                    !searchedNodeSet.contains(link.getObject())) {
-                linkIterator.remove();
+        // Include all the links which have thier statement ids
+        // in statement search set
+        List<Link> finalLinks = new ArrayList<Link>();
+        for (Link link: transformedNetwork.getLinks()) {
+            for (String statementId: link.getStatementIds()) {
+                if (statementIdSearchSet.contains(statementId)) {
+                    // statement id match
+                    // adding to the final link list
+                    finalLinks.add(link);
+                }
             }
         }
 
@@ -208,18 +193,5 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         return networkList;
-    }
-
-    private Map<String, Set<Node>> getStatementIdNodeMap(Map<String, Node> nodes) {
-        Map<String, Set<Node>> statementIdMap = new HashMap<String, Set<Node>>();
-        for (Node node: nodes.values()) {
-            for (String statementId: node.getStatementIds()) {
-                if (!statementIdMap.containsKey(statementId)) {
-                    statementIdMap.put(statementId, new HashSet<Node>());
-                }
-                statementIdMap.get(statementId).add(node);
-            }
-        }
-        return statementIdMap;
     }
 }
