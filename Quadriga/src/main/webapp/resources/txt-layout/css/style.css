@@ -85,6 +85,11 @@
 	a>i.fa {
 	   color: #6b7770;
 	}
+	
+	.btn-warning {
+	   background-color: #e3daa8;
+	   border: 1px solid rgb(202, 197, 167);
+	}
 
 	form
 	{
