@@ -20,6 +20,7 @@
 
 
 function d3visualize(graph, networkId, path,type) {
+	
 	if(graph==null){
 		alert("no network");
 	}
@@ -31,7 +32,7 @@ function d3visualize(graph, networkId, path,type) {
 	// Preparing the force directed graph
 	if(type=="force"){
 		layout = d3.layout.force()
-		.charge(-150)
+		.charge(-300)
 		.linkDistance(200)
 		.size([width, height]);
 		layout
@@ -58,20 +59,10 @@ function d3visualize(graph, networkId, path,type) {
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
 			.append('svg:g');
-	
-
 
 	var div1 = d3.select("#allannot_details");
 
 	d3.select("#chart").on("click", function(){return div1.style("visibility", "visible");});
-
-	/*var expand = d3.select("#chart")
-				.on("click", function(){
-
-					$("chart").show();
-					$("allannot_details").hide();
-				});*/
-
 
 	// Prepare the arrow
 	vis.append("defs").selectAll("marker")
@@ -135,7 +126,7 @@ function d3visualize(graph, networkId, path,type) {
 	// Starts the drag
 	// Means starts with force.stop
 	function dragstart(d, i) {
-		layout.stop(); // stops the force auto positioning before you start dragging
+		d3.select(this).classed("fixed", d.fixed = true);
 	}
 
 	// Moves the node based on the user interaction
@@ -214,9 +205,8 @@ function d3visualize(graph, networkId, path,type) {
 
 	function  redraw() {
 		console.log("here", d3.event.translate, d3.event.scale);
-		vis.attr("transform",
-				"translate(" + d3.event.translate + ")"
-				+ " scale(" + d3.event.scale + ")");
+		vis.attr("transform", 
+				" scale(" + d3.event.scale + ")");
 	};
 //	Works on loading the network and placing the nodes randomly for view
 
@@ -635,3 +625,4 @@ function d3visualize(graph, networkId, path,type) {
 	}
 
 }
+
