@@ -14,17 +14,7 @@
     		<h3><b><c:out value="${blockentry.title}"></c:out></b></h3>
     		<h4><i> Posted by <c:out value="${blockentry.author}"></c:out> on <c:out value="${blockentry.date}"></c:out> </i></h4>
     		<p align="justify"><c:out value="${blockentry.text}" escapeXml="false"></c:out>  </p>
-    		
-    		<%-- Try escapeXML using attribute --%>
-    		<c:out value="${'<b>This is a <c:out> example </b>'}" escapeXml="false"></c:out>
-    		<c:set var="string1" value="This is first String."/>
-			<c:set var="string2" value="This <em>is second String.</em>"/>
-
-			<%-- Try escapeXML using function--%>
-			<p>With escapeXml() Function:</p>
-			<p>string (1) : ${fn:escapeXml(string1)}</p>	
-			<p>string (2) : ${fn:escapeXml(string2)}</p>
-    		
+    		    		
 	</div>
 	
    </c:forEach>
