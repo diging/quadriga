@@ -82,14 +82,4 @@ public interface IProjectShallowMapper {
 	 */
 	public abstract IProject getProjectDetails(ProjectDTO projectDTO)
 			throws QuadrigaStorageException;
-
-	/**
-	 * 
-	 * @param accesibility
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<IProject> getProjectListByAccesibility(String accesibility)
-			throws QuadrigaStorageException;
-	
 }

@@ -65,8 +65,7 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
 	{
 		ProjectDTO projectDTO = null;
 		List<ProjectDTO> projectDTOList = null;
-		try
-		{
+		try {
 			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.projectowner.username =:username and projectid=:projectid");
 			//projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
 			query.setParameter("username", userId);
@@ -74,21 +73,18 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
 			
 			projectDTOList =  query.list();
 			if(projectDTOList != null && projectDTOList.size() > 0){
-			projectDTO = projectDTOList.get(0);
+			    projectDTO = projectDTOList.get(0);
 			}
 			return projectDTO;
-		}
-		catch(Exception e)
-		{
+		} catch(Exception e) {
 			logger.info("Retrieve project details method :"+e.getMessage());	
 			throw new QuadrigaStorageException(e);
 		}
 	}
 
-
     /**
      * 
-     * {@inheritDoc}
+     * This method fetches all the  projects with the given accessibility
      * 
      * Uses Hibernate to get {@link ProjectDTO} of a {@link IProject} ID. 
      */
@@ -111,7 +107,6 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
 			throw new QuadrigaStorageException(e);
 		}
 	}
-
 
 	@Override
 	@SuppressWarnings("unchecked")

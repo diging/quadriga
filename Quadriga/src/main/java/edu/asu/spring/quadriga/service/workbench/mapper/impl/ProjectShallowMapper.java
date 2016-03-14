@@ -241,36 +241,4 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 		return projectList;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	*/
-	@Override
-	@Transactional
-	public List<IProject> getProjectListByAccesibility(String accessibility)
-			throws QuadrigaStorageException{
-		List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOByAccessibility(accessibility);
-		List<IProject> projectList = null;
-		if(projectDTOList!=null){
-			for(ProjectDTO projectDTO : projectDTOList){
-				if(projectList == null){
-					projectList = new ArrayList<IProject>();
-				}
-				IProject projectProxy = new ProjectProxy(projectManager);
-				projectProxy.setProjectId(projectDTO.getProjectid());
-				projectProxy.setProjectName(projectDTO.getProjectname());
-				projectProxy.setDescription(projectDTO.getDescription());
-				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
-				projectProxy.setUnixName(projectDTO.getUnixname());
-				projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
-				projectProxy.setCreatedBy(projectDTO.getCreatedby());
-				projectProxy.setCreatedDate(projectDTO.getCreateddate());
-				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
-				projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
-				projectList.add(projectProxy);
-			}
-		}
-		
-		return projectList;
-	}
-	
 }

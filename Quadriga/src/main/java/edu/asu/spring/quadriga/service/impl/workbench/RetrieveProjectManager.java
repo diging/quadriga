@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -63,9 +65,15 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
      */
 	@Override
 	@Transactional
-	public List<IProject> getProjectListByAccessibility(String accessibility) throws QuadrigaStorageException
-	{
-		return projectShallowMapper.getProjectList(accessibility);
+	public List<IProject> getProjectListByAccessibility(String accessibility) throws QuadrigaStorageException {
+	    List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOByAccessibility(accessibility);
+	    List<IProject> projectList = new ArrayList<IProject>();
+        if(projectDTOList!=null) {
+            for(ProjectDTO projectDTO : projectDTOList){
+               projectList.add(projectShallowMapper.getProjectDetails(projectDTO));
+            }
+        }       
+        return projectList;
 	}
 	
 	/**
