@@ -41,8 +41,8 @@ public class TextFileService implements ITextFileService {
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
 
-        UUID refId = UUID.randomUUID();
-        txtFile.setRefId(refId.toString());
+        UUID textId = UUID.randomUUID();
+        txtFile.setTextId(textId.toString());
         boolean fsStatus = saveTextFileLocal(txtFile);
         boolean dbStatus = saveTextFileDB(txtFile);
         return fsStatus && dbStatus;
@@ -59,6 +59,7 @@ public class TextFileService implements ITextFileService {
         txtFileDTO.setFilename(txtFile.getFileName());
         txtFileDTO.setProjectId(txtFile.getProjectId());
         txtFileDTO.setTextId(txtFile.getTextId());
+        txtFileDTO.setRefId(txtFile.getRefId());
         txtFileDTO.setWorkspaceId(txtFile.getWorkspaceId());
         return txtFileDAO.saveTextFileDTO(txtFileDTO);
     }
@@ -92,7 +93,8 @@ public class TextFileService implements ITextFileService {
         try {
             propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
             propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
-            propFw.write("Reference Id:" + txtFile.getTextId() + "\n");
+            propFw.write("ReferenceId:" + txtFile.getRefId() + "\n");
+            propFw.write("TextFileId:" + txtFile.getTextId() + "\n");
             fw.close();
             propFw.close();
             return true;

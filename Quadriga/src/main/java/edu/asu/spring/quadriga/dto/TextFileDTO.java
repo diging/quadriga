@@ -19,18 +19,22 @@ import org.springframework.stereotype.Component;
 public class TextFileDTO implements Serializable {
 
     
-   
         private static final long serialVersionUID = -1798070786993154676L;
 
         
-        //@JoinColumn(name = "projectid", referencedColumnName = "project_id")
+        
         @Id
         @Basic(optional = false)
-        @Column(name = "textId")
+        @Column(name = "textid", unique=true, nullable=false)
         private String textId;
+        
+        
         @Basic(optional = false)
-        @Column(name = "refId")
-        private String refId;      
+        @Column(name = "refid")
+        private String refId;   
+        
+        
+        
         @Basic(optional = false)
         @Column(name = "projectid")
         private String projectId;
@@ -41,6 +45,14 @@ public class TextFileDTO implements Serializable {
         @Column(name = "wsid")
         private String workspaceId;
         
+        public String getTextId() {
+            return textId;
+        }
+
+        public void setTextId(String textId) {
+            this.textId = textId;
+        }
+        
         public String getProjectId() {
             return projectId;
         }
@@ -49,15 +61,7 @@ public class TextFileDTO implements Serializable {
             this.projectId = project;
         }
 
-        public String getTextId() {
-            return textId;
-        }
-
-        public void setTextId(String refid) {
-            this.textId = refid;
-        }
-
-        public String getFilename() {
+       public String getFilename() {
             return filename;
         }
 
