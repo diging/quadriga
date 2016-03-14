@@ -191,8 +191,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     @Override
     public String getConceptLemmaFromConceptId(String id) {
 
-        Map<String, String> vars = new HashMap<String, String>();
-        vars.put("name", id.trim());
         String lemma = id;
         ConceptpowerReply rep = conceptpowerConnector.getById(id);
         if (rep.getConceptEntry().size() == 0) {
@@ -200,7 +198,25 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
         }
         return rep.getConceptEntry().get(0).getLemma();
     }
+    
+    /**
+     * This method returns Description for the given concept
+     * 
+     * @param id
+     *            - item id
+     * @return String - Description associated with concept
+     */
+    @Override
+    public String getConceptDescriptionFromConceptId(String id) {
 
+        String desc = id;
+        ConceptpowerReply rep = conceptpowerConnector.getById(id);
+        if (rep.getConceptEntry().size() == 0) {
+            return desc;
+        }
+        return rep.getConceptEntry().get(0).getDescription();
+    }
+    
     /**
      * This method adds the items to the concept collection
      * 
