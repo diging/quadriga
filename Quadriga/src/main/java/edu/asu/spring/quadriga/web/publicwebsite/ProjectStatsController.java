@@ -34,86 +34,86 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @Controller
 public class ProjectStatsController {
 
-	@Autowired
-	private IRetrieveProjectManager projectManager;
+    @Autowired
+    private IRetrieveProjectManager projectManager;
 
-	@Autowired
-	private INetworkManager networkmanager;
+    @Autowired
+    private INetworkManager networkmanager;
 
-	@Autowired
-	private ProjectStats projectStats;
+    @Autowired
+    private ProjectStats projectStats;
 
-	@Autowired
-	private Environment env;
+    @Autowired
+    private Environment env;
 
-	private JSONArray getProjectStatsJson(List<IConceptStats> topConcepts)
-	        throws JSONException {
-		JSONArray jsonArray = new JSONArray();
+    private JSONArray getProjectStatsJson(List<IConceptStats> topConcepts)
+            throws JSONException {
+        JSONArray jsonArray = new JSONArray();
 
-		int cnt = Integer.parseInt(env.getProperty("project.stats.topcount"));
-		int len = topConcepts.size() > cnt ? cnt : topConcepts.size();
+        int cnt = Integer.parseInt(env.getProperty("project.stats.topcount"));
+        int len = topConcepts.size() > cnt ? cnt : topConcepts.size();
 
-		for (int i = 0; i < len; i++) {
-			JSONObject jsonObject = new JSONObject();
-			IConceptStats conceptStats = topConcepts.get(i);
-			jsonObject.put("conceptId", conceptStats.getConceptId());
-			jsonObject.put("description", conceptStats.getDescription());
-			jsonObject.put("label", conceptStats.getLemma());
-			jsonObject.put("frequency", conceptStats.getCount());
-			jsonArray.put(jsonObject);
-		}
-		return jsonArray;
-	}
+        for (int i = 0; i < len; i++) {
+            JSONObject jsonObject = new JSONObject();
+            IConceptStats conceptStats = topConcepts.get(i);
+            jsonObject.put("conceptId", conceptStats.getConceptId());
+            jsonObject.put("description", conceptStats.getDescription());
+            jsonObject.put("label", conceptStats.getLemma());
+            jsonObject.put("frequency", conceptStats.getCount());
+            jsonArray.put(jsonObject);
+        }
+        return jsonArray;
+    }
 
-	/**
-	 * This method gives the visualization of how often concepts appear in the
-	 * networks
-	 * 
-	 * @author Bharath Srikantan & Ajay Modi
-	 * @param projectUnixName
-	 *            The project unix name
-	 * @param model
-	 *            Model
-	 * @return view
-	 * @throws JAXBException
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
-	public String showProjectStatistics(
-	        @PathVariable("projectUnixName") String projectUnixName, Model model)
-	        throws JAXBException, QuadrigaStorageException {
-		IProject project = projectManager
-		        .getProjectDetailsByUnixName(projectUnixName);
+    /**
+     * This method gives the visualization of how often concepts appear in the
+     * networks
+     * 
+     * @author Bharath Srikantan & Ajay Modi
+     * @param projectUnixName
+     *            The project unix name
+     * @param model
+     *            Model
+     * @return view
+     * @throws JAXBException
+     * @throws QuadrigaStorageException
+     */
+    @RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
+    public String showProjectStatistics(
+            @PathVariable("projectUnixName") String projectUnixName, Model model)
+            throws JAXBException, QuadrigaStorageException {
+        IProject project = projectManager
+                .getProjectDetailsByUnixName(projectUnixName);
 
-		if (project == null) {
-			return "auth/accessissue";
-		}
+        if (project == null) {
+            return "auth/accessissue";
+        }
 
-		String projectId = project.getProjectId();
-		List<INetwork> networks = networkmanager
-		        .getNetworksInProject(projectId);
-		List<IConceptStats> topConcepts = null;
-		JSONArray jArray = null;
+        String projectId = project.getProjectId();
+        List<INetwork> networks = networkmanager
+                .getNetworksInProject(projectId);
+        List<IConceptStats> topConcepts = null;
+        JSONArray jArray = null;
 
-		if (!networks.isEmpty()) {
-			topConcepts = projectStats.getTopConcepts(networks);
+        if (!networks.isEmpty()) {
+            topConcepts = projectStats.getTopConcepts(networks);
 
-			try {
-				jArray = getProjectStatsJson(topConcepts);
-				model.addAttribute("jsonstring", jArray);
-				model.addAttribute("networkid", "\"\"");
-				model.addAttribute("project", project);
+            try {
+                jArray = getProjectStatsJson(topConcepts);
+                model.addAttribute("jsonstring", jArray);
+                model.addAttribute("networkid", "\"\"");
+                model.addAttribute("project", project);
 
-			} catch (JSONException e) {
+            } catch (JSONException e) {
 
-				StringBuffer errorMsg = new StringBuffer();
-				model.addAttribute("show_error_alert", true);
-				errorMsg.append(e.getMessage());
-				errorMsg.append("\n");
-				model.addAttribute("error_alert_msg", errorMsg.toString());
-			}
-		}
+                StringBuffer errorMsg = new StringBuffer();
+                model.addAttribute("show_error_alert", true);
+                errorMsg.append(e.getMessage());
+                errorMsg.append("\n");
+                model.addAttribute("error_alert_msg", errorMsg.toString());
+            }
+        }
 
-		return "sites/project/statistics";
-	}
+        return "sites/project/statistics";
+    }
 }

@@ -50,19 +50,21 @@ import edu.asu.spring.quadriga.transform.PredicateNode;
 
 /**
  * Class for parsing Appellation/Relation Event networks into S-O-P networks.
+ * 
  * @author jdamerow
  *
  */
 @PropertySource(value = "classpath:/user.properties")
 @Service
 public class EventParser {
-    
-    private static final Logger logger = LoggerFactory.getLogger(EventParser.class);
-    
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(EventParser.class);
+
     @Autowired
     @Qualifier("qStoreURL")
     private String qStoreURL;
-    
+
     @Autowired
     @Qualifier("restTemplate")
     private RestTemplate restTemplate;
@@ -78,65 +80,75 @@ public class EventParser {
     @Autowired
     @Qualifier("jaxbMarshaller")
     private Jaxb2Marshaller jaxbMarshaller;
-    
+
     @Autowired
     private Environment env;
-    
+
     @Autowired
     private IConceptpowerConnector conceptPowerConnector;
 
-    
-    public void parseStatement(String relationEventId, Map<String, Node> nodes, List<Link> links) throws JAXBException, QStoreStorageException {
+    public void parseStatement(String relationEventId, Map<String, Node> nodes,
+            List<Link> links) throws JAXBException, QStoreStorageException {
         ElementEventsType elementEventType = getElementEventTypeFromCreationEventTypeID(relationEventId);
-        List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
-        Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-         
+        List<CreationEvent> creationEventList = elementEventType
+                .getRelationEventOrAppellationEvent();
+        Iterator<CreationEvent> creationEventIterator = creationEventList
+                .iterator();
+
         while (creationEventIterator.hasNext()) {
             CreationEvent event = creationEventIterator.next();
             parseSubjectOrObjectEvent(event, relationEventId, nodes, links);
         }
-        
+
     }
-    
-    private Node parseSubjectOrObjectEvent(CreationEvent event, String statementId, Map<String, Node> leafNodes, List<Link> links) {
+
+    private Node parseSubjectOrObjectEvent(CreationEvent event,
+            String statementId, Map<String, Node> leafNodes, List<Link> links) {
         if (event == null) {
             return null;
         }
-        
+
         if (event instanceof AppellationEventType) {
-           List<TermType> terms = ((AppellationEventType) event).getTerms();
-           if (terms.size() > 0) {
-               String conceptId = terms.get(0).getTermID();
-               if (leafNodes.containsKey(conceptId)) {
-                   leafNodes.get(conceptId).getStatementIds().add(statementId);
-               }
-               else {
-                   Node node = new Node();
-                   parseNode((AppellationEventType) event, node, statementId);
-                   leafNodes.put(conceptId, node);
-               }
-               return leafNodes.get(conceptId);
-           }
-           return null;
-        }
-        else if (event instanceof RelationEventType) {
+            List<TermType> terms = ((AppellationEventType) event).getTerms();
+            if (terms.size() > 0) {
+                String conceptId = terms.get(0).getTermID();
+                if (leafNodes.containsKey(conceptId)) {
+                    leafNodes.get(conceptId).getStatementIds().add(statementId);
+                } else {
+                    Node node = new Node();
+                    parseNode((AppellationEventType) event, node, statementId);
+                    leafNodes.put(conceptId, node);
+                }
+                return leafNodes.get(conceptId);
+            }
+            return null;
+        } else if (event instanceof RelationEventType) {
             RelationType relation = ((RelationEventType) event).getRelation();
-            
+
             // create node for predicate
             PredicateType pred = relation.getPredicateType();
-            PredicateNode predNode = parsePredicateEvent(pred.getAppellationEvent(), statementId);
+            PredicateNode predNode = parsePredicateEvent(
+                    pred.getAppellationEvent(), statementId);
             leafNodes.put(predNode.getId(), predNode);
-            
-            Node subjectNode = parseSubjectOrObjectEvent(relation.getSubjectType().getAppellationEvent(), statementId, leafNodes, links);
+
+            Node subjectNode = parseSubjectOrObjectEvent(relation
+                    .getSubjectType().getAppellationEvent(), statementId,
+                    leafNodes, links);
             if (subjectNode == null) {
-                subjectNode = parseSubjectOrObjectEvent(relation.getSubjectType().getRelationEvent(), statementId, leafNodes, links);
+                subjectNode = parseSubjectOrObjectEvent(relation
+                        .getSubjectType().getRelationEvent(), statementId,
+                        leafNodes, links);
             }
-            
-            Node objectNode = parseSubjectOrObjectEvent(relation.getObjectType(relation).getAppellationEvent(), statementId, leafNodes, links);
+
+            Node objectNode = parseSubjectOrObjectEvent(
+                    relation.getObjectType(relation).getAppellationEvent(),
+                    statementId, leafNodes, links);
             if (objectNode == null) {
-                objectNode = parseSubjectOrObjectEvent(relation.getObjectType(relation).getRelationEvent(), statementId, leafNodes, links);
+                objectNode = parseSubjectOrObjectEvent(
+                        relation.getObjectType(relation).getRelationEvent(),
+                        statementId, leafNodes, links);
             }
-            
+
             if (subjectNode != null) {
                 Link link = new Link();
                 link.setSubject(predNode);
@@ -144,7 +156,7 @@ public class EventParser {
                 link.setLabel("has subject");
                 links.add(link);
             }
-            
+
             if (objectNode != null) {
                 Link link = new Link();
                 link.setSubject(predNode);
@@ -152,14 +164,15 @@ public class EventParser {
                 link.setLabel("has object");
                 links.add(link);
             }
-            
+
             return predNode;
         }
-        
+
         return null;
     }
 
-    private PredicateNode parsePredicateEvent(AppellationEventType appellationEvent, String statementId) {
+    private PredicateNode parsePredicateEvent(
+            AppellationEventType appellationEvent, String statementId) {
         PredicateNode predNode = new PredicateNode();
         parseNode(appellationEvent, predNode, statementId);
         predNode.setId(UUID.randomUUID().toString());
@@ -167,7 +180,7 @@ public class EventParser {
     }
 
     private void parseNode(AppellationEventType event, Node node,
-                           String statementId) {
+            String statementId) {
         StringBuffer label = new StringBuffer();
         for (TermType type : event.getTerms()) {
             label.append(type.getTermInterpertation());
@@ -184,7 +197,7 @@ public class EventParser {
         node.getStatementIds().add(statementId);
     }
 
-    private String getLemma(ConceptpowerReply re, String id){
+    private String getLemma(ConceptpowerReply re, String id) {
         String lemma = id;
         if (re.getConceptEntry().size() != 0) {
             return re.getConceptEntry().get(0).getLemma();
@@ -192,16 +205,17 @@ public class EventParser {
         return lemma;
     }
 
-    private String getDesc(ConceptpowerReply re, String id){
+    private String getDesc(ConceptpowerReply re, String id) {
         String desc = id;
         if (re.getConceptEntry().size() != 0) {
             return re.getConceptEntry().get(0).getDescription();
         }
         return desc;
-    }    
+    }
 
-    private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
-            throws JAXBException, QStoreStorageException {
+    private ElementEventsType getElementEventTypeFromCreationEventTypeID(
+            String relationEventId) throws JAXBException,
+            QStoreStorageException {
         String xml = getCreationEventXmlStringFromQstore(relationEventId);
         ElementEventsType elementEventType = null;
         if (xml == null) {
@@ -214,24 +228,27 @@ public class EventParser {
         }
         return elementEventType;
     }
-    
-    private ElementEventsType unMarshalXmlToElementEventsType(String xml) throws JAXBException {
+
+    private ElementEventsType unMarshalXmlToElementEventsType(String xml)
+            throws JAXBException {
         ElementEventsType elementEventType = null;
 
         // Try to unmarshall the XML got from QStore to an ElementEventsType
         // object
         JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
         Unmarshaller unmarshaller1 = context.createUnmarshaller();
-        unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+        unmarshaller1
+                .setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
         InputStream is = new ByteArrayInputStream(xml.getBytes());
-        JAXBElement<ElementEventsType> response1 = unmarshaller1.unmarshal(new StreamSource(is),
-                ElementEventsType.class);
+        JAXBElement<ElementEventsType> response1 = unmarshaller1.unmarshal(
+                new StreamSource(is), ElementEventsType.class);
         elementEventType = response1.getValue();
 
         return elementEventType;
     }
-    
-    private String getCreationEventXmlStringFromQstore(String id) throws JAXBException {
+
+    private String getCreationEventXmlStringFromQstore(String id)
+            throws JAXBException {
         // Message converters for JAXb to understand the xml
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         List<MediaType> mediaTypes = new ArrayList<MediaType>();
@@ -239,7 +256,8 @@ public class EventParser {
         messageConverters.add(new StringHttpMessageConverter());
         org.springframework.oxm.Marshaller marshaler = jaxbMarshaller;
         org.springframework.oxm.Unmarshaller unmarshaler = jaxbMarshaller;
-        messageConverters.add(new MarshallingHttpMessageConverter(marshaler, unmarshaler));
+        messageConverters.add(new MarshallingHttpMessageConverter(marshaler,
+                unmarshaler));
 
         restTemplate.setMessageConverters(messageConverters);
 
@@ -253,21 +271,24 @@ public class EventParser {
         try {
             logger.debug("URL : " + getQStoreGetURL() + id);
             // Get the XML from QStore
-            response = restTemplate.exchange(getQStoreGetURL() + id, HttpMethod.GET, new HttpEntity<String[]>(headers),
+            response = restTemplate.exchange(getQStoreGetURL() + id,
+                    HttpMethod.GET, new HttpEntity<String[]>(headers),
                     String.class);
         } catch (Exception e) {
-           logger.error(e.getMessage(), e);
-           return null;
+            logger.error(e.getMessage(), e);
+            return null;
         }
         return response.getBody().toString();
     }
-    
+
     private String getAuthHeader() {
-        String auth = env.getProperty("qstore.admin.username") + ":" + env.getProperty("qstore.admin.password");
-        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+        String auth = env.getProperty("qstore.admin.username") + ":"
+                + env.getProperty("qstore.admin.password");
+        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset
+                .forName("US-ASCII")));
         return "Basic " + new String(encodedAuth);
     }
-    
+
     private String getQStoreGetURL() {
         return qStoreURL + qStoreURL_Get;
     }

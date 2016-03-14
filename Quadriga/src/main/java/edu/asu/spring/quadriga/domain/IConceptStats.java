@@ -7,21 +7,21 @@ import java.util.List;
  *
  */
 public interface IConceptStats {
-	
-	public abstract String getConceptId();
 
-	public abstract void setConceptId(String conceptId);
+    public abstract String getConceptId();
 
-	public abstract void setDescription(String discription);
+    public abstract void setConceptId(String conceptId);
 
-	public abstract String getDescription();
+    public abstract void setDescription(String discription);
 
-	public abstract String getLemma();
+    public abstract String getDescription();
 
-	public abstract void setLemma(String lemma);
+    public abstract String getLemma();
 
-	public abstract Integer getCount();
+    public abstract void setLemma(String lemma);
 
-	public abstract void setCount(Integer count);
-	
+    public abstract Integer getCount();
+
+    public abstract void setCount(Integer count);
+
 }
