@@ -81,7 +81,7 @@
 						<span><a class="inText" href="${pageContext.servletContext.contextPath}/auth/profile">(Your Profile)</a></span>
 					</div>
 					<div class="loggedOutLink">
-						<a href="<c:url value='/j_spring_security_logout' />">Logout</a>
+						<a href="<c:url value='/logout' />">Logout</a>
 					</div>
 					<hr class="clearLoggedIn">
 				</div>
