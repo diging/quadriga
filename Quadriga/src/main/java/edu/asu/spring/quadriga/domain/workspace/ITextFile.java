@@ -10,10 +10,14 @@ public interface ITextFile {
 
     public abstract void setProjectId(String projectId);
 
+    public abstract String getTextId();
+
+    public abstract void setTextId(String textId);
+
     public abstract String getRefId();
 
     public abstract void setRefId(String refId);
-
+    
     public abstract String getFileName();
 
     public abstract void setFileName(String fileName);

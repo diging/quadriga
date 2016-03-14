@@ -21,8 +21,6 @@ import junit.framework.Assert;
 
 public class TextFileValidatorTest {
     
-    @Mock
-    private ITextFileService tfService;
     @InjectMocks
     private AddTextValidator txtValidator;
     
@@ -32,9 +30,7 @@ public class TextFileValidatorTest {
     
     @Before
     public void init(){
-        tfService = Mockito.mock(ITextFileService.class);
-        MockitoAnnotations.initMocks(this);
-        
+               
         properTxtFile = new TextFile();
         properTxtFile.setFileContent("Dummy File Content. This is Dummy");
         properTxtFile.setFileName("testfile.txt");
@@ -72,8 +68,8 @@ public class TextFileValidatorTest {
             Errors errors =  new BindException(improperTxtFile, "ipTxtFile");
             ValidationUtils.invokeValidator(txtValidator, improperTxtFile, errors);
             Assert.assertTrue(errors.hasErrors());
-            Assert.assertEquals(errors.getFieldError("fileName"),"filename.proper");
-            Assert.assertEquals(errors.getFieldError("fileContent"),"filecontent.required");
+            Assert.assertEquals(errors.getFieldError("fileName").getCode(),"filename.proper");
+            Assert.assertEquals(errors.getFieldError("fileContent").getCode(),"filecontent.required");
         }
         
         @Test
@@ -81,7 +77,7 @@ public class TextFileValidatorTest {
             Errors errors =  new BindException(emptyTxtFile, "eTxtFile");
             ValidationUtils.invokeValidator(txtValidator, emptyTxtFile, errors);
             Assert.assertTrue(errors.hasErrors());
-            Assert.assertEquals(errors.getFieldError("fileName"),"filename.required");
-            Assert.assertEquals(errors.getFieldError("fileContent"),"filecontent.required");
+            Assert.assertEquals(errors.getFieldError("fileName").getCode(),"filename.required");
+            Assert.assertEquals(errors.getFieldError("fileContent").getCode(),"filecontent.required");
         }
 }

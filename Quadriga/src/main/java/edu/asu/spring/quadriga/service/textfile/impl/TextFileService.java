@@ -58,7 +58,7 @@ public class TextFileService implements ITextFileService {
         TextFileDTO txtFileDTO = new TextFileDTO();
         txtFileDTO.setFilename(txtFile.getFileName());
         txtFileDTO.setProjectId(txtFile.getProjectId());
-        txtFileDTO.setRefId(txtFile.getRefId());
+        txtFileDTO.setTextId(txtFile.getTextId());
         txtFileDTO.setWorkspaceId(txtFile.getWorkspaceId());
         return txtFileDAO.saveTextFileDTO(txtFileDTO);
     }
@@ -73,7 +73,7 @@ public class TextFileService implements ITextFileService {
 
         String saveDir = env.getProperty("textfile.location");
         System.out.println(env.getProperty("textfile.location"));
-        String filePath = saveDir + "/" + txtFile.getRefId();
+        String filePath = saveDir + "/" + txtFile.getTextId();
         File saveTxtFile;
         File dirFile = new File(filePath);
         if (!dirFile.exists()) {
@@ -92,7 +92,7 @@ public class TextFileService implements ITextFileService {
         try {
             propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
             propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
-            propFw.write("Reference Id:" + txtFile.getRefId() + "\n");
+            propFw.write("Reference Id:" + txtFile.getTextId() + "\n");
             fw.close();
             propFw.close();
             return true;

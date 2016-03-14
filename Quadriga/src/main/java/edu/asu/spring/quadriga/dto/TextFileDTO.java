@@ -26,15 +26,14 @@ public class TextFileDTO implements Serializable {
         //@JoinColumn(name = "projectid", referencedColumnName = "project_id")
         @Id
         @Basic(optional = false)
-        @Column(name = "refid")
-        private String refId;
-        
+        @Column(name = "textId")
+        private String textId;
+        @Basic(optional = false)
+        @Column(name = "refId")
+        private String refId;      
         @Basic(optional = false)
         @Column(name = "projectid")
         private String projectId;
-        
-        
-
         @Basic(optional = false)
         @Column(name = "filename")
         private String filename;
@@ -50,12 +49,12 @@ public class TextFileDTO implements Serializable {
             this.projectId = project;
         }
 
-        public String getRefId() {
-            return refId;
+        public String getTextId() {
+            return textId;
         }
 
-        public void setRefId(String refid) {
-            this.refId = refid;
+        public void setTextId(String refid) {
+            this.textId = refid;
         }
 
         public String getFilename() {
@@ -73,6 +72,14 @@ public class TextFileDTO implements Serializable {
 		public void setWorkspaceId(String workspaceId) {
 			this.workspaceId = workspaceId;
 		}
+
+        public String getRefId() {
+            return refId;
+        }
+
+        public void setRefId(String refId) {
+            this.refId = refId;
+        }
 
     
 

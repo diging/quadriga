@@ -46,7 +46,6 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
             sessionFactory.getCurrentSession().save(txtFileDTO);
             return true;
         } catch (Exception e) {
-            logger.error("Error in adding the Text File: ", e);
             throw new QuadrigaStorageException(e);
         }
     }
