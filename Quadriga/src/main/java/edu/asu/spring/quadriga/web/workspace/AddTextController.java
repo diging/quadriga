@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
@@ -60,7 +62,7 @@ public class AddTextController {
      */
     @AccessPolicies({
             @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
-                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR}),
+                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }),
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
                     RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
@@ -99,24 +101,30 @@ public class AddTextController {
     @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/addtext", method = RequestMethod.POST)
     public ModelAndView saveTextFileForm(HttpServletResponse resp,
             @Validated @ModelAttribute("textfile") TextFile txtFile, BindingResult result,
-            @PathVariable("workspaceid") String workspaceid, @PathVariable("projectid") String projid)
+            @PathVariable("workspaceid") String workspaceid, @PathVariable("projectid") String projid,
+            RedirectAttributes redirectAttributes)
                     throws QuadrigaStorageException, QuadrigaAccessException, IOException {
 
-        ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
+        ModelAndView model;
         if (result.hasErrors()) {
+            model = new ModelAndView("auth/workbench/workspace/addtext");
             model.getModelMap().put("textfile", txtFile);
             model.getModelMap().put("workspaceId", workspaceid);
             model.getModelMap().put("myProjectId", projid);
             model.getModelMap().put("success", "0");
         } else {
-            model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
+            model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/" + workspaceid);
+
             model.getModelMap().put("workspaceId", workspaceid);
             model.getModelMap().put("myProjectId", projid);
             txtFile.setWorkspaceId(workspaceid);
             txtFile.setProjectId(projid);
-            if(txtFileService.saveTextFile(txtFile))
-                model.getModelMap().put("success", "1");
-            else{
+            if (txtFileService.saveTextFile(txtFile)) {
+
+                redirectAttributes.addFlashAttribute("show_success_alert", true);
+                System.out.println("fails ghere");
+                redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
+            } else {
                 model.getModelMap().put("success", "2");
             }
         }
