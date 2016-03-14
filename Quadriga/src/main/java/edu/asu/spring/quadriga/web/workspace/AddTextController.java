@@ -125,7 +125,8 @@ public class AddTextController {
                 System.out.println("fails ghere");
                 redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
             } else {
-                model.getModelMap().put("success", "2");
+                redirectAttributes.addFlashAttribute("show_error_alert", true);
+                redirectAttributes.addFlashAttribute("show_error_alert", "Error while checking the text file.");
             }
         }
         return model;
