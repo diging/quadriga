@@ -1,0 +1,31 @@
+.search-wrapper {
+    position: relative;
+}
+
+.search-results {
+    overflow: hidden;
+    position: absolute;
+    top: 60px;
+}
+
+.search-results > .list-group {
+    margin-bottom: 0;
+}
+
+.search-wrapper .search-input {
+    position: relative;
+}
+
+/* Not to display IE clear */
+.search-wrapper .search-input::-ms-clear {
+    display: none;
+}
+
+.search-wrapper .search-loader {
+    width: 16px;
+    height: 16px;
+    display: none;
+    position: absolute;
+    top: 34px;
+    right: 10px;
+}
