@@ -2,6 +2,12 @@ package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
+/**
+ * @author Nischal Samji
+ * 
+ * Domain object for handling Text File Operations.
+ *
+ */
 public class TextFile implements ITextFile {
 
     private String fileName;

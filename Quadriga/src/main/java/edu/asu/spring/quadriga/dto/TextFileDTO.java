@@ -13,6 +13,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.springframework.stereotype.Component;
 
 
+/**
+ * @author Nischal Samji
+ * 
+ * DTO for Text File Operations
+ *
+ */
 @Entity
 @Table(name = "tbl_textfiles")
 @XmlRootElement
