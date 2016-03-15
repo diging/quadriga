@@ -89,12 +89,4 @@ public class LoginControllerTest {
 		assertEquals(loginController.loginerror(model),"login");
 	}
 
-	/**
-	 * This method checks if the {@link LoginController} returns the logout path.
-	 */
-	@Test
-	public void testLogout() {
-		assertEquals(loginController.logout(model),"login");
-	}
-
 }
