@@ -200,7 +200,7 @@ public class WebsiteProjectController {
 		model.addAttribute("networkid", "\"\"");
 		model.addAttribute("project", project);
 
-		return "sites/networks/visualize";
+		return "sites/networks/explore";
 	}
 	
 }
