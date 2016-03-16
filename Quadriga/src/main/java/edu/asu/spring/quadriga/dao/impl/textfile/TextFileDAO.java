@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
+@Transactional
 public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
     @Autowired
@@ -28,15 +29,38 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
     @Override
     public List<TextFileDTO> getTextFileDTObyWsId(String wsId) {
-        
-     // TODO To be implemented
-        return null;
+
+        List<TextFileDTO> tfDTO = null;
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
+            query.setParameter("wsId", wsId);
+            tfDTO = (List<TextFileDTO>)query.list();
+            System.out.println(tfDTO);
+        } catch (HibernateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return tfDTO;
+
     }
 
     @Override
     public List<TextFileDTO> getTextFileDTObyProjId(String projId) {
-        // TODO To be implemented
-        return null;
+
+        List<TextFileDTO> tfDTO = null;
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "from TextFileDTO txtFiles where txtFiles.projectId =:projID");
+            query.setParameter("projId", projId);
+            tfDTO = (List<TextFileDTO>)query.list();
+            System.out.println(tfDTO);
+        } catch (HibernateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return tfDTO;
+
     }
 
     /*
@@ -48,7 +72,7 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
      * the db.
      * 
      */
-    @Transactional
+    
     @Override
     public boolean saveTextFileDTO(TextFileDTO txtFileDTO) throws QuadrigaStorageException {
         try {
@@ -73,13 +97,12 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
     @Override
     public TextFileDTO getTextFileDTO(String textId) {
         TextFileDTO tfDTO = null;
-        try{
-            tfDTO = (TextFileDTO)sessionFactory.getCurrentSession().get(TextFileDTO.class, textId);
-        }
-        catch(HibernateException hEx){
-            hEx.printStackTrace();
-            logger.error("Error in retrieving textfile with id:"+ textId);
-            
+
+         try {
+            tfDTO = (TextFileDTO) sessionFactory.getCurrentSession().get(TextFileDTO.class, textId);
+        } catch (HibernateException e) {
+            logger.error("Retrieve Text File details method :", e);
+            return null;
         }
         return tfDTO;
     }
