@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl.textfile;
 
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,13 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
     @Override
     public <List>TextFileDTO getTextFileDTObyWsId(String wsId) {
-        // TODO To be implemented
+        List txtFileList = null;
+        try{
+            
+        }
+        catch(HibernateException hEx){
+            
+        }
         return null;
     }
 
@@ -67,8 +74,14 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
     @Override
     public TextFileDTO getTextFileDTO(String textId) {
-        // TODO To be implemented
-        return null;
+        TextFileDTO tfDTO = null;
+        try {
+            tfDTO = (TextFileDTO) sessionFactory.getCurrentSession().get(TextFileDTO.class, textId);
+        } catch (HibernateException e) {
+            logger.error("Retrieve Text File details method :", e);
+            return null;
+        }
+        return tfDTO;
     }
 
 }
