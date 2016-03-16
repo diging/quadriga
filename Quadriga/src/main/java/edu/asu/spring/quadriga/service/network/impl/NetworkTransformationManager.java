@@ -148,6 +148,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // Filter the nodes with the concept id
         // add all the statement ids to a set
         Set<String> statementIdSearchSet = new HashSet<String>();
+        List<Node> searchedNodes = new ArrayList<Node>();
         for (Node node: transformedNetwork.getNodes().values()) {
             if (conceptId.equals(node.getConceptId())) {
                 statementIdSearchSet.addAll(node.getStatementIds());
@@ -182,6 +183,13 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             if (!addedNodes.contains(objectNode)) {
                 finalNodes.put((++index).toString(), objectNode);
                 addedNodes.add(objectNode);
+            }
+        }
+
+        // finally add the searched concept nodes if they are not present
+        for (Node node: searchedNodes) {
+            if (!searchedNodes.contains(node)) {
+                finalNodes.put((++index).toString(), node);
             }
         }
 
