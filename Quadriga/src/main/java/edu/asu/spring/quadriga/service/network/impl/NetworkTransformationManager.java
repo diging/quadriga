@@ -154,27 +154,34 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             }
         }
 
-        // Include only those nodes which have their statement ids
-        // in statement search set
-        Map<String, Node> finalNodes = new HashMap<String, Node>();
-        for (Map.Entry<String, Node> entry: transformedNetwork.getNodes().entrySet()) {
-            Node node = entry.getValue();
-            for (String statementId: node.getStatementIds()) {
-                if (statementIdSearchSet.contains(statementId)) {
-                    // statement id match. Add it to the final nodes map
-                    finalNodes.put(entry.getKey(), node);
-                }
-            }
-        }
-
-        // Include only those links which have their statement ids
-        // in statement search set
+        // include only those links which have statement ids in the search set
         List<Link> finalLinks = new ArrayList<Link>();
         for (Link link: transformedNetwork.getLinks()) {
             if (statementIdSearchSet.contains(link.getStatementId())) {
                 // statement id match
                 // add to the final link list
                 finalLinks.add(link);
+            }
+        }
+
+        // final nodes
+        Map<String, Node> finalNodes = new HashMap<String, Node>();
+        Set<Node> addedNodes = new HashSet<Node>();
+        Integer index = 0;
+        for (Link link: finalLinks) {
+            Node subjectNode = link.getSubject();
+            Node objectNode = link.getObject();
+            // if node already added then do not add it
+            // if nodes are added twice - it would produce many
+            // nodes and less links => disconnected graph
+            if (!addedNodes.contains(subjectNode)) {
+                finalNodes.put((++index).toString(), subjectNode);
+                addedNodes.add(subjectNode);
+            }
+
+            if (!addedNodes.contains(objectNode)) {
+                finalNodes.put((++index).toString(), objectNode);
+                addedNodes.add(objectNode);
             }
         }
 
