@@ -1,6 +1,9 @@
 package edu.asu.spring.quadriga.dao.impl.textfile;
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
+@Transactional
 public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
     @Autowired
@@ -24,21 +28,35 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
     private static final Logger logger = LoggerFactory.getLogger(TextFileDAO.class);
 
     @Override
-    public <List>TextFileDTO getTextFileDTObyWsId(String wsId) {
-        List txtFileList = null;
-        try{
-            
+    public List<TextFileDTO> getTextFileDTObyWsId(String wsId) {
+        List<TextFileDTO> tfDTO = null;
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
+            query.setParameter("wsId", wsId);
+            tfDTO = (List<TextFileDTO>)query.list();
+            System.out.println(tfDTO);
+        } catch (HibernateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        catch(HibernateException hEx){
-            
-        }
-        return null;
+        return tfDTO;
     }
 
     @Override
-    public TextFileDTO getTextFileDTObyProjId(String projId) {
-        // TODO To be implemented
-        return null;
+    public List<TextFileDTO> getTextFileDTObyProjId(String projId) {
+        List<TextFileDTO> tfDTO = null;
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "from TextFileDTO txtFiles where txtFiles.projectId =:projID");
+            query.setParameter("projId", projId);
+            tfDTO = (List<TextFileDTO>)query.list();
+            System.out.println(tfDTO);
+        } catch (HibernateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return tfDTO;
     }
 
     /*
@@ -50,7 +68,7 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
      * the db.
      * 
      */
-    @Transactional
+    
     @Override
     public boolean saveTextFileDTO(TextFileDTO txtFileDTO) throws QuadrigaStorageException {
         try {

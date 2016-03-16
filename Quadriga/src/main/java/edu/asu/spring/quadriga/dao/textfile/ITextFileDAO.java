@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.dao.textfile;
 
+import java.util.List;
+
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -12,7 +14,7 @@ public interface ITextFileDAO extends IBaseDAO<TextFileDTO>{
      * @return
      *         Returns a list of TextFiles related to the workspace
      */
-    public abstract <List>TextFileDTO getTextFileDTObyWsId(String wsId);
+    public abstract List<TextFileDTO> getTextFileDTObyWsId(String wsId);
 
     /**
      * @param projId
@@ -20,7 +22,7 @@ public interface ITextFileDAO extends IBaseDAO<TextFileDTO>{
      * @return
      *      Returns a list of TextFiles related to the workspace.
      */
-    public abstract <List>TextFileDTO getTextFileDTObyProjId(String projId);
+    public abstract List<TextFileDTO> getTextFileDTObyProjId(String projId);
 
     /**
      * @param textId
