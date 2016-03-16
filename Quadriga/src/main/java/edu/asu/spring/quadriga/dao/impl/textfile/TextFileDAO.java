@@ -27,23 +27,14 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
     private static final Logger logger = LoggerFactory.getLogger(TextFileDAO.class);
 
     @Override
-    public <List>TextFileDTO getTextFileDTObyWsId(String wsId) {
+    public List<TextFileDTO> getTextFileDTObyWsId(String wsId) {
         
-        try {
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    "Select * from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
-            query.setParameter("wsId", wsId);
-            System.out.println(query.list());
-            return null;
-        } catch (HibernateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+     // TODO To be implemented
         return null;
     }
 
     @Override
-    public TextFileDTO getTextFileDTObyProjId(String projId) {
+    public List<TextFileDTO> getTextFileDTObyProjId(String projId) {
         // TODO To be implemented
         return null;
     }
