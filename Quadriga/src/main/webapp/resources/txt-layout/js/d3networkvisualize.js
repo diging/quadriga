@@ -214,8 +214,7 @@ function d3init(graph, networkId, path,type) {
 	function  redraw() {
 		console.log("here", d3.event.translate, d3.event.scale);
 		vis.attr("transform",
-				"translate(" + d3.event.translate + ")"
-				+ " scale(" + d3.event.scale + ")");
+				" scale(" + d3.event.scale + ")");
 	};
 //	Works on loading the network and placing the nodes randomly for view
 
@@ -619,22 +618,22 @@ function d3init(graph, networkId, path,type) {
 		if(d.group==1){
 
 			html = "<div id='popup' title='Annotation' >" +
-			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
-			"</br>" +
-			"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
-			"</br>" +
+			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +			
 			"</div>";
 		}
 		// Annotate on node
 		else{
 			html = "<div id='popup' title='Annotation'>" +
 			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
+			"</br>" +
+			"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
+			"</br>" +
 			"</div>";
 		}				
 		$('#inner-details').html(html);	
 		// This function annotate for node
 		// This works on annot_node tag in the pop.
-		$('#annot_node').click(function() {
+		$('#annot_node,#annot_relation').click(function() {
 			//Type = node
 			var type1 ="node";
 
@@ -648,11 +647,11 @@ function d3init(graph, networkId, path,type) {
 
 
 			// Creating popup html content to facilitate adding annotation
-			var html1 = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
+			var html1 = "<div id='"+popupId+"' class='form-group' title='Annotation' style='display: none'>" +
 			"<form id='annot_form' action=" + path
 			+ "/auth/editing/saveAnnotation/";
 			html1 += networkId + " method='POST' >";
-			html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
+			html1 += "<textarea name='annotText' id='"+text1ID+"'class='form-control' cols='15' rows='5'></textarea>";
 			html1 += "<input  type='hidden' name='nodeid' id='nodeid' value="
 				+ d.id + " />";
 			html1 += "<input  type='hidden' name='nodename' id='nodename' value="
@@ -798,7 +797,7 @@ function d3init(graph, networkId, path,type) {
 		var objecttype = "node";
 		var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
 		var annotationDesc = "<h5>Annotations</h5>";
-		var annotationContent = "<textarea id="+'"annotationtextarea"'+" cols=40 rows=5 readonly>";
+		var annotationContent = "<textarea id="+'"annotationtextarea"'+" class='form-control' cols=40 rows=5 readonly>";  /* style='background:#FFFFFF; border: 1px solid #dddddd;'*/
 		// ajax Call to get annotation for a node.id
 		// Used to add the old annotation in to the popup view
 		$.ajax({
@@ -834,7 +833,7 @@ function d3init(graph, networkId, path,type) {
 		var descHeading = "<h5>Description of Node</h5>";
 
 		var lemmaName="<h5> Node name : "+lemma+"</h5>";
-		var conceptDesc = "<textarea id="+'"conceptdescTextArea"'+" cols=40 rows=5 readonly>";
+		var conceptDesc = "<textarea id="+'"conceptdescTextArea"'+" class='form-control' cols=40 rows=5 readonly>";
 
 		// This is done to replace all dot (.) with dollar ($)
 		// Since our spring controller would ignore any data after dot (.)
@@ -873,11 +872,11 @@ function d3init(graph, networkId, path,type) {
 
 
 		// Creating popup html content to facilitate adding annotation
-		var html = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
+		var html = "<div id='"+popupId+"' title='Annotation' >" +//style='display: none'
 		"<form id='annot_edge_form' action=" + path
 		+ "/auth/editing/saveAnnotationToEdge/";
 		html += networkId + " method='GET' >";
-		html += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
+		html += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15' ></textarea>";
 		html+= "<input type='button' id='annot_submit_edge' value='submit'>";
 		html += "</div></form>";
 

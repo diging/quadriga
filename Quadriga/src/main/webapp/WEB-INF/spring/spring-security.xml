@@ -10,23 +10,26 @@
 		<intercept-url pattern="/rest/**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<http-basic/>		
 		<!-- <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" /> -->
+		<csrf disabled="true"/>
 	</http>
 	<global-method-security pre-post-annotations="enabled"/>
 	
 	<http auto-config="true" use-expressions="true" disable-url-rewriting="true">
 		<access-denied-handler error-page="/forbidden" />
-		<headers />
+		<headers disabled="true"/>
+        <csrf disabled="true"/>
+        
 		<intercept-url pattern="/login*" access="permitAll" />
 		<intercept-url pattern="/register*" access="permitAll" />
 		<intercept-url pattern="/logout*" access="permitAll" />
 		<intercept-url pattern="/createaccount*" access="permitAll" />
-
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/welcome**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/home**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/about**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/workbench/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
+		<intercept-url pattern="/auth/rest/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/conceptcollections/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/conceptdetails/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/searchitems/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
@@ -41,7 +44,7 @@
 		
 		<form-login login-page="/login" default-target-url="/auth/welcome"
 			authentication-failure-url="/loginfailed" />
-		<logout logout-success-url="/logout" invalidate-session="true" />
+		<logout logout-success-url="/login" invalidate-session="true" />
 	</http>
 	
 	<!-- <ldap-server url="ldap://diging.asu.edu:10389" manager-dn="uid=admin,ou=system"
@@ -56,8 +59,8 @@
 	</beans:bean>
 	<authentication-manager alias="authenticationManager" erase-credentials="false">
 		<authentication-provider>
-	        <user-service>
-	       		<user name="admin" password="admin" authorities="ROLE_QUADRIGA_USER_ADMIN, ROLE_QUADRIGA_USER_STANDARD, ROLE_QUADRIGA_USER_COLLABORATOR" />
+		    <user-service>
+	       		<user name="${quadriga.admin.username}" password="${quadriga.admin.password}" authorities="ROLE_QUADRIGA_USER_ADMIN, ROLE_QUADRIGA_USER_STANDARD, ROLE_QUADRIGA_USER_COLLABORATOR" />
 	        </user-service>
    		</authentication-provider>
 		<authentication-provider ref="authProvider"></authentication-provider>

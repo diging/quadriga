@@ -47,6 +47,11 @@ import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
 
+/**
+ * Class for parsing Appellation/Relation Event networks into S-O-P networks.
+ * @author jdamerow
+ *
+ */
 @PropertySource(value = "classpath:/user.properties")
 @Service
 public class EventParser {
@@ -84,7 +89,7 @@ public class EventParser {
         ElementEventsType elementEventType = getElementEventTypeFromCreationEventTypeID(relationEventId);
         List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
         Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-        
+         
         while (creationEventIterator.hasNext()) {
             CreationEvent event = creationEventIterator.next();
             parseSubjectOrObjectEvent(event, relationEventId, nodes, links);
@@ -171,7 +176,7 @@ public class EventParser {
         }
         node.setId(event.getAppellationEventID());
        
-        node.setConceptId(label.toString());
+        node.setConceptId(label.toString().trim());
         
         if (node.getConceptId() != null) {
             node.setLabel(conceptCollectionManager.getConceptLemmaFromConceptId(node.getConceptId()));
