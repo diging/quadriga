@@ -33,14 +33,9 @@ public class TextFileDTO implements Serializable {
         @Basic(optional = false)
         @Column(name = "textid", unique=true, nullable=false)
         private String textId;
-        
-        
         @Basic(optional = false)
         @Column(name = "refid")
         private String refId;   
-        
-        
-        
         @Basic(optional = false)
         @Column(name = "projectid")
         private String projectId;

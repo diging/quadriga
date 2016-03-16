@@ -44,6 +44,7 @@ public class AddTextController {
 
     /**
      * @param binder
+     *          Generic binder object to bind the validator to the domain object.
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -55,8 +56,11 @@ public class AddTextController {
      * Method to generate a view to generate a view to add new text file.
      * 
      * @param workspaceid
-     *            Path Variable to retrieve the associated Workspace id
+     *          Path variable to retrieve the active workspace id
+     * @param projid
+     *          Path variable to retrieve the active project id
      * @return
+     *          Returns the text file addition module
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
@@ -88,6 +92,7 @@ public class AddTextController {
      * @param workspaceid
      *            Path Variable to retrieve the associated Workspace id
      * @return
+     *          Returns the workspace details page if success else returns the add text page.
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      * @throws IOException

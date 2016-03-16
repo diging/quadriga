@@ -23,14 +23,14 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
     private static final Logger logger = LoggerFactory.getLogger(TextFileDAO.class);
 
     @Override
-    public TextFileDTO getTextFileDTO(String wsId) {
-        // TODO Auto-generated method stub
+    public <List>TextFileDTO getTextFileDTObyWsId(String wsId) {
+        // TODO To be implemented
         return null;
     }
 
     @Override
     public TextFileDTO getTextFileDTObyProjId(String projId) {
-        // TODO Auto-generated method stub
+        // TODO To be implemented
         return null;
     }
 
@@ -63,6 +63,12 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
     @Override
     public TextFileDTO getDTO(String id) {
         return getDTO(TextFileDTO.class, id);
+    }
+
+    @Override
+    public TextFileDTO getTextFileDTO(String textId) {
+        // TODO To be implemented
+        return null;
     }
 
 }
