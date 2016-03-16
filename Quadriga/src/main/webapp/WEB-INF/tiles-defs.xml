@@ -63,8 +63,6 @@
         <put-attribute name="currentPage" value="home" />
     </definition>
 
-
-
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Login" />
@@ -77,7 +75,6 @@
         <put-attribute name="navigation" value="/WEB-INF/views/public/sitesnavbarleft.jsp"  />          
 		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
 	</definition>
-
 
 	<!-- About page -->
 	<definition name="auth/about" extends="base.definition.nonav">

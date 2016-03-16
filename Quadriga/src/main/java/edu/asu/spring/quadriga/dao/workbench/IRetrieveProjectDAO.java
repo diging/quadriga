@@ -114,5 +114,6 @@ public interface IRetrieveProjectDAO
 	ProjectDTO getProjectDTOByUnixName(String unixName)
 			throws QuadrigaStorageException;
 	
+	List<ProjectDTO> getAllProjectsDTOByAccessibility(String accessibility) throws QuadrigaStorageException;
 
 }
