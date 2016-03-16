@@ -127,7 +127,6 @@ public class AddTextController {
             if (txtFileService.saveTextFile(txtFile)) {
 
                 redirectAttributes.addFlashAttribute("show_success_alert", true);
-                System.out.println("fails ghere");
                 redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
             } else {
                 redirectAttributes.addFlashAttribute("show_error_alert", true);

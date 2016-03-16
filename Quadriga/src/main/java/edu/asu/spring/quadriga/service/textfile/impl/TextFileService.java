@@ -45,6 +45,7 @@ public class TextFileService implements ITextFileService {
         txtFile.setTextId(textId.toString());
         boolean fsStatus = saveTextFileLocal(txtFile);
         boolean dbStatus = saveTextFileDB(txtFile);
+        txtFileDAO.getTextFileDTObyWsId(txtFile.getWorkspaceId());
         return fsStatus && dbStatus;
     }
 

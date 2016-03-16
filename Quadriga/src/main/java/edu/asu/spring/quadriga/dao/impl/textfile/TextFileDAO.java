@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.dao.impl.textfile;
 
+import java.util.List;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +28,17 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
     @Override
     public <List>TextFileDTO getTextFileDTObyWsId(String wsId) {
-        // TODO To be implemented
+        
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "Select * from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
+            query.setParameter("wsId", wsId);
+            System.out.println(query.list());
+            return null;
+        } catch (HibernateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -67,8 +81,16 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
     @Override
     public TextFileDTO getTextFileDTO(String textId) {
-        // TODO To be implemented
-        return null;
+        TextFileDTO tfDTO = null;
+        try{
+            tfDTO = (TextFileDTO)sessionFactory.getCurrentSession().get(TextFileDTO.class, textId);
+        }
+        catch(HibernateException hEx){
+            hEx.printStackTrace();
+            logger.error("Error in retrieving textfile with id:"+ textId);
+            
+        }
+        return tfDTO;
     }
 
 }
