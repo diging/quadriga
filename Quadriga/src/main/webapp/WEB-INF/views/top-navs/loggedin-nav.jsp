@@ -24,9 +24,10 @@
 		</ul>
 		</li></sec:authorize>
 
-		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/networks">Networks</a>
+		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR', 'ROLE_QUADRIGA_USER_ADMIN')"><li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/networks">Networks</a>
 		<ul>
 		<li><a href="${pageContext.servletContext.contextPath}/auth/editing">Editing</a></li>
+		<li><a href="${pageContext.servletContext.contextPath}/auth/transformation">Transformations</a></li>
 		</ul>
 		</li></sec:authorize>
 		
