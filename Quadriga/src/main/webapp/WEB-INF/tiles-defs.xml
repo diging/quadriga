@@ -704,7 +704,7 @@
 		<put-attribute name="content" value="/WEB-INF/views/public/publicwebsiteabout.jsp"/>
 	</definition>
 	
-	<definition name="sites/public/publicWebsiteEditAbout" extends="base.definition.public">
+	<definition name="sites/settings/publicWebsiteEditAbout" extends="base.definition.public">
 	   <put-attribute name="currentPage" value="EditAbout" />
 		<put-attribute name="content" value="/WEB-INF/views/settings/publicWebsiteEditAbout.jsp"/>
 	</definition>

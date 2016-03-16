@@ -34,7 +34,7 @@ public class WebsiteAboutEditController {
         model.addAttribute("project", project);
         model.addAttribute("title", title);
         model.addAttribute("aboutProject", aboutProject);
-        return "sites/public/publicWebsiteEditAbout";
+        return "sites/settings/publicWebsiteEditAbout";
     }
 
 }
