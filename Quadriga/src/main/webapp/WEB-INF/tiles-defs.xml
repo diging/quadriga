@@ -63,7 +63,6 @@
         <put-attribute name="currentPage" value="home" />
     </definition>
 
-
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Login" />
@@ -819,5 +818,3 @@
 	
 	
 </tiles-definitions>
-
-	
