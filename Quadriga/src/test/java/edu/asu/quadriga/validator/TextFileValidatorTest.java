@@ -36,6 +36,8 @@ public class TextFileValidatorTest {
 
     @Before
     public void init() {
+        
+        MockitoAnnotations.initMocks(this);
 
         properTxtFile = new TextFile();
         properTxtFile.setFileContent("Dummy File Content. This is Dummy");
@@ -48,7 +50,7 @@ public class TextFileValidatorTest {
         improperTxtFile.setFileContent("");
         improperTxtFile.setFileName(".testtext");
         improperTxtFile.setProjectId(UUID.randomUUID().toString());
-        improperTxtFile.setRefId(UUID.randomUUID().toString());
+        improperTxtFile.setRefId("");
         improperTxtFile.setWorkspaceId(UUID.randomUUID().toString());
 
         emptyTxtFile = new TextFile();
