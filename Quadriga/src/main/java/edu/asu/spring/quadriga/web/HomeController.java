@@ -122,6 +122,7 @@ public class HomeController {
         return "auth/home";
     }
 
+    
     @RequestMapping(value = "auth/about", method = RequestMethod.GET)
     public String aboutQuadriga(Locale locale, Model model, Principal principal) {
         Date date = new Date();
