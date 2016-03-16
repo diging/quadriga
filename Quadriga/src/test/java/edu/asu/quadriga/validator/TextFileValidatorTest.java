@@ -19,6 +19,12 @@ import edu.asu.spring.quadriga.service.textfile.impl.TextFileService;
 import edu.asu.spring.quadriga.validator.AddTextValidator;
 import junit.framework.Assert;
 
+/**
+ * @author Nischal Samji
+ * 
+ * Unit Test for Validator for storing text file objects.
+ *
+ */
 public class TextFileValidatorTest {
 
     @InjectMocks
