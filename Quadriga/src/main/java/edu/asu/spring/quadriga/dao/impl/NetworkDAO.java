@@ -1102,6 +1102,10 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
 	}
 
 
+	@Override
+    public String getIdPrefix() {
+        return messages.getProperty("network_id.prefix");
+    }
 
     @Override
     public NetworksDTO getDTO(String id) {

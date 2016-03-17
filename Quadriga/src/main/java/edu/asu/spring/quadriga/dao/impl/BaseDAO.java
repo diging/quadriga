@@ -3,7 +3,10 @@ package edu.asu.spring.quadriga.dao.impl;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
+import java.util.Properties;
+import java.util.Random;
+
+import javax.annotation.Resource;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -24,6 +27,9 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>  {
 	@Autowired
 	protected SessionFactory sessionFactory;
 	
+	@Resource(name = "projectconstants")
+    protected Properties messages;
+	
 	private static final Logger logger = LoggerFactory.getLogger(BaseDAO.class);
 	
 	
@@ -33,8 +39,36 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>  {
 	@Override
     public String generateUniqueID()
 	{
-		return UUID.randomUUID().toString();
+	    String id = null;
+	    while (true) {
+	        id = getIdPrefix() + generateId();
+            T existingDto = getDTO(id);
+            if (existingDto == null)
+                break;
+        }
+		return id;
 	}
+	
+	/**
+     * This methods generates a new 6 character long id. Note that this method
+     * does not assure that the id isn't in use yet. 
+     * 
+     * Adapted from http://stackoverflow.com/questions/9543715/generating-human-readable-usable-short-but-unique-ids
+     * 
+     * @return 6 character id
+     */
+    private String generateId() {
+        char[] chars = 
+                "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+        
+        Random random = new Random();
+        StringBuilder builder = new StringBuilder();
+        for (int i=0; i<6; i++) {
+            builder.append(chars[random.nextInt(62)]);
+        }
+        
+        return builder.toString();
+    }
 	
 	/* (non-Javadoc)
      * @see edu.asu.spring.quadriga.dao.impl.IBaseDAO#getUserDTO(java.lang.String)
@@ -94,5 +128,10 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>  {
         }
     }
 	
+	public String getIdPrefix() {
+	    return messages.getProperty("notype_id.prefix");
+	}
+	
 	public abstract T getDTO(String id);
+    
 }
