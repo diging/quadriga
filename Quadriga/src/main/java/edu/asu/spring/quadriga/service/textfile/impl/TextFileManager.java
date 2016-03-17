@@ -44,7 +44,7 @@ public class TextFileManager implements ITextFileManager {
      */
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
-        String txtId = (txtFileDAO.generateUniqueID());
+        String txtId = txtFileDAO.generateUniqueID();
         txtFile.setTextId(txtId);
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
         txtFileDTO.setTextId(txtId);
@@ -61,7 +61,6 @@ public class TextFileManager implements ITextFileManager {
      * @throws QuadrigaStorageException
      */
     private boolean saveTextFileDB(TextFileDTO tfDTO) throws QuadrigaStorageException {   
-        System.out.println(tfDTO.getTextId());
         return txtFileDAO.saveTextFileDTO(tfDTO);
     }
 

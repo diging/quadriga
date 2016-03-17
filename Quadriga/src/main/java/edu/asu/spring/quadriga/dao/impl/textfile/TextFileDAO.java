@@ -1,6 +1,9 @@
 package edu.asu.spring.quadriga.dao.impl.textfile;
 
 import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -21,6 +24,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 @Repository
 @Transactional
 public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
+    
+    @Resource(name = "projectconstants")
+    private Properties messages;
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -36,7 +42,6 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
                     "from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
             query.setParameter("wsId", wsId);
             tfDTO = (List<TextFileDTO>)query.list();
-            System.out.println(tfDTO);
         } catch (HibernateException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -54,7 +59,6 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
                     "from TextFileDTO txtFiles where txtFiles.projectId =:projID");
             query.setParameter("projId", projId);
             tfDTO = (List<TextFileDTO>)query.list();
-            System.out.println(tfDTO);
         } catch (HibernateException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -105,5 +109,11 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
         }
         return tfDTO;
     }
+    
+    
+    @Override
+    public String getIdPrefix() {
+        return messages.getProperty("project_id.prefix");
+    }    
 
 }

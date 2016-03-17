@@ -44,7 +44,8 @@ public class AddTextController {
 
     /**
      * @param binder
-     *          Generic binder object to bind the validator to the domain object.
+     *            Generic binder object to bind the validator to the domain
+     *            object.
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -56,11 +57,10 @@ public class AddTextController {
      * Method to generate a view to generate a view to add new text file.
      * 
      * @param workspaceid
-     *          Path variable to retrieve the active workspace id
+     *            Path variable to retrieve the active workspace id
      * @param projid
-     *          Path variable to retrieve the active project id
-     * @return
-     *          Returns the text file addition module
+     *            Path variable to retrieve the active project id
+     * @return Returns the text file addition module
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
@@ -91,8 +91,8 @@ public class AddTextController {
      *            Generic BingingResults object to hold validation errors
      * @param workspaceid
      *            Path Variable to retrieve the associated Workspace id
-     * @return
-     *          Returns the workspace details page if success else returns the add text page.
+     * @return Returns the workspace details page if success else returns the
+     *         add text page.
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      * @throws IOException
@@ -110,22 +110,17 @@ public class AddTextController {
             RedirectAttributes redirectAttributes)
                     throws QuadrigaStorageException, QuadrigaAccessException, IOException {
 
-        ModelAndView model;
+        ModelAndView model = new ModelAndView();
+        model.getModelMap().put("workspaceId", workspaceid);
+        model.getModelMap().put("myProjectId", projid);
         if (result.hasErrors()) {
-            model = new ModelAndView("auth/workbench/workspace/addtext");
+            model.setViewName("auth/workbench/workspace/addtext");
             model.getModelMap().put("textfile", txtFile);
-            model.getModelMap().put("workspaceId", workspaceid);
-            model.getModelMap().put("myProjectId", projid);
-            model.getModelMap().put("success", "0");
         } else {
             model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/" + workspaceid);
-
-            model.getModelMap().put("workspaceId", workspaceid);
-            model.getModelMap().put("myProjectId", projid);
             txtFile.setWorkspaceId(workspaceid);
             txtFile.setProjectId(projid);
             if (tfManager.saveTextFile(txtFile)) {
-
                 redirectAttributes.addFlashAttribute("show_success_alert", true);
                 redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
             } else {
