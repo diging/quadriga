@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.qstore.impl;
+package edu.asu.spring.quadriga.qstore.impl;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -26,7 +27,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
-import edu.asu.spring.quadriga.service.qstore.IQStoreConnector;
+import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 
 @Service
 @PropertySource(value = "classpath:/user.properties")
@@ -90,6 +91,7 @@ public class QStoreConnector implements IQStoreConnector {
      * @see edu.asu.spring.quadriga.service.qstore.impl.IQStoreConnector#getCreationEvent(java.lang.String)
      */
     @Override
+    @Cacheable(value="creationEvent")
     public String getCreationEvent(String id) throws QStoreStorageException {
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         List<MediaType> mediaTypes = new ArrayList<MediaType>();
@@ -157,6 +159,7 @@ public class QStoreConnector implements IQStoreConnector {
      * @see edu.asu.spring.quadriga.service.qstore.impl.IQStoreConnector#getStatements(java.lang.String)
      */
     @Override
+    @Cacheable(value="statements")
     public String getStatements(String xml) {
         String res = "";
         // Add message converters for JAxb
