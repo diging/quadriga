@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.textfile;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,11 @@ public interface ITextFileManager {
      * @throws IOException
      */
     boolean saveTextFile(ITextFile txtfile) throws QuadrigaStorageException, IOException;
+    
+    List<ITextFile> retrieveTextFileByWsID(String wsId);
+    
+    List<ITextFile> retrieveTextFileByProjID(String projId);
+    
+    ITextFile retrieveTextFileBytextId(String textId);
 
 }

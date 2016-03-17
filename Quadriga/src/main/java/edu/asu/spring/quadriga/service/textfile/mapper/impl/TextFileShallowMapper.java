@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
+import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileShallowMapper;
@@ -19,8 +20,16 @@ public class TextFileShallowMapper implements ITextFileShallowMapper {
     
     @Override
     public List<ITextFile> getTextFileListbyWsId(String wsId) {
-        // TODO Auto-generated method stub
-        return null;
+        List <ITextFile> tfList = null;
+        
+        ITextFile tfProxy = new TextFile();
+        List<TextFileDTO> tfDTOList = tfDAO.getTextFileDTObyWsId(wsId);
+        for(TextFileDTO tfDTO: tfDTOList){
+            tfProxy.setFileName(tfDTO.getFilename());
+            tfProxy.setTextId(tfDTO.getTextId());
+            tfList.add(tfProxy);
+        }
+        return tfList;
     }
 
     @Override

@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.textfile.impl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,30 @@ public class TextFileManager implements ITextFileManager {
             return false;
         }
 
+    }
+
+    @Override
+    public List<ITextFile> retrieveTextFileByWsID(String wsId) {
+        
+        List<ITextFile> tfList = tfSMapper.getTextFileListbyWsId(wsId);
+        
+        return tfList;
+    }
+
+    @Override
+    public List<ITextFile> retrieveTextFileByProjID(String projId) {
+        List<ITextFile> tfList = tfSMapper.getTextFileListbyProjId(projId);
+        
+        return tfList;
+    }
+
+    @Override
+    public ITextFile retrieveTextFileBytextId(String textId) {
+        
+        ITextFile tFile = tfSMapper.getTextFile(textId);
+        
+        return tFile;
+        
     }
 
 }
