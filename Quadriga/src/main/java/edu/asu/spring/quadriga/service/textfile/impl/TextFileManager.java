@@ -15,21 +15,19 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileShallowMapper;
 
-@PropertySource(value = "classpath:/user.properties")
+
 @Service
 public class TextFileManager implements ITextFileManager {
 
     @Autowired
     private ITextFileDAO txtFileDAO;
-
+    
     @Autowired
-    private IProjectWorkspaceDAO projWSDAO;
-
-    @Autowired
-    private Environment env;
+    private IFileSaveService fileSaveServ;
     
     @Autowired
     private ITextFileShallowMapper tfSMapper;
@@ -68,40 +66,12 @@ public class TextFileManager implements ITextFileManager {
      * @param txtFile
      *            TextFile object to be updated in the FileSystem
      * @return
+     *  returns true if file is successfully saved else returns false.
      * @throws IOException
      */
     private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
 
-        String saveDir = env.getProperty("textfile.location");
-        System.out.println(env.getProperty("textfile.location"));
-        String filePath = saveDir + "/" + txtFile.getTextId();
-        File saveTxtFile;
-        File dirFile = new File(filePath);
-        if (!dirFile.exists()) {
-            dirFile.mkdir();
-        }
-        String fileName = txtFile.getFileName();
-        if (fileName.contains(".")) {
-            saveTxtFile = new File(filePath + "/" + fileName);
-        } else {
-            saveTxtFile = new File(filePath + "/" + fileName + ".txt");
-        }
-        FileWriter fw = new FileWriter(saveTxtFile);
-        fw.write(txtFile.getFileContent());
-        File propFile = new File(filePath + "/meta.properties");
-        FileWriter propFw = new FileWriter(propFile);
-        try {
-            propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
-            propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
-            propFw.write("ReferenceId:" + txtFile.getRefId() + "\n");
-            propFw.write("TextFileId:" + txtFile.getTextId() + "\n");
-            fw.close();
-            propFw.close();
-            return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
-        }
+        return fileSaveServ.saveFileToLocal(txtFile);
 
     }
 
