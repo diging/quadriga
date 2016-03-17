@@ -11,9 +11,9 @@ public interface ITextFileManager {
 
     /**
      * @param txtfile
-     *          Text File object from web controller to handle text operations.
-     * @return
-     *          Returns true if file save is successful else returns false. 
+     *            Text File object from web controller to handle text
+     *            operations.
+     * @return Returns true if file save is successful else returns false.
      * @throws QuadrigaStorageException
      * @throws IOException
      */

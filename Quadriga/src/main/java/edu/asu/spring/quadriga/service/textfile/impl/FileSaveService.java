@@ -18,10 +18,10 @@ public class FileSaveService implements IFileSaveService {
 
     @Autowired
     private Environment env;
-    
+
     private String filePath;
     private ITextFile txtFile;
-    
+
     @Override
     public boolean saveFileToLocal(ITextFile txtFile) throws IOException {
         this.txtFile = txtFile;
@@ -33,19 +33,19 @@ public class FileSaveService implements IFileSaveService {
         }
         return saveMetadata() && saveFileContent();
     }
-    
-    private boolean saveMetadata() throws IOException{
+
+    private boolean saveMetadata() throws IOException {
         File propFile = new File(filePath + "/meta.properties");
         FileWriter propFw = new FileWriter(propFile);
         propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
         propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
         propFw.write("ReferenceId:" + txtFile.getRefId() + "\n");
         propFw.write("TextFileId:" + txtFile.getTextId() + "\n");
-        propFw.close();        
+        propFw.close();
         return true;
     }
-    
-    private boolean saveFileContent() throws IOException{
+
+    private boolean saveFileContent() throws IOException {
         String fileName = txtFile.getFileName();
         File saveTxtFile;
         if (fileName.contains(".")) {
