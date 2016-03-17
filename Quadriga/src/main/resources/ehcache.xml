@@ -7,5 +7,13 @@
 	<cache name="concepts" eternal="false" maxElementsInMemory="200"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
 		timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="statements" eternal="false" maxElementsInMemory="500"
+        overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+        timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" />
+        
+    <cache name="creationEvent" eternal="false" maxElementsInMemory="500"
+        overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+        timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" />
 
 </ehcache>

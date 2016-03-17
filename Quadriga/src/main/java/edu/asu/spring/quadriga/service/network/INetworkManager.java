@@ -1,17 +1,12 @@
 package edu.asu.spring.quadriga.service.network;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.codehaus.jettison.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
@@ -184,15 +179,6 @@ public interface INetworkManager {
 	public abstract ElementEventsType getElementEventTypeFromCreationEventTypeID(
 			String relationEventId) throws JAXBException,
 			QStoreStorageException;
-
-	/**
-	 * This method shoud help in Unmarshalling XML {@link String} into {@link ElementEventsType} object.
-	 * @param xml								XML in the form of {@link String}	
-	 * @return									Returns the {@link ElementEventsType} object for a particular QStore XML
-	 * @throws JAXBException					Throws JAXB exception in case we have issues while unmarshalling.
-	 */
-	public abstract ElementEventsType unMarshalXmlToElementEventsType(String xml)
-			throws JAXBException;
 
 	/**
 	 * This method should help in parsing a {@link RelationEventType} object to get the details of the {@link RelationEventObject}.

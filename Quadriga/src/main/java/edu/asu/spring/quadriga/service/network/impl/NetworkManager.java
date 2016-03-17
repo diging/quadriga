@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -9,11 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -59,10 +54,11 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.qstore.IMarshallingService;
+import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
-import edu.asu.spring.quadriga.service.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
@@ -104,6 +100,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private INetworkDAO dbConnect;
+    
+    @Autowired
+    private IMarshallingService marshallingService;
 
     /**
      * 
@@ -119,29 +118,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                     "Some issue retriving data from Qstore. Please check the logs related to Qstore.");
         } else {
             // Initialize ElementEventsType object for relation event
-            elementEventType = unMarshalXmlToElementEventsType(xml);
+            elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
         }
-        return elementEventType;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public ElementEventsType unMarshalXmlToElementEventsType(String xml) throws JAXBException {
-        ElementEventsType elementEventType = null;
-
-        // Try to unmarshall the XML got from QStore to an ElementEventsType
-        // object
-        JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
-        Unmarshaller unmarshaller1 = context.createUnmarshaller();
-        unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-        InputStream is = new ByteArrayInputStream(xml.getBytes());
-        JAXBElement<ElementEventsType> response1 = unmarshaller1.unmarshal(new StreamSource(is),
-                ElementEventsType.class);
-        elementEventType = response1.getValue();
-
         return elementEventType;
     }
 
@@ -776,7 +754,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Transactional
     public String storeNetworkDetails(String xml, IUser user, String networkName, String workspaceId,
             String uploadStatus, String networkId, int version) throws JAXBException {
-        ElementEventsType elementEventType = unMarshalXmlToElementEventsType(xml);
+        ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
 
         // Get Workspace details.
         IWorkSpace workspace = null;
@@ -1121,10 +1099,10 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      */
     class NewNetworkDetailsCache {
 
-        List<String[]> networkDetailsCache;
-        boolean fileExists;
+        private List<String[]> networkDetailsCache;
+        private boolean fileExists;
 
-        NewNetworkDetailsCache() {
+        public NewNetworkDetailsCache() {
             this.networkDetailsCache = new ArrayList<String[]>();
             this.fileExists = true;
         }
