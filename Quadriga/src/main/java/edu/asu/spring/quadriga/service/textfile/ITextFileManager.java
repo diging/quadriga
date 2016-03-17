@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface ITextFileService {
+public interface ITextFileManager {
 
     /**
      * @param txtfile

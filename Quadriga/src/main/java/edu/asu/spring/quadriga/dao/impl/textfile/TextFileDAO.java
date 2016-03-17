@@ -102,7 +102,6 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
             tfDTO = (TextFileDTO) sessionFactory.getCurrentSession().get(TextFileDTO.class, textId);
         } catch (HibernateException e) {
             logger.error("Retrieve Text File details method :", e);
-            return null;
         }
         return tfDTO;
     }

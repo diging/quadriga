@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.textfile.ITextFileService;
+import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.validator.AddTextValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -37,7 +37,7 @@ public class AddTextController {
     private ITextFileFactory textFileFactory;
 
     @Autowired
-    private ITextFileService txtFileService;
+    private ITextFileManager tfManager;
 
     @Autowired
     private AddTextValidator txtValidator;
@@ -124,7 +124,7 @@ public class AddTextController {
             model.getModelMap().put("myProjectId", projid);
             txtFile.setWorkspaceId(workspaceid);
             txtFile.setProjectId(projid);
-            if (txtFileService.saveTextFile(txtFile)) {
+            if (tfManager.saveTextFile(txtFile)) {
 
                 redirectAttributes.addFlashAttribute("show_success_alert", true);
                 redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");

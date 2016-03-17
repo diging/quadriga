@@ -15,11 +15,12 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.textfile.ITextFileService;
+import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
+import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileShallowMapper;
 
 @PropertySource(value = "classpath:/user.properties")
 @Service
-public class TextFileService implements ITextFileService {
+public class TextFileManager implements ITextFileManager {
 
     @Autowired
     private ITextFileDAO txtFileDAO;
@@ -29,6 +30,9 @@ public class TextFileService implements ITextFileService {
 
     @Autowired
     private Environment env;
+    
+    @Autowired
+    private ITextFileShallowMapper tfSMapper;
 
     /*
      * (non-Javadoc)
@@ -52,15 +56,11 @@ public class TextFileService implements ITextFileService {
      * @param txtFile
      *            TextFile object to be updated in the database
      * @return
+     * returns true if file is successfully saved else returns false.
      * @throws QuadrigaStorageException
      */
     private boolean saveTextFileDB(ITextFile txtFile) throws QuadrigaStorageException {
-        TextFileDTO txtFileDTO = new TextFileDTO();
-        txtFileDTO.setFilename(txtFile.getFileName());
-        txtFileDTO.setProjectId(txtFile.getProjectId());
-        txtFileDTO.setTextId(txtFile.getTextId());
-        txtFileDTO.setRefId(txtFile.getRefId());
-        txtFileDTO.setWorkspaceId(txtFile.getWorkspaceId());
+        TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
         return txtFileDAO.saveTextFileDTO(txtFileDTO);
     }
 

@@ -14,8 +14,8 @@ import org.springframework.validation.ValidationUtils;
 
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
-import edu.asu.spring.quadriga.service.textfile.ITextFileService;
-import edu.asu.spring.quadriga.service.textfile.impl.TextFileService;
+import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
+import edu.asu.spring.quadriga.service.textfile.impl.TextFileManager;
 import edu.asu.spring.quadriga.validator.AddTextValidator;
 import junit.framework.Assert;
 
