@@ -52,7 +52,7 @@ public class PublicPageController {
     @RequestMapping(value = "auth/workbench/addpublicpage", method = RequestMethod.GET)
     public ModelAndView publicPageSettingsForm() {
         ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
-        model.getModelMap().put("project", publicPageFactory.createPublicPageObject());
+        model.getModelMap().put("publicpage", publicPageFactory.createPublicPageObject());
         return model;
     }
 

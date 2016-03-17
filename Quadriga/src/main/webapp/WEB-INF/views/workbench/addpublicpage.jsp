@@ -23,45 +23,45 @@
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Title 1</td>
-				<td style="width: 400px"><form:input path="projectName"
+				<td style="width: 400px"><form:input path="title1"
 						size="60" id="title1" /></td>
-				<td><form:errors path="projectName" class="ui-state-error-text"></form:errors></td>
+				<td><form:errors path="title1" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description 1</td>
-				<td><form:textarea path="description" cols="60" rows="6"
+				<td><form:textarea path="description1" cols="60" rows="6"
 						id="description1" /></td>
-				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
+				<td><form:errors path="description1" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="SAVE"></td>
 			</tr>
 			<tr>
 				<td style="width: 170px">Title 2</td>
-				<td style="width: 400px"><form:input path="projectName"
+				<td style="width: 400px"><form:input path="title2"
 						size="60" id="title2" /></td>
-				<td><form:errors path="projectName" class="ui-state-error-text"></form:errors></td>
+				<td><form:errors path="title2" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description 2</td>
-				<td><form:textarea path="description" cols="60" rows="6"
+				<td><form:textarea path="description2" cols="60" rows="6"
 						id="description2" /></td>
-				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
+				<td><form:errors path="description2" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="SAVE"></td>
 			</tr>
 			<tr>
 				<td style="width: 170px">Title 3</td>
-				<td style="width: 400px"><form:input path="projectName"
+				<td style="width: 400px"><form:input path="title3"
 						size="60" id="title3" /></td>
-				<td><form:errors path="projectName" class="ui-state-error-text"></form:errors></td>
+				<td><form:errors path="title3" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description 3</td>
-				<td><form:textarea path="description" cols="60" rows="6"
+				<td><form:textarea path="description3" cols="60" rows="6"
 						id="description3" /></td>
-				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
+				<td><form:errors path="description3" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="SAVE"></td>
