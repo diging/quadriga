@@ -44,11 +44,12 @@ public class TextFileManager implements ITextFileManager {
      */
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
-
-        UUID textId = UUID.randomUUID();
-        txtFile.setTextId(textId.toString());
+        String txtId = (txtFileDAO.generateUniqueID());
+        txtFile.setTextId(txtId);
+        TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
+        txtFileDTO.setTextId(txtId);
         boolean fsStatus = saveTextFileLocal(txtFile);
-        boolean dbStatus = saveTextFileDB(txtFile);
+        boolean dbStatus = saveTextFileDB(txtFileDTO);
         return fsStatus && dbStatus;
     }
 
@@ -59,9 +60,9 @@ public class TextFileManager implements ITextFileManager {
      * returns true if file is successfully saved else returns false.
      * @throws QuadrigaStorageException
      */
-    private boolean saveTextFileDB(ITextFile txtFile) throws QuadrigaStorageException {
-        TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
-        return txtFileDAO.saveTextFileDTO(txtFileDTO);
+    private boolean saveTextFileDB(TextFileDTO tfDTO) throws QuadrigaStorageException {   
+        System.out.println(tfDTO.getTextId());
+        return txtFileDAO.saveTextFileDTO(tfDTO);
     }
 
     /**
