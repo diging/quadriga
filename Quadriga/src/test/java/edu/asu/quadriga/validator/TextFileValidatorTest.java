@@ -67,9 +67,6 @@ public class TextFileValidatorTest {
         Errors errors = new BindException(properTxtFile, "pTxtFile");
         ValidationUtils.invokeValidator(txtValidator, properTxtFile, errors);
         Assert.assertFalse(errors.hasErrors());
-        Assert.assertNull(errors.getFieldError("fileName"));
-        Assert.assertNull(errors.getFieldError("fileContent"));
-        Assert.assertNull(errors.getFieldError("refId"));
     }
 
     @Test

@@ -66,7 +66,7 @@ public class AddTextController {
      */
     @AccessPolicies({
             @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
-                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }),
+                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }),
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
                     RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })

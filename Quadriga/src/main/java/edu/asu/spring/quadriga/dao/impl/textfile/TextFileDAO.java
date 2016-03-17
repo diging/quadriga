@@ -21,6 +21,12 @@ import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
+/**
+ * @author Nischal Samji
+ * 
+ * Data Access Object for performing Text File Operations.
+ *
+ */
 @Repository
 @Transactional
 public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
