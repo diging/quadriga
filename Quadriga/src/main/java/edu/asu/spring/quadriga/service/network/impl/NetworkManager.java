@@ -61,6 +61,7 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -84,17 +85,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private IRestVelocityFactory restVelocityFactory;
 
     @Autowired
-    private IConceptCollectionManager conceptCollectionManager;
-
-    @Autowired
-    private IListWSManager wsManager;
+    private IListWSManager wsListManager;
 
     @Autowired
     private INetworkMapper networkmapper;
     
-    @Autowired
-    private IWorkspaceShallowMapper workspaceShallowMapper;
-
     @Autowired
     private IProjectShallowMapper projectShallowMapper;
 
@@ -103,6 +98,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     
     @Autowired
     private IMarshallingService marshallingService;
+    
+    @Autowired
+    private IWorkspaceManager workspaceManager;
 
     /**
      * 
@@ -121,75 +119,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
         }
         return elementEventType;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public RelationEventObject parseThroughRelationEvent(RelationEventType relationEventType,
-            RelationEventObject relationEventObject, List<List<Object>> relationEventPredicateMapping) {
-
-        // Get RelationType of the RelationEventType
-        RelationType relationType = relationEventType.getRelation();
-
-        // Handle Predicate of the RelationType
-        PredicateType predicateType = relationType.getPredicateType();
-        relationEventObject.setPredicateObject(
-                parseThroughPredicate(relationEventType, predicateType, relationEventPredicateMapping));
-
-        // Handle Subject of the RelationType
-        SubjectObjectType subjectType = relationType.getSubjectType();
-        SubjectObject subjectObject = parseThroughSubject(relationEventType, subjectType,
-                relationEventPredicateMapping);
-        relationEventObject.setSubjectObject(subjectObject);
-
-        // Handle Object of the RelationType
-        SubjectObjectType objectType = relationType.getObjectType(relationType);
-        ObjectTypeObject objectTypeObject = parseThroughObject(relationEventType, objectType,
-                relationEventPredicateMapping);
-        relationEventObject.setObjectTypeObject(objectTypeObject);
-
-        return relationEventObject;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public PredicateObject parseThroughPredicate(RelationEventType relationEventType, PredicateType predicateType,
-            List<List<Object>> relationEventPredicateMapping) {
-        // Predicate has only appellation event, so get appellation event inside
-        // the predicate
-        AppellationEventType appellationEvent = predicateType.getAppellationEvent();
-        String nodeId = appellationEvent.getAppellationEventID();
-        PredicateObject predicateObject = null;
-        List<TermType> termTypeList = appellationEvent.getTerms();
-        Iterator<TermType> termTypeIterator = termTypeList.iterator();
-        while (termTypeIterator.hasNext()) {
-            TermType tt = termTypeIterator.next();
-            AppellationEventObject appellationEventObject = new AppellationEventObject();
-            appellationEventObject
-                    .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()) + "_"
-                            + shortUUID());
-            if (nodeId != null) {
-                appellationEventObject.setTermId(nodeId + "_" + shortUUID());
-                // appellationEventObject.setTermId(nodeId);
-            } else {
-                appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
-            }
-            predicateObject = new PredicateObject();
-            predicateObject.setAppellationEventObject(appellationEventObject);
-            relationEventPredicateMapping = stackPredicateAppellationObject(
-                    relationEventType.getRelationEventId(relationEventType),
-                    predicateObject.getAppellationEventObject().getTermId(), appellationEventObject,
-                    relationEventPredicateMapping);
-            predicateObject.setRelationEventID(relationEventType.getRelationEventId(relationEventType));
-            return predicateObject;
-        }
-        return predicateObject;
     }
 
     /**
@@ -272,134 +201,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         return null;
     }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public SubjectObject parseThroughSubject(RelationEventType relationEventType, SubjectObjectType subjectObjectType,
-            List<List<Object>> relationEventPredicateMapping) {
-
-        // Check for relation event inside subject and add if any
-        RelationEventType subjectRelationEventType = subjectObjectType.getRelationEvent();
-
-        SubjectObject subjectObject = new SubjectObject();
-
-        if (subjectRelationEventType == null) {
-            subjectObject.setIsRelationEventObject(false);
-        } else {
-            String tempRelationEventId = subjectRelationEventType.getRelationEventId(subjectRelationEventType);
-            AppellationEventObject temp = isRelationEventPresentInStack(tempRelationEventId,
-                    relationEventPredicateMapping);
-            /*
-             * I am trying to fool subject as Appellation event when we find a
-             * existing relation event been referred here I will give
-             * appellation event with predicate of referred relation event
-             */
-            if (temp != null) {
-                subjectObject.setIsRelationEventObject(false);
-                subjectObject.setAppellationEventObject(temp);
-                subjectObject.setRemoteStatementId(tempRelationEventId);
-                subjectObject.setRemoteLink(true);
-            } else {
-                subjectObject.setIsRelationEventObject(true);
-                RelationEventObject relationEventObject = new RelationEventObject();
-                // isRelationEventPresentInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
-                relationEventObject = parseThroughRelationEvent(subjectRelationEventType, relationEventObject,
-                        relationEventPredicateMapping);
-                subjectObject.setRelationEventObject(relationEventObject);
-            }
-        }
-        // Check for Appellation event inside subject and add if any
-        AppellationEventType appellationEventType = subjectObjectType.getAppellationEvent();
-        if (appellationEventType == null) {
-
-        } else {
-            String nodeId = appellationEventType.getAppellationEventID();
-            List<TermType> termTypeList = appellationEventType.getTerms();
-            Iterator<TermType> termTypeIterator = termTypeList.iterator();
-            while (termTypeIterator.hasNext()) {
-                TermType tt = termTypeIterator.next();
-                AppellationEventObject appellationEventObject = new AppellationEventObject();
-                appellationEventObject
-                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()));
-                if (nodeId != null) {
-                    appellationEventObject.setTermId(nodeId);
-                } else {
-                    appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
-                }
-                subjectObject.setAppellationEventObject(appellationEventObject);
-            }
-        }
-        return subjectObject;
-
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public ObjectTypeObject parseThroughObject(RelationEventType relationEventType, SubjectObjectType subjectObjectType,
-            List<List<Object>> relationEventPredicateMapping) {
-
-        // Check for relation event inside subject and add if any
-        RelationEventType objectRelationEventType = subjectObjectType.getRelationEvent();
-
-        ObjectTypeObject objectTypeObject = new ObjectTypeObject();
-
-        if (objectRelationEventType == null) {
-            objectTypeObject.setIsRelationEventObject(false);
-        } else {
-            String tempRelationEventId = objectRelationEventType.getRelationEventId(objectRelationEventType);
-            AppellationEventObject temp = isRelationEventPresentInStack(tempRelationEventId,
-                    relationEventPredicateMapping);
-            /*
-             * I am trying to fool subject as Appellation event when we find a
-             * existing relation event been referred here I will give
-             * appellation event with predicate of referred relation event
-             */
-            if (temp != null) {
-                objectTypeObject.setIsRelationEventObject(false);
-                objectTypeObject.setAppellationEventObject(temp);
-                objectTypeObject.setRemoteStatementId(tempRelationEventId);
-                objectTypeObject.setRemoteLink(true);
-            } else {
-                objectTypeObject.setIsRelationEventObject(true);
-                RelationEventObject relationEventObject = new RelationEventObject();
-                // isRelationEventPresentInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
-                relationEventObject = parseThroughRelationEvent(objectRelationEventType, relationEventObject,
-                        relationEventPredicateMapping);
-                objectTypeObject.setRelationEventObject(relationEventObject);
-            }
-        }
-        // Check for Appellation event inside subject and add if any
-        AppellationEventType appellationEventType = subjectObjectType.getAppellationEvent();
-        if (appellationEventType == null) {
-
-        } else {
-            String nodeId = appellationEventType.getAppellationEventID();
-            List<TermType> termTypeList = appellationEventType.getTerms();
-            Iterator<TermType> termTypeIterator = termTypeList.iterator();
-            while (termTypeIterator.hasNext()) {
-                TermType tt = termTypeIterator.next();
-                AppellationEventObject appellationEventObject = new AppellationEventObject();
-                appellationEventObject
-                        .setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation()));
-                if (nodeId != null) {
-                    appellationEventObject.setTermId(nodeId);
-                } else {
-                    appellationEventObject.setTermId(tt.getTermID() + "_" + shortUUID());
-                }
-                objectTypeObject.setAppellationEventObject(appellationEventObject);
-                logger.debug("subjectType Term : " + tt.getTermInterpertation());
-            }
-        }
-        return objectTypeObject;
-
-    }
-
     
     /**
      * Check if we have bit streams in the network XML
@@ -551,25 +352,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      */
     @Override
     @Transactional
-    public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException {
-        if (workspaceid == null || workspaceid.equals(""))
-            return null;
-        // Get the project object associated with the workspace
-        IProject project = workspaceShallowMapper.getWorkSpaceDetails(workspaceid).getProjectWorkspace().getProject();
-        if (project != null)
-            return project.getProjectId();
-        else
-            return null;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
     public List<INetwork> getNetworksInProject(String projectid) throws QuadrigaStorageException {
 
         // Fetch the list of networks in the project
@@ -682,6 +464,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      */
     @Override
     @Transactional
+    // TODO: delete this!!!
     public String getNetworkJSTreeJson(String userName) throws JSONException {
         List<IProject> projectList = null;
         JSONObject core = new JSONObject();
@@ -698,7 +481,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                     dataArray.put(data);
                     String wsParent = project.getProjectId();
 
-                    List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getProjectId(), userName);
+                    List<IWorkSpace> wsList = wsListManager.listActiveWorkspace(project.getProjectId(), userName);
                     if (wsList != null) {
                         for (IWorkSpace ws : wsList) {
                             // workspace json
@@ -709,7 +492,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                             dataArray.put(data1);
                             String networkParent = ws.getWorkspaceId();
 
-                            List<IWorkspaceNetwork> workspaceNnetworkList = wsManager
+                            List<IWorkspaceNetwork> workspaceNnetworkList = workspaceManager
                                     .getWorkspaceNetworkList(ws.getWorkspaceId());
                             if (workspaceNnetworkList != null) {
                                 for (IWorkspaceNetwork workspaceNetwork : workspaceNnetworkList) {
@@ -759,7 +542,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         // Get Workspace details.
         IWorkSpace workspace = null;
         try {
-            workspace = wsManager.getWorkspaceDetails(workspaceId, user.getUserName());
+            workspace = workspaceManager.getWorkspaceDetails(workspaceId, user.getUserName());
         } catch (QuadrigaStorageException e3) {
             logger.error("Error while getting workspace details", e3);
         } catch (QuadrigaAccessException e3) {

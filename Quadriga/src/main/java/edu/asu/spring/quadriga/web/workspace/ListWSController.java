@@ -49,9 +49,11 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.workspace.WorkspaceManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -77,7 +79,7 @@ public class ListWSController
 	public final static int FAILURE = 0;
 
 	@Autowired
-	private	IListWSManager wsManager;
+	private	IWorkspaceManager wsManager;
 
 	@Autowired
 	private IWSSecurityChecker workspaceSecurity;
@@ -194,16 +196,6 @@ public class ListWSController
 	}
 
 
-	public IListWSManager getWsManager() {
-		return wsManager;
-	}
-
-
-	public void setWsManager(IListWSManager wsManager) {
-		this.wsManager = wsManager;
-	}
-
-	
 	/**
 	 * Handle the request to view masked dspace keys and also allow an user to update the keys.
 	 * 
@@ -279,7 +271,7 @@ public class ListWSController
 	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
 	{
 		String userName = principal.getName();
-		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid,userName);
 
 
 		//retrieve the collaborators associated with the workspace

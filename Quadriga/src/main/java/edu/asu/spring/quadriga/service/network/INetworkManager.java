@@ -8,14 +8,10 @@ import org.codehaus.jettison.json.JSONException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
-import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.Workspace;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
@@ -73,17 +69,6 @@ public interface INetworkManager {
 	 */
 	public abstract List<INetwork> getNetworkList(IUser user)
 			throws QuadrigaStorageException;
-
-	/**
-	 * Get {@link IProject} ID of type {@link String} for {@link IWorkspace} ID of type {@link String}.
-	 * As we have {@link INetwork} attached to a {@link Workspace}. We need {@link IProject} ID to display to which project the network belongs to. 
-	 * @param workspaceid				{@link IWorkSpace} ID of type {@link String}
-	 * @return							{@link IProject} ID of type {@link String}
-	 * @throws QuadrigaStorageException		Database storage exception thrown
-	 */
-	public abstract String getProjectIdForWorkspaceId(String workspaceid)
-			throws QuadrigaStorageException;
-
 
 	/**
 	 * Get only the Top Nodes of the {@link INetworkNodeInfo}. In a XML received from QStore we could have a list of Appellation Events and Relation Events.
@@ -180,30 +165,6 @@ public interface INetworkManager {
 			String relationEventId) throws JAXBException,
 			QStoreStorageException;
 
-	/**
-	 * This method should help in parsing a {@link RelationEventType} object to get the details of the {@link RelationEventObject}.
-	 * It could fetch information of the {@link PredicateObject} , {@link SubjectObject}, {@link ObjectTypeObject} of the {@link RelationEventObject}
-	 * @param relationEventType					{@link RelationEventType} object
-	 * @param relationEventObject				{@link RelationEventObject} object
-	 * @param relationEventPredicateMapping		{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
-	 * @return									Returns the {@link RelationEventObject} object with parsed details.
-	 */
-	public abstract RelationEventObject parseThroughRelationEvent(
-			RelationEventType relationEventType,
-			RelationEventObject relationEventObject,
-			List<List<Object>> relationEventPredicateMapping);
-
-	/**
-	 * This method should help in parsing through the {@link PredicateType} of a particular {@link RelationEventType}.
-	 * We could parse the {@link PredicateType} object for any required variables or objects in it.
-	 * @param relationEventType						Target {@link RelationEventType} object
-	 * @param predicateType							Target {@link PredicateType} object	
-	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.	
-	 * @return										Returns the {@link PredicateObject} object with needed info. 
-	 */
-	public abstract PredicateObject parseThroughPredicate(RelationEventType relationEventType,
-			PredicateType predicateType,
-			List<List<Object>> relationEventPredicateMapping);
 
 	/**
 	 * This method should help in checking if {@link RelationEventType} is already parsed earlier.
@@ -214,29 +175,6 @@ public interface INetworkManager {
 	 * @return										Returns {@link AppellationEventObject} if we have found earlier, else it would return null
 	 */
 	public abstract AppellationEventObject isRelationEventPresentInStack(String relationEventId,
-			List<List<Object>> relationEventPredicateMapping);
-
-	/**
-	 * This method should help in parsing through the {@link SubjectObjectType} of a particular {@link RelationEventType} for SubjectType of Relation.
-	 * We could parse the {@link SubjectObjectType} object for any required variables or objects in it.
-	 * @param relationEventType						Target {@link RelationEventType} object 
-	 * @param subjectObjectType						Target {@link SubjectObjectType} object
-	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
-	 * @return										Returns {@link SubjectObject} with filled in required data
-	 */
-	public abstract SubjectObject parseThroughSubject(RelationEventType relationEventType,
-			SubjectObjectType subjectObjectType,
-			List<List<Object>> relationEventPredicateMapping);
-
-	/**
-	 * This method should help in parsing through the {@link SubjectObjectType} of a particular {@link RelationEventType} for ObjectType of Relation.
-	 * @param relationEventType						Target {@link RelationEventType} object 
-	 * @param subjectObjectType						Target {@link SubjectObjectType} object
-	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
-	 * @return										Returns {@link ObjectTypeObject} with filled in required data
-	 */
-	public abstract ObjectTypeObject parseThroughObject(RelationEventType relationEventType,
-			SubjectObjectType subjectObjectType,
 			List<List<Object>> relationEventPredicateMapping);
 	
 	/**
