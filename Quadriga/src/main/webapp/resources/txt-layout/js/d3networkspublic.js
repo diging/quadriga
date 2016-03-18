@@ -1,4 +1,3 @@
-
 /**
  * @Author : Sowjanya Ambati
  * @Author : Dwaraka Lohith
@@ -232,7 +231,11 @@ function d3visualizepublic(graph, networkId, path,type) {
 			
 			var stId = d.statementid;
 			var associated_nodes = vis.selectAll('circle').filter(function(node) {
-				return ($.inArray(stId[0], node.statementid)) > -1;
+				for (var i = 0; i < stId.length; i++) {
+				    if (($.inArray(stId[i], node.statementid)) > -1)
+				    	return true;
+				}
+				return false;
 			});
 			associated_nodes.each(function(a) {
 				d3.select(this).style("opacity", 1);
@@ -420,27 +423,27 @@ function d3visualizepublic(graph, networkId, path,type) {
 	}
 
 	function displayItemData(){
-		$.ajax({
-			url : path+"auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				if (data.length > 0) {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-					$('#metadataTable')
-							.dataTable().fnAddData(data);
-				} else {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-				}
-			},
-			error: function() {
-				alert("error");
-			}
-		});
+//		$.ajax({
+//			url : path+"auth/editing/getitemmetadata/"+networkId,
+//			type : "GET",
+//			dataType: 'json',
+//			success : function(data) {
+//				if (data.length > 0) {
+//					$('#metadataTable')
+//							.dataTable()
+//							.fnClearTable();
+//					$('#metadataTable')
+//							.dataTable().fnAddData(data);
+//				} else {
+//					$('#metadataTable')
+//							.dataTable()
+//							.fnClearTable();
+//				}
+//			},
+//			error: function() {
+//				alert("error");
+//			}
+//		});
 	}
 	
 	function defineMetadataTable(){
@@ -500,7 +503,4 @@ function d3visualizepublic(graph, networkId, path,type) {
 		});
 
 	}
-	
-
-
 }

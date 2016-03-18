@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 
@@ -25,7 +25,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	private IListWsDAO dbConnect;
 	
 	@Autowired
-	private IListWSManager wsManager;
+	private IWorkspaceManager wsManager;
 	
 	@Autowired
 	private IWorkspaceDeepMapper workspaceDeepMapper;

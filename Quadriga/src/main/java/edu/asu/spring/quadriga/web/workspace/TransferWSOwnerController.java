@@ -29,9 +29,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.validator.UserValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -51,7 +51,7 @@ public class TransferWSOwnerController
 	private IModifyWSManager workspaceManager;
 	
 	@Autowired
-	private IListWSManager retrieveWSManager;
+	private IWorkspaceManager wsManager;
 	
 	@Autowired
 	private IWorkspaceCollaboratorManager wsCollabManager;
@@ -94,7 +94,7 @@ public class TransferWSOwnerController
 		owner = principal.getName();
 		
 		//retrieve the workspace details
-		workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, owner);
+		workspace = wsManager.getWorkspaceDetails(workspaceid, owner);
 		
 		//retrieve the collaborators associated with the workspace
 		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
@@ -149,7 +149,7 @@ public class TransferWSOwnerController
 		userName = principal.getName();
 		
 		//retrieve the workspace details
-		workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
+		workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
 		
 		//retrieve the collaborators associated with the workspace
 		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);

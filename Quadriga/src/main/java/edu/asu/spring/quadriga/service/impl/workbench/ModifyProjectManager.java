@@ -75,8 +75,7 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
     @Override
     @Transactional
     public void addNewProject(IProject project, String userName) {
-        String projectId = messages.getProperty("project_internalid.name") + generateUniqueID();
-        project.setProjectId(projectId);
+        project.setProjectId(projectDao.generateUniqueID());
         ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project, userName);
         projectDao.saveNewDTO(projectDTO);
     }
