@@ -1,4 +1,3 @@
-
 /**
  * @Author : Sowjanya Ambati
  * @Author : Dwaraka Lohith
@@ -51,25 +50,18 @@ function d3visualize(graph, networkId, path,type) {
 		.start();
 	}
 
-                                          
+
 	var vis = d3.select("#chart").append("svg:svg")
 			.attr("width", width)
 			.attr("height", height)
 			.append('svg:g')
+			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
 			.append('svg:g');
 
 	var div1 = d3.select("#allannot_details");
 
 	d3.select("#chart").on("click", function(){return div1.style("visibility", "visible");});
-
-	/*var expand = d3.select("#chart")
-				.on("click", function(){
-
-					$("chart").show();
-					$("allannot_details").hide();
-				});*/
-
 
 	// Prepare the arrow
 	vis.append("defs").selectAll("marker")
@@ -212,10 +204,7 @@ function d3visualize(graph, networkId, path,type) {
 
 	function  redraw() {
 		console.log("here", d3.event.translate, d3.event.scale);
-		vis.attr("transform",
-				//Fix for QUAD-72: Commented translate behavior
-				"translate(" + d3.event.translate + ")"
-				+ 
+		vis.attr("transform", 
 				" scale(" + d3.event.scale + ")");
 	};
 //	Works on loading the network and placing the nodes randomly for view
@@ -238,7 +227,11 @@ function d3visualize(graph, networkId, path,type) {
 			
 			var stId = d.statementid;
 			var associated_nodes = vis.selectAll('circle').filter(function(node) {
-				return ($.inArray(stId[0], node.statementid)) > -1;
+				for (var i = 0; i < stId.length; i++) {
+				    if (($.inArray(stId[i], node.statementid)) > -1)
+				    	return true;
+				}
+				return false;
 			});
 			associated_nodes.each(function(a) {
 				d3.select(this).style("opacity", 1);
@@ -275,7 +268,6 @@ function d3visualize(graph, networkId, path,type) {
 			//alert(source);
 			statementId = source.statementid;
 			/*var snodes = vis.selectAll(".node").each(function(d){
-
 						for(var i in statementId){
 							for(var j in d.statementid){
 								if(statementId[i] == d.statementid[j]){
@@ -284,7 +276,6 @@ function d3visualize(graph, networkId, path,type) {
 								}
 							}
 						}
-
 						/*found = $.intersection(statementId, d.statementid);
 						if(found.size()>0){
 							nodearray.push(d);
@@ -331,7 +322,6 @@ function d3visualize(graph, networkId, path,type) {
 						d3.select(d.target).style("opacity", opacity);
 						//fade all elements
 						vis.selectAll("circle, line").style("opacity", opacity);
-
 						var associated_links = vis.selectAll("line").filter(function(d) {
 							return  d.source.index == i;
 							// return d.source.index == i || d.target.index == i;
@@ -345,9 +335,7 @@ function d3visualize(graph, networkId, path,type) {
 								d3.select(o.source).style("opacity", 1);
 							});
 						});
-
 					};
-
 				}*/
 
 	function fadeLinks(opacity) {
@@ -412,19 +400,12 @@ function d3visualize(graph, networkId, path,type) {
 			dataType: 'json',
 			success : function(data) {
 				/*var tr;
-
 					$.each(data.text, function(key,value){
-
 					            tr = $('<tr/>');
-
 					            tr.append("<td>" + json[i].User_Name + "</td>");
-
 					            tr.append("<td>" + json[i].score + "</td>");
-
 					            tr.append("<td>" + json[i].team + "</td>");
-
 					            $('annot_table').append(tr);
-
 					        });*/
 				var cnt = 0;
 				output += "<ol>";
@@ -488,27 +469,27 @@ function d3visualize(graph, networkId, path,type) {
 	}
 
 	function displayItemData(){
-		$.ajax({
-			url : path+"auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				if (data.length > 0) {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-					$('#metadataTable')
-							.dataTable().fnAddData(data);
-				} else {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-				}
-			},
-			error: function() {
-				alert("error");
-			}
-		});
+//		$.ajax({
+//			url : path+"auth/editing/getitemmetadata/"+networkId,
+//			type : "GET",
+//			dataType: 'json',
+//			success : function(data) {
+//				if (data.length > 0) {
+//					$('#metadataTable')
+//							.dataTable()
+//							.fnClearTable();
+//					$('#metadataTable')
+//							.dataTable().fnAddData(data);
+//				} else {
+//					$('#metadataTable')
+//							.dataTable()
+//							.fnClearTable();
+//				}
+//			},
+//			error: function() {
+//				alert("error");
+//			}
+//		});
 	}
 	
 	function defineMetadataTable(){
