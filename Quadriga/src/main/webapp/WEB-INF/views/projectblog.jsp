@@ -26,8 +26,6 @@ You don't own any public blogs.
 </c:if>
 </div>
 <div style="float: right;">
-	<a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/addprojectblog">
-	<i
-		class="fa fa-plus-circle"></i> Add a new entry</a>
+	<a href="addprojectblog"><i class="fa fa-plus-circle"></i> Add a
+		new entry</a>
 </div>
-

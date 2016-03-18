@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,8 +67,8 @@ public class PublicBlogController {
     }
     
     /**
-     * This method gives the the addprojectblog page
-     * 
+     * This method navigates to a form for adding a project blog
+     * for standard and admin users only
      * @param projectUnixName
      *            The project unix name
      * @param model
@@ -75,21 +76,17 @@ public class PublicBlogController {
      * @return view
      * @throws QuadrigaStorageException
      */
+    @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
     @RequestMapping(value = "sites/{projectUnixName}/addprojectblog", method = RequestMethod.GET)
     public String addprojectblog(@PathVariable("projectUnixName") String projectUnixName, Model model)
             throws QuadrigaStorageException {
-        // Creating project object for validating project name and to be used in
-        // future for saving the blog and
-      /*  IProject project = projectManager
-                .getProjectDetailsByUnixName(projectUnixName);
+
+        IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
 
         if (project == null) {
             return "forbidden";
-        } */
-
-        model.addAttribute("project", "Hello");
+        }
 
         return "sites/addprojectblog";
     }
-
 }

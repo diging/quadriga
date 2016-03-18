@@ -41,6 +41,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.workspace.WorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -66,8 +67,8 @@ public class AddWSCollabController {
     private CollaboratorValidator validator;
 
     @Autowired
-    private IListWSManager retrieveWSManager;
-
+    private IWorkspaceManager workspaceManager;
+    
     private static final Logger logger = LoggerFactory
             .getLogger(WorkspaceCollaboratorManager.class);
 
@@ -139,7 +140,7 @@ public class AddWSCollabController {
         model = new ModelAndView("auth/workbench/workspace/addcollaborators");
         String userName = principal.getName();
 
-        IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(
+        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(
                 workspaceid, userName);
 
         // adding the collaborator model
@@ -212,7 +213,7 @@ public class AddWSCollabController {
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addcollaborators");
         String userName = principal.getName();
 
-        IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(
+        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(
                 workspaceid, userName);
         model.getModelMap().put("workspacename", workspace.getWorkspaceName());
         model.getModelMap().put("workspacedesc", workspace.getDescription());
