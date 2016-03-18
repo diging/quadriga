@@ -62,7 +62,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
     @Autowired
     private NetworkDTOMapper networkMapper;
 
-    @Resource(name = "database_error_msgs")
+    @Resource(name = "projectconstants")
     private Properties messages;
 
     @Autowired
