@@ -70,17 +70,4 @@ public class LoginController {
 
 	}
 
-	/**
-	 * A authenticated user is logged out of the system.
-	 * 
-	 * @return		Redirect to login page
-	 */
-	@NoAuthorizationCheck
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(ModelMap model) {
-
-		return "login";
-
-	}
-
 }

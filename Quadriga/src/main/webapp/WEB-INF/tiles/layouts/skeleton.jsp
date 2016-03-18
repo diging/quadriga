@@ -81,7 +81,7 @@
 						Welcome <i class="fa fa-user"></i><span style="margin-left: 5px;"><sec:authentication property="principal.username" /></span>!
 					</div>
 					<div class="loggedOutLink">
-						<a href="<c:url value='/j_spring_security_logout' />">Logout</a>
+						<a href="<c:url value='/logout' />">Logout</a>
 					</div>
 					<hr class="clearLoggedIn">
 				</div>

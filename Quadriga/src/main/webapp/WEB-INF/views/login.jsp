@@ -27,17 +27,17 @@ $(document).ready(function() {
 Language : <a href="${pageContext.servletContext.contextPath}/login?siteLanguage=en_US">English</a>|
     <a href="${pageContext.servletContext.contextPath}/login?siteLanguage=zh_CN">Chinese</a>
 </span> -->
-	<form name='f' action="<c:url value='j_spring_security_check' />"
+	<form name='f' action="<c:url value='/login' />"
 		method='POST'>
 		<table>
 			<tr>
 				<td><spring:message code="label.user" />:</td>
-				<td><input type='text' name='j_username' value=''>
+				<td><input type='text' name='username' value=''>
 				</td>
 			</tr>
 			<tr>
 				<td><spring:message code="label.password" />:</td>
-				<td><input type='password' name='j_password' />
+				<td><input type='password' name='password' />
 				</td>
 			</tr>
 			<tr>
