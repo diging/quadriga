@@ -641,11 +641,11 @@ public class ListWSController
 		String fileid = networkManager.getSourceReferenceURL(networkId,networkManager.getLatestVersionOfNetwork(networkId));
 		logger.info("Source reference ID " + fileid);
 		
-		String metaData = wsManager.getItemMetadataAsJson(fileid, dspaceUsername, dspacePassword, dspaceKeys);
-		
-		if(metaData!=null){
-			return metaData;
-		}
+		//String metaData = wsManager.getItemMetadataAsJson(fileid, dspaceUsername, dspacePassword, dspaceKeys);
+//		
+//		if(metaData!=null){
+//			return metaData;
+//		}
 		
 		return null;
 	}
