@@ -215,35 +215,4 @@ public class WebsiteProjectController {
 
 		return "sites/networks/explore";
 	}
-
-	/**
-	 * This method gives the visualization of  how often concepts appear in the networks
-	 * @author Bharath Srikantan
-	 * @param projectUnixName	The project unix name
-	 * @param model				Model
-	 * @return view
-	 * @throws JAXBException
-	 * @throws QuadrigaStorageException
-	 * @throws JSONException 
-	 */
-	@RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
-	public String showProjectStatistics(@PathVariable("projectUnixName") String projectUnixName,
-									   Model model)throws JAXBException, QuadrigaStorageException, JSONException {
-		IProject project = getProjectDetails(projectUnixName);
-
-		if (project == null) {
-			return "auth/accessissue";
-		}
- 
-		String data = "[{\"conceptId\":\"ID-1\",\"description\":\"Desc1\",\"frequency\":\".01\"},{\"conceptId\":\"ID-2\",\"description\":\"Desc2\",\"frequency\":\".03\"},{\"conceptId\":\"ID-3\",\"description\":\"Desc3\",\"frequency\":\".01\"},{\"conceptId\":\"ID-4\",\"description\":\"Desc4\",\"frequency\":\".02\"},{\"conceptId\":\"ID-5\",\"description\":\"Desc5\",\"frequency\":\".04\"}]";
-		System.out.println("Json obj "+data);
-		
-
-		model.addAttribute("jsonstring", data);
-		model.addAttribute("networkid", "\"\"");
-		model.addAttribute("project", project);
-
-		return "sites/project/statistics";
-	}
-
 }
