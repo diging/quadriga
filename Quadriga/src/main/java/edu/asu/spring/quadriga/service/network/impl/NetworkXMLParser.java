@@ -18,7 +18,7 @@ import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
-import edu.asu.spring.quadriga.service.textfile.ITextFileService;
+import edu.asu.spring.quadriga.service.textfile.impl.TextFileManager;
 
 /**
  * 
@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.service.textfile.ITextFileService;
 public class NetworkXMLParser implements INetworkXMLParser {
 
     @Autowired
-    private ITextFileService txtFileService;
+    private TextFileManager txtFileManager;
 
     @Override
     public String storeText(String xml, String projectid, String workspaceid)
@@ -54,11 +54,11 @@ public class NetworkXMLParser implements INetworkXMLParser {
         NodeList handle = document.getElementsByTagName("handle");
         NodeList fileName = document.getElementsByTagName("file_name");
         if (handle.getLength() == 0 && fileName.getLength() == 0) {
-            throw new NetworkXMLParseException("Please specify the Handle and file name in the input XML ");
+            throw new NetworkXMLParseException("The Handle and file name must be specified in the input XML ");
         } else if (handle.getLength() == 0) {
-            throw new NetworkXMLParseException("Please specify the Handle in the input XML ");
+            throw new NetworkXMLParseException("Handle must be specified in the input XML ");
         } else if (fileName.getLength() == 0) {
-            throw new NetworkXMLParseException("Please specify the file name in the input XML ");
+            throw new NetworkXMLParseException("File name must be specified in the input XML ");
         }
 
         String handleID = handle.item(0).getTextContent();
@@ -70,7 +70,7 @@ public class NetworkXMLParser implements INetworkXMLParser {
         txtfile.setWorkspaceId(workspaceid);
         txtfile.setRefId(handleID);
 
-        return txtFileService.saveTextFile(txtfile) ? "Success" : null;
+        return txtFileManager.saveTextFile(txtfile) ? "Success" : null;
 
     }
 
