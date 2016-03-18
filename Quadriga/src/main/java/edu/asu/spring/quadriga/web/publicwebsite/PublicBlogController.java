@@ -12,15 +12,16 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
+/** 
+ * This controller navigates user to public blog page
+ * and handles operations related to public blog pages.
+ * @author Kavinya Rajendran
+ */
 @PropertySource(value = "classpath:/user.properties")
 @Controller
 public class PublicBlogController {
 	@Autowired 
 	private IRetrieveProjectManager projectManager;
-	
-	private IProject getProjectDetails(String name) throws QuadrigaStorageException{
-		return projectManager.getProjectDetailsByUnixName(name);
-	}
 	
 	/**
 	 * This method gives the the projectblog
@@ -33,7 +34,7 @@ public class PublicBlogController {
 	public String projectblog(@PathVariable("projectUnixName") String projectUnixName,
 									   Model model)
 			throws QuadrigaStorageException {
-		IProject project = getProjectDetails(projectUnixName);
+		IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
 
 		if (project == null) {
 			return "forbidden";
