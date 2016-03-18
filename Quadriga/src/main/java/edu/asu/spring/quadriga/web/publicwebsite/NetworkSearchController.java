@@ -6,7 +6,7 @@ import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
-import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import org.codehaus.jettison.json.JSONException;

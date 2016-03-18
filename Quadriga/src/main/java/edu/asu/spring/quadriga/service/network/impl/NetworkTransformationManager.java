@@ -165,7 +165,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // To store already added nodes to the final nodes map
         // this would avoid duplicate nodes
         Set<Node> addedNodes = new HashSet<Node>();
-        Integer index = 0;
         for (Link link: transformedNetwork.getLinks()) {
             if (statementIdSearchSet.contains(link.getStatementId())) {
                 // statement id match
@@ -178,12 +177,12 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 // if nodes are added twice - it would produce many
                 // nodes and less links => disconnected graph
                 if (!addedNodes.contains(subjectNode)) {
-                    finalNodes.put((++index).toString(), subjectNode);
+                    finalNodes.put(subjectNode.getId(), subjectNode);
                     addedNodes.add(subjectNode);
                 }
 
                 if (!addedNodes.contains(objectNode)) {
-                    finalNodes.put((++index).toString(), objectNode);
+                    finalNodes.put(objectNode.getId(), objectNode);
                     addedNodes.add(objectNode);
                 }
             }
@@ -192,7 +191,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // finally add the searched concept nodes if they are not present
         for (Node node: searchedNodes) {
             if (!searchedNodes.contains(node)) {
-                finalNodes.put((++index).toString(), node);
+                finalNodes.put(node.getId(), node);
             }
         }
 
