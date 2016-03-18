@@ -33,6 +33,7 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
@@ -568,12 +569,12 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             }
         }
 
-        List<String[]> networkDetailsCache = newNetworkDetailCache.getNetworkDetailsCache();
+        List<NetworkEntry> networkDetailsCache = newNetworkDetailCache.getEntries();
         // Add network statements for networks
-        for (String[] node : networkDetailsCache) {
+        for (NetworkEntry entry : networkDetailsCache) {
             try {
                 String rowid = generateUniqueID();
-                dbConnect.addNetworkStatement(rowid, networkId, node[0], node[1], node[2], user, version);
+                dbConnect.addNetworkStatement(rowid, networkId, entry.getId(), entry.getType(), entry.isTop() ? 1 : 0, user, version);
             } catch (QuadrigaStorageException e1) {
                 logger.error("DB error while adding network statment", e1);
             }
@@ -640,9 +641,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         while (elementsIterator.hasNext()) {
             JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
             if (element.getName().toString().contains("id")) {
-                String networkNodeInfo[] = { element.getValue().toString(), INetworkManager.APPELLATIONEVENT,
-                        INetworkManager.TOPNODE };
-                newNetworkDetailCache.getNetworkDetailsCache().add(networkNodeInfo);
+                NetworkEntry entry = new NetworkEntry();
+                entry.setId(element.getValue().toString());
+                entry.setType(INetworkManager.APPELLATIONEVENT);
+                entry.setTop(true);
+                newNetworkDetailCache.addEntry(entry);
             }
             // Check if dspace file exists.
             if (element.getName().toString().contains("source_reference")) {
@@ -681,9 +684,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
             // get relation event id
             if (element.getName().toString().contains("id")) {
-                String networkNodeInfo[] = { element.getValue().toString(), INetworkManager.RELATIONEVENT,
-                        INetworkManager.TOPNODE };
-                newNetworkDetailCache.getNetworkDetailsCache().add(networkNodeInfo);
+                NetworkEntry entry = new NetworkEntry();
+                entry.setId(element.getValue().toString());
+                entry.setType(INetworkManager.RELATIONEVENT);
+                entry.setTop(true);
+                newNetworkDetailCache.addEntry(entry);
             }
 
             // get dspace quadriga URL
@@ -807,9 +812,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                 JAXBElement<?> elements = (JAXBElement<?>) elementsIterator.next();
 
                 if (elements.getName().toString().contains("id")) {
-                    String networkNodeInfo[] = { elements.getValue().toString(), INetworkManager.RELATIONEVENT,
-                            INetworkManager.NONTOPNODE };
-                    newNetworkDetailCache.getNetworkDetailsCache().add(networkNodeInfo);
+                    NetworkEntry entry = new NetworkEntry();
+                    entry.setId(elements.getValue().toString());
+                    entry.setType(INetworkManager.RELATIONEVENT);
+                    entry.setTop(false);
+                    newNetworkDetailCache.addEntry(entry);
                 }
 
                 if (elements.getName().toString().contains("source_reference")) {
@@ -855,9 +862,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                 JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
 
                 if (element.getName().toString().contains("id")) {
-                    String networkNodeInfo[] = { element.getValue().toString(), INetworkManager.APPELLATIONEVENT,
-                            INetworkManager.NONTOPNODE };
-                    newNetworkDetailCache.getNetworkDetailsCache().add(networkNodeInfo);
+                    NetworkEntry entry = new NetworkEntry();
+                    entry.setId(element.getValue().toString());
+                    entry.setType(INetworkManager.APPELLATIONEVENT);
+                    entry.setTop(false);
+                    newNetworkDetailCache.addEntry(entry);
                 }
 
                 if (element.getName().toString().contains("source_reference")) {
@@ -872,41 +881,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return newNetworkDetailCache;
     }
 
-    /**
-     * This inner class would be used to cache the network details of newly
-     * uploaded network. We use hold the cache until all the data in the
-     * uploaded network seems legitimate as per our general rules of network.
-     * 
-     * @author Lohith Dwaraka
-     *
-     */
-    class NewNetworkDetailsCache {
-
-        private List<String[]> networkDetailsCache;
-        private boolean fileExists;
-
-        public NewNetworkDetailsCache() {
-            this.networkDetailsCache = new ArrayList<String[]>();
-            this.fileExists = true;
-        }
-
-        public List<String[]> getNetworkDetailsCache() {
-            return networkDetailsCache;
-        }
-
-        public void setNetworkDetailsCache(List<String[]> networkDetailsCache) {
-            this.networkDetailsCache = networkDetailsCache;
-        }
-
-        public boolean isFileExists() {
-            return fileExists;
-        }
-
-        public void setFileExists(boolean fileExists) {
-            this.fileExists = fileExists;
-        }
-
-    }
 
     /**
      * 
@@ -1048,6 +1022,73 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     public NetworksDTO getDTO(String id) {
         return getDTO(NetworksDTO.class, id);
+    }
+    
+    /**
+     * This inner class would be used to cache the network details of newly
+     * uploaded network. We use hold the cache until all the data in the
+     * uploaded network seems legitimate as per our general rules of network.
+     * 
+     * @author Lohith Dwaraka
+     *
+     */
+    class NewNetworkDetailsCache {
+        
+        private boolean fileExists;
+        private List<NetworkEntry> entries;
+        
+        public NewNetworkDetailsCache() {
+            this.fileExists = true;
+            entries = new ArrayList<NetworkManager.NetworkEntry>();
+        }
+
+        public boolean isFileExists() {
+            return fileExists;
+        }
+
+        public void setFileExists(boolean fileExists) {
+            this.fileExists = fileExists;
+        }
+        
+        public void addEntry(NetworkEntry entry) {
+            entries.add(entry);
+        }
+        
+        public List<NetworkEntry> getEntries() {
+            return entries;
+        }
+
+    }
+    
+    class NetworkEntry {
+        private String id;
+        private String type;
+        private boolean isTop;
+        
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public boolean isTop() {
+            return isTop;
+        }
+
+        public void setTop(boolean isTop) {
+            this.isTop = isTop;
+        }
+
     }
 
 }

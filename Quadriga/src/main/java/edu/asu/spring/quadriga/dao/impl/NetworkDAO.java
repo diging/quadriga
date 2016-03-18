@@ -185,11 +185,11 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      */
     @Override
     public String addNetworkStatement(String rowid, String networkId,
-            String id, String type, String isTop, IUser user, int version)
+            String id, String type, int isTop, IUser user, int version)
             throws QuadrigaStorageException {
 
         NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(
-                rowid, networkId, id, Integer.parseInt(isTop), version, type,
+                rowid, networkId, id, isTop, version, type,
                 user.getUserName(), new Date(), user.getUserName(), new Date());
 
         try {

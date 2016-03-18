@@ -39,7 +39,7 @@ public interface INetworkDAO {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String addNetworkStatement(String rowid,String networkId, String id, String type,
-			String isTop, IUser user, int version) throws QuadrigaStorageException;
+			int isTop, IUser user, int version) throws QuadrigaStorageException;
 
 
 	/**
