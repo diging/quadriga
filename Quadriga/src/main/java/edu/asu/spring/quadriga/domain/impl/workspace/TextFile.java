@@ -2,13 +2,21 @@ package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
+/**
+ * @author Nischal Samji
+ * 
+ * Domain object for handling Text File Operations.
+ *
+ */
 public class TextFile implements ITextFile {
 
     private String fileName;
     private String projectId;
     private String workspaceId;
-    private String refId;
+    private String textId;
     private String fileContent;
+    private String refId;
+   
 
     @Override
     public String getFileName() {
@@ -41,12 +49,12 @@ public class TextFile implements ITextFile {
     }
 
     @Override
-    public String getRefId() {
-        return refId;
+    public String getTextId() {
+        return textId;
     }
 
-    public void setRefId(String refId) {
-        this.refId = refId;
+    public void setTextId(String textId) {
+        this.textId = textId;
     }
 
     public String getFileContent() {
@@ -57,4 +65,14 @@ public class TextFile implements ITextFile {
         this.fileContent = fileContent;
     }
 
+    public String getRefId() {
+        return refId;
+    }
+
+    public void setRefId(String refId) {
+        this.refId = refId;
+    }
+ 
+
+   
 }
