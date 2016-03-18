@@ -151,38 +151,39 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         List<Node> searchedNodes = new ArrayList<Node>();
         for (Node node: transformedNetwork.getNodes().values()) {
             if (conceptId.equals(node.getConceptId())) {
+                searchedNodes.add(node);
                 statementIdSearchSet.addAll(node.getStatementIds());
             }
         }
 
         // include only those links which have statement ids in the search set
         List<Link> finalLinks = new ArrayList<Link>();
+        // final nodes
+        Map<String, Node> finalNodes = new HashMap<String, Node>();
+        // To store already added nodes to the final nodes map
+        // this would avoid duplicate nodes
+        Set<Node> addedNodes = new HashSet<Node>();
+        Integer index = 0;
         for (Link link: transformedNetwork.getLinks()) {
             if (statementIdSearchSet.contains(link.getStatementId())) {
                 // statement id match
                 // add to the final link list
                 finalLinks.add(link);
-            }
-        }
 
-        // final nodes
-        Map<String, Node> finalNodes = new HashMap<String, Node>();
-        Set<Node> addedNodes = new HashSet<Node>();
-        Integer index = 0;
-        for (Link link: finalLinks) {
-            Node subjectNode = link.getSubject();
-            Node objectNode = link.getObject();
-            // if node already added then do not add it
-            // if nodes are added twice - it would produce many
-            // nodes and less links => disconnected graph
-            if (!addedNodes.contains(subjectNode)) {
-                finalNodes.put((++index).toString(), subjectNode);
-                addedNodes.add(subjectNode);
-            }
+                Node subjectNode = link.getSubject();
+                Node objectNode = link.getObject();
+                // if node already added then do not add it
+                // if nodes are added twice - it would produce many
+                // nodes and less links => disconnected graph
+                if (!addedNodes.contains(subjectNode)) {
+                    finalNodes.put((++index).toString(), subjectNode);
+                    addedNodes.add(subjectNode);
+                }
 
-            if (!addedNodes.contains(objectNode)) {
-                finalNodes.put((++index).toString(), objectNode);
-                addedNodes.add(objectNode);
+                if (!addedNodes.contains(objectNode)) {
+                    finalNodes.put((++index).toString(), objectNode);
+                    addedNodes.add(objectNode);
+                }
             }
         }
 
