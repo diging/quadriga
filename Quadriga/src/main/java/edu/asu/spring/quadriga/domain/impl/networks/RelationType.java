@@ -114,18 +114,18 @@ public class RelationType {
      * @return PredicateType
      */
     public PredicateType getPredicateType(){
-		PredicateType  predicate = null;
-		List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> I2 = e3.iterator();
-		while(I2.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) I2.next();
-			if(element.getValue().toString().contains("PredicateType")){
-				predicate= (PredicateType) element.getValue();
+        PredicateType  predicate = null;
+        List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
+        Iterator <JAXBElement<?>> I2 = e3.iterator();
+        while(I2.hasNext()){
+            JAXBElement<?> element = (JAXBElement<?>) I2.next();
+            if(element.getValue().toString().contains("PredicateType")){
+                predicate= (PredicateType) element.getValue();
 
-			}
-		}
-		return predicate;
-	}
+            }
+        }
+        return predicate;
+    }
     
     
     /**
@@ -133,44 +133,59 @@ public class RelationType {
      * @param rt : RelationType
      * @return SubjectObjectType
      */
-	public SubjectObjectType getSubjectType(){
-		SubjectObjectType subjectType = null;
-		List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> I2 = e3.iterator();
-		while(I2.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) I2.next();
-			if(element.getValue().toString().contains("SubjectObjectType")){
-				//	Handles the subject part of the relation
-				if(element.getName().toString().contains("subject")){
-					subjectType = (SubjectObjectType) element.getValue();
-				}
+    public SubjectObjectType getSubjectType(){
+        SubjectObjectType subjectType = null;
+        List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
+        Iterator <JAXBElement<?>> I2 = e3.iterator();
+        while(I2.hasNext()){
+            JAXBElement<?> element = (JAXBElement<?>) I2.next();
+            if(element.getValue().toString().contains("SubjectObjectType")){
+                //	Handles the subject part of the relation
+                if(element.getName().toString().contains("subject")){
+                    subjectType = (SubjectObjectType) element.getValue();
+                }
 
-			}
-		}
-		return subjectType;
-	}
-	
-	
-	/**
+            }
+        }
+        return subjectType;
+    }
+
+
+    /**
      * Gets the Object of SubjectObjectType from the RelationType object
      * @param rt : RelationType
      * @return SubjectObjectType
      */
-	public SubjectObjectType getObjectType(RelationType rt){
-		SubjectObjectType objectType = null;
-		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> I2 = e3.iterator();
-		while(I2.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) I2.next();
-			if(element.getValue().toString().contains("SubjectObjectType")){
-				//	Handles the subject part of the relation
-				if(element.getName().toString().contains("object")){
-					objectType = (SubjectObjectType) element.getValue();
-				}
+    public SubjectObjectType getObjectType(RelationType rt){
+        SubjectObjectType objectType = null;
+        List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+        Iterator <JAXBElement<?>> I2 = e3.iterator();
+        while(I2.hasNext()){
+            JAXBElement<?> element = (JAXBElement<?>) I2.next();
+            if(element.getValue().toString().contains("SubjectObjectType")){
+                //	Handles the subject part of the relation
+                if(element.getName().toString().contains("object")){
+                    objectType = (SubjectObjectType) element.getValue();
+                }
 
-			}
-		}
-		return objectType;
-	}
+            }
+        }
+        return objectType;
+    }
+
+    /**
+     * Get source reference
+     * @return sourceReference
+     */
+    public String getSourceReference() {
+        for (JAXBElement element: idOrCreatorOrCreationDate) {
+            if ("source_reference".equals(element.getName().getLocalPart())) {
+                return (String) element.getValue();
+            }
+        }
+
+        // send an empty string if it cannot find a source_reference
+        return "";
+    }
 
 }

@@ -5,6 +5,7 @@ public class Link {
     private Node subject;
     private Node object;
     private String label;
+    private String sourceReference;
     
     public Node getSubject() {
         return subject;
@@ -30,4 +31,11 @@ public class Link {
         this.label = label;
     }
 
+    public String getSourceReference() {
+        return sourceReference;
+    }
+
+    public void setSourceReference(String sourceReference) {
+        this.sourceReference = sourceReference;
+    }
 }

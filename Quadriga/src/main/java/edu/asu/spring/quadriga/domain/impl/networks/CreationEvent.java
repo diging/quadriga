@@ -105,4 +105,19 @@ public abstract class CreationEvent {
         return this.idOrCreatorOrCreationDate;
     }
 
+    /**
+     * Get the source reference
+     * @return
+     */
+    public String getSourceReference() {
+        for (JAXBElement element: getIdOrCreatorOrCreationDate()) {
+            if ("source_reference".equals(element.getName().getLocalPart())) {
+                return (String) element.getValue();
+            }
+        }
+
+        // send an empty string if it cannot find a source_reference
+        return "";
+    }
+
 }
