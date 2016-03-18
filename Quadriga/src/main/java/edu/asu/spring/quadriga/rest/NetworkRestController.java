@@ -46,7 +46,7 @@ import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -66,7 +66,7 @@ public class NetworkRestController {
     private IRestMessage errorMessageRest;
 
     @Autowired
-    private IListWSManager wsManager;
+    private IWorkspaceManager wsManager;
 
     @Autowired
     private IEditorManager editorManager;
@@ -115,7 +115,7 @@ public class NetworkRestController {
                     .getErrorMsg("Please provide a workspace id as a part of post parameters");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
+        String projectid = wsManager.getProjectIdFromWorkspaceId(workspaceid);
         if (projectid == null || projectid.isEmpty()) {
             String errorMsg = errorMessageRest
                     .getErrorMsg("No project could be found for the given workspace id " + workspaceid);
