@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.network.impl;
+package edu.asu.spring.quadriga.service.network;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
