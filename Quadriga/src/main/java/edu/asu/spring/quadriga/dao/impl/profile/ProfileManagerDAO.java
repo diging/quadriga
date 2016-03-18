@@ -3,6 +3,9 @@ package edu.asu.spring.quadriga.dao.impl.profile;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -29,6 +32,7 @@ import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 @Repository
 public class ProfileManagerDAO extends BaseDAO<QuadrigaUserprofileDTO> implements
         IProfileManagerDAO {
+
     @Autowired
     private SessionFactory sessionFactory;
     

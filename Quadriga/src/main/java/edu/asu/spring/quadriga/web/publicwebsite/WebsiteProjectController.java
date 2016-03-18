@@ -17,6 +17,7 @@ import javax.xml.bind.JAXBException;
 
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -39,8 +40,8 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
-import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @PropertySource(value = "classpath:/user.properties")
@@ -245,7 +246,7 @@ public class WebsiteProjectController {
 		model.addAttribute("networkid", "\"\"");
 		model.addAttribute("project", project);
 
-		return "sites/networks/visualize";
+		return "sites/networks/explore";
 	}
 
 }

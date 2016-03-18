@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.qstore;
+package edu.asu.spring.quadriga.qstore;
 
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
