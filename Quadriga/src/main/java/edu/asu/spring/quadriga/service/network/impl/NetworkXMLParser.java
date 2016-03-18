@@ -2,14 +2,22 @@ package edu.asu.spring.quadriga.service.network.impl;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -47,18 +55,18 @@ public class NetworkXMLParser implements INetworkXMLParser {
 
         NodeList textNodeList = document.getElementsByTagName("text");
         if (textNodeList.getLength() == 0) {
-            return "Success";
+            return xml;
         }
         String text = textNodeList.item(0).getTextContent();
 
         NodeList handle = document.getElementsByTagName("handle");
         NodeList fileName = document.getElementsByTagName("file_name");
         if (handle.getLength() == 0 && fileName.getLength() == 0) {
-            throw new NetworkXMLParseException("The Handle and file name must be specified in the input XML ");
+            throw new NetworkXMLParseException("Handle and file name must be specified in the input XML");
         } else if (handle.getLength() == 0) {
-            throw new NetworkXMLParseException("Handle must be specified in the input XML ");
+            throw new NetworkXMLParseException("Handle must be specified in the input XML");
         } else if (fileName.getLength() == 0) {
-            throw new NetworkXMLParseException("File name must be specified in the input XML ");
+            throw new NetworkXMLParseException("File name must be specified in the input XML");
         }
 
         String handleID = handle.item(0).getTextContent();
@@ -69,9 +77,29 @@ public class NetworkXMLParser implements INetworkXMLParser {
         txtfile.setProjectId(projectid);
         txtfile.setWorkspaceId(workspaceid);
         txtfile.setRefId(handleID);
+        
+        txtFileManager.saveTextFile(txtfile);
+        
+        Element e = document.getDocumentElement();
+        e.removeChild(textNodeList.item(0));
+        e.removeChild(handle.item(0));
+        e.removeChild(fileName.item(0));
+        return documentToString(document);
 
-        return txtFileManager.saveTextFile(txtfile) ? "Success" : null;
+    }
 
+    private String documentToString(Document doc) throws NetworkXMLParseException {
+        DOMSource domSource = new DOMSource(doc);
+        Transformer transformer;
+        StringWriter sw = new StringWriter();
+        try {
+            transformer = TransformerFactory.newInstance().newTransformer();
+            StreamResult sr = new StreamResult(sw);
+            transformer.transform(domSource, sr);
+        } catch (TransformerFactoryConfigurationError | TransformerException e) {
+            throw new NetworkXMLParseException("Error Converting document to XML");
+        }
+        return sw.toString();
     }
 
 }

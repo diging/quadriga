@@ -134,20 +134,6 @@ public class NetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 
         }
-        
-        String res = null;
-        try{
-            res = networkManager.storeNetworks(xml);
-        } catch(QStoreStorageException e){
-            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
-            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        if (res == null) {
-            String errorMsg = errorMessageRest.getErrorMsg("Please provide correct XML in body of the post request. Qstore system is not accepting your XML");
-            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-        }
-        
         String resTxt = null;
         try{
             resTxt = networkManager.storeText(xml, projectid, workspaceid);
@@ -163,6 +149,20 @@ public class NetworkRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Unable to save the file with text from XML");
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        
+        String res = null;
+        try{
+            res = networkManager.storeNetworks(resTxt);
+        } catch(QStoreStorageException e){
+            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (res == null) {
+            String errorMsg = errorMessageRest.getErrorMsg("Please provide correct XML in body of the post request. Qstore system is not accepting your XML");
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+        }
+        
 
         String networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,
                 "", INetworkManager.VERSION_ZERO);
