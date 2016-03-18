@@ -3,9 +3,6 @@ package edu.asu.spring.quadriga.dao.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.hibernate.Query;
 import org.hibernate.ScrollMode;
@@ -61,9 +58,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
 
     @Autowired
     private NetworkDTOMapper networkMapper;
-
-    @Resource(name = "projectconstants")
-    private Properties messages;
 
     @Autowired
     private ProjectDTOMapper projectMapper;
