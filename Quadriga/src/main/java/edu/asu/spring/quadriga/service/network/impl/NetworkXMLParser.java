@@ -16,6 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -40,6 +41,7 @@ public class NetworkXMLParser implements INetworkXMLParser {
     private TextFileManager txtFileManager;
 
     @Override
+    @Transactional
     public String storeText(String xml, String projectid, String workspaceid)
             throws NetworkXMLParseException, QuadrigaStorageException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
