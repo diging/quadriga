@@ -108,7 +108,6 @@ public class ProjectStatsController {
                 JSONArray jArray = null;
                 jArray = getProjectStatsJson(topConcepts);
                 model.addAttribute("jsonstring", jArray);
-                System.out.println(jArray.toString());
                 model.addAttribute("networkid", "\"\"");
                 model.addAttribute("project", project);
 
