@@ -46,25 +46,32 @@ public class ProjectStatsController {
     @Autowired
     private Environment env;
 
-    private JSONArray getProjectStatsJson(List<IConceptStats> topConcepts)
+    private JSONArray getProjectStatsJson(List<IConceptStats> conceptList)
+            throws JSONException {
+
+        int cnt = Integer.parseInt(env.getProperty("project.stats.topcount"));
+        int len = conceptList.size() > cnt ? cnt : conceptList.size();
+        
+        List<IConceptStats> topConceptsList = conceptList.subList(0, len);
+        return getTopConceptsJson(topConceptsList,len); 
+    }
+    
+    private JSONArray getTopConceptsJson(List<IConceptStats> conceptsList, int length)
             throws JSONException {
         JSONArray jsonArray = new JSONArray();
 
-        int cnt = Integer.parseInt(env.getProperty("project.stats.topcount"));
-        int len = topConcepts.size() > cnt ? cnt : topConcepts.size();
-
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < length; i++) {
             JSONObject jsonObject = new JSONObject();
-            IConceptStats conceptStats = topConcepts.get(i);
+            IConceptStats conceptStats = conceptsList.get(i);
             jsonObject.put("conceptId", conceptStats.getConceptId());
             jsonObject.put("description", conceptStats.getDescription());
             jsonObject.put("label", conceptStats.getLemma());
-            jsonObject.put("frequency", conceptStats.getCount());
+            jsonObject.put("count", conceptStats.getCount());
             jsonArray.put(jsonObject);
         }
         return jsonArray;
     }
-
+    
     /**
      * This method gives the visualization of how often concepts appear in the
      * networks
@@ -93,14 +100,15 @@ public class ProjectStatsController {
         List<INetwork> networks = networkmanager
                 .getNetworksInProject(projectId);
         List<IConceptStats> topConcepts = null;
-        JSONArray jArray = null;
 
         if (!networks.isEmpty()) {
-            topConcepts = projectStats.getTopConcepts(networks);
+            topConcepts = projectStats.getConceptCount(networks);
 
             try {
+                JSONArray jArray = null;
                 jArray = getProjectStatsJson(topConcepts);
                 model.addAttribute("jsonstring", jArray);
+                System.out.println(jArray.toString());
                 model.addAttribute("networkid", "\"\"");
                 model.addAttribute("project", project);
 

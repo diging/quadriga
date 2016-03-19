@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IProjectStats {
 
-    public abstract List<IConceptStats> getTopConcepts(List<INetwork> Networks)
+    public abstract List<IConceptStats> getConceptCount(List<INetwork> Networks)
             throws QuadrigaStorageException;
 
 }

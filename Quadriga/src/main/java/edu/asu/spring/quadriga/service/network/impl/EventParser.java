@@ -201,7 +201,7 @@ public class EventParser {
             String id = node.getConceptId();
             ConceptpowerReply re = conceptPowerConnector.getById(id);
             node.setLabel(getLemma(re, id));
-            node.setDescription(getDesc(re, id));
+            node.setDescription(getDescription(re, id));
         }
         node.getStatementIds().add(statementId);
     }
@@ -214,12 +214,12 @@ public class EventParser {
         return lemma;
     }
 
-    private String getDesc(ConceptpowerReply re, String id) {
-        String desc = id;
+    private String getDescription(ConceptpowerReply re, String id) {
+        String description = "";
         if (re.getConceptEntry().size() != 0) {
             return re.getConceptEntry().get(0).getDescription();
         }
-        return desc;
+        return description;
     }
     
     private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)

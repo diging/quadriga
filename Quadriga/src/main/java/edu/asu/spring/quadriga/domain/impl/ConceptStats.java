@@ -1,19 +1,12 @@
 package edu.asu.spring.quadriga.domain.impl;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import edu.asu.spring.quadriga.domain.IConceptStats;
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 
 /**
  * This class represents one concept with limited properties. It provides
  * existing properties of concept in terms of concept id, description and lemma
- * of the concept. Apart from that, it also provides frequency of concept
- * appears in a certain object.
+ * of the concept. Apart from that, it also provides count of concept
+ * appears in a certain text.
  *
  * @author ajaymodi
  *
@@ -35,7 +28,6 @@ public class ConceptStats implements IConceptStats {
     }
 
     public ConceptStats() {
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -94,8 +86,17 @@ public class ConceptStats implements IConceptStats {
             return false;
         return true;
     }
-
-    public void incCount() {
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((conceptId == null) ? 0 : conceptId.hashCode());
+        return result;
+    }
+    
+    public void incrementCount() {
         this.count = this.getCount() + 1;
     }
 

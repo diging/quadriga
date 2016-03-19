@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.domain.impl.ConceptStats;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
-import edu.asu.spring.quadriga.service.network.impl.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.publicwebsite.IProjectStats;
 import edu.asu.spring.quadriga.transform.Node;
 
@@ -34,7 +34,7 @@ public class ProjectStats implements IProjectStats {
     private INetworkTransformationManager transformationManager;
 
     @Override
-    public List<IConceptStats> getTopConcepts(List<INetwork> networks)
+    public List<IConceptStats> getConceptCount(List<INetwork> networks)
             throws QuadrigaStorageException {
         HashMap<String, ConceptStats> mapStats = new HashMap<String, ConceptStats>();
 
@@ -46,7 +46,7 @@ public class ProjectStats implements IProjectStats {
                 for (Node node : mapNodes.values()) {
                     String url = node.getConceptId();
                     if (mapStats.containsKey(url)) {
-                        mapStats.get(url).incCount();
+                        mapStats.get(url).incrementCount();
                     } else {
                         ConceptStats conceptStats = new ConceptStats(url,
                                 node.getDescription(), node.getLabel(), 1);
