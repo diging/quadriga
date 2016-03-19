@@ -149,7 +149,7 @@ public class EventParser {
 
         return null;
     }
-
+    
     private PredicateNode parsePredicateEvent(
             AppellationEventType appellationEvent, String statementId) {
         PredicateNode predNode = new PredicateNode();
