@@ -9,15 +9,14 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-6 search-wrapper" style="position: relative">
-			<form action="<c:url value="/sites/${project.unixName}/search" />" id="search-form"
-				  method="post">
+			<div id="search-form">
 				<div class="form-group search-input">
 					<label for="search-term">Enter the search term</label>
 					<input type="text" class="form-control" id="search-term" autocomplete="off">
                     <span style="background: url('<c:url value="/resources/txt-layout/images/throbber.gif" />');"
 						  id="ajax-loader" class="search-loader"></span>
 				</div>
-			</form>
+			</div>
 			<div class="row" id="search-results-wrapper" style="display: none;">
 				<div class="col-sm-12 search-results">
 					<div class="list-group" id="search-results-items">
@@ -42,7 +41,7 @@
 		var $resWrapper = $('#search-results-wrapper');
 		var $items = $('#search-results-items');
 		var $list = $resWrapper.find('.list-group-item:first');
-		var url = $('#search-form').attr('action'); // action URL
+		var url = '<c:url value="/sites/${project.unixName}/search" />';
 		var loader = (function() {
 			// var isVisible = false;
 			var timeout;

@@ -125,6 +125,10 @@ public class NetworkSearchController {
             json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
 
+        if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+            model.addAttribute("isNetworkEmpty", true);
+        }
+
         model.addAttribute("jsonstring", json);
         model.addAttribute("networkid", "\"\"");
         model.addAttribute("project", project);

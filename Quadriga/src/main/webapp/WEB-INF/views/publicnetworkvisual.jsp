@@ -35,15 +35,20 @@ $("input[type=button]").button().click(function(event) {
 
 <!-- <div id="dspace_metadata"></div>  -->
 
+<c:if test="${isNetworkEmpty}">
+<div class="row">
+	<div class="alert alert-info">Could not find any nodes for the search term in the project</div>
+</div>
+</c:if>
 
-
-
+<c:if test="${!isNetworkEmpty}">
 <div id="chart" class="row"></div>
 
 <div id="inner-details" class="row"></div>
 <div id="allannot_details" class="row">
-<div class="row"><table id = "annotationsTable"></table></div>
+	<div class="row"><table id = "annotationsTable"></table></div>
 </div>
+</c:if>
 
 
 <div id="log" class="row"></div>
