@@ -44,6 +44,9 @@ import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.qstore.IMarshallingService;
+import edu.asu.spring.quadriga.qstore.IQStoreConnector;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
@@ -76,6 +79,7 @@ public class EventParser {
     @Autowired
     @Qualifier("qStoreURL_Get")
     private String qStoreURL_Get;
+    private IQStoreConnector qstoreConnector;
 
     @Autowired
     @Qualifier("jaxbMarshaller")
@@ -86,6 +90,11 @@ public class EventParser {
 
     @Autowired
     private IConceptpowerConnector conceptPowerConnector;
+
+    private IConceptCollectionManager conceptCollectionManager;
+    
+    @Autowired
+    private IMarshallingService marshallingService;
 
     public void parseStatement(String relationEventId, Map<String, Node> nodes,
             List<Link> links) throws JAXBException, QStoreStorageException {
@@ -212,19 +221,17 @@ public class EventParser {
         }
         return desc;
     }
-
-    private ElementEventsType getElementEventTypeFromCreationEventTypeID(
-            String relationEventId) throws JAXBException,
-            QStoreStorageException {
-        String xml = getCreationEventXmlStringFromQstore(relationEventId);
+    
+    private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
+            throws JAXBException, QStoreStorageException {
+        String xml = qstoreConnector.getCreationEvent(relationEventId);
         ElementEventsType elementEventType = null;
         if (xml == null) {
             throw new QStoreStorageException(
                     "Some issue retriving data from Qstore, Please check the logs related to Qstore");
         } else {
-
             // Initialize ElementEventsType object for relation event
-            elementEventType = unMarshalXmlToElementEventsType(xml);
+            elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
         }
         return elementEventType;
     }
