@@ -6,6 +6,7 @@ public class Link {
     private Node object;
     private String label;
     private String sourceReference;
+    private String statementId;
     
     public Node getSubject() {
         return subject;
@@ -37,5 +38,13 @@ public class Link {
 
     public void setSourceReference(String sourceReference) {
         this.sourceReference = sourceReference;
+    }
+
+    public String getStatementId() {
+        return statementId;
+    }
+
+    public void setStatementId(String statementId) {
+        this.statementId = statementId;
     }
 }

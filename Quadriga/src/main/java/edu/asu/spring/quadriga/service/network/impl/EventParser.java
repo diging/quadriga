@@ -115,6 +115,8 @@ public class EventParser {
 
             if (subjectNode != null) {
                 Link link = new Link();
+                // add the statement id to the link
+                link.setStatementId(statementId);
                 link.setSubject(predNode);
                 link.setObject(subjectNode);
                 link.setLabel("has subject");
@@ -125,6 +127,8 @@ public class EventParser {
             
             if (objectNode != null) {
                 Link link = new Link();
+                // add the statement id to the link
+                link.setStatementId(statementId);
                 link.setSubject(predNode);
                 link.setObject(objectNode);
                 link.setLabel("has object");
