@@ -5,6 +5,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+<h3>Add Blog Entry</h3>
+
 <script>
 	tinymce
 			.init({
@@ -20,6 +23,6 @@
 <form method="get"
 	action="">
 	<textarea
-		style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center"> [Project Title] </textarea>
-	<div id="editable">`</div>
+		style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center"> [Title] </textarea>
+	<div id="editable"></div>
 </form>

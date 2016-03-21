@@ -24,11 +24,8 @@
 	<c:if test="${empty blockentrylist}">
 You don't own any public blogs.
 </c:if>
-<div>	Here : ${project.unixName}
-</div>
-
 
 	<div style="float: right;">
-		<a href="sites/${project.unixName}/addprojectblog"><i
+		<a href="${project.projectId}/addprojectblog"><i
 			class="fa fa-plus-circle"></i> Add a new entry</a>
 	</div>
