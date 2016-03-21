@@ -10,19 +10,30 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import edu.asu.spring.quadriga.profile.ISearchResult;
+import edu.asu.spring.quadriga.profile.IService;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.context.Theme;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -51,7 +62,6 @@ public class WebsiteProjectController {
 	
 	@Autowired
     private Environment env;
-
 	
 	public IRetrieveProjectManager getProjectManager() {
 		return projectManager;
@@ -61,7 +71,7 @@ public class WebsiteProjectController {
 		this.projectManager = projectManager;
 	}
 	
-	private IProject getProjectDetails(String name) throws QuadrigaStorageException{
+	private IProject getProjectDetails(String name) throws QuadrigaStorageException {
 		return projectManager.getProjectDetailsByUnixName(name);
 	}
 
@@ -160,6 +170,9 @@ public class WebsiteProjectController {
 		model.addAttribute("project", project);
 		
 		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+
+		// test the transformed networks
+
 		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
@@ -170,4 +183,37 @@ public class WebsiteProjectController {
 		model.addAttribute("jsonstring",json);
 		return "sites/networks/visualize";
 	}
+
+	/**
+	 * This method gives the visualization of all the networks in a project
+	 * @param projectUnixName	The project unix name
+	 * @param model				Model
+	 * @return view
+	 * @throws JAXBException
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
+	public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName,
+									   Model model)
+			throws JAXBException, QuadrigaStorageException {
+		IProject project = getProjectDetails(projectUnixName);
+
+		if (project == null) {
+			return "auth/accessissue";
+		}
+
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetworkOfProject(project.getProjectId());
+
+		String json = null;
+		if (transformedNetwork != null) {
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+		}
+
+		model.addAttribute("jsonstring", json);
+		model.addAttribute("networkid", "\"\"");
+		model.addAttribute("project", project);
+
+		return "sites/networks/explore";
+	}
+
 }

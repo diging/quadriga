@@ -25,18 +25,18 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ConceptCollectionWorkspaceController {
 
 	@Autowired
-	IConceptCollectionManager conceptCollectionManager;
+	private IConceptCollectionManager conceptCollectionManager;
 
 	@Autowired
-	IListWSManager wsManager;
+	private IWorkspaceManager wsManager;
 	
 	@Autowired
 	private IWorkspaceCCManager workspaceCCManager;
@@ -81,6 +81,7 @@ public class ConceptCollectionWorkspaceController {
 		model.addAttribute("workspaceId", workspaceId);
 		return "auth/workbench/workspace/conceptcollections";
 	}
+
 	
 	/**
 	 * Retrieve the concept collections which are not associated to the given workspace

@@ -24,18 +24,18 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class DictionaryWorkspaceController {
 
 	@Autowired
-	IDictionaryManager dictonaryManager;
+	private IDictionaryManager dictonaryManager;
 
 	@Autowired
-	IListWSManager wsManager;
+	private IWorkspaceManager wsManager;
 	
 	@Autowired
 	private IWorkspaceDictionaryManager workspaceDictionaryManager;

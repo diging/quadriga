@@ -128,7 +128,7 @@ public class DictionaryItemCollabController {
     @RequestMapping(value = "auth/dictionaries/deleteDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
     public String deleteDictionaryItem(HttpServletRequest req,
             @PathVariable("dictionaryid") String dictionaryId, ModelMap model,
-            Principal principal) throws QuadrigaStorageException {
+            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
 
         IUser user = usermanager.getUser(principal.getName());
         String[] values = req.getParameterValues("selected");
@@ -223,7 +223,7 @@ public class DictionaryItemCollabController {
     @RequestMapping(value = "auth/dictionaries/updateDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
     public String updateDictionaryItem(HttpServletRequest req,
             @PathVariable("dictionaryid") String dictionaryId, ModelMap model,
-            Principal principal) throws QuadrigaStorageException {
+            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
 
         IUser user = usermanager.getUser(principal.getName());
         String[] values = req.getParameterValues("selected");

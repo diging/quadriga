@@ -12,7 +12,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 
 /**
  * Service level Implementation of {@link IAuthorization} for {@link IWorkSpace} for REST APIs.
@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 public class WorkspaceRestAuthorization implements IAuthorization 
 {
 	@Autowired
-	private	IListWSManager wsManager;
+	private	IWorkspaceManager wsManager;
 
 	@Autowired
 	private IWSSecurityChecker wsSecurityManager;
@@ -57,8 +57,7 @@ public class WorkspaceRestAuthorization implements IAuthorization
 		//fetch the details of the workspace
 		workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
 		if(workspace ==null){
-
-			return haveAccess;
+			throw new QuadrigaAccessException();
 		}
 		//check if the logged in user is workspace owner
 		if(workspace.getOwner()!=null)

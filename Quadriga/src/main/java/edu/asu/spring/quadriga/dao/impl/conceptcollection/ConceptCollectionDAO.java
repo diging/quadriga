@@ -41,7 +41,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 @Repository
 public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implements IConceptCollectionDAO {
 
-	@Autowired
+    @Autowired
 	protected SessionFactory sessionFactory;
 	
 	@Autowired
@@ -135,6 +135,7 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
 			ConceptCollectionDTO conceptcollectionsDTO = conceptCollectionDTOMapper.getConceptCollectionDTO(conceptCollection);
 			conceptcollectionsDTO.setConceptCollectionid(generateUniqueID());
 			sessionFactory.getCurrentSession().save(conceptcollectionsDTO);
+			conceptCollection.setConceptCollectionId(conceptcollectionsDTO.getConceptCollectionid());
 		}
 		catch(Exception e)
 		{
@@ -413,6 +414,11 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
 	@Override
     public ConceptCollectionDTO getDTO(String id) {
         return getDTO(ConceptCollectionDTO.class, id);
+    }
+
+    @Override
+    public String getIdPrefix() {
+        return messages.getProperty("concept_collection_id.prefix");
     }
 
 }
