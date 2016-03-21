@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 
-@Service
 public class PublicPage implements IPublicPage {
 	private String title1;
 	private String description1;
@@ -22,7 +21,7 @@ public class PublicPage implements IPublicPage {
 	private String description2;
 	private String title3;
 	private String description3;
-	
+
 	/**
 	 * retrieves the Title 1
 	 */
@@ -38,7 +37,7 @@ public class PublicPage implements IPublicPage {
 	public void setTitle1(String title1) {
 		this.title1 = title1;
 	}
-	
+
 	/**
 	 * retrieves the Title 2
 	 */
@@ -54,8 +53,7 @@ public class PublicPage implements IPublicPage {
 	public void setTitle2(String title2) {
 		this.title2 = title2;
 	}
-	
-	
+
 	/**
 	 * retrieves Title 3
 	 */
@@ -71,7 +69,6 @@ public class PublicPage implements IPublicPage {
 	public void setTitle3(String title3) {
 		this.title3 = title3;
 	}
-		
 
 	/**
 	 * retrieves the description 1 of the project
@@ -89,7 +86,6 @@ public class PublicPage implements IPublicPage {
 		this.description1 = description1;
 	}
 
-	
 	/**
 	 * retrieves the description 2 of the project
 	 */
@@ -106,7 +102,6 @@ public class PublicPage implements IPublicPage {
 		this.description2 = description2;
 	}
 
-	
 	/**
 	 * retrieves the description 3 of the project
 	 */
