@@ -145,22 +145,18 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Override
     public String callQStore(String workspaceId, String xml, IUser user) throws ParserConfigurationException,
             SAXException, IOException, JAXBException, QuadrigaStorageException, QuadrigaAccessException {
-        // TODO Auto-generated method stub -- Karthik
     	String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
         String networkName = "VogenWeb_Details";
         String responseFromQStore = networkManager.storeXMLQStore(annotatedText);
         String networkId = networkManager.storeNetworkDetails(responseFromQStore, user, networkName, workspaceId,
                 INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
         return networkId;
-        // Returns networkId
     }
 
     @Override
     @Transactional
     public String createWorkspaceForExternalProject(String externalWorkspaceId, String externalWorkspaceName,
             String projectId, IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
-
-        // TODO Auto-generated method stub -- Karthik
 
         boolean isExternalWorkspaceExists = externalWSManager.isExternalWorkspaceExists(externalWorkspaceId);
         String workspaceId = null;

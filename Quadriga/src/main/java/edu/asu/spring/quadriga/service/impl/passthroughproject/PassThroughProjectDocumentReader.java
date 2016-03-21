@@ -119,7 +119,6 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
 
 	private String processWorkspace(String externalWorkspaceId, String externalWorkspaceName, String projectId,
 			Principal principal) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
-		// TODO Auto-generated method stub
 		IUser user = userManager.getUser(principal.getName());
 		String internalWorkspaceId = passThroughProjectManager.createWorkspaceForExternalProject(externalWorkspaceId,
 				externalWorkspaceName, projectId, user);
