@@ -905,8 +905,29 @@
 		border: 1px solid #c1cac5;
 		padding: 5px;
 		margin-bottom: 10px;
-		
 	}
+	
+	.projectContainer {
+		width: 100%;
+		clear: both;
+	}
+	
+	
+	.recentProjectList {
+		border: 1px solid #c1cac5;
+		padding: 5px;
+		width: 47%;
+		padding: 1%;
+		margin: 1%;
+		float: left;
+	}
+	
+	.recentProjectList ul {
+		margin-left: 10%;
+		list-style-type: disc;
+		margin-bottom : 0%;
+	}
+	
 	
 	div.toggleBtn {
 		margin-left: 20px;

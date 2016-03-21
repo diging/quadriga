@@ -1,6 +1,8 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -197,4 +199,63 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		}
 		return false;
 	}
+	
+	
+	/**
+	 * This method returns the list of recently updated top 5 projects associated with
+	 * the logged in user.
+	 * @param sUserName
+	 * @return List - list of recently updated projects.
+	 * @throws QuadrigaStorageException
+	 * @author Suraj Nilapwar
+	 */
+	@Override
+	@Transactional
+	public List<IProject> getRecentProjectList(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectsList = new ArrayList<IProject>();
+		List<String> projectIds = new ArrayList<String>();
+		
+		List<IProject> projectListAsOwner;
+		projectListAsOwner =  projectShallowMapper.getProjectList(sUserName);
+		if(projectListAsOwner != null)
+		{
+			for (IProject p : projectListAsOwner) {
+				projectsList.add(getProjectDetails(p.getProjectId()));
+				projectIds.add(p.getProjectId());
+			}
+		}
+		
+		List<IProject> projectListAsCollaborator; 
+		projectListAsCollaborator = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);;
+		if(projectListAsCollaborator != null)
+		{
+			for (IProject p : projectListAsCollaborator) {
+				if (!projectIds.contains(p.getProjectId()))
+				{
+					projectsList.add(getProjectDetails(p.getProjectId()));		
+					projectIds.add(p.getProjectId());
+				}
+			}
+		}
+		
+		Collections.sort(projectsList, new Comparator<IProject>() {
+			@Override
+			public int compare(IProject o1, IProject o2) {
+				return o2.getUpdatedDate().compareTo(o1.getUpdatedDate());
+			}
+		});
+		
+		List<IProject> recentProjectsList = new ArrayList<IProject>();
+		//check if recentProjectList has size greater than 5, we need recently modified 5 projects
+		if(projectsList!=null && projectsList.size()>5)
+		{
+			recentProjectsList = projectsList.subList(0, 5);
+		}
+		
+		return recentProjectsList;
+	}
+	
+	
+
 }

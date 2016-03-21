@@ -1,6 +1,8 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.NoAuthorizationCheck;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * The controller to manage the login step performed by every user in Quadriga Database
@@ -25,19 +30,27 @@ public class LoginController {
 	IUserManager userManager;
 	IUser user;
 
+    @Autowired 
+	private IRetrieveProjectManager projectManager;
+    
 	/**
 	 * A valid authenticated user is redirected to the home page.
 	 * 
 	 * @return 		Returned to the home page of Quadriga.
+	 * @throws QuadrigaStorageException 
 	 */
 	@NoAuthorizationCheck
 	@RequestMapping(value = "auth/welcome", method = RequestMethod.GET)
 	public String validUserHandle(ModelMap model, Principal principal,
-			Authentication authentication) {
+			Authentication authentication) throws QuadrigaStorageException {
 
 		// Get the LDAP-authenticated userid
 		String sUserId = principal.getName();		
 		model.addAttribute("username", sUserId);
+
+        List<IProject> recentProjects = new ArrayList<IProject>();
+        recentProjects = projectManager.getRecentProjectList(sUserId);
+		model.addAttribute("projects", recentProjects);
 		
 		return "auth/home";
 

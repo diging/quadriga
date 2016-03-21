@@ -23,8 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.impl.Profile;
+import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.IService;
@@ -33,6 +37,7 @@ import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
 import edu.asu.spring.quadriga.web.profile.impl.AuthorityFileSearchService;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
@@ -74,6 +79,9 @@ public class HomeController {
     private String serviceId;
     private String term;
 
+    @Autowired 
+	private IRetrieveProjectManager projectManager;
+    
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
 
@@ -118,7 +126,13 @@ public class HomeController {
         model.addAttribute("conceptmsg", messages.getProperty("concept_desc"));
         model.addAttribute("dictmsg", messages.getProperty("dictonary_desc"));
         model.addAttribute("networksmsg", messages.getProperty("network_desc"));
+        
+        
+        List<IProject> recentProjects = new ArrayList<IProject>();
+        recentProjects = projectManager.getRecentProjectList(sUserId);
 
+        model.addAttribute("projects", recentProjects);
+        
         return "auth/home";
     }
 
