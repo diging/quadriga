@@ -723,10 +723,12 @@
 		<put-attribute name="currentPage" value="addprojectblog" />
 		<put-attribute name="content" value="/WEB-INF/views/addprojectblog.jsp" />
 	</definition>
-
-	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks"> 
-		<put-attribute name="title" value="Quadriga Networks visualize" /> <put-attribute 
-		name="content" value="/WEB-INF/views/editing/networks.jsp" /> </definition> -->
+	
+	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks">
+		<put-attribute name="title" value="Quadriga Networks visualize" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/editing/networks.jsp" />
+	</definition> -->
 
 
 	<!-- editing -->

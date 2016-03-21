@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,17 +71,6 @@ public class PublicBlogController {
         return "sites/projectblog";
     }
 
-    /**
-     * This method provides page to add project blog entry to the authorized
-     * user. Only project owners are allowed to add entry to the blog.
-     * 
-     * @param projectUnixName
-     *            The project unix name
-     * @param model
-     *            Model
-     * @return view
-     * @throws QuadrigaStorageException
-     */
     /**
      * This method provides page to add project blog entry to the authorized
      * user. Only project owners are allowed to add entry to the blog.
