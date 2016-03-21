@@ -129,22 +129,15 @@ public class NetworkSearchController {
             json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
 
-        String searchNodeLabel = "";
         if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
             model.addAttribute("isNetworkEmpty", true);
-        } else {
-            // get the search concept id
-            for (Node node: transformedNetwork.getNodes().values()) {
-                if (conceptId.equals(node.getConceptId())) {
-                    searchNodeLabel = node.getLabel();
-                    break;
-                }
-            }
         }
 
         String lemma = "";
+        String searchNodeLabel = "";
         ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
         if (reply != null && reply.getConceptEntry().size() > 0) {
+            searchNodeLabel = reply.getConceptEntry().get(0).getLemma();
             lemma = reply.getConceptEntry().get(0).getDescription();
         }
 

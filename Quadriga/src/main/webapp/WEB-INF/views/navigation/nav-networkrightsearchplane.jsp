@@ -18,44 +18,6 @@ $(document).ready(function(){
 		overflow: auto;
 		left: 0;
 	}
-	
-	div.div_main {
-		width: 330px;
-		padding: 10px;
-		margin: 0px;
-		opacity: 0.7;
-	}
-		
-	table,th,td{
-		border:1px solid black;
-	}
-
-		
-	}
-	
-	caption,th,td {
-		font-family: 'Open Sans Condensed', sans-serif;
-		padding: 0em 0em;
-		border: 0px solid #B0BCB0;
-	}
-	
-	caption {
-		
-		font-weight: 900;
-		text-transform: uppercase;
-	}
-	#textfilestyle
-	{
-		display: inline-block;
-		background: #DDEFF8;
-		padding: 0.75em 0.75em 0.75em 0.75em;
-		border-radius: 8px;
-		font-size: 0.85em;
-		color: #000000;
-		margin-left: -4.3em;
-		left: 0;
-	}
-
 </style>
 
 <c:if test="${!isNetworkEmpty}">
