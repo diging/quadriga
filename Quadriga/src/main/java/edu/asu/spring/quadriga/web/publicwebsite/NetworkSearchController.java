@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
@@ -8,6 +10,7 @@ import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.transform.Node;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,6 +48,9 @@ public class NetworkSearchController {
 
     @Autowired
     private INetworkTransformationManager transformationManager;
+
+    @Autowired
+    private IConceptpowerConnector conceptpowerConnector;
 
     private static String defaultJsonErrorMsg = "{\"status\" : 500," +
             " \"message\": \"Unable to get the search terms\"}";
@@ -123,13 +129,30 @@ public class NetworkSearchController {
             json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
 
+        String searchNodeLabel = "";
         if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
             model.addAttribute("isNetworkEmpty", true);
+        } else {
+            // get the search concept id
+            for (Node node: transformedNetwork.getNodes().values()) {
+                if (conceptId.equals(node.getConceptId())) {
+                    searchNodeLabel = node.getLabel();
+                    break;
+                }
+            }
+        }
+
+        String lemma = "";
+        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
+        if (reply != null && reply.getConceptEntry().size() > 0) {
+            lemma = reply.getConceptEntry().get(0).getDescription();
         }
 
         model.addAttribute("jsonstring", json);
         model.addAttribute("networkid", "\"\"");
         model.addAttribute("project", project);
+        model.addAttribute("searchNodeLabel", searchNodeLabel);
+        model.addAttribute("description", lemma);
 
         return "sites/networks/searchednetwork";
     }
