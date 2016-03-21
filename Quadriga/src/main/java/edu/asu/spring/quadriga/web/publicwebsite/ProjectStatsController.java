@@ -46,18 +46,15 @@ public class ProjectStatsController {
     @Autowired
     private Environment env;
 
-    private JSONArray getProjectStatsJson(List<IConceptStats> conceptList)
-            throws JSONException {
+    private int getCount(List<IConceptStats> conceptList) {
 
         int cnt = Integer.parseInt(env.getProperty("project.stats.topcount"));
         int len = conceptList.size() > cnt ? cnt : conceptList.size();
-        
-        List<IConceptStats> topConceptsList = conceptList.subList(0, len);
-        return getTopConceptsJson(topConceptsList,len); 
+        return len;
     }
-    
-    private JSONArray getTopConceptsJson(List<IConceptStats> conceptsList, int length)
-            throws JSONException {
+
+    private JSONArray getTopConceptsJson(List<IConceptStats> conceptsList,
+            int length) throws JSONException {
         JSONArray jsonArray = new JSONArray();
 
         for (int i = 0; i < length; i++) {
@@ -71,7 +68,7 @@ public class ProjectStatsController {
         }
         return jsonArray;
     }
-    
+
     /**
      * This method gives the visualization of how often concepts appear in the
      * networks
@@ -99,14 +96,17 @@ public class ProjectStatsController {
         String projectId = project.getProjectId();
         List<INetwork> networks = networkmanager
                 .getNetworksInProject(projectId);
-        List<IConceptStats> topConcepts = null;
+        List<IConceptStats> conceptsWithCount = null;
 
         if (!networks.isEmpty()) {
-            topConcepts = projectStats.getConceptCount(networks);
+            conceptsWithCount = projectStats.getConceptCount(networks);
 
             try {
                 JSONArray jArray = null;
-                jArray = getProjectStatsJson(topConcepts);
+                int cnt = getCount(conceptsWithCount);
+                jArray = getTopConceptsJson(conceptsWithCount.subList(0, cnt),
+                        cnt);
+
                 model.addAttribute("jsonstring", jArray);
                 model.addAttribute("networkid", "\"\"");
                 model.addAttribute("project", project);

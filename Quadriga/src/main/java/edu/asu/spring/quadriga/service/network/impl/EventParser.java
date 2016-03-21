@@ -170,26 +170,24 @@ public class EventParser {
         if (node.getConceptId() != null) {
             String id = node.getConceptId();
             ConceptpowerReply re = conceptPowerConnector.getById(id);
-            node.setLabel(getLemma(re, id));
-            node.setDescription(getDescription(re, id));
+            if (re.getConceptEntry().size() != 0) {
+                node.setLabel(getLemma(re, id));
+                node.setDescription(getDescription(re, id));
+            } else {
+                node.setLabel(id);
+                node.setDescription("");
+            }
+            
         }
         node.getStatementIds().add(statementId);
     }
 
     private String getLemma(ConceptpowerReply re, String id) {
-        String lemma = id;
-        if (re.getConceptEntry().size() != 0) {
-            return re.getConceptEntry().get(0).getLemma();
-        }
-        return lemma;
+        return re.getConceptEntry().get(0).getLemma();
     }
 
     private String getDescription(ConceptpowerReply re, String id) {
-        String description = "";
-        if (re.getConceptEntry().size() != 0) {
-            return re.getConceptEntry().get(0).getDescription();
-        }
-        return description;
+        return re.getConceptEntry().get(0).getDescription();
     }
     
     private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
