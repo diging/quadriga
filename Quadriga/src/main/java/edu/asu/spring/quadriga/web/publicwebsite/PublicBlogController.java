@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * response with blog title, date, author and content.
  *
  * @author Kavinya Rajendran
+ * @author PawanMahalle
  */
 @PropertySource(value = "classpath:/user.properties")
 @Controller
