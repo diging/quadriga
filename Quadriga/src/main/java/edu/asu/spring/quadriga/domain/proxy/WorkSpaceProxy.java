@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 
 /**
  * This class acts a proxy to {@link WorkSpace} while fetching {@link List} of {@link IWorkSpace}. 
@@ -44,7 +45,8 @@ public class WorkSpaceProxy implements IWorkSpace {
 	/**
 	 *  Access to {@link IListWSManager} to call manager methods to update actual {@link WorkSpace} object.
 	 */
-	private IListWSManager wsManager;
+	private IWorkspaceManager wsManager;
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(WorkSpaceProxy.class);
 
@@ -53,7 +55,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 * Constructor to create {@link WorkSpaceProxy} with {@link IListWSManager} manager object.
 	 * @param wsManager							{@link IListWSManager} object
 	 */
-	public WorkSpaceProxy(IListWSManager wsManager) {
+	public WorkSpaceProxy(IWorkspaceManager wsManager) {
 		this.wsManager = wsManager;
 	}
 

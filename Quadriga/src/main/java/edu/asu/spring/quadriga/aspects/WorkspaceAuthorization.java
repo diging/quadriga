@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 
 /**
  * Service level Implementation of {@link IAuthorization} for {@link IWorkSpace}.
@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 public class WorkspaceAuthorization implements IAuthorization 
 {
 	@Autowired
-	private	IListWSManager wsManager;
+	private	IWorkspaceManager wsManager;
 
 	@Autowired
 	private IWSSecurityChecker wsSecurityManager;

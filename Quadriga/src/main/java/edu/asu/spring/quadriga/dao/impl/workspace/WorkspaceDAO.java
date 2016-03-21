@@ -225,4 +225,9 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
     public WorkspaceDTO getDTO(String id) {
         return getDTO(WorkspaceDTO.class, id);
     }
+    
+    @Override
+    public String getIdPrefix() {
+        return messages.getProperty("workspace_id.prefix");
+    }
 }

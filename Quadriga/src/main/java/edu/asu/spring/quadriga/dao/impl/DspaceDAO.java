@@ -179,7 +179,7 @@ public class DspaceDAO extends BaseDAO<DspaceKeysDTO> implements IDspaceDAO {
                 || dspaceKeys.getPrivateKey().equals("") || username.equals("")) {
             return FAILURE;
         }
-        
+
         DspaceKeysDTO dspaceKeysDTO = new DspaceKeysDTO(
                 new DspaceKeysDTOPK(username, dspaceKeys.getPublicKey(),
                         dspaceKeys.getPrivateKey()));

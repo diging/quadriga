@@ -6,7 +6,6 @@ package edu.asu.spring.quadriga.dao.conceptcollection;
 import java.util.List;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
@@ -103,3 +102,4 @@ public interface IConceptCollectionDAO extends IBaseDAO<ConceptCollectionDTO> {
 		
 		
 	}
+

@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.dao.impl.editor;
 
+import java.util.Properties;
+
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -13,6 +17,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 @Repository
 public class EditorAccessDAO extends BaseDAO implements IEditorAccessDAO
 {
+   
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -108,5 +113,4 @@ public class EditorAccessDAO extends BaseDAO implements IEditorAccessDAO
     public Object getDTO(String id) {
         throw new NotImplementedException();
     }
-
 }

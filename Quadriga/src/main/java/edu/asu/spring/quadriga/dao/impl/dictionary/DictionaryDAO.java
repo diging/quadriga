@@ -2,9 +2,6 @@ package edu.asu.spring.quadriga.dao.impl.dictionary;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -27,7 +24,6 @@ import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 @Repository
 public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionaryDAO
 {
-
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -36,9 +32,6 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 	
 	@Autowired
 	private UserDTOMapper userMapper;
-	
-	@Resource(name = "projectconstants")
-	private Properties messages;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryDAO.class);
 
@@ -52,7 +45,7 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 	 */
 	@Override
 	public void addDictionary(IDictionary dictionary) throws QuadrigaStorageException {
-		String dictionaryId = messages.getProperty("dictionary_internalid.name") + generateUniqueID();
+		String dictionaryId = generateUniqueID();
 		dictionary.setDictionaryId(dictionaryId);
 		DictionaryDTO dictionaryDTO = dictionaryDTOMapper.getDictionaryDTO(dictionary);
 		saveNewDTO(dictionaryDTO);
@@ -296,6 +289,11 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
+    }
+
+    @Override
+    public String getIdPrefix() {
+        return messages.getProperty("dictionary_id.prefix");
     }
 
 	
