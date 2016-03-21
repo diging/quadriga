@@ -227,7 +227,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		}
 		
 		List<IProject> projectListAsCollaborator; 
-		projectListAsCollaborator = getCollaboratorProjectList(sUserName);
+		projectListAsCollaborator = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);;
 		if(projectListAsCollaborator != null)
 		{
 			for (IProject p : projectListAsCollaborator) {
