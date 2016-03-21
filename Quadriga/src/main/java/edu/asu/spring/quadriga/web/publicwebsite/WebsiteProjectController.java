@@ -10,30 +10,16 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
-import edu.asu.spring.quadriga.profile.ISearchResult;
-import edu.asu.spring.quadriga.profile.IService;
-
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.context.Theme;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -216,5 +202,5 @@ public class WebsiteProjectController {
 
 		return "sites/networks/explore";
 	}
-
+	
 }
