@@ -15,17 +15,16 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 /**
- * This Controller is used to perform all the changes related to Quadriga public sites
+ * This Controller is mapped to handle public site page 
  * @author Charan Thej Aware
- *
+ * @author Madhu Meghana Talasila
  */
 
 @Controller
 public class SitesController {
-    
     @Autowired 
-	private IRetrieveProjectManager retrieveProjectManager;
-	
+    private IRetrieveProjectManager retrieveProjectManager;
+
     /**
      * This method is used to access the public page -sites that enlists the public pages of all the projects 
      * @param locale
@@ -35,9 +34,8 @@ public class SitesController {
      */
     @RequestMapping(value = "sites", method = RequestMethod.GET)
     public String showQuadrigaPublicPages(Model model) throws QuadrigaStorageException {
-    	List<IProject> projectList = retrieveProjectManager.getProjectListByAccessibility("PUBLIC");
+        List<IProject> projectList = retrieveProjectManager.getProjectListByAccessibility("PUBLIC");
         model.addAttribute("projectList", projectList);
         return "sites";
     }
-
 }
