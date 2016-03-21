@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<h2>Add your blog</h2>
+
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
 <h3>Add Blog Entry</h3>
