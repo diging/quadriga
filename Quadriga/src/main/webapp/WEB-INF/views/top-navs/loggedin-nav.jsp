@@ -6,7 +6,6 @@
 <nav id="nav" class="skel-ui-fixed">
 	<ul>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "home" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/home">Home</a></li></sec:authorize>
-		<sec:authorize access="permitAll"><li ${currentPage == "home" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/sites">Sites</a></li></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "about" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/about">About</a></li></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "workbench" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/workbench">Workbench</a></li></sec:authorize>
 
