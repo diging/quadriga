@@ -47,10 +47,9 @@
 	</definition>
 	
 	<definition name="base.definition.public"
-        template="/WEB-INF/tiles/layouts/skeleton_public.jsp">
+        template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp">
         <put-attribute name="title" value="" />
-        <put-attribute name="navigation"
-            value="/WEB-INF/views/public/navbar.jsp" />
+        <put-attribute name="navigation" value="" />  	
         <put-attribute name="footer" value="/tiles/credits.jsp" />
         <put-attribute name="currentPage" value="home" />
     </definition>
@@ -64,17 +63,22 @@
         <put-attribute name="currentPage" value="home" />
     </definition>
 
-
-
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
 	
+	<!-- Sites pages -->
+	<definition name="sites" extends="base.definition.public">
+		<put-attribute name="title" value="Quadriga - Public Sites" />
+        <put-attribute name="navigation" value="/WEB-INF/views/public/sitesnavbarleft.jsp"  />          
+		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
+	</definition>
+
 	<!-- About page -->
 	<definition name="auth/about" extends="base.definition.nonav">
-	    <put-attribute name="title" value="Quadruga - Introduction" />
+	    <put-attribute name="title" value="Quadriga - Introduction" />
 		<put-attribute name="content" value="/WEB-INF/views/about.jsp"/>
 		<put-attribute name="currentPage" value="about" />
 	</definition>
@@ -794,6 +798,9 @@
 			value="/WEB-INF/views/editing/networkvisual.jsp" />
 	</definition>
 
+
+
+
 	<definition name="sites/networks/visualize" extends="base.definition.public.network">
 		<put-attribute name="currentPage" value="networks" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
@@ -803,17 +810,6 @@
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
 
-	<!-- Explore combined network -->
-	<definition name="sites/networks/explore" extends="base.definition.public.network">
-		<put-attribute name="currentPage" value="exploregraph" />
-		<put-attribute name="title" value="Quadriga Networks Visualize" />
-		<put-attribute name="right-navigation"
-					   value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
-		<put-attribute name="content"
-					   value="/WEB-INF/views/publicnetworkvisual.jsp" />
-	</definition>
-
-
 	<definition name="auth/editing/history" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Networks Edit" />
 		<put-attribute name="content"
@@ -822,5 +818,3 @@
 	
 	
 </tiles-definitions>
-
-	
