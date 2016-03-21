@@ -30,5 +30,7 @@ public interface IRetrieveProjectManager {
 			throws QuadrigaStorageException;
 	boolean getPublicProjectWebsiteAccessibility(String unixName) throws QuadrigaStorageException;
 	boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) throws QuadrigaStorageException;
-
+	
+	public abstract List<IProject> getRecentProjectList(String sUserName)
+			throws QuadrigaStorageException;
 }

@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.web.LoginController;
 
 /**
@@ -63,10 +64,11 @@ public class LoginControllerTest {
 
 	/**
 	 * This method checks if the {@link LoginController} returns the appropriate paths for the valid user.
+	 * @throws QuadrigaStorageException 
 	 * 
 	 */
 	@Test
-	public void testValidUserHandle() throws SQLException {
+	public void testValidUserHandle() throws SQLException, QuadrigaStorageException {
 
 		//Valid and Active user
 		assertEquals(loginController.validUserHandle(model, principal, authentication),"auth/home");
