@@ -27,6 +27,7 @@
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/networks">Networks</a>
 		<ul>
 		<li><a href="${pageContext.servletContext.contextPath}/auth/editing">Editing</a></li>
+		<li><a href="${pageContext.servletContext.contextPath}/auth/uploadTransformation">Upload_Transformation</a></li>
 		</ul>
 		</li></sec:authorize>
 		
