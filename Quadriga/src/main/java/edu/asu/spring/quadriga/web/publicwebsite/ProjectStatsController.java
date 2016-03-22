@@ -109,7 +109,6 @@ public class ProjectStatsController {
 
                 model.addAttribute("jsonstring", jArray);
                 model.addAttribute("networkid", "\"\"");
-                model.addAttribute("project", project);
 
             } catch (JSONException e) {
 
@@ -120,7 +119,7 @@ public class ProjectStatsController {
                 model.addAttribute("error_alert_msg", errorMsg.toString());
             }
         }
-
+        model.addAttribute("project", project);
         return "sites/project/statistics";
     }
 }
