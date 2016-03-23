@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,8 +34,6 @@ public class DictionaryWorkspaceController {
     @Autowired
     private IWorkspaceDictionaryManager workspaceDictionaryManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(DictionaryWorkspaceController.class);
-
     /**
      * Retrieve dictionaries from the system to associate the selected
      * dictionaries with the given workspace
@@ -54,16 +50,12 @@ public class DictionaryWorkspaceController {
     public String addWorkspaceDictionary(@PathVariable("workspaceid") String workspaceId, Model model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
-        List<IDictionary> dictionaryList = null;
-        dictionaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(workspaceId, userId);
-        if (dictionaryList == null) {
-            logger.info("Dictionary list is empty");
-        }
+        List<IDictionary> dictionaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(workspaceId,
+                userId);
         model.addAttribute("dictinarylist", dictionaryList);
         model.addAttribute("workspaceId", workspaceId);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
-        model.addAttribute("userId", userId);
         return "auth/workbench/workspace/adddictionaries";
     }
 
@@ -83,39 +75,19 @@ public class DictionaryWorkspaceController {
     public String addWorkspaceDictionary(HttpServletRequest req, @PathVariable("workspaceid") String workspaceId,
             Model model, RedirectAttributes attr, Principal principal)
                     throws QuadrigaStorageException, QuadrigaAccessException {
-        String msg = "";
-        int flag = 0;
         String userId = principal.getName();
 
         String[] values = req.getParameterValues("selected");
         if (values == null) {
             attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Please select a Dictionary");
+            attr.addFlashAttribute("error_alert_msg", "Please select a Dictionary.");
             return "redirect:/auth/workbench/workspace/" + workspaceId + "/adddictionary";
         }
         for (int i = 0; i < values.length; i++) {
             workspaceDictionaryManager.addWorkspaceDictionary(workspaceId, values[i], userId);
-            if (!msg.equals("")) {
-                flag = 1;
-            }
         }
-        if (flag == 0) {
-            attr.addFlashAttribute("show_success_alert", true);
-            attr.addFlashAttribute("success_alert_msg", "Dictionaries added to workspace successfully");
-        } else {
-            attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Dictionary is already added or some internal issue");
-        }
-        List<IWorkspaceDictionary> dicitonaryList = null;
-        dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
-        if (dicitonaryList == null) {
-            logger.info("Dictionar list is empty buddy");
-        }
-        model.addAttribute("dicitonaryList", dicitonaryList);
-
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
-        model.addAttribute("workspacedetails", workspace);
-        model.addAttribute("workspaceId", workspaceId);
+        attr.addFlashAttribute("show_success_alert", true);
+        attr.addFlashAttribute("success_alert_msg", "Dictionaries added to workspace successfully.");
         return "redirect:/auth/workbench/workspace/" + workspaceId + "/adddictionary";
     }
 
@@ -136,11 +108,8 @@ public class DictionaryWorkspaceController {
             Model model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
-        List<IWorkspaceDictionary> dicitonaryList = null;
-        dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
-        if (dicitonaryList == null) {
-            logger.info("Dictionar list is empty buddy");
-        }
+        List<IWorkspaceDictionary> dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId,
+                userId);
         model.addAttribute("dicitonaryList", dicitonaryList);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
@@ -164,11 +133,8 @@ public class DictionaryWorkspaceController {
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
-        List<IWorkspaceDictionary> dicitonaryList = null;
-        dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
-        if (dicitonaryList == null) {
-            logger.info("Dictionar list is empty buddy");
-        }
+        List<IWorkspaceDictionary> dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId,
+                userId);
         model.addAttribute("dicitonaryList", dicitonaryList);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
@@ -193,37 +159,18 @@ public class DictionaryWorkspaceController {
             Model model, RedirectAttributes attr, Principal principal)
                     throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
-        String msg = "";
-        int flag = 0;
 
         String[] values = req.getParameterValues("selected");
         if (values == null) {
             attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Please select a Dictionary");
+            attr.addFlashAttribute("error_alert_msg", "Please select a Dictionary.");
             return "redirect:/auth/workbench/workspace/" + workspaceId + "/deletedictionary";
         }
         for (int i = 0; i < values.length; i++) {
             workspaceDictionaryManager.deleteWorkspaceDictionary(workspaceId, userId, values[i]);
-            if (!msg.equals("")) {
-                flag = 1;
-            }
         }
-        if (flag == 0) {
-            attr.addFlashAttribute("show_success_alert", true);
-            attr.addFlashAttribute("success_alert_msg", "Dictionaries deleted from workspace successfully");
-        } else {
-            attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Unable to delete Dictionaries due to some internal issue");
-        }
-        List<IWorkspaceDictionary> dicitonaryList = null;
-        dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
-        if (dicitonaryList == null) {
-            logger.info("Dictionary list is empty buddy");
-        }
-        model.addAttribute("dicitonaryList", dicitonaryList);
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
-        model.addAttribute("workspacedetails", workspace);
-        model.addAttribute("workspaceId", workspaceId);
+        attr.addFlashAttribute("show_success_alert", true);
+        attr.addFlashAttribute("success_alert_msg", "Dictionaries deleted from workspace successfully.");
         return "redirect:/auth/workbench/workspace/" + workspaceId + "/deletedictionary";
     }
 }

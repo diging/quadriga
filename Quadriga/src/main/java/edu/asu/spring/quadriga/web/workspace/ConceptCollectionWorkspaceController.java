@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,8 +34,6 @@ public class ConceptCollectionWorkspaceController {
     @Autowired
     private IWorkspaceCCManager workspaceCCManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(ConceptCollectionWorkspaceController.class);
-
     /**
      * Retrieves the concept collections associated with the given workspace
      * 
@@ -53,13 +49,8 @@ public class ConceptCollectionWorkspaceController {
     public String listProjectConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
-        // List<IConceptCollection> conceptCollectionList = null;
-        List<IWorkspaceConceptCollection> conceptCollectionList = null;
-
-        conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
-        if (conceptCollectionList == null) {
-            logger.info("Concept collection list is empty buddy");
-        }
+        List<IWorkspaceConceptCollection> conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId,
+                userId);
         model.addAttribute("conceptCollectionList", conceptCollectionList);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
@@ -84,16 +75,12 @@ public class ConceptCollectionWorkspaceController {
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
-        List<IConceptCollection> conceptCollectionList = null;
-        conceptCollectionList = workspaceCCManager.getNonAssociatedWorkspaceConcepts(workspaceId, userId);
-        if (conceptCollectionList == null) {
-            logger.info("conceptCollectionList list is empty");
-        }
+        List<IConceptCollection> conceptCollectionList = workspaceCCManager
+                .getNonAssociatedWorkspaceConcepts(workspaceId, userId);
         model.addAttribute("conceptCollectionList", conceptCollectionList);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("workspaceId", workspaceId);
-        model.addAttribute("userId", userId);
         return "auth/workbench/workspace/addconceptcollections";
     }
 
@@ -113,38 +100,19 @@ public class ConceptCollectionWorkspaceController {
     public String addWorkspaceConceptCollection(HttpServletRequest req, @PathVariable("workspaceid") String workspaceId,
             Model model, RedirectAttributes attr, Principal principal)
                     throws QuadrigaStorageException, QuadrigaAccessException {
-        String msg = "";
-        int flag = 0;
         String userId = principal.getName();
 
         String[] values = req.getParameterValues("selected");
         if (values == null) {
             attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Please select a Concept Collection");
+            attr.addFlashAttribute("error_alert_msg", "Please select a Concept Collection.");
             return "redirect:/auth/workbench/workspace/" + workspaceId + "/addconceptcollection";
         }
         for (int i = 0; i < values.length; i++) {
-            msg = workspaceCCManager.addWorkspaceCC(workspaceId, values[i], userId);
-            if (!msg.equals("")) {
-                flag = 1;
-            }
+            workspaceCCManager.addWorkspaceCC(workspaceId, values[i], userId);
         }
-        if (flag == 0) {
-            attr.addFlashAttribute("show_success_alert", true);
-            attr.addFlashAttribute("success_alert_msg", "Concept Collection added to workspace successfully");
-        } else {
-            attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Concept Collection is already added or some internal issue");
-        }
-        List<IWorkspaceConceptCollection> conceptCollectionList = null;
-        conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
-        if (conceptCollectionList == null) {
-            logger.info("conceptCollectionList list is empty buddy");
-        }
-        model.addAttribute("conceptCollectionList", conceptCollectionList);
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
-        model.addAttribute("workspacedetails", workspace);
-        model.addAttribute("workspaceId", workspaceId);
+        attr.addFlashAttribute("show_success_alert", true);
+        attr.addFlashAttribute("success_alert_msg", "Concept Collection added to workspace successfully.");
         return "redirect:/auth/workbench/workspace/" + workspaceId + "/addconceptcollection";
     }
 
@@ -165,11 +133,8 @@ public class ConceptCollectionWorkspaceController {
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
-        List<IWorkspaceConceptCollection> conceptCollectionList = null;
-        conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
-        if (conceptCollectionList == null) {
-            logger.info("conceptCollectionList list is empty buddy");
-        }
+        List<IWorkspaceConceptCollection> conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId,
+                userId);
         model.addAttribute("conceptCollectionList", conceptCollectionList);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
@@ -195,37 +160,18 @@ public class ConceptCollectionWorkspaceController {
             @PathVariable("workspaceid") String workspaceId, Model model, RedirectAttributes attr, Principal principal)
                     throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
-        String msg = "";
-        int flag = 0;
 
         String[] values = req.getParameterValues("selected");
         if (values == null) {
             attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Please select a Concept Collection");
+            attr.addFlashAttribute("error_alert_msg", "Please select a Concept Collection.");
             return "redirect:/auth/workbench/workspace/" + workspaceId + "/deleteconceptcollections";
         }
         for (int i = 0; i < values.length; i++) {
             workspaceCCManager.deleteWorkspaceCC(workspaceId, userId, values[i]);
-            if (!msg.equals("")) {
-                flag = 1;
-            }
         }
-        if (flag == 0) {
-            attr.addFlashAttribute("show_success_alert", true);
-            attr.addFlashAttribute("success_alert_msg", "Concept Collection deleted from workspace successfully");
-        } else {
-            attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Unable to delete Concept Collection due to some internal issue");
-        }
-        List<IWorkspaceConceptCollection> conceptCollectionList = null;
-        conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
-        if (conceptCollectionList == null) {
-            logger.info("Dictionary list is empty buddy");
-        }
-        model.addAttribute("conceptCollectionList", conceptCollectionList);
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
-        model.addAttribute("workspacedetails", workspace);
-        model.addAttribute("projectid", workspaceId);
+        attr.addFlashAttribute("show_success_alert", true);
+        attr.addFlashAttribute("success_alert_msg", "Concept Collection deleted from workspace successfully.");
         return "redirect:/auth/workbench/workspace/" + workspaceId + "/deleteconceptcollections";
     }
 }

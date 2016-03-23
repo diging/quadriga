@@ -40,8 +40,7 @@ public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> imple
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String addWorkspaceCC(String workspaceId, String CCId, String userId) throws QuadrigaStorageException {
-		String errMsg = "";
+	public void addWorkspaceCC(String workspaceId, String CCId, String userId) throws QuadrigaStorageException {
 		ConceptCollectionDTO conceptCollection = null;
 		WorkspaceDTO workspace = null;
 		List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionList = null;
@@ -97,11 +96,8 @@ public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> imple
 		}
 		catch(Exception e)
 		{
-			errMsg = "Oops! Error from DB";
-			logger.error("addWorkspaceCC method :",e);
         	throw new QuadrigaStorageException();
 		}
-		return errMsg;
 	}
 
 //	/**

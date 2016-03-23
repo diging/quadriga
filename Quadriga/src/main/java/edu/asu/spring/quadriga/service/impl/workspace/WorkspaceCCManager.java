@@ -30,10 +30,9 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	
 	@Override
 	@Transactional
-	public String addWorkspaceCC(String workspaceId, String CCId, String userId)
+	public void addWorkspaceCC(String workspaceId, String CCId, String userId)
 			throws QuadrigaStorageException {
-		String msg=dbConnect.addWorkspaceCC(workspaceId, CCId, userId);
-		return msg;
+		dbConnect.addWorkspaceCC(workspaceId, CCId, userId);
 	}
 
 	@Override
