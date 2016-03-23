@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
@@ -8,6 +10,7 @@ import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.transform.Node;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,6 +48,9 @@ public class NetworkSearchController {
 
     @Autowired
     private INetworkTransformationManager transformationManager;
+
+    @Autowired
+    private IConceptpowerConnector conceptpowerConnector;
 
     private static String defaultJsonErrorMsg = "{\"status\" : 500," +
             " \"message\": \"Unable to get the search terms\"}";
@@ -127,9 +133,19 @@ public class NetworkSearchController {
             model.addAttribute("isNetworkEmpty", true);
         }
 
+        String lemma = "";
+        String searchNodeLabel = "";
+        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
+        if (reply != null && reply.getConceptEntry().size() > 0) {
+            searchNodeLabel = reply.getConceptEntry().get(0).getLemma();
+            lemma = reply.getConceptEntry().get(0).getDescription();
+        }
+
         model.addAttribute("jsonstring", json);
         model.addAttribute("networkid", "\"\"");
         model.addAttribute("project", project);
+        model.addAttribute("searchNodeLabel", searchNodeLabel);
+        model.addAttribute("description", lemma);
 
         return "sites/networks/searchednetwork";
     }

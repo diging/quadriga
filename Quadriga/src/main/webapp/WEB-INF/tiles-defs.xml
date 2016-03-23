@@ -818,7 +818,7 @@
 		<put-attribute name="currentPage" value="networksearch" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
 		<put-attribute name="right-navigation"
-					   value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
+					   value="/WEB-INF/views/navigation/nav-networkrightsearchplane.jsp"/>
 		<put-attribute name="content"
 					   value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>

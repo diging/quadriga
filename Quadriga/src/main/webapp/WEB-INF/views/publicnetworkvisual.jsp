@@ -42,7 +42,9 @@ $("input[type=button]").button().click(function(event) {
 </c:if>
 
 <c:if test="${!isNetworkEmpty}">
-<div id="chart" class="row"></div>
+
+<div id="chart" class="row">
+</div>
 
 <div id="inner-details" class="row"></div>
 <div id="allannot_details" class="row">
