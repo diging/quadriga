@@ -14,7 +14,7 @@ public interface IRetrieveProjectManager {
 
 	public abstract List<IProject> getProjectList(String sUserName)
 			throws QuadrigaStorageException;
-	
+
 	public abstract List<IProjectCollaborator> getCollaboratingUsers(String projectId) throws QuadrigaStorageException;
 
 	public abstract List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
@@ -30,5 +30,6 @@ public interface IRetrieveProjectManager {
 			throws QuadrigaStorageException;
 	boolean getPublicProjectWebsiteAccessibility(String unixName) throws QuadrigaStorageException;
 	boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) throws QuadrigaStorageException;
+	public abstract List<IProject> getProjectListByAccessibility(String name)throws QuadrigaStorageException;
 
 }
