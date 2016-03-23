@@ -47,7 +47,7 @@
 	
 	<cache:annotation-driven />
     <beans:bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-        <beans:property name="cacheManager"><beans:ref local="ehcache"/></beans:property>
+        <beans:property name="cacheManager"><beans:ref bean="ehcache"/></beans:property>
     </beans:bean>
 
     <beans:bean id="ehcache"

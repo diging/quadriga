@@ -1,9 +1,22 @@
 package edu.asu.spring.quadriga.dao.publicwebsite;
 
-public interface IAboutTextDAO<T> {
+import edu.asu.spring.quadriga.dao.IBaseDAO;
+import edu.asu.spring.quadriga.dto.AboutTextDTO;
 
-    public abstract void updateDTO(T dto);
+/**
+ * Interface for editing About text of public website of project.
+ * 
+ * @author Rajat Aggarwal
+ *
+ */
 
-    public abstract void saveNewDTO(T dto);
+public interface IAboutTextDAO extends IBaseDAO<AboutTextDTO> {
+
+    /**
+     * Saving "about project" information in AboutTextDTO object
+     * 
+     * @author Rajat Aggarwal
+     */
+    public abstract void saveNewDTO(AboutTextDTO dto);
 
 }

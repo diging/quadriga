@@ -1,15 +1,34 @@
 package edu.asu.spring.quadriga.service.impl.publicwebsite;
 
-import edu.asu.spring.quadriga.dao.impl.publicwebsite.AboutTextDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import edu.asu.spring.quadriga.dao.publicwebsite.IAboutTextDAO;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 
+/**
+ * Service to save title and description of public website about page form.
+ * 
+ * @author Rajat Aggarwal
+ *
+ */
+@Service
 public class AboutTextManager implements IAboutTextManager {
 
-    private AboutTextDAO aboutTextDAO = new AboutTextDAO();
+    @Autowired
+    private IAboutTextDAO aboutTextDAO;
 
-    void saveAbout() {
+    @Transactional
+    @Override
+    public void saveAbout(String projectId, String title, String description) {
         AboutTextDTO aboutTextDTO = new AboutTextDTO();
+        String id = aboutTextDAO.generateUniqueID();
+        aboutTextDTO.setId(id);
+        aboutTextDTO.setProjectId(projectId);
+        aboutTextDTO.setTitle(title);
+        aboutTextDTO.setDescription(description);
         aboutTextDAO.saveNewDTO(aboutTextDTO);
     }
 }

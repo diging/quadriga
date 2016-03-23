@@ -709,6 +709,11 @@
 		<put-attribute name="content" value="/WEB-INF/views/public/publicWebsiteEditAbout.jsp"/>
 	</definition>
 	
+	<definition name="sites/public/saveAbout" extends="base.definition.public">
+	   <put-attribute name="currentPage" value="saveAbout" />
+		<put-attribute name="content" value="/WEB-INF/views/public/saveAbout.jsp"/>
+	</definition>
+	
 
 	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks">
 		<put-attribute name="title" value="Quadriga Networks visualize" />

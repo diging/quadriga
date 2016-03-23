@@ -14,8 +14,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
- * This controller handles requests for editing project's public website's about page.
- * 
+ * This controller manages public website's about page of a project. Information of title and description is editable.
+ *
  * @author Rajat Aggarwal
  *
  */
@@ -29,6 +29,8 @@ public class WebsiteAboutEditController {
     @RequestMapping(value = "sites/{ProjectUnixName}/EditAbout", method = RequestMethod.GET)
     public String showAbout(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal) throws QuadrigaStorageException {
         IProject project = projectManager.getProjectDetailsByUnixName(unixName);
+        System.out.println("hi:" + project);
+        System.out.println("hi2" + project.getProjectId());
         String title = "Project Title will be here";
         String aboutProject = "<i>This line describes project in italics</i><br> <b>This is bold</b>";
         model.addAttribute("project", project);
