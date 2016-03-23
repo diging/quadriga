@@ -3,8 +3,12 @@ package edu.asu.spring.quadriga.service.network.impl;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBElement;
@@ -555,7 +559,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
 
-        // Below code reads the top level Appelation events
+        // Below code reads the top level Appellation events
 
         newNetworkDetailCache = parseNewNetworkStatement(elementEventType, workspaceBitStreamList,
                 newNetworkDetailCache);
@@ -601,20 +605,19 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
         Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
+        
         while (creationEventIterator.hasNext()) {
             CreationEvent creationEvent = creationEventIterator.next();
             // Cache Appellation Events
             if (creationEvent instanceof AppellationEventType) {
-                newNetworkDetailCache = parseNewAppellationEvent(newNetworkDetailCache, creationEvent,
-                        workspaceBitStreamList);
+                parseNewAppellationEvent(newNetworkDetailCache, creationEvent);
             }
             // Cache Relation Events
             if (creationEvent instanceof RelationEventType) {
-                newNetworkDetailCache = parseNewRelationEvent(newNetworkDetailCache, creationEvent,
-                        workspaceBitStreamList);
-
+                parseNewRelationEvent(newNetworkDetailCache, creationEvent);
             }
         }
+        
         return newNetworkDetailCache;
     }
 
@@ -633,31 +636,32 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      * @return Returns updated {@link NewNetworkDetailsCache} object which holds
      *         the cache of network details
      */
-    public NewNetworkDetailsCache parseNewAppellationEvent(NewNetworkDetailsCache newNetworkDetailCache,
-            CreationEvent creationEvent, List<IWorkspaceBitStream> workspaceBitStreamList) {
+    private NetworkEntry parseNewAppellationEvent(NewNetworkDetailsCache newNetworkDetailCache,
+            CreationEvent creationEvent) {
 
         List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
         Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
+        NetworkEntry entry = new NetworkEntry();
+        
         while (elementsIterator.hasNext()) {
             JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
             if (element.getName().toString().contains("id")) {
-                NetworkEntry entry = new NetworkEntry();
-                entry.setId(element.getValue().toString());
-                entry.setType(INetworkManager.APPELLATIONEVENT);
-                entry.setTop(true);
-                newNetworkDetailCache.addEntry(entry);
-            }
-            // Check if dspace file exists.
-            if (element.getName().toString().contains("source_reference")) {
-                logger.debug("Dspace file : " + element.getValue().toString());
-                boolean dspaceFileExists = hasBitStream(element.getValue().toString(), workspaceBitStreamList);
-                if (dspaceFileExists == false) {
-                    newNetworkDetailCache.setFileExists(false);
+                String id = element.getValue().toString();
+                if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                    entry = newNetworkDetailCache.getById(id);
+                } else {
+                    entry.setId(id);
+                    entry.setType(INetworkManager.APPELLATIONEVENT);
+                    entry.setTop(true);
+                    newNetworkDetailCache.addEntry(entry);
                 }
+            }
+            if (element.getName().toString().endsWith("}refId")) {
+                entry.setRefId(element.getValue().toString());
             }
         }
 
-        return newNetworkDetailCache;
+        return entry;
     }
 
     /**
@@ -674,43 +678,43 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      * @return Returns updated {@link NewNetworkDetailsCache} object which holds
      *         the cache of network details
      */
-    public NewNetworkDetailsCache parseNewRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,
-            CreationEvent creationEvent, List<IWorkspaceBitStream> workspaceBitStreamList) {
+    private NetworkEntry parseNewRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,
+            CreationEvent creationEvent) {
 
         List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
         Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
+        NetworkEntry entry = new NetworkEntry();
+        
         while (elementsIterator.hasNext()) {
             JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
 
             // get relation event id
             if (element.getName().toString().contains("id")) {
-                NetworkEntry entry = new NetworkEntry();
-                entry.setId(element.getValue().toString());
-                entry.setType(INetworkManager.RELATIONEVENT);
-                entry.setTop(true);
-                newNetworkDetailCache.addEntry(entry);
-            }
-
-            // get dspace quadriga URL
-            if (element.getName().toString().contains("source_reference")) {
-                boolean dspaceFileExists = hasBitStream(element.getValue().toString(), workspaceBitStreamList);
-                if (dspaceFileExists == false) {
-                    newNetworkDetailCache.setFileExists(false);
+                String id = element.getValue().toString();
+                if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                    entry = newNetworkDetailCache.getById(id);
+                } else {
+                    entry.setId(id);
+                    entry.setType(INetworkManager.RELATIONEVENT);
+                    entry.setTop(true);
+                    newNetworkDetailCache.addEntry(entry);
                 }
             }
-
+            
         }
         RelationEventType relationEventType = (RelationEventType) (creationEvent);
         try {
             // Go Recursively and check for Relation event within a relation
             // events
-            newNetworkDetailCache = parseIntoRelationEventElement(relationEventType, newNetworkDetailCache,
-                    workspaceBitStreamList);
+            NetworkEntry relEntry = parseIntoRelationEventElement(relationEventType, newNetworkDetailCache);
+            if (relEntry != null) {
+                relEntry.setTop(false);
+            }
         } catch (QuadrigaStorageException se) {
             logger.error("DB Storage issue", se);
         }
 
-        return newNetworkDetailCache;
+        return entry;
     }
 
     /**
@@ -729,8 +733,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      * @throws QuadrigaStorageException
      *             Throws Database storage exception
      */
-    public NewNetworkDetailsCache parseIntoRelationEventElement(RelationEventType relationEventType,
-            NewNetworkDetailsCache newNetworkDetailCache, List<IWorkspaceBitStream> workspaceBitStreamList)
+    private NetworkEntry parseIntoRelationEventElement(RelationEventType relationEventType,
+            NewNetworkDetailsCache newNetworkDetailCache)
                     throws QuadrigaStorageException {
 
         List<?> creatorOrRelationList = relationEventType.getRelationCreatorOrRelation();
@@ -749,17 +753,20 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                         // Handles the subject part of the relation
                         if (element.getName().toString().contains("subject")) {
                             SubjectObjectType subject = (SubjectObjectType) element.getValue();
-                            newNetworkDetailCache = parseNewSubjectObjectType(newNetworkDetailCache, subject,
-                                    workspaceBitStreamList);
+                            NetworkEntry entry = parseNewSubjectObjectType(newNetworkDetailCache, subject);
+                            if (entry != null) {
+                                entry.setTop(false);
+                            }
 
                         } else {
                             // Handles the object part of the relation
                             if (element.getName().toString().contains("object")) {
 
                                 SubjectObjectType object = (SubjectObjectType) element.getValue();
-                                newNetworkDetailCache = parseNewSubjectObjectType(newNetworkDetailCache, object,
-                                        workspaceBitStreamList);
-
+                                NetworkEntry entry = parseNewSubjectObjectType(newNetworkDetailCache, object);
+                                if (entry != null) {
+                                    entry.setTop(false);
+                                }
                             }
                         }
                     } else {
@@ -768,15 +775,18 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
                             PredicateType predicateType = (PredicateType) element.getValue();
                             AppellationEventType appellationEventType = predicateType.getAppellationEvent();
-                            newNetworkDetailCache = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache,
-                                    appellationEventType, workspaceBitStreamList);
+                            NetworkEntry entry = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache,
+                                    appellationEventType);
+                            if (entry != null) {
+                                entry.setTop(false);
+                            }
                         }
                     }
                 }
             }
         }
 
-        return newNetworkDetailCache;
+        return null;
     }
 
     /**
@@ -794,8 +804,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      * @throws QuadrigaStorageException
      *             Throws Database storage exception
      */
-    public NewNetworkDetailsCache parseNewSubjectObjectType(NewNetworkDetailsCache newNetworkDetailCache,
-            SubjectObjectType subjectOrObject, List<IWorkspaceBitStream> workspaceBitStreamList)
+    private NetworkEntry parseNewSubjectObjectType(NewNetworkDetailsCache newNetworkDetailCache,
+            SubjectObjectType subjectOrObject)
                     throws QuadrigaStorageException {
 
         // Check for relation event inside subject
@@ -803,34 +813,39 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         if (relationEventType == null) {
             // Check for Appellation event inside subject and add if any
             AppellationEventType appellationEventType = subjectOrObject.getAppellationEvent();
-            newNetworkDetailCache = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache,
-                    appellationEventType, workspaceBitStreamList);
+            return parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache,
+                    appellationEventType);
         } else {
             List<JAXBElement<?>> elementsList = relationEventType.getIdOrCreatorOrCreationDate();
             Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
+            NetworkEntry entry = new NetworkEntry();
+            
             while (elementsIterator.hasNext()) {
-                JAXBElement<?> elements = (JAXBElement<?>) elementsIterator.next();
+                JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
 
-                if (elements.getName().toString().contains("id")) {
-                    NetworkEntry entry = new NetworkEntry();
-                    entry.setId(elements.getValue().toString());
-                    entry.setType(INetworkManager.RELATIONEVENT);
-                    entry.setTop(false);
-                    newNetworkDetailCache.addEntry(entry);
-                }
-
-                if (elements.getName().toString().contains("source_reference")) {
-                    boolean dspaceFileExists = hasBitStream(elements.getValue().toString(), workspaceBitStreamList);
-                    if (dspaceFileExists == false) {
-                        newNetworkDetailCache.setFileExists(false);
+                if (element.getName().toString().contains("id")) {
+                    String id = element.getValue().toString();
+                    if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                        entry = newNetworkDetailCache.getById(id);
+                    } else {
+                        entry.setId(id);
+                        entry.setType(INetworkManager.RELATIONEVENT);
+                        entry.setTop(true);
+                        newNetworkDetailCache.addEntry(entry);
                     }
                 }
-            }
-            newNetworkDetailCache = parseIntoRelationEventElement(relationEventType, newNetworkDetailCache,
-                    workspaceBitStreamList);
-        }
 
-        return newNetworkDetailCache;
+                if (element.getName().toString().endsWith("}refId")) {
+                    entry.setRefId(element.getValue().toString());
+                }
+            }
+            NetworkEntry nestedEntry = parseIntoRelationEventElement(relationEventType, newNetworkDetailCache);
+            if (nestedEntry != null) {
+                nestedEntry.setTop(false);
+            }
+            
+            return entry;
+        }
     }
 
     /**
@@ -847,38 +862,42 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      * @return Returns updated {@link NewNetworkDetailsCache} object which holds
      *         the cache of network details
      */
-    public NewNetworkDetailsCache parseNewAppellationEventFoundInRelationEvent(
-            NewNetworkDetailsCache newNetworkDetailCache, AppellationEventType appellationEventType,
-            List<IWorkspaceBitStream> workspaceBitStreamList) {
+    private NetworkEntry parseNewAppellationEventFoundInRelationEvent(
+            NewNetworkDetailsCache newNetworkDetailCache, AppellationEventType appellationEventType) {
 
         // Check for Appellation event inside predicate
         if (appellationEventType == null) {
             logger.debug("AE1 is null");
+            return null;
         } else {
             logger.debug("AE1 found object");
             List<JAXBElement<?>> elementsList = appellationEventType.getIdOrCreatorOrCreationDate();
             Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
+            NetworkEntry entry = new NetworkEntry();
+            
             while (elementsIterator.hasNext()) {
                 JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
 
                 if (element.getName().toString().contains("id")) {
-                    NetworkEntry entry = new NetworkEntry();
-                    entry.setId(element.getValue().toString());
-                    entry.setType(INetworkManager.APPELLATIONEVENT);
-                    entry.setTop(false);
-                    newNetworkDetailCache.addEntry(entry);
-                }
-
-                if (element.getName().toString().contains("source_reference")) {
-                    boolean dspaceFileExists = hasBitStream(element.getValue().toString(), workspaceBitStreamList);
-                    if (dspaceFileExists == false) {
-                        newNetworkDetailCache.setFileExists(false);
+                    String id = element.getValue().toString();
+                    if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                        entry = newNetworkDetailCache.getById(id);
+                    } else {
+                        entry.setId(id);
+                        entry.setType(INetworkManager.APPELLATIONEVENT);
+                        entry.setTop(false);
+                        newNetworkDetailCache.addEntry(entry);
                     }
                 }
+
+                if (element.getName().toString().endsWith("}refId")) {
+                    entry.setRefId(element.getValue().toString());
+                }
             }
+            
+            return entry;
         }
 
-        return newNetworkDetailCache;
     }
 
 
@@ -1036,10 +1055,12 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         
         private boolean fileExists;
         private List<NetworkEntry> entries;
+        private Map<String, NetworkEntry> addedIds;
         
         public NewNetworkDetailsCache() {
             this.fileExists = true;
             entries = new ArrayList<NetworkManager.NetworkEntry>();
+            addedIds = new HashMap<String, NetworkManager.NetworkEntry>();
         }
 
         public boolean isFileExists() {
@@ -1052,15 +1073,25 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         
         public void addEntry(NetworkEntry entry) {
             entries.add(entry);
+            addedIds.put(entry.getId(), entry);
         }
         
         public List<NetworkEntry> getEntries() {
             return entries;
         }
+        
+        public Set<String> getAddedIds() {
+            return addedIds.keySet();
+        }
+        
+        public NetworkEntry getById(String id) {
+            return addedIds.get(id);
+        }
 
     }
     
     class NetworkEntry {
+        private String refId;
         private String id;
         private String type;
         private boolean isTop;
@@ -1087,6 +1118,14 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         public void setTop(boolean isTop) {
             this.isTop = isTop;
+        }
+
+        public String getRefId() {
+            return refId;
+        }
+
+        public void setRefId(String refId) {
+            this.refId = refId;
         }
 
     }
