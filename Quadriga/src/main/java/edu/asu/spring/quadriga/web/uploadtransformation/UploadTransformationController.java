@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UploadTransformationController {
 
 	@RequestMapping(value="auth/uploadTransformation",method=RequestMethod.GET)
-	public void uploadTransformationFiles(ModelMap model, Principal principal){
-		
+	public String uploadTransformationFiles(ModelMap model, Principal principal){
+		return "auth/uploadTransformation";
 	}
 }
