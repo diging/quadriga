@@ -45,6 +45,10 @@ public class QuadrigaUserDetails implements UserDetails {
 		return username;
 	}
 	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getName() {
 		return name;
 	}
