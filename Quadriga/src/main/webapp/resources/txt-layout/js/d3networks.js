@@ -1,4 +1,3 @@
-
 /**
  * @Author : Sowjanya Ambati
  * @Author : Dwaraka Lohith
@@ -269,7 +268,6 @@ function d3visualize(graph, networkId, path,type) {
 			//alert(source);
 			statementId = source.statementid;
 			/*var snodes = vis.selectAll(".node").each(function(d){
-
 						for(var i in statementId){
 							for(var j in d.statementid){
 								if(statementId[i] == d.statementid[j]){
@@ -278,7 +276,6 @@ function d3visualize(graph, networkId, path,type) {
 								}
 							}
 						}
-
 						/*found = $.intersection(statementId, d.statementid);
 						if(found.size()>0){
 							nodearray.push(d);
@@ -325,7 +322,6 @@ function d3visualize(graph, networkId, path,type) {
 						d3.select(d.target).style("opacity", opacity);
 						//fade all elements
 						vis.selectAll("circle, line").style("opacity", opacity);
-
 						var associated_links = vis.selectAll("line").filter(function(d) {
 							return  d.source.index == i;
 							// return d.source.index == i || d.target.index == i;
@@ -339,9 +335,7 @@ function d3visualize(graph, networkId, path,type) {
 								d3.select(o.source).style("opacity", 1);
 							});
 						});
-
 					};
-
 				}*/
 
 	function fadeLinks(opacity) {
@@ -406,19 +400,12 @@ function d3visualize(graph, networkId, path,type) {
 			dataType: 'json',
 			success : function(data) {
 				/*var tr;
-
 					$.each(data.text, function(key,value){
-
 					            tr = $('<tr/>');
-
 					            tr.append("<td>" + json[i].User_Name + "</td>");
-
 					            tr.append("<td>" + json[i].score + "</td>");
-
 					            tr.append("<td>" + json[i].team + "</td>");
-
 					            $('annot_table').append(tr);
-
 					        });*/
 				var cnt = 0;
 				output += "<ol>";
@@ -629,4 +616,3 @@ function d3visualize(graph, networkId, path,type) {
 	}
 
 }
-
