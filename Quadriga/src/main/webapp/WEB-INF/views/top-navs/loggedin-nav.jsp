@@ -28,6 +28,8 @@
 		<ul>
 		<li><a href="${pageContext.servletContext.contextPath}/auth/editing">Editing</a></li>
 		<li><a href="${pageContext.servletContext.contextPath}/auth/uploadTransformation">Upload_Transformation</a></li>
+		<li><a href="${pageContext.servletContext.contextPath}/auth/transformation">Transformations</a></li>
+
 		</ul>
 		</li></sec:authorize>
 		
