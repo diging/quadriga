@@ -49,7 +49,13 @@
 	});
 	
 </script>
-
+<style>
+ #project div {
+  display: inline;
+  margin: 0 1em 0 1em;
+  width: 30%;
+}
+</style>
 
 <header>
 	<h2>Transformations</h2>
@@ -60,7 +66,8 @@
 	<c:when test="${not empty projects}">
 		<ul class="pagination1">
 	<c:forEach var="project" items="${projects}" >
-			
+		
+	<div id="project">	
 	<div class="checkbox">
     <label>
       <input type="checkbox">
@@ -72,13 +79,11 @@
 	
 	
 	<div style="display: none" class="toggled">
-	<ul class="workspaceToggleList">
+	<ul class="networkToggleList">
 	
 				<li>
 					<details>
 						<ul>
-<%-- 			 				<li><span class="byline">${project}</span></li> --%>
-
 							<c:if test="${not empty networkMap[project]}">
 								<c:forEach var="network" items="${networkMap[project]}">
 									<summary>
@@ -99,6 +104,7 @@
 	
 	</div></div>
 	
+	</div>
 	</div>
 	</c:forEach> 
 
