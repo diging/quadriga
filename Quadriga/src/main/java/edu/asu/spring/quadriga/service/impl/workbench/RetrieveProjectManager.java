@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 
 	@Autowired
 	private IProjectCollaboratorManager projectManager;
+	
+	@Autowired
+    private Environment env;
 
 	/**
 	 * This method returns the list of projects associated with
@@ -225,7 +229,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 				projectIds.add(p.getProjectId());
 			}
 		}
-		
 		List<IProject> projectListAsCollaborator; 
 		projectListAsCollaborator = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);;
 		if(projectListAsCollaborator != null)
@@ -238,7 +241,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 				}
 			}
 		}
-		
 		Collections.sort(projectsList, new Comparator<IProject>() {
 			@Override
 			public int compare(IProject o1, IProject o2) {
@@ -246,16 +248,27 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 			}
 		});
 		
-		List<IProject> recentProjectsList = new ArrayList<IProject>();
-		//check if recentProjectList has size greater than 5, we need recently modified 5 projects
-		if(projectsList!=null && projectsList.size()>5)
+		int count;
+		String recentProjectCount = env.getProperty("project.recent.list.count");
+		if(recentProjectCount!=null)
 		{
-			recentProjectsList = projectsList.subList(0, 5);
+			count = Integer.parseInt(recentProjectCount);
+		}
+		else
+		{
+			count = projectsList.size();
+		}
+		
+		List<IProject> recentProjectsList;
+		if(projectsList!=null && recentProjectCount!=null && projectsList.size()>count)
+		{
+			recentProjectsList = new ArrayList<IProject>(projectsList.subList(0, count));
+		}
+		else
+		{
+			recentProjectsList = new ArrayList<IProject>(projectsList);
 		}
 		
 		return recentProjectsList;
 	}
-	
-	
-
 }

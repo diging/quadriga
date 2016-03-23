@@ -127,10 +127,7 @@ public class HomeController {
         model.addAttribute("dictmsg", messages.getProperty("dictonary_desc"));
         model.addAttribute("networksmsg", messages.getProperty("network_desc"));
         
-        
-        List<IProject> recentProjects = new ArrayList<IProject>();
-        recentProjects = projectManager.getRecentProjectList(sUserId);
-
+        List<IProject> recentProjects = projectManager.getRecentProjectList(sUserId);
         model.addAttribute("projects", recentProjects);
         
         return "auth/home";
