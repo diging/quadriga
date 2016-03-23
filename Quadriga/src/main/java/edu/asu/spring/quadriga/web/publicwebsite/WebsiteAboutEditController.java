@@ -26,7 +26,7 @@ public class WebsiteAboutEditController {
     @Autowired
     private IRetrieveProjectManager projectManager;
 
-    @RequestMapping(value = "sites/{ProjectUnixName}/EditAbout", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/editabout/{ProjectUnixName}", method = RequestMethod.GET)
     public String showAbout(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal) throws QuadrigaStorageException {
         IProject project = projectManager.getProjectDetailsByUnixName(unixName);
         String title = "Project Title will be here";
@@ -34,7 +34,7 @@ public class WebsiteAboutEditController {
         model.addAttribute("project", project);
         model.addAttribute("title", title);
         model.addAttribute("aboutProject", aboutProject);
-        return "sites/settings/publicWebsiteEditAbout";
+        return "auth/editabout";
     }
 
 }
