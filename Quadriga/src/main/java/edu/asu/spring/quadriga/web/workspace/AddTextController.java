@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -17,13 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factory.workbench.ITextFileFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
+import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
@@ -108,7 +106,7 @@ public class AddTextController {
             @Validated @ModelAttribute("textfile") TextFile txtFile, BindingResult result,
             @PathVariable("workspaceid") String workspaceid, @PathVariable("projectid") String projid,
             RedirectAttributes redirectAttributes)
-                    throws QuadrigaStorageException, QuadrigaAccessException, IOException {
+                    throws FileStorageException, QuadrigaAccessException, QuadrigaStorageException, IOException {
 
         ModelAndView model = new ModelAndView();
         model.getModelMap().put("workspaceId", workspaceid);

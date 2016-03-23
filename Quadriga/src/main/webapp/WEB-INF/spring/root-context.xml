@@ -50,6 +50,7 @@
         <beans:property name="cacheManager"><beans:ref bean="ehcache"/></beans:property>
     </beans:bean>
 
+	
     <beans:bean id="ehcache"
         class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
         p:config-location="classpath:ehcache.xml" />
