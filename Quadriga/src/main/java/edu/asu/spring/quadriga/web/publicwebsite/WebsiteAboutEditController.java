@@ -26,17 +26,16 @@ public class WebsiteAboutEditController {
     @Autowired
     private IRetrieveProjectManager projectManager;
 
-    @RequestMapping(value = "sites/{ProjectUnixName}/EditAbout", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/editabout/{ProjectUnixName}", method = RequestMethod.GET)
     public String showAbout(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal) throws QuadrigaStorageException {
+        System.out.println("here");
         IProject project = projectManager.getProjectDetailsByUnixName(unixName);
-        System.out.println("hi:" + project);
-        System.out.println("hi2" + project.getProjectId());
         String title = "Project Title will be here";
         String aboutProject = "<i>This line describes project in italics</i><br> <b>This is bold</b>";
         model.addAttribute("project", project);
         model.addAttribute("title", title);
         model.addAttribute("aboutProject", aboutProject);
-        return "sites/public/publicWebsiteEditAbout";
+        return "auth/editabout";
     }
 
 }

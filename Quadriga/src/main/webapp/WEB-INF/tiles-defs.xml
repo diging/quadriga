@@ -704,14 +704,15 @@
 		<put-attribute name="content" value="/WEB-INF/views/public/publicwebsiteabout.jsp"/>
 	</definition>
 	
-	<definition name="sites/public/publicWebsiteEditAbout" extends="base.definition.public">
-	   <put-attribute name="currentPage" value="EditAbout" />
-		<put-attribute name="content" value="/WEB-INF/views/public/publicWebsiteEditAbout.jsp"/>
+	
+	<definition name="auth/saveabout" extends="base.definition">
+	   <put-attribute name="currentPage" value="saveabout" />
+		<put-attribute name="content" value="/WEB-INF/views/settings/saveAbout.jsp"/>
 	</definition>
 	
-	<definition name="sites/public/saveAbout" extends="base.definition.public">
-	   <put-attribute name="currentPage" value="saveAbout" />
-		<put-attribute name="content" value="/WEB-INF/views/public/saveAbout.jsp"/>
+	<definition name="auth/editabout" extends="base.definition">
+	   <put-attribute name="currentPage" value="editabout" />
+		<put-attribute name="content" value="/WEB-INF/views/settings/publicWebsiteEditAbout.jsp"/>
 	</definition>
 	
 

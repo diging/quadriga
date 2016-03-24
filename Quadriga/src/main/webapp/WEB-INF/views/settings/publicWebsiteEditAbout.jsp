@@ -7,7 +7,7 @@
 
 <h1>About Project - Edit</h1>
 Edit <b>${project.unixName}</b> about details here
-<form  method="post" action="${pageContext.servletContext.contextPath}/sites/${project.unixName}/saveAbout" modelAttribute="AboutTextBackingBean">
+<form  method="post" action="${pageContext.servletContext.contextPath}/auth/saveabout/${project.unixName}" modelAttribute="AboutTextBackingBean">
  	<textarea path="title" name="title" style="width:100%; font-weight:bold; font-size:24px; vertical-align:middle; align:center; text-align:center"> ${title} </textarea>
  	<p path="description" name="description" id="description"></p>
 </form>

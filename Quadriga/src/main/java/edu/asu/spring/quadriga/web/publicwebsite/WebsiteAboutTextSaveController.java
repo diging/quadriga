@@ -30,13 +30,13 @@ public class WebsiteAboutTextSaveController {
     @Autowired
     private IAboutTextManager aboutTextManager;
 
-    @RequestMapping(value = "sites/{ProjectUnixName}/saveAbout", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/saveabout/{ProjectUnixName}", method = RequestMethod.POST)
     public String saveAbout(@PathVariable("ProjectUnixName") String unixName, @ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Principal principal)
             throws QuadrigaStorageException {
         IProject project = projectManager.getProjectDetailsByUnixName(unixName);
         String projectId = project.getProjectId();
         aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
-        return "sites/public/saveAbout";
+        return "auth/saveabout";
     }
 
 }
