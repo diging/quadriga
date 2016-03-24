@@ -8,3 +8,6 @@
         href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/search">Search</a></li>
 <li ${currentPage == "getprojectstatistics" ? "class=\"active\"" : ""}><a
         href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/statistics">Statistics</a></li>
+<li ${currentPage == "about" ? "class=\"active\"" : ""}><a
+	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/about">About</a></li>
+
