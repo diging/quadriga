@@ -6,17 +6,12 @@
 
 <!-- CSS Files -->
 <link type="text/css"
-	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/base.css"
-	rel="stylesheet" />
-<link type="text/css"
-	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ForceDirected.css"
-	rel="stylesheet" />
-<link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css"
-	rel="stylesheet" />
+	rel="stylesheet" /> 
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
 <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+
 
 </head>
 <script type="text/javascript">
@@ -26,12 +21,12 @@ function changeLayout(json,networkid,path,type)
 }
 
 </script>
-<script>
+<!-- <script>
 $("input[type=button]").button().click(function(event) {
 	event.preventDefault();
 });</script>
 
-
+ -->
 <body
 	onload="d3visualizepublic(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
 
@@ -40,16 +35,23 @@ $("input[type=button]").button().click(function(event) {
 
 <!-- <div id="dspace_metadata"></div>  -->
 
+<c:if test="${isNetworkEmpty}">
+<div class="row">
+	<div class="alert alert-info">Could not find any nodes for the search term in the project</div>
+</div>
+</c:if>
 
+<c:if test="${!isNetworkEmpty}">
 
-
-<div id="chart"></div>
-
-<div id="inner-details"></div>
-<div id="allannot_details">
-<table id = annotationsTable></table>
+<div id="chart" class="row">
 </div>
 
+<div id="inner-details" class="row"></div>
+<div id="allannot_details" class="row">
+	<div class="row"><table id = "annotationsTable"></table></div>
+</div>
+</c:if>
 
-<div id="log"></div>
+
+<div id="log" class="row"></div>
 

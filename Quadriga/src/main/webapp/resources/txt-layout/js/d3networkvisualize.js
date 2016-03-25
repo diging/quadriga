@@ -46,8 +46,8 @@ function d3init(graph, networkId, path,type) {
 
 
 	var vis = d3.select("#chart").append("svg:svg")
-			//.attr("width", width)
-			//.attr("height", height)
+			.attr("width", width)
+			.attr("height", height)
 			.append('svg:g')
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
@@ -236,7 +236,11 @@ function d3init(graph, networkId, path,type) {
 			
 			var stId = d.statementid;
 			var associated_nodes = vis.selectAll('circle').filter(function(node) {
-				return ($.inArray(stId[0], node.statementid)) > -1;
+				for (var i = 0; i < stId.length; i++) {
+				    if (($.inArray(stId[i], node.statementid)) > -1)
+				    	return true;
+				}
+				return false;
 			});
 			associated_nodes.each(function(a) {
 				d3.select(this).style("opacity", 1);
@@ -484,132 +488,36 @@ function d3init(graph, networkId, path,type) {
 				});
 		//displayAllAnnotationsNew();
 	}
-/*
-	/*function displayItemData(){
-		$.ajax({
-			url : path+"/auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				console.log(data);
-				if (data.length > 0) {
-					$.each(data.text, function(key,value) {
-					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
-					console.log(value.filename);
-					$("#metadataTable").append(row);
-                        });
-            
-				} 
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-	}*/
-	
-	/*function displayItemData(){
-		$.ajax({
-			url : path+"/auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				//var cnt = 0;
-				output += "<ol>";
-				$.each(data.text, function(key,value){
-					//content += ++cnt +'.<li>'+value.name+'</li>'+value.text+'</li>'; 
-					output+="<li>" + File Name + " " + value.filename + "</li>"; 
-					output+="<li>" + Author + " " + value.submitter + "</li>"; 
-					output+="<li>" + Last Updated+ " " + value.modifieddate + "</li>"; 
-				});
-				output += "</ol>";
-				//$('#item_metadata').html(output);
-				
-				//drawTable(data.text);
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-	}
-	*/
 	
 	function displayItemData(){
 		var output = "";
-		$.ajax({
-			url : path+"/auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				console.log(data);
-				//var cnt = 0;
-				//output += "<ol>";
-				$.each(data.text, function(key,value){
-					console.log("came in");
-					//output+="<li>" + "<b>File Name</b>" + " --> " + value.filename + "</li>"; 
-					//output+="<li>" + "<b>Author</b>" + " --> " + value.submitter + "</li>"; 
-					//output+="<li>" + "<b>Last Updated</b>" + " --> " + value.modifieddate + "</li>"; 
-					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
-					$('#metadataTable').append(row);
-				});
-				//output += "</ol>";
-				//$('#metadataTable').html(row);
-				
-				//drawTable(data.text);
-			},
-			error: function() {
-				alert("error");
-			}
-		});
+//		$.ajax({
+//			url : path+"/auth/editing/getitemmetadata/"+networkId,
+//			type : "GET",
+//			dataType: 'json',
+//			success : function(data) {
+//				console.log(data);
+//				//var cnt = 0;
+//				//output += "<ol>";
+//				$.each(data.text, function(key,value){
+//					console.log("came in");
+//					//output+="<li>" + "<b>File Name</b>" + " --> " + value.filename + "</li>"; 
+//					//output+="<li>" + "<b>Author</b>" + " --> " + value.submitter + "</li>"; 
+//					//output+="<li>" + "<b>Last Updated</b>" + " --> " + value.modifieddate + "</li>"; 
+//					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
+//					$('#metadataTable').append(row);
+//				});
+//				//output += "</ol>";
+//				//$('#metadataTable').html(row);
+//				
+//				//drawTable(data.text);
+//			},
+//			error: function() {
+//				alert("error");
+//			}
+//		});
 	}
 	
-	
-	
-	/*function displayItemData(){
-		console.log("came here");
-		$.ajax({
-			url : path+"auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				if (data.length > 0) {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-					$('#metadataTable')
-							.dataTable().fnAddData(data);
-				} else {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-				}
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-	}*/
-	
-	/*function defineMetadataTable(){
-		$('#metadataTable')
-		.dataTable(
-				{
-					"bJQueryUI" : true,
-					"sPaginationType" : "full_numbers",
-					"bAutoWidth" : false,
-					"aoColumns" : [ {
-						"sTitle" : "FileName",
-						"mDataProp" :"filename",
-					},{
-						"sTitle" : "Author",
-						"mDataProp" :"submitter",
-					}, {
-						"sTitle" : "Last Modified Date",
-						"mDataProp" :"modifieddate",
-					}],
-				});
-	}*/
-	
-
 	function rightClick(d){
 		var html = "";
 		// If the node type is Predicate
@@ -618,22 +526,22 @@ function d3init(graph, networkId, path,type) {
 		if(d.group==1){
 
 			html = "<div id='popup' title='Annotation' >" +
-			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
-			"</br>" +
-			"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
-			"</br>" +
+			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +			
 			"</div>";
 		}
 		// Annotate on node
 		else{
 			html = "<div id='popup' title='Annotation'>" +
 			"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
+			"</br>" +
+			"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
+			"</br>" +
 			"</div>";
 		}				
 		$('#inner-details').html(html);	
 		// This function annotate for node
 		// This works on annot_node tag in the pop.
-		$('#annot_node').click(function() {
+		$('#annot_node,#annot_relation').click(function() {
 			//Type = node
 			var type1 ="node";
 
@@ -647,11 +555,11 @@ function d3init(graph, networkId, path,type) {
 
 
 			// Creating popup html content to facilitate adding annotation
-			var html1 = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
+			var html1 = "<div id='"+popupId+"' class='form-group' title='Annotation' style='display: none'>" +
 			"<form id='annot_form' action=" + path
 			+ "/auth/editing/saveAnnotation/";
 			html1 += networkId + " method='POST' >";
-			html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
+			html1 += "<textarea name='annotText' id='"+text1ID+"'class='form-control' cols='15' rows='5'></textarea>";
 			html1 += "<input  type='hidden' name='nodeid' id='nodeid' value="
 				+ d.id + " />";
 			html1 += "<input  type='hidden' name='nodename' id='nodename' value="
@@ -797,7 +705,7 @@ function d3init(graph, networkId, path,type) {
 		var objecttype = "node";
 		var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
 		var annotationDesc = "<h5>Annotations</h5>";
-		var annotationContent = "<textarea id="+'"annotationtextarea"'+" cols=40 rows=5 readonly>";
+		var annotationContent = "<textarea id="+'"annotationtextarea"'+" class='form-control' cols=40 rows=5 readonly>";  /* style='background:#FFFFFF; border: 1px solid #dddddd;'*/
 		// ajax Call to get annotation for a node.id
 		// Used to add the old annotation in to the popup view
 		$.ajax({
@@ -833,7 +741,7 @@ function d3init(graph, networkId, path,type) {
 		var descHeading = "<h5>Description of Node</h5>";
 
 		var lemmaName="<h5> Node name : "+lemma+"</h5>";
-		var conceptDesc = "<textarea id="+'"conceptdescTextArea"'+" cols=40 rows=5 readonly>";
+		var conceptDesc = "<textarea id="+'"conceptdescTextArea"'+" class='form-control' cols=40 rows=5 readonly>";
 
 		// This is done to replace all dot (.) with dollar ($)
 		// Since our spring controller would ignore any data after dot (.)
@@ -872,11 +780,11 @@ function d3init(graph, networkId, path,type) {
 
 
 		// Creating popup html content to facilitate adding annotation
-		var html = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
+		var html = "<div id='"+popupId+"' title='Annotation' >" +//style='display: none'
 		"<form id='annot_edge_form' action=" + path
 		+ "/auth/editing/saveAnnotationToEdge/";
 		html += networkId + " method='GET' >";
-		html += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
+		html += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15' ></textarea>";
 		html+= "<input type='button' id='annot_submit_edge' value='submit'>";
 		html += "</div></form>";
 
