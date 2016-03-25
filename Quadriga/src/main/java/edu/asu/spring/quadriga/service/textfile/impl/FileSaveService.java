@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
+import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 
 @Service
@@ -23,15 +24,9 @@ public class FileSaveService implements IFileSaveService {
     private ITextFile txtFile;
 
     @Override
-    public boolean saveFileToLocal(ITextFile txtFile) throws IOException {
+    public boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException, IOException {
         this.txtFile = txtFile;
-        String saveDir = env.getProperty("textfile.location");
-        filePath = saveDir + "/" + txtFile.getTextId();
-        File dirFile = new File(filePath);
-        if (!dirFile.exists()) {
-            dirFile.mkdir();
-        }
-        return saveMetadata() && saveFileContent();
+        return true;
     }
 
     private boolean saveMetadata() throws IOException {
@@ -39,7 +34,12 @@ public class FileSaveService implements IFileSaveService {
         FileWriter propFw = new FileWriter(propFile);
         propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
         propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
-        propFw.write("ReferenceId:" + txtFile.getRefId() + "\n");
+        try {
+            propFw.write("ReferenceId:" + txtFile.getRefId() + "\n");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         propFw.write("TextFileId:" + txtFile.getTextId() + "\n");
         propFw.close();
         return true;

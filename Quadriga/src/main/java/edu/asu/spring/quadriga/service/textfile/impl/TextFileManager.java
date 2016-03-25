@@ -1,19 +1,12 @@
 package edu.asu.spring.quadriga.service.textfile.impl;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
-import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
+import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
@@ -41,7 +34,7 @@ public class TextFileManager implements ITextFileManager {
      * to handle Text Management Operations
      */
     @Override
-    public boolean saveTextFile(ITextFile txtFile) throws QuadrigaStorageException, IOException {
+    public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, IOException, QuadrigaStorageException {
         String txtId = txtFileDAO.generateUniqueID();
         txtFile.setTextId(txtId);
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
@@ -70,7 +63,6 @@ public class TextFileManager implements ITextFileManager {
      * @throws IOException
      */
     private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
-
         return fileSaveServ.saveFileToLocal(txtFile);
 
     }
