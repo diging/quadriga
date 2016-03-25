@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * controller for upload transformation button
  *
  */
+@Controller
 public class UploadTransformationController {
 
 	@RequestMapping(value="auth/uploadTransformation",method=RequestMethod.GET)
