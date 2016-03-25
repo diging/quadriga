@@ -8,7 +8,21 @@
 </head>
 <body>
 
-Hello
-
+<form class="form-inline">
+<div class="col-md-6">
+Upload Pattern File
+<label for="patternTitle" class="col-md-2"> Title</label>
+<input type="text" class="col-md-4">
+<label for="patternDesciption" class="col-md-2"> Optional Description </label> 
+<input type="text" class="col-md-4">
+<input type="file" >
+</div>
+<div class="col-md-6">Upload Mapping File
+<label for "mapTitle"> Title:</label>
+<label> Optional Description </label>
+<input type="file" >
+</div>
+<button type="submit" class="btn btn-default"> Submit </button>
+</form>
 </body>
 </html>
