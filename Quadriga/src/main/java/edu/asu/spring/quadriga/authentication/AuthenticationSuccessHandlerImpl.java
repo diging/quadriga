@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
  *
  */
 @Service("authSuccessHandler")
-public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
+public class AuthenticationSuccessHandlerImpl extends SavedRequestAwareAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -33,6 +33,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
             String userName = quadrigaUserDetails.getUsername();
             quadrigaUserDetails.setUsername(userName.toLowerCase());
         }
-        response.sendRedirect(request.getContextPath() + "/auth/welcome");
+        super.onAuthenticationSuccess(request, response, authentication);
     }
 }
