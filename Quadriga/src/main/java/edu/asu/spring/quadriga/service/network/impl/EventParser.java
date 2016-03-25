@@ -162,7 +162,7 @@ public class EventParser {
         node.setId(event.getAppellationEventID());
         node.setConceptId(label.toString().trim());
         // set the source reference
-        node.setSourceReference(node.getSourceReference());
+        node.setSourceReference(event.getSourceReference());
         
         if (node.getConceptId() != null) {
             node.setLabel(conceptCollectionManager.getConceptLemmaFromConceptId(node.getConceptId()));
