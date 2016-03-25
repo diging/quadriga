@@ -55,7 +55,7 @@
         class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
         p:config-location="classpath:ehcache.xml" />
         
-     <beans: bean id="txtfileSaveUtil" class="edu.asu.spring.quadriga.service.textfile.impl">
+     <beans: bean id="txtfileSaveUtil" class="edu.asu.spring.quadriga.utilities.impl">
      		<beans:property name="textFileLocation" value="${textfile.url}">
         </beans:bean>
 </beans:beans>

@@ -119,7 +119,7 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
     
     @Override
     public String getIdPrefix() {
-        return messages.getProperty("project_id.prefix");
+        return messages.getProperty("textfile_id.prefix");
     }    
 
 }
