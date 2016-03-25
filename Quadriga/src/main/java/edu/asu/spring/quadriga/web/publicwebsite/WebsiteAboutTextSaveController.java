@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,11 +31,10 @@ public class WebsiteAboutTextSaveController {
     @Autowired
     private IAboutTextManager aboutTextManager;
 
-    @RequestMapping(value = "auth/saveabout/{ProjectUnixName}", method = RequestMethod.POST)
-    public String saveAbout(@PathVariable("ProjectUnixName") String unixName, @ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Principal principal)
+    @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
+    @RequestMapping(value = "auth/workbench/projects/{projectId}/settings/saveabout", method = RequestMethod.POST)
+    public String saveAbout(@PathVariable("projectId") String projectId, @ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Principal principal)
             throws QuadrigaStorageException {
-        IProject project = projectManager.getProjectDetailsByUnixName(unixName);
-        String projectId = project.getProjectId();
         aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
         return "auth/saveabout";
     }

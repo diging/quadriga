@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,11 +26,11 @@ public class WebsiteAboutEditController {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
-
-    @RequestMapping(value = "auth/editabout/{ProjectUnixName}", method = RequestMethod.GET)
-    public String showAbout(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal) throws QuadrigaStorageException {
-        System.out.println("here");
-        IProject project = projectManager.getProjectDetailsByUnixName(unixName);
+    
+    @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
+    @RequestMapping(value = "auth/workbench/projects/{projectId}/settings/editabout", method = RequestMethod.GET)
+    public String showAbout(@PathVariable("projectId") String projectId, Model model, Principal principal) throws QuadrigaStorageException {
+        IProject project = projectManager.getProjectDetails(projectId);
         String title = "Project Title will be here";
         String aboutProject = "<i>This line describes project in italics</i><br> <b>This is bold</b>";
         model.addAttribute("project", project);
