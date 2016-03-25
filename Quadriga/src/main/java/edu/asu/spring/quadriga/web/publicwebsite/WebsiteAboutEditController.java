@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
@@ -27,6 +29,9 @@ public class WebsiteAboutEditController {
     @Autowired
     private IRetrieveProjectManager projectManager;
     
+    @Autowired
+    private IAboutTextManager aboutTextManager;
+    
     @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
     @RequestMapping(value = "auth/workbench/projects/{projectId}/settings/editabout", method = RequestMethod.GET)
     public String showAbout(@PathVariable("projectId") String projectId, Model model, Principal principal) throws QuadrigaStorageException {
@@ -39,4 +44,22 @@ public class WebsiteAboutEditController {
         return "auth/editabout";
     }
 
+    /**
+     * . 
+     * Any change made in the about project page is updated into the database here and a "Successfully saved" message is
+     * displayed.
+     * 
+     * @author Rajat Aggarwal
+     *
+     */
+
+    @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
+    @RequestMapping(value = "auth/workbench/projects/{projectId}/settings/saveabout", method = RequestMethod.POST)
+    public String saveAbout(@PathVariable("projectId") String projectId, @ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Principal principal)
+            throws QuadrigaStorageException {
+        aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
+        return "auth/saveabout";
+    }
+
+    
 }

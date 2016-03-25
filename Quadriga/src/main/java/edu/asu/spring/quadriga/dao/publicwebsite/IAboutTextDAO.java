@@ -17,6 +17,6 @@ public interface IAboutTextDAO extends IBaseDAO<AboutTextDTO> {
      * 
      * @author Rajat Aggarwal
      */
-    public abstract void saveNewDTO(AboutTextDTO dto);
+   
 
 }

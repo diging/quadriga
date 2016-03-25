@@ -18,53 +18,53 @@ import javax.persistence.Table;
 @Table(name = "tbl_about_text")
 public class AboutTextDTO implements Serializable {
 
-    private static final long serialVersionUID = 1103019135158917211L;
+	private static final long serialVersionUID = 1103019135158917211L;
 
-    @Id
-    private String Id;
+	@Id
+	private String Id;
 
-    public String getId() {
-        return Id;
-    }
+	@Basic(optional = true)
+	@Column(name = "ProjectId")
+	private String projectId;
 
-    public void setId(String id) {
-        Id = id;
-    }
+	@Basic(optional = true)
+	@Column(name = "title")
+	private String title;
 
-    @Basic(optional = false)
-    @Column(name = "ProjectId")
-    private String projectId;
+	@Basic(optional = true)
+	@Column(name = "description")
+	private String description;
 
-    @Basic(optional = false)
-    @Column(name = "title")
-    private String title;
+	public String getId() {
+		return Id;
+	}
 
-    @Basic(optional = false)
-    @Column(name = "description")
-    private String description;
+	public void setId(String id) {
+		Id = id;
+	}
 
-    public String getProjectId() {
-        return projectId;
-    }
+	public String getProjectId() {
+		return projectId;
+	}
 
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
-    }
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 }
