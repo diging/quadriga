@@ -721,6 +721,12 @@
 		<put-attribute name="content" value="/WEB-INF/views/settings/publicWebsiteEditAbout.jsp"/>
 	</definition>
 	
+	<definition name="auth/settings" extends="base.definition">
+	   <put-attribute name="currentPage" value="settings" />
+		<put-attribute name="content" value="/WEB-INF/views/settings/publicwebsitesettings.jsp"/>
+	</definition>
+	
+
 
 	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks">
 		<put-attribute name="title" value="Quadriga Networks visualize" />
