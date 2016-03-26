@@ -1,28 +1,35 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
+<form class="form-horizontal">
+<div id="mappingDiv" class="col-md-6" style="border:1px solid#A89E9E; border-radius:10px;"> <!-- style="border:1px solid#A89E9E; border-radius:10px;" -->
+<div class="form-group">
+<div class="col-md-12">
+<input type="file" class="form-control">
+</div>
+</div>
 
-<form class="form-inline">
-<div class="col-md-6">
-Upload Pattern File
-<label for="patternTitle" class="col-md-2"> Title</label>
-<input type="text" class="col-md-4">
-<label for="patternDesciption" class="col-md-2"> Optional Description </label> 
-<input type="text" class="col-md-4">
-<input type="file" >
+<div class="form-group">
+<label for="mappingTitle" class="col-md-4 control-label" style="font-weight:bold;"> Title</label>
+<div class="col-md-8"><input type="text" class="form-control" id="mappingTitle"></div>
 </div>
-<div class="col-md-6">Upload Mapping File
-<label for "mapTitle"> Title:</label>
-<label> Optional Description </label>
-<input type="file" >
+	
+<div class="form-group">
+<label for="mappingDesciption" class="col-md-4 control-label" style="font-weight:bold;">Description </label>
+<div class="col-md-8"> <textarea class="form-control" rows="2" id="mappingDescription" placeholder="This field is optional"></textarea></div>
 </div>
-<button type="submit" class="btn btn-default"> Submit </button>
+
+</div>
+
+
+<div id="transfomrDiv" class="col-md-6">
+<div class="form-group">
+<label for="transformTitle" class="col-md-4 control-label" style="font-weight:bold;"> Title</label>
+<div class="col-md-8"><input type="text" class="form-control" id="transfomrTitle"></div>
+</div>
+	
+<div class="form-group">
+<label for="transfomrDesciption" class="col-md-4 control-label" style="font-weight:bold;">Description </label>
+<div class="col-md-8"> <textarea class="form-control" rows="2" id="transfomrDescription" placeholder="This fild is optional"></textarea></div>
+</div>
+
+</div>
+
 </form>
-</body>
-</html>
