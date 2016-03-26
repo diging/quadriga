@@ -18,6 +18,8 @@ public class UploadTransformationController {
 
 	@RequestMapping(value="auth/uploadTransformation",method=RequestMethod.POST)
 	public String uploadTransformationFiles(ModelMap model, Principal principal){
+				
+		model.addAttribute("success","1");
 		return "auth/uploadTransformation";
 	}
 }

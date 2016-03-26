@@ -11,6 +11,7 @@ public class SelectTranformationFiles {
 	
 	@RequestMapping(value="auth/selectTransformationFiles",method=RequestMethod.GET)
 	public String selectTransformationFiles(ModelMap model, Principal principal){
+		model.addAttribute("sucess",'0');
 		return "auth/uploadTransformation";
 	}
 }
