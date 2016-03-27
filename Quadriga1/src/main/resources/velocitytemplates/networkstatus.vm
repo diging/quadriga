@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/dictionaryitemslist.xsd">
+	<Quadriga:networkDetails>
+		<Quadriga:networkStatus code="$status"></Quadriga:networkStatus>
+		<Quadriga:networkAnnotationList>
+			#foreach ($networkAnno in $networkAnnoList)
+			<Quadriga:networkAnnotation>
+				<Quadriga:annotationId>$networkAnno.annotationId</Quadriga:annotationId>
+				<Quadriga:nodeId>$networkAnno.nodeId</Quadriga:nodeId>
+				<Quadriga:nodeName>$networkAnno.nodeName</Quadriga:nodeName>
+				<Quadriga:annotationText>$networkAnno.annotationText</Quadriga:annotationText>
+				<Quadriga:createdBy>$networkAnno.userId</Quadriga:createdBy>
+			</Quadriga:networkAnnotation>
+			#end
+		</Quadriga:networkAnnotationList>
+	</Quadriga:networkDetails>
+</Quadriga:QuadrigaReply>
