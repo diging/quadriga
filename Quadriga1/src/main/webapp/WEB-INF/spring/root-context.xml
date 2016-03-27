@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<!-- Enables the Spring Transaction programming model -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<context:component-scan base-package="edu.asu.spring.quadriga"/>
+	
+	<!--Reference to Quad Database connection file-->
+	<beans:import resource="spring-dbconnectionmanager.xml" />
+
+	<!-- Reference to Quadriga roles -->
+	<beans:import resource="quadriga-roles.xml" />
+	
+	<!-- Reference to Collaborator roles -->
+	<beans:import resource="collaborator-roles.xml"/>
+	
+	<!-- Reference the rest settings -->
+	<beans:import resource="rest-service.xml"/>
+	
+	<!-- Reference the Concept Collection roles-->
+	<beans:import resource="cc-collaborator-roles.xml"/>
+	
+	<!-- Reference the Dictionary Collaborator roles -->
+	<beans:import resource="dict-collaborator-roles.xml"/>
+
+	<!-- Reference the mesages -->
+	<beans:import resource="message-localization.xml"/>
+	
+	<!-- Reference the email configuration -->
+	<beans:import resource="email-config.xml"/>
+	
+	<!-- Reference the hibernate -->
+	<beans:import resource="../hibernate/hibernate.cfg.xml"/>
+	
+	<cache:annotation-driven />
+    <beans:bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <beans:property name="cacheManager"><beans:ref bean="ehcache"/></beans:property>
+    </beans:bean>
+
+    <beans:bean id="ehcache"
+        class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+        p:config-location="classpath:ehcache.xml" />
+        
+</beans:beans>
