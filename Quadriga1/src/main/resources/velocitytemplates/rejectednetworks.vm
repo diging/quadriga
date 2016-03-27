@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/rejectedNetwork.xsd">
+	<Quadriga:networkList>
+		#foreach ($network in $workspaceNetworkList)
+		<Quadriga:network>
+			<Quadriga:name>$network.network.networkName</Quadriga:name>
+			<Quadriga:id>$network.network.networkId</Quadriga:id>
+			<Quadriga:status code="$network.network.status"></Quadriga:status>
+			<Quadriga:uri>$url/rest/network/$network.network.networkId/all</Quadriga:uri>
+		</Quadriga:network> 	
+		#end
+	</Quadriga:networkList>
+</Quadriga:QuadrigaReply>

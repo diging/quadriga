@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/userDetails.xsd">
+<Quadriga:userDetails>
+	<Quadriga:username>$userdetails.name</Quadriga:username>
+	<Quadriga:userid>$userdetails.userName</Quadriga:userid>
+	<Quadriga:email>$userdetails.email</Quadriga:email>
+	<Quadriga:uri>$url/rest/userDetails/$userdetails.userName</Quadriga:uri>
+	<Quadriga:createdBy>$userDetails.createdBy</Quadriga:createdBy>
+	<Quadriga:createdDate>$userDetails.createdDate</Quadriga:createdDate>
+	<Quadriga:updatedBy>$userDetails.updatedBy</Quadriga:updatedBy>
+	<Quadriga:updatedDate>$userDetails.updatedDate</Quadriga:updatedDate>
+	<Quadriga:authorityFileEntryList>
+		#foreach ($authFileList in $list)
+		<Quadriga:authorityFileEntry type="$authFileList.serviceId">
+			<Quadriga:name>$authFileList.profilename</Quadriga:name>
+			<Quadriga:url>$authFileList.profileId</Quadriga:url>
+			<Quadriga:authorityType>$authFileList.profileId</Quadriga:authorityType>
+			<Quadriga:description>$authFileList.description</Quadriga:description>
+			<Quadriga:serviceId>$authFileList.serviceId</Quadriga:serviceId>
+		</Quadriga:authorityFileEntry>
+		#end
+	</Quadriga:authorityFileEntryList>
+</Quadriga:userDetails> 	
+</Quadriga:QuadrigaReply>
