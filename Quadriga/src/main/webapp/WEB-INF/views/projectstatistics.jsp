@@ -21,6 +21,6 @@ document.body.onload = function()
 }
 </script>
 
-<h2>Project Statistics</h2>
+<h2 style = "text-align: right;">Project Statistics</h2>
 <div id='stats'></div>
 

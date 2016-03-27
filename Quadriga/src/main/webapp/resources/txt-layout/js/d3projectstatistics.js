@@ -8,8 +8,8 @@
 
 function d3ProjectStatistics(data) {
 
-	var margin = {top: 40, right: 20, bottom: 30, left: 40},
-	width = 960 - margin.left - margin.right,
+	var margin = {top: 40, right: 20, bottom: 30, left: 300},
+	width = 1160 - margin.left - margin.right,
 	height = 500 - margin.top - margin.bottom;
 
 	var formatPercent = d3.format("");
@@ -33,7 +33,9 @@ function d3ProjectStatistics(data) {
 	.attr('class', 'd3-tip')
 	.offset([-10, 0])
 	.html(function(d) {
-		return "<strong>Description:</strong> <span style='color:red'>" + d.description + "</span>";
+		return "<strong>Description:</strong> <span style='color:red'>" + d.description + "</span></br>" +
+			   "<strong>Concept ID:</strong> <span style='color:red'>" + d.conceptId + "</span></br>" +
+			   "<strong>Count:</strong> <span style='color:red'>" + d.count + "</span>";
 	})
 
 	var svg = d3.select('#stats').append("svg")
@@ -42,11 +44,11 @@ function d3ProjectStatistics(data) {
 	.append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	svg.call(tip);
+	svg.call(tip);	
 
 	data = JSON.parse(data);
-	x.domain(data.map(function(d) { return d.conceptId; }));
-	y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+	x.domain(data.map(function(d) { return d.label; }));
+	y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
 	svg.append("g")
 	.attr("class", "x axis")
@@ -57,21 +59,20 @@ function d3ProjectStatistics(data) {
 	.attr("class", "y axis")
 	.call(yAxis)
 	.append("text")
-	.attr("transform", "rotate(-90)")
-	.attr("y", 6)
+	.attr("y", -10)
 	.attr("dy", ".71em")
 	.style("text-anchor", "end")
-	.text("Frequency");
+	.text("Count");
 
 	svg.selectAll(".bar")
 	.data(data)
 	.enter()
 	.append("rect")
 	.attr("class", "bar")
-	.attr("x", function(d) { return x(d.conceptId); })
+	.attr("x", function(d) { return x(d.label); })
 	.attr("width", x.rangeBand())
-	.attr("y", function(d) { return y(d.frequency); })
-	.attr("height", function(d) { return height - y(d.frequency); })
+	.attr("y", function(d) { return y(d.count); })
+	.attr("height", function(d) { return height - y(d.count); })
 	.on('mouseover', tip.show)
 	.on('mouseout', tip.hide);
 }

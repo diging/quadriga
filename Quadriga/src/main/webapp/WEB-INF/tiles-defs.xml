@@ -807,7 +807,7 @@
 		<put-attribute name="title" value="Project statistics" />
 		<put-attribute name="content" value="/WEB-INF/views/projectstatistics.jsp" />
 	</definition>
-	
+
 	<!-- Explore combined network -->
 	<definition name="sites/networks/explore" extends="base.definition.public.network">
 		<put-attribute name="currentPage" value="exploregraph" />
