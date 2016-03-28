@@ -45,6 +45,21 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 	}
 	
 	@Override
+    @Transactional
+    public List<IDictionary> getNonAssociatedProjectDictionaries(String projectId) throws QuadrigaStorageException {
+	    List<DictionaryDTO> dictionaryDTOList = dictDao.getNonAssociatedProjectDictionaries(projectId);
+        
+        List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+        if(dictionaryDTOList != null) {
+            for(DictionaryDTO dictionaryDTO: dictionaryDTOList) {
+                dictionaryList.add(createDictionaryProxy(dictionaryDTO));
+            }
+        }
+        
+        return dictionaryList;
+	}
+	
+	@Override
 	@Transactional
 	public List<IDictionary> getDictionaryListOfCollaborator(String userName) throws QuadrigaStorageException {
 		

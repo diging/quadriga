@@ -261,7 +261,21 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 		query.setParameter("username",userName);
 		return query.list();
 	}
-
+	
+	
+	@SuppressWarnings("unchecked")
+    @Override
+	public List<DictionaryDTO> getNonAssociatedProjectDictionaries(String projectId) throws QuadrigaStorageException {
+	    try {
+	    Query query = sessionFactory.getCurrentSession().createQuery("FROM DictionaryDTO dict WHERE dict.dictionaryid NOT IN (" +
+	            "SELECT p.projectDictionaryDTOPK.dictionaryid FROM ProjectDictionaryDTO p WHERE p.projectDictionaryDTOPK.projectid = :projectid)");
+	    query.setParameter("projectid", projectId);
+	    return query.list();
+	    } catch(Exception e) {
+	        throw new QuadrigaStorageException(e);
+	    }
+	}
+	
     @Override
     public DictionaryDTO getDTO(String id) {
         return getDTO(DictionaryDTO.class, id);

@@ -183,4 +183,8 @@ public interface IDictionaryManager {
     public abstract void updateDictionaryDetailsRequest(IDictionary dictionary,
             String userName) throws QuadrigaStorageException;
 
+
+    public abstract List<IDictionary> getNonAssociatedProjectDictionaries(String projectId)
+            throws QuadrigaStorageException;
+
 }
