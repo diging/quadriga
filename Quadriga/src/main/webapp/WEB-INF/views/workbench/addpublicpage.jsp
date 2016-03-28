@@ -4,8 +4,9 @@
 <!-- Content -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script>
-	$(document).ready(function() {
-	});
+$(document).ready(function() {
+});
+
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
@@ -14,7 +15,7 @@
 	});
 </script>
 <article class="is-page-content">
-	<form:form commandName="publicpage" method="POST"
+	<form:form commandName="publicpage" method="GET"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/addpublicpage">
 		<header>
 			<h2>Editing Text Contents to be shown</h2>
@@ -35,8 +36,7 @@
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference</td>
-				<td style="width: 1px"><input value=" "<form:input path="order"
-						size="2" id="order" /></td>
+				<td style="width: 1px"><input value=" "</td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>

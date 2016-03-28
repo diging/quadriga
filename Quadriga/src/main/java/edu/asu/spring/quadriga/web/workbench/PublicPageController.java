@@ -8,7 +8,8 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -62,6 +63,6 @@ public class PublicPageController {
         model.getModelMap().put("publicpage", publicPageFactory.createPublicPageObject());
         return model;
     }
-    
+     
 
 }
