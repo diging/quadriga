@@ -22,6 +22,7 @@ public class PublicPageValidator implements Validator {
 	 * @param obj
 	 * @param err
 	 */
+	
 	@Override
 	public void validate(Object obj, Errors err) {
 		// validate all the input parameters
