@@ -56,17 +56,17 @@ public class RestAccessAspect {
      */
     @Around("within(edu.asu.spring.quadriga.rest..*) && @annotation(checks)")
     public Object chkAuthorization(ProceedingJoinPoint pjp, RestAccessPolicies checks) throws Throwable {
-        
+
         boolean haveAccess = true;
 
         // retrieve the logged in User name
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName();
-        
-        if(userName == null || "".equals(userName)){
+        String userName = auth.getName().toLowerCase();
+
+        if (userName == null || userName.isEmpty()) {
             throw new RestException(401);
         }
-        
+
         // Loop through all the access policies specified
         ElementAccessPolicy[] policies = checks.value();
 

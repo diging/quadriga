@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.web.workbench;
 
-
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,180 +30,176 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
-
 @Controller
-public class RetrieveProjectController 
-{
+public class RetrieveProjectController {
 
+    @Autowired
+    private IRetrieveProjectManager projectManager;
 
-	@Autowired 
-	private IRetrieveProjectManager projectManager;
+    @Autowired
+    private IRetrieveJsonProjectManager jsonProjectManager;
 
-	@Autowired 
-	private IRetrieveJsonProjectManager jsonProjectManager;
+    @Autowired
+    private IProjectSecurityChecker projectSecurity;
 
-	@Autowired
-	private IProjectSecurityChecker projectSecurity;
-	
-	@Autowired
-	private IListWSManager wsManager;
+    @Autowired
+    private IListWSManager wsManager;
 
-	/**
-	 *this method acts as a controller for handling all the activities on the workbench
-	 *home page
-	 * @param   principal
-	 * @return 	string for workbench url 
-	 * @throws  QuadrigaStorageException
-	 * @author 		rohit sukleshwar pendbhaje
-	 * @throws JSONException 
-	 */
-	@RequestMapping(value="auth/workbench", method = RequestMethod.GET)
-	public ModelAndView getProjectList(Principal principal) throws QuadrigaStorageException, JSONException
-	{
-		String userName;
-		ModelAndView model;
-		
-		userName = principal.getName();
+    /**
+     * this method acts as a controller for handling all the activities on the
+     * workbench home page
+     * 
+     * @param principal
+     * @return string for workbench url
+     * @throws QuadrigaStorageException
+     * @author rohit sukleshwar pendbhaje
+     * @throws JSONException
+     */
+    @RequestMapping(value = "auth/workbench", method = RequestMethod.GET)
+    public ModelAndView getProjectList(Principal principal) throws QuadrigaStorageException, JSONException {
+        String userName;
+        ModelAndView model;
 
-		List<IProject> projectListAsOwner = projectManager.getProjectList(userName);
-		List<IProject> fullProjects = new ArrayList<IProject>();
+        userName = principal.getName();
 
-		model = new ModelAndView("auth/workbench");
-		List<String> projectIds = new ArrayList<String>();
-		Map<String, Boolean> accessibleProjects = new HashMap<String, Boolean>();
-		
-		if(projectListAsOwner != null)
-		{
-			for (IProject p : projectListAsOwner) {
-				fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
-				projectIds.add(p.getProjectId());
-				accessibleProjects.put(p.getProjectId(), true);
-			}
-		}
-		
-		//Fetch all the projects for which the user is collaborator
-		List<IProject> projectListAsCollaborator = projectManager.getCollaboratorProjectList(userName);
-		if(projectListAsCollaborator != null)
-		{
-			for (IProject p : projectListAsCollaborator) {
-				if (!projectIds.contains(p.getProjectId()))
-				{
-					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
-					projectIds.add(p.getProjectId());
-					accessibleProjects.put(p.getProjectId(), true);
-				}
-			}
-		}
-		
-		//Fetch all the projects for which the user is associated workspace owner
-		List<IProject> projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(userName);
-		if(projectListAsWorkspaceOwner != null)
-		{
-			for (IProject p : projectListAsWorkspaceOwner) {
-				if (!projectIds.contains(p.getProjectId()))
-				{
-					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
-					projectIds.add(p.getProjectId());
-					accessibleProjects.put(p.getProjectId(), false);
-				}	
-			}
-		}
-		
-		//Fetch all the projects for which the user is associated workspace collaborator
-		List<IProject> projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
-		if(projectListAsWSCollaborator != null)
-		{
-			for (IProject p : projectListAsWSCollaborator) {
-				if (!projectIds.contains(p.getProjectId()))
-				{
-					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
-					projectIds.add(p.getProjectId());
-					accessibleProjects.put(p.getProjectId(), false);
-				}	
-			}
-		}
-		
-		Collections.sort(fullProjects, new Comparator<IProject>() {
+        List<IProject> projectListAsOwner = projectManager.getProjectList(userName);
+        List<IProject> fullProjects = new ArrayList<IProject>();
 
-			@Override
-			public int compare(IProject o1, IProject o2) {
-				return o1.getProjectName().compareTo(o2.getProjectName());
-			}
-		});
-		
-		model.getModelMap().put("projects", fullProjects);
-		model.getModelMap().put("accessibleProjects", accessibleProjects);
-		
-		
-//		model.getModelMap().put("projectlistasowner", projectListAsOwner);
-//		model.getModelMap().put("projectlistascollaborator", projectListAsCollaborator);
-//		model.getModelMap().put("projectlistaswsowner", projectListAsWorkspaceOwner);
-//		model.getModelMap().put("projectlistaswscollaborator", projectListAsWSCollaborator);
+        model = new ModelAndView("auth/workbench");
+        List<String> projectIds = new ArrayList<String>();
+        Map<String, Boolean> accessibleProjects = new HashMap<String, Boolean>();
 
-		return model;
-	}
+        if (projectListAsOwner != null) {
+            for (IProject p : projectListAsOwner) {
+                fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));
+                projectIds.add(p.getProjectId());
+                accessibleProjects.put(p.getProjectId(), true);
+            }
+        }
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR} )})
-	@RequestMapping(value="auth/workbench/projects/{projectid}", method = RequestMethod.GET)
-	public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, NoSuchRoleException, QuadrigaAccessException
-	{
-		ModelAndView model = new ModelAndView("auth/workbench/project");
+        // Fetch all the projects for which the user is collaborator
+        List<IProject> projectListAsCollaborator = projectManager.getCollaboratorProjectList(userName);
+        if (projectListAsCollaborator != null) {
+            for (IProject p : projectListAsCollaborator) {
+                if (!projectIds.contains(p.getProjectId())) {
+                    fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));
+                    projectIds.add(p.getProjectId());
+                    accessibleProjects.put(p.getProjectId(), true);
+                }
+            }
+        }
 
-		String userName = principal.getName();
-		IProject project = projectManager.getProjectDetails(projectid);
+        // Fetch all the projects for which the user is associated workspace
+        // owner
+        List<IProject> projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(userName);
+        if (projectListAsWorkspaceOwner != null) {
+            for (IProject p : projectListAsWorkspaceOwner) {
+                if (!projectIds.contains(p.getProjectId())) {
+                    fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));
+                    projectIds.add(p.getProjectId());
+                    accessibleProjects.put(p.getProjectId(), false);
+                }
+            }
+        }
 
-		//retrieve all the workspaces associated with the project
-		List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectid,userName);
+        // Fetch all the projects for which the user is associated workspace
+        // collaborator
+        List<IProject> projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
+        if (projectListAsWSCollaborator != null) {
+            for (IProject p : projectListAsWSCollaborator) {
+                if (!projectIds.contains(p.getProjectId())) {
+                    fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));
+                    projectIds.add(p.getProjectId());
+                    accessibleProjects.put(p.getProjectId(), false);
+                }
+            }
+        }
 
-		List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
+        Collections.sort(fullProjects, new Comparator<IProject>() {
 
-		List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
-		
-		List<IWorkSpace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
+            @Override
+            public int compare(IProject o1, IProject o2) {
+                return o1.getProjectName().compareTo(o2.getProjectName());
+            }
+        });
 
-		int deactivatedWSSize = deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
-		
-		int archivedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
+        model.getModelMap().put("projects", fullProjects);
+        model.getModelMap().put("accessibleProjects", accessibleProjects);
 
-		model.getModelMap().put("project", project);
-		model.getModelMap().put("workspaceList",workspaceList);
-		model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
-		model.getModelMap().put("deactivatedWSSize", deactivatedWSSize);
-		model.getModelMap().put("archivedWSSize", archivedWSSize);
+        // model.getModelMap().put("projectlistasowner", projectListAsOwner);
+        // model.getModelMap().put("projectlistascollaborator",
+        // projectListAsCollaborator);
+        // model.getModelMap().put("projectlistaswsowner",
+        // projectListAsWorkspaceOwner);
+        // model.getModelMap().put("projectlistaswscollaborator",
+        // projectListAsWSCollaborator);
 
-		if(projectSecurity.isProjectOwner(userName,projectid)){
-			model.getModelMap().put("owner", 1);
-		}else{
-			model.getModelMap().put("owner", 0);
-		}
-		if(projectSecurity.isEditor(userName, projectid)){
-			model.getModelMap().put("editoraccess", 1);
-		}else{
-			model.getModelMap().put("editoraccess", 0);
-		}
-		if (projectSecurity.isCollaborator(userName, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, project.getProjectId())) {
-		    model.getModelMap().put("isProjectAdmin", true);
-		}
-		else {
-		    model.getModelMap().put("isProjectAdmin", false);
-		}
-		return model;
-	}
+        return model;
+    }
 
-	/*@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
-	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException {
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }) })
+    @RequestMapping(value = "auth/workbench/projects/{projectid}", method = RequestMethod.GET)
+    public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid, Principal principal)
+            throws QuadrigaStorageException, NoSuchRoleException, QuadrigaAccessException {
+        ModelAndView model = new ModelAndView("auth/workbench/project");
 
+        String userName = principal.getName();
+        IProject project = projectManager.getProjectDetails(projectid);
 
+        // retrieve all the workspaces associated with the project
+        List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectid, userName);
 
-		IProject project = projectManager.getProjectDetailsByUnixName(unixName);
-		if(project!=null){
+        List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
-			model.addAttribute("project", project);
-			return "website";
-		}
-		else
-			return "forbidden";
+        List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
 
+        List<IWorkSpace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
 
-	}*/
+        int deactivatedWSSize = deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
+
+        int archivedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
+
+        model.getModelMap().put("project", project);
+        model.getModelMap().put("workspaceList", workspaceList);
+        model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
+        model.getModelMap().put("deactivatedWSSize", deactivatedWSSize);
+        model.getModelMap().put("archivedWSSize", archivedWSSize);
+
+        if (projectSecurity.isProjectOwner(userName, projectid)) {
+            model.getModelMap().put("owner", 1);
+        } else {
+            model.getModelMap().put("owner", 0);
+        }
+        if (projectSecurity.isEditor(userName, projectid)) {
+            model.getModelMap().put("editoraccess", 1);
+        } else {
+            model.getModelMap().put("editoraccess", 0);
+        }
+        if (projectSecurity.isCollaborator(userName, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, project.getProjectId())) {
+            model.getModelMap().put("isProjectAdmin", true);
+        } else {
+            model.getModelMap().put("isProjectAdmin", false);
+        }
+        return model;
+    }
+
+    /*
+     * @RequestMapping(value="sites/{ProjectUnixName}",
+     * method=RequestMethod.GET) public String
+     * showProject(@PathVariable("ProjectUnixName") String unixName,Model model)
+     * throws QuadrigaStorageException {
+     * 
+     * 
+     * 
+     * IProject project = projectManager.getProjectDetailsByUnixName(unixName);
+     * if(project!=null){
+     * 
+     * model.addAttribute("project", project); return "website"; } else return
+     * "forbidden";
+     * 
+     * 
+     * }
+     */
 }
