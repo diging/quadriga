@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -21,12 +22,13 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.domain.IUserStats;
 
 /**
  * This controller has all the mappings required to view the statistics of the
  * project
  * 
- * @author ajaymodi
+ * @author Ajay Modi
  *
  */
 
@@ -46,32 +48,29 @@ public class ProjectStatsController {
     @Autowired
     private Environment env;
 
-    private JSONArray getProjectStatsJson(List<IConceptStats> conceptList)
-            throws JSONException {
+    private int getCount(List<IConceptStats> conceptList) {
 
         int cnt = Integer.parseInt(env.getProperty("project.stats.topcount"));
         int len = conceptList.size() > cnt ? cnt : conceptList.size();
-        
-        List<IConceptStats> topConceptsList = conceptList.subList(0, len);
-        return getTopConceptsJson(topConceptsList,len); 
+        return len;
     }
-    
-    private JSONArray getTopConceptsJson(List<IConceptStats> conceptsList, int length)
-            throws JSONException {
+
+    private JSONArray getTopConceptsJson(List<IConceptStats> conceptsList,
+            int length) throws JSONException {
         JSONArray jsonArray = new JSONArray();
 
         for (int i = 0; i < length; i++) {
             JSONObject jsonObject = new JSONObject();
             IConceptStats conceptStats = conceptsList.get(i);
-            jsonObject.put("conceptId", conceptStats.getConceptId());
-            jsonObject.put("description", conceptStats.getDescription());
-            jsonObject.put("label", conceptStats.getLemma());
+            jsonObject.put("conceptId", conceptStats.getConceptId().replace("\"", ""));
+            jsonObject.put("description", conceptStats.getDescription().replace("\"", ""));
+            jsonObject.put("label", conceptStats.getLemma().replace("\"", ""));
             jsonObject.put("count", conceptStats.getCount());
             jsonArray.put(jsonObject);
         }
         return jsonArray;
     }
-    
+
     /**
      * This method gives the visualization of how often concepts appear in the
      * networks
@@ -97,35 +96,21 @@ public class ProjectStatsController {
         }
 
         String projectId = project.getProjectId();
-        
-        List<IProjectCollaborator> projectCollaboratorList = projectManager
-                .getProjectCollaborators(projectId);
-        
-        if (projectCollaboratorList != null)
-            
-        // loop through each collaborator
-        for (IProjectCollaborator projectCollaborator : projectCollaboratorList) {
-            if (projectCollaborator.getCollaborator() != null) {
-                
-            }
-        }
-
-        
-        
         List<INetwork> networks = networkmanager
                 .getNetworksInProject(projectId);
-        List<IConceptStats> topConcepts = null;
-
+        List<IConceptStats> conceptsWithCount = null;
+        List<IUserStats> userStats; 
         if (!networks.isEmpty()) {
-            topConcepts = projectStats.getConceptCount(networks);
-                            
-
+            conceptsWithCount = projectStats.getConceptCount(networks);
+            userStats = new ArrayList<IUserStats>(projectStats.getCountofNetwork(projectId, projectStats.getCountofWorkspace(projectId)).values());
             try {
                 JSONArray jArray = null;
-                jArray = getProjectStatsJson(topConcepts);
-                model.addAttribute("jsonstring", jArray);
+                int cnt = getCount(conceptsWithCount);
+                jArray = getTopConceptsJson(conceptsWithCount.subList(0, cnt),
+                        cnt);
+                String jsonData = jArray.toString();
+                model.addAttribute("jsonstring", jsonData);
                 model.addAttribute("networkid", "\"\"");
-                model.addAttribute("project", project);
 
             } catch (JSONException e) {
 
@@ -136,7 +121,7 @@ public class ProjectStatsController {
                 model.addAttribute("error_alert_msg", errorMsg.toString());
             }
         }
-
+        model.addAttribute("project", project);
         return "sites/project/statistics";
     }
 }

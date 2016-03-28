@@ -16,6 +16,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
@@ -33,14 +35,19 @@ import edu.asu.spring.quadriga.transform.PredicateNode;
 
 /**
  * Class for parsing Appellation/Relation Event networks into S-O-P networks.
+ * 
  * @author jdamerow
  *
  */
 @PropertySource(value = "classpath:/user.properties")
 @Service
 public class EventParser {
-    
-    private static final Logger logger = LoggerFactory.getLogger(EventParser.class);
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(EventParser.class);
+
+    @Autowired
+    private IConceptpowerConnector conceptPowerConnector;
     
     @Autowired
     private IQStoreConnector qstoreConnector;
@@ -58,105 +65,133 @@ public class EventParser {
     @Autowired
     private IMarshallingService marshallingService;
 
-    
-    public void parseStatement(String relationEventId, Map<String, Node> nodes, List<Link> links) throws JAXBException, QStoreStorageException {
+
+    public void parseStatement(String relationEventId, Map<String, Node> nodes,
+            List<Link> links) throws JAXBException, QStoreStorageException {
         ElementEventsType elementEventType = getElementEventTypeFromCreationEventTypeID(relationEventId);
-        List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
-        Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-         
+        List<CreationEvent> creationEventList = elementEventType
+                .getRelationEventOrAppellationEvent();
+        Iterator<CreationEvent> creationEventIterator = creationEventList
+                .iterator();
+
         while (creationEventIterator.hasNext()) {
             CreationEvent event = creationEventIterator.next();
             parseSubjectOrObjectEvent(event, relationEventId, nodes, links);
         }
-        
+
     }
-    
-    private Node parseSubjectOrObjectEvent(CreationEvent event, String statementId, Map<String, Node> leafNodes, List<Link> links) {
+
+    private Node parseSubjectOrObjectEvent(CreationEvent event,
+            String statementId, Map<String, Node> leafNodes, List<Link> links) {
         if (event == null) {
             return null;
         }
-        
+
         if (event instanceof AppellationEventType) {
-           List<TermType> terms = ((AppellationEventType) event).getTerms();
-           if (terms.size() > 0) {
-               String conceptId = terms.get(0).getTermID();
-               if (leafNodes.containsKey(conceptId)) {
-                   leafNodes.get(conceptId).getStatementIds().add(statementId);
-               }
-               else {
-                   Node node = new Node();
-                   parseNode((AppellationEventType) event, node, statementId);
-                   leafNodes.put(conceptId, node);
-               }
-               return leafNodes.get(conceptId);
-           }
-           return null;
-        }
-        else if (event instanceof RelationEventType) {
+            List<TermType> terms = ((AppellationEventType) event).getTerms();
+            if (terms.size() > 0) {
+                String conceptId = terms.get(0).getTermID();
+                if (leafNodes.containsKey(conceptId)) {
+                    leafNodes.get(conceptId).getStatementIds().add(statementId);
+                } else {
+                    Node node = new Node();
+                    parseNode((AppellationEventType) event, node, statementId);
+                    leafNodes.put(conceptId, node);
+                }
+                return leafNodes.get(conceptId);
+            }
+            return null;
+        } else if (event instanceof RelationEventType) {
             RelationType relation = ((RelationEventType) event).getRelation();
-            
+
             // create node for predicate
             PredicateType pred = relation.getPredicateType();
-            PredicateNode predNode = parsePredicateEvent(pred.getAppellationEvent(), statementId);
+            PredicateNode predNode = parsePredicateEvent(
+                    pred.getAppellationEvent(), statementId);
             leafNodes.put(predNode.getId(), predNode);
-            
-            Node subjectNode = parseSubjectOrObjectEvent(relation.getSubjectType().getAppellationEvent(), statementId, leafNodes, links);
+
+            Node subjectNode = parseSubjectOrObjectEvent(relation
+                    .getSubjectType().getAppellationEvent(), statementId,
+                    leafNodes, links);
             if (subjectNode == null) {
-                subjectNode = parseSubjectOrObjectEvent(relation.getSubjectType().getRelationEvent(), statementId, leafNodes, links);
+                subjectNode = parseSubjectOrObjectEvent(relation
+                        .getSubjectType().getRelationEvent(), statementId,
+                        leafNodes, links);
             }
-            
-            Node objectNode = parseSubjectOrObjectEvent(relation.getObjectType(relation).getAppellationEvent(), statementId, leafNodes, links);
+
+            Node objectNode = parseSubjectOrObjectEvent(
+                    relation.getObjectType(relation).getAppellationEvent(),
+                    statementId, leafNodes, links);
             if (objectNode == null) {
-                objectNode = parseSubjectOrObjectEvent(relation.getObjectType(relation).getRelationEvent(), statementId, leafNodes, links);
+                objectNode = parseSubjectOrObjectEvent(
+                        relation.getObjectType(relation).getRelationEvent(),
+                        statementId, leafNodes, links);
             }
-            
+
             if (subjectNode != null) {
                 Link link = new Link();
+                // add the statement id to the link
+                link.setStatementId(statementId);
                 link.setSubject(predNode);
                 link.setObject(subjectNode);
                 link.setLabel("has subject");
                 links.add(link);
             }
-            
+
             if (objectNode != null) {
                 Link link = new Link();
+                // add the statement id to the link
+                link.setStatementId(statementId);
                 link.setSubject(predNode);
                 link.setObject(objectNode);
                 link.setLabel("has object");
                 links.add(link);
             }
-            
+
             return predNode;
         }
-        
+
         return null;
     }
     
-    private PredicateNode parsePredicateEvent(AppellationEventType appellationEvent, String statementId) {
+    private PredicateNode parsePredicateEvent(
+            AppellationEventType appellationEvent, String statementId) {
         PredicateNode predNode = new PredicateNode();
-        
         parseNode(appellationEvent, predNode, statementId);
-        
         predNode.setId(UUID.randomUUID().toString());
-        
         return predNode;
     }
-    
-    private void parseNode(AppellationEventType event, Node node, String statementId) {
+
+    private void parseNode(AppellationEventType event, Node node,
+            String statementId) {
         StringBuffer label = new StringBuffer();
         for (TermType type : event.getTerms()) {
             label.append(type.getTermInterpertation());
             label.append(" ");
         }
         node.setId(event.getAppellationEventID());
-       
         node.setConceptId(label.toString().trim());
-        
         if (node.getConceptId() != null) {
-            node.setLabel(conceptCollectionManager.getConceptLemmaFromConceptId(node.getConceptId()));
+            String id = node.getConceptId();
+            ConceptpowerReply re = conceptPowerConnector.getById(id);
+            if (re.getConceptEntry().size() != 0) {
+                node.setLabel(getLemma(re));
+                node.setDescription(getDescription(re));
+            } else {
+                node.setLabel(id);
+                node.setDescription("");
+            }
+            
         }
-        
         node.getStatementIds().add(statementId);
+    }
+
+    private String getLemma(ConceptpowerReply re) {
+        return re.getConceptEntry().get(0).getLemma();
+    }
+
+    private String getDescription(ConceptpowerReply re) {
+        return re.getConceptEntry().get(0).getDescription();
     }
     
     private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
@@ -172,5 +207,5 @@ public class EventParser {
         }
         return elementEventType;
     }
-    
+
 }
