@@ -15,7 +15,7 @@ public interface IWorkspaceCCDAO {
 	 * @throws			SQLException
 	 * @author          Lohith Dwaraka
 	 */
-	public abstract String addWorkspaceCC(String workspaceId,
+	public abstract void addWorkspaceCC(String workspaceId,
 			String CCId, String userId) throws QuadrigaStorageException;
 
 	/**

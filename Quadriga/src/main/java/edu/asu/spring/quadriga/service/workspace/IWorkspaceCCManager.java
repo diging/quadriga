@@ -17,7 +17,7 @@ public interface IWorkspaceCCManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addWorkspaceCC(String workspaceId, String CCId, String userId)throws QuadrigaStorageException;
+	public abstract void addWorkspaceCC(String workspaceId, String CCId, String userId)throws QuadrigaStorageException;
 	
 	/**
 	 * List the concept collection in a project for a user - userId
