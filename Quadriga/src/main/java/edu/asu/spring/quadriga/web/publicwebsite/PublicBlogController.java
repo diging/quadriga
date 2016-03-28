@@ -60,6 +60,7 @@ public class PublicBlogController {
 
         dummyList.add(map);
 
+        model.addAttribute("project", project);
         model.addAttribute("blockentrylist", dummyList);
 
         return "sites/projectblog";

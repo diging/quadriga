@@ -1,6 +1,6 @@
 <li ${currentPage == "home" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">Home</a></li>
-<li ${currentPage == "networks" ? "class=\"active\"" : ""}><a
+<li ${currentPage == "projectblog" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblog">Project
 		Blog</a></li>
 <li ${currentPage == "networks" ? "class=\"active\"" : ""}><a
