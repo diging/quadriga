@@ -609,6 +609,16 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/showWordSearch.jsp" />
 	</definition>
+	<!-- Adding Public page settings -start -->
+	<definition name="auth/workbench/addpublicpage"
+		extends="base.definition.workbench.nav">
+		<put-attribute name="title" value="Quadriga Workbench - Add Public Page Settings" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-publicpage.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workbench/addpublicpage.jsp" />
+	</definition>		
+	<!-- Adding Public Page settings END -->
 	<!-- 
 	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
 	<put-attribute name="content" 
