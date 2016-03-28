@@ -2,10 +2,11 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!-- Content -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script>
-$(document).ready(function() {
-});
+	$(document).ready(function() {
+	});
 
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
@@ -24,8 +25,8 @@ $(document).ready(function() {
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Title</td>
-				<td style="width: 400px"><form:input path="title"
-						size="60" id="title" /></td>
+				<td style="width: 400px"><form:input path="title" size="60"
+						id="title" /></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
@@ -36,7 +37,8 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference</td>
-				<td style="width: 1px"><input value=" "</td>
+				<td style="width: 1px"><form:input path="order" size="60"
+						id="order" /></td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
@@ -44,8 +46,8 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td style="width: 170px">Title</td>
-				<td style="width: 1px"><form:input path="title"
-						size="60" id="title" /></td>
+				<td style="width: 1px"><form:input path="title" size="60"
+						id="title" /></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
@@ -56,8 +58,7 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference</td>
-				<td style="width: 1px"><input value=" "<form:input path="order"
-						size="2" id="order" /></td>
+				<td style="width: 1px"><form:input path="order" size="60" id="order" /></td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
@@ -65,8 +66,8 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td style="width: 170px">Title</td>
-				<td style="width: 400px"><form:input path="title"
-						size="60" id="title" /></td>
+				<td style="width: 400px"><form:input path="title" size="60"
+						id="title" /></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
@@ -77,8 +78,7 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference</td>
-				<td style="width: 1px"><input value=" "<form:input path="order"
-						size="2" id="order" /></td>
+				<td style="width: 1px"><form:input path="order" size="60" id="order" />
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>

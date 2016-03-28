@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.domain.impl.workbench;
 
-
-
 /**
  * @description : Project class describing the properties of a Public Page object
  * 
@@ -12,18 +10,9 @@ package edu.asu.spring.quadriga.domain.impl.workbench;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 
 public class PublicPage implements IPublicPage {
-	private String title;	
+	private String title;
 	private String description;
 	private int order;
-	
-
-	public int getOrder() {
-		return order;
-	}
-
-	public void setOrder(int order) {
-		this.order = order;
-	}
 
 	/**
 	 * retrieves the Title
@@ -34,7 +23,7 @@ public class PublicPage implements IPublicPage {
 	}
 
 	/**
-	 * assigns the Title 
+	 * assigns the Title
 	 */
 	@Override
 	public void setTitle(String title) {
@@ -42,7 +31,7 @@ public class PublicPage implements IPublicPage {
 	}
 
 	/**
-	 * retrieves the description of the project
+	 * retrieves the description of the Given Title
 	 */
 	@Override
 	public String getDescription() {
@@ -50,13 +39,25 @@ public class PublicPage implements IPublicPage {
 	}
 
 	/**
-	 * assigns the description of the project
+	 * assigns the description of the Given Title
 	 */
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	
+	/**
+	 * retrieves the order of the Given Title
+	 */
+	public int getOrder() {
+		return order;
+	}
+
+	/**
+	 * assigns the order of the Given Title
+	 */
+	public void setOrder(int order) {
+		this.order = order;
+	}
 
 }

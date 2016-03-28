@@ -6,7 +6,6 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
 
-
 @Service
 public class PublicPageValidator implements Validator {
 
@@ -29,7 +28,6 @@ public class PublicPageValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "title", "title.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "description.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "order", "order.required");
-		
-		
+
 	}
 }

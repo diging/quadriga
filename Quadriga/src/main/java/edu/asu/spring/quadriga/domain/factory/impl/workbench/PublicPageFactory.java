@@ -6,9 +6,9 @@ import edu.asu.spring.quadriga.domain.factory.workbench.IPublicPageFactory;
 import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 
-
 /**
  * Factory class to create Public Page object
+ * 
  * @author Prasanth Priya Nesan
  * 
  */
@@ -20,17 +20,15 @@ public class PublicPageFactory implements IPublicPageFactory {
 	 */
 	@Override
 	public IPublicPage createPublicPageObject() {
-		
+
 		return new PublicPage();
 	}
-
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IPublicPage clonePublicPageObject(IPublicPage publicpage) 
-	{
+	public IPublicPage clonePublicPageObject(IPublicPage publicpage) {
 		IPublicPage clone = new PublicPage();
 		clone.setTitle(publicpage.getTitle());
 		clone.setDescription(publicpage.getDescription());

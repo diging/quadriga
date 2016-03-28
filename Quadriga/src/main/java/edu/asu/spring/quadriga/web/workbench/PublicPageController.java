@@ -29,40 +29,33 @@ import edu.asu.spring.quadriga.validator.PublicPageValidator;
 @Controller
 public class PublicPageController {
 
-    @Autowired
-    private IPublicPageFactory publicPageFactory;
+	@Autowired
+	private IPublicPageFactory publicPageFactory;
 
-    @Resource(name = "projectconstants")
-    private Properties messages;
+	@Resource(name = "projectconstants")
+	private Properties messages;
 
-    @Autowired
-    private PublicPageValidator validator;
-    
-   
-    
+	@Autowired
+	private PublicPageValidator validator;
 
-    /**
-     * Attach the custom validator to the Spring context
-     */
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(validator);
-       
-    }
-    
+	/**
+	 * Attach the custom validator to the Spring context
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(validator);
+	}
 
-    /**
-     * This method is called during the load of Public page settings form
-     * 
-     * @return model - model object
-     */
-    @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN')")
-    @RequestMapping(value = "auth/workbench/addpublicpage", method = RequestMethod.GET)
-    public ModelAndView publicPageSettingsForm(){
-        ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
-        model.getModelMap().put("publicpage", publicPageFactory.createPublicPageObject());
-        return model;
-    }
-     
-
+	/**
+	 * This method is called during the load of Public page settings form
+	 * 
+	 * @return model - model object
+	 */
+	@PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN')")
+	@RequestMapping(value = "auth/workbench/addpublicpage", method = RequestMethod.GET)
+	public ModelAndView publicPageSettingsForm() {
+		ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
+		model.getModelMap().put("publicpage", publicPageFactory.createPublicPageObject());
+		return model;
+	}
 }
