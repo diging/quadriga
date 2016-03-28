@@ -54,4 +54,3 @@ $("input[type=button]").button().click(function(event) {
 
 
 <div id="log" class="row"></div>
-

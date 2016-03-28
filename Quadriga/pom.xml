@@ -19,7 +19,7 @@
 		<deploy.path.test>quadriga-test</deploy.path.test>
 		<deploy.path.dev>quadriga</deploy.path.dev>
 		<deploy.path.prod>quadriga</deploy.path.prod>
-		<database.url>jdbc:mysql://localhost:3306/quadriga</database.url>
+		<database.url>jdbc:mysql://localhost:3307/quadriga</database.url>
 		<database.username>dbadmin</database.username>
 		<database.pw>dbadmin</database.pw>
 		<qstore.url>http://localhost:8080/qstore4s</qstore.url>
@@ -477,7 +477,7 @@
 					</webResources>
 				</configuration>
 			</plugin>
-			<plugin>
+<!-- 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
 				<executions>
@@ -492,14 +492,14 @@
 					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
 					<revisionOnScmFailure></revisionOnScmFailure>
-					<!-- <format>#{0} ({1,date})</format> -->
+					<format>#{0} ({1,date})</format>
 					<items>
 						<item>buildNumber\d*</item>
 						<item>timestamp</item>
 					</items>
 					<format>#{0} ({1,date,yyyy-MM-dd HH:mm:ss})</format>
 				</configuration>
-			</plugin>
+			</plugin> -->
 		</plugins>
 
 		<resources>
