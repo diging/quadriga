@@ -20,9 +20,9 @@
 </script>
 
 <!-- Action not defined for the form -->
-<form method="get"
+<form method="POST"
 	action="">
 	<textarea
-		style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center"> [Title] </textarea>
-	<div id="editable"></div>
+		style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center" name="title"> [Title] </textarea>
+	<div id="editable" name="description"></div>
 </form>
