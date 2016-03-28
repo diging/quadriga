@@ -26,4 +26,7 @@ public interface INetworkTransformationManager {
 	 */
 	ITransformedNetwork getTransformedNetworkOfProject(String projectId)
 			throws QuadrigaStorageException;
+
+	ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId)
+			throws QuadrigaStorageException;
 }

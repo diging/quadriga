@@ -6,8 +6,8 @@
 <li ${currentPage == "networks" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/browsenetworks">Networks</a></li>
 <li ${currentPage == "exploregraph" ? "class=\"active\"" : ""}><a
-	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/networks">Explore</a></li>
+        href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/networks">Explore</a></li>
 <li ${currentPage == "networksearch" ? "class=\"active\"" : ""}><a
-	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/search">Search</a></li>
+        href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/search">Search</a></li>
 <li ${currentPage == "getprojectstatistics" ? "class=\"active\"" : ""}><a
-	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/statistics">Statistics</a></li>
+        href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/statistics">Statistics</a></li>

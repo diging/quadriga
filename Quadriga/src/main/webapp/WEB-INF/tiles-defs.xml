@@ -703,16 +703,11 @@
 		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp"/>
 	</definition>
 
-	<!-- Site search -->
-	<definition name="sites/search" extends="base.definition.public">
-		<put-attribute name="currentPage" value="networksearch" />
-		<put-attribute name="content" value="/WEB-INF/views/networksearch.jsp" />
-	</definition>
-
-	<definition name="sites/projectblog" extends="base.definition.public">
-		<put-attribute name="currentPage" value="projectblog" />
-		<put-attribute name="content" value="/WEB-INF/views/projectblog.jsp" />
-	</definition>
+    <!-- Site search -->
+    <definition name="sites/search" extends="base.definition.public">
+        <put-attribute name="currentPage" value="networksearch" />
+        <put-attribute name="content" value="/WEB-INF/views/networksearch.jsp"/>
+    </definition>
 	
 	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks">
 		<put-attribute name="title" value="Quadriga Networks visualize" />
@@ -809,11 +804,21 @@
 	</definition>
 
 	<!-- Explore combined network -->
+
 	<definition name="sites/networks/explore" extends="base.definition.public.network">
 		<put-attribute name="currentPage" value="exploregraph" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
 		<put-attribute name="right-navigation"
 					   value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
+		<put-attribute name="content"
+					   value="/WEB-INF/views/publicnetworkvisual.jsp" />
+	</definition>
+
+	<definition name="sites/networks/searchednetwork" extends="base.definition.public.network">
+		<put-attribute name="currentPage" value="networksearch" />
+		<put-attribute name="title" value="Quadriga Networks Visualize" />
+		<put-attribute name="right-navigation"
+					   value="/WEB-INF/views/navigation/nav-networkrightsearchplane.jsp"/>
 		<put-attribute name="content"
 					   value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
@@ -827,3 +832,5 @@
 	
 	
 </tiles-definitions>
+
+	
