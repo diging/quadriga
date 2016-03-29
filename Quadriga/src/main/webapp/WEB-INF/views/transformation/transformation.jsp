@@ -6,14 +6,11 @@
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
-
-
 <!--  
 	Author Jaydatta Nagarkar, Jaya-Venkata Vutukuri  
 	Used to list the networks
 -->
-
-<script type="text/javascript">
+<script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
 		$("ul.pagination1").quickPagination({
 			pageSize : "10"
@@ -21,33 +18,90 @@
 		$("ul.pagination2").quickPagination({
 			pageSize : "10"
 		});
-
-	});
-</script>
-<script type="text/javascript" charset="utf8">
-	$(document).ready(function() {
+		
 		activeTable = $('.dataTable').dataTable({
 			"bJQueryUI" : true,
 			"sPaginationType" : "full_numbers",
 			"bAutoWidth" : false
 		});
-	});
-	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
 		});
+		
+		$("#selectAllProjects").click(function(){
+			$(".projectList").prop('checked',$(this).prop('checked'));
+		});
+
+		$("#selectAllTransformations").click(function(){
+			$(".transformationList").prop('checked',$(this).prop('checked'));
+		});
+		
 	});
+	
 </script>
 <script type="text/javascript">
-	
-	$(function() {
-		
-		$( ".toggleBtn" ).click(function(event) {
-	        var toggled =  $(this).find( "div" );
-			toggled.toggle();
-		});
-	});
-	
+$(document).ready(function () {
+    $('#confirmationTransformation').click(function () {
+    	if(jQuery('#divProjectList input[type=checkbox]:checked').length && jQuery('#headingTwo input[type=checkbox]:checked').length) {
+
+        	var projects = [];
+            $.each($("input[name='project']:checked"), function(){            
+                projects.push($(this).val());
+            });        
+    		var transformations = [];
+            $.each($("input[name='transformation']:checked"), function(){            
+                transformations.push($(this).val());
+            });
+        	$('#confirm').dialog({ modal : true,
+        						draggable:false,
+        						resizable:false,
+       							position:'center',
+       							width:'auto',
+       							height:'auto',
+       							title:"Confirm Transformation",
+        	   							
+       							open: function (type, data) {
+       						        $(this).parent().appendTo("form");
+       						    },
+       						    
+	       						 buttons: { "Submit": function() { $(this).dialog("close"); },"Cancel": function() { $(this).dialog("close"); } },
+       							
+				        		open: function(){           
+				        			var projects = [];
+				        	        $.each($("input[name='project']:checked"), function(){            
+				        	            projects.push($(this).val());
+				        	        });
+				        			
+				        			var transformations = [];
+				        	        $.each($("input[name='transformation']:checked"), function(){            
+				        	            transformations.push($(this).val());
+				        	        });
+    			
+				        			jQuery("#contentholder").html("<h3>Transformations:</h3> "+transformations.join("<br/>")+""+" <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")+"");	
+				        		}  		
+				        	  }
+        					);   
+    					}
+		    	
+    				else{
+				 		$('#alert').dialog({ modal : true,
+						draggable:false,
+						resizable:false,
+						position:'center',
+						width:'auto',
+						height:'auto',
+						title:"Transformation Cannot be processed",
+									
+						open: function (type, data) {
+						    $(this).parent().appendTo("form");
+						    },
+						    
+						 buttons: { "Okay": function() { $(this).dialog("close"); } },
+		    				});	
+						jQuery("#alertholder").html("Please select atleast one transformation and project");
+		    			}
+    });    
+});
 </script>
 <style>
  #project div {
@@ -57,36 +111,44 @@
 }
 </style>
 
-<header>
-	<h2>Transformations</h2>
 
-</header>
- 
-   <c:choose>
+<div>
+<header>
+	<h2><label><input type="checkbox" id="selectAllProjects"></label> Projects</h2>
+	</header>
+</div>
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<c:choose>
 	<c:when test="${not empty projects}">
 		<ul class="pagination1">
 	<c:forEach var="project" items="${projects}" >
-		
-	<div id="project">	
-	<div class="checkbox">
-    <label>
-      <input type="checkbox">
-    </label>
-	
-	<div class="toggleBtn">
-		
-		<img src="/quadriga/resources/txt-layout/css/images/open.png"></img><a> ${project}</a>
-	
-	
-	<div style="display: none" class="toggled">
-	<ul class="networkToggleList">
-	
-				<li>
-					<details>
-						<ul>
-							<c:if test="${not empty networkMap[project]}">
-								<c:forEach var="network" items="${networkMap[project]}">
-									<summary>
+	<div class="panel panel-default">
+    	<div class="panel-heading" role="tab" id="headingOne">
+      		<h4 class="panel-title">   
+        		<div class="checkbox1" id="divProjectList"> 
+        		<label>
+      				<input type="checkbox" value="${project}"  name="project" class="projectList"> 
+        		</label>
+        		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#${project}" aria-expanded="true" aria-controls="${project}">
+    			${project}
+    			</a> 				
+ 				</div>       		
+      		</h4>
+    	</div>
+		<div id="${project}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      		<div class="panel-body">   				
+   				<ul class="networkToggleList">
+					<li>
+						<details>
+							<ul>							
+								<div class="container-fluid">
+								<div class="row">
+								<c:if test="${not empty networkMap[project]}">
+								<c:forEach var="network" items="${networkMap[project]}">	
+									 <div class="col-md-4">
+									 <summary>
+										<input type="checkbox" >
 										<a href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.networkId}">
 										<c:out value="${network.networkName}"></c:out>
 										</a>
@@ -95,37 +157,62 @@
 									<li>Submitted by : <c:out value="${network.creator.userName}"></c:out>
 									</li>
 									<br>
+									</div>
 								</c:forEach>
-							</c:if>
-						</ul>
-					</details>
-				</li>
-	</ul>
-	
-	</div></div>
-	
-	</div>
-	</div>
-	</c:forEach> 
+								</c:if>
+								</div>
+								</div>			
+							</ul>
+						</details>
+					</li>
+				</ul>
+       		</div>
+    	</div>
+  </div>
 
-
-	</c:when>
-	<c:otherwise>
+</c:forEach>
+</ul>
+</c:when>
+<c:otherwise>
 		<spring:message code="empty.networks" />
 	</c:otherwise>
 </c:choose>
+</div>
 
-<span class="byline">List of available Transformations.</span>
+<div class="row">
+<div class="col-md-8"><span class="byline"><input type="checkbox" id="selectAllTransformations">  List of available Transformations.</span></div>
+</div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <c:choose>
 	<c:when test="${not empty dummyTransformations}">
 		<ul class="pagination1">
 			<c:forEach var="transformations" items="${dummyTransformations}">
-				<li>
-					<c:out value="${transformations}"></c:out>
-				</li>
+				<div class="panel panel-default">
+    				<div class="panel-heading" role="tab" id="headingTwo">
+      				<h4 class="panel-title">   
+						<li>
+							<input type="checkbox" value="${transformations}" name="transformation" class="transformationList">
+							&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${transformations}"></c:out>
+						</li>
+		    		</h4>
+    				</div>
+				</div>				
 			</c:forEach>
 		</ul>
 	</c:when>	
 </c:choose>
-<br />
-<br />
+</div>
+
+<input type="button" value='Submit Project and Transformations' id="confirmationTransformation"/>
+<div id="confirm" style="display:none;">
+	<center><h4>Are you sure you want to transform the following <br>networks with below transformation files?</h4> </center>   
+	<p id="contentholder">
+ 	</p>
+</div>
+
+<div id="alert" style="display:none;">
+	<center><h4>No Transformations or Projects selected</h4> </center>   
+ 	<p id="alertholder">
+ 	</p>
+</div>
+

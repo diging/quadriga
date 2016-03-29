@@ -42,14 +42,11 @@ public class TransformationAssignUserController {
 	@Autowired
 	private IUserManager userManager;
 
-
 	@Autowired
 	private IProject projectManager;
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger(TransformationAssignUserController.class);
-
-
 	/**
 	 * List networks assigned to a User
 	 * @param model
@@ -58,21 +55,15 @@ public class TransformationAssignUserController {
 	 * @throws QuadrigaStorageException
 	 */
 	@RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
-	public String listNetworksAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	private String listNetworksTransformationsAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUser(principal.getName());
-		
-		
 		List<INetwork> approvedNetworkList=null;
-		List<String> dummyTransformations = new ArrayList<String>();
-
-		List<INetwork> userlist =null;
-		
+		List<String> dummyTransformations = new ArrayList<String>();		
 		Set<String> projects = new HashSet<>();
 		Map<String,List<INetwork>> networkMap = new HashMap<>();
 		
 		try{
-			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
-		
+			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);		
 			for(INetwork network : approvedNetworkList)
 			{
 				String projectName = network.getNetworkWorkspace().getWorkspace().getProjectWorkspace().getProject().getProjectName();
@@ -81,31 +72,24 @@ public class TransformationAssignUserController {
 					networkPerProjectList = new ArrayList<INetwork>();
 				else
 					networkPerProjectList = networkMap.get(projectName);
-						
 				networkPerProjectList.add(network);			
 				projects.add(projectName);
 				networkMap.put(projectName, networkPerProjectList);
-			}
-			dummyTransformations.add("dummyData");
-			dummyTransformations.add("dummyData2");
-			dummyTransformations.add("dummyData3");
-			dummyTransformations.add("dummyData4");
-			dummyTransformations.add("dummyData5");
-			dummyTransformations.add("dummyData6");
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
+				}
 	
-		
-		
-		
+				dummyTransformations.add("dummyData");
+				dummyTransformations.add("dummyData2");
+				dummyTransformations.add("dummyData3");
+				dummyTransformations.add("dummyData4");
+				dummyTransformations.add("dummyData5");
+				dummyTransformations.add("dummyData6");
+			}
+			catch(QuadrigaStorageException e){
+				logger.error("Some issue in the DB",e);
+			}
 		model.addAttribute("projects", projects);
 		model.addAttribute("networkMap", networkMap);		
-		model.addAttribute("userId", user.getUserName());
-		model.addAttribute("dummyTransformations", dummyTransformations);
-		
+		model.addAttribute("dummyTransformations", dummyTransformations);	
 		return "auth/transformation";
 	}
-
-	
 }
