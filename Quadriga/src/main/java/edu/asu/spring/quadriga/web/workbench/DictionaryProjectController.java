@@ -68,7 +68,7 @@ public class DictionaryProjectController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Dictionaries added to workspace successfully.");
-        return "redirect:/auth/workbench/" + projectid + "/adddictionary";
+        return "redirect:/auth/workbench/projects/" + projectid;
     }
 
     @RequestMapping(value = "auth/workbench/{projectid}/dictionaries", method = RequestMethod.GET)
@@ -115,6 +115,6 @@ public class DictionaryProjectController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Dictionaries deleted from workspace successfully.");
-        return "redirect:/auth/workbench/" + projectid + "/deletedictionary";
+        return "redirect:/auth/workbench/projects/" + projectid;
     }
 }

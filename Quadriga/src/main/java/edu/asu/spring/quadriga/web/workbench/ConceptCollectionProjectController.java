@@ -51,58 +51,13 @@ public class ConceptCollectionProjectController {
         return "auth/workbench/project/conceptcollections";
     }
 
-    // @AccessPolicies({ @ElementAccessPolicy(type =
-    // CheckedElementType.PROJECT,paramIndex = 1, userRole =
-    // {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN}
-    // )})
-    // @RequestMapping(value =
-    // "auth/workbench/{projectid}/addconceptcollection", method =
-    // RequestMethod.GET)
-    // public String addProjectConceptCollection(
-    // @PathVariable("projectid") String projectid, Model model)
-    // throws QuadrigaAccessException
-    //
-    // {
-    // try {
-    // UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-    // .getAuthentication().getPrincipal();
-    // String userId = user.getUsername();
-    //
-    // List<IProjectConceptCollection> conceptCollectionList = null;
-    // //TODO: getCollectionsOwnedbyUser() needs to be changed according to
-    // mapper
-    // try {
-    // conceptCollectionList =
-    // conceptCollectionManager.getCollectionsOwnedbyUser(userId);
-    // } catch (QuadrigaStorageException e) {
-    // throw new QuadrigaStorageException();
-    // }
-    // if (conceptCollectionList == null) {
-    // logger.info("conceptCollectionList list is empty");
-    // }
-    // //TODO: iterator needs to be changed
-    // Iterator<IProjectConceptCollection> I = conceptCollectionList.iterator();
-    // while(I.hasNext()){
-    // IConceptCollection con = I.next();
-    // logger.info(" "+con.getConceptCollectionName());
-    // }
-    // model.addAttribute("conceptCollectionList", conceptCollectionList);
-    // IProject project = projectManager.getProjectDetails(projectid);
-    // model.addAttribute("project", project);
-    // model.addAttribute("projectid", projectid);
-    // model.addAttribute("userId", userId);
-    // } catch (Exception e) {
-    // logger.error(" ----",e);
-    // }
-    // return "auth/workbench/project/addconceptcollections";
-    // }
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
     public String addProjectConceptCollection(@PathVariable("projectid") String projectid, Model model,
             Principal principal) throws QuadrigaAccessException, QuadrigaStorageException {
-        String userId = principal.getName();
-        List<IConceptCollection> conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
+        List<IConceptCollection> conceptCollectionList = conceptCollectionManager
+                .getNonAssociatedProjectConcepts(projectid);
         model.addAttribute("conceptCollectionList", conceptCollectionList);
         IProject project = projectManager.getProjectDetails(projectid);
         model.addAttribute("project", project);
@@ -128,7 +83,7 @@ public class ConceptCollectionProjectController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Concept Collection added to workspace successfully.");
-        return "redirect:/auth/workbench/" + projectid + "/addconceptcollection";
+        return "redirect:/auth/workbench/projects/" + projectid;
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
@@ -166,6 +121,6 @@ public class ConceptCollectionProjectController {
 
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Concept Collection deleted from workspace successfully.");
-        return "redirect:/auth/workbench/" + projectid + "/deleteconceptcollections";
+        return "redirect:/auth/workbench/projects/" + projectid;
     }
 }
