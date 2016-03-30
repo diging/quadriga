@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.impl.workspace.WorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCCDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -28,27 +29,20 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	@Autowired
 	private IWorkspaceDeepMapper wsDeepMapper;
 	
+	@Autowired
+	private WorkspaceDAO wsDAO;
+	
 	@Override
 	@Transactional
 	public void addWorkspaceCC(String workspaceId, String CCId, String userId)
 			throws QuadrigaStorageException {
 		dbConnect.addWorkspaceCC(workspaceId, CCId, userId);
 	}
-
-	@Override
-	@Transactional
-	public List<IWorkspaceConceptCollection> listWorkspaceCC(IWorkSpace workspace,
-			String userId) throws QuadrigaStorageException {
-		WorkspaceDTO workspaceDTO  = dbConnect.listWorkspaceCC(workspace.getWorkspaceId(), userId);
-		List<IWorkspaceConceptCollection> wsCCList = wsCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO);
-		return wsCCList;
-	}
 	
 	@Override
 	@Transactional
-	public List<IWorkspaceConceptCollection> listWorkspaceCC(String workspaceId,
-			String userId) throws QuadrigaStorageException {
-		WorkspaceDTO workspaceDTO  = dbConnect.listWorkspaceCC(workspaceId, userId);
+	public List<IWorkspaceConceptCollection> listWorkspaceCC(String workspaceId) throws QuadrigaStorageException {
+		WorkspaceDTO workspaceDTO  = wsDAO.getWorkspaceDTO(workspaceId);
 		IWorkSpace workspace = wsDeepMapper.getWorkSpaceDetails(workspaceId);
 		List<IWorkspaceConceptCollection> wsCCList = wsCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO);
 		return wsCCList;

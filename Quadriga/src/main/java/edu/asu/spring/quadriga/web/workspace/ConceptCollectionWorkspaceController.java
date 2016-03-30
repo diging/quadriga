@@ -49,8 +49,7 @@ public class ConceptCollectionWorkspaceController {
     public String listProjectConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
-        List<IWorkspaceConceptCollection> conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId,
-                userId);
+        List<IWorkspaceConceptCollection> conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId);
         model.addAttribute("conceptCollectionList", conceptCollectionList);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
@@ -113,7 +112,7 @@ public class ConceptCollectionWorkspaceController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Concept Collection added to workspace successfully.");
-        return "redirect:/auth/workbench/workspace/" + workspaceId + "/addconceptcollection";
+        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
     }
 
     /**
@@ -133,8 +132,7 @@ public class ConceptCollectionWorkspaceController {
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
-        List<IWorkspaceConceptCollection> conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId,
-                userId);
+        List<IWorkspaceConceptCollection> conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId);
         model.addAttribute("conceptCollectionList", conceptCollectionList);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
@@ -172,6 +170,6 @@ public class ConceptCollectionWorkspaceController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Concept Collection deleted from workspace successfully.");
-        return "redirect:/auth/workbench/workspace/" + workspaceId + "/deleteconceptcollections";
+        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
     }
 }

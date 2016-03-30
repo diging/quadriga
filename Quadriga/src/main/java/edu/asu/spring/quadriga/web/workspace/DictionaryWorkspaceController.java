@@ -88,7 +88,7 @@ public class DictionaryWorkspaceController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Dictionaries added to workspace successfully.");
-        return "redirect:/auth/workbench/workspace/" + workspaceId + "/adddictionary";
+        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
     }
 
     /**
@@ -171,6 +171,6 @@ public class DictionaryWorkspaceController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Dictionaries deleted from workspace successfully.");
-        return "redirect:/auth/workbench/workspace/" + workspaceId + "/deletedictionary";
+        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
     }
 }
