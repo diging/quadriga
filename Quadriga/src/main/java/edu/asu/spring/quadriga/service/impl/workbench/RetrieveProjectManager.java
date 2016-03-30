@@ -42,7 +42,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	private IProjectCollaboratorManager projectManager;
 	
 	@Autowired
-    private Environment env;
+	private Environment env;
 
 	/**
 	 * This method returns the list of projects associated with
@@ -215,15 +215,13 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	 */
 	@Override
 	@Transactional
-	public List<IProject> getRecentProjectList(String sUserName) throws QuadrigaStorageException
-	{
+	public List<IProject> getRecentProjectList(String sUserName) throws QuadrigaStorageException{
 		List<IProject> projectsList = new ArrayList<IProject>();
 		List<String> projectIds = new ArrayList<String>();
 		
 		List<IProject> projectListAsOwner;
 		projectListAsOwner =  projectShallowMapper.getProjectList(sUserName);
-		if(projectListAsOwner != null)
-		{
+		if(projectListAsOwner != null){
 			for (IProject p : projectListAsOwner) {
 				projectsList.add(getProjectDetails(p.getProjectId()));
 				projectIds.add(p.getProjectId());
@@ -231,11 +229,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		}
 		List<IProject> projectListAsCollaborator; 
 		projectListAsCollaborator = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);;
-		if(projectListAsCollaborator != null)
-		{
+		if(projectListAsCollaborator != null){
 			for (IProject p : projectListAsCollaborator) {
-				if (!projectIds.contains(p.getProjectId()))
-				{
+				if (!projectIds.contains(p.getProjectId())){
 					projectsList.add(getProjectDetails(p.getProjectId()));		
 					projectIds.add(p.getProjectId());
 				}
@@ -250,22 +246,18 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		
 		int count;
 		String recentProjectCount = env.getProperty("project.recent.list.count");
-		if(recentProjectCount!=null)
-		{
+		if(recentProjectCount!=null){
 			count = Integer.parseInt(recentProjectCount);
 		}
-		else
-		{
+		else{
 			count = projectsList.size();
 		}
 		
 		List<IProject> recentProjectsList;
-		if(projectsList!=null && recentProjectCount!=null && projectsList.size()>count)
-		{
+		if(projectsList!=null && recentProjectCount!=null && projectsList.size()>count){
 			recentProjectsList = new ArrayList<IProject>(projectsList.subList(0, count));
 		}
-		else
-		{
+		else{
 			recentProjectsList = new ArrayList<IProject>(projectsList);
 		}
 		

@@ -2,6 +2,6 @@
 /buildNumber.properties
 /.idea/
 *.iml
-.settings/
+/.settings/
 *.project
 /bin/
