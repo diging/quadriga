@@ -805,6 +805,7 @@
  
 	<definition name="sites/project/statistics" extends="base.definition">
 		<put-attribute name="title" value="Project statistics" />
+		<put-attribute name="currentPage" value="statistics" />
 		<put-attribute name="content" value="/WEB-INF/views/projectstatistics.jsp" />
 	</definition>
 
