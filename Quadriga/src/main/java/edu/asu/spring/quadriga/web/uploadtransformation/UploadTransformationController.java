@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 
 /**
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UploadTransformationController {
 
 	@RequestMapping(value="auth/uploadTransformation",method=RequestMethod.POST)
-	public String uploadTransformationFiles(ModelMap model, Principal principal, HttpServletRequest request){
+	public String uploadTransformationFiles(ModelMap model,Principal principal, HttpServletRequest request){
 		
+		/*ModelAndView model;
+		model = new ModelAndView("auth/uploadTransformation");*/
 		String mappingTitle = request.getParameter("mappingTitle");
 		String mappingDescription=""+request.getParameter("mappingDescription");				
 		String mappingFilePath=request.getParameter("mappingFilePath");
@@ -38,7 +41,8 @@ public class UploadTransformationController {
 		System.out.println("Transfomation File Description is: "+transfomrDescription);
 		System.out.println("Tranformation File Name is: "+transformFilePath);
 		
-		model.addAttribute("success",1);
+		//model.addAttribute("success",1);
+		request.setAttribute("success", 1);
 		return "auth/uploadTransformation";
 	}
 }
