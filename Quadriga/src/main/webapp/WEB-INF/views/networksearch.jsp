@@ -9,15 +9,14 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-6 search-wrapper" style="position: relative">
-			<form action="<c:url value="/sites/${project.unixName}/search" />" id="search-form"
-				method="post">
+			<div id="search-form">
 				<div class="form-group search-input">
 					<label for="search-term">Enter the search term</label>
 					<input type="text" class="form-control" id="search-term" autocomplete="off">
-					<span style="background: url('<c:url value="/resources/txt-layout/images/throbber.gif" />');"
+                    <span style="background: url('<c:url value="/resources/txt-layout/images/throbber.gif" />');"
 						  id="ajax-loader" class="search-loader"></span>
 				</div>
-			</form>
+			</div>
 			<div class="row" id="search-results-wrapper" style="display: none;">
 				<div class="col-sm-12 search-results">
 					<div class="list-group" id="search-results-items">
@@ -36,13 +35,13 @@
 <script>
 	function init() {
 		// ajax loader
+		var networkURL = '<c:url value="/sites/${project.unixName}/networks/search?conceptId=" />';
 		var $loader = $('#ajax-loader');
 		var $searchInput = $('#search-term');
 		var $resWrapper = $('#search-results-wrapper');
 		var $items = $('#search-results-items');
 		var $list = $resWrapper.find('.list-group-item:first');
-		var url = $('#search-form').attr('action'); // action URL
-
+		var url = '<c:url value="/sites/${project.unixName}/search" />';
 		var loader = (function() {
 			// var isVisible = false;
 			var timeout;
@@ -63,13 +62,11 @@
 				}
 			};
 		})();
-
 		// ajax loader
 		$(document).on({
 			ajaxStart: loader.show,
 			ajaxStop: loader.hide
 		});
-
 		var triggerChange = (function() {
 			var timeout;
 			var timeoutInt = 400;
@@ -84,39 +81,32 @@
 					return;
 				}
 				prevVal = val;
-
 				// clear this interval
 				clearTimeout(timeout);
 				timeout = setTimeout(change, timeoutInt);
 			}
 		})();
-
 		var reqSuccess = function(data) {
 			var terms = data.terms || [];
 			addTerms(terms);
 		};
-
 		var reqFail = function(err) {
 			// triggered even when abort is called
 			// console.log(err);
 		};
-
 		var reqAlways = function(obj) {
 			// this triggered always
 		};
-
 		var addTerms = (function() {
 			// clear all the terms
 			var $a = $('#search-item-template');
 			var maxResults = 5;
-
 			return function(terms) {
 				// if terms are empty hide the search wrapper
 				if (terms && terms.length === 0) {
 					$resWrapper.hide();
 					return;
 				}
-
 				var $link;
 				var maxNum = Math.min(terms.length, maxResults);
 				$items.html('');
@@ -124,14 +114,13 @@
 					$link = $a.clone();
 					$link.attr('id', '');
 					$link.find('.search-name strong').text(terms[i].name);
-					$link.attr('href', terms[i].id);
+					$link.attr('href', networkURL + terms[i].id);
 					$link.find('.search-desc').text(terms[i].description);
 					$items.append($link);
 				}
 				$resWrapper.show();
 			};
 		})();
-
 		var onChange = (function(ev) {
 			// cancel the original request
 			// and make a new request
@@ -151,7 +140,6 @@
 				if ($xhr) {
 					$xhr.abort();
 				}
-
 				var searchVal = $searchInput.val();
 				if (searchVal.trim().length === 0) {
 					// do not make request
@@ -170,7 +158,6 @@
 				}).done(done).fail(fail).always(always);
 			};
 		})();
-
 		// custom event for value change
 		// check if change works for input
 		$searchInput.on('keyup', triggerChange)
