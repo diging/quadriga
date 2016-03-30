@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.impl.workspace.WorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCCDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
@@ -30,7 +30,7 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	private IWorkspaceDeepMapper wsDeepMapper;
 	
 	@Autowired
-	private WorkspaceDAO wsDAO;
+	private IWorkspaceDAO wsDAO;
 	
 	@Override
 	@Transactional
