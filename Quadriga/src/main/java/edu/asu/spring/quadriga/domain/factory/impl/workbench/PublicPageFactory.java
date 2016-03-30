@@ -20,7 +20,6 @@ public class PublicPageFactory implements IPublicPageFactory {
 	 */
 	@Override
 	public IPublicPage createPublicPageObject() {
-
 		return new PublicPage();
 	}
 
