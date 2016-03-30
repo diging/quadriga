@@ -22,13 +22,12 @@ public class PublicPageValidator implements Validator {
 	 * @param obj
 	 * @param err
 	 */
-	
+
 	@Override
 	public void validate(Object obj, Errors err) {
 		// validate all the input parameters
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "title", "title.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "description.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "order", "order.required");
-
 	}
 }
