@@ -15,10 +15,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.impl.UserDAO;
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**

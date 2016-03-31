@@ -1,7 +1,8 @@
 package edu.asu.spring.quadriga.utilities.impl;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
@@ -25,21 +26,20 @@ public class FileManagerService implements IFileManager {
     }
 
     @Override
-    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws FileStorageException {
+    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws IOException, FileStorageException, FileNotFoundException {
         
         
-        File f = new File(dirName+fileName);
-        try {
-            FileWriter fw  = new FileWriter(f);
-            
-        } catch (IOException fse) {
-            // TODO Auto-generated catch block
-            fse.printStackTrace();
+        FileOutputStream fos = new FileOutputStream(dirName+fileName);
+        try{
+        fos.write(fileContent);
+        fos.close();
+        return true;
+        }
+        catch(Exception e){
+            return false;
         }
         
-        
-        return false;
-    }
+       }
 
     
 

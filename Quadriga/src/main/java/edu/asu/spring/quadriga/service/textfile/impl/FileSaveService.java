@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,15 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
+import edu.asu.spring.quadriga.utilities.IFileManager;
 
 @Service
-@PropertySource(value = "classpath:/user.properties")
+
 public class FileSaveService implements IFileSaveService {
 
+    @Qualifier("txtfileSaveUtil")
     @Autowired
-    private Environment env;
+    private IFileManager fileManager ;
 
     private String filePath;
     private ITextFile txtFile;
@@ -53,9 +56,8 @@ public class FileSaveService implements IFileSaveService {
         } else {
             saveTxtFile = new File(filePath + "/" + fileName + ".txt");
         }
-        FileWriter fw = new FileWriter(saveTxtFile);
-        fw.write(txtFile.getFileContent());
-        fw.close();
+        byte[] fileContentBytes = txtFile.getFileContent().getBytes("UTF-8");
+        fileManager.saveFiletoDir("dirName", fileName, fileContentBytes);
         return true;
     }
 
