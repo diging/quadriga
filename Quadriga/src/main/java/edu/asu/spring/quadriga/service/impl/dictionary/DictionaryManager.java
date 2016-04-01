@@ -134,6 +134,13 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryList;
 	}
+	
+	@Override
+    @Transactional
+    public List<IDictionary> getNonAssociatedProjectDictionaries(String projectId) throws QuadrigaStorageException
+    {
+        return dictShallowMapper.getNonAssociatedProjectDictionaries(projectId);
+    }
 
 	//	/**
 	//	 * @throws QuadrigaStorageException 

@@ -100,5 +100,7 @@ public interface IConceptCollectionDAO extends IBaseDAO<ConceptCollectionDTO> {
 		public abstract  String getConceptCollectionId(String ccName)
 				throws QuadrigaStorageException;
 		
+        public abstract List<IConceptCollection> getNonAssociatedProjectConcepts(String projectId) throws QuadrigaStorageException;
+		
 		
 	}

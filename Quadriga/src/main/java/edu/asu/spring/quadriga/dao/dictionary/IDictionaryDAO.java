@@ -107,4 +107,6 @@ public interface IDictionaryDAO extends IBaseDAO<DictionaryDTO> {
 
 	public void updateDictionary(IDictionary dictionary, String userName)
             throws QuadrigaStorageException;
+
+	public abstract List<DictionaryDTO> getNonAssociatedProjectDictionaries(String projectId) throws QuadrigaStorageException;
 }

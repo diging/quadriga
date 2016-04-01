@@ -16,5 +16,7 @@ public interface IDictionaryShallowMapper {
 			throws QuadrigaStorageException;
 	public abstract List<IDictionary> getDictionaryListOfCollaborator(String userName)
 			throws QuadrigaStorageException;
+	public abstract List<IDictionary> getNonAssociatedProjectDictionaries(String projectId)
+            throws QuadrigaStorageException;
 
 }

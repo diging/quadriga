@@ -7,19 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
@@ -96,6 +91,13 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId)
             throws QuadrigaStorageException {
         return ccShallowMapper.getConceptCollectionList(sUserId);
+    }
+    
+    @Override
+    @Transactional
+    public List<IConceptCollection> getNonAssociatedProjectConcepts(String projectId) throws QuadrigaStorageException
+    {
+        return ccDao.getNonAssociatedProjectConcepts(projectId);
     }
 
     /**
@@ -266,8 +268,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     @Transactional
     public List<IConceptCollectionCollaborator> showCollaboratingUsers(
             String collectionid) throws QuadrigaStorageException {
-        // List<ICollaborator> collaboratorList =
-        // dbConnect.showCollaboratorRequest(collectionid);
         List<IConceptCollectionCollaborator> ccCollaboratorList = null;
         IConceptCollection conceptCollection = conceptCollectionDeepMapper
                 .getConceptCollectionDetails(collectionid);
@@ -393,13 +393,10 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
             dataList.put("data", dataArray);
 
             core.put("core", dataList);
-            // logger.info(core.toString(1));
-
         } catch (QuadrigaStorageException e) {
             logger.error("DB Error while fetching project, Workspace  details",
                     e);
         }
-        // return core.toString(SUCCESS);
         return core.toString(1);
     }
 }

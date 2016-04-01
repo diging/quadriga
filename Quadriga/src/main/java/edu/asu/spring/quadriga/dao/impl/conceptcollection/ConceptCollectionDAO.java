@@ -19,8 +19,6 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionConcepts;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
@@ -30,9 +28,8 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
-import edu.asu.spring.quadriga.mapper.UserDTOMapper;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
 
 /**
  * @author karthik
@@ -48,19 +45,10 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
 	protected ConceptCollectionDTOMapper conceptCollectionDTOMapper;
 	
 	@Autowired
-	private UserDTOMapper userDTOMapper;
-	
-	@Autowired
-	private ICollaboratorFactory collaboratorFactory;
-	
-	@Autowired
     private IUserManager userManager;
 	
 	@Autowired
-	private IUserFactory userFactory;
-	
-	@Autowired
-	private IQuadrigaRoleManager roleManager;
+    private IConceptCollectionShallowMapper ccShallowMapper;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ConceptCollectionDAO.class);
 	
@@ -419,6 +407,34 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
     @Override
     public String getIdPrefix() {
         return messages.getProperty("concept_collection_id.prefix");
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @Override
+    public List<IConceptCollection> getNonAssociatedProjectConcepts(String projectId) throws QuadrigaStorageException {
+        IConceptCollection conceptCollection = null;
+        List<IConceptCollection> conceptCollectionList = new ArrayList<IConceptCollection>();
+        List<ConceptCollectionDTO> conceptCollectionDTOList = new ArrayList<ConceptCollectionDTO>();
+        try
+        {
+            
+            Query query = sessionFactory.getCurrentSession().createQuery("FROM ConceptCollectionDTO cc WHERE cc.conceptCollectionid NOT IN(" +
+                    "SELECT p.projectConceptcollectionDTOPK.conceptcollectionid FROM ProjectConceptCollectionDTO p WHERE p.projectConceptcollectionDTOPK.projectid = :projectid)");
+            query.setParameter("projectid", projectId);
+            conceptCollectionDTOList = query.list();
+            
+            for(ConceptCollectionDTO conceptCollectionDTO : conceptCollectionDTOList)
+            {
+                conceptCollection = ccShallowMapper.getConceptCollectionDetails(conceptCollectionDTO);
+                conceptCollectionList.add(conceptCollection);
+            }
+            
+        }
+        catch(Exception ex)
+        {
+            throw new QuadrigaStorageException(ex);
+        }
+        return conceptCollectionList;
     }
 
 }
