@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<link type="text/css"
-	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/base.css"
-	rel="stylesheet" />
+
 <link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ForceDirected.css"
 	rel="stylesheet" />
@@ -19,8 +17,7 @@ document.body.onload = function()
 {
 	d3ProjectStatistics(data);
 }
-</script>
-
-<h2 style = "text-align: right;">Project Statistics</h2>
+</script> 
+<h1>Project Statistics</h1>
 <div id='stats'></div>
 
