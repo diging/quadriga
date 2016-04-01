@@ -83,6 +83,7 @@ public class PublicBlogController {
         dummyList.add(map);
 
         model.addAttribute("blockentrylist", dummyList);
+        model.addAttribute("project", project);
         model.addAttribute("project_id", project.getProjectId());
 
         return "sites/projectblog";
@@ -117,6 +118,7 @@ public class PublicBlogController {
         }
 
         model.addAttribute("projectBlog", new ProjectBlog());
+        model.addAttribute("project", project);
         model.addAttribute("project_id", projectId);
         model.addAttribute("success", 0);
 
