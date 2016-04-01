@@ -62,8 +62,10 @@ public class ProjectStatsController {
         for (int i = 0; i < length; i++) {
             JSONObject jsonObject = new JSONObject();
             IConceptStats conceptStats = conceptsList.get(i);
-            jsonObject.put("conceptId", conceptStats.getConceptId().replace("\"", ""));
-            jsonObject.put("description", conceptStats.getDescription().replace("\"", ""));
+            jsonObject.put("conceptId",
+                    conceptStats.getConceptId().replace("\"", ""));
+            jsonObject.put("description", conceptStats.getDescription()
+                    .replace("\"", ""));
             jsonObject.put("label", conceptStats.getLemma().replace("\"", ""));
             jsonObject.put("count", conceptStats.getCount());
             jsonArray.put(jsonObject);
@@ -99,10 +101,10 @@ public class ProjectStatsController {
         List<INetwork> networks = networkmanager
                 .getNetworksInProject(projectId);
         List<IConceptStats> conceptsWithCount = null;
-        List<IUserStats> userStats; 
+        List<IUserStats> userStats;
         if (!networks.isEmpty()) {
             conceptsWithCount = projectStats.getConceptCount(networks);
-            userStats = new ArrayList<IUserStats>(projectStats.getCountofNetwork(projectId, projectStats.getCountofWorkspace(projectId)).values());
+            userStats = projectStats.getUserStats(projectId);
             try {
                 JSONArray jArray = null;
                 int cnt = getCount(conceptsWithCount);

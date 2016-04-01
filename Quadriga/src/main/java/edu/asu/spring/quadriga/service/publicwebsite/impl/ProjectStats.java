@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.workbench.IProjectAccessDAO;
+import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.IConceptStats;
 import edu.asu.spring.quadriga.domain.IUserStats;
@@ -25,6 +28,7 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.publicwebsite.IProjectStats;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 import edu.asu.spring.quadriga.transform.Node;
 
 /**
@@ -48,7 +52,10 @@ public class ProjectStats implements IProjectStats {
     private INetworkManager networkManager;
 
     @Autowired
-    private IProjectCollaboratorManager projectManager;
+    private IProjectCollaboratorManager projectCollaboratorManager;
+
+    @Autowired
+    private IProjectDeepMapper projectDeepMapper;
 
     @Override
     public List<IConceptStats> getConceptCount(List<INetwork> networks)
@@ -95,7 +102,7 @@ public class ProjectStats implements IProjectStats {
     public Map<String, IUserStats> getCountofWorkspace(String projectId)
             throws QuadrigaStorageException {
 
-        List<IProjectCollaborator> projectCollaboratorList = projectManager
+        List<IProjectCollaborator> projectCollaboratorList = projectCollaboratorManager
                 .getProjectCollaborators(projectId);
 
         if (projectCollaboratorList == null)
@@ -103,42 +110,89 @@ public class ProjectStats implements IProjectStats {
 
         Map<String, IUserStats> mapUserWorkspace = new HashMap<String, IUserStats>();
         // loop through each collaborator
+
         for (IProjectCollaborator projectCollaborator : projectCollaboratorList) {
             if (projectCollaborator.getCollaborator() != null) {
                 String username = projectCollaborator.getCollaborator()
                         .getUserObj().getUserName();
-                List<IWorkSpace> workspaceList = listWSDAO.listWorkspace(
+                UserStats userStats = (UserStats) setUserWorkspaceStats(
                         projectId, username);
-                UserStats userStats;
-                if (workspaceList == null) {
-                    userStats = new UserStats(username, 0, 0);
-                } else {
-                    userStats = new UserStats(username, workspaceList.size(), 0);
-                }
                 mapUserWorkspace.put(username, userStats);
             }
         }
 
+        String username = projectDeepMapper.getProjectDetails(projectId)
+                .getOwner().getUserName();
+        if (username == null)
+            return mapUserWorkspace;
+
+        UserStats userStats = (UserStats) setUserWorkspaceStats(projectId,
+                username);
+        mapUserWorkspace.put(username, userStats);
+
         return mapUserWorkspace;
     }
 
+    public IUserStats setUserWorkspaceStats(String projectId, String username)
+            throws QuadrigaStorageException {
+        List<IWorkSpace> workspaceList = listWSDAO.listWorkspace(projectId,
+                username);
+        UserStats userStats;
+        if (workspaceList == null) {
+            userStats = new UserStats(username, 0, 0);
+        } else {
+            userStats = new UserStats(username, workspaceList.size(), 0);
+        }
+        return userStats;
+
+    }
+
     @Override
-    public Map<String, IUserStats> getCountofNetwork(String projectid,
-            Map<String, IUserStats> mapUserNetworks)
+    public Map<String, IUserStats> getCountofNetwork(String projectid)
             throws QuadrigaStorageException {
         List<INetwork> networksList = networkManager
                 .getNetworksInProject(projectid);
+
+        if (networksList == null)
+            return null;
+
+        Map<String, IUserStats> mapUserNetworks = new HashMap<String, IUserStats>();
+
         for (INetwork network : networksList) {
             if (network.getCreator() != null) {
                 String username = network.getCreator().getUserName();
                 IUserStats userStats = mapUserNetworks.get(username);
                 if (userStats == null) {
-                    new UserStats(username, 0, 1);
+                    userStats = new UserStats(username, 0, 1);
                 } else {
                     userStats.incrementNetworkCount();
                 }
+                mapUserNetworks.put(username, userStats);
             }
         }
         return mapUserNetworks;
+    }
+
+    @Override
+    public List<IUserStats> getUserStats(String projectId)
+            throws QuadrigaStorageException {
+
+        Map<String, IUserStats> mapWorkspaceStats = getCountofWorkspace(projectId);
+        Map<String, IUserStats> mapNetworkStats = getCountofNetwork(projectId);
+        List<IUserStats> userStatsList = new ArrayList<IUserStats>();
+
+        for (Map.Entry<String, IUserStats> workspaceEntry : mapWorkspaceStats
+                .entrySet()) {
+            String username = workspaceEntry.getKey();
+            IUserStats userStats = mapWorkspaceStats.get(username);
+            if (mapNetworkStats.get(username) != null) {
+                Integer networkCount = mapNetworkStats.get(username)
+                        .getNetworkCount();
+                userStats.setNetworkCount(networkCount);
+            }
+            userStatsList.add(userStats);
+        }
+
+        return userStatsList;
     }
 }
