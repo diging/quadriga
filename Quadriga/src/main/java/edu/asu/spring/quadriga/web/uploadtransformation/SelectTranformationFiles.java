@@ -10,10 +10,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * @Controller
+ * @author Jaya Venkat
+ *
+ */
 @Controller
 public class SelectTranformationFiles {
 	
 	@RequestMapping( value="auth/selectTransformationFiles",method=RequestMethod.GET)
+	/**
+	 * 
+	 * @param model
+	 * @param principal
+	 * @param request
+	 * This method redirect to uploadTranformation.jsp and sets an attrubte  named success to value 0. 
+	 * Success attribute is used to display only part of the jsp page
+	 * @return
+	 */
 	public String selectTransformationFiles(ModelMap model, Principal principal,HttpServletRequest request){
 		
 		request.setAttribute("success", 0);

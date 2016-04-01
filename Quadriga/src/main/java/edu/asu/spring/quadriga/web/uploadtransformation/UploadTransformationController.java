@@ -14,18 +14,23 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 
- * @author Jaya Vutukuri
- * controller for upload transformation button
- *
+ * @author Jaya Venkat
+ * This is a controller which takes request from uploadTransfomation.jsp to upload tranformation files
  */
 @Controller
 public class UploadTransformationController {
 
 	@RequestMapping(value="auth/uploadTransformation",method=RequestMethod.POST)
+	/**
+	 * 
+	 * @param model
+	 * @param principal
+	 * @param request
+	 * takes the mandatory tile and file name of both mappingFile and Transformation File and saves them using rest service
+	 * @return
+	 */
 	public String uploadTransformationFiles(ModelMap model,Principal principal, HttpServletRequest request){
-		
-		/*ModelAndView model;
-		model = new ModelAndView("auth/uploadTransformation");*/
+				
 		String mappingTitle = request.getParameter("mappingTitle");
 		String mappingDescription=""+request.getParameter("mappingDescription");				
 		String mappingFilePath=request.getParameter("mappingFilePath");
@@ -41,7 +46,7 @@ public class UploadTransformationController {
 		System.out.println("Transfomation File Description is: "+transfomrDescription);
 		System.out.println("Tranformation File Name is: "+transformFilePath);
 		
-		//model.addAttribute("success",1);
+		
 		request.setAttribute("success", 1);
 		return "auth/uploadTransformation";
 	}
