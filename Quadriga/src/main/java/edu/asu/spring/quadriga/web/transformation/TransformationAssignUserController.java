@@ -67,15 +67,13 @@ public class TransformationAssignUserController {
 			for(INetwork network : approvedNetworkList)
 			{
 				String projectName = network.getNetworkWorkspace().getWorkspace().getProjectWorkspace().getProject().getProjectName();
-				List<INetwork> networkPerProjectList; 
 				if(networkMap.get(projectName)==null)
-					networkPerProjectList = new ArrayList<INetwork>();
-				else
-					networkPerProjectList = networkMap.get(projectName);
-				networkPerProjectList.add(network);			
+					{
+					networkMap.put(projectName, new ArrayList<INetwork>());
+					}
 				projects.add(projectName);
-				networkMap.put(projectName, networkPerProjectList);
-				}
+				networkMap.get(projectName).add(network);			
+			}
 	
 				dummyTransformations.add("dummyData");
 				dummyTransformations.add("dummyData2");

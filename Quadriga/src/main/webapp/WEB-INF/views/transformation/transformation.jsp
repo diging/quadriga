@@ -13,16 +13,16 @@
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
 		$("ul.pagination1").quickPagination({
-			pageSize : "10"
+			pageSize: "10"
 		});
 		$("ul.pagination2").quickPagination({
-			pageSize : "10"
+			pageSize: "10"
 		});
 		
 		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false
+			"bJQueryUI": true,
+			"sPaginationType": "full_numbers",
+			"bAutoWidth": false
 		});
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
@@ -52,7 +52,7 @@ $(document).ready(function () {
             $.each($("input[name='transformation']:checked"), function(){            
                 transformations.push($(this).val());
             });
-        	$('#confirm').dialog({ modal : true,
+        	$('#confirm').dialog({ modal: true,
         						draggable:false,
         						resizable:false,
        							position:'center',
@@ -84,7 +84,7 @@ $(document).ready(function () {
     					}
 		    	
     				else{
-				 		$('#alert').dialog({ modal : true,
+				 		$('#alert').dialog({ modal: true,
 						draggable:false,
 						resizable:false,
 						position:'center',
@@ -95,7 +95,6 @@ $(document).ready(function () {
 						open: function (type, data) {
 						    $(this).parent().appendTo("form");
 						    },
-						    
 						 buttons: { "Okay": function() { $(this).dialog("close"); } },
 		    				});	
 						jQuery("#alertholder").html("Please select atleast one transformation and project");
@@ -153,8 +152,8 @@ $(document).ready(function () {
 										<c:out value="${network.networkName}"></c:out>
 										</a>
 									</summary>
-									<li>Workspace : <c:out	value="${network.networkWorkspace.workspace.workspaceName}"></c:out></li>
-									<li>Submitted by : <c:out value="${network.creator.userName}"></c:out>
+									<li>Workspace: <c:out	value="${network.networkWorkspace.workspace.workspaceName}"></c:out></li>
+									<li>Submitted by: <c:out value="${network.creator.userName}"></c:out>
 									</li>
 									<br>
 									</div>
