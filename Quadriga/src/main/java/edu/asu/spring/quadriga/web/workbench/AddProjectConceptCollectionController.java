@@ -18,7 +18,6 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -27,7 +26,7 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
-public class ConceptCollectionProjectController {
+public class AddProjectConceptCollectionController {
 
     @Autowired
     private IConceptCollectionManager conceptCollectionManager;
@@ -37,19 +36,6 @@ public class ConceptCollectionProjectController {
 
     @Autowired
     private IProjectConceptCollectionManager projectConceptCollectionManager;
-
-    @RequestMapping(value = "auth/workbench/{projectid}/conceptcollections", method = RequestMethod.GET)
-    public String listProjectConceptCollection(@PathVariable("projectid") String projectid, Model model,
-            Principal principal) throws QuadrigaStorageException {
-        String userId = principal.getName();
-        List<IProjectConceptCollection> projectConceptCollectionList = projectConceptCollectionManager
-                .listProjectConceptCollection(projectid, userId);
-        model.addAttribute("projectConceptCollectionList", projectConceptCollectionList);
-        IProject project = projectManager.getProjectDetails(projectid);
-        model.addAttribute("project", project);
-        model.addAttribute("projectid", projectid);
-        return "auth/workbench/project/conceptcollections";
-    }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
@@ -82,45 +68,8 @@ public class ConceptCollectionProjectController {
             projectConceptCollectionManager.addProjectConceptCollection(projectid, values[i], userId);
         }
         attr.addFlashAttribute("show_success_alert", true);
-        attr.addFlashAttribute("success_alert_msg", "Concept Collection added to workspace successfully.");
+        attr.addFlashAttribute("success_alert_msg", "Concept Collection added to project successfully.");
         return "redirect:/auth/workbench/projects/" + projectid;
     }
 
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.GET)
-    public String deleteProjectConceptCollection(@PathVariable("projectid") String projectid, Model model,
-            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
-        String userId = principal.getName();
-        List<IProjectConceptCollection> projectConceptCollectionList = projectConceptCollectionManager
-                .listProjectConceptCollection(projectid, userId);
-
-        model.addAttribute("projectConceptCollectionList", projectConceptCollectionList);
-        IProject project = projectManager.getProjectDetails(projectid);
-        model.addAttribute("project", project);
-        model.addAttribute("projectid", projectid);
-        return "auth/workbench/project/deleteconceptcollections";
-    }
-
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.POST)
-    public String deleteProjectConceptCollection(HttpServletRequest req, @PathVariable("projectid") String projectid,
-            Model model, Principal principal, RedirectAttributes attr)
-                    throws QuadrigaStorageException, QuadrigaAccessException {
-        String userId = principal.getName();
-        String[] values = req.getParameterValues("selected");
-        if (values == null) {
-            attr.addFlashAttribute("show_error_alert", true);
-            attr.addFlashAttribute("error_alert_msg", "Please select a Concept Collection.");
-            return "redirect:/auth/workbench/" + projectid + "/deleteconceptcollections";
-        }
-        for (int i = 0; i < values.length; i++) {
-            projectConceptCollectionManager.deleteProjectConceptCollection(projectid, userId, values[i]);
-        }
-
-        attr.addFlashAttribute("show_success_alert", true);
-        attr.addFlashAttribute("success_alert_msg", "Concept Collection deleted from workspace successfully.");
-        return "redirect:/auth/workbench/projects/" + projectid;
-    }
 }
