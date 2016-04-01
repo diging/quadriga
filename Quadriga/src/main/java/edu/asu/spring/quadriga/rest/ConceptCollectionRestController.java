@@ -198,7 +198,7 @@ public class ConceptCollectionRestController {
         JSONArray ja = new JSONArray();
         try {
             conceptCollectionList = workspaceCCManager.listWorkspaceCC(
-                    workspaceId, userId);    
+                    workspaceId);    
                 
         }catch (QuadrigaStorageException e) {
             logger.error("QuadrigaStorageException:", e);
@@ -339,7 +339,7 @@ public class ConceptCollectionRestController {
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             String userId = principal.getName();
-            List<IWorkspaceConceptCollection> collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+            List<IWorkspaceConceptCollection> collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId);
             Template template = engine.getTemplate("velocitytemplates/workspaceconceptcollections.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", collectionsList);
