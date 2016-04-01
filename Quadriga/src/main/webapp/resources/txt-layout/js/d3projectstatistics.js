@@ -33,9 +33,9 @@ function d3ProjectStatistics(data) {
 	.attr('class', 'd3-tip')
 	.offset([-10, 0])
 	.html(function(d) {
-		return "<strong>Description:</strong> <span style='color:red'>" + d.description + "</span></br>" +
-			   "<strong>Concept ID:</strong> <span style='color:red'>" + d.conceptId + "</span></br>" +
-			   "<strong>Count:</strong> <span style='color:red'>" + d.count + "</span>";
+		return "Description : " + d.description + " </br>" +
+			   "Concept ID : " + d.conceptId + "</br>" +
+			   "Count : "+ d.count;
 	})
 
 	var svg = d3.select('#stats').append("svg")
