@@ -30,9 +30,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 	
 	@Override
 	@Transactional
-	public List<IDictionary> getDictionaryList(String userName) throws QuadrigaStorageException {
-		
-		List<DictionaryDTO> dictionaryDTOList = dictDao.getDictionaryDTOList(userName);
+	public List<IDictionary> getDictionaryList(List<DictionaryDTO> dictionaryDTOList) throws QuadrigaStorageException {
 		
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
 		if(dictionaryDTOList != null) {
@@ -46,9 +44,8 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 	
 	@Override
     @Transactional
-    public List<IDictionary> getNonAssociatedProjectDictionaries(String projectId) throws QuadrigaStorageException {
-	    List<DictionaryDTO> dictionaryDTOList = dictDao.getNonAssociatedProjectDictionaries(projectId);
-        
+    public List<IDictionary> getNonAssociatedProjectDictionaries(List<DictionaryDTO> dictionaryDTOList) throws QuadrigaStorageException {
+	    
         List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
         if(dictionaryDTOList != null) {
             for(DictionaryDTO dictionaryDTO: dictionaryDTOList) {
@@ -61,9 +58,8 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 	
 	@Override
 	@Transactional
-	public List<IDictionary> getDictionaryListOfCollaborator(String userName) throws QuadrigaStorageException {
+	public List<IDictionary> getDictionaryListOfCollaborator(List<DictionaryDTO> dictionaryDTOList) throws QuadrigaStorageException {
 		
-		List<DictionaryDTO> dictionaryDTOList = dictDao.getDictionaryCollabOfUser(userName);
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
 		if(dictionaryDTOList != null) {
 			for(DictionaryDTO dictionaryDTO: dictionaryDTOList) {

@@ -30,10 +30,10 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class ConceptCollectionProjectController {
 
     @Autowired
-    IConceptCollectionManager conceptCollectionManager;
+    private IConceptCollectionManager conceptCollectionManager;
 
     @Autowired
-    IRetrieveProjectManager projectManager;
+    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private IProjectConceptCollectionManager projectConceptCollectionManager;
