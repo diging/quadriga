@@ -6,7 +6,10 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * DTO for about project text of project's public website.
@@ -16,6 +19,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tbl_about_text")
+@XmlRootElement
+@NamedQueries({
+		@NamedQuery(name = "AboutTextDTO.findByProjectId", query = "SELECT a FROM AboutTextDTO a where a.projectId= :projectId") })
+
 public class AboutTextDTO implements Serializable {
 
 	private static final long serialVersionUID = 1103019135158917211L;
@@ -23,15 +30,12 @@ public class AboutTextDTO implements Serializable {
 	@Id
 	private String Id;
 
-	@Basic(optional = true)
 	@Column(name = "ProjectId")
 	private String projectId;
 
-	@Basic(optional = true)
 	@Column(name = "title")
 	private String title;
 
-	@Basic(optional = true)
 	@Column(name = "description")
 	private String description;
 

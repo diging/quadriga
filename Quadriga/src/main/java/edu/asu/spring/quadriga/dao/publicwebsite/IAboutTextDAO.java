@@ -12,11 +12,6 @@ import edu.asu.spring.quadriga.dto.AboutTextDTO;
 
 public interface IAboutTextDAO extends IBaseDAO<AboutTextDTO> {
 
-    /**
-     * Saving "about project" information in AboutTextDTO object
-     * 
-     * @author Rajat Aggarwal
-     */
-   
+	AboutTextDTO getDTOByProjectId(String projectId);
 
 }

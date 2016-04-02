@@ -17,18 +17,16 @@ import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 @Service
 public class AboutTextManager implements IAboutTextManager {
 
-    @Autowired
-    private IAboutTextDAO aboutTextDAO;
+	@Autowired
+	private IAboutTextDAO aboutTextDAO;
 
-    @Transactional
-    @Override
-    public void saveAbout(String projectId, String title, String description) {
-        AboutTextDTO aboutTextDTO = new AboutTextDTO();
-        String id = aboutTextDAO.generateUniqueID();
-        aboutTextDTO.setId(id);
-        aboutTextDTO.setProjectId(projectId);
-        aboutTextDTO.setTitle(title);
-        aboutTextDTO.setDescription(description);
-        aboutTextDAO.saveNewDTO(aboutTextDTO);
-    }
+	@Transactional
+	@Override
+	public void saveAbout(String projectId, String title, String description) {
+		AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
+		aboutTextDTO.setProjectId(projectId);
+		aboutTextDTO.setTitle(title);
+		aboutTextDTO.setDescription(description);
+		aboutTextDAO.saveNewDTO(aboutTextDTO);
+	}
 }
