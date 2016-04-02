@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Repository
-public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
+public class ListWsDAO extends BaseDAO<WorkspaceDTO> implements IListWsDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -40,7 +40,6 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
 
     @Autowired
     private NetworkDTOMapper networkDTOMapper;
-    
 
     /**
      * {@inheritDoc}
@@ -227,22 +226,22 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<WorkspaceDTO> listActiveWorkspaceDTOofCollaborator(
-            String projectid, String username) throws QuadrigaStorageException {
-            List<WorkspaceDTO> workspaceDTOList = null;
-            try {
-                Query query = sessionFactory.getCurrentSession().createQuery(
-                        "Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where workcollab.quadrigaUserDTO.username =:username and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated");
-                query.setParameter("username", username);
-                query.setParameter("projectid", projectid);
-                query.setParameter("isdeactivated", false);
-                query.setParameter("isarchived", false);
+    public List<WorkspaceDTO> listActiveWorkspaceDTOofCollaborator(String projectid, String username)
+            throws QuadrigaStorageException {
+        List<WorkspaceDTO> workspaceDTOList = null;
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where workcollab.quadrigaUserDTO.username =:username and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated");
+            query.setParameter("username", username);
+            query.setParameter("projectid", projectid);
+            query.setParameter("isdeactivated", false);
+            query.setParameter("isarchived", false);
 
-                workspaceDTOList = query.list();
-            } catch (HibernateException e) {
-                throw new QuadrigaStorageException(e);
-            }
-            return workspaceDTOList;
+            workspaceDTOList = query.list();
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
+        }
+        return workspaceDTOList;
     }
 
     /**

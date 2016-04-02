@@ -37,28 +37,28 @@ public class PassThroughProjectRestController {
 
     @Autowired
     private IUserManager userManager;
-    
+
     @Autowired
     private IPassThroughProjectDocumentReader passThroughProjectDocumentReader;
 
     @RequestMapping(value = "rest/passthroughproject", method = RequestMethod.POST)
-    public ResponseEntity<String> getPassThroughProject(HttpServletRequest request, @RequestHeader("Accept") String accept,
-            HttpServletResponse response, @RequestBody String xml,
-            Principal principal) throws QuadrigaException,
-            ParserConfigurationException, SAXException, IOException,
-            JAXBException, TransformerException, QuadrigaStorageException,
-            QuadrigaAccessException {
+    public ResponseEntity<String> getPassThroughProject(HttpServletRequest request,
+            @RequestHeader("Accept") String accept, HttpServletResponse response, @RequestBody String xml,
+            Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException,
+                    JAXBException, TransformerException, QuadrigaStorageException, QuadrigaAccessException {
 
+        String userid = principal.getName();
         Document document = passThroughProjectDocumentReader.getXMLParser(xml);
 
-        String projectId = passThroughProjectDocumentReader.getProjectID(document, principal);
-        
-        String workspaceId = passThroughProjectDocumentReader.getWorsapceID(document, projectId, principal);
+        String projectId = passThroughProjectDocumentReader.getProjectID(document, userid);
 
-        String networkId = passThroughProjectManager.callQStore(
-                workspaceId, xml,
-                userManager.getUser(principal.getName()));
-        
+        String workspaceId = passThroughProjectDocumentReader.getWorsapceID(document, projectId, userid);
+
+        String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
+
+        String networkId = passThroughProjectManager.callQStore(workspaceId, xml, userManager.getUser(userid),
+                annotatedText);
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.valueOf(accept));
         httpHeaders.set("networkid", networkId);

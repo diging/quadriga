@@ -20,7 +20,6 @@ public class ListExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements 
     @Autowired
     private SessionFactory sessionFactory;
 
-
     /**
      * {@inheritDoc}
      */
@@ -28,7 +27,8 @@ public class ListExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements 
     public boolean isExternalWorkspaceExists(String workspaceId) throws QuadrigaStorageException {
         List externalWorkspaceid = null;
         try {
-            Query query = sessionFactory.getCurrentSession().getNamedQuery("ExternalWorkspaceDTO.findByExternalWorkspaceid");
+            Query query = sessionFactory.getCurrentSession()
+                    .getNamedQuery("ExternalWorkspaceDTO.findByExternalWorkspaceid");
             query.setParameter("externalWorkspaceid", workspaceId);
             externalWorkspaceid = query.list();
         } catch (HibernateException e) {
@@ -52,10 +52,9 @@ public class ListExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements 
 
     }
 
-
     @Override
     public ExternalWorkspaceDTO getDTO(String id) {
-        return getDTO(ExternalWorkspaceDTO.class,id);
+        return getDTO(ExternalWorkspaceDTO.class, id);
     }
 
 }

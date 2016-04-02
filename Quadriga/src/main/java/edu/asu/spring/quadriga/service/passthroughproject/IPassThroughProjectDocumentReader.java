@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.passthroughproject;
 
 import java.io.IOException;
-import java.security.Principal;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,13 +13,13 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IPassThroughProjectDocumentReader {
 
-	Document getXMLParser(String xml) throws ParserConfigurationException, SAXException, IOException;
+    Document getXMLParser(String xml) throws ParserConfigurationException, SAXException, IOException;
 
-	String getProjectID(Document document, Principal principal) throws QuadrigaStorageException;
+    String getProjectID(Document document, String userid) throws QuadrigaStorageException;
 
-	String getWorsapceID(Document document, String projectId, Principal principal)
-			throws JAXBException, QuadrigaStorageException, QuadrigaAccessException;
+    String getWorsapceID(Document document, String projectId, String userid)
+            throws JAXBException, QuadrigaStorageException, QuadrigaAccessException;
 
-	String getAnnotateData(String xml);
+    String getAnnotateData(String xml);
 
 }

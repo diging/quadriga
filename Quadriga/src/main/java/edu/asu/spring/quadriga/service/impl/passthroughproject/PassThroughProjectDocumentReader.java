@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.service.impl.passthroughproject;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.security.Principal;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
@@ -21,6 +20,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factory.passthroughproject.IPassThroughProjectFactory;
+import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
@@ -31,135 +32,144 @@ import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectMan
 @Service
 public class PassThroughProjectDocumentReader implements IPassThroughProjectDocumentReader {
 
-	private static final Logger logger = LoggerFactory.getLogger(PassThroughProjectDocumentReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(PassThroughProjectDocumentReader.class);
 
-	@Autowired
-	private IPassThroughProjectManager passThroughProjectManager;
+    @Autowired
+    private IPassThroughProjectManager passThroughProjectManager;
 
-	@Autowired
-	private IUserManager userManager;
+    @Autowired
+    private IUserManager userManager;
 
-	@Override
-	public Document getXMLParser(String xml) throws ParserConfigurationException, SAXException, IOException {
+    @Autowired
+    private IPassThroughProjectFactory passthrprojfactory;
 
-		DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-		DocumentBuilder b = f.newDocumentBuilder();
-		Document doc = b.parse(new InputSource(new StringReader(xml)));
-		doc.getDocumentElement().normalize();
-		return doc;
-	}
+    @Override
+    public Document getXMLParser(String xml) throws ParserConfigurationException, SAXException, IOException {
 
-	@Override
-	public String getProjectID(Document document, Principal principal) throws QuadrigaStorageException {
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        DocumentBuilder b = f.newDocumentBuilder();
+        Document doc = b.parse(new InputSource(new StringReader(xml)));
+        doc.getDocumentElement().normalize();
+        return doc;
+    }
 
-		String externalProjectId = getTagId(document, "project");
-		if (externalProjectId == null) {
-			externalProjectId = Constants.DEFAULT_PROJECT_ID;
-		}
+    @Override
+    public String getProjectID(Document document, String userid) throws QuadrigaStorageException {
 
-		String externalUserName = getTagValue(document, "user_name");
-		if (externalUserName == null) {
-			externalUserName = Constants.DEFAULT_VOGONWEB_USER_NAME;
-		}
+        String externalProjectId = getTagId(document, "project");
+        if (externalProjectId == null) {
+            externalProjectId = Constants.DEFAULT_PROJECT_ID;
+        }
 
-		String externalUserId = getTagValue(document, "user_id");
-		if (externalUserId == null) {
-			externalUserId = Constants.DEFAULT_VOGONWEB_USER_ID;
-		}
+        String externalUserName = getTagValue(document, "user_name");
+        if (externalUserName == null) {
+            externalUserName = Constants.DEFAULT_VOGONWEB_USER_NAME;
+        }
 
-		String name = getTagValue(document, "name");
-		if (name == null) {
-			name = Constants.DEFAULT_PROJECT_NAME;
-		}
+        String externalUserId = getTagValue(document, "user_id");
+        if (externalUserId == null) {
+            externalUserId = Constants.DEFAULT_VOGONWEB_USER_ID;
+        }
 
-		String description = getTagValue(document, "description");
-		if (description == null) {
-			description = Constants.DEFAULT_PROJECT_DESCRIPTION;
-		}
+        String name = getTagValue(document, "name");
+        if (name == null) {
+            name = Constants.DEFAULT_PROJECT_NAME;
+        }
 
-		String sender = getTagValue(document, "sender");
-		if (sender == null) {
-			sender = Constants.VOGONWEB_SENDER;
-		}
+        String description = getTagValue(document, "description");
+        if (description == null) {
+            description = Constants.DEFAULT_PROJECT_DESCRIPTION;
+        }
 
-		String projectId = processProject(principal, externalProjectId, name, description, externalUserName,
-				externalUserId, sender);
-		return projectId;
-	}
+        String sender = getTagValue(document, "sender");
+        if (sender == null) {
+            sender = Constants.VOGONWEB_SENDER;
+        }
 
-	@Override
-	public String getWorsapceID(Document document, String projectId, Principal principal)
-			throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+        IPassThroughProject project = passthrprojfactory.createPassThroughProjectObject();
+        project.setExternalProjectid(externalProjectId);
+        project.setExternalUserName(externalUserName);
+        project.setExternalUserId(externalUserId);
+        project.setProjectName(name);
+        project.setDescription(description);
+        project.setClient(sender);
 
-		String workspaceName = getTagValue(document, "workspace");
-		if (workspaceName == null) {
-			workspaceName = Constants.DEFAULT_WORKSPACE_NAME;
-		}
+        String projectId = processProject(userid, project);
+        return projectId;
+    }
 
-		String externalWorkspaceId = getTagId(document, "workspace");
-		if (externalWorkspaceId == null) {
-			externalWorkspaceId = Constants.DEFAULT_WORKSPACE_ID;
-		}
+    @Override
+    public String getWorsapceID(Document document, String projectId, String userid)
+            throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
 
-		String internalWorkspaceId = processWorkspace(externalWorkspaceId, workspaceName, projectId, principal);
+        String workspaceName = getTagValue(document, "workspace");
+        if (workspaceName == null) {
+            workspaceName = Constants.DEFAULT_WORKSPACE_NAME;
+        }
 
-		return internalWorkspaceId;
-	}
+        String externalWorkspaceId = getTagId(document, "workspace");
+        if (externalWorkspaceId == null) {
+            externalWorkspaceId = Constants.DEFAULT_WORKSPACE_ID;
+        }
 
-	@Override
-	public String getAnnotateData(String xml) {
+        String internalWorkspaceId = processWorkspace(externalWorkspaceId, workspaceName, projectId, userid);
 
-		int startIndex = xml.indexOf("<element_events");
-		int endIndex = xml.indexOf("</element_events>");
+        return internalWorkspaceId;
+    }
 
-		String annotatedText = StringUtils.substring(xml, startIndex, endIndex + 17);
+    @Override
+    public String getAnnotateData(String xml) {
 
-		return annotatedText;
-	}
+        int startIndex = xml.indexOf("<element_events");
+        int endIndex = xml.indexOf("</element_events>");
 
-	private String processWorkspace(String externalWorkspaceId, String externalWorkspaceName, String projectId,
-			Principal principal) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
-		IUser user = userManager.getUser(principal.getName());
-		String internalWorkspaceId = passThroughProjectManager.createWorkspaceForExternalProject(externalWorkspaceId,
-				externalWorkspaceName, projectId, user);
-		return internalWorkspaceId;
-	}
+        String annotatedText = StringUtils.substring(xml, startIndex, endIndex + 17);
 
-	private String getTagId(Document document, String tagName) {
+        return annotatedText;
+    }
 
-		try {
-			Node node = document.getElementsByTagName(tagName).item(0);
-			if (node == null) {
-				return null;
-			}
-			NamedNodeMap nodeAttributeMap = node.getAttributes();
-			Node idNode = nodeAttributeMap.getNamedItem("id");
-			return idNode.getNodeValue();
-		} catch (Exception ex) {
-			logger.info("Problem while processing id for tag->" + tagName + " in xml. So returning null");
-			return null;
-		}
-	}
+    private String processWorkspace(String externalWorkspaceId, String externalWorkspaceName, String projectId,
+            String userid) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+        IUser user = userManager.getUser(userid);
+        String internalWorkspaceId = passThroughProjectManager.createWorkspaceForExternalProject(externalWorkspaceId,
+                externalWorkspaceName, projectId, user);
+        return internalWorkspaceId;
+    }
 
-	private String getTagValue(Document document, String tagName) {
-		try {
-			Node tagNode = document.getElementsByTagName(tagName).item(0);
-			return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
-		} catch (Exception ex) {
-			logger.info("Exception occurred while processsing tag ->" + tagName + ". So returning null");
-			return null;
-		}
-	}
+    private String getTagId(Document document, String tagName) {
 
-	private String processProject(Principal principal, String externalProjectid, String name, String description,
-			String externalUserName, String externalUserId, String sender) throws QuadrigaStorageException {
+        try {
+            Node node = document.getElementsByTagName(tagName).item(0);
+            if (node == null) {
+                return null;
+            }
+            NamedNodeMap nodeAttributeMap = node.getAttributes();
+            Node idNode = nodeAttributeMap.getNamedItem("id");
+            return idNode.getNodeValue();
+        } catch (Exception ex) {
+            logger.info("Problem while processing id for tag->" + tagName + " in xml. So returning null");
+            return null;
+        }
+    }
 
-		String internalProjetid = passThroughProjectManager.getInternalProjectId(externalProjectid, principal);
+    private String getTagValue(Document document, String tagName) {
+        try {
+            Node tagNode = document.getElementsByTagName(tagName).item(0);
+            return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
+        } catch (Exception ex) {
+            logger.info("Exception occurred while processsing tag ->" + tagName + ". So returning null");
+            return null;
+        }
+    }
 
-		if (StringUtils.isEmpty(internalProjetid)) {
-			return passThroughProjectManager.addPassThroughProject(principal, name, description, externalProjectid,
-					externalUserId, externalUserName, sender);
-		}
-		return internalProjetid;
-	}
+    private String processProject(String userid, IPassThroughProject project) throws QuadrigaStorageException {
+
+        String internalProjetid = passThroughProjectManager.getInternalProjectId(project.getExternalProjectid(),
+                userid);
+
+        if (StringUtils.isEmpty(internalProjetid)) {
+            return passThroughProjectManager.addPassThroughProject(userid, project);
+        }
+        return internalProjetid;
+    }
 }
