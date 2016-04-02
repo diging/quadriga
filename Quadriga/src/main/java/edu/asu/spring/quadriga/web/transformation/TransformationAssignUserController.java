@@ -48,25 +48,30 @@ public class TransformationAssignUserController {
 
 	@Autowired
 	private IProject projectManager;
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(TransformationAssignUserController.class);
+
 	/**
 	 * List networks assigned to a User
+	 * 
 	 * @param model
 	 * @param principal
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+			RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR,
+			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
 	@RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
-	private String listTransformations(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	private String listTransformations(ModelMap model, Principal principal)
+			throws QuadrigaStorageException {
 		IUser user = userManager.getUser(principal.getName());
-		
-		List<String> dummyTransformations = new ArrayList<String>();		
+
+		List<String> dummyTransformations = new ArrayList<String>();
 		Set<String> projects = new HashSet<>();
-		
-		Map<String,List<INetwork>> networkMap = new HashMap<>();
+
+		Map<String, List<INetwork>> networkMap = new HashMap<>();
 
 		try {
 			List<INetwork> approvedNetworkList;
@@ -81,20 +86,20 @@ public class TransformationAssignUserController {
 				}
 				projects.add(projectName);
 				networkMap.get(projectName).add(network);
-			}	
+			}
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
-		}	
-				dummyTransformations.add("dummyData");
-				dummyTransformations.add("dummyData2");
-				dummyTransformations.add("dummyData3");
-				dummyTransformations.add("dummyData4");
-				dummyTransformations.add("dummyData5");
-				dummyTransformations.add("dummyData6");
-		
-				model.addAttribute("projects", projects);
-				model.addAttribute("networkMap", networkMap);		
-				model.addAttribute("dummyTransformations", dummyTransformations);	
-				return "auth/transformation";
+		}
+		dummyTransformations.add("dummyData");
+		dummyTransformations.add("dummyData2");
+		dummyTransformations.add("dummyData3");
+		dummyTransformations.add("dummyData4");
+		dummyTransformations.add("dummyData5");
+		dummyTransformations.add("dummyData6");
+
+		model.addAttribute("projects", projects);
+		model.addAttribute("networkMap", networkMap);
+		model.addAttribute("dummyTransformations", dummyTransformations);
+		return "auth/transformation";
 	}
 }
