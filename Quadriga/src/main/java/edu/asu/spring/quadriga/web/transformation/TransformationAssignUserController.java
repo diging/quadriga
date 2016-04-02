@@ -16,6 +16,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -30,6 +33,7 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
  * 
  *  @author: Jaydatta Nagarkar.
  * */
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class TransformationAssignUserController {
@@ -54,40 +58,43 @@ public class TransformationAssignUserController {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
 	@RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
-	private String listNetworksTransformationsAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	private String listTransformations(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUser(principal.getName());
-		List<INetwork> approvedNetworkList=null;
+		
 		List<String> dummyTransformations = new ArrayList<String>();		
 		Set<String> projects = new HashSet<>();
-		Map<String,List<INetwork>> networkMap = new HashMap<>();
 		
-		try{
-			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);		
-			for(INetwork network : approvedNetworkList)
-			{
-				String projectName = network.getNetworkWorkspace().getWorkspace().getProjectWorkspace().getProject().getProjectName();
-				if(networkMap.get(projectName)==null)
-					{
+		Map<String,List<INetwork>> networkMap = new HashMap<>();
+
+		try {
+			List<INetwork> approvedNetworkList;
+			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
+
+			for (INetwork network : approvedNetworkList) {
+				String projectName = network.getNetworkWorkspace()
+						.getWorkspace().getProjectWorkspace().getProject()
+						.getProjectName();
+				if (networkMap.get(projectName) == null) {
 					networkMap.put(projectName, new ArrayList<INetwork>());
-					}
+				}
 				projects.add(projectName);
-				networkMap.get(projectName).add(network);			
-			}
-	
+				networkMap.get(projectName).add(network);
+			}	
+		} catch (QuadrigaStorageException e) {
+			logger.error("Some issue in the DB", e);
+		}	
 				dummyTransformations.add("dummyData");
 				dummyTransformations.add("dummyData2");
 				dummyTransformations.add("dummyData3");
 				dummyTransformations.add("dummyData4");
 				dummyTransformations.add("dummyData5");
 				dummyTransformations.add("dummyData6");
-			}
-			catch(QuadrigaStorageException e){
-				logger.error("Some issue in the DB",e);
-			}
-		model.addAttribute("projects", projects);
-		model.addAttribute("networkMap", networkMap);		
-		model.addAttribute("dummyTransformations", dummyTransformations);	
-		return "auth/transformation";
+		
+				model.addAttribute("projects", projects);
+				model.addAttribute("networkMap", networkMap);		
+				model.addAttribute("dummyTransformations", dummyTransformations);	
+				return "auth/transformation";
 	}
 }
