@@ -29,4 +29,21 @@ public class AboutTextManager implements IAboutTextManager {
 		aboutTextDTO.setDescription(description);
 		aboutTextDAO.saveNewDTO(aboutTextDTO);
 	}
+
+	@Transactional
+	@Override
+	public String getAboutTitle(String projectId) {
+		AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
+		return aboutTextDTO.getTitle();
+
+	}
+
+	@Transactional
+	@Override
+	public String getAboutDescription(String projectId) {
+		AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
+		return aboutTextDTO.getDescription();
+
+	}
+
 }

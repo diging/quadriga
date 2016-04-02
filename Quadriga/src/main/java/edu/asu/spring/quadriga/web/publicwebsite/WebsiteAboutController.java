@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
- * This controller is to map project/about page for public website. A formatted string is sent to jsp which is displayed in the correct HTML format
+ * This controller is to map project/about page for public website. A formatted
+ * string is sent to jsp which is displayed in the correct HTML format
  * 
  * @author Rajat Aggarwal
  *
@@ -24,16 +26,23 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @Controller
 public class WebsiteAboutController {
 
-    @Autowired
-    private IRetrieveProjectManager projectManager;
+	@Autowired
+	private IRetrieveProjectManager projectManager;
 
-    @RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
-    public String showAbout(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal) throws QuadrigaStorageException {
-        IProject project = projectManager.getProjectDetailsByUnixName(unixName);
-        String aboutProject = "<i>This line describes project in italics</i><br> <b>This is bold</b>";
-        model.addAttribute("project", project);
-        model.addAttribute("aboutProject", aboutProject);
-        return "sites/public/PublicWebsiteAbout";
-    }
+	@Autowired
+	private IAboutTextManager aboutTextManager;
+
+	@RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
+	public String showAbout(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal)
+			throws QuadrigaStorageException {
+		IProject project = projectManager.getProjectDetailsByUnixName(unixName);
+		String projectId = project.getProjectId();
+		String title = aboutTextManager.getAboutTitle(projectId);
+		String description = aboutTextManager.getAboutDescription(projectId);
+		model.addAttribute("project", project);
+		model.addAttribute("title", title);
+		model.addAttribute("description", description);
+		return "sites/public/PublicWebsiteAbout";
+	}
 
 }

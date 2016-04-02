@@ -56,7 +56,7 @@ public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO
 			else
 				return null;
 		} catch (HibernateException e) {
-			System.out.println("Error while retrieving abouTextDTO");
+			System.out.println("Error while retrieving aboutTextDTO");
 			return null;
 		}
 	}
