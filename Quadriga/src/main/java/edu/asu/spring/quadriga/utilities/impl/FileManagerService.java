@@ -13,12 +13,22 @@ import edu.asu.spring.quadriga.utilities.IFileManager;
 @Service
 public class FileManagerService implements IFileManager {
 
-    @Override
+	private String textFileLocation;
+	
+	
+    public String getTextFileLocation() {
+		return textFileLocation;
+	}
+
+	public void setTextFileLocation(String textFileLocation) {
+		this.textFileLocation = textFileLocation;
+	}
+
+	@Override
     public boolean createDirectoryIfNotExists(String dirPath) {
         
-        String saveDir = "testlocation";
-        String filePath = saveDir + "/"+ dirPath;
-        File dirFile = new File(filePath);
+       
+        File dirFile = new File(dirPath);
         if (!dirFile.exists()) {
             dirFile.mkdir();
         }
@@ -28,8 +38,12 @@ public class FileManagerService implements IFileManager {
     @Override
     public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws IOException, FileStorageException, FileNotFoundException {
         
-        
-        FileOutputStream fos = new FileOutputStream(dirName+fileName);
+        createDirectoryIfNotExists(textFileLocation+"/"+dirName);
+        File f = new File(textFileLocation+"/"+dirName+fileName);
+        if(!f.exists()){
+        	f.createNewFile();
+        }
+        FileOutputStream fos = new FileOutputStream(f);
         try{
         fos.write(fileContent);
         fos.close();

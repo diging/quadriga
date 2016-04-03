@@ -1,13 +1,9 @@
 package edu.asu.spring.quadriga.service.textfile.impl;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
@@ -16,48 +12,44 @@ import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.utilities.IFileManager;
 
 @Service
-
 public class FileSaveService implements IFileSaveService {
 
     @Qualifier("txtfileSaveUtil")
     @Autowired
     private IFileManager fileManager ;
-
-    private String filePath;
     private ITextFile txtFile;
 
     @Override
     public boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException, IOException {
         this.txtFile = txtFile;
+        
+        saveMetadata();
+        saveFileContent();
+        
         return true;
     }
 
     private boolean saveMetadata() throws IOException {
-        File propFile = new File(filePath + "/meta.properties");
-        FileWriter propFw = new FileWriter(propFile);
-        propFw.write("WsId:" + txtFile.getWorkspaceId() + "\n");
-        propFw.write("ProjectId:" + txtFile.getProjectId() + "\n");
-        try {
-            propFw.write("ReferenceId:" + txtFile.getRefId() + "\n");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        propFw.write("TextFileId:" + txtFile.getTextId() + "\n");
-        propFw.close();
+    	StringBuilder x =  new StringBuilder();
+    	x.append("WsId:" + txtFile.getWorkspaceId() + "\n");
+    	x.append("ProjectId:" + txtFile.getProjectId() + "\n");
+    	x.append("ReferenceId:" + txtFile.getRefId() + "\n");
+    	x.append("TextFileId:" + txtFile.getTextId() + "\n");
+        String filePath = txtFile.getTextId();
+        fileManager.saveFiletoDir(filePath, "/meta.properties", x.toString().getBytes());
         return true;
     }
 
     private boolean saveFileContent() throws IOException {
         String fileName = txtFile.getFileName();
-        File saveTxtFile;
+        String saveTxtFile;
         if (fileName.contains(".")) {
-            saveTxtFile = new File(filePath + "/" + fileName);
+            saveTxtFile = ("/" + fileName);
         } else {
-            saveTxtFile = new File(filePath + "/" + fileName + ".txt");
+            saveTxtFile = ("/" + fileName + ".txt");
         }
         byte[] fileContentBytes = txtFile.getFileContent().getBytes("UTF-8");
-        fileManager.saveFiletoDir("dirName", fileName, fileContentBytes);
+        fileManager.saveFiletoDir(txtFile.getTextId(), saveTxtFile, fileContentBytes);
         return true;
     }
 
