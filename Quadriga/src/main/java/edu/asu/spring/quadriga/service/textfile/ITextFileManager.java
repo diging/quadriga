@@ -19,6 +19,13 @@ public interface ITextFileManager {
      */
     boolean saveTextFile(ITextFile txtfile) throws QuadrigaStorageException, FileStorageException, IOException;
     
+    /**
+     * Retrieve Textfile Domain Objects based on Workspace Id.
+     * @param wsId
+     *        Associated workspace id to retrieve TextFiles.
+     * @return
+     *        Returns a list of TextFile objects to be displayed on workspace details page. 
+     */
     List<ITextFile> retrieveTextFiles(String wsId);
 
 }

@@ -23,14 +23,6 @@ public interface ITextFileShallowMapper {
     public abstract ITextFile getTextFile(String textId);
 
     /**
-     * @param projId
-     *       Project ID for the TextFiles to be retrieved.
-     * @return
-     *       Returns a TextFile Object.
-     */
-    public abstract List<ITextFile> getTextFileListbyProjId(String projId);
-    
-    /**
      * @param txtFile
      *         Domain Object to be mapped to a DTO.
      * @return

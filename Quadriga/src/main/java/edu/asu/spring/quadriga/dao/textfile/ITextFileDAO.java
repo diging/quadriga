@@ -6,6 +6,12 @@ import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
+/**
+ * @author Nischal Samji
+ * 
+ *         Interface for TextFileDAO Operations
+ *
+ */
 public interface ITextFileDAO extends IBaseDAO<TextFileDTO>{
 
     /**
