@@ -1,19 +1,14 @@
 package edu.asu.spring.quadriga.service.impl.passthroughproject;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
@@ -21,6 +16,7 @@ import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
@@ -34,9 +30,6 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     @Autowired
     private IWorkspaceDAO workspaceDao;
-
-    @Autowired
-    private SessionFactory sessionFactory;
 
     @Autowired
     private INetworkManager networkManager;
@@ -63,10 +56,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Transactional
     public String getInternalProjectId(String externalProjectid, String userid) throws QuadrigaStorageException {
 
-        Query query = sessionFactory.getCurrentSession().getNamedQuery("PassThroughProjectDTO.findByExternalProjectid");
-        query.setParameter("externalProjectid", externalProjectid);
-
-        List<PassThroughProjectDTO> projectDTOs = query.list();
+        List<PassThroughProjectDTO> projectDTOs = projectDao.getExternalProjects(externalProjectid);
 
         for (PassThroughProjectDTO projectDTO : projectDTOs) {
             boolean isOwner = projectSecurityChecker.isProjectOwner(userid, projectDTO.getProjectid());
@@ -84,8 +74,8 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     @Override
     public String callQStore(String workspaceId, String xml, IUser user, String annotatedText)
-            throws ParserConfigurationException, SAXException, IOException, JAXBException, QuadrigaStorageException,
-            QuadrigaAccessException {
+            throws QStoreStorageException, QuadrigaStorageException, QuadrigaAccessException, JAXBException {
+        // TODO This should not be hardcoded here.
         String networkName = "VogenWeb_Details";
         String responseFromQStore = networkManager.storeXMLQStore(annotatedText);
         String networkId = networkManager.storeNetworkDetails(responseFromQStore, user, networkName, workspaceId,

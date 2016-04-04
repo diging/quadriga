@@ -55,4 +55,13 @@ public class PassThroughProjectDAO extends BaseDAO<PassThroughProjectDTO> implem
 
         return projectId;
     }
+
+    @Override
+    public List<PassThroughProjectDTO> getExternalProjects(String externalProjectid) throws QuadrigaStorageException {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("PassThroughProjectDTO.findByExternalProjectid");
+        query.setParameter("externalProjectid", externalProjectid);
+
+        List<PassThroughProjectDTO> projectDTOs = query.list();
+        return projectDTOs;
+    }
 }

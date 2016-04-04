@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -45,7 +46,7 @@ public class PassThroughProjectRestController {
     public ResponseEntity<String> getPassThroughProject(HttpServletRequest request,
             @RequestHeader("Accept") String accept, HttpServletResponse response, @RequestBody String xml,
             Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException,
-                    JAXBException, TransformerException, QuadrigaStorageException, QuadrigaAccessException {
+                    JAXBException, TransformerException, QuadrigaStorageException, QuadrigaAccessException, QStoreStorageException {
 
         String userid = principal.getName();
         Document document = passThroughProjectDocumentReader.getXMLParser(xml);

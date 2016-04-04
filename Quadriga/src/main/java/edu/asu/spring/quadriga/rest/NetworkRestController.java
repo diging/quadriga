@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -20,6 +19,10 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +39,8 @@ import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
-import edu.asu.spring.quadriga.exceptions.QuadrigaException;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
@@ -94,20 +98,17 @@ public class NetworkRestController {
 	 * @param response
 	 * @param xml
 	 * @param accept
-	 * @return XML
-	 * @throws QuadrigaException
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 * @throws JAXBException 
-	 * @throws TransformerException 
-	 * @throws QuadrigaStorageException 
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws RestException
+     * @throws QStoreStorageException
+     * @throws QuadrigaAccessException
+     * @throws JAXBException
 	 */
-	@ResponseBody
 	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
-	public String getNetworkFromClients(HttpServletRequest request,
+	public ResponseEntity<String> getNetworkFromClients(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
+			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaStorageException, RestException, QStoreStorageException, QuadrigaAccessException, JAXBException {
 
 
 		IUser user = userManager.getUser(principal.getName());
@@ -116,49 +117,47 @@ public class NetworkRestController {
 		String workspaceid = request.getParameter("workspaceid");
 
 		if(workspaceid == null||workspaceid.isEmpty()){
-			response.setStatus(404);
-			return "Please provide correct workspace id.";
+		    String errorMsg = errorMessageRest
+                    .getErrorMsg("Please provide a workspace id as a part of post parameters");
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 		}
 		String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
 		if(projectid == null || projectid.isEmpty()){
-			response.setStatus(404);
-			return "Please provide correct workspace id.";
+		    String errorMsg = errorMessageRest
+                    .getErrorMsg("No project could be found for the given workspace id " + workspaceid);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
 		}
 
 		if(networkName == null ||  networkName.isEmpty()){
-			response.setStatus(404);
-			return "Please provide network name as a part of post parameters";
+		    String errorMsg = errorMessageRest.getErrorMsg("Please provide network name as a part of post parameters");
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 		}
 
 
 		xml=xml.trim();
 		if (xml.isEmpty()) {
-			response.setStatus(406);
-			return "Please provide XML in body of the post request.";
+		    String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 
-		} else {
-			String res=networkManager.storeXMLQStore(xml);
-			if(res.equals("")){
-				response.setStatus(406);
-				return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
-			}
-
-			networkId=networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,networkId,INetworkManager.VERSION_ZERO);
-
-			if(networkId.endsWith(INetworkManager.DSPACEERROR)){
-				response.setStatus(404);
-				return "Text files don't belong to this workspace.";
-			}
-
-			//TODO: Send email to all editors of a workspace
-			//TODO: Get the workspace editors from the workspaceid
-
-
-			response.setStatus(200);
-			response.setContentType(accept);
-			response.setHeader("networkid",networkId );
-			return res;
+		} 
+		String res=networkManager.storeXMLQStore(xml);
+		if(res.equals("")){
+		    String errorMsg = "Please provide correct XML in body of the post request. Qstore system is not accepting your XML";
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 		}
+
+		networkId=networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,networkId,INetworkManager.VERSION_ZERO);
+
+
+		//TODO: Send email to all editors of a workspace
+		//TODO: Get the workspace editors from the workspaceid
+
+
+		HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.valueOf(accept));
+        httpHeaders.set("networkid", networkId);
+        return new ResponseEntity<String>(res, httpHeaders, HttpStatus.OK);
+		
 
 	}
 
@@ -627,81 +626,83 @@ public class NetworkRestController {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	@ResponseBody
-	@RequestMapping(value = "rest/reuploadnetwork/{networkid}", method = RequestMethod.POST)
-	public String reuploadNetwork(@PathVariable("networkid") String networkId,
-			HttpServletResponse response,HttpServletRequest request,
-			@RequestBody String xml,
-			@RequestHeader("Accept") String accept,
-			Principal principal) throws JAXBException, QuadrigaStorageException, RestException, ParserConfigurationException, SAXException, IOException {
-
-		IUser user = userManager.getUser(principal.getName());
-
-		String networkName = request.getParameter("networkname");
-
-
-		if(networkId == null||networkId.isEmpty()){
-			response.setStatus(404);
-			return "Please provide network id.";
-		}
-
-		INetwork network = null;
-		try{
-			network = networkManager.getNetwork(networkId);
-			if(network==null){
-				logger.info("network is null");
-				response.setStatus(404);
-				return "Please provide correct network id.";
-			}else{
-				logger.info(network.getNetworkName());
-			}
-		}catch(QuadrigaStorageException e){
-			logger.error("DB Error :",e);
-		}
-		//		logger.info("Old name : "+network.getName()+"  new name : "+networkName);
-		if(!(network.getStatus().equals(INetworkStatus.REJECTED))){
-			response.setStatus(500);
-			return "The Network doesn't have status : REJECTED";
-		}else{
-
-			xml=xml.trim();
-			if (xml.isEmpty()) {
-				response.setStatus(500);
-				return "Please provide XML in body of the post request.";
-
-			} else {
-
-				String res=networkManager.storeXMLQStore(xml);
-				if(res.equals("")){
-					response.setStatus(500);
-					return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
-				}
-				String networkNameUpdateStatus="";
-				if(!(networkName == null ||networkName.equals(network.getNetworkName()) || networkName.equals(""))){
-					networkNameUpdateStatus = networkManager.updateNetworkName(networkId,networkName);
-					if(!(networkNameUpdateStatus.equals("success"))){
-						response.setStatus(500);
-						return "DB Issue, please try after sometime";
-					}
-				}
-
-				//networkManager.archiveNetwork(networkId);
-				editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
-				int latestVersion = networkManager.getLatestVersionOfNetwork(networkId) +1;
-				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK, networkId,latestVersion);
-
-				if(networkId.endsWith(INetworkManager.DSPACEERROR)){
-					response.setStatus(404);
-					return "Text files don't belong to this workspace.";
-				}
-
-				response.setStatus(200);
-				response.setContentType(accept);
-				response.setHeader("networkid",networkId );
-				return res;
-			}
-		}
-	}
+	
+	//TODO leave this as it is 
+//	@ResponseBody
+//	@RequestMapping(value = "rest/reuploadnetwork/{networkid}", method = RequestMethod.POST)
+//	public String reuploadNetwork(@PathVariable("networkid") String networkId,
+//			HttpServletResponse response,HttpServletRequest request,
+//			@RequestBody String xml,
+//			@RequestHeader("Accept") String accept,
+//			Principal principal) throws JAXBException, QuadrigaStorageException, RestException, ParserConfigurationException, SAXException, IOException {
+//
+//		IUser user = userManager.getUser(principal.getName());
+//
+//		String networkName = request.getParameter("networkname");
+//
+//
+//		if(networkId == null||networkId.isEmpty()){
+//			response.setStatus(404);
+//			return "Please provide network id.";
+//		}
+//
+//		INetwork network = null;
+//		try{
+//			network = networkManager.getNetwork(networkId);
+//			if(network==null){
+//				logger.info("network is null");
+//				response.setStatus(404);
+//				return "Please provide correct network id.";
+//			}else{
+//				logger.info(network.getNetworkName());
+//			}
+//		}catch(QuadrigaStorageException e){
+//			logger.error("DB Error :",e);
+//		}
+//		//		logger.info("Old name : "+network.getName()+"  new name : "+networkName);
+//		if(!(network.getStatus().equals(INetworkStatus.REJECTED))){
+//			response.setStatus(500);
+//			return "The Network doesn't have status : REJECTED";
+//		}else{
+//
+//			xml=xml.trim();
+//			if (xml.isEmpty()) {
+//				response.setStatus(500);
+//				return "Please provide XML in body of the post request.";
+//
+//			} else {
+//
+//				String res=networkManager.storeXMLQStore(xml);
+//				if(res.equals("")){
+//					response.setStatus(500);
+//					return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
+//				}
+//				String networkNameUpdateStatus="";
+//				if(!(networkName == null ||networkName.equals(network.getNetworkName()) || networkName.equals(""))){
+//					networkNameUpdateStatus = networkManager.updateNetworkName(networkId,networkName);
+//					if(!(networkNameUpdateStatus.equals("success"))){
+//						response.setStatus(500);
+//						return "DB Issue, please try after sometime";
+//					}
+//				}
+//
+//				//networkManager.archiveNetwork(networkId);
+//				editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
+//				int latestVersion = networkManager.getLatestVersionOfNetwork(networkId) +1;
+//				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK, networkId,latestVersion);
+//
+//				if(networkId.endsWith(INetworkManager.DSPACEERROR)){
+//					response.setStatus(404);
+//					return "Text files don't belong to this workspace.";
+//				}
+//
+//				response.setStatus(200);
+//				response.setContentType(accept);
+//				response.setHeader("networkid",networkId );
+//				return res;
+//			}
+//		}
+//	}
 
 
 

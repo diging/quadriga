@@ -40,5 +40,10 @@ public class RestException extends Exception {
 		
 	}
 
+	//TODO Ignore
+    public RestException(int i, QuadrigaStorageException e) {
+        // TODO Auto-generated constructor stub
+    }
+
 	
 }

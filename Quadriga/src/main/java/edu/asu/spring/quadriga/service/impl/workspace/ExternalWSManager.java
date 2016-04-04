@@ -25,13 +25,13 @@ public class ExternalWSManager implements IExternalWSManager {
 
     @Autowired
     private IListExternalWsDAO externalWorkspaceDAO;
-    
+
     @Autowired
     private IProjectDAO projectDao;
 
     @Autowired
     private ProjectDTOMapper projectMapper;
-    
+
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -41,14 +41,15 @@ public class ExternalWSManager implements IExternalWSManager {
     }
 
     @Override
-    public void createExternalWorkspace(String externalWorkspaceId,String externalWorkspaceName, String workspaceId,String projectId,IUser user) {
-        
+    public void createExternalWorkspace(String externalWorkspaceId, String externalWorkspaceName, String workspaceId,
+            String projectId, IUser user) {
+
         ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
 
         ExternalWorkspaceDTO workspaceDTO = new ExternalWorkspaceDTO();
         workspaceDTO.setWorkspacename(externalWorkspaceName);
         workspaceDTO.setDescription("External Workspace");
-
+        // TODO Move this to DAO
         Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
         query.setParameter("username", user.getUserName());
         List<QuadrigaUserDTO> quadrigaUsers = query.list();
@@ -69,7 +70,7 @@ public class ExternalWSManager implements IExternalWSManager {
 
         externalWorkspaceDAO.saveNewDTO(workspaceDTO);
         projectDao.updateDTO(projectDto);
-        
+
     }
 
     @Override

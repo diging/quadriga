@@ -29,6 +29,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
@@ -100,7 +101,7 @@ public interface INetworkManager {
 	 * @throws IOException							IO Exceptions while accessing QStore.
 	 */
 	public abstract String storeXMLQStore(String XML)
-			throws ParserConfigurationException, SAXException, IOException;
+			throws QStoreStorageException;
 
 	/**
 	 * Get {@link INetwork} object for a given networkId and {@link IUser}.
@@ -405,7 +406,7 @@ public interface INetworkManager {
 	 * @throws JAXBException							JAXB exception for any XML to object unmarshalling.
 	 */
 	public abstract String storeNetworkDetails(String xml, IUser user, String networkName,
-			String workspaceId, String uploadStatus, String networkId, int version) throws JAXBException;
+			String workspaceId, String uploadStatus, String networkId, int version) throws QuadrigaStorageException, QuadrigaAccessException, JAXBException;
 	
 	/**
 	 * This method should help in getting all the version of a {@link INetwork}
