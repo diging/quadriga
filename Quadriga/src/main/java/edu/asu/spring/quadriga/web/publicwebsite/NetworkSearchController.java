@@ -152,18 +152,10 @@ public class NetworkSearchController {
 
 
     @RequestMapping(value = "sites/networks/search", method = RequestMethod.GET)
-    public String getSearchTransformedNetwork(@RequestParam("conceptId") String conceptId,
+    public String getSearchTransformedNetwork(@RequestParam("conceptId") String conceptId,@RequestParam("projectName") List<String> projectNames,
                                               Model model)
         throws QuadrigaStorageException {
-    	
-    	List<String> projectNames = new ArrayList<>();
     	List<String> projectIds = new ArrayList<>();
-    	
-    	//change RequestMethod from GET to POST, Get projects through POST request
-    	projectNames.add("TestProjectQUAD15");
-    	projectNames.add("Test2");
-    	projectNames.add("Test123");
-
     	List<IProject> projectList = new ArrayList<>();
     	for(String projectName : projectNames){
     		IProject project = projectManager.getProjectDetailsByUnixName(projectName);
