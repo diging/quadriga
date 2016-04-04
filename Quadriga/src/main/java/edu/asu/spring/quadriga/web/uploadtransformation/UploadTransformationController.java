@@ -27,19 +27,11 @@ public class UploadTransformationController {
 	@RequestMapping(value="auth/uploadTransformation",method=RequestMethod.POST)
 	public String uploadTransformationFiles(@ModelAttribute("UploadTransformationBackingBean") UploadTransformationBackingBean formBean, ModelMap model,Principal principal, HttpServletRequest request) throws IOException{
 				
-		String mappingTitle = formBean.getMappingFileTitle();
-		String mappingDescription=""+formBean.getMappingFileDescription();				
-		File mappingFile=formBean.getMappingFile();
-		
-		BufferedReader br = new BufferedReader(new FileReader(mappingFile));
-		String mappingFileContent = br.readLine();
-		/*String transformTitle=request.getParameter("transformTitle");
-		String transfomrDescription = request.getParameter("transfomrDescription");
-		String transformFilePath = request.getParameter("transformFilePath");*/
-		
+		String mappingTitle = formBean.getMappingTitle();
+		String mappingDescription=""+formBean.getMappingDescription();				
 		System.out.println("Mapping File Title is: "+mappingTitle);
 		System.out.println("Mapping File Description is: "+mappingDescription);
-		System.out.println("Mapping File Path is: "+mappingFileContent);
+		
 		
 		/*System.out.println("Tranformation File Title is: "+ transformTitle);
 		System.out.println("Transfomation File Description is: "+transfomrDescription);

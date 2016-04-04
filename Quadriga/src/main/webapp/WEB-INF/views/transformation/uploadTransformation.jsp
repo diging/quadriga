@@ -32,7 +32,7 @@ function submitClick(id){
 </div>
 
 <div class="form-group required">
-<div class="col-md-12"><input type="file" class="form-control" id="mappingFilePath" name="mappingFilePath" required="required"></div>
+<div class="col-md-12"><input type="file" class="form-control" id="mappingFile" name="mappingFile" required="required"></div>
 </div>
 
 
@@ -54,7 +54,7 @@ function submitClick(id){
 </div>
 
 <div class="form-group required">
-<div class="col-md-12"><input type="file" class="form-control" id="transformFilePath" name="transformFilePath"  required="required"></div>
+<div class="col-md-12"><input type="file" class="form-control" id="transformFile" name="transformFile"  required="required"></div>
 </div>
 
 

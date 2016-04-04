@@ -4,51 +4,36 @@ import java.io.File;
 
 public class UploadTransformationBackingBean {
 	
-	private String  mappingFileTitle;
-	private String mappingFileDescription;
-	private File mappingFile;
+	private String  mappingTitle;
+	private String mappingDescription;
+	/*private File mappingFile;*/
 	
-	private String transfomationFileTitle;
-	private String transformationFileDescription;
-	private File tranformationFile;
-	public String getMappingFileTitle() {
-		return mappingFileTitle;
+	private String transfomationTitle;
+	private String transformationDescription;
+	/*private File tranformationFile;*/
+	public String getMappingTitle() {
+		return mappingTitle;
 	}
-	public void setMappingFileTitle(String mappingFileTitle) {
-		this.mappingFileTitle = mappingFileTitle;
+	public void setMappingTitle(String mappingTitle) {
+		this.mappingTitle = mappingTitle;
 	}
-	public String getMappingFileDescription() {
-		return mappingFileDescription;
+	public String getMappingDescription() {
+		return mappingDescription;
 	}
-	public void setMappingFileDescription(String mappingFileDescription) {
-		this.mappingFileDescription = mappingFileDescription;
+	public void setMappingDescription(String mappingDescription) {
+		this.mappingDescription = mappingDescription;
 	}
-	public File getMappingFile() {
-		return mappingFile;
+	public String getTransfomationTitle() {
+		return transfomationTitle;
 	}
-	public void setMappingFile(File mappingFile) {
-		this.mappingFile = mappingFile;
+	public void setTransfomationTitle(String transfomationTitle) {
+		this.transfomationTitle = transfomationTitle;
 	}
-	public String getTransfomationFileTitle() {
-		return transfomationFileTitle;
+	public String getTransformationDescription() {
+		return transformationDescription;
 	}
-	public void setTransfomationFileTitle(String transfomationFileTitle) {
-		this.transfomationFileTitle = transfomationFileTitle;
+	public void setTransformationDescription(String transformationDescription) {
+		this.transformationDescription = transformationDescription;
 	}
-	public String getTransformationFileDescription() {
-		return transformationFileDescription;
-	}
-	public void setTransformationFileDescription(
-			String transformationFileDescription) {
-		this.transformationFileDescription = transformationFileDescription;
-	}
-	public File getTranformationFile() {
-		return tranformationFile;
-	}
-	public void setTranformationFile(File tranformationFile) {
-		this.tranformationFile = tranformationFile;
-	}
-	
-	
 
 }
