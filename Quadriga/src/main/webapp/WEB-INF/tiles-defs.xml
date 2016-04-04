@@ -830,8 +830,8 @@
 			value="/WEB-INF/views/editing/networkshistory.jsp" />
 	</definition>
 
-	<definition name="base.definition.public"
-		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp">
+	<definition name="base.definition.public.sites" 
+		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp" >
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation" value="" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
@@ -839,7 +839,7 @@
 	</definition>
 
 	<!-- Sites pages -->
-	<definition name="sites" extends="base.definition.public">
+	<definition name="sites" extends="base.definition.public.sites">
 		<put-attribute name="title" value="Quadriga - Public Sites" />
 		<put-attribute name="navigation"
 			value="/WEB-INF/views/public/sitesnavbarleft.jsp" />
