@@ -15,6 +15,9 @@ $(document).ready(function() {
 } );
 </script>
 <!-- Content -->
+<input type="text" class="form-control" placeholder="Search Public Sites Repository" tabindex="1" autocapitalize="off">
+
+</br>
 	<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
 		<thead>
 			<tr>
