@@ -14,7 +14,11 @@
 		infrastructure -->
 
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+	<annotation-driven >
+	   <argument-resolvers>
+            <beans:bean class="edu.asu.spring.quadriga.inject.util.ProjectInterfaceResolver" />
+        </argument-resolvers>
+	</annotation-driven>
 
 	<context:component-scan
 		base-package="edu.asu.spring.quadriga.web, edu.asu.spring.quadriga.rest, edu.asu.spring.quadriga.exceptions" />

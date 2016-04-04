@@ -36,6 +36,7 @@ import org.springframework.ui.context.Theme;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -89,14 +90,14 @@ public class WebsiteProjectController {
 	 * @throws QuadrigaStorageException				Database storage exception thrown
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
-	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model, Principal principal) throws QuadrigaStorageException {
+	public String showProject(Model model, @PathVariable("ProjectUnixName") String unixName, Principal principal, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
 		
 		String user = null;
 		if(principal!=null){
 			user = principal.getName();
 		}
 		
-		IProject project = getProjectDetails(unixName);
+		//project = getProjectDetails(unixName);
 		
 		model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 		
