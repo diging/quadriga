@@ -9,10 +9,10 @@ import java.io.IOException;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
-import edu.asu.spring.quadriga.utilities.IFileManager;
+import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
 
 @Service
-public class FileManagerService implements IFileManager {
+public class FileSaveUtility implements IFileSaveUtility {
 
     private String textFileLocation;
 

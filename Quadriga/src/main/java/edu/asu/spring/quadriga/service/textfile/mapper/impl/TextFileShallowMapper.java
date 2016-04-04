@@ -17,12 +17,11 @@ import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileShallowMapper;
 @Service
 public class TextFileShallowMapper implements ITextFileShallowMapper {
 
-
     @Override
     public List<ITextFile> getTextFileList(List<TextFileDTO> txtFileDTOList) {
 
         List<ITextFile> tfList = new ArrayList<ITextFile>();
-        
+
         for (TextFileDTO tfDTO : txtFileDTOList) {
             ITextFile tfProxy = new TextFile();
             tfProxy.setFileName(tfDTO.getFilename());
@@ -42,10 +41,9 @@ public class TextFileShallowMapper implements ITextFileShallowMapper {
         txtFile.setFileName(tfDTO.getFilename());
         txtFile.setProjectId(tfDTO.getProjectId());
         txtFile.setWorkspaceId(tfDTO.getWorkspaceId());
-      
+
         return null;
     }
-
 
     @Override
     public TextFileDTO getTextFileDTO(ITextFile txtFile) {
@@ -58,7 +56,5 @@ public class TextFileShallowMapper implements ITextFileShallowMapper {
 
         return tfDTO;
     }
-
-   
 
 }

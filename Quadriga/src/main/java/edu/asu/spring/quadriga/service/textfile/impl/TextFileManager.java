@@ -15,22 +15,25 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileShallowMapper;
-import edu.asu.spring.quadriga.utilities.IFileManager;
+import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
 
-
+/**
+ * @author Nischal Samji
+ *
+ */
 @Service
 public class TextFileManager implements ITextFileManager {
 
     @Autowired
     private ITextFileDAO txtFileDAO;
-       
+
     @Autowired
     private IFileSaveService fileSaveServ;
-    
+
     @Qualifier("txtfileSaveUtil")
     @Autowired
-    private IFileManager fileManager;
-    
+    private IFileSaveUtility fileManager;
+
     @Autowired
     private ITextFileShallowMapper tfSMapper;
 
@@ -56,19 +59,17 @@ public class TextFileManager implements ITextFileManager {
     /**
      * @param txtFile
      *            TextFile object to be updated in the database
-     * @return
-     * returns true if file is successfully saved else returns false.
+     * @return returns true if file is successfully saved else returns false.
      * @throws QuadrigaStorageException
      */
-    private boolean saveTextFileDB(TextFileDTO tfDTO) throws QuadrigaStorageException {   
+    private boolean saveTextFileDB(TextFileDTO tfDTO) throws QuadrigaStorageException {
         return txtFileDAO.saveTextFileDTO(tfDTO);
     }
 
     /**
      * @param txtFile
      *            TextFile object to be updated in the FileSystem
-     * @return
-     *  returns true if file is successfully saved else returns false.
+     * @return returns true if file is successfully saved else returns false.
      * @throws IOException
      */
     private boolean saveTextFileLocal(ITextFile txtFile) throws FileStorageException, IOException {
@@ -80,15 +81,15 @@ public class TextFileManager implements ITextFileManager {
     public List<ITextFile> retrieveTextFiles(String wsId) {
         List<TextFileDTO> tfDTOList = txtFileDAO.getTextFileDTObyWsId(wsId);
         return tfSMapper.getTextFileList(tfDTOList);
-        
+
     }
 
     @Override
     public String retrieveTextFileContent(String txtId) throws FileNotFoundException, IOException {
-        
+
         TextFileDTO tfDTO = txtFileDAO.getTextFileDTO(txtId);
-       fileManager.readFileContent(tfDTO.getFilename(), tfDTO.getTextId());
-        
+        fileManager.readFileContent(tfDTO.getFilename(), tfDTO.getTextId());
+
         return null;
     }
 

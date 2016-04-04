@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
+/**
+ * @author Nischal Samji Backing bean for Text File Operations.
+ *
+ */
 public interface ITextFile {
 
     public abstract String getWorkspaceId();
@@ -17,7 +21,7 @@ public interface ITextFile {
     public abstract String getRefId();
 
     public abstract void setRefId(String refId);
-    
+
     public abstract String getFileName();
 
     public abstract void setFileName(String fileName);

@@ -1,22 +1,19 @@
-package edu.asu.spring.quadriga.domain.factory.workbench;
+package edu.asu.spring.quadriga.domain.factory.workspace;
 
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
-
 /**
- * @author Nischal Samji
- * Generates Text File Objects
+ * @author Nischal Samji Generates Text File Objects
  *
  */
 @Service
 public interface ITextFileFactory {
 
     /**
-     * @return
-     * 		returns a TextFile Object
+     * @return Returns a TextFile Object for Web Backing
      */
     public abstract ITextFile createTextFileObject();
-        
+
 }

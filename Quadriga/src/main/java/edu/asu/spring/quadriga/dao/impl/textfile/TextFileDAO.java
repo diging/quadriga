@@ -22,13 +22,13 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 /**
  * @author Nischal Samji
  * 
- * Data Access Object for performing Text File Operations.
+ *         Data Access Object for performing Text File Operations.
  *
  */
 @Repository
 @Transactional
 public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
-    
+
     @Resource(name = "projectconstants")
     private Properties messages;
 
@@ -42,10 +42,10 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
         List<TextFileDTO> tfDTO = null;
         try {
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    "from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
+            Query query = sessionFactory.getCurrentSession()
+                    .createQuery("from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
             query.setParameter("wsId", wsId);
-            tfDTO = (List<TextFileDTO>)query.list();
+            tfDTO = (List<TextFileDTO>) query.list();
         } catch (HibernateException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -63,7 +63,7 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
      * the db.
      * 
      */
-    
+
     @Override
     public boolean saveTextFileDTO(TextFileDTO txtFileDTO) throws QuadrigaStorageException {
         try {
@@ -89,18 +89,17 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
     public TextFileDTO getTextFileDTO(String textId) {
         TextFileDTO tfDTO = null;
 
-         try {
+        try {
             tfDTO = (TextFileDTO) sessionFactory.getCurrentSession().get(TextFileDTO.class, textId);
         } catch (HibernateException e) {
             logger.error("Retrieve Text File details method :", e);
         }
         return tfDTO;
     }
-    
-    
+
     @Override
     public String getIdPrefix() {
         return messages.getProperty("textfile_id.prefix");
-    }    
+    }
 
 }

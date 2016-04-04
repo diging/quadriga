@@ -5,7 +5,7 @@ import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 /**
  * @author Nischal Samji
  * 
- * Domain object for handling Text File Operations.
+ *         Domain object for handling Text File Operations.
  *
  */
 public class TextFile implements ITextFile {
@@ -16,7 +16,6 @@ public class TextFile implements ITextFile {
     private String textId;
     private String fileContent;
     private String refId;
-   
 
     @Override
     public String getFileName() {
@@ -72,7 +71,5 @@ public class TextFile implements ITextFile {
     public void setRefId(String refId) {
         this.refId = refId;
     }
- 
 
-   
 }

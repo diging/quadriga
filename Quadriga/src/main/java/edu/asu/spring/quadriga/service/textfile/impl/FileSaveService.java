@@ -8,14 +8,18 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
-import edu.asu.spring.quadriga.utilities.IFileManager;
+import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
 
+/**
+ * @author Nischal Samji
+ *
+ */
 @Service
 public class FileSaveService implements IFileSaveService {
 
     @Qualifier("txtfileSaveUtil")
     @Autowired
-    private IFileManager fileManager;
+    private IFileSaveUtility fileManager;
     private ITextFile txtFile;
 
     @Override
@@ -26,6 +30,11 @@ public class FileSaveService implements IFileSaveService {
         return true;
     }
 
+    /**
+     * @return
+     * @throws IOException
+     * @throws FileStorageException
+     */
     private boolean saveMetadata() throws IOException, FileStorageException {
         StringBuilder fileContent = new StringBuilder();
         fileContent.append("WsId:" + txtFile.getWorkspaceId() + "\n");

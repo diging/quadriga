@@ -19,16 +19,24 @@ public interface ITextFileManager {
      * @throws IOException
      */
     boolean saveTextFile(ITextFile txtfile) throws QuadrigaStorageException, FileStorageException, IOException;
-    
+
     /**
      * Retrieve Textfile Domain Objects based on Workspace Id.
+     * 
      * @param wsId
-     *        Associated workspace id to retrieve TextFiles.
-     * @return
-     *        Returns a list of TextFile objects to be displayed on workspace details page. 
+     *            Associated workspace id to retrieve TextFiles.
+     * @return Returns a list of TextFile objects to be displayed on workspace
+     *         details page.
      */
     List<ITextFile> retrieveTextFiles(String wsId);
-    
-    String retrieveTextFileContent(String txtId) throws FileNotFoundException, IOException; 
+
+    /**
+     * @param txtId
+     *            Text ID of the file to be retrieved.
+     * @return Returns the contents of the file as a string.
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    String retrieveTextFileContent(String txtId) throws FileNotFoundException, IOException;
 
 }
