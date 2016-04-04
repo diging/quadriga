@@ -25,21 +25,13 @@
 	href="${pageContext.servletContext.contextPath}/resources/public/css/navbar.css"
 	rel="stylesheet">
 
-<!-- Custom styles for this dataTable -->
-<link rel="stylesheet" type="text/css"
-	href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.1/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8"
-	src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" charset="utf8"
-	src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.1/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+
 <script type="text/javascript" charset="utf8">
-			$(document).ready(function(){
-			  $('#example').dataTable({
-				"sPaginationType" : "full_numbers",
-				"bLengthChange": false,
-				"bAutoWidth" : false
-			  });
-			});
+			
 			
 			$(document).ready(function() {
 			    // Configure/customize these variables.
@@ -101,7 +93,7 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="">Quadriga Network Sites</a>
+					<a class="navbar-brand" href="">Quadriga Sites</a>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
