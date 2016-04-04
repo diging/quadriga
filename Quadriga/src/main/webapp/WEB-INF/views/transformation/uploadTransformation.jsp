@@ -16,7 +16,7 @@ function submitClick(id){
 
 <c:choose>
 <c:when test="${success == 0}">
-<form name="selectTransformFiles" method="post" class="form-horizontal" action="${pageContext.servletContext.contextPath}/auth/uploadTransformation">
+<form name="selectTransformFiles" method="post" class="form-horizontal" action="${pageContext.servletContext.contextPath}/auth/uploadTransformation" modelAttribute="UploadTransformationBackingBean">
 <div id="mappingDiv" class="col-md-5" style="border:1px solid#A89E9E; border-radius:10px;"> <!-- style="border:1px solid#A89E9E; border-radius:10px;" -->
 
 <h4 style="text-align:center"><u> Upload Mapping File </u> </h4>
