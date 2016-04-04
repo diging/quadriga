@@ -8,7 +8,7 @@ import java.io.IOException;
  *Exception thrown when saving a file to filesystem fails.
  *
  */
-public class FileStorageException extends IOException {
+public class FileStorageException extends Exception {
     private static final long serialVersionUID = -3850218568287768164L;
     
     public FileStorageException() {

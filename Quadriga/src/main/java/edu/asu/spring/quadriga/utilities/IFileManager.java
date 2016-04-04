@@ -21,4 +21,7 @@ public interface IFileManager {
      * @throws IOException
      */
     public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws FileStorageException, FileNotFoundException, IOException;
+    
+    
+    public String readFileContent(String fileName, String dirName) throws FileNotFoundException, IOException;
 }

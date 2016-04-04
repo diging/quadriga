@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.utilities.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,6 +51,17 @@ public class FileManagerService implements IFileManager {
             return false;
         }
 
+    }
+
+    @Override
+    public String readFileContent(String fileName, String dirName) throws IOException {
+        
+        File f = new File(textFileLocation + "/" + dirName + "/" + fileName);
+        byte fileBytes[] = new byte[(int) f.length()];
+        FileInputStream fis = new FileInputStream(f);
+        fis.read(fileBytes);
+        System.out.println(new String(fileBytes));
+        return null;
     }
 
 }

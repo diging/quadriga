@@ -3,10 +3,8 @@ package edu.asu.spring.quadriga.service.textfile.mapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
@@ -14,20 +12,18 @@ import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileShallowMapper;
 
 /**
  * @author Nischal Samji
- *
+ * 
  */
 @Service
 public class TextFileShallowMapper implements ITextFileShallowMapper {
 
-    @Autowired
-    private ITextFileDAO tfDAO;
 
     @Override
-    public List<ITextFile> getTextFileListbyWsId(String wsId) {
+    public List<ITextFile> getTextFileList(List<TextFileDTO> txtFileDTOList) {
 
         List<ITextFile> tfList = new ArrayList<ITextFile>();
-        List<TextFileDTO> tfDTOList = tfDAO.getTextFileDTObyWsId(wsId);
-        for (TextFileDTO tfDTO : tfDTOList) {
+        
+        for (TextFileDTO tfDTO : txtFileDTOList) {
             ITextFile tfProxy = new TextFile();
             tfProxy.setFileName(tfDTO.getFilename());
             tfProxy.setTextId(tfDTO.getTextId());
@@ -39,8 +35,14 @@ public class TextFileShallowMapper implements ITextFileShallowMapper {
     }
 
     @Override
-    public ITextFile getTextFile(String textId) {
-        // TODO Auto-generated method stub
+    public ITextFile getTextFile(TextFileDTO tfDTO) {
+        ITextFile txtFile = new TextFile();
+        txtFile.setTextId(tfDTO.getTextId());
+        txtFile.setRefId(tfDTO.getRefId());
+        txtFile.setFileName(tfDTO.getFilename());
+        txtFile.setProjectId(tfDTO.getProjectId());
+        txtFile.setWorkspaceId(tfDTO.getWorkspaceId());
+      
         return null;
     }
 
@@ -56,5 +58,7 @@ public class TextFileShallowMapper implements ITextFileShallowMapper {
 
         return tfDTO;
     }
+
+   
 
 }

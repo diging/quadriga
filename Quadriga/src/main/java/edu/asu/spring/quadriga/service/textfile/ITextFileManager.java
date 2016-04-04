@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.textfile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,5 +28,7 @@ public interface ITextFileManager {
      *        Returns a list of TextFile objects to be displayed on workspace details page. 
      */
     List<ITextFile> retrieveTextFiles(String wsId);
+    
+    String retrieveTextFileContent(String txtId) throws FileNotFoundException, IOException; 
 
 }

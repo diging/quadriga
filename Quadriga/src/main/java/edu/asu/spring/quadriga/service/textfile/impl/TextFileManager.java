@@ -1,9 +1,11 @@
 package edu.asu.spring.quadriga.service.textfile.impl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
@@ -13,6 +15,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileShallowMapper;
+import edu.asu.spring.quadriga.utilities.IFileManager;
 
 
 @Service
@@ -23,6 +26,10 @@ public class TextFileManager implements ITextFileManager {
        
     @Autowired
     private IFileSaveService fileSaveServ;
+    
+    @Qualifier("txtfileSaveUtil")
+    @Autowired
+    private IFileManager fileManager;
     
     @Autowired
     private ITextFileShallowMapper tfSMapper;
@@ -64,16 +71,25 @@ public class TextFileManager implements ITextFileManager {
      *  returns true if file is successfully saved else returns false.
      * @throws IOException
      */
-    private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
+    private boolean saveTextFileLocal(ITextFile txtFile) throws FileStorageException, IOException {
         return fileSaveServ.saveFileToLocal(txtFile);
 
     }
 
     @Override
     public List<ITextFile> retrieveTextFiles(String wsId) {
-        System.out.println(tfSMapper.getTextFileListbyWsId(wsId).size());
-        return tfSMapper.getTextFileListbyWsId(wsId);
+        List<TextFileDTO> tfDTOList = txtFileDAO.getTextFileDTObyWsId(wsId);
+        return tfSMapper.getTextFileList(tfDTOList);
         
+    }
+
+    @Override
+    public String retrieveTextFileContent(String txtId) throws FileNotFoundException, IOException {
+        
+        TextFileDTO tfDTO = txtFileDAO.getTextFileDTO(txtId);
+       fileManager.readFileContent(tfDTO.getFilename(), tfDTO.getTextId());
+        
+        return null;
     }
 
 }

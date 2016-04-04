@@ -26,7 +26,7 @@ public class FileSaveService implements IFileSaveService {
         return true;
     }
 
-    private boolean saveMetadata() throws IOException {
+    private boolean saveMetadata() throws IOException, FileStorageException {
         StringBuilder fileContent = new StringBuilder();
         fileContent.append("WsId:" + txtFile.getWorkspaceId() + "\n");
         fileContent.append("ProjectId:" + txtFile.getProjectId() + "\n");
@@ -37,7 +37,7 @@ public class FileSaveService implements IFileSaveService {
         return true;
     }
 
-    private boolean saveFileContent() throws IOException {
+    private boolean saveFileContent() throws IOException, FileStorageException {
         String fileName = txtFile.getFileName();
         String saveTxtFile;
         if (fileName.contains(".")) {

@@ -12,7 +12,7 @@ public interface ITextFileShallowMapper {
      * @return
      *      Returns a list of TextFile Objects.
      */
-    public abstract List<ITextFile> getTextFileListbyWsId(String wsId);
+    public abstract List<ITextFile> getTextFileList(List<TextFileDTO> txtFileDTOList);
 
     /**
      * @param textId
@@ -20,7 +20,7 @@ public interface ITextFileShallowMapper {
      * @return
      *      Returns a TextFile Object.
      */
-    public abstract ITextFile getTextFile(String textId);
+    public abstract ITextFile getTextFile(TextFileDTO tfDTO);
 
     /**
      * @param txtFile
@@ -29,4 +29,8 @@ public interface ITextFileShallowMapper {
      *         Returns the mapped DTO object for a textfile domain object.
      */
     public abstract TextFileDTO getTextFileDTO(ITextFile txtFile);
+
+    
+
+   
 }
