@@ -119,6 +119,7 @@ public class AddTextController {
             txtFile.setWorkspaceId(workspaceid);
             txtFile.setProjectId(projid);
             if (tfManager.saveTextFile(txtFile)) {
+                tfManager.retrieveTextFiles(workspaceid);
                 redirectAttributes.addFlashAttribute("show_success_alert", true);
                 redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
             } else {

@@ -1,6 +1,8 @@
 package edu.asu.spring.quadriga.service.textfile.impl;
 
 import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
@@ -65,6 +67,13 @@ public class TextFileManager implements ITextFileManager {
     private boolean saveTextFileLocal(ITextFile txtFile) throws IOException {
         return fileSaveServ.saveFileToLocal(txtFile);
 
+    }
+
+    @Override
+    public List<ITextFile> retrieveTextFiles(String wsId) {
+        System.out.println(tfSMapper.getTextFileListbyWsId(wsId).size());
+        return tfSMapper.getTextFileListbyWsId(wsId);
+        
     }
 
 }

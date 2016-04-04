@@ -39,6 +39,7 @@ import edu.asu.spring.quadriga.domain.dspace.ICommunity;
 import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
@@ -50,6 +51,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
@@ -87,6 +89,9 @@ public class ListWSController
 
 	@Autowired
 	private IDspaceManager dspaceManager;
+	
+	@Autowired
+	private ITextFileManager tfManager;
 
 	private String dspaceUsername;
 	private String dspacePassword;
@@ -284,12 +289,13 @@ public class ListWSController
 
 		//retrieve the collaborators associated with the workspace
 		List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
-
+		List<ITextFile> tfList = tfManager.retrieveTextFiles(workspaceid);
 
 		workspace.setWorkspaceCollaborators(workspaceCollaboratorList);
 		List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceid);
 		model.addAttribute("networkList", workspaceNetworkList);
 		model.addAttribute("workspacedetails", workspace);
+		model.addAttribute("textFileList", tfList);
 
 		if(workspaceSecurity.checkWorkspaceOwner(userName, workspaceid)){
 			model.addAttribute("owner", 1);

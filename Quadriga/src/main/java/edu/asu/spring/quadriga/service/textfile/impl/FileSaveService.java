@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
@@ -16,27 +15,25 @@ public class FileSaveService implements IFileSaveService {
 
     @Qualifier("txtfileSaveUtil")
     @Autowired
-    private IFileManager fileManager ;
+    private IFileManager fileManager;
     private ITextFile txtFile;
 
     @Override
     public boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException, IOException {
         this.txtFile = txtFile;
-        
         saveMetadata();
         saveFileContent();
-        
         return true;
     }
 
     private boolean saveMetadata() throws IOException {
-    	StringBuilder x =  new StringBuilder();
-    	x.append("WsId:" + txtFile.getWorkspaceId() + "\n");
-    	x.append("ProjectId:" + txtFile.getProjectId() + "\n");
-    	x.append("ReferenceId:" + txtFile.getRefId() + "\n");
-    	x.append("TextFileId:" + txtFile.getTextId() + "\n");
+        StringBuilder fileContent = new StringBuilder();
+        fileContent.append("WsId:" + txtFile.getWorkspaceId() + "\n");
+        fileContent.append("ProjectId:" + txtFile.getProjectId() + "\n");
+        fileContent.append("ReferenceId:" + txtFile.getRefId() + "\n");
+        fileContent.append("TextFileId:" + txtFile.getTextId() + "\n");
         String filePath = txtFile.getTextId();
-        fileManager.saveFiletoDir(filePath, "/meta.properties", x.toString().getBytes());
+        fileManager.saveFiletoDir(filePath, "/meta.properties", fileContent.toString().getBytes());
         return true;
     }
 

@@ -6,14 +6,7 @@ import java.io.IOException;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 
 public interface IFileManager {
-    /**
-     * @param dirPath
-     * 		Path of the directory to store text files.
-     * @return
-     * 		Returns true if the file is successfully saved.
-     */
-    public boolean createDirectoryIfNotExists(String dirPath);
-    
+        
     /**
      * @param dirName
      * 		Path of the directory for the file.

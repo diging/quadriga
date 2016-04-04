@@ -54,23 +54,6 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
     }
 
-    @Override
-    public List<TextFileDTO> getTextFileDTObyProjId(String projId) {
-
-        List<TextFileDTO> tfDTO = null;
-        try {
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    "from TextFileDTO txtFiles where txtFiles.projectId =:projID");
-            query.setParameter("projId", projId);
-            tfDTO = (List<TextFileDTO>)query.list();
-        } catch (HibernateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return tfDTO;
-
-    }
-
     /*
      * (non-Javadoc)
      * 

@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.textfile;
 
 import java.io.IOException;
+import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
@@ -17,5 +18,7 @@ public interface ITextFileManager {
      * @throws IOException
      */
     boolean saveTextFile(ITextFile txtfile) throws QuadrigaStorageException, FileStorageException, IOException;
+    
+    List<ITextFile> retrieveTextFiles(String wsId);
 
 }

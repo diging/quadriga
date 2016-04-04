@@ -17,14 +17,6 @@ public interface ITextFileDAO extends IBaseDAO<TextFileDTO>{
     public abstract List<TextFileDTO> getTextFileDTObyWsId(String wsId);
 
     /**
-     * @param projId
-     *           Project Id to retrieve textfiles in the related project. 
-     * @return
-     *      Returns a list of TextFiles related to the workspace.
-     */
-    public abstract List<TextFileDTO> getTextFileDTObyProjId(String projId);
-
-    /**
      * @param textId
      *          Text Id for the corresponding text file.
      * @return
@@ -36,7 +28,7 @@ public interface ITextFileDAO extends IBaseDAO<TextFileDTO>{
      * @param txtFileDTO
      *          TextFile DTO to be stored in the database.
      * @return
-     *          Returns true if saved succesfull else false.
+     *          Returns true if text file is saved successfully else false.
      * @throws QuadrigaStorageException
      */
     public abstract boolean saveTextFileDTO(TextFileDTO txtFileDTO) throws QuadrigaStorageException;

@@ -13,21 +13,18 @@ import edu.asu.spring.quadriga.utilities.IFileManager;
 @Service
 public class FileManagerService implements IFileManager {
 
-	private String textFileLocation;
-	
-	
+    private String textFileLocation;
+
     public String getTextFileLocation() {
-		return textFileLocation;
-	}
+        return textFileLocation;
+    }
 
-	public void setTextFileLocation(String textFileLocation) {
-		this.textFileLocation = textFileLocation;
-	}
+    public void setTextFileLocation(String textFileLocation) {
+        this.textFileLocation = textFileLocation;
+    }
 
-	@Override
-    public boolean createDirectoryIfNotExists(String dirPath) {
-        
-       
+    private boolean createDirectoryIfNotExists(String dirPath) {
+
         File dirFile = new File(dirPath);
         if (!dirFile.exists()) {
             dirFile.mkdir();
@@ -36,25 +33,23 @@ public class FileManagerService implements IFileManager {
     }
 
     @Override
-    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws IOException, FileStorageException, FileNotFoundException {
-        
-        createDirectoryIfNotExists(textFileLocation+"/"+dirName);
-        File f = new File(textFileLocation+"/"+dirName+fileName);
-        if(!f.exists()){
-        	f.createNewFile();
+    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent)
+            throws IOException, FileStorageException, FileNotFoundException {
+
+        createDirectoryIfNotExists(textFileLocation + "/" + dirName);
+        File f = new File(textFileLocation + "/" + dirName + fileName);
+        if (!f.exists()) {
+            f.createNewFile();
         }
         FileOutputStream fos = new FileOutputStream(f);
-        try{
-        fos.write(fileContent);
-        fos.close();
-        return true;
-        }
-        catch(Exception e){
+        try {
+            fos.write(fileContent);
+            fos.close();
+            return true;
+        } catch (Exception e) {
             return false;
         }
-        
-       }
 
-    
+    }
 
 }
