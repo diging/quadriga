@@ -382,4 +382,31 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
     		throw new QuadrigaStorageException(e);
     	}
     }
+    
+    /**
+     * 
+     * This method fetches all the projects that contain the given search term and accessibility
+     * 
+     * Uses Hibernate to get {@link ProjectDTO} of a {@link IProject} ID. 
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<ProjectDTO> getAllProjectsDTOBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException  {
+        List<ProjectDTO> projectDTOList = null;
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery("from ProjectDTO project where project.accessibility=:accessibility AND "
+                                                        + "(project.description like '%:searchTerm%' "
+                                                        + " OR "
+                                                        + "project.projectname like '%:searchTerm%')");
+            query.setParameter("accessibility", accessibility);
+            query.setParameter("searchTerm", searchTerm);
+            projectDTOList =  query.list();
+            return projectDTOList;
+        }
+        catch(HibernateException e) {
+            logger.info("getAllProjectsDTO By SearchTerm And Accessiblity method :"+e.getMessage());  
+            throw new QuadrigaStorageException(e);
+        }
+    }
+
 }
