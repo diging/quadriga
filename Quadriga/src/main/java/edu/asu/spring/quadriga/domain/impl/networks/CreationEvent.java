@@ -12,12 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
@@ -48,9 +43,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "creationEvent", propOrder = {
-    "idOrCreatorOrCreationDate"
-})
+@XmlType(name = "creationEvent")
 @XmlSeeAlso({
     AppellationEventType.class,
     RelationEventType.class
@@ -59,7 +52,6 @@ public abstract class CreationEvent {
 
     @XmlElementRefs({
         @XmlElementRef(name = "creation_date", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "internal_refId", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "interpretation_creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
@@ -68,6 +60,9 @@ public abstract class CreationEvent {
         @XmlElementRef(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class)
     })
     protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
+
+    @XmlElement(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String sourceReference;
 
     /**
      * Gets the value of the idOrCreatorOrCreationDate property.
@@ -105,19 +100,11 @@ public abstract class CreationEvent {
         return this.idOrCreatorOrCreationDate;
     }
 
-    /**
-     * Get the source reference
-     * @return
-     */
     public String getSourceReference() {
-        for (JAXBElement element: getIdOrCreatorOrCreationDate()) {
-            if ("source_reference".equals(element.getName().getLocalPart())) {
-                return (String) element.getValue();
-            }
-        }
-
-        // send an empty string if it cannot find a source_reference
-        return "";
+        return sourceReference;
     }
 
+    public void setSourceReference(String sourceReference) {
+        this.sourceReference = sourceReference;
+    }
 }

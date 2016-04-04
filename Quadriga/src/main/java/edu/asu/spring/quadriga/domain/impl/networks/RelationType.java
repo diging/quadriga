@@ -13,11 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
@@ -51,13 +47,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RelationType", propOrder = {
-    "idOrCreatorOrCreationDate"
-})
+@XmlType(name = "RelationType")
 public class RelationType {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_place", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
@@ -69,6 +62,9 @@ public class RelationType {
         @XmlElementRef(name = "predicate", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class)
     })
     protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
+
+    @XmlElement(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String sourceReference;
 
     /**
      * Gets the value of the idOrCreatorOrCreationDate property.
@@ -173,19 +169,11 @@ public class RelationType {
         return objectType;
     }
 
-    /**
-     * Get source reference
-     * @return sourceReference
-     */
-    public String getSourceReference() {
-        for (JAXBElement element: idOrCreatorOrCreationDate) {
-            if ("source_reference".equals(element.getName().getLocalPart())) {
-                return (String) element.getValue();
-            }
-        }
-
-        // send an empty string if it cannot find a source_reference
-        return "";
+    public void setSourceReference(String sourceReference) {
+        this.sourceReference = sourceReference;
     }
 
+    public String getSourceReference() {
+        return sourceReference;
+    }
 }
