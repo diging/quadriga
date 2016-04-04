@@ -1,11 +1,9 @@
 package edu.asu.spring.quadriga.exceptions;
 
-import java.io.IOException;
-
 /**
  * @author Nischal Samji
  * 
- *         Exception thrown when saving a file to filesystem fails.
+ *         Exception thrown when saving a file to file system fails.
  *
  */
 public class FileStorageException extends Exception {

@@ -60,8 +60,7 @@ public class FileSaveUtility implements IFileSaveUtility {
         byte fileBytes[] = new byte[(int) f.length()];
         FileInputStream fis = new FileInputStream(f);
         fis.read(fileBytes);
-        System.out.println(new String(fileBytes));
-        return null;
+        return new String(fileBytes);
     }
 
 }

@@ -37,14 +37,7 @@ public class TextFileManager implements ITextFileManager {
     @Autowired
     private ITextFileShallowMapper tfSMapper;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.asu.spring.quadriga.service.textfile.ITextFileService#saveTextFile(
-     * edu.asu.spring.quadriga.domain.workspace.ITextFile) Service layer method
-     * to handle Text Management Operations
-     */
+    
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, IOException, QuadrigaStorageException {
         String txtId = txtFileDAO.generateUniqueID();
@@ -85,12 +78,12 @@ public class TextFileManager implements ITextFileManager {
     }
 
     @Override
-    public String retrieveTextFileContent(String txtId) throws FileNotFoundException, IOException {
+    public String retrieveTextFileContent(String txtId) throws FileStorageException, IOException {
 
         TextFileDTO tfDTO = txtFileDAO.getTextFileDTO(txtId);
-        fileManager.readFileContent(tfDTO.getFilename(), tfDTO.getTextId());
+        return fileManager.readFileContent(tfDTO.getFilename(), tfDTO.getTextId());
 
-        return null;
+        
     }
 
 }

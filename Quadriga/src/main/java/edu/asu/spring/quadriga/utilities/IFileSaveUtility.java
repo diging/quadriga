@@ -35,5 +35,5 @@ public interface IFileSaveUtility {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public String readFileContent(String fileName, String dirName) throws FileNotFoundException, IOException;
+    public String readFileContent(String fileName, String dirName) throws FileStorageException, IOException;
 }

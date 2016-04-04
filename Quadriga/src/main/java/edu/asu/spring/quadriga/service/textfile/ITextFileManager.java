@@ -11,6 +11,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface ITextFileManager {
 
     /**
+     * Save the Text file in the database and Local File System.
      * @param txtfile
      *            Text File object from web controller to handle text
      *            operations.
@@ -31,12 +32,14 @@ public interface ITextFileManager {
     List<ITextFile> retrieveTextFiles(String wsId);
 
     /**
+     * Retrieve the text file content as a string.
      * @param txtId
      *            Text ID of the file to be retrieved.
      * @return Returns the contents of the file as a string.
      * @throws FileNotFoundException
      * @throws IOException
+     * @throws FileStorageException 
      */
-    String retrieveTextFileContent(String txtId) throws FileNotFoundException, IOException;
+    String retrieveTextFileContent(String txtId) throws IOException, FileStorageException;
 
 }
