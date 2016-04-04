@@ -37,11 +37,8 @@ public class WebsiteAboutController {
 			throws QuadrigaStorageException {
 		IProject project = projectManager.getProjectDetailsByUnixName(unixName);
 		String projectId = project.getProjectId();
-		String title = aboutTextManager.getAboutTitle(projectId);
-		String description = aboutTextManager.getAboutDescription(projectId);
 		model.addAttribute("project", project);
-		model.addAttribute("title", title);
-		model.addAttribute("description", description);
+		model.addAttribute("aboutText", aboutTextManager.getDTOByProjectId(projectId));
 		return "sites/public/PublicWebsiteAbout";
 	}
 

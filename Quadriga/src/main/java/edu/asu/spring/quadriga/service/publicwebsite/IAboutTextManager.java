@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.service.publicwebsite;
 
+import edu.asu.spring.quadriga.dto.AboutTextDTO;
+
 /**
  * Interface for AboutTextManager which is service to facilitate storage of
  * about text data.
@@ -10,8 +12,5 @@ package edu.asu.spring.quadriga.service.publicwebsite;
 public interface IAboutTextManager {
 
 	public void saveAbout(String projectId, String title, String description);
-
-	public String getAboutTitle(String projectId);
-
-	public String getAboutDescription(String projectId);
+	public AboutTextDTO getDTOByProjectId(String projectId);
 }

@@ -23,9 +23,9 @@
 	modelAttribute="AboutTextBackingBean">
 
 	<textarea path="title" name="title"
-		style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center"> ${title}</textarea>
+		style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center"> ${aboutText.title}</textarea>
 	<div style="" path="description" name="description" id="description"
-		value=${description} </div>
+		value=${aboutText.description} </div>
 
 </form>
 

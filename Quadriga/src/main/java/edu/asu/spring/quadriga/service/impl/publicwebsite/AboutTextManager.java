@@ -24,6 +24,10 @@ public class AboutTextManager implements IAboutTextManager {
 	@Override
 	public void saveAbout(String projectId, String title, String description) {
 		AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
+
+		if (aboutTextDTO == null)
+			aboutTextDTO = new AboutTextDTO();
+
 		aboutTextDTO.setProjectId(projectId);
 		aboutTextDTO.setTitle(title);
 		aboutTextDTO.setDescription(description);
@@ -32,18 +36,8 @@ public class AboutTextManager implements IAboutTextManager {
 
 	@Transactional
 	@Override
-	public String getAboutTitle(String projectId) {
-		AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
-		return aboutTextDTO.getTitle();
-
-	}
-
-	@Transactional
-	@Override
-	public String getAboutDescription(String projectId) {
-		AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
-		return aboutTextDTO.getDescription();
-
+	public AboutTextDTO getDTOByProjectId(String projectId) {
+		return aboutTextDAO.getDTOByProjectId(projectId);
 	}
 
 }

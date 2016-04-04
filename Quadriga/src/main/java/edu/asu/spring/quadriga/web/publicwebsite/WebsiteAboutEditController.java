@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * This controller manages public website's about page of a project. Information
@@ -33,21 +37,15 @@ public class WebsiteAboutEditController {
 	@Autowired
 	private IAboutTextManager aboutTextManager;
 
-	@PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
+			RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR }) })
 	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/editabout", method = RequestMethod.GET)
-	public String showAbout(@PathVariable("projectId") String projectId, Model model, Principal principal)
+	public String editAbout(@PathVariable("projectId") String projectId, Model model, Principal principal)
 			throws QuadrigaStorageException {
 		IProject project = projectManager.getProjectDetails(projectId);
 
-		String title = null;
-		String description = null;
-
-		title = aboutTextManager.getAboutTitle(projectId);
-		description = aboutTextManager.getAboutDescription(projectId);
-		System.out.println(description);
+		model.addAttribute("aboutText", aboutTextManager.getDTOByProjectId(projectId));
 		model.addAttribute("project", project);
-		model.addAttribute("title", title);
-		model.addAttribute("description", description);
 		return "auth/editabout";
 	}
 
@@ -59,7 +57,8 @@ public class WebsiteAboutEditController {
 	 *
 	 */
 
-	@PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
+			RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR }) })
 	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/saveabout", method = RequestMethod.POST)
 	public String saveAbout(@PathVariable("projectId") String projectId,
 			@ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Principal principal)

@@ -28,37 +28,21 @@ public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO
 	 */
 
 	public AboutTextDTO getDTOByProjectId(String projectId) {
-
-		AboutTextDTO aboutTextDTO = getPresentDTO(projectId);
-		if (aboutTextDTO == null) {
-			aboutTextDTO = new AboutTextDTO();
-			String id1 = generateUniqueID();
-			aboutTextDTO.setId(id1);
-		}
-
-		return aboutTextDTO;
-	}
-
-	/**
-	 * Hibernate query to fetch any existing DTO object
-	 * 
-	 * @author: Rajat Aggarwal
-	 */
-
-	protected AboutTextDTO getPresentDTO(String projectId) {
-
+		AboutTextDTO aboutTextDTO;
 		try {
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("AboutTextDTO.findByProjectId");
 			query.setParameter("projectId", projectId);
 			List<AboutTextDTO> aboutTextDTOList = query.list();
 			if (aboutTextDTOList.size() != 0)
-				return aboutTextDTOList.get(0);
+				aboutTextDTO = aboutTextDTOList.get(0);
 			else
 				return null;
 		} catch (HibernateException e) {
 			System.out.println("Error while retrieving aboutTextDTO");
 			return null;
 		}
+
+		return aboutTextDTO;
 	}
 
 	@Override
