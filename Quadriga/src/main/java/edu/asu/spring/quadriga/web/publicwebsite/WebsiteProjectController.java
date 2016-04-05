@@ -1,40 +1,19 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
-/**
- * This controller has all the mappings required to view the external website of a project, view all the networks in that project
- * and visualize the networks 
- * 
- * @author Sayalee Mehendale
- *
- */
-
-
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
-import edu.asu.spring.quadriga.profile.ISearchResult;
-import edu.asu.spring.quadriga.profile.IService;
-
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.context.Theme;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -46,6 +25,13 @@ import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
+/**
+ * This controller has all the mappings required to view the external website of a project, view all the networks in that project
+ * and visualize the networks 
+ * 
+ * @author Sayalee Mehendale
+ *
+ */
 @PropertySource(value = "classpath:/user.properties")
 @Controller
 public class WebsiteProjectController {
@@ -97,8 +83,6 @@ public class WebsiteProjectController {
 			user = principal.getName();
 		}
 		
-		//project = getProjectDetails(unixName);
-		
 		model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 		
 		if (project == null)
@@ -138,8 +122,7 @@ public class WebsiteProjectController {
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}/browsenetworks", method=RequestMethod.GET)
-	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName,Model model, Principal principal) throws QuadrigaStorageException{
-		IProject project = getProjectDetails(unixName);
+	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException{
 		String projectid = project.getProjectId();
 		List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
 		
@@ -163,12 +146,11 @@ public class WebsiteProjectController {
 	 * @throws JAXBException				JAXB exception while getting the JSON
 	 */
 	@RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
-	public String visualizeNetworks(@PathVariable("projectUnixName") String unixName, @PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+	public String visualizeNetworks(@PathVariable("projectUnixName") String unixName, @PathVariable("networkId") String networkId, ModelMap model, Principal principal, @InjectProject(unixNameParameter = "projectUnixName") IProject project) throws QuadrigaStorageException, JAXBException {
 		INetwork network = networkmanager.getNetwork(networkId);
 		if(network==null){
 			return "auth/accessissue";
 		}
-		IProject project = getProjectDetails(unixName);
 		model.addAttribute("project", project);
 		
 		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
@@ -196,10 +178,8 @@ public class WebsiteProjectController {
 	 */
 	@RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
 	public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName,
-									   Model model)
+									   Model model, @InjectProject(unixNameParameter = "projectUnixName") IProject project)
 			throws JAXBException, QuadrigaStorageException {
-		IProject project = getProjectDetails(projectUnixName);
-
 		if (project == null) {
 			return "auth/accessissue";
 		}

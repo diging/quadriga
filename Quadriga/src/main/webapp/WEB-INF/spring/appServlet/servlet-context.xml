@@ -17,7 +17,7 @@
 	<annotation-driven >
 	   <argument-resolvers>
             <beans:bean class="edu.asu.spring.quadriga.inject.util.ProjectInterfaceResolver" />
-        </argument-resolvers>
+        </argument-resolvers>  
 	</annotation-driven>
 
 	<context:component-scan

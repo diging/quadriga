@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Aspect
@@ -26,37 +25,49 @@ public class InjectProjectAspect {
     private IRetrieveProjectManager projectManager;
 
     @Around("within(edu.asu.spring.quadriga.web..*)")
-    public void injectProject(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object injectProject(ProceedingJoinPoint joinPoint) throws Throwable {
+        // get all the values we need
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Method method = methodSignature .getMethod();
+        Method method = methodSignature.getMethod();
         Parameter[] paras = method.getParameters();
         
-        int projectParamIdx = 0;
+        
+        int projectParamIdx = -1;
         Map<String, Integer> pathParamMap = new HashMap<String, Integer>();
         InjectProject injectAnnotation = null;
         
         IProject project = null;
+        Object[] arguments = joinPoint.getArgs();
+        
         if (paras != null) {
+            // iterate over parameters and find out where the unixname is injected
+            // and where the project should be injected
             for (int i=0; i<paras.length; i++) {
                 Parameter p = paras[i];
                 
+                // this tests if the paramters is annotated with InjectProject
                 if (p.getAnnotation(InjectProject.class) != null) {
                     injectAnnotation = p.getAnnotation(InjectProject.class);
                     projectParamIdx = i;
                 }
+                // this gets all parameters annotated with PathVariable
                 if (p.getAnnotation(PathVariable.class) != null) {
                     PathVariable pathVar = p.getAnnotation(PathVariable.class);
                     pathParamMap.put(pathVar.value(), i);
                 }
             }  
             
-            Object[] arguments = joinPoint.getArgs();
+            // if we want to inject a project
             if (injectAnnotation != null) {
+                // get the index of the parameter that holds the unix name from the path
                 Integer idxOfProjectId = pathParamMap.get(injectAnnotation.unixNameParameter());
                 if (idxOfProjectId != null) {
-                    String projectId = (String) arguments[idxOfProjectId];
-                    project = projectManager.getProjectDetailsByUnixName(projectId);
                     
+                    // get project by its unix name
+                    String projectUnixName = (String) arguments[idxOfProjectId];
+                    project = projectManager.getProjectDetailsByUnixName(projectUnixName);
+                    
+                    // replace the annotated project parameter with the retrieved project
                     Object[] newArgs = new Object[arguments.length];
                     for(int i=0; i<newArgs.length; i++) {
                         if (i == projectParamIdx) {
@@ -65,12 +76,14 @@ public class InjectProjectAspect {
                             newArgs[i] = arguments[i];
                         }
                     }
-                    
-                    joinPoint.proceed(newArgs);
+                    // lets replace the old arguments with the new ones
+                    arguments = newArgs;
                 }
             }
  
         }
-        joinPoint.proceed();
+        
+        // continue with controller method
+        return joinPoint.proceed(arguments);
     }
 }
