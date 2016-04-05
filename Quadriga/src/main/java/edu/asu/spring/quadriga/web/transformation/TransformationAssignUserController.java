@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-/*
+/**
  * This class will list all the networks approved by the user and 
  * display approved networks and some dummy transformations for
  * the data
@@ -69,27 +69,27 @@ public class TransformationAssignUserController {
 		IUser user = userManager.getUser(principal.getName());
 
 		List<String> dummyTransformations = new ArrayList<String>();
-		Set<String> projects = new HashSet<>();
-
+		Set<IProject> projects = new HashSet<>();
 		Map<String, List<INetwork>> networkMap = new HashMap<>();
-
+		List<INetwork> approvedNetworkList =null;
+		int flash=0;
 		try {
-			List<INetwork> approvedNetworkList;
-			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
-
-			for (INetwork network : approvedNetworkList) {
-				String projectName = network.getNetworkWorkspace()
-						.getWorkspace().getProjectWorkspace().getProject()
-						.getProjectName();
-				if (networkMap.get(projectName) == null) {
-					networkMap.put(projectName, new ArrayList<INetwork>());
-				}
-				projects.add(projectName);
-				networkMap.get(projectName).add(network);
-			}
+			approvedNetworkList=editorManager.getApprovedNetworkOfUser(user);
 		} catch (QuadrigaStorageException e) {
-			logger.error("Some issue in the DB", e);
+			logger.error("Error fetching list of approved networks", e);
+			flash=1;
 		}
+			
+		for (INetwork network : approvedNetworkList) {
+				IProject project = network.getNetworkWorkspace()
+						.getWorkspace().getProjectWorkspace().getProject();
+				
+				if (networkMap.get(project.getProjectName()) == null) {
+					networkMap.put(project.getProjectName(), new ArrayList<INetwork>());
+					projects.add(project);
+				}
+				networkMap.get(project.getProjectName()).add(network);
+			}	
 		dummyTransformations.add("dummyData");
 		dummyTransformations.add("dummyData2");
 		dummyTransformations.add("dummyData3");
@@ -97,9 +97,11 @@ public class TransformationAssignUserController {
 		dummyTransformations.add("dummyData5");
 		dummyTransformations.add("dummyData6");
 
+		model.addAttribute("flash",flash);
 		model.addAttribute("projects", projects);
 		model.addAttribute("networkMap", networkMap);
 		model.addAttribute("dummyTransformations", dummyTransformations);
+		
 		return "auth/transformation";
 	}
 }

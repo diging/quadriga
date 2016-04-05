@@ -31,7 +31,6 @@
 		$("#selectAllProjects").click(function(){
 			$(".projectList").prop('checked',$(this).prop('checked'));
 		});
-
 		$("#selectAllTransformations").click(function(){
 			$(".transformationList").prop('checked',$(this).prop('checked'));
 		});
@@ -43,7 +42,6 @@
 $(document).ready(function () {
     $('#confirmationTransformation').click(function () {
     	if(jQuery('#divProjectList input[type=checkbox]:checked').length && jQuery('#headingTwo input[type=checkbox]:checked').length) {
-
         	var projects = [];
             $.each($("input[name='project']:checked"), function(){            
                 projects.push($(this).val());
@@ -102,6 +100,12 @@ $(document).ready(function () {
     });    
 });
 </script>
+<script>
+<c:if test="${flash == 1}">
+	window.alert("Error fetching list of approved networks");
+</c:if>
+</script>
+
 <style>
  #project div {
   display: inline;
@@ -117,6 +121,9 @@ $(document).ready(function () {
 	</header>
 </div>
 
+
+
+
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <c:choose>
 	<c:when test="${not empty projects}">
@@ -127,15 +134,15 @@ $(document).ready(function () {
       		<h4 class="panel-title">   
         		<div class="checkbox1" id="divProjectList"> 
         		<label>
-      				<input type="checkbox" value="${project}"  name="project" class="projectList"> 
+      				<input type="checkbox" value="${project.projectName}"  name="project" class="projectList"> 
         		</label>
         		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#${project}" aria-expanded="true" aria-controls="${project}">
-    			${project}
+    			${project.projectName}
     			</a> 				
  				</div>       		
       		</h4>
     	</div>
-		<div id="${project}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+		<div id="${project.projectName}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
       		<div class="panel-body">   				
    				<ul class="networkToggleList">
 					<li>
@@ -143,8 +150,8 @@ $(document).ready(function () {
 							<ul>							
 								<div class="container-fluid">
 								<div class="row">
-								<c:if test="${not empty networkMap[project]}">
-								<c:forEach var="network" items="${networkMap[project]}">	
+								<c:if test="${not empty networkMap[project.projectName]}">
+								<c:forEach var="network" items="${networkMap[project.projectName]}">	
 									 <div class="col-md-4">
 									 <summary>
 										<input type="checkbox" >
@@ -214,4 +221,3 @@ $(document).ready(function () {
  	<p id="alertholder">
  	</p>
 </div>
-
