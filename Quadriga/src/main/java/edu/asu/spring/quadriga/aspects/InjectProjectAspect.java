@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.aspects;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,12 +12,28 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
+/**
+ * This class intercepts all controller methods. If one of the parameters of a method
+ * is annotated with {@link InjectProject}, it will find the parameter annotated with {@link PathVariable}
+ * that has refers to the same variable in the path. It will then try to find the project with
+ * the unix name provided in the path variable. For example, the following method annotations:
+ * 
+ * <code>
+ * public String showProject(@PathVariable("ProjectUnixName") String unixName, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
+ * </code>
+ * 
+ * will result in a project object filled with the information of the project with the unix name "unixName".
+ * 
+ * @author jdamerow
+ *
+ */
 @Aspect
 @Component
 public class InjectProjectAspect {
