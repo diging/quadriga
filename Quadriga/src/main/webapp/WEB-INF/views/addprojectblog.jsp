@@ -13,9 +13,11 @@
 	});
 
 	function submitClick(id) {
-		location.href = "${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}";
+		location.href = "${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}";
 	}
 </script>
+
+<!-- Script to generate rich text editor -->
 <script>
 	tinymce
 			.init({
@@ -29,16 +31,19 @@
 
 <article class="is-page-content">
 	<form:form commandName="projectBlog" method="POST"
-		action="${pageContext.servletContext.contextPath}/sites/${project_id}/addprojectblog">
+		action="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblog">
+
 		<header>
 			<h2>Create new Project Entry</h2>
-			<span class="byline">Please fill in the following information:</span>
+			<span class="byline">Please fill in the following details</span>
 		</header>
+
+		<!-- Create Project Blog button at top right corner -->
 		<div style="text-align: right;">
-						<input class="btn btn-primary" type="submit" value="Create Entry"
-							style="width: 15%; align: center;">
-					</div>
-					<br>
+			<input class="btn btn-primary" type="submit" value="Create Entry"
+				style="width: 15%; align: center;">
+		</div>
+		<br>
 		<table style="width: 100%">
 			<tr>
 				<td><form:textarea path="title" id="title"
@@ -46,14 +51,16 @@
 						style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center" /></td>
 			</tr>
 			<tr>
-				<td><form:textarea path="description" id="description"/></td>
+				<td><form:textarea path="description" id="description" /></td>
 			</tr>
+			<br>
 			<tr>
-
-				<td><br><div style="text-align: center;">
+				<td>
+					<div style="text-align: center;">
 						<input class="btn btn-primary" type="submit" value="Create Entry"
 							style="width: 15%; align: center;">
-					</div></td>
+					</div>
+				</td>
 
 			</tr>
 		</table>

@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.domain.projectblog;
 
 import java.util.Date;
 
+import edu.asu.spring.quadriga.domain.IUser;
+
 /**
  * Interface for {@linkplain ProjectBlog} object
  * 

@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.domain.impl.projectblog;
 
 import java.util.Date;
 
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlog;
 
 /**
@@ -15,9 +16,9 @@ public class ProjectBlog implements IProjectBlog {
     private String projectBlogId;
     private String title;
     private String description;
-    private String author;
     private Date createdDate;
     private String projectId;
+    private String author;
 
     /*
      * (non-Javadoc)
@@ -86,25 +87,10 @@ public class ProjectBlog implements IProjectBlog {
         this.description = description;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.asu.spring.quadriga.domain.impl.projectblog.IProjectBlog#getAuthor()
-     */
-    @Override
     public String getAuthor() {
         return author;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.asu.spring.quadriga.domain.impl.projectblog.IProjectBlog#setAuthor(
-     * java.lang.String)
-     */
-    @Override
     public void setAuthor(String author) {
         this.author = author;
     }
@@ -191,5 +177,4 @@ public class ProjectBlog implements IProjectBlog {
             return false;
         return true;
     }
-
 }

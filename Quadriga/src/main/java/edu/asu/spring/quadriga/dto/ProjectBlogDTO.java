@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.asu.spring.quadriga.dto;
 
 import java.io.Serializable;
@@ -20,55 +16,50 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *This class represents the column mappings for projectblog table.
+ * This class represents the column mappings for <code>tbl_projectblog</code>
+ * table.
+ * 
  * @author Pawan Mahalle
+ * 
  */
-/**
- * @author PawanMahalle
- *
- */
+
 @Entity
 @Table(name = "tbl_projectblog")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ProjectBlogDTO.findAll", query = "SELECT pb FROM ProjectBlogDTO pb"),   })
+@NamedQueries({ 
+    @NamedQuery(name = "ProjectBlogDTO.findAll", query = "SELECT pb FROM ProjectBlogDTO pb"),
+    @NamedQuery(name = "ProjectBlogDTO.findByProjectBlogId", query = "SELECT p FROM ProjectBlogDTO p WHERE p.projectid = :projectId order by createdDate desc"), })
 public class ProjectBlogDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Id
-    @Basic(optional = false)
     @Column(name = "projectblogid")
     private String projectBlogId;
-    
-    @Basic(optional = false)
+
     @Column(name = "title")
     private String title;
-    
-    @Basic(optional = false)
+
     @Column(name = "createdDate")
     private Date createdDate;
-    
-    @Basic(optional = false)
+
     @Column(name = "projectid")
     private String projectid;
-    
-    @Basic(optional = false)
+
     @Column(name = "author")
     private String author;
-    
+
     @Lob
-    @Basic(optional = false)
     @Column(name = "description")
     private String description;
-    
-    @JoinColumn(name = "projectid", referencedColumnName = "projectid",insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+
+    @JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
+    @ManyToOne
     private ProjectDTO projectDTO;
-    
-    @JoinColumn(name = "author", referencedColumnName = "username",insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+
+    @JoinColumn(name = "author", referencedColumnName = "username", insertable = false, updatable = false)
+    @ManyToOne
     private QuadrigaUserDTO projectBlogAuthorDTO;
-    
+
     public ProjectBlogDTO() {
     }
 
@@ -134,6 +125,6 @@ public class ProjectBlogDTO implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
-    }    
-    
+    }
+
 }
