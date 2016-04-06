@@ -94,7 +94,7 @@ public class EventParser {
         }
         else if (event instanceof RelationEventType) {
             RelationType relation = ((RelationEventType) event).getRelation();
-            
+
             // create node for predicate
             PredicateType pred = relation.getPredicateType();
             PredicateNode predNode = parsePredicateEvent(pred.getAppellationEvent(), statementId);
@@ -109,7 +109,10 @@ public class EventParser {
             if (objectNode == null) {
                 objectNode = parseSubjectOrObjectEvent(relation.getObjectType(relation).getRelationEvent(), statementId, leafNodes, links);
             }
-            
+
+            // source reference from relation type
+            String sourceReference = relation.getSourceReference();
+
             if (subjectNode != null) {
                 Link link = new Link();
                 // add the statement id to the link
@@ -118,6 +121,8 @@ public class EventParser {
                 link.setObject(subjectNode);
                 link.setLabel("has subject");
                 links.add(link);
+                // set the source reference to the link
+                link.setSourceReference(sourceReference);
             }
             
             if (objectNode != null) {
@@ -128,6 +133,8 @@ public class EventParser {
                 link.setObject(objectNode);
                 link.setLabel("has object");
                 links.add(link);
+                // set the source reference to the link
+                link.setSourceReference(sourceReference);
             }
             
             return predNode;
@@ -153,8 +160,9 @@ public class EventParser {
             label.append(" ");
         }
         node.setId(event.getAppellationEventID());
-       
         node.setConceptId(label.toString().trim());
+        // set the source reference
+        node.setSourceReference(event.getSourceReference());
         
         if (node.getConceptId() != null) {
             node.setLabel(conceptCollectionManager.getConceptLemmaFromConceptId(node.getConceptId()));
