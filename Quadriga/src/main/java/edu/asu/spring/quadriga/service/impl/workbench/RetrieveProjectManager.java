@@ -225,7 +225,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
      * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
      * @param searchTerm - The search term which is a text, searched in name and description of the project.
      * @param accessibility - accessibility of the project.
-     * @return List<IProject> - list of projects associated with the accessibility of the project.
+     * @return List<IProject> - list of projects associated with the given searchTerm and accessibility of the project.
  * @throws QuadrigaStorageException 
      */
     @Override
