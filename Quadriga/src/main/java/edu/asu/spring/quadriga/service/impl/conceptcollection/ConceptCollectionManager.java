@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.asu.spring.quadriga.service.impl.conceptcollection;
 
 import java.util.HashMap;
@@ -62,20 +59,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     private IQuadrigaRoleManager roleMapper;
 
     @Autowired
-    private IListWSManager wsManager;
-
-    @Autowired
-    private IListWsDAO wsListManger;
-
-    @Autowired
     private IConceptCollectionShallowMapper ccShallowMapper;
-
-    @Autowired
-    private IProjectShallowMapper projectShallowMapper;
-    
-    @Autowired
-    private IUserManager userManager;
-
 
     /**
      * This method retrieves the concept collection owner by the submitted user
