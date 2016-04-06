@@ -78,13 +78,11 @@ public class TransformationAssignUserController {
         } catch (QuadrigaStorageException e) {
             flash = 1;
             logger.error("Error fetching list of approved networks", e);
-
         }
 
         for (INetwork network : approvedNetworkList) {
             IProject project = network.getNetworkWorkspace().getWorkspace()
                     .getProjectWorkspace().getProject();
-
             if (networkMap.get(project.getProjectName()) == null) {
                 networkMap.put(project.getProjectName(),
                         new ArrayList<INetwork>());
