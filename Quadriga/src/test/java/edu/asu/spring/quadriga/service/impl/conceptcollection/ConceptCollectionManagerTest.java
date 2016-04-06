@@ -41,7 +41,7 @@ public class ConceptCollectionManagerTest {
     @Mock
     private IConceptCollectionDeepMapper mockedConceptCollectionDeepMapper = Mockito
             .mock(IConceptCollectionDeepMapper.class);
-    
+
     @Mock
     private IConceptpowerConnector cpConnector;
 
@@ -92,7 +92,7 @@ public class ConceptCollectionManagerTest {
         List<IProject> ccProjectsList2 = new ArrayList<IProject>();
         ccProjectsList2.add(project);
         ccProjectsList2.add(project2);
-        
+
         Mockito.when(cpConnector.search("item", "pos")).thenReturn(rep);
         Mockito.when(cpConnector.getById("id")).thenReturn(rep);
 
@@ -119,8 +119,8 @@ public class ConceptCollectionManagerTest {
         concept = new Concept();
 
         Mockito.when(mockedConceptFactory.createConceptObject()).thenReturn(concept);
-        Mockito.when(mockedccDao.updateItem(Matchers.any(IConcept.class), Matchers.eq("id"), Matchers.eq("username")))
-                .thenReturn("dummy");
+        Mockito.doNothing().when(mockedccDao).updateItem(Matchers.any(IConcept.class), Matchers.eq("id"),
+                Matchers.eq("username"));
     }
 
     @Test
