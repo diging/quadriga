@@ -34,7 +34,7 @@ $("input[type=button]").button().click(function(event) {
 
 <body
 	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
-
+<a href="#" onclick="goFullscreen('chart')"> <img src="${pageContext.servletContext.contextPath}/resources/fullscreen_icon.png" width="30" height="30"  style="float: left"/> </a>
 
 
 
@@ -56,9 +56,14 @@ $("input[type=button]").button().click(function(event) {
 <script type="text/javascript">
 
   function goFullscreen(id) {
-
+	  document.getElementById('chart').style='position: fixed; top: 0; bottom :0; left: 0; right :0';
     // Get the element that we want to take into fullscreen mode
-
+    var a = document.getElementById('chart');
+    document.getElementsByTagName('svg')[0].id = 'svg_id';
+    var svgDoc= document.getElementById('svg_id');
+       
+	svgDoc.setAttribute("height", "100%");
+	svgDoc.setAttribute("width", "100%");
     var element = document.getElementById(id);
 
 
@@ -86,12 +91,53 @@ $("input[type=button]").button().click(function(event) {
       element.webkitRequestFullScreen();
 
    }
-
+    
    // Hooray, now we're in fullscreen mode!
 
   }
 
 </script>
 
+<script type="text/javascript">
+function clear()
+{
 
-<input type="button" value="click to go fullscreen" onclick="goFullscreen('chart')">
+	//alert("hello manoj");
+	var element=document.getElementById('chart');
+	element.style.removeProperty('position');//=null;
+	element.style.top=null;
+	element.style.bottom=null;
+	element.style.right=null;
+	element.style.left=null;
+	var width = "500";
+	height = "500";
+	 var svgDoc= document.getElementById('svg_id');
+	svgDoc.setAttribute("height", height);
+	svgDoc.setAttribute("width", width);
+}
+
+</script>
+
+<script>
+if (document.addEventListener)
+{
+    document.addEventListener('webkitfullscreenchange', exitHandler, false);
+    document.addEventListener('mozfullscreenchange', exitHandler, false);
+    document.addEventListener('fullscreenchange', exitHandler, false);
+    document.addEventListener('MSFullscreenChange', exitHandler, false);
+}
+
+function exitHandler()
+{
+    if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null)
+    {
+    	if(window.innerWidth == screen.width && window.innerHeight == screen.height) {
+
+    	}
+    	else
+    	{
+    		clear();
+    	}
+    }
+}
+</script>
