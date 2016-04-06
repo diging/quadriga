@@ -37,71 +37,72 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class TransformationAssignUserController {
-	@Autowired
-	private INetworkManager networkManager;
+    @Autowired
+    private INetworkManager networkManager;
 
-	@Autowired
-	private IEditorManager editorManager;
+    @Autowired
+    private IEditorManager editorManager;
 
-	@Autowired
-	private IUserManager userManager;
+    @Autowired
+    private IUserManager userManager;
 
-	@Autowired
-	private IProject projectManager;
+    @Autowired
+    private IProject projectManager;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(TransformationAssignUserController.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(TransformationAssignUserController.class);
 
-	/**
-	 * List networks assigned to a User
-	 * 
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-			RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR,
-			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
-	private String listTransformations(ModelMap model, Principal principal)
-			throws QuadrigaStorageException {
-		IUser user = userManager.getUser(principal.getName());
+    /**
+     * List networks assigned to a User
+     * 
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR,
+            RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
+    private String listTransformations(ModelMap model, Principal principal)
+            throws QuadrigaStorageException {
+        IUser user = userManager.getUser(principal.getName());
 
-		List<String> dummyTransformations = new ArrayList<String>();
-		Set<IProject> projects = new HashSet<>();
-		Map<String, List<INetwork>> networkMap = new HashMap<>();
-		List<INetwork> approvedNetworkList =null;
-		int flash=0;
-		try {
-			approvedNetworkList=editorManager.getApprovedNetworkOfUser(user);
-		} catch (QuadrigaStorageException e) {
-			logger.error("Error fetching list of approved networks", e);
-			flash=1;
-		}
-			
-		for (INetwork network : approvedNetworkList) {
-				IProject project = network.getNetworkWorkspace()
-						.getWorkspace().getProjectWorkspace().getProject();
-				
-				if (networkMap.get(project.getProjectName()) == null) {
-					networkMap.put(project.getProjectName(), new ArrayList<INetwork>());
-					projects.add(project);
-				}
-				networkMap.get(project.getProjectName()).add(network);
-			}	
-		dummyTransformations.add("dummyData");
-		dummyTransformations.add("dummyData2");
-		dummyTransformations.add("dummyData3");
-		dummyTransformations.add("dummyData4");
-		dummyTransformations.add("dummyData5");
-		dummyTransformations.add("dummyData6");
+        List<String> dummyTransformations = new ArrayList<String>();
+        Set<IProject> projects = new HashSet<>();
+        Map<String, List<INetwork>> networkMap = new HashMap<>();
+        List<INetwork> approvedNetworkList = null;
+        int flash = 0;
+        try {
+            approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
+        } catch (QuadrigaStorageException e) {
+            flash = 1;
+            logger.error("Error fetching list of approved networks", e);
 
-		model.addAttribute("flash",flash);
-		model.addAttribute("projects", projects);
-		model.addAttribute("networkMap", networkMap);
-		model.addAttribute("dummyTransformations", dummyTransformations);
-		
-		return "auth/transformation";
-	}
+        }
+
+        for (INetwork network : approvedNetworkList) {
+            IProject project = network.getNetworkWorkspace().getWorkspace()
+                    .getProjectWorkspace().getProject();
+
+            if (networkMap.get(project.getProjectName()) == null) {
+                networkMap.put(project.getProjectName(),
+                        new ArrayList<INetwork>());
+                projects.add(project);
+            }
+            networkMap.get(project.getProjectName()).add(network);
+        }
+        dummyTransformations.add("dummyData");
+        dummyTransformations.add("dummyData2");
+        dummyTransformations.add("dummyData3");
+        dummyTransformations.add("dummyData4");
+        dummyTransformations.add("dummyData5");
+        dummyTransformations.add("dummyData6");
+        model.addAttribute("flash", flash);
+        model.addAttribute("projects", projects);
+        model.addAttribute("networkMap", networkMap);
+        model.addAttribute("dummyTransformations", dummyTransformations);
+
+        return "auth/transformation";
+    }
 }
