@@ -171,9 +171,6 @@ public class ConceptcollectionController {
         conceptControllerManager.getCollaborators(collection);
         model.addAttribute("collectionid", collectionId);
 
-        String jsTreeData = conceptControllerManager.getProjectsTree(username,
-                collectionId);
-        model.addAttribute("core", jsTreeData);
         model.addAttribute("owner",
                 collection.getOwner().getUserName().equals(username));
 

@@ -184,15 +184,6 @@ public class ConceptCollectionManagerTest {
     }
 
     @Test
-    public void getProjectsTreeTest() throws QuadrigaStorageException, JSONException {
-
-        String result = "{\"core\": {\"data\": [\n {\n  \"id\": \"id\",\n  \"parent\": \"#\",\n  \"text\": \"test project\"\n },\n {\n  \"id\": \"w-id\",\n  \"parent\": \"id\",\n  \"text\": \"w-name\"\n },\n {\n  \"id\": \"w-id2\",\n  \"parent\": \"id\",\n  \"text\": \"<a href=\'#\' id=\'w-id2\' name=\'w-name2\' onclick=\'javascript:addCCtoWorkspace(this.id,this.name);\' >w-name2<\\/a>\"\n },\n {\n  \"id\": \"id2\",\n  \"parent\": \"#\",\n  \"text\": \"<a href=\'#\' id=\'id2\' name=\'test project2\' onclick=\'javascript:addCCtoProjects(this.id,this.name);\' > test project2<\\/a>\"\n }\n]}}";
-
-        String actualResult = conceptCollectionManagerUnderTest.getProjectsTree("username", "ccId");
-        assertEquals(result, actualResult);
-    }
-
-    @Test
     public void updateTest() throws QuadrigaStorageException {
 
         ConceptCollection conceptCollection = new ConceptCollection();

@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +22,6 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -322,70 +317,5 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     public void fillConceptCollection(IConceptCollection conceptCollection) throws QuadrigaStorageException {
         ConceptCollectionDTO ccDto = ccDao.getDTO(conceptCollection.getConceptCollectionId());
         conceptCollectionDeepMapper.fillConceptCollection(conceptCollection, ccDto);
-    }
-    
-
-    @Override
-    @Transactional
-    public String getProjectsTree(String userName, String ccId) throws JSONException {
-        List<IProject> projectList = null;
-        JSONObject core = new JSONObject();
-        try {
-            // projectList = projectManager.getProjectList(userName);
-            projectList = projectShallowMapper.getProjectList(userName);
-            JSONArray dataArray = new JSONArray();
-            List<IProject> ccProjectsList = projectShallowMapper.getCollaboratorProjectListOfUser(ccId);
-            List<IWorkSpace> ccWorkspaceList = wsListManger.getWorkspaceByConceptCollection(ccId);
-            if (ccProjectsList != null) {
-                for (IProject project : projectList) {
-                    // Each data
-                    // if (!ccProjectsList.contains(project)) {
-                    JSONObject data = new JSONObject();
-                    data.put("id", project.getProjectId());
-                    data.put("parent", "#");
-                    String projectLink = null;
-                    if (ccProjectsList.contains(project)) {
-                        projectLink = project.getProjectName();
-                    } else {
-                        projectLink = "<a href='#' id='" + project.getProjectId() + "' name='"
-                                + project.getProjectName()
-                                + "' onclick='javascript:addCCtoProjects(this.id,this.name);' > "
-                                + project.getProjectName() + "</a>";
-                    }
-                    data.put("text", projectLink);
-                    dataArray.put(data);
-                    String wsParent = project.getProjectId();
-
-                    List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getProjectId(), userName);
-                    for (IWorkSpace ws : wsList) {
-                        // workspace json
-                        // if(!ccWorkspaceList.contains(ws)) {
-                        JSONObject data1 = new JSONObject();
-                        data1.put("id", ws.getWorkspaceId());
-                        data1.put("parent", wsParent);
-                        String wsLink = null;
-                        if (ccWorkspaceList.contains(ws)) {
-                            wsLink = ws.getWorkspaceName();
-                        } else {
-                            wsLink = "<a href='#' id='" + ws.getWorkspaceId() + "' name='" + ws.getWorkspaceName()
-                                    + "' onclick='javascript:addCCtoWorkspace(this.id,this.name);' >"
-                                    + ws.getWorkspaceName() + "</a>";
-                        }
-                        data1.put("text", wsLink);
-                        dataArray.put(data1);
-                        // }
-                    }
-
-                    // }
-                }
-            }
-            JSONObject dataList = new JSONObject();
-            dataList.put("data", dataArray);
-
-            core.put("core", dataList);
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while fetching project, Workspace  details", e);
-        }
-        return core.toString(1);
     }
 }
