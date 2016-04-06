@@ -305,6 +305,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      * @throws QuadrigaStorageException
      */
     @Override
+    @Transactional
     public IConceptCollection getConceptCollection(String id) throws QuadrigaStorageException {
         return conceptCollectionDeepMapper.getConceptCollectionDetails(id);
     }
@@ -317,6 +318,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      * @throws QuadrigaStorageException
      */
     @Override
+    @Transactional
     public void fillConceptCollection(IConceptCollection conceptCollection) throws QuadrigaStorageException {
         ConceptCollectionDTO ccDto = ccDao.getDTO(conceptCollection.getConceptCollectionId());
         conceptCollectionDeepMapper.fillConceptCollection(conceptCollection, ccDto);

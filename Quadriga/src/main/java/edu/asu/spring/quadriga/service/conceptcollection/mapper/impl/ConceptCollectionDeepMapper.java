@@ -203,6 +203,7 @@ public class ConceptCollectionDeepMapper implements
 				concept.setLemma(ccItemsDTO.getConceptDTO().getLemma());
 				concept.setPos(ccItemsDTO.getConceptDTO().getPos());
 				concept.setConceptId(ccItemsDTO.getConceptCollectionItemsDTOPK().getConcept());
+				concept.setDescription(ccItemsDTO.getConceptDTO().getDescription());
 				
 				
 				IConceptCollectionConcepts ccCocnepts= ccConceptsFactory.createConceptCollectionConceptsObject(); 
