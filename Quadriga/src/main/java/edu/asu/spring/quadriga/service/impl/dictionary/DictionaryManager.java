@@ -120,11 +120,8 @@ public class DictionaryManager implements IDictionaryManager {
     @Transactional
     public List<IDictionary> getDictionariesList(String userId) throws QuadrigaStorageException {
         List<DictionaryDTO> dictionaryDTOList = dictDao.getDictionaryDTOList(userId);
-        List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+        return dictShallowMapper.getDictionaryList(dictionaryDTOList);
 
-        dictionaryList = dictShallowMapper.getDictionaryList(dictionaryDTOList);
-
-        return dictionaryList;
     }
 
     @Override
@@ -166,8 +163,7 @@ public class DictionaryManager implements IDictionaryManager {
     @Transactional
     public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException {
         List<DictionaryDTO> dictionaryDTOList = dictDao.getDictionaryCollabOfUser(userId);
-        List<IDictionary> dictionaryList = dictShallowMapper.getDictionaryListOfCollaborator(dictionaryDTOList);
-        return dictionaryList;
+        return dictShallowMapper.getDictionaryListOfCollaborator(dictionaryDTOList);
     }
 
     @Override
@@ -262,15 +258,7 @@ public class DictionaryManager implements IDictionaryManager {
             return null;
 
         IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryDTO);
-
-        List<IDictionaryItems> dictionaryItemList = null;
-        try {
-            dictionaryItemList = dictionary.getDictionaryItems();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-
-        return dictionaryItemList;
+        return dictionary.getDictionaryItems();
     }
 
     @Override
@@ -278,11 +266,7 @@ public class DictionaryManager implements IDictionaryManager {
     public List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
         DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryid);
         IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryDTO);
-
-        List<IDictionaryItems> dictionaryItemList = null;
-        dictionaryItemList = dictionary.getDictionaryItems();
-
-        return dictionaryItemList;
+        return dictionary.getDictionaryItems();
     }
 
     /**
@@ -322,12 +306,10 @@ public class DictionaryManager implements IDictionaryManager {
     @Transactional
     public List<WordpowerReply.DictionaryEntry> searchWordPower(String item, String pos) {
 
-        List<WordpowerReply.DictionaryEntry> dictionaryEntry = null;
         String fullUrl = getSearchWordPowerURL() + "" + item + "/" + pos;
         logger.debug("Search Word Power URL : " + fullUrl);
         WordpowerReply wordpowerReply = (WordpowerReply) restTemplate.getForObject(fullUrl, WordpowerReply.class);
-        dictionaryEntry = wordpowerReply.getDictionaryEntry();
-        return dictionaryEntry;
+        return wordpowerReply.getDictionaryEntry();
     }
 
     /**
@@ -352,7 +334,6 @@ public class DictionaryManager implements IDictionaryManager {
 
     public List<WordpowerReply.DictionaryEntry> getUpdateFromWordPower(String dictionaryId, String itemid) {
 
-        List<WordpowerReply.DictionaryEntry> dictionaryEntry = null;
         logger.debug("Update url from func : " + getUpdateFromWordPowerURL());
         itemid = itemid.substring(itemid.lastIndexOf("/") + 1, itemid.length());
         logger.debug("Update Item ID : " + itemid);
@@ -360,8 +341,7 @@ public class DictionaryManager implements IDictionaryManager {
         String fullUrl = getUpdateFromWordPowerURL() + "" + itemid;
         logger.debug("Update Word Power URL : " + fullUrl);
         WordpowerReply wordpowerReply = (WordpowerReply) restTemplate.getForObject(fullUrl, WordpowerReply.class);
-        dictionaryEntry = wordpowerReply.getDictionaryEntry();
-        return dictionaryEntry;
+        return wordpowerReply.getDictionaryEntry();
     }
 
     /**
@@ -445,8 +425,7 @@ public class DictionaryManager implements IDictionaryManager {
     @Override
     @Transactional
     public String getDictionaryId(String dictName) throws QuadrigaStorageException {
-        String dictId = dictDao.getDictionaryId(dictName);
-        return dictId;
+        return dictDao.getDictionaryId(dictName);
     }
 
     @Override
@@ -517,10 +496,8 @@ public class DictionaryManager implements IDictionaryManager {
     @Override
     @Transactional
     public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException {
-        IDictionary dictionary = null;
         DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryId);
-        dictionary = dictDeepMapper.getDictionaryDetails(dictionaryDTO);
-        return dictionary;
+        return dictDeepMapper.getDictionaryDetails(dictionaryDTO);
     }
 
     /**

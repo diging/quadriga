@@ -63,42 +63,39 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
      */
     @Override
     public IDictionary getDictionaryDetails(DictionaryDTO dictionaryDTO) throws QuadrigaStorageException {
-        IDictionary dictionary = null;
+        if (dictionaryDTO == null)
+            return null;
 
-        if (dictionaryDTO != null) {
-            dictionary = dictionaryFactory.createDictionaryObject();
-            dictionary.setDictionaryId(dictionaryDTO.getDictionaryid());
-            dictionary.setDictionaryName(dictionaryDTO.getDictionaryname());
-            dictionary.setDescription(dictionaryDTO.getDescription());
-            dictionary.setCreatedBy(dictionaryDTO.getCreatedby());
-            dictionary.setCreatedDate(dictionaryDTO.getCreateddate());
-            dictionary.setUpdatedBy(dictionaryDTO.getUpdatedby());
-            dictionary.setUpdatedDate(dictionaryDTO.getUpdateddate());
-            dictionary.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
+        IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+        dictionary.setDictionaryId(dictionaryDTO.getDictionaryid());
+        dictionary.setDictionaryName(dictionaryDTO.getDictionaryname());
+        dictionary.setDescription(dictionaryDTO.getDescription());
+        dictionary.setCreatedBy(dictionaryDTO.getCreatedby());
+        dictionary.setCreatedDate(dictionaryDTO.getCreateddate());
+        dictionary.setUpdatedBy(dictionaryDTO.getUpdatedby());
+        dictionary.setUpdatedDate(dictionaryDTO.getUpdateddate());
+        dictionary.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
 
-            // Setting dictionary collaborator
-            dictionary.setDictionaryCollaborators(getDictionaryCollaboratorList(dictionaryDTO, dictionary));
-            // Setting dictionary Projects
-            dictionary.setDictionaryProjects(
-                    projectDictionaryShallowMapper.getProjectDictionaryList(dictionaryDTO, dictionary));
-            // Setting dictionary Workspaces
-            dictionary.setDictionaryWorkspaces(
-                    workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(dictionary, dictionaryDTO));
-            // Setting dictionary Items
-            dictionary.setDictionaryItems(getDictionaryItemList(dictionaryDTO, dictionary));
-        }
+        // Setting dictionary collaborator
+        dictionary.setDictionaryCollaborators(getDictionaryCollaboratorList(dictionaryDTO, dictionary));
+        // Setting dictionary Projects
+        dictionary.setDictionaryProjects(
+                projectDictionaryShallowMapper.getProjectDictionaryList(dictionaryDTO, dictionary));
+        // Setting dictionary Workspaces
+        dictionary.setDictionaryWorkspaces(
+                workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(dictionary, dictionaryDTO));
+        // Setting dictionary Items
+        dictionary.setDictionaryItems(getDictionaryItemList(dictionaryDTO, dictionary));
+
         return dictionary;
     }
 
     public List<IDictionaryItems> getDictionaryItemList(DictionaryDTO dictionaryDTO, IDictionary dictionary) {
-        List<IDictionaryItems> dictionaryItemList = null;
+        List<IDictionaryItems> dictionaryItemList = new ArrayList<IDictionaryItems>();
         List<DictionaryItemsDTO> dictionaryItemsDTOList = dictionaryDTO.getDictionaryItemsDTOList();
 
         if (dictionaryItemsDTOList != null) {
             for (DictionaryItemsDTO dictionaryItemsDTO : dictionaryItemsDTOList) {
-                if (dictionaryItemList == null) {
-                    dictionaryItemList = new ArrayList<IDictionaryItems>();
-                }
                 IItem item = dictionaryItemFactory.createDictionaryItemObject();
                 // TODO : we need to fill this
                 item.setTerm(dictionaryItemsDTO.getTerm());
@@ -121,15 +118,12 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 
     public List<IDictionaryCollaborator> getDictionaryCollaboratorList(DictionaryDTO dictionaryDTO,
             IDictionary dictionary) throws QuadrigaStorageException {
-        List<IDictionaryCollaborator> dictionaryCollaboratorList = null;
+        List<IDictionaryCollaborator> dictionaryCollaboratorList = new ArrayList<IDictionaryCollaborator>();
         if (dictionaryDTO.getDictionaryCollaboratorDTOList() != null
                 && dictionaryDTO.getDictionaryCollaboratorDTOList().size() > 0) {
             HashMap<String, IDictionaryCollaborator> userDictionaryCollaboratorMap = mapUserDictionaryCollaborator(
                     dictionaryDTO, dictionary);
             for (String userID : userDictionaryCollaboratorMap.keySet()) {
-                if (dictionaryCollaboratorList == null) {
-                    dictionaryCollaboratorList = new ArrayList<IDictionaryCollaborator>();
-                }
                 dictionaryCollaboratorList.add(userDictionaryCollaboratorMap.get(userID));
             }
         }

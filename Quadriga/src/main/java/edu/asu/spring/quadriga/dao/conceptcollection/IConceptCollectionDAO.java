@@ -89,7 +89,7 @@ public interface IConceptCollectionDAO extends IBaseDAO<ConceptCollectionDTO> {
      * @return
      * @throws QuadrigaStorageException
      */
-    public abstract String deleteItems(String id, String collectionId, String username) throws QuadrigaStorageException;
+    public abstract void deleteItems(String id, String collectionId, String username) throws QuadrigaStorageException;
 
     /**
      * Method is used to update the fields in the database
@@ -100,7 +100,7 @@ public interface IConceptCollectionDAO extends IBaseDAO<ConceptCollectionDTO> {
      * @return
      * @throws QuadrigaStorageException
      */
-    public abstract String updateItem(IConcept concept, String collectionId, String username)
+    public abstract void updateItem(IConcept concept, String collectionId, String username)
             throws QuadrigaStorageException;
 
     /**

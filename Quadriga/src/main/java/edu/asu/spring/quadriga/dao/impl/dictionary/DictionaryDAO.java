@@ -6,8 +6,6 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -27,8 +25,6 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
 
     @Autowired
     private DictionaryDTOMapper dictionaryDTOMapper;
-
-    private static final Logger logger = LoggerFactory.getLogger(DictionaryDAO.class);
 
     /**
      * Save a dictionary in the database
@@ -77,8 +73,7 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
                 sessionFactory.getCurrentSession().save(dictionaryItems);
             }
         } catch (HibernateException e) {
-            logger.error("addDictionaryItems method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
     }
 
@@ -106,9 +101,8 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
             if (dictItemsDTO != null) {
                 sessionFactory.getCurrentSession().delete(dictItemsDTO);
             }
-        } catch (Exception e) {
-            logger.error("deleteDictionaryItems method :", e);
-            throw new QuadrigaStorageException();
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
         }
     }
 
@@ -179,7 +173,7 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
             if (dictionaryDTO != null) {
                 isValidUser = Boolean.TRUE;
             }
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
         return isValidUser;
@@ -197,16 +191,14 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
     @SuppressWarnings({ "unchecked" })
     @Override
     public List<DictionaryDTO> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException {
-        List<DictionaryDTO> dictDTOList = null;
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(
                     "Select dictCollab.dictionaryDTO from DictionaryCollaboratorDTO dictCollab where dictCollab.quadrigaUserDTO.username =:username");
             query.setParameter("username", userId);
-            dictDTOList = query.list();
-        } catch (Exception e) {
+            return query.list();
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
-        return dictDTOList;
     }
 
     /**
@@ -227,12 +219,10 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
             query.setParameter("termid", itemid);
             int output = query.executeUpdate();
             if (output == 0) {
-                logger.error("Item does not exists in this dictionary");
-                throw new QuadrigaStorageException();
+                throw new QuadrigaStorageException("Item does not exist in the dictionary");
             }
-        } catch (Exception e) {
-            logger.error("getDictionaryItemsDetailsCollab method :", e);
-            throw new QuadrigaStorageException();
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
         }
     }
 
@@ -257,7 +247,7 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
             if (dictDTO != null) {
                 dictID = dictDTO.getDictionaryid();
             }
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
         return dictID;
@@ -273,9 +263,13 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
     @SuppressWarnings("unchecked")
     @Override
     public List<DictionaryDTO> getDictionaryDTOList(String userName) throws QuadrigaStorageException {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery("DictionaryDTO.findByUsername");
-        query.setParameter("username", userName);
-        return query.list();
+        try {
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("DictionaryDTO.findByUsername");
+            query.setParameter("username", userName);
+            return query.list();
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -287,7 +281,7 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
                             + "SELECT p.projectDictionaryDTOPK.dictionaryid FROM ProjectDictionaryDTO p WHERE p.projectDictionaryDTOPK.projectid = :projectid)");
             query.setParameter("projectid", projectId);
             return query.list();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -307,17 +301,13 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
      */
     @Override
     public void updateDictionary(IDictionary dictionary, String userName) throws QuadrigaStorageException {
-        try {
-            DictionaryDTO dictionaryDTO = getDTO(dictionary.getDictionaryId());
-            dictionaryDTO.setDictionaryname(dictionary.getDictionaryName());
-            dictionaryDTO.setDescription(dictionary.getDescription());
-            dictionaryDTO.setAccessibility(Boolean.FALSE);
-            dictionaryDTO.setUpdatedby(userName);
-            dictionaryDTO.setUpdateddate(new Date());
-            updateDTO(dictionaryDTO);
-        } catch (HibernateException e) {
-            throw new QuadrigaStorageException(e);
-        }
+        DictionaryDTO dictionaryDTO = getDTO(dictionary.getDictionaryId());
+        dictionaryDTO.setDictionaryname(dictionary.getDictionaryName());
+        dictionaryDTO.setDescription(dictionary.getDescription());
+        dictionaryDTO.setAccessibility(Boolean.FALSE);
+        dictionaryDTO.setUpdatedby(userName);
+        dictionaryDTO.setUpdateddate(new Date());
+        updateDTO(dictionaryDTO);
     }
 
     @Override
