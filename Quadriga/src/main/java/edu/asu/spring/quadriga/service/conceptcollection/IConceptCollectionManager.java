@@ -10,6 +10,7 @@ import org.codehaus.jettison.json.JSONException;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -54,20 +55,6 @@ public interface IConceptCollectionManager {
      * @return
      */
     public ConceptpowerReply search(String item, String pos);
-
-    /**
-     * Method is used to get collection details like description and items list
-     * Input: IConceptCollection Output: void. We place the result in the same
-     * input object
-     * 
-     * @param concept
-     * @param username
-     * @throws QuadrigaStorageException
-     * @throws QuadrigaAccessException
-     * 
-     */
-    public abstract void fillCollectionDetails(IConceptCollection concept, String username)
-            throws QuadrigaStorageException, QuadrigaAccessException;
 
     /**
      * Method is used to add new items to items list of a conceptcollection
@@ -127,9 +114,13 @@ public interface IConceptCollectionManager {
 
     public abstract String getConceptCollectionId(String ccName) throws QuadrigaStorageException;
 
-    public abstract String getProjectsTree(String userName, String ccId) throws JSONException;
-
     public abstract List<IConceptCollection> getNonAssociatedProjectConcepts(String projectId)
+            throws QuadrigaStorageException;
+
+    public abstract IConceptCollection getConceptCollection(String id)
+            throws QuadrigaStorageException;
+
+    public abstract void fillConceptCollection(IConceptCollection conceptCollection)
             throws QuadrigaStorageException;
 
 }

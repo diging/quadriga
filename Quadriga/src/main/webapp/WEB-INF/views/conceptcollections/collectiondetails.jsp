@@ -3,8 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
-<script
-	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.dataTable').dataTable({
@@ -50,16 +49,6 @@
 		}
 	}
 
-	$(function() {
-
-		var data = $
-		{
-			core
-		}
-		;
-		console.log(data);
-		$('#html').jstree(data);
-	});
 
 	function addCCtoProjects(id, name) {
 

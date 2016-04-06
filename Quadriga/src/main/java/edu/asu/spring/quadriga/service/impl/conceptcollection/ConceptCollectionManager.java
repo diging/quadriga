@@ -1,15 +1,9 @@
-/**
- * 
- */
 package edu.asu.spring.quadriga.service.impl.conceptcollection;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +19,11 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
+import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
@@ -65,16 +59,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     private IQuadrigaRoleManager roleMapper;
 
     @Autowired
-    private IListWSManager wsManager;
-
-    @Autowired
-    private IListWsDAO wsListManger;
-
-    @Autowired
     private IConceptCollectionShallowMapper ccShallowMapper;
-
-    @Autowired
-    private IProjectShallowMapper projectShallowMapper;
 
     /**
      * This method retrieves the concept collection owner by the submitted user
@@ -114,21 +99,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
         return ccShallowMapper.getConceptCollectionListOfCollaborator(sUserId);
     }
 
-    /**
-     * This method retrieves the concept collection details
-     * 
-     * @param conceptColl
-     *            - concept collection object containing the id
-     * @param username
-     *            - logged in user name
-     * @throws QuadrigaStorageException
-     */
-    @Override
-    @Transactional
-    public void fillCollectionDetails(IConceptCollection conceptColl, String username)
-            throws QuadrigaStorageException, QuadrigaAccessException {
-        ccDao.getCollectionDetails(conceptColl, username);
-    }
 
     /**
      * This method searches the items and its part of speech in the concept
@@ -306,68 +276,30 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     public String getConceptCollectionId(String ccName) throws QuadrigaStorageException {
         return ccDao.getConceptCollectionId(ccName);
     }
-
+    
+    /**
+     * This method retrieves a concept collection given its id. 
+     * @param id Id of the concept collection to retrieve.
+     * @return
+     * @throws QuadrigaStorageException
+     */
     @Override
     @Transactional
-    public String getProjectsTree(String userName, String ccId) throws JSONException {
-        List<IProject> projectList = null;
-        JSONObject core = new JSONObject();
-        try {
-            // projectList = projectManager.getProjectList(userName);
-            projectList = projectShallowMapper.getProjectList(userName);
-            JSONArray dataArray = new JSONArray();
-            List<IProject> ccProjectsList = projectShallowMapper.getCollaboratorProjectListOfUser(ccId);
-            List<IWorkSpace> ccWorkspaceList = wsListManger.getWorkspaceByConceptCollection(ccId);
-            if (ccProjectsList != null) {
-                for (IProject project : projectList) {
-                    // Each data
-                    // if (!ccProjectsList.contains(project)) {
-                    JSONObject data = new JSONObject();
-                    data.put("id", project.getProjectId());
-                    data.put("parent", "#");
-                    String projectLink = null;
-                    if (ccProjectsList.contains(project)) {
-                        projectLink = project.getProjectName();
-                    } else {
-                        projectLink = "<a href='#' id='" + project.getProjectId() + "' name='"
-                                + project.getProjectName()
-                                + "' onclick='javascript:addCCtoProjects(this.id,this.name);' > "
-                                + project.getProjectName() + "</a>";
-                    }
-                    data.put("text", projectLink);
-                    dataArray.put(data);
-                    String wsParent = project.getProjectId();
-
-                    List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getProjectId(), userName);
-                    for (IWorkSpace ws : wsList) {
-                        // workspace json
-                        // if(!ccWorkspaceList.contains(ws)) {
-                        JSONObject data1 = new JSONObject();
-                        data1.put("id", ws.getWorkspaceId());
-                        data1.put("parent", wsParent);
-                        String wsLink = null;
-                        if (ccWorkspaceList.contains(ws)) {
-                            wsLink = ws.getWorkspaceName();
-                        } else {
-                            wsLink = "<a href='#' id='" + ws.getWorkspaceId() + "' name='" + ws.getWorkspaceName()
-                                    + "' onclick='javascript:addCCtoWorkspace(this.id,this.name);' >"
-                                    + ws.getWorkspaceName() + "</a>";
-                        }
-                        data1.put("text", wsLink);
-                        dataArray.put(data1);
-                        // }
-                    }
-
-                    // }
-                }
-            }
-            JSONObject dataList = new JSONObject();
-            dataList.put("data", dataArray);
-
-            core.put("core", dataList);
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while fetching project, Workspace  details", e);
-        }
-        return core.toString(1);
+    public IConceptCollection getConceptCollection(String id) throws QuadrigaStorageException {
+        return conceptCollectionDeepMapper.getConceptCollectionDetails(id);
+    }
+    
+    /**
+     * This method retrieves the dto corresponding to the id of the provided concept collection
+     * and fills the provided concept collection with the data from the dto. Note that if data
+     * is already present in the concept collection, they will be overridden.
+     * @param conceptCollection
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    @Transactional
+    public void fillConceptCollection(IConceptCollection conceptCollection) throws QuadrigaStorageException {
+        ConceptCollectionDTO ccDto = ccDao.getDTO(conceptCollection.getConceptCollectionId());
+        conceptCollectionDeepMapper.fillConceptCollection(conceptCollection, ccDto);
     }
 }

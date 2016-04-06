@@ -37,14 +37,9 @@ import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollecti
 @Repository
 public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implements IConceptCollectionDAO {
 
-    @Autowired
-    protected SessionFactory sessionFactory;
-
+    
     @Autowired
     protected ConceptCollectionDTOMapper conceptCollectionDTOMapper;
-
-    @Autowired
-    private IUserManager userManager;
 
     @Autowired
     private IConceptCollectionShallowMapper ccShallowMapper;
@@ -123,42 +118,19 @@ public class ConceptCollectionDAO extends BaseDAO<ConceptCollectionDTO> implemen
      *            username - logged in user
      */
     @Override
-    public void getCollectionDetails(IConceptCollection collection, String username)
+    public ConceptCollectionDTO getCollectionDetails(String collectionId, String username)
             throws QuadrigaStorageException, QuadrigaAccessException {
         IUser owner = null;
-        collection.setConceptCollectionCollaborators(new ArrayList<IConceptCollectionCollaborator>());
-        List<IConceptCollectionConcepts> concepts = new ArrayList<IConceptCollectionConcepts>();
         ConceptCollectionDTO conceptcollectionsDTO = null;
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(
                     "from ConceptCollectionDTO conceptColl where conceptColl.conceptCollectionid =:conceptCollectionid");
-            query.setParameter("conceptCollectionid", collection.getConceptCollectionId());
+            query.setParameter("conceptCollectionid", collectionId);
 
-            conceptcollectionsDTO = (ConceptCollectionDTO) query.uniqueResult();
+            return (ConceptCollectionDTO) query.uniqueResult();
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
-        if (conceptcollectionsDTO != null) {
-            collection.setDescription(conceptcollectionsDTO.getDescription());
-            collection.setConceptCollectionName(conceptcollectionsDTO.getCollectionname());
-            owner = userManager.getUser(conceptcollectionsDTO.getCollectionowner().getUsername());
-            collection.setOwner(owner);
-            if (conceptcollectionsDTO.getConceptCollectionItemsDTOList() != null
-                    && conceptcollectionsDTO.getConceptCollectionItemsDTOList().size() > 0) {
-                Iterator<ConceptCollectionItemsDTO> ccItemsIterator = conceptcollectionsDTO
-                        .getConceptCollectionItemsDTOList().iterator();
-
-                while (ccItemsIterator.hasNext()) {
-                    IConceptCollectionConcepts tempConcept = new ConceptCollectionConcepts();
-                    ConceptsDTO concept = ccItemsIterator.next().getConceptDTO();
-                    tempConcept.setConcept(conceptCollectionDTOMapper.getConceptCollectionItems(concept));
-                    tempConcept.setConceptCollection(collection);
-                    concepts.add(tempConcept);
-                }
-            }
-            collection.setConceptCollectionConcepts(concepts);
-        }
-
     }
 
     @SuppressWarnings("unchecked")
