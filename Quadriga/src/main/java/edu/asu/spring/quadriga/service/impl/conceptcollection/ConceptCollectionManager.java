@@ -27,9 +27,11 @@ import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
+import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
@@ -75,6 +77,10 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 
     @Autowired
     private IProjectShallowMapper projectShallowMapper;
+    
+    @Autowired
+    private IUserManager userManager;
+
 
     /**
      * This method retrieves the concept collection owner by the submitted user
@@ -114,21 +120,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
         return ccShallowMapper.getConceptCollectionListOfCollaborator(sUserId);
     }
 
-    /**
-     * This method retrieves the concept collection details
-     * 
-     * @param conceptColl
-     *            - concept collection object containing the id
-     * @param username
-     *            - logged in user name
-     * @throws QuadrigaStorageException
-     */
-    @Override
-    @Transactional
-    public void fillCollectionDetails(IConceptCollection conceptColl, String username)
-            throws QuadrigaStorageException, QuadrigaAccessException {
-        ccDao.getCollectionDetails(conceptColl, username);
-    }
 
     /**
      * This method searches the items and its part of speech in the concept
@@ -306,6 +297,31 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     public String getConceptCollectionId(String ccName) throws QuadrigaStorageException {
         return ccDao.getConceptCollectionId(ccName);
     }
+    
+    /**
+     * This method retrieves a concept collection given its id. 
+     * @param id Id of the concept collection to retrieve.
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    public IConceptCollection getConceptCollection(String id) throws QuadrigaStorageException {
+        return conceptCollectionDeepMapper.getConceptCollectionDetails(id);
+    }
+    
+    /**
+     * This method retrieves the dto corresponding to the id of the provided concept collection
+     * and fills the provided concept collection with the data from the dto. Note that if data
+     * is already present in the concept collection, they will be overridden.
+     * @param conceptCollection
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    public void fillConceptCollection(IConceptCollection conceptCollection) throws QuadrigaStorageException {
+        ConceptCollectionDTO ccDto = ccDao.getDTO(conceptCollection.getConceptCollectionId());
+        conceptCollectionDeepMapper.fillConceptCollection(conceptCollection, ccDto);
+    }
+    
 
     @Override
     @Transactional

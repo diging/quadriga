@@ -75,25 +75,38 @@ public class ConceptCollectionDeepMapper implements
 		ConceptCollectionDTO ccDTO = dbConnect.getDTO(ccId);
 		if(ccDTO != null){
 			conceptCollection = ccFactory.createConceptCollectionObject();
-			conceptCollection.setConceptCollectionId(ccDTO.getConceptCollectionid());
-			conceptCollection.setConceptCollectionName(ccDTO.getCollectionname());
-			conceptCollection.setDescription(ccDTO.getDescription());
-			conceptCollection.setCreatedBy(ccDTO.getCreatedby());
-			conceptCollection.setCreatedDate(ccDTO.getCreateddate());
-			conceptCollection.setUpdatedBy(ccDTO.getUpdatedby());
-			conceptCollection.setUpdatedDate(ccDTO.getUpdateddate());
-			conceptCollection.setOwner(userDeepMapper.getUser(ccDTO.getCollectionowner().getUsername()));
-			
-			// Setting dictionary collaborator
-			conceptCollection.setConceptCollectionCollaborators(getConceptCollectionCollaboratorList(ccDTO, conceptCollection));
-			// Setting dictionary Projects
-			conceptCollection.setConceptCollectionProjects(projectCCShallowMapper.getProjectConceptCollectionList(ccDTO, conceptCollection));
-			// Setting dictionary Workspaces
-			conceptCollection.setConceptCollectionWorkspaces(workspaceCCShallowMapper.getWorkspaceConceptCollectionList(conceptCollection, ccDTO));
-			// Setting dictionary Items
-			conceptCollection.setConceptCollectionConcepts(getConceptCollectionConceptsList(ccDTO, conceptCollection));
+			fillConceptCollection(conceptCollection, ccDTO);
 		}
 		return conceptCollection;
+	}
+	
+	/**
+	 * This method fills the provided concept collection with the data from the provided concept
+	 * collection DTO. 
+	 * 
+	 * @param conceptCollection
+	 * @param ccDTO
+	 * @throws QuadrigaStorageException
+	 */
+	@Override
+    public void fillConceptCollection(IConceptCollection conceptCollection, ConceptCollectionDTO ccDTO) throws QuadrigaStorageException {
+	    conceptCollection.setConceptCollectionId(ccDTO.getConceptCollectionid());
+        conceptCollection.setConceptCollectionName(ccDTO.getCollectionname());
+        conceptCollection.setDescription(ccDTO.getDescription());
+        conceptCollection.setCreatedBy(ccDTO.getCreatedby());
+        conceptCollection.setCreatedDate(ccDTO.getCreateddate());
+        conceptCollection.setUpdatedBy(ccDTO.getUpdatedby());
+        conceptCollection.setUpdatedDate(ccDTO.getUpdateddate());
+        conceptCollection.setOwner(userDeepMapper.getUser(ccDTO.getCollectionowner().getUsername()));
+        
+        // Setting dictionary collaborator
+        conceptCollection.setConceptCollectionCollaborators(getConceptCollectionCollaboratorList(ccDTO, conceptCollection));
+        // Setting dictionary Projects
+        conceptCollection.setConceptCollectionProjects(projectCCShallowMapper.getProjectConceptCollectionList(ccDTO, conceptCollection));
+        // Setting dictionary Workspaces
+        conceptCollection.setConceptCollectionWorkspaces(workspaceCCShallowMapper.getWorkspaceConceptCollectionList(conceptCollection, ccDTO));
+        // Setting dictionary Items
+        conceptCollection.setConceptCollectionConcepts(getConceptCollectionConceptsList(ccDTO, conceptCollection));
 	}
 	
 	public List<IConceptCollectionCollaborator> getConceptCollectionCollaboratorList(ConceptCollectionDTO ccDTO,IConceptCollection conceptCollection) throws QuadrigaStorageException

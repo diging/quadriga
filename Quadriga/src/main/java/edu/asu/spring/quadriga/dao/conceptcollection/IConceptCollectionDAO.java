@@ -41,12 +41,13 @@ public interface IConceptCollectionDAO extends IBaseDAO<ConceptCollectionDTO> {
      * Queries the database with concept collection objects
      * 
      * @param username
+     * @return TODO
      * 
      * @return Copies the data into the input object
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    public abstract void getCollectionDetails(IConceptCollection collection, String username)
+    public abstract ConceptCollectionDTO getCollectionDetails(String collectionId, String username)
             throws QuadrigaStorageException, QuadrigaAccessException;
 
     /**
