@@ -48,23 +48,22 @@ public class EventParser {
 
     @Autowired
     private IConceptpowerConnector conceptPowerConnector;
-    
+
     @Autowired
     private IQStoreConnector qstoreConnector;
 
     @Autowired
     @Qualifier("jaxbMarshaller")
     private Jaxb2Marshaller jaxbMarshaller;
-    
+
     @Autowired
     private Environment env;
-    
+
     @Autowired
     private IConceptCollectionManager conceptCollectionManager;
-    
+
     @Autowired
     private IMarshallingService marshallingService;
-
 
     public void parseStatement(String relationEventId, Map<String, Node> nodes,
             List<Link> links) throws JAXBException, QStoreStorageException {
@@ -128,6 +127,9 @@ public class EventParser {
                         statementId, leafNodes, links);
             }
 
+            // source reference from relation type
+            String sourceReference = relation.getSourceReference();
+
             if (subjectNode != null) {
                 Link link = new Link();
                 // add the statement id to the link
@@ -136,6 +138,8 @@ public class EventParser {
                 link.setObject(subjectNode);
                 link.setLabel("has subject");
                 links.add(link);
+                // set the source reference to the link
+                link.setSourceReference(sourceReference);
             }
 
             if (objectNode != null) {
@@ -146,6 +150,8 @@ public class EventParser {
                 link.setObject(objectNode);
                 link.setLabel("has object");
                 links.add(link);
+                // set the source reference to the link
+                link.setSourceReference(sourceReference);
             }
 
             return predNode;
@@ -153,7 +159,7 @@ public class EventParser {
 
         return null;
     }
-    
+
     private PredicateNode parsePredicateEvent(
             AppellationEventType appellationEvent, String statementId) {
         PredicateNode predNode = new PredicateNode();
@@ -171,6 +177,9 @@ public class EventParser {
         }
         node.setId(event.getAppellationEventID());
         node.setConceptId(label.toString().trim());
+        // set the source reference
+        node.setSourceReference(event.getSourceReference());
+
         if (node.getConceptId() != null) {
             String id = node.getConceptId();
             ConceptpowerReply re = conceptPowerConnector.getById(id);
@@ -181,7 +190,7 @@ public class EventParser {
                 node.setLabel(id);
                 node.setDescription("");
             }
-            
+
         }
         node.getStatementIds().add(statementId);
     }
@@ -193,9 +202,10 @@ public class EventParser {
     private String getDescription(ConceptpowerReply re) {
         return re.getConceptEntry().get(0).getDescription();
     }
-    
-    private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
-            throws JAXBException, QStoreStorageException {
+
+    private ElementEventsType getElementEventTypeFromCreationEventTypeID(
+            String relationEventId) throws JAXBException,
+            QStoreStorageException {
         String xml = qstoreConnector.getCreationEvent(relationEventId);
         ElementEventsType elementEventType = null;
         if (xml == null) {
@@ -203,7 +213,8 @@ public class EventParser {
                     "Some issue retriving data from Qstore, Please check the logs related to Qstore");
         } else {
             // Initialize ElementEventsType object for relation event
-            elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
+            elementEventType = marshallingService
+                    .unMarshalXmlToElementEventsType(xml);
         }
         return elementEventType;
     }

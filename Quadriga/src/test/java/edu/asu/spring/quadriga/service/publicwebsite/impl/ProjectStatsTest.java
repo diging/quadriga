@@ -23,35 +23,35 @@ import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
 import edu.asu.spring.quadriga.transform.Node;
 
-
 public class ProjectStatsTest {
-    
+
     @Mock
-    private INetworkTransformationManager mockedTransformationManager = Mockito.mock(INetworkTransformationManager.class);
+    private INetworkTransformationManager mockedTransformationManager = Mockito
+            .mock(INetworkTransformationManager.class);
 
     @InjectMocks
     private ProjectStats projectStatsUnderTest;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    private List<IConceptStats> mockedConceptStatsList;
 
-    @Test
-    public void getConceptCountTest() throws QuadrigaStorageException {
-        
+    private List<INetwork> mockedNetworkList;
+
+    @Before
+    public void setUp() throws QuadrigaStorageException {
+        MockitoAnnotations.initMocks(this);
+
         Network network1 = new Network();
         network1.setNetworkId("id");
-        network1.setNetworkName("test network");        
-        
+        network1.setNetworkName("test network");
+
         Network network2 = new Network();
         network2.setNetworkId("id2");
-        network2.setNetworkName("test network2");        
-        
-        List<INetwork> networkList = new ArrayList<INetwork>();
-        networkList.add(network1);
-        networkList.add(network2);
-        
+        network2.setNetworkName("test network2");
+
+        mockedNetworkList = new ArrayList<INetwork>();
+        mockedNetworkList.add(network1);
+        mockedNetworkList.add(network2);
+
         Map<String, Node> nodes = new HashMap<String, Node>();
         Node n1 = new Node();
         n1.setConceptId("url1");
@@ -60,8 +60,9 @@ public class ProjectStatsTest {
         nodes.put("1", n1);
         nodes.put("2", n2);
 
-        TransformedNetwork transformedNetwork1 = new TransformedNetwork(nodes, null);
-        
+        TransformedNetwork transformedNetwork1 = new TransformedNetwork(nodes,
+                null);
+
         Map<String, Node> nodes2 = new HashMap<String, Node>();
         Node nd1 = new Node();
         nd1.setConceptId("url1");
@@ -70,18 +71,35 @@ public class ProjectStatsTest {
         nodes.put("1", nd1);
         nodes.put("2", nd2);
 
-        TransformedNetwork transformedNetwork2 = new TransformedNetwork(nodes2, null);
-        
+        TransformedNetwork transformedNetwork2 = new TransformedNetwork(nodes2,
+                null);
+
         ConceptStats cs1 = new ConceptStats("url1", null, null, 3);
         ConceptStats cs2 = new ConceptStats("url2", null, null, 1);
-        List<IConceptStats> conceptStatsList = new ArrayList<IConceptStats>();
-        conceptStatsList.add(cs1);
-        conceptStatsList.add(cs2);
-        
-        Mockito.when(mockedTransformationManager.getTransformedNetwork("id")).thenReturn(transformedNetwork1);
-        Mockito.when(mockedTransformationManager.getTransformedNetwork("id2")).thenReturn(transformedNetwork2);
-                
-        assertEquals("conceptCount", conceptStatsList, projectStatsUnderTest.getConceptCount(networkList));
-        
+
+        mockedConceptStatsList = new ArrayList<IConceptStats>();
+        mockedConceptStatsList.add(cs1);
+        mockedConceptStatsList.add(cs2);
+
+        Mockito.when(mockedTransformationManager.getTransformedNetwork("id"))
+                .thenReturn(transformedNetwork1);
+        Mockito.when(mockedTransformationManager.getTransformedNetwork("id2"))
+                .thenReturn(transformedNetwork2);
+    }
+
+    @Test
+    public void getConceptCountTest() throws QuadrigaStorageException {
+
+        List<IConceptStats> conceptStatsList = projectStatsUnderTest
+                .getConceptCount(mockedNetworkList);
+        assertTrue(conceptStatsList.containsAll(mockedConceptStatsList)
+                && mockedConceptStatsList.containsAll(conceptStatsList));
+
+    }
+
+    @Test
+    public void getSortedConceptCountTest() throws QuadrigaStorageException {
+        assertEquals("conceptCount", mockedConceptStatsList,
+                projectStatsUnderTest.getConceptCount(mockedNetworkList));
     }
 }
