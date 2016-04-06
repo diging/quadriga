@@ -18,9 +18,6 @@
 <!-- Bootstrap core CSS -->
 <link
 	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-<link
-	href="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/css/bootstrap.min.css"
-	rel="stylesheet">
 
 <!-- Custom styles for this template -->
 <link
