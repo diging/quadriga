@@ -490,12 +490,16 @@ public class ConceptCollectionRestController {
     public ResponseEntity<String> getConceptList(@PathVariable("collectionID") String collectionID, ModelMap model,
             HttpServletRequest req, Principal principal) throws RestException {
         StringWriter sw = new StringWriter();
-        IConceptCollection collection = collectionFactory.createConceptCollectionObject();
+        IConceptCollection collection;
+        try {
+            collection = conceptControllerManager.getConceptCollection(collectionID);
+        } catch (QuadrigaStorageException e1) {
+            throw new RestException(500, e1);
+        }
         collection.setConceptCollectionId(collectionID);
         try {
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            conceptControllerManager.fillCollectionDetails(collection, principal.getName());
             Template template = engine.getTemplate("velocitytemplates/conceptdetails.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", collection.getConceptCollectionConcepts());
