@@ -47,7 +47,6 @@ public class AddTextController {
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-
         binder.setValidator(txtValidator);
     }
 
@@ -124,7 +123,7 @@ public class AddTextController {
                 redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
             } else {
                 redirectAttributes.addFlashAttribute("show_error_alert", true);
-                redirectAttributes.addFlashAttribute("show_error_alert", "Error while checking the text file.");
+                redirectAttributes.addFlashAttribute("show_error_alert", "Error while saving the text file.");
             }
         }
         return model;

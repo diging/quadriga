@@ -43,13 +43,10 @@ public class FileSaveUtility implements IFileSaveUtility {
             f.createNewFile();
         }
         FileOutputStream fos = new FileOutputStream(f);
-        try {
             fos.write(fileContent);
             fos.close();
+            
             return true;
-        } catch (Exception e) {
-            return false;
-        }
 
     }
 

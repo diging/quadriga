@@ -18,7 +18,7 @@ public interface IFileSaveUtility {
      *            Filename of the file to be stored.
      * @param fileContent
      *            Content of the file as a byte array.
-     * @return Return true if the file is saved else returns false.
+     * @return Returns true if file save is successful else returns false
      * @throws FileStorageException
      * @throws FileNotFoundException
      * @throws IOException

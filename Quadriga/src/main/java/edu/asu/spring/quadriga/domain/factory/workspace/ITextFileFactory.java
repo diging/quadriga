@@ -14,6 +14,6 @@ public interface ITextFileFactory {
     /**
      * @return Returns a TextFile Object for Web Backing
      */
-    public abstract ITextFile createTextFileObject();
+    public ITextFile createTextFileObject();
 
 }

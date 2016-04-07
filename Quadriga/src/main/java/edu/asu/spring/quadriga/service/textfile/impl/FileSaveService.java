@@ -25,9 +25,7 @@ public class FileSaveService implements IFileSaveService {
     @Override
     public boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException, IOException {
         this.txtFile = txtFile;
-        saveMetadata();
-        saveFileContent();
-        return true;
+        return saveMetadata() && saveFileContent();
     }
 
     /**
@@ -42,8 +40,10 @@ public class FileSaveService implements IFileSaveService {
         fileContent.append("ReferenceId:" + txtFile.getRefId() + "\n");
         fileContent.append("TextFileId:" + txtFile.getTextId() + "\n");
         String filePath = txtFile.getTextId();
-        fileManager.saveFiletoDir(filePath, "/meta.properties", fileContent.toString().getBytes());
-        return true;
+        if(fileManager.saveFiletoDir(filePath, "/meta.properties", fileContent.toString().getBytes())){
+            return true;
+        }
+        else return false;
     }
 
     private boolean saveFileContent() throws IOException, FileStorageException {
@@ -55,8 +55,10 @@ public class FileSaveService implements IFileSaveService {
             saveTxtFile = ("/" + fileName + ".txt");
         }
         byte[] fileContentBytes = txtFile.getFileContent().getBytes("UTF-8");
-        fileManager.saveFiletoDir(txtFile.getTextId(), saveTxtFile, fileContentBytes);
+        if(fileManager.saveFiletoDir(txtFile.getTextId(), saveTxtFile, fileContentBytes)){
         return true;
+        }
+        else return false;
     }
 
 }

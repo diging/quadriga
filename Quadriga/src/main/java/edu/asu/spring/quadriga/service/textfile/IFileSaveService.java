@@ -14,7 +14,7 @@ public interface IFileSaveService {
     /**
      * @param txtFile
      *            Text File Object to be saved
-     * @return Returns true if file is succesfully saved.
+     * @return Returns true if file is successfully saved.
      * @throws IOException
      * @throws FileStorageException
      */
