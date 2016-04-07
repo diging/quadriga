@@ -3,18 +3,20 @@ package edu.asu.spring.quadriga.domain.projectblog;
 import java.util.Date;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
 
 /**
- * Interface for {@linkplain ProjectBlog} object
+ * Interface for project blog entry objects.
  * 
  * @author PawanMahalle
  *
+ * @see ProjectBlogEntry
  */
-public interface IProjectBlog {
+public interface IProjectBlogEntry {
 
-    String getProjectBlogId();
+    String getProjectBlogEntryId();
 
-    void setProjectBlogId(String projectBlogId);
+    void setProjectBlogEntryId(String projectBlogEntryId);
 
     String getTitle();
 
@@ -24,10 +26,6 @@ public interface IProjectBlog {
 
     void setDescription(String description);
 
-    String getAuthor();
-
-    void setAuthor(String author);
-
     Date getCreatedDate();
 
     void setCreatedDate(Date createdDate);
@@ -35,5 +33,9 @@ public interface IProjectBlog {
     String getProjectId();
 
     void setProjectId(String projectId);
+
+    void setAuthor(IUser author);
+
+    IUser getAuthor();
 
 }

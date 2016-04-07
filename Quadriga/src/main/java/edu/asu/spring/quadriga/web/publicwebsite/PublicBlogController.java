@@ -5,16 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import edu.asu.spring.quadriga.domain.projectblog.IProjectBlog;
+import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.projectblog.IProjectBlogManager;
+import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
@@ -26,17 +25,16 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  */
 @PropertySource(value = "classpath:/user.properties")
 @Controller
-@Transactional(rollbackFor = { Exception.class })
 public class PublicBlogController {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
 
     @Autowired
-    private IProjectBlogManager projectBlogManager;
+    private IProjectBlogEntryManager projectBlogEntryManager;
 
     /**
-     * fetches the project blog entries from <code>tbl_projectblog</code>.
+     * fetches project blog entries from <code>tbl_projectblogentry</code>.
      * 
      * @param projectUnixName
      *            The project unix name
@@ -48,7 +46,7 @@ public class PublicBlogController {
     @RequestMapping(value = "sites/{projectUnixName}/projectblog", method = RequestMethod.GET)
     public String projectblog(@PathVariable("projectUnixName") String projectUnixName, Model model)
             throws QuadrigaStorageException {
-        
+            
         IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
 
         if (project == null) {
@@ -57,10 +55,10 @@ public class PublicBlogController {
 
         //Obtain project blog entries for given project
         String projectId = project.getProjectId();
-        List<IProjectBlog> projectBlogList = projectBlogManager.getProjectBlogList(projectId);
+        List<IProjectBlogEntry> projectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId);
     
         //Add the critical data to model object
-        model.addAttribute("projectBlogList", projectBlogList);
+        model.addAttribute("projectBlogEntryList", projectBlogEntryList);
         model.addAttribute("project", project);
 
         return "sites/projectblog";

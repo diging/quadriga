@@ -30,12 +30,12 @@
 </script>
 
 <article class="is-page-content">
-	<form:form commandName="projectBlog" method="POST"
-		action="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblog">
+	<form:form commandName="projectBlogEntry" method="POST"
+		action="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblogentry">
 
 		<header>
 			<h2>Create new Project Entry</h2>
-			<span class="byline">Please fill in the following details</span>
+			<span class="byline">Please fill in blog details</span>
 		</header>
 
 		<!-- Create Project Blog button at top right corner -->

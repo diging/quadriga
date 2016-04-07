@@ -5,7 +5,6 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -18,38 +17,39 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlog;
+import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
+import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.projectblog.IProjectBlogManager;
+import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * This controller is responsible for providing UI to create project blog entry
- * and save the entry to database table <code>tbl_projectblog</code>.
+ * and save the entry to database table <code>tbl_projectblogentry</code>.
  *
  * @author PawanMahalle
  */
 @PropertySource(value = "classpath:/user.properties")
 @Controller
-@Transactional(rollbackFor = { Exception.class })
-public class AddProjectBlogController {
+public class AddProjectBlogEntryController {
 
-    @Autowired 
-    IUserManager userManager;
-   
     @Autowired
-    IProjectBlogManager projectBlogManager;
-    
+    private IUserManager userManager;
+
+    @Autowired
+    private IProjectBlogEntryManager projectBlogEntryManager;
+
     @Autowired
     private IRetrieveProjectManager projectManager;
 
     /**
-     * This method provides page to add project blog entry to the authorized
-     * user. Only project owners are allowed to add entry to the blog.
+     * provides form to add project blog entry details to the authorized user.
+     * Only project owners and admins are allowed to add entry to the blog.
      * 
      * @param projectUnixName
      *            The project Unix name
@@ -65,7 +65,7 @@ public class AddProjectBlogController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "sites/{projectId}/addprojectblog", method = RequestMethod.GET)
+    @RequestMapping(value = "sites/{projectId}/addprojectblogentry", method = RequestMethod.GET)
     public String addProjectBlogForm(@PathVariable("projectId") String projectId, Model model)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
@@ -75,28 +75,46 @@ public class AddProjectBlogController {
             return "forbidden";
         }
 
-        model.addAttribute("projectBlog", new ProjectBlog());
+        model.addAttribute("projectBlogEntry", new ProjectBlogEntry());
         model.addAttribute("project", project);
 
-        return "sites/addprojectblog";
+        return "sites/addprojectblogentry";
     }
 
+    /**
+     * adds the project blog entry added by user to
+     * <code>tbl_projectblogentry</code> and redirects the page to latest
+     * project blog entries page.
+     * 
+     * @param projectBlogEntry
+     *      instance of {@linkplain IProjectBlogEntry} to be added to table
+     * @param result
+     * @param projectId
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "sites/{projectId}/addprojectblog", method = RequestMethod.POST)
-    public ModelAndView addProjectBlogRequest(@Validated @ModelAttribute("projectBlog") ProjectBlog projectBlog,
-            BindingResult result, @PathVariable("projectId") String projectId, Model model, Principal principal)
-                    throws QuadrigaStorageException, QuadrigaAccessException {
-        
-        String author = principal.getName();
-        projectBlog.setAuthor(author);
-        
-        projectBlogManager.addNewProjectBlog(projectBlog, principal.getName());
-        
-        //After the blog is created, go to page containing all project blog entries
+    @RequestMapping(value = "sites/{projectId}/addprojectblogentry", method = RequestMethod.POST)
+    public ModelAndView addProjectBlogRequest(
+            @Validated @ModelAttribute("projectBlogEntry") ProjectBlogEntry projectBlogEntry, BindingResult result,
+            @PathVariable("projectId") String projectId, Model model, Principal principal)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+
+        String username = principal.getName();
+        IUser user = userManager.getUser(username);
+        projectBlogEntry.setAuthor(user);
+
+        projectBlogEntryManager.addNewProjectBlogEntry(projectBlogEntry);
+
+        // After the blog is created, go to page containing all project blog
+        // entries
         IProject project = projectManager.getProjectDetails(projectId);
-        ModelAndView redirection = new ModelAndView("redirect:"+"/sites/"+project.getUnixName()+"/projectblog");
-        
+        ModelAndView redirection = new ModelAndView("redirect:" + "/sites/" + project.getUnixName() + "/projectblog");
+
         return redirection;
     }
 }

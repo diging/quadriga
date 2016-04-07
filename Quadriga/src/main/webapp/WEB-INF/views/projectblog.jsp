@@ -4,47 +4,44 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<!-- Bootstrap Core CSS -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Page Heading -->
-<h1 class="page-header">Project Entries</h1>
+<h1 class="page-header">Project Blog Entries</h1>
+
+<!-- Link to create blog entry -->
+<div align="right">
+	<a
+		href="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblogentry"><i
+		class="fa fa-plus-circle"></i> Add a new entry</a>
+</div>
 
 <!-- Page content when project blog entries are found -->
-<c:if test="${not empty projectBlogList}">
+<c:if test="${not empty projectBlogEntryList}">
 	<div class="container">
 		<div class="row">
 
 			<div>
-				<c:forEach var="projectBlog" items="${projectBlogList}">
+				<c:forEach var="projectBlogEntry" items="${projectBlogEntryList}">
 
 					<!-- Blog Entries Column -->
 					<div class="panel panel-default">
 
 						<div class="panel-heading">
-							<h3>${projectBlog.title}</h3>
+							<h3>${projectBlogEntry.title}</h3>
 						</div>
 
 						<div class="panel-body">
 							<p>
 								Posted on
 								<fmt:formatDate type="both" dateStyle="long" timeStyle="long"
-									value="${projectBlog.createdDate}" />
+									value="${projectBlogEntry.createdDate}" />
 							</p>
-							<p>Author: ${projectBlog.author}</p>
-							<p>${projectBlog.description}</p>
+							<p>Author: ${projectBlogEntry.author.name}</p>
+							<p>${projectBlogEntry.description}</p>
 						</div>
-						
+
 					</div>
-					
-					<!-- Link to create blog entry -->
-					<div align="right">
-						<a
-							href="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblog"><i
-							class="fa fa-plus-circle"></i> Add a new entry</a>
-					</div>
-					
-					<br>
+
 				</c:forEach>
 			</div>
 		</div>
@@ -52,11 +49,6 @@
 </c:if>
 
 <!-- Page content when no project blog entries are found -->
-<c:if test="${empty projectBlogList}">
+<c:if test="${empty projectBlogEntryList}">
 No project blog entry found for ${project.unixName}.
-<div align="right">
-		<a
-			href="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblog"><i
-			class="fa fa-plus-circle"></i> Add a new entry</a>
-	</div>
 </c:if>

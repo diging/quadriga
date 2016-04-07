@@ -7,20 +7,21 @@ import javax.annotation.Resource;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.projectblog.IProjectBlogDAO;
-import edu.asu.spring.quadriga.dto.ProjectBlogDTO;
+import edu.asu.spring.quadriga.dao.projectblog.IProjectBlogEntryDAO;
+import edu.asu.spring.quadriga.dto.ProjectBlogEntryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
- * This class acts as data access object for {@linkplain ProjectBlogDTO} class.
+ * This class acts as data access object for {@linkplain ProjectBlogEntryDTO} class.
  * 
  * @author PawanMahalle
  *
  */
 @Service
-public class ProjectBlogDAO extends BaseDAO<ProjectBlogDTO>implements IProjectBlogDAO {
+public class ProjectBlogEntryDAO extends BaseDAO<ProjectBlogEntryDTO>implements IProjectBlogEntryDAO {
 
     @Resource(name = "projectconstants")
     private Properties messages;
@@ -37,15 +38,15 @@ public class ProjectBlogDAO extends BaseDAO<ProjectBlogDTO>implements IProjectBl
      * {@inheritDoc}
      */
     @Override
-    public ProjectBlogDTO getProjectBlogDTO(String id) {
-        return getDTO(ProjectBlogDTO.class, id);
+    public ProjectBlogEntryDTO getProjectBlogDTO(String id) {
+        return getDTO(ProjectBlogEntryDTO.class, id);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ProjectBlogDTO getDTO(String id) {
+    public ProjectBlogEntryDTO getDTO(String id) {
         return getProjectBlogDTO(id);
     }
 
@@ -53,18 +54,19 @@ public class ProjectBlogDAO extends BaseDAO<ProjectBlogDTO>implements IProjectBl
      * {@inheritDoc}
      */
     @Override
-    public List<ProjectBlogDTO> getProjectBlogDTOList(String projectId) throws QuadrigaStorageException {
+    @Transactional
+    public List<ProjectBlogEntryDTO> getProjectBlogEntryDTOList(String projectId) throws QuadrigaStorageException {
        
         if (projectId == null || projectId.equals(""))
             return null;
 
         // Create a query to get all projects
         Query query = sessionFactory.getCurrentSession().getNamedQuery(
-                "ProjectBlogDTO.findByProjectBlogId");
+                "ProjectBlogEntryDTO.findByProjectBlogId");
         query.setParameter("projectId", projectId);
 
         @SuppressWarnings("unchecked")
-        List<ProjectBlogDTO> projectBlogDTOList = query.list();
+        List<ProjectBlogEntryDTO> projectBlogDTOList = query.list();
 
         return projectBlogDTOList;
     }

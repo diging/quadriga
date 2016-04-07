@@ -116,7 +116,7 @@ public class WebsiteProjectController {
 		
 		if(projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
 				|| projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
-			model.addAttribute("project", project);
+		    model.addAttribute("project", project);
 			return "sites/website";
 		}
 		else {
