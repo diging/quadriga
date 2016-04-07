@@ -40,8 +40,8 @@ public class PublicBlogController {
      * @return view
      * @throws QuadrigaStorageException
      */
-    @RequestMapping(value = "sites/{projectUnixName}/projectblog", method = RequestMethod.GET)
-    public String projectblog(@PathVariable("projectUnixName") String projectUnixName, Model model,
+    @RequestMapping(value = "sites/{ProjectUnixName}/projectblog", method = RequestMethod.GET)
+    public String projectblog(@PathVariable("ProjectUnixName") String projectUnixName, Model model,
             @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
 
         // Obtain project blog entries for given project

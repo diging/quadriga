@@ -15,6 +15,8 @@
 		class="fa fa-plus-circle"></i> Add a new entry</a>
 </div>
 
+<br>
+
 <!-- Page content when project blog entries are found -->
 <c:if test="${not empty projectBlogEntryList}">
 	<div class="container">
