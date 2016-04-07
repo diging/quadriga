@@ -26,15 +26,15 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 /**
  * This class will list all the networks approved by the user and 
  * display approved networks and some dummy transformations for
  * the data
  * 
- *  @author: Jaydatta Nagarkar.
- * */
-import edu.asu.spring.quadriga.web.login.RoleNames;
-
+ * @author: Jaydatta Nagarkar.
+ * 
+ */
 @Controller
 public class TransformationAssignUserController {
     @Autowired
@@ -72,13 +72,14 @@ public class TransformationAssignUserController {
         Set<IProject> projects = new HashSet<>();
         Map<String, List<INetwork>> networkMap = new HashMap<>();
         List<INetwork> approvedNetworkList = null;
-        int flash = 0;
         try {
-            approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
+            approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);        
         } catch (QuadrigaStorageException e) {
-            flash = 1;
             logger.error("Error fetching list of approved networks", e);
-        }
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg","Error fetching list of approved networks");
+            return "auth/transformation";
+         }
 
         for (INetwork network : approvedNetworkList) {
             IProject project = network.getNetworkWorkspace().getWorkspace()
@@ -96,7 +97,8 @@ public class TransformationAssignUserController {
         dummyTransformations.add("dummyData4");
         dummyTransformations.add("dummyData5");
         dummyTransformations.add("dummyData6");
-        model.addAttribute("flash", flash);
+        
+
         model.addAttribute("projects", projects);
         model.addAttribute("networkMap", networkMap);
         model.addAttribute("dummyTransformations", dummyTransformations);

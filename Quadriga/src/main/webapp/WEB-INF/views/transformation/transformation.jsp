@@ -8,9 +8,9 @@
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 <!--  
 	Author Jaydatta Nagarkar, Jaya-Venkata Vutukuri  
-	Used to list the networks
+	
 -->
-<script type="text/javascript" charset="utf8">
+ <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
 		$("ul.pagination1").quickPagination({
 			pageSize: "10"
@@ -56,7 +56,7 @@ $(document).ready(function () {
        							position:'center',
        							width:'auto',
        							height:'auto',
-       							title:"Confirm Transformation",
+       							title:"Confirm transformation",
         	   							
        							open: function (type, data) {
        						        $(this).parent().appendTo("form");
@@ -88,22 +88,17 @@ $(document).ready(function () {
 						position:'center',
 						width:'auto',
 						height:'auto',
-						title:"Transformation Cannot be processed",
+						title:"Transformation cannot be processed. ",
 									
 						open: function (type, data) {
 						    $(this).parent().appendTo("form");
 						    },
 						 buttons: { "Okay": function() { $(this).dialog("close"); } },
 		    				});	
-						jQuery("#alertholder").html("Please select atleast one transformation and project");
+						jQuery("#alertholder").html("Please select at least one transformation and project");
 		    			}
     });    
 });
-</script>
-<script>
-<c:if test="${flash == 1}">
-	window.alert("Error fetching list of approved networks");
-</c:if>
 </script>
 
 <style>
@@ -121,7 +116,15 @@ $(document).ready(function () {
 	</header>
 </div>
 
-
+<c:choose>
+<c:when test="${show_error_alert}">
+<div class="alert alert-danger">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+    ${error_alert_msg}
+</div>
+</c:when>
+</c:choose>
+            
 
 
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -186,7 +189,7 @@ $(document).ready(function () {
 </div>
 
 <div class="row">
-<div class="col-md-8"><span class="byline"><input type="checkbox" id="selectAllTransformations">  List of available Transformations.</span></div>
+<div class="col-md-8"><span class="byline"><input type="checkbox" id="selectAllTransformations">  List of available transformations.</span></div>
 </div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <c:choose>
@@ -217,7 +220,7 @@ $(document).ready(function () {
 </div>
 
 <div id="alert" style="display:none;">
-	<center><h4>No Transformations or Projects selected</h4> </center>   
+	<center><h4>No transformations or projects selected. </h4> </center>   
  	<p id="alertholder">
  	</p>
 </div>
