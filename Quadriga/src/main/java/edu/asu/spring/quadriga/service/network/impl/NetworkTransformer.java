@@ -55,34 +55,27 @@ public class NetworkTransformer implements INetworkTransformer {
             List<INetworkNodeInfo> networkTopNodesList) {
         Map<String, Node> nodes = new HashMap<String, Node>();
         List<Link> links = new ArrayList<Link>();
+        ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
 
-        if (networkTopNodesList != null) {
-
-            if (networkTopNodesList.size() > 0) {
-                Iterator<INetworkNodeInfo> topNodeIterator = networkTopNodesList
-                        .iterator();
-                while (topNodeIterator.hasNext()) {
-                    INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
-                    if (networkNodeInfo.getStatementType().equals(
-                            INetworkManager.RELATIONEVENT)) {
-                        try {
-                            parser.parseStatement(networkNodeInfo.getId(),
-                                    nodes, links);
-                        } catch (JAXBException e) {
-                            logger.error("Issue while parsing the JAXB object",
-                                    e);
-                        } catch (QStoreStorageException e) {
-                            logger.error("QStore retrieve error", e);
-                        }
+        if (networkTopNodesList != null && networkTopNodesList.size() > 0) {
+            for (INetworkNodeInfo networkNodeInfo : networkTopNodesList) {
+                if (networkNodeInfo.getStatementType().equals(
+                        INetworkManager.RELATIONEVENT)) {
+                    try {
+                        parser.parseStatement(networkNodeInfo.getId(),
+                                nodes, links);
+                    } catch (JAXBException e) {
+                        logger.error("Issue while parsing the JAXB object",
+                                e);
+                    } catch (QStoreStorageException e) {
+                        logger.error("QStore retrieve error", e);
                     }
                 }
-            } else {
-                return null;
             }
-        } else {
-            return null;
         }
 
-        return new TransformedNetwork(nodes, links);
+        // Instead of sending null
+        // send an empty transformed network
+        return transformedNetwork;
     }
 }

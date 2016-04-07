@@ -49,10 +49,7 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         // fetch the details of the concept collection
-        IConceptCollection collection = collectionFactory
-                .createConceptCollectionObject();
-        collection.setConceptCollectionId(conceptCollectionId);
-        conceptCollectionManager.fillCollectionDetails(collection, userName);
+        IConceptCollection collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
 
         // check if the user is a concept collection owner
         String conceptCollectionOwner = collection.getOwner().getUserName();

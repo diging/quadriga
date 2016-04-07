@@ -13,11 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
@@ -51,13 +47,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RelationType", propOrder = {
-    "idOrCreatorOrCreationDate"
-})
+@XmlType(name = "RelationType")
 public class RelationType {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_place", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
@@ -69,6 +62,9 @@ public class RelationType {
         @XmlElementRef(name = "predicate", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class)
     })
     protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
+
+    @XmlElement(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String sourceReference;
 
     /**
      * Gets the value of the idOrCreatorOrCreationDate property.
@@ -114,18 +110,18 @@ public class RelationType {
      * @return PredicateType
      */
     public PredicateType getPredicateType(){
-		PredicateType  predicate = null;
-		List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> I2 = e3.iterator();
-		while(I2.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) I2.next();
-			if(element.getValue().toString().contains("PredicateType")){
-				predicate= (PredicateType) element.getValue();
+        PredicateType  predicate = null;
+        List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
+        Iterator <JAXBElement<?>> I2 = e3.iterator();
+        while(I2.hasNext()){
+            JAXBElement<?> element = (JAXBElement<?>) I2.next();
+            if(element.getValue().toString().contains("PredicateType")){
+                predicate= (PredicateType) element.getValue();
 
-			}
-		}
-		return predicate;
-	}
+            }
+        }
+        return predicate;
+    }
     
     
     /**
@@ -133,44 +129,51 @@ public class RelationType {
      * @param rt : RelationType
      * @return SubjectObjectType
      */
-	public SubjectObjectType getSubjectType(){
-		SubjectObjectType subjectType = null;
-		List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> I2 = e3.iterator();
-		while(I2.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) I2.next();
-			if(element.getValue().toString().contains("SubjectObjectType")){
-				//	Handles the subject part of the relation
-				if(element.getName().toString().contains("subject")){
-					subjectType = (SubjectObjectType) element.getValue();
-				}
+    public SubjectObjectType getSubjectType(){
+        SubjectObjectType subjectType = null;
+        List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
+        Iterator <JAXBElement<?>> I2 = e3.iterator();
+        while(I2.hasNext()){
+            JAXBElement<?> element = (JAXBElement<?>) I2.next();
+            if(element.getValue().toString().contains("SubjectObjectType")){
+                //	Handles the subject part of the relation
+                if(element.getName().toString().contains("subject")){
+                    subjectType = (SubjectObjectType) element.getValue();
+                }
 
-			}
-		}
-		return subjectType;
-	}
-	
-	
-	/**
+            }
+        }
+        return subjectType;
+    }
+
+
+    /**
      * Gets the Object of SubjectObjectType from the RelationType object
      * @param rt : RelationType
      * @return SubjectObjectType
      */
-	public SubjectObjectType getObjectType(RelationType rt){
-		SubjectObjectType objectType = null;
-		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> I2 = e3.iterator();
-		while(I2.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) I2.next();
-			if(element.getValue().toString().contains("SubjectObjectType")){
-				//	Handles the subject part of the relation
-				if(element.getName().toString().contains("object")){
-					objectType = (SubjectObjectType) element.getValue();
-				}
+    public SubjectObjectType getObjectType(RelationType rt){
+        SubjectObjectType objectType = null;
+        List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+        Iterator <JAXBElement<?>> I2 = e3.iterator();
+        while(I2.hasNext()){
+            JAXBElement<?> element = (JAXBElement<?>) I2.next();
+            if(element.getValue().toString().contains("SubjectObjectType")){
+                //	Handles the subject part of the relation
+                if(element.getName().toString().contains("object")){
+                    objectType = (SubjectObjectType) element.getValue();
+                }
 
-			}
-		}
-		return objectType;
-	}
+            }
+        }
+        return objectType;
+    }
 
+    public void setSourceReference(String sourceReference) {
+        this.sourceReference = sourceReference;
+    }
+
+    public String getSourceReference() {
+        return sourceReference;
+    }
 }

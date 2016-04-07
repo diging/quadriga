@@ -1025,13 +1025,13 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             // Check if event is Appellation event
             if (creationEvent instanceof AppellationEventType) {
                 AppellationEventType appellationEventType = (AppellationEventType) creationEvent;
-                return appellationEventType.getAppellationSourceReference();
+                return appellationEventType.getSourceReference();
             }
             // Check if event is Relation event
             if (creationEvent instanceof RelationEventType) {
                 RelationEventType relationEventType = (RelationEventType) creationEvent;
 
-                return relationEventType.getRelationEventSourceReference();
+                return relationEventType.getSourceReference();
             }
         }
 
