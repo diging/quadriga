@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * This controller is responsible for showing project blog entries for a
@@ -26,9 +26,6 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @PropertySource(value = "classpath:/user.properties")
 @Controller
 public class PublicBlogController {
-
-    @Autowired
-    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private IProjectBlogEntryManager projectBlogEntryManager;
@@ -44,20 +41,14 @@ public class PublicBlogController {
      * @throws QuadrigaStorageException
      */
     @RequestMapping(value = "sites/{projectUnixName}/projectblog", method = RequestMethod.GET)
-    public String projectblog(@PathVariable("projectUnixName") String projectUnixName, Model model)
-            throws QuadrigaStorageException {
-            
-        IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
+    public String projectblog(@PathVariable("projectUnixName") String projectUnixName, Model model,
+            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
 
-        if (project == null) {
-            return "forbidden";
-        }
-
-        //Obtain project blog entries for given project
+        // Obtain project blog entries for given project
         String projectId = project.getProjectId();
         List<IProjectBlogEntry> projectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId);
-    
-        //Add the critical data to model object
+
+        // Add the critical data to model object
         model.addAttribute("projectBlogEntryList", projectBlogEntryList);
         model.addAttribute("project", project);
 
