@@ -3,9 +3,6 @@ package edu.asu.spring.quadriga.dao.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.hibernate.Query;
 import org.hibernate.ScrollMode;
@@ -61,9 +58,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
 
     @Autowired
     private NetworkDTOMapper networkMapper;
-
-    @Resource(name = "database_error_msgs")
-    private Properties messages;
 
     @Autowired
     private ProjectDTOMapper projectMapper;
@@ -185,11 +179,11 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      */
     @Override
     public String addNetworkStatement(String rowid, String networkId,
-            String id, String type, String isTop, IUser user, int version)
+            String id, String type, int isTop, IUser user, int version)
             throws QuadrigaStorageException {
 
         NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(
-                rowid, networkId, id, Integer.parseInt(isTop), version, type,
+                rowid, networkId, id, isTop, version, type,
                 user.getUserName(), new Date(), user.getUserName(), new Date());
 
         try {
