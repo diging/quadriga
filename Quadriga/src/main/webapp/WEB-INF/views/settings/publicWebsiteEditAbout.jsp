@@ -12,6 +12,39 @@
 				menubar : false,
 				toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons | save'
 			});
+
+	$("#dlgConfirm")
+			.dialog(
+					{
+						resizable : false,
+						height : 'auto',
+						width : 350,
+						modal : true,
+						buttons : {
+							Submit : function() {
+								$(this).dialog("close");
+								//$("#deletewsform")[0].submit();
+								$
+										.ajax({
+											url : "${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/saveabout",
+											type : "POST",
+											data : "selected="
+													+ $('#hidden').val(),
+											success : function() {
+												location.reload();
+												//alert("done");
+											},
+											error : function() {
+												alert("error");
+											}
+										});
+								event.preventDefault();
+							},
+							Cancel : function() {
+								$(this).dialog("close");
+							}
+						}
+					});
 </script>
 
 </script>

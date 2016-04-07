@@ -61,10 +61,15 @@ public class WebsiteAboutEditController {
 			RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR }) })
 	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/saveabout", method = RequestMethod.POST)
 	public String saveAbout(@PathVariable("projectId") String projectId,
-			@ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Principal principal)
+			@ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Model model, Principal principal)
 			throws QuadrigaStorageException {
 		aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
-		return "auth/saveabout";
+		IProject project = projectManager.getProjectDetails(projectId);
+		model.addAttribute("show_success_alert", true);
+		model.addAttribute("success_alert_msg", " Edit was successful.");
+		model.addAttribute("aboutText", aboutTextManager.getDTOByProjectId(projectId));
+		model.addAttribute("project", project);
+		return "auth/editabout";
 	}
 
 }
