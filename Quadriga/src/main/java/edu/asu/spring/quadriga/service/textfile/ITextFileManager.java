@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.textfile;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
@@ -19,7 +18,7 @@ public interface ITextFileManager {
      * @throws QuadrigaStorageException
      * @throws IOException
      */
-    boolean saveTextFile(ITextFile txtfile) throws QuadrigaStorageException, FileStorageException, IOException;
+    boolean saveTextFile(ITextFile txtfile) throws QuadrigaStorageException, FileStorageException;
 
     /**
      * Retrieve Textfile Domain Objects based on Workspace Id.
@@ -40,6 +39,6 @@ public interface ITextFileManager {
      * @throws IOException
      * @throws FileStorageException 
      */
-    String retrieveTextFileContent(String txtId) throws IOException, FileStorageException;
+    String retrieveTextFileContent(String txtId) throws FileStorageException;
 
 }

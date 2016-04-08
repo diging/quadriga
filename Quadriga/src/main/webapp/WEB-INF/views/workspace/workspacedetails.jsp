@@ -20,6 +20,11 @@
 			"bAutoWidth" : false
 		});
 	});
+	function drawModal(){
+	$('#txtModal').on('click',function(){
+		alert("clicked");
+	});
+	}
 </script>
 
 
@@ -332,7 +337,7 @@
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
 									<td width="25%" align="center">
-									<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid=${textfile.textId}"><c:out
+									<a id="txtModal" click="drawModal()" href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid=${textfile.textId}"><c:out
 											value="${textfile.fileName}"></c:out></a></td>
 									<td width="25%" align="center"><c:out
 											value="${textfile.refId}"></c:out></td>

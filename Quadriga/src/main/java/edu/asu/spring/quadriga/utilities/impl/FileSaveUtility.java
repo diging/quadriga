@@ -34,29 +34,47 @@ public class FileSaveUtility implements IFileSaveUtility {
     }
 
     @Override
-    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent)
-            throws IOException, FileStorageException, FileNotFoundException {
+    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws FileStorageException {
 
-        createDirectoryIfNotExists(textFileLocation + "/" + dirName);
-        File f = new File(textFileLocation + "/" + dirName + fileName);
-        if (!f.exists()) {
-            f.createNewFile();
-        }
-        FileOutputStream fos = new FileOutputStream(f);
+        try {
+            createDirectoryIfNotExists(textFileLocation + "/" + dirName);
+            File f = new File(textFileLocation + "/" + dirName + fileName);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(f);
             fos.write(fileContent);
             fos.close();
-            
-            return true;
+        } catch (IOException e) {
+            throw new FileStorageException("Default directory not specified in configuration");
+        }
+
+        return true;
 
     }
 
     @Override
-    public String readFileContent(String fileName, String dirName) throws IOException {
-        
+    public String readFileContent(String fileName, String dirName) throws FileStorageException {
+
         File f = new File(textFileLocation + "/" + dirName + "/" + fileName);
         byte fileBytes[] = new byte[(int) f.length()];
-        FileInputStream fis = new FileInputStream(f);
-        fis.read(fileBytes);
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(f);
+            fis.read(fileBytes);
+
+        } catch (IOException e) {
+            throw new FileStorageException("Default directory not specified in configuration");
+        } finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException e) {
+                throw new FileStorageException("Default directory not specified in configuration");
+            }
+
+        }
         return new String(fileBytes);
     }
 

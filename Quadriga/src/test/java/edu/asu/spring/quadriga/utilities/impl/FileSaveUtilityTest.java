@@ -34,6 +34,6 @@ public class FileSaveUtilityTest {
     
     @Test
     public void successFileWrite() throws FileNotFoundException, FileStorageException, IOException{
-        Assert.assertEquals(true,fileSaveUtil.saveFiletoDir("root","zapak", "chillar".getBytes()));
+        Assert.assertEquals(true,fileSaveUtil.saveFiletoDir(tempFolder.getRoot().getAbsolutePath(),"zapak", "chillar".getBytes()));
     }
 }
