@@ -99,7 +99,7 @@ public class ProjectStatsTest {
 
     @Test
     public void getSortedConceptCountTest() throws QuadrigaStorageException {
-        assertEquals("conceptCount", mockedConceptStatsList,
+        assertEquals(mockedConceptStatsList,
                 projectStatsUnderTest.getConceptCount(mockedNetworkList));
     }
 }
