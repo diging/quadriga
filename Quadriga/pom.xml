@@ -19,7 +19,7 @@
 		<deploy.path.test>quadriga-test</deploy.path.test>
 		<deploy.path.dev>quadriga</deploy.path.dev>
 		<deploy.path.prod>quadriga</deploy.path.prod>
-		<database.url>jdbc:mysql://localhost:3307/quadriga</database.url>
+		<database.url>jdbc:mysql://localhost:3306/quadriga</database.url>
 		<database.username>dbadmin</database.username>
 		<database.pw>dbadmin</database.pw>
 		<qstore.url>http://localhost:8080/qstore4s</qstore.url>
