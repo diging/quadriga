@@ -7,7 +7,6 @@ import edu.asu.spring.quadriga.service.uploadtransformation.IUploadTransformatio
 import edu.asu.spring.quadriga.dao.uploadtransformation.IUploadTransformationDAO;
 import edu.asu.spring.quadriga.dto.UploadTransfomationFilesDTO;
 
-;
 
 @Service
 public class UploadTransformationManager implements
@@ -22,6 +21,8 @@ public class UploadTransformationManager implements
 		UploadTransfomationFilesDTO tranformDTO = new UploadTransfomationFilesDTO(
 				mappingTitle, mappingDescription, transformationTitle,
 				transformationDescription);
+		uploadTransformationDAO.saveTransformationFiles(tranformDTO);
+		
 		
 
 	}
