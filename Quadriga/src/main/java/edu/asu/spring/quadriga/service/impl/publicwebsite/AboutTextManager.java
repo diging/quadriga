@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.publicwebsite.IAboutTextDAO;
+import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 
@@ -36,7 +37,7 @@ public class AboutTextManager implements IAboutTextManager {
 
 	@Transactional
 	@Override
-	public AboutTextDTO getDTOByProjectId(String projectId) {
+	public IAboutText getDTOByProjectId(String projectId) {
 		return aboutTextDAO.getDTOByProjectId(projectId);
 	}
 

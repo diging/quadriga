@@ -11,6 +11,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import edu.asu.spring.quadriga.domain.settings.IAboutText;
+
 /**
  * DTO for about project text of project's public website.
  * 
@@ -23,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
 		@NamedQuery(name = "AboutTextDTO.findByProjectId", query = "SELECT a FROM AboutTextDTO a where a.projectId= :projectId") })
 
-public class AboutTextDTO implements Serializable {
+public class AboutTextDTO implements Serializable, IAboutText {
 
 	private static final long serialVersionUID = 1103019135158917211L;
 

@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.publicwebsite;
+package edu.asu.spring.quadriga.web.settings;
 
 import java.security.Principal;
 

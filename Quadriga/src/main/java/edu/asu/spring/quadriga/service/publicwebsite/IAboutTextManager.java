@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.publicwebsite;
 
+import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
 
 /**
@@ -12,5 +13,5 @@ import edu.asu.spring.quadriga.dto.AboutTextDTO;
 public interface IAboutTextManager {
 
 	public void saveAbout(String projectId, String title, String description);
-	public AboutTextDTO getDTOByProjectId(String projectId);
+	public IAboutText getDTOByProjectId(String projectId);
 }

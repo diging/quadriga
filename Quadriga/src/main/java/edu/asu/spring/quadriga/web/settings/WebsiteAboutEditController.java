@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.publicwebsite;
+package edu.asu.spring.quadriga.web.settings;
 
 import java.security.Principal;
 
@@ -38,12 +38,12 @@ public class WebsiteAboutEditController {
 	private IAboutTextManager aboutTextManager;
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
-			RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR }) })
+			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR,
+			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
 	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/editabout", method = RequestMethod.GET)
 	public String editAbout(@PathVariable("projectId") String projectId, Model model, Principal principal)
 			throws QuadrigaStorageException {
 		IProject project = projectManager.getProjectDetails(projectId);
-
 		model.addAttribute("aboutText", aboutTextManager.getDTOByProjectId(projectId));
 		model.addAttribute("project", project);
 		return "auth/editabout";
@@ -51,14 +51,15 @@ public class WebsiteAboutEditController {
 
 	/**
 	 * . Any change made in the about project page is updated into the database
-	 * here and a "Successfully saved" message is displayed.
+	 * here and a "You successfully edited the about text" message is displayed.
 	 * 
 	 * @author Rajat Aggarwal
 	 *
 	 */
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
-			RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR }) })
+			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR,
+			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
 	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/saveabout", method = RequestMethod.POST)
 	public String saveAbout(@PathVariable("projectId") String projectId,
 			@ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Model model, Principal principal)
@@ -66,7 +67,7 @@ public class WebsiteAboutEditController {
 		aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
 		IProject project = projectManager.getProjectDetails(projectId);
 		model.addAttribute("show_success_alert", true);
-		model.addAttribute("success_alert_msg", " Edit was successful.");
+		model.addAttribute("success_alert_msg", "You successfully edited the about text");
 		model.addAttribute("aboutText", aboutTextManager.getDTOByProjectId(projectId));
 		model.addAttribute("project", project);
 		return "auth/editabout";
