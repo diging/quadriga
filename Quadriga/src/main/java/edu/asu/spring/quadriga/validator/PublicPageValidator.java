@@ -15,7 +15,7 @@ public class PublicPageValidator implements Validator {
     }
 
     /**
-     * This method validates the entered Title and Descriptions. Validates if
+     * This method validates the entered Title and Description and the order. Validates if
      * the values are available or not. If values are not available error is
      * thrown
      * 

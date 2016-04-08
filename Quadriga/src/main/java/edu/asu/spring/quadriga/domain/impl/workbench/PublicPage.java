@@ -1,19 +1,20 @@
 package edu.asu.spring.quadriga.domain.impl.workbench;
 
+import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
+
 /**
- * @description : Project class describing the properties of a Public Page object
+ * @description : Public Page class describing the properties of a Public Page
+ *              object
  * 
  * @author : Prasanth Priya Nesan
  * 
  */
-
-import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
-
-public class PublicPage implements IPublicPage {
+public class PublicPage implements IPublicPage { 
     private String title;
     private String description;
     private int order;
 
+    
     /**
      * retrieves the Title
      */

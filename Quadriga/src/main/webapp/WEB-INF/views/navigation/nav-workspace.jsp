@@ -95,4 +95,4 @@
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
 <hr>
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/addpublicpage"><i class="fa fa-cog"></i> Public Page Settings</a>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addpublicpage"><i class="fa fa-cog"></i> Public Page Settings</a>
