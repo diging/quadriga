@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.service.uploadtransformation.IUploadTransformationManager;
+import edu.asu.spring.quadriga.dao.impl.uploadTransformation.UploadTransformationDAO;
 import edu.asu.spring.quadriga.dao.uploadtransformation.IUploadTransformationDAO;
 import edu.asu.spring.quadriga.dto.UploadTransfomationFilesDTO;
 
@@ -13,7 +14,7 @@ public class UploadTransformationManager implements
 		IUploadTransformationManager {
 
 	@Autowired
-	private IUploadTransformationDAO uploadTransformationDAO;
+	private UploadTransformationDAO uploadTransformationDAO;
 
 	@Override
 	public void saveAbout(String mappingTitle, String mappingDescription,
