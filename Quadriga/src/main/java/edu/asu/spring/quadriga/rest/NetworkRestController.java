@@ -36,6 +36,8 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.exceptions.FileStorageException;
+import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -133,19 +135,38 @@ public class NetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 
         }
+        String resTxt = null;
+        try{
+            resTxt = networkManager.storeText(xml, projectid, workspaceid);
+        } catch (NetworkXMLParseException e) {
+            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+        } catch(QuadrigaStorageException | IOException e){
+            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (FileStorageException e) {
+            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+        } 
+        
+        if (resTxt == null) {
+            String errorMsg = errorMessageRest.getErrorMsg("Unable to save the file with text from XML");
+            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         
         String res = null;
         try{
-            res = networkManager.storeNetworks(xml);
+            res = networkManager.storeNetworks(resTxt);
         } catch(QStoreStorageException e){
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (res == null) {
-            String errorMsg = "Please provide correct XML in body of the post request. Qstore system is not accepting your XML";
+            String errorMsg = errorMessageRest.getErrorMsg("Please provide correct XML in body of the post request. Qstore system is not accepting your XML");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
+        
 
         String networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,
                 "", INetworkManager.VERSION_ZERO);
