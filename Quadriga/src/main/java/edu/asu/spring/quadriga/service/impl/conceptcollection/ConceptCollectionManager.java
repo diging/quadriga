@@ -41,7 +41,8 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 @Service
 public class ConceptCollectionManager implements IConceptCollectionManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConceptCollectionManager.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(ConceptCollectionManager.class);
 
     @Autowired
     private IConceptCollectionDAO ccDao;
@@ -72,13 +73,15 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException {
+    public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId)
+            throws QuadrigaStorageException {
         return ccShallowMapper.getConceptCollectionList(sUserId);
     }
 
     @Override
     @Transactional
-    public List<IConceptCollection> getNonAssociatedProjectConcepts(String projectId) throws QuadrigaStorageException {
+    public List<IConceptCollection> getNonAssociatedProjectConcepts(
+            String projectId) throws QuadrigaStorageException {
         return ccDao.getNonAssociatedProjectConcepts(projectId);
     }
 
@@ -95,10 +98,10 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException {
+    public List<IConceptCollection> getUserCollaborations(String sUserId)
+            throws QuadrigaStorageException {
         return ccShallowMapper.getConceptCollectionListOfCollaborator(sUserId);
     }
-
 
     /**
      * This method searches the items and its part of speech in the concept
@@ -130,17 +133,20 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public void update(String[] ids, IConceptCollection collection, String username) throws QuadrigaStorageException {
+    public void update(String[] ids, IConceptCollection collection,
+            String username) throws QuadrigaStorageException {
         for (String id : ids) {
             if ((id != null && !id.isEmpty())) {
                 ConceptpowerReply rep = conceptpowerConnector.getById(id);
 
                 IConcept concept = conceptFactory.createConceptObject();
                 concept.setConceptId(id);
-                concept.setDescription(rep.getConceptEntry().get(0).getDescription());
+                concept.setDescription(rep.getConceptEntry().get(0)
+                        .getDescription());
                 concept.setLemma(rep.getConceptEntry().get(0).getLemma());
                 concept.setPos(rep.getConceptEntry().get(0).getPos());
-                ccDao.updateItem(concept, collection.getConceptCollectionId(), username);
+                ccDao.updateItem(concept, collection.getConceptCollectionId(),
+                        username);
             }
         }
     }
@@ -155,14 +161,30 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     @Override
     public String getConceptLemmaFromConceptId(String id) {
 
-        Map<String, String> vars = new HashMap<String, String>();
-        vars.put("name", id.trim());
         String lemma = id;
         ConceptpowerReply rep = conceptpowerConnector.getById(id);
         if (rep.getConceptEntry().size() == 0) {
             return lemma;
         }
         return rep.getConceptEntry().get(0).getLemma();
+    }
+
+    /**
+     * This method returns Description for the given concept
+     * 
+     * @param id
+     *            - item id
+     * @return String - Description associated with concept
+     */
+    @Override
+    public String getConceptDescriptionFromConceptId(String id) {
+
+        String desc = "";
+        ConceptpowerReply rep = conceptpowerConnector.getById(id);
+        if (rep.getConceptEntry().size() == 0) {
+            return desc;
+        }
+        return rep.getConceptEntry().get(0).getDescription();
     }
 
     /**
@@ -180,7 +202,8 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public void addItems(String lemmma, String id, String pos, String desc, String conceptcollectionId, String username)
+    public void addItems(String lemmma, String id, String pos, String desc,
+            String conceptcollectionId, String username)
             throws QuadrigaStorageException, QuadrigaAccessException {
         ccDao.saveItem(lemmma, id, pos, desc, conceptcollectionId, username);
     }
@@ -194,7 +217,8 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public void addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException {
+    public void addConceptCollection(IConceptCollection collection)
+            throws QuadrigaStorageException {
         ccDao.addCollection(collection);
     }
 
@@ -211,7 +235,8 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public void deleteItem(String id, String collectionId, String username) throws QuadrigaStorageException {
+    public void deleteItem(String id, String collectionId, String username)
+            throws QuadrigaStorageException {
         ccDao.deleteItems(id, collectionId, username);
 
     }
@@ -225,12 +250,14 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public List<IConceptCollectionCollaborator> showCollaboratingUsers(String collectionid)
-            throws QuadrigaStorageException {
+    public List<IConceptCollectionCollaborator> showCollaboratingUsers(
+            String collectionid) throws QuadrigaStorageException {
         List<IConceptCollectionCollaborator> ccCollaboratorList = null;
-        IConceptCollection conceptCollection = conceptCollectionDeepMapper.getConceptCollectionDetails(collectionid);
+        IConceptCollection conceptCollection = conceptCollectionDeepMapper
+                .getConceptCollectionDetails(collectionid);
         if (conceptCollection != null) {
-            ccCollaboratorList = conceptCollection.getConceptCollectionCollaborators();
+            ccCollaboratorList = conceptCollection
+                    .getConceptCollectionCollaborators();
         }
         return ccCollaboratorList;
     }
@@ -243,19 +270,24 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
+    public void getCollaborators(IConceptCollection collection)
+            throws QuadrigaStorageException {
 
         IConceptCollection conceptCollection = conceptCollectionDeepMapper
-                .getConceptCollectionDetails(collection.getConceptCollectionId());
+                .getConceptCollectionDetails(collection
+                        .getConceptCollectionId());
         if (conceptCollection != null) {
 
             List<IConceptCollectionCollaborator> conceptCollectionCollaborators = conceptCollection
                     .getConceptCollectionCollaborators();
-            if (conceptCollectionCollaborators != null && conceptCollectionCollaborators.size() > 0) {
+            if (conceptCollectionCollaborators != null
+                    && conceptCollectionCollaborators.size() > 0) {
                 for (IConceptCollectionCollaborator conceptCollectionCollaborator : conceptCollectionCollaborators) {
-                    for (IQuadrigaRole collaboratorRole : conceptCollectionCollaborator.getCollaborator()
-                            .getCollaboratorRoles()) {
-                        roleMapper.fillQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collaboratorRole);
+                    for (IQuadrigaRole collaboratorRole : conceptCollectionCollaborator
+                            .getCollaborator().getCollaboratorRoles()) {
+                        roleMapper.fillQuadrigaRole(
+                                IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES,
+                                collaboratorRole);
                     }
                 }
             }
@@ -273,33 +305,43 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     @Transactional
-    public String getConceptCollectionId(String ccName) throws QuadrigaStorageException {
+    public String getConceptCollectionId(String ccName)
+            throws QuadrigaStorageException {
         return ccDao.getConceptCollectionId(ccName);
     }
-    
+
     /**
-     * This method retrieves a concept collection given its id. 
-     * @param id Id of the concept collection to retrieve.
+     * This method retrieves a concept collection given its id.
+     * 
+     * @param id
+     *            Id of the concept collection to retrieve.
      * @return
      * @throws QuadrigaStorageException
      */
     @Override
     @Transactional
-    public IConceptCollection getConceptCollection(String id) throws QuadrigaStorageException {
+    public IConceptCollection getConceptCollection(String id)
+            throws QuadrigaStorageException {
         return conceptCollectionDeepMapper.getConceptCollectionDetails(id);
     }
-    
+
     /**
-     * This method retrieves the dto corresponding to the id of the provided concept collection
-     * and fills the provided concept collection with the data from the dto. Note that if data
-     * is already present in the concept collection, they will be overridden.
+     * This method retrieves the dto corresponding to the id of the provided
+     * concept collection and fills the provided concept collection with the
+     * data from the dto. Note that if data is already present in the concept
+     * collection, they will be overridden.
+     * 
      * @param conceptCollection
      * @throws QuadrigaStorageException
      */
     @Override
     @Transactional
-    public void fillConceptCollection(IConceptCollection conceptCollection) throws QuadrigaStorageException {
-        ConceptCollectionDTO ccDto = ccDao.getDTO(conceptCollection.getConceptCollectionId());
-        conceptCollectionDeepMapper.fillConceptCollection(conceptCollection, ccDto);
+    public void fillConceptCollection(IConceptCollection conceptCollection)
+            throws QuadrigaStorageException {
+        ConceptCollectionDTO ccDto = ccDao.getDTO(conceptCollection
+                .getConceptCollectionId());
+        conceptCollectionDeepMapper.fillConceptCollection(conceptCollection,
+                ccDto);
     }
+
 }
