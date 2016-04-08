@@ -95,7 +95,7 @@ $(document).ready(function () {
 						    },
 						 buttons: { "Okay": function() { $(this).dialog("close"); } },
 		    				});	
-						jQuery("#alertholder").html("Please select at least one transformation and project");
+						jQuery("#alertholder").html("Please select at least one transformation and project.");
 		    			}
     });    
 });
@@ -116,14 +116,7 @@ $(document).ready(function () {
 	</header>
 </div>
 
-<c:choose>
-<c:when test="${show_error_alert}">
-<div class="alert alert-danger">
-<button type="button" class="close" data-dismiss="alert">&times;</button>
-    ${error_alert_msg}
-</div>
-</c:when>
-</c:choose>
+
             
 
 

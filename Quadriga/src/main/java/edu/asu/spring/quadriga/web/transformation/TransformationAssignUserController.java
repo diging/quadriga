@@ -77,7 +77,7 @@ public class TransformationAssignUserController {
         } catch (QuadrigaStorageException e) {
             logger.error("Error fetching list of approved networks", e);
             model.addAttribute("show_error_alert", true);
-            model.addAttribute("error_alert_msg","Error fetching list of approved networks");
+            model.addAttribute("error_alert_msg","There was an error retrieving the list of approved networks.");
             return "auth/transformation";
          }
 
@@ -85,8 +85,7 @@ public class TransformationAssignUserController {
             IProject project = network.getNetworkWorkspace().getWorkspace()
                     .getProjectWorkspace().getProject();
             if (networkMap.get(project.getProjectName()) == null) {
-                networkMap.put(project.getProjectName(),
-                        new ArrayList<INetwork>());
+                networkMap.put(project.getProjectName(),new ArrayList<INetwork>());
                 projects.add(project);
             }
             networkMap.get(project.getProjectName()).add(network);
