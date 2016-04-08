@@ -21,7 +21,7 @@ public class UploadTransformationManager implements
 		UploadTransfomationFilesDTO tranformDTO = new UploadTransfomationFilesDTO(
 				mappingTitle, mappingDescription, transformationTitle,
 				transformationDescription);
-		uploadTransformationDAO.saveTransformationFiles(tranformDTO);
+		uploadTransformationDAO.saveNewDTO(tranformDTO);
 		
 		
 

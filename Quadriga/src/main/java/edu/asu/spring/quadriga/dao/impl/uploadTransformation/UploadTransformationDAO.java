@@ -15,11 +15,7 @@ public class UploadTransformationDAO extends BaseDAO<UploadTransfomationFilesDTO
 		return null;
 	}
 
-	@Override
-	public void saveTransformationFiles(UploadTransfomationFilesDTO tranformDTO) {
-		// TODO Auto-generated method stub
-		
-	}		
+	
 
 }
 
