@@ -96,9 +96,6 @@ public class WebsiteProjectController {
         model.addAttribute("project_baseurl",
                 env.getProperty("project.cite.baseurl"));
 
-        if (project == null)
-            return "forbidden";
-
         if (user == null) {
             if (projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
                 model.addAttribute("project", project);
@@ -223,9 +220,6 @@ public class WebsiteProjectController {
             Model model,
             @InjectProject(unixNameParameter = "projectUnixName") IProject project)
             throws JAXBException, QuadrigaStorageException {
-        if (project == null) {
-            return "auth/accessissue";
-        }
 
         ITransformedNetwork transformedNetwork = transformationManager
                 .getTransformedNetworkOfProject(project.getProjectId());

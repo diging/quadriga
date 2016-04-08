@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.aspects;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
@@ -83,6 +81,9 @@ public class InjectProjectAspect {
                     // get project by its unix name
                     String projectUnixName = (String) arguments[idxOfProjectId];
                     project = projectManager.getProjectDetailsByUnixName(projectUnixName);
+                    
+                    if (project == null)
+                        return "404";
                     
                     // replace the annotated project parameter with the retrieved project
                     Object[] newArgs = new Object[arguments.length];
