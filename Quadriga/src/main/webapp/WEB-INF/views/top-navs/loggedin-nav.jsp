@@ -6,7 +6,6 @@
 <nav id="nav" class="skel-ui-fixed">
 	<ul>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "home" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/home">Home</a></li></sec:authorize>
-		<sec:authorize access="permitAll"><li ${currentPage == "home" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/sites">Sites</a></li></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "about" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/about">About</a></li></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "workbench" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/workbench">Workbench</a></li></sec:authorize>
 
@@ -30,6 +29,7 @@
 		<li><a href="${pageContext.servletContext.contextPath}/auth/editing">Editing</a></li>
 		</ul>
 		</li></sec:authorize>
+		<sec:authorize access="permitAll"><li ${currentPage == "sites" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/sites">Sites</a></li></sec:authorize>
 		
 		<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')"><li ${currentPage == "admin" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/users/manage">User Management</a></li></sec:authorize>
 		<!-- <li class="page_item_logout"><a href="<c:url value="/j_spring_security_logout" />">Logout</a></li> -->
