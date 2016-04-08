@@ -59,8 +59,7 @@ public class WebsiteProjectController {
         this.projectManager = projectManager;
     }
 
-    private IProject getProjectDetails(String name)
-            throws QuadrigaStorageException {
+    private IProject getProjectDetails(String name) throws QuadrigaStorageException {
         return projectManager.getProjectDetailsByUnixName(name);
     }
 
@@ -81,20 +80,15 @@ public class WebsiteProjectController {
      *             Database storage exception thrown
      */
     @RequestMapping(value = "sites/{ProjectUnixName}", method = RequestMethod.GET)
-    public String showProject(
-            Model model,
-            @PathVariable("ProjectUnixName") String unixName,
-            Principal principal,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
-            throws QuadrigaStorageException {
+    public String showProject(Model model, @PathVariable("ProjectUnixName") String unixName, Principal principal,
+            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
 
         String user = null;
         if (principal != null) {
             user = principal.getName();
         }
 
-        model.addAttribute("project_baseurl",
-                env.getProperty("project.cite.baseurl"));
+        model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 
         if (user == null) {
             if (projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
@@ -105,10 +99,8 @@ public class WebsiteProjectController {
             }
         }
 
-        if (projectManager
-                .getPrivateProjectWebsiteAccessibility(unixName, user)
-                || projectManager
-                        .getPublicProjectWebsiteAccessibility(unixName)) {
+        if (projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
+                || projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
             model.addAttribute("project", project);
             return "sites/website";
         } else {
@@ -136,15 +128,10 @@ public class WebsiteProjectController {
      *             Database storage exception thrown
      */
     @RequestMapping(value = "sites/{ProjectUnixName}/browsenetworks", method = RequestMethod.GET)
-    public String browseNetworks(
-            @PathVariable("ProjectUnixName") String unixName,
-            Model model,
-            Principal principal,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
-            throws QuadrigaStorageException {
+    public String browseNetworks(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal,
+            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
         String projectid = project.getProjectId();
-        List<INetwork> Networks = networkmanager
-                .getNetworksInProject(projectid);
+        List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
 
         // List<String> networkNames = null;
         if (!Networks.isEmpty()) {
@@ -174,21 +161,17 @@ public class WebsiteProjectController {
      *             JAXB exception while getting the JSON
      */
     @RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
-    public String visualizeNetworks(
-            @PathVariable("projectUnixName") String unixName,
-            @PathVariable("networkId") String networkId,
-            ModelMap model,
-            Principal principal,
+    public String visualizeNetworks(@PathVariable("projectUnixName") String unixName,
+            @PathVariable("networkId") String networkId, ModelMap model, Principal principal,
             @InjectProject(unixNameParameter = "projectUnixName") IProject project)
-            throws QuadrigaStorageException, JAXBException {
+                    throws QuadrigaStorageException, JAXBException {
         INetwork network = networkmanager.getNetwork(networkId);
         if (network == null) {
             return "auth/accessissue";
         }
         model.addAttribute("project", project);
 
-        ITransformedNetwork transformedNetwork = transformationManager
-                .getTransformedNetwork(networkId);
+        ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 
         // test the transformed networks
 
@@ -196,8 +179,7 @@ public class WebsiteProjectController {
         model.addAttribute("networkid", nwId);
         String json = null;
         if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(),
-                    transformedNetwork.getLinks());
+            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
         model.addAttribute("jsonstring", json);
         return "sites/networks/visualize";
@@ -215,19 +197,16 @@ public class WebsiteProjectController {
      * @throws QuadrigaStorageException
      */
     @RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
-    public String visualizeAllNetworks(
-            @PathVariable("projectUnixName") String projectUnixName,
-            Model model,
+    public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName, Model model,
             @InjectProject(unixNameParameter = "projectUnixName") IProject project)
-            throws JAXBException, QuadrigaStorageException {
+                    throws JAXBException, QuadrigaStorageException {
 
         ITransformedNetwork transformedNetwork = transformationManager
                 .getTransformedNetworkOfProject(project.getProjectId());
 
         String json = null;
         if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(),
-                    transformedNetwork.getLinks());
+            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
 
         model.addAttribute("jsonstring", json);
