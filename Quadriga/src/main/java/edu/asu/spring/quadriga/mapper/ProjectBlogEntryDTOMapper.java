@@ -31,23 +31,23 @@ public class ProjectBlogEntryDTOMapper extends BaseMapper {
      * @param userName
      * @return
      */
-    public ProjectBlogEntryDTO getProjectBlogDTO(IProjectBlogEntry projectBlogEntry) {
+    public ProjectBlogEntryDTO getProjectBlogEntryDTO(IProjectBlogEntry projectBlogEntry) {
 
-        ProjectBlogEntryDTO projectBlogDTOEntry = new ProjectBlogEntryDTO();
+        ProjectBlogEntryDTO projectBlogEntryDTO = new ProjectBlogEntryDTO();
 
-        projectBlogDTOEntry.setProjectBlogEntryId(projectBlogEntry.getProjectBlogEntryId());
-        projectBlogDTOEntry.setTitle(projectBlogEntry.getTitle());
-        projectBlogDTOEntry.setDescription(projectBlogEntry.getDescription());
-        projectBlogDTOEntry.setCreatedDate(projectBlogEntry.getCreatedDate());
+        projectBlogEntryDTO.setProjectBlogEntryId(projectBlogEntry.getProjectBlogEntryId());
+        projectBlogEntryDTO.setTitle(projectBlogEntry.getTitle());
+        projectBlogEntryDTO.setDescription(projectBlogEntry.getDescription());
+        projectBlogEntryDTO.setCreatedDate(projectBlogEntry.getCreatedDate());
 
         String username = projectBlogEntry.getAuthor().getName();
         QuadrigaUserDTO author = getUserDTO(username);
-        projectBlogDTOEntry.setProjectBlogEntryAuthorDTO(author);
-        projectBlogDTOEntry.setAuthor(author.getUsername());
+        projectBlogEntryDTO.setProjectBlogEntryAuthorDTO(author);
+        projectBlogEntryDTO.setAuthor(author.getUsername());
 
-        projectBlogDTOEntry.setProjectid(projectBlogEntry.getProjectId());
+        projectBlogEntryDTO.setProjectid(projectBlogEntry.getProjectId());
 
-        return projectBlogDTOEntry;
+        return projectBlogEntryDTO;
     }
 
     /**
@@ -58,7 +58,7 @@ public class ProjectBlogEntryDTOMapper extends BaseMapper {
      * @return
      * @throws QuadrigaStorageException 
      */
-    public IProjectBlogEntry getProjectBlog(ProjectBlogEntryDTO projectBlogEntryDTO) throws QuadrigaStorageException {
+    public IProjectBlogEntry getProjectBlogEntry(ProjectBlogEntryDTO projectBlogEntryDTO) throws QuadrigaStorageException {
         IProjectBlogEntry projectBlogEntry = new ProjectBlogEntry();
 
         projectBlogEntry.setProjectBlogEntryId(projectBlogEntryDTO.getProjectBlogEntryId());

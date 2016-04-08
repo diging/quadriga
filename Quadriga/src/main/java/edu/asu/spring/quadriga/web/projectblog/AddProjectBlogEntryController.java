@@ -66,7 +66,7 @@ public class AddProjectBlogEntryController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "sites/{projectId}/addprojectblogentry", method = RequestMethod.GET)
-    public String addProjectBlogForm(@PathVariable("projectId") String projectId, Model model)
+    public String addProjectBlogEntryForm(@PathVariable("projectId") String projectId, Model model)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         IProject project = projectManager.getProjectDetails(projectId);
@@ -99,7 +99,7 @@ public class AddProjectBlogEntryController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "sites/{projectId}/addprojectblogentry", method = RequestMethod.POST)
-    public ModelAndView addProjectBlogRequest(
+    public ModelAndView addProjectBlogEntryRequest(
             @Validated @ModelAttribute("projectBlogEntry") ProjectBlogEntry projectBlogEntry, BindingResult result,
             @PathVariable("projectId") String projectId, Model model, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {

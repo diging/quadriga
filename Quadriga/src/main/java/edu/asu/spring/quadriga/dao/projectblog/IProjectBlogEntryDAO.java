@@ -21,7 +21,7 @@ public interface IProjectBlogEntryDAO extends IBaseDAO<ProjectBlogEntryDTO> {
      * @param id
      * @return
      */
-    ProjectBlogEntryDTO getProjectBlogDTO(String id);
+    ProjectBlogEntryDTO getProjectBlogEntryDTO(String id);
 
     /**
      * fetches the list of project blog entries for given project when project

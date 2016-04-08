@@ -29,7 +29,7 @@ public class ProjectBlogEntryManager implements IProjectBlogEntryManager {
     private IProjectBlogEntryDAO projectBlogEntryDAO;
 
     @Autowired
-    private ProjectBlogEntryDTOMapper projectBlogDTOMapper;
+    private ProjectBlogEntryDTOMapper projectBlogEntryDTOMapper;
 
     /**
      * {@inheritDoc}
@@ -41,9 +41,9 @@ public class ProjectBlogEntryManager implements IProjectBlogEntryManager {
         projectBlogEntry.setProjectBlogEntryId(projectBlogEntryDAO.generateUniqueID());
         projectBlogEntry.setCreatedDate(new Date());
 
-        ProjectBlogEntryDTO projectBlogDTO = projectBlogDTOMapper.getProjectBlogDTO(projectBlogEntry);
+        ProjectBlogEntryDTO projectBlogEntryDTO = projectBlogEntryDTOMapper.getProjectBlogEntryDTO(projectBlogEntry);
 
-        projectBlogEntryDAO.saveNewDTO(projectBlogDTO);
+        projectBlogEntryDAO.saveNewDTO(projectBlogEntryDTO);
     }
 
     /**
@@ -56,7 +56,7 @@ public class ProjectBlogEntryManager implements IProjectBlogEntryManager {
         
         List<IProjectBlogEntry> projectBlogEntryList = new ArrayList<>();
         for(ProjectBlogEntryDTO projectBlogEntryDTO: projectBlogEntryDTOList){
-            projectBlogEntryList.add(projectBlogDTOMapper.getProjectBlog(projectBlogEntryDTO));
+            projectBlogEntryList.add(projectBlogEntryDTOMapper.getProjectBlogEntry(projectBlogEntryDTO));
         }
         return projectBlogEntryList;
     }

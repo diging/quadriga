@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This class represents the column mappings for <code>tbl_projectblog</code>
+ * This class represents the column mappings for <code>tbl_projectblogentry</code>
  * table.
  * 
  * @author Pawan Mahalle
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "tbl_projectblogentry")
 @XmlRootElement
 @NamedQueries({ @NamedQuery(name = "ProjectBlogEntryDTO.findAll", query = "SELECT pb FROM ProjectBlogEntryDTO pb"),
-        @NamedQuery(name = "ProjectBlogEntryDTO.findByProjectBlogId", query = "SELECT p FROM ProjectBlogEntryDTO p WHERE p.projectid = :projectId order by createdDate desc"), })
+        @NamedQuery(name = "ProjectBlogEntryDTO.findByProjectId", query = "SELECT p FROM ProjectBlogEntryDTO p WHERE p.projectid = :projectId order by createdDate desc"), })
 public class ProjectBlogEntryDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

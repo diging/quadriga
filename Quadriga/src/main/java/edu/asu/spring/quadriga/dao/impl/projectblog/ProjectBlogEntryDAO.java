@@ -31,14 +31,14 @@ public class ProjectBlogEntryDAO extends BaseDAO<ProjectBlogEntryDTO>implements 
      */
     @Override
     public String getIdPrefix() {
-        return messages.getProperty("projectblog_id.prefix");
+        return messages.getProperty("projectblogentry_id.prefix");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ProjectBlogEntryDTO getProjectBlogDTO(String id) {
+    public ProjectBlogEntryDTO getProjectBlogEntryDTO(String id) {
         return getDTO(ProjectBlogEntryDTO.class, id);
     }
 
@@ -47,7 +47,7 @@ public class ProjectBlogEntryDAO extends BaseDAO<ProjectBlogEntryDTO>implements 
      */
     @Override
     public ProjectBlogEntryDTO getDTO(String id) {
-        return getProjectBlogDTO(id);
+        return getProjectBlogEntryDTO(id);
     }
 
     /**
@@ -62,13 +62,13 @@ public class ProjectBlogEntryDAO extends BaseDAO<ProjectBlogEntryDTO>implements 
 
         // Create a query to get all projects
         Query query = sessionFactory.getCurrentSession().getNamedQuery(
-                "ProjectBlogEntryDTO.findByProjectBlogId");
+                "ProjectBlogEntryDTO.findByProjectId");
         query.setParameter("projectId", projectId);
 
         @SuppressWarnings("unchecked")
-        List<ProjectBlogEntryDTO> projectBlogDTOList = query.list();
+        List<ProjectBlogEntryDTO> projectBlogEntryDTOList = query.list();
 
-        return projectBlogDTOList;
+        return projectBlogEntryDTOList;
     }
     
 }
