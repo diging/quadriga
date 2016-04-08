@@ -38,8 +38,7 @@ public class WebsiteAboutEditController {
 	private IAboutTextManager aboutTextManager;
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR,
-			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
+			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
 	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/editabout", method = RequestMethod.GET)
 	public String editAbout(@PathVariable("projectId") String projectId, Model model, Principal principal)
 			throws QuadrigaStorageException {
@@ -58,8 +57,7 @@ public class WebsiteAboutEditController {
 	 */
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR,
-			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
+			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
 	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/saveabout", method = RequestMethod.POST)
 	public String saveAbout(@PathVariable("projectId") String projectId,
 			@ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Model model, Principal principal)
