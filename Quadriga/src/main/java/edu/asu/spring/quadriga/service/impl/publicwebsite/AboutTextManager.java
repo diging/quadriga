@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.impl.publicwebsite;
 
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.publicwebsite.IAboutTextDAO;
 import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 
 /**
@@ -23,9 +25,10 @@ public class AboutTextManager implements IAboutTextManager {
 
 	@Transactional
 	@Override
-	public void saveAbout(String projectId, String title, String description) {
-		AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
-
+	public void saveAbout(String projectId, String title, String description) throws QuadrigaStorageException {
+		AboutTextDTO aboutTextDTO;
+		aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
+		
 		if (aboutTextDTO == null)
 			aboutTextDTO = new AboutTextDTO();
 
@@ -37,7 +40,7 @@ public class AboutTextManager implements IAboutTextManager {
 
 	@Transactional
 	@Override
-	public IAboutText getDTOByProjectId(String projectId) {
+	public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException {
 		return aboutTextDAO.getDTOByProjectId(projectId);
 	}
 

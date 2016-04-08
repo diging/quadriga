@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.publicwebsite;
 
 import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * Interface for AboutTextManager which is service to facilitate storage of
@@ -12,6 +13,6 @@ import edu.asu.spring.quadriga.dto.AboutTextDTO;
  */
 public interface IAboutTextManager {
 
-	public void saveAbout(String projectId, String title, String description);
-	public IAboutText getDTOByProjectId(String projectId);
+	public void saveAbout(String projectId, String title, String description) throws QuadrigaStorageException;
+	public IAboutText getAboutTextByProjectId(String projectIx) throws QuadrigaStorageException;
 }

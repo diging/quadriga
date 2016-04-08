@@ -43,7 +43,7 @@ public class WebsiteAboutEditController {
 	public String editAbout(@PathVariable("projectId") String projectId, Model model, Principal principal)
 			throws QuadrigaStorageException {
 		IProject project = projectManager.getProjectDetails(projectId);
-		model.addAttribute("aboutText", aboutTextManager.getDTOByProjectId(projectId));
+		model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
 		model.addAttribute("project", project);
 		return "auth/editabout";
 	}
@@ -66,7 +66,7 @@ public class WebsiteAboutEditController {
 		IProject project = projectManager.getProjectDetails(projectId);
 		model.addAttribute("show_success_alert", true);
 		model.addAttribute("success_alert_msg", "You successfully edited the about text");
-		model.addAttribute("aboutText", aboutTextManager.getDTOByProjectId(projectId));
+		model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
 		model.addAttribute("project", project);
 		return "auth/editabout";
 	}

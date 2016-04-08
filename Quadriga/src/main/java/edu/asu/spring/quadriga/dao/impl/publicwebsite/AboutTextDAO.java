@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.publicwebsite.IAboutTextDAO;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * DAO class for public website's about project text.
@@ -18,7 +19,7 @@ import edu.asu.spring.quadriga.dto.AboutTextDTO;
  */
 
 @Repository
-public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO {
+public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO  {
 
 	/**
 	 * 
@@ -27,7 +28,7 @@ public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO
 	 * @return
 	 */
 
-	public AboutTextDTO getDTOByProjectId(String projectId) {
+	public AboutTextDTO getDTOByProjectId(String projectId) throws QuadrigaStorageException {
 		AboutTextDTO aboutTextDTO;
 		try {
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("AboutTextDTO.findByProjectId");
@@ -38,8 +39,8 @@ public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO
 			else
 				return null;
 		} catch (HibernateException e) {
-			System.out.println("Error while retrieving aboutTextDTO");
-			return null;
+			throw ( new QuadrigaStorageException("System error", e)) ; 
+			
 		}
 
 		return aboutTextDTO;
