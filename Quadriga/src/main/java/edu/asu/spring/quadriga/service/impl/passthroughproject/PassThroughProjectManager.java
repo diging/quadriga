@@ -1,14 +1,18 @@
 package edu.asu.spring.quadriga.service.impl.passthroughproject;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
@@ -16,12 +20,14 @@ import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
+import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDocumentReader;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IExternalWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -47,6 +53,9 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Resource(name = "projectconstants")
     private Properties messages;
 
+    @Autowired
+    private IPassThroughProjectDocumentReader passThroughProjectDocumentReader;
+
     @Override
     @Transactional
     public String addPassThroughProject(String userid, IPassThroughProject project) throws QuadrigaStorageException {
@@ -55,7 +64,8 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     @Override
     @Transactional
-    public String getInternalProjectId(String externalProjectid, String userid) throws QuadrigaStorageException, NoSuchRoleException {
+    public String getInternalProjectId(String externalProjectid, String userid)
+            throws QuadrigaStorageException, NoSuchRoleException {
 
         List<PassThroughProjectDTO> projectDTOs = projectDao.getExternalProjects(externalProjectid);
 
@@ -74,10 +84,21 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     }
 
     @Override
-    public String callQStore(String workspaceId, String xml, IUser user, String annotatedText)
-            throws QStoreStorageException, QuadrigaStorageException, QuadrigaAccessException, JAXBException {
+    public String callQStore(String xml, IUser user)
+            throws QStoreStorageException, QuadrigaStorageException, QuadrigaAccessException, JAXBException,
+            ParserConfigurationException, SAXException, IOException, NoSuchRoleException, DocumentParserException {
         // TODO This should not be hardcoded here.
         String networkName = "VogenWeb_Details";
+
+        String userid = user.getUserName();
+        Document document = passThroughProjectDocumentReader.getXMLParser(xml);
+
+        String projectId = passThroughProjectDocumentReader.getProjectID(document, userid);
+
+        String workspaceId = passThroughProjectDocumentReader.getWorsapceID(document, projectId, userid);
+
+        String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
+
         String responseFromQStore = networkManager.storeNetworks(annotatedText);
         String networkId = networkManager.storeNetworkDetails(responseFromQStore, user, networkName, workspaceId,
                 INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);

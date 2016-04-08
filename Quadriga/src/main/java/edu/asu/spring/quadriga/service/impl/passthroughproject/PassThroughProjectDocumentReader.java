@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -47,9 +48,9 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
     @Override
     public Document getXMLParser(String xml) throws ParserConfigurationException, SAXException, IOException {
 
-        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-        DocumentBuilder b = f.newDocumentBuilder();
-        Document doc = b.parse(new InputSource(new StringReader(xml)));
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(new InputSource(new StringReader(xml)));
         doc.getDocumentElement().normalize();
         return doc;
     }
@@ -147,8 +148,8 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
             NamedNodeMap nodeAttributeMap = node.getAttributes();
             Node idNode = nodeAttributeMap.getNamedItem("id");
             return idNode.getNodeValue();
-        } catch (Exception ex) {
-            logger.info("Problem while processing id for tag->" + tagName + " in xml. So returning null");
+        } catch (DOMException ex) {
+            logger.error("Problem while processing id for tag->" + tagName + " in xml. So returning null");
             return null;
         }
     }
@@ -157,13 +158,14 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
         try {
             Node tagNode = document.getElementsByTagName(tagName).item(0);
             return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
-        } catch (Exception ex) {
+        } catch (DOMException ex) {
             logger.info("Exception occurred while processsing tag ->" + tagName + ". So returning null");
             return null;
         }
     }
 
-    private String processProject(String userid, IPassThroughProject project) throws QuadrigaStorageException, NoSuchRoleException {
+    private String processProject(String userid, IPassThroughProject project)
+            throws QuadrigaStorageException, NoSuchRoleException {
 
         String internalProjetid = passThroughProjectManager.getInternalProjectId(project.getExternalProjectid(),
                 userid);

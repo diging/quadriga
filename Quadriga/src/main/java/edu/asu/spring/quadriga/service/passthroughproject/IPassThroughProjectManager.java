@@ -1,9 +1,15 @@
 package edu.asu.spring.quadriga.service.passthroughproject;
 
+import java.io.IOException;
+
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
+import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -16,9 +22,11 @@ public interface IPassThroughProjectManager {
 
     String addPassThroughProject(String userid, IPassThroughProject project) throws QuadrigaStorageException;
 
-    String getInternalProjectId(String externalProjectid, String userid) throws QuadrigaStorageException, NoSuchRoleException;
+    String getInternalProjectId(String externalProjectid, String userid)
+            throws QuadrigaStorageException, NoSuchRoleException;
 
-    String callQStore(String workspaceId, String xml, IUser user, String annotatedText)
-            throws QuadrigaStorageException, QuadrigaAccessException, JAXBException, QStoreStorageException;
+    String callQStore(String xml, IUser user)
+            throws QStoreStorageException, QuadrigaStorageException, QuadrigaAccessException, JAXBException,
+            ParserConfigurationException, SAXException, IOException, NoSuchRoleException, DocumentParserException;
 
 }

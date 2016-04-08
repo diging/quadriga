@@ -19,15 +19,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDocumentReader;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 
 @Controller
@@ -39,28 +38,18 @@ public class PassThroughProjectRestController {
     @Autowired
     private IUserManager userManager;
 
-    @Autowired
-    private IPassThroughProjectDocumentReader passThroughProjectDocumentReader;
-
     // TODO Handle exceptions properly
     @RequestMapping(value = "rest/passthroughproject", method = RequestMethod.POST)
     public ResponseEntity<String> getPassThroughProject(HttpServletRequest request,
             @RequestHeader("Accept") String accept, HttpServletResponse response, @RequestBody String xml,
             Principal principal)
                     throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException,
-                    TransformerException, QuadrigaStorageException, QuadrigaAccessException, QStoreStorageException {
+ TransformerException, QuadrigaStorageException, QuadrigaAccessException,
+                    QStoreStorageException, DocumentParserException {
 
         String userid = principal.getName();
-        Document document = passThroughProjectDocumentReader.getXMLParser(xml);
 
-        String projectId = passThroughProjectDocumentReader.getProjectID(document, userid);
-
-        String workspaceId = passThroughProjectDocumentReader.getWorsapceID(document, projectId, userid);
-
-        String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
-
-        String networkId = passThroughProjectManager.callQStore(workspaceId, xml, userManager.getUser(userid),
-                annotatedText);
+        String networkId = passThroughProjectManager.callQStore(xml, userManager.getUser(userid));
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.valueOf(accept));
