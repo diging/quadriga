@@ -41,7 +41,7 @@ public class ConceptCollectionManagerTest {
     @Mock
     private IConceptCollectionDeepMapper mockedConceptCollectionDeepMapper = Mockito
             .mock(IConceptCollectionDeepMapper.class);
-    
+
     @Mock
     private IConceptpowerConnector cpConnector;
 
@@ -92,7 +92,7 @@ public class ConceptCollectionManagerTest {
         List<IProject> ccProjectsList2 = new ArrayList<IProject>();
         ccProjectsList2.add(project);
         ccProjectsList2.add(project2);
-        
+
         Mockito.when(cpConnector.search("item", "pos")).thenReturn(rep);
         Mockito.when(cpConnector.getById("id")).thenReturn(rep);
 
@@ -119,8 +119,8 @@ public class ConceptCollectionManagerTest {
         concept = new Concept();
 
         Mockito.when(mockedConceptFactory.createConceptObject()).thenReturn(concept);
-        Mockito.when(mockedccDao.updateItem(Matchers.any(IConcept.class), Matchers.eq("id"), Matchers.eq("username")))
-                .thenReturn("dummy");
+        Mockito.doNothing().when(mockedccDao).updateItem(Matchers.any(IConcept.class), Matchers.eq("id"),
+                Matchers.eq("username"));
     }
 
     @Test
@@ -181,15 +181,6 @@ public class ConceptCollectionManagerTest {
         List<IConceptCollectionCollaborator> resultList = conceptCollectionManagerUnderTest
                 .showCollaboratingUsers("id");
         assertNull(resultList);
-    }
-
-    @Test
-    public void getProjectsTreeTest() throws QuadrigaStorageException, JSONException {
-
-        String result = "{\"core\": {\"data\": [\n {\n  \"id\": \"id\",\n  \"parent\": \"#\",\n  \"text\": \"test project\"\n },\n {\n  \"id\": \"w-id\",\n  \"parent\": \"id\",\n  \"text\": \"w-name\"\n },\n {\n  \"id\": \"w-id2\",\n  \"parent\": \"id\",\n  \"text\": \"<a href=\'#\' id=\'w-id2\' name=\'w-name2\' onclick=\'javascript:addCCtoWorkspace(this.id,this.name);\' >w-name2<\\/a>\"\n },\n {\n  \"id\": \"id2\",\n  \"parent\": \"#\",\n  \"text\": \"<a href=\'#\' id=\'id2\' name=\'test project2\' onclick=\'javascript:addCCtoProjects(this.id,this.name);\' > test project2<\\/a>\"\n }\n]}}";
-
-        String actualResult = conceptCollectionManagerUnderTest.getProjectsTree("username", "ccId");
-        assertEquals(result, actualResult);
     }
 
     @Test

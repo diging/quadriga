@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -12,10 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -32,6 +33,7 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  * @author Sayalee Mehendale
  *
  */
+
 @PropertySource(value = "classpath:/user.properties")
 @Controller
 public class WebsiteProjectController {
@@ -57,10 +59,6 @@ public class WebsiteProjectController {
 
     public void setProjectManager(IRetrieveProjectManager projectManager) {
         this.projectManager = projectManager;
-    }
-
-    private IProject getProjectDetails(String name) throws QuadrigaStorageException {
-        return projectManager.getProjectDetailsByUnixName(name);
     }
 
     /**
@@ -103,6 +101,7 @@ public class WebsiteProjectController {
                 || projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
             model.addAttribute("project", project);
             return "sites/website";
+
         } else {
             return "forbidden";
         }
@@ -214,6 +213,7 @@ public class WebsiteProjectController {
         model.addAttribute("project", project);
 
         return "sites/networks/explore";
+
     }
 
 }
