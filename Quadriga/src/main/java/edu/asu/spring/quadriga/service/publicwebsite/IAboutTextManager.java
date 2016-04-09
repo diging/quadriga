@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.publicwebsite;
 
 import edu.asu.spring.quadriga.domain.settings.IAboutText;
-import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -14,5 +13,5 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface IAboutTextManager {
 
 	public void saveAbout(String projectId, String title, String description) throws QuadrigaStorageException;
-	public IAboutText getAboutTextByProjectId(String projectIx) throws QuadrigaStorageException;
+	public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException;
 }

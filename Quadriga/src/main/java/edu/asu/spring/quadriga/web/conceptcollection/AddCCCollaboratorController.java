@@ -147,11 +147,7 @@ public class AddCCCollaboratorController {
         model = new ModelAndView("auth/conceptcollection/addcollaborators");
 
         // fetch the concept collection details
-        IConceptCollection conceptCollection = collectionFactory
-                .createConceptCollectionObject();
-        conceptCollection.setConceptCollectionId(collectionid);
-        conceptControllerManager.fillCollectionDetails(conceptCollection,
-                userName);
+        IConceptCollection conceptCollection = conceptControllerManager.getConceptCollection(collectionid);
 
         // fetch the non collaborators and add it to the model
         nonCollaboratorList = collaboratorManager.getUsersNotCollaborating(collectionid);
@@ -234,11 +230,7 @@ public class AddCCCollaboratorController {
 
         String username = principal.getName();
         // fetch the concept collection details
-        IConceptCollection conceptCollection = collectionFactory
-                .createConceptCollectionObject();
-        conceptCollection.setConceptCollectionId(collectionid);
-        conceptControllerManager.fillCollectionDetails(conceptCollection,
-                username);
+        IConceptCollection conceptCollection = conceptControllerManager.getConceptCollection(collectionid);
 
         model.getModelMap().put("collectionname",
                 conceptCollection.getConceptCollectionName());

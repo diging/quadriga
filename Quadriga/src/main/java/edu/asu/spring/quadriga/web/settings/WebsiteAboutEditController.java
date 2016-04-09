@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
@@ -39,14 +40,13 @@ public class WebsiteAboutEditController {
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
 			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/editabout", method = RequestMethod.GET)
-	public String editAbout(@PathVariable("projectId") String projectId, Model model, Principal principal)
-			throws QuadrigaStorageException {
-		IProject project = projectManager.getProjectDetails(projectId);
-		model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
-		model.addAttribute("project", project);
-		return "auth/editabout";
-	}
+		@RequestMapping(value = "auth/workbench/projects/{ProjectUnixName}/settings/editabout", method = RequestMethod.GET)
+		public String editAbout(@PathVariable("ProjectUnixName") String unixName, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project, Model model,
+				Principal principal) throws QuadrigaStorageException {
+			model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(project.getProjectId()));
+			model.addAttribute("project", project);
+			return "auth/editabout";
+		}
 
 	/**
 	 * . Any change made in the about project page is updated into the database
@@ -58,12 +58,13 @@ public class WebsiteAboutEditController {
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
 			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/projects/{projectId}/settings/saveabout", method = RequestMethod.POST)
-	public String saveAbout(@PathVariable("projectId") String projectId,
+	@RequestMapping(value = "auth/workbench/projects/{ProjectUnixName}/settings/saveabout", method = RequestMethod.POST)
+	public String saveAbout(@PathVariable("ProjectUnixName") String unixName,
+			@InjectProject(unixNameParameter = "ProjectUnixName") IProject project,
 			@ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Model model, Principal principal)
 			throws QuadrigaStorageException {
+		String projectId = project.getProjectId();
 		aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
-		IProject project = projectManager.getProjectDetails(projectId);
 		model.addAttribute("show_success_alert", true);
 		model.addAttribute("success_alert_msg", "You successfully edited the about text");
 		model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));

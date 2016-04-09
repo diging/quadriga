@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
@@ -33,12 +34,11 @@ public class WebsiteAboutController {
 	private IAboutTextManager aboutTextManager;
 
 	@RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
-	public String showAbout(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal)
-			throws QuadrigaStorageException {
-		IProject project = projectManager.getProjectDetailsByUnixName(unixName);
+	public String showAbout(@PathVariable("ProjectUnixName") String unixName, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project, Model model,
+			Principal principal) throws QuadrigaStorageException {
 		String projectId = project.getProjectId();
 		model.addAttribute("project", project);
-		model.addAttribute("aboutText", aboutTextManager.getDTOByProjectId(projectId));
+		model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
 		return "sites/public/PublicWebsiteAbout";
 	}
 

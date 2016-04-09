@@ -26,7 +26,7 @@
 		<put-attribute name="left-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
- 	<definition name="base.definition.rightnav" template="/WEB-INF/tiles/layouts/skeleton_right.jsp">
+	<definition name="base.definition.rightnav" template="/WEB-INF/tiles/layouts/skeleton_right.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation"
 			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
@@ -54,13 +54,12 @@
 	</definition>
 
 	<definition name="base.definition.public.network"
-        template="/WEB-INF/tiles/layouts/skeleton_public_network.jsp">
-        <put-attribute name="title" value="" />
-        <put-attribute name="navigation"
-            value="/WEB-INF/views/public/navbar.jsp" />
-        <put-attribute name="footer" value="/tiles/credits.jsp" />
-        <put-attribute name="currentPage" value="home" />
-    </definition>
+		template="/WEB-INF/tiles/layouts/skeleton_public_network.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation" value="/WEB-INF/views/public/navbar.jsp" />
+		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="currentPage" value="home" />
+	</definition>
 
 
 
@@ -385,12 +384,14 @@
 			value="/WEB-INF/views/workspace/showInactiveWorkspace.jsp" />
 	</definition>
 
-	<definition name="auth/workbench/workspace/showArchivedWorkspace" extends="base.definition.workbench">
+	<definition name="auth/workbench/workspace/showArchivedWorkspace"
+		extends="base.definition.workbench">
 		<put-attribute name="title" value="List of Archived Workspaces" />
-		<put-attribute name="content" value="/WEB-INF/views/workspace/showArchivedWorkspace.jsp"/>
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/showArchivedWorkspace.jsp" />
 	</definition>
-	
-	<!--  archive/activate workspace pages -END -->
+
+	<!-- archive/activate workspace pages -END -->
 	<definition name="auth/workbench/workspace/addcollaborators"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="Add Collaborators" />
@@ -708,42 +709,45 @@
 	</definition>
 
 
-    <!-- Site search -->
-    <definition name="sites/search" extends="base.definition.public">
-        <put-attribute name="currentPage" value="networksearch" />
-        <put-attribute name="content" value="/WEB-INF/views/networksearch.jsp"/>
-    </definition>
-	
+	<!-- Site search -->
+	<definition name="sites/search" extends="base.definition.public">
+		<put-attribute name="currentPage" value="networksearch" />
+		<put-attribute name="content" value="/WEB-INF/views/networksearch.jsp" />
+	</definition>
+
 
 	<definition name="sites/public/PublicWebsiteAbout" extends="base.definition.public">
-	   <put-attribute name="currentPage" value="about" />
-		<put-attribute name="content" value="/WEB-INF/views/public/publicwebsiteabout.jsp"/>
+		<put-attribute name="currentPage" value="about" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/public/publicwebsiteabout.jsp" />
 	</definition>
-	
-	
+
+
 	<definition name="auth/saveabout" extends="base.definition">
-	   <put-attribute name="currentPage" value="saveabout" />
-		<put-attribute name="content" value="/WEB-INF/views/settings/editAbout.jsp"/>
+		<put-attribute name="currentPage" value="saveabout" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/settings/editAbout.jsp" />
 	</definition>
-	
+
 	<definition name="auth/editabout" extends="base.definition">
-	   <put-attribute name="currentPage" value="editabout" />
-		<put-attribute name="content" value="/WEB-INF/views/settings/publicWebsiteEditAbout.jsp"/>
+		<put-attribute name="currentPage" value="editabout" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/settings/publicWebsiteEditAbout.jsp" />
 	</definition>
-	
+
 	<definition name="auth/settings" extends="base.definition">
-	   <put-attribute name="currentPage" value="settings" />
-		<put-attribute name="content" value="/WEB-INF/views/settings/publicwebsitesettings.jsp"/>
+		<put-attribute name="currentPage" value="settings" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/settings/publicwebsitesettings.jsp" />
 	</definition>
-	
 
 
-	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks">
-		<put-attribute name="title" value="Quadriga Networks visualize" />
 
-	 <definition name="sites/networks/visualize" extends="base.definition.networks"> 
-		<put-attribute name="title" value="Quadriga Networks visualize" /> <put-attribute 
-		name="content" value="/WEB-INF/views/editing/networks.jsp" /> </definition> -->
+	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks"> 
+		<put-attribute name="title" value="Quadriga Networks visualize" /> <definition 
+		name="sites/networks/visualize" extends="base.definition.networks"> <put-attribute 
+		name="title" value="Quadriga Networks visualize" /> <put-attribute name="content" 
+		value="/WEB-INF/views/editing/networks.jsp" /> </definition> -->
 
 
 	<!-- editing -->
@@ -833,26 +837,32 @@
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
 
+	<definition name="sites/project/statistics" extends="base.definition.public">
+		<put-attribute name="title" value="Project statistics" />
+		<put-attribute name="currentPage" value="statistics" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/projectstatistics.jsp" />
+	</definition>
+
 	<!-- Explore combined network -->
 
 	<definition name="sites/networks/explore" extends="base.definition.public.network">
 		<put-attribute name="currentPage" value="exploregraph" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
 		<put-attribute name="right-navigation"
-					   value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
+			value="/WEB-INF/views/navigation/nav-networkrightplane.jsp" />
 		<put-attribute name="content"
-					   value="/WEB-INF/views/publicnetworkvisual.jsp" />
+			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
 
 	<definition name="sites/networks/searchednetwork" extends="base.definition.public.network">
 		<put-attribute name="currentPage" value="networksearch" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
 		<put-attribute name="right-navigation"
-					   value="/WEB-INF/views/navigation/nav-networkrightsearchplane.jsp"/>
+			value="/WEB-INF/views/navigation/nav-networkrightsearchplane.jsp" />
 		<put-attribute name="content"
-					   value="/WEB-INF/views/publicnetworkvisual.jsp" />
+			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
-
 
 	<definition name="auth/editing/history" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Networks Edit" />

@@ -5,5 +5,5 @@
 
 <title>Public Page Settings</title>
 <a
-	href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout">Change
+	href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.unixName}/settings/editabout">Change
 	About Project details</a>

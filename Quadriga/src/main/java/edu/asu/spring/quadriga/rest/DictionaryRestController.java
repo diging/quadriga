@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,7 +44,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
@@ -58,7 +56,6 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItem;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItemList;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.QuadrigaDictDetailsReply;
@@ -86,9 +83,6 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class DictionaryRestController {
 
-    @Autowired
-    private IDictionaryManager dictonaryManager;
-
     private static final Logger logger = LoggerFactory
             .getLogger(DictionaryRestController.class);
 
@@ -109,9 +103,6 @@ public class DictionaryRestController {
 
     @Autowired
     private IDictionaryFactory dictionaryFactory;
-
-    @Autowired
-    private DictionaryItemFactory dictionaryItemsFactory;
 
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
