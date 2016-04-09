@@ -10,24 +10,28 @@
 
 
 <script>
-$(document).ready(function() {
-    $('#example').DataTable();
-} );
+	$(document).ready(function() {
+		$('#example').DataTable();
+	});
 
-function handle(e){
-    if(e.keyCode === 13){
-    	alert("Hello");
-        document.getElementById("sites").submit();
-    }
-    return false;
-}
+	function handle(e) {
+		if (e.keyCode === 13) {
+			document.getElementById("sites").submit();
+		}
+		return false;
+	}
 </script>
 <!-- Content -->
-<form name='sites' id="sites" action="${pageContext.servletContext.contextPath}/sites/searchTerm" method='POST'>
-	<input type="text" class="form-control" placeholder="Search Public Sites Repository" name="searchTerm" tabindex="1" onkeypress="handle(event)" autocapitalize="off">
+<form name='sites' id="sites"
+	action="${pageContext.servletContext.contextPath}/sites/searchTerm"
+	method='POST'>
+	<input type="text" class="form-control"
+		placeholder="Search Public Sites Repository" name="searchTerm"
+		tabindex="1" onkeypress="handle(event)" autocapitalize="off">
 
 	</br>
-	<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+	<table id="example" class="table table-striped table-bordered"
+		cellspacing="0" width="100%">
 		<thead>
 			<tr>
 				<th>Title</th>

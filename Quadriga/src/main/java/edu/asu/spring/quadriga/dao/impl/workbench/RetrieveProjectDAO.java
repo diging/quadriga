@@ -395,11 +395,11 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
         List<ProjectDTO> projectDTOList = null;
         try {
             Query query = sessionFactory.getCurrentSession().createQuery("from ProjectDTO project where project.accessibility=:accessibility AND "
-                                                        + "(project.description like '%:searchTerm%' "
+                                                        + "(project.description like :searchTerm "
                                                         + " OR "
-                                                        + "project.projectname like '%:searchTerm%')");
+                                                        + "project.projectname like :searchTerm )");
             query.setParameter("accessibility", accessibility);
-            query.setParameter("searchTerm", searchTerm);
+            query.setParameter("searchTerm", "%"+searchTerm+"%");
             projectDTOList =  query.list();
             return projectDTOList;
         }
