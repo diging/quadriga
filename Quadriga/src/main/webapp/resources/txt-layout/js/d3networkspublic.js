@@ -25,15 +25,18 @@ function d3visualizepublic(graph, networkId, path,type) {
 	}
 	// Layout size
 	var width = $('#chart').parent().width();
-	height = 500;
+	console.log(width);
+	height = "500";
 	var layout;
 	var color = d3.scale.category20();
+	var svg_id ="svg_id";
 	// Preparing the force directed graph
 	if(type=="force"){
 		layout = d3.layout.force()
 		.charge(-150)
 		.linkDistance(200)
 		.size([width, height]);
+		
 		layout
 		.nodes(graph.nodes)
 		.links(graph.links)
