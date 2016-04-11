@@ -34,11 +34,10 @@
 		action="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblogentry">
 
 		<header>
-			<h2>Create new Project Entry</h2>
-			<span class="byline">Please fill in blog details</span>
+			<h2>Create new blog entry</h2>
 		</header>
 
-		<!-- Create Project Blog button at top right corner -->
+		<!-- Create project blog entry button at top right corner -->
 		<div style="text-align: right;">
 			<input class="btn btn-primary" type="submit" value="Create Entry"
 				style="width: 15%; align: center;">
@@ -53,18 +52,17 @@
 			<tr>
 				<td><form:textarea path="description" id="description" /></td>
 			</tr>
-			<br>
-			<tr>
-				<td>
-					<div style="text-align: center;">
-						<input class="btn btn-primary" type="submit" value="Create Entry"
-							style="width: 15%; align: center;">
-					</div>
-				</td>
 
-			</tr>
 		</table>
+	
+		<br>
 
+		<!-- Create project blog entry button at top right corner -->
+		<div style="text-align: right;">
+			<input class="btn btn-primary" type="submit" value="Create Entry"
+				style="width: 15%; align: center;">
+		</div>
+		
 	</form:form>
 </article>
 

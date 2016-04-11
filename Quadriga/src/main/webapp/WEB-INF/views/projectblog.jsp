@@ -8,18 +8,19 @@
 <!-- Page Heading -->
 <h1 class="page-header">Project Blog Entries</h1>
 
-<!-- Link to create blog entry -->
-<div align="right">
-	<a
-		href="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblogentry"><i
-		class="fa fa-plus-circle"></i> Add a new entry</a>
-</div>
-
-<br>
+<c:if test="${isProjectAdmin || isProjectOWner}">
+	<!-- Link to create blog entry -->
+	<div align="right">
+		<a
+			href="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblogentry"><i
+			class="fa fa-plus-circle"></i> Add a new entry</a>
+	</div>
+	<br>
+</c:if>
 
 <!-- Page content when project blog entries are found -->
 <c:if test="${not empty projectBlogEntryList}">
-	<div class="container">
+	<div class="container" style="width:100%">
 		<div class="row">
 
 			<div>
