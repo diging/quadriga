@@ -1,10 +1,19 @@
 package edu.asu.spring.quadriga.web.workbench;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import javax.annotation.Resource;
+
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -12,6 +21,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -20,6 +31,7 @@ import edu.asu.spring.quadriga.domain.factory.workbench.IPublicPageFactory;
 import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.validator.PublicPageValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -37,6 +49,7 @@ public class PublicPageController {
 
     /**
      * Attach the custom validator to the Spring context
+     *
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -59,23 +72,48 @@ public class PublicPageController {
         return model;
     }
 
+    // /**
+    // * This method is called for the validation of the Public page settings
+    // form
+    // *
+    // * @return model - model object
+    // */
+    // @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,
+    // paramIndex = 3, userRole = {
+    // RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN
+    // }) })
+    // @RequestMapping(value = "auth/workbench/{projectid}/addpublicpage1",
+    // method = RequestMethod.GET)
+    // public ModelAndView publicPageSettingsFormSubmit(@Validated
+    // @ModelAttribute("publicpage") PublicPage publicPage,
+    // BindingResult result, @PathVariable("projectid") String projectid) {
+    // if (result.hasErrors()) {
+    // ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
+    // return model;
+    // }
+    // ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
+    // model.getModelMap().put("publicpage",
+    // publicPageFactory.createPublicPageObject());
+    // model.getModelMap().put("ppprojectid", projectid);
+    // return model;
+    // }
+ 
     /**
-     * This method is called for the validation of the Public page settings form
+     * This method returns json data
      *
-     * @return model - model object
+     * @return json
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/workbench/{projectid}/addpublicpage1", method = RequestMethod.GET)
-    public ModelAndView publicPageSettingsFormSubmit(@Validated @ModelAttribute("publicpage") PublicPage publicPage,
-            BindingResult result, @PathVariable("projectid") String projectid) {
-        if (result.hasErrors()) {
-            ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
-            return model;
+    @RequestMapping(value = "auth/workbench/{projectid}/addpublicpage1", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public PublicPageValidator publicPageSettingsFormSubmit(
+            @Validated @ModelAttribute("publicpage") PublicPage publicPage, BindingResult result) {
+        PublicPageValidator res = new PublicPageValidator();
+        if (!result.hasErrors()) {
+            res.setStatus("SUCCESS");
+        } else {
+            res.setStatus("FAIL");
         }
-        ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
-        model.getModelMap().put("publicpage", publicPageFactory.createPublicPageObject());
-        model.getModelMap().put("ppprojectid", projectid);
-        return model;
+
+        return res;
     }
 }

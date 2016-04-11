@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
+import antlr.collections.List;
 import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
 
 @Service
@@ -32,5 +34,21 @@ public class PublicPageValidator implements Validator {
         if (page.getOrder() == 0) {
             err.rejectValue("order", "order.required");
         }
+    }
+    
+    private String status;
+    private List errorMessageList;
+
+    public String getStatus() {
+      return status;
+    }
+    public void setStatus(String status) {
+      this.status = status;
+    }
+    public List getErrorMessageList() {
+      return this.errorMessageList;
+    }
+    public void setErrorMessageList(List errorMessageList) {
+      this.errorMessageList = errorMessageList;
     }
 }
