@@ -840,7 +840,7 @@
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation" value="" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
-		<put-attribute name="currentPage" value="home" />
+		<put-attribute name="currentPage" value="sites" />
 	</definition>
 
 	<!-- Sites pages -->
