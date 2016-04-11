@@ -34,7 +34,7 @@ $("input[type=button]").button().click(function(event) {
 
 <body
 	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
-<a href="#" onclick="goFullscreen('chart')"> <img src="${pageContext.servletContext.contextPath}/resources/fullscreen_icon.png" width="30" height="30"  style="float: left"/> </a>
+<input type="submit" onclick="goFullscreen('chart')"  class="fa fa-2x" style="float: left" value="&#xf0b2;"/>
 
 
 
@@ -59,8 +59,7 @@ $("input[type=button]").button().click(function(event) {
 	  document.getElementById('chart').style='position: fixed; top: 0; bottom :0; left: 0; right :0';
     // Get the element that we want to take into fullscreen mode
     var a = document.getElementById('chart');
-    document.getElementsByTagName('svg')[0].id = 'svg_id';
-    var svgDoc= document.getElementById('svg_id');
+    var svgDoc= document.getElementsByTagName('svg')[0]
        
 	svgDoc.setAttribute("height", "100%");
 	svgDoc.setAttribute("width", "100%");
@@ -111,7 +110,7 @@ function clear()
 	element.style.left=null;
 	var width = "500";
 	height = "500";
-	 var svgDoc= document.getElementById('svg_id');
+	 var svgDoc= document.getElementsByTagName('svg')[0];
 	svgDoc.setAttribute("height", height);
 	svgDoc.setAttribute("width", width);
 }
