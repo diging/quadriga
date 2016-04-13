@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -23,10 +25,13 @@ public class FileSaveUtilityTest {
     
     @Autowired
     @Qualifier("txtfileSaveUtil")
+    @Mock
     private IFileSaveUtility fileSaveUtil;
     
     @Before
     public void init() throws Exception{
+    	
+    	fileSaveUtil = Mockito.mock(FileSaveUtility.class);
         File tempFile = tempFolder.newFile("test.txt");
         FileUtils.fileWrite(tempFile.getAbsolutePath(), "testdata");
         
@@ -35,5 +40,12 @@ public class FileSaveUtilityTest {
     @Test
     public void successFileWrite() throws FileNotFoundException, FileStorageException, IOException{
         Assert.assertEquals(true,fileSaveUtil.saveFiletoDir(tempFolder.getRoot().getAbsolutePath(),"zapak", "chillar".getBytes()));
+    }
+    
+    @Test
+    public void testFileRetrieval() throws FileStorageException{
+    	System.out.println(tempFolder.getRoot().getAbsolutePath().toString());
+    	Assert.assertEquals("testdata", fileSaveUtil.readFileContent("test.txt", tempFolder.getRoot().getAbsolutePath().toString()));
+    	
     }
 }
