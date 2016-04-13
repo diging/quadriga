@@ -29,6 +29,7 @@
 			$.ajax({
 				  type : "GET",
 				  url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid="+txtid,
+				  contentType: "text/plain",
 				  success:function(details){
 					 $('.modal-body').text(details);
 				  }				
