@@ -23,7 +23,7 @@ public class TextFileDTO implements Serializable {
     private static final long serialVersionUID = -1798070786993154676L;
 
     @Id
-    @Column(name = "textid", unique = true, nullable = false)
+    @Column(name = "textid", unique=true)
     private String textId;
     @Column(name = "refid")
     private String refId;
