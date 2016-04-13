@@ -23,19 +23,14 @@ public class TextFileDTO implements Serializable {
     private static final long serialVersionUID = -1798070786993154676L;
 
     @Id
-    @Basic(optional = false)
     @Column(name = "textid", unique = true, nullable = false)
     private String textId;
-    @Basic(optional = false)
     @Column(name = "refid")
     private String refId;
-    @Basic(optional = false)
     @Column(name = "projectid")
     private String projectId;
-    @Basic(optional = false)
     @Column(name = "filename")
     private String filename;
-    @Basic(optional = false)
     @Column(name = "wsid")
     private String workspaceId;
 
