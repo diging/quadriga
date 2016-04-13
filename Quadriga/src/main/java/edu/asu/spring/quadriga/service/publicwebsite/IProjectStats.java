@@ -19,28 +19,6 @@ public interface IProjectStats {
             throws QuadrigaStorageException;
 
     /**
-     * Retrieve the count of workspace for all users associated to given project
-     * 
-     * @param projectid
-     * @return - the count of workspace for all users associated to given
-     *         project.
-     * @throws QuadrigaStorageException
-     */
-    public abstract Map<String, IUserStats> getCountofWorkspace(String projectid)
-            throws QuadrigaStorageException;
-
-    /**
-     * Retrieve the count of network for all users associated to given workspace
-     * 
-     * @param projectid
-     * @return - the count of network for all users associated to given project.
-     * @throws QuadrigaStorageException
-     */
-
-    public abstract Map<String, IUserStats> getCountofNetwork(String projectid)
-            throws QuadrigaStorageException;
-
-    /**
      * Retrieve the user statistics of project
      * 
      * @param projectid

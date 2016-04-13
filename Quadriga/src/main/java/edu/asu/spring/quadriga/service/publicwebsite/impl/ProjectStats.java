@@ -98,25 +98,23 @@ public class ProjectStats implements IProjectStats {
         return csList;
     }
 
-    @Override
-    public Map<String, IUserStats> getCountofWorkspace(String projectId)
+    private Map<String, IUserStats> getCountofWorkspace(String projectId,
+            Map<String, IUserStats> mapUserWorkspace)
             throws QuadrigaStorageException {
 
         List<IProjectCollaborator> projectCollaboratorList = projectCollaboratorManager
                 .getProjectCollaborators(projectId);
 
         if (projectCollaboratorList == null)
-            return null;
+            return mapUserWorkspace;
 
-        Map<String, IUserStats> mapUserWorkspace = new HashMap<String, IUserStats>();
         // loop through each collaborator
-
         for (IProjectCollaborator projectCollaborator : projectCollaboratorList) {
             if (projectCollaborator.getCollaborator() != null) {
                 String username = projectCollaborator.getCollaborator()
                         .getUserObj().getUserName();
-                UserStats userStats = (UserStats) setUserWorkspaceStats(
-                        projectId, username);
+                IUserStats userStats = retrieveUserWorkspaceStats(projectId,
+                        username);
                 mapUserWorkspace.put(username, userStats);
             }
         }
@@ -126,15 +124,15 @@ public class ProjectStats implements IProjectStats {
         if (username == null)
             return mapUserWorkspace;
 
-        UserStats userStats = (UserStats) setUserWorkspaceStats(projectId,
+        UserStats userStats = (UserStats) retrieveUserWorkspaceStats(projectId,
                 username);
         mapUserWorkspace.put(username, userStats);
 
         return mapUserWorkspace;
     }
 
-    public IUserStats setUserWorkspaceStats(String projectId, String username)
-            throws QuadrigaStorageException {
+    private IUserStats retrieveUserWorkspaceStats(String projectId,
+            String username) throws QuadrigaStorageException {
         List<IWorkSpace> workspaceList = listWSDAO.listWorkspace(projectId,
                 username);
         UserStats userStats;
@@ -144,19 +142,16 @@ public class ProjectStats implements IProjectStats {
             userStats = new UserStats(username, workspaceList.size(), 0);
         }
         return userStats;
-
     }
 
-    @Override
-    public Map<String, IUserStats> getCountofNetwork(String projectid)
+    private Map<String, IUserStats> getCountofNetwork(String projectid,
+            Map<String, IUserStats> mapUserNetworks)
             throws QuadrigaStorageException {
         List<INetwork> networksList = networkManager
                 .getNetworksInProject(projectid);
 
         if (networksList == null)
-            return null;
-
-        Map<String, IUserStats> mapUserNetworks = new HashMap<String, IUserStats>();
+            return mapUserNetworks;
 
         for (INetwork network : networksList) {
             if (network.getCreator() != null) {
@@ -164,10 +159,11 @@ public class ProjectStats implements IProjectStats {
                 IUserStats userStats = mapUserNetworks.get(username);
                 if (userStats == null) {
                     userStats = new UserStats(username, 0, 1);
+                    mapUserNetworks.put(username, userStats);
                 } else {
                     userStats.incrementNetworkCount();
                 }
-                mapUserNetworks.put(username, userStats);
+
             }
         }
         return mapUserNetworks;
@@ -177,22 +173,13 @@ public class ProjectStats implements IProjectStats {
     public List<IUserStats> getUserStats(String projectId)
             throws QuadrigaStorageException {
 
-        Map<String, IUserStats> mapWorkspaceStats = getCountofWorkspace(projectId);
-        Map<String, IUserStats> mapNetworkStats = getCountofNetwork(projectId);
-        List<IUserStats> userStatsList = new ArrayList<IUserStats>();
+        Map<String, IUserStats> mapUserStats = new HashMap<String, IUserStats>();
 
-        for (Map.Entry<String, IUserStats> workspaceEntry : mapWorkspaceStats
-                .entrySet()) {
-            String username = workspaceEntry.getKey();
-            IUserStats userStats = mapWorkspaceStats.get(username);
-            if (mapNetworkStats.get(username) != null) {
-                Integer networkCount = mapNetworkStats.get(username)
-                        .getNetworkCount();
-                userStats.setNetworkCount(networkCount);
-            }
-            userStatsList.add(userStats);
-        }
+        mapUserStats = getCountofWorkspace(projectId, mapUserStats);
+        mapUserStats = getCountofNetwork(projectId, mapUserStats);
 
-        return userStatsList;
+        List<IUserStats> listUserStats = new ArrayList<IUserStats>(
+                mapUserStats.values());
+        return listUserStats;
     }
 }
