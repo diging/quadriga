@@ -81,7 +81,7 @@
 	</ul>
 </div>
 <div>
-<a href="${pageContext.servletContext.contextPath}/auth/workbench"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Workspaces </a>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench"><span class="glyphicon glyphicon-circle-arrow-left"> </span> All Workspaces </a>
 </div>
 <h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
 	<span>Dictionaries</span>
