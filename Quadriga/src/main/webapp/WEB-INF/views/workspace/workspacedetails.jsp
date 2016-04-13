@@ -20,11 +20,21 @@
 			"bAutoWidth" : false
 		});
 	});
-	$('#txtModal').on('shown.bs.modal', function(event){
-		console.log("event triggered");
-		var link = $(event.relatedTarget);
-		var txtid = link.data('txtId');
-		console.log(txtid)
+	$(document).ready(function(){
+		$('#txtModal').on('show.bs.modal', function(event){
+			var link = $(event.relatedTarget);
+			
+			var txtid = link.data('txtid');
+			
+			$.ajax({
+				  type : "GET",
+				  url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid="+txtid,
+				  success:function(details){
+					 $('.modal-body').text(details);
+				  }				
+				});
+			
+		});
 	});
 </script>
 
@@ -338,11 +348,14 @@
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
 									<td width="25%" align="center">
-									<a data-toggle="modal" data-target="#txtModal" data-txtId="${textfile.textId}" href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid=${textfile.textId}"><c:out
+									<a data-toggle="modal" data-target="#txtModal" data-txtId="${textfile.textId}"><c:out
 											value="${textfile.fileName}"></c:out></a></td>
 									<td width="25%" align="center"><c:out
 											value="${textfile.refId}"></c:out></td>
 								</tr>
+								<script>
+								
+								</script>
 							</c:forEach>
 						</tbody>
 					</table>
@@ -435,15 +448,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
-            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            <h4 class="modal-title" id="myModalLabel">Text Content</h4>
             </div>
             <div class="modal-body">
-                <h3>Modal Body</h3>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
         </div>
     </div>
   </div>
