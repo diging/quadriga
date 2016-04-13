@@ -7,7 +7,6 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security.xsd">
 	<http pattern="/rest/**" auto-config="true" use-expressions="true" create-session="stateless">
-		<csrf disabled="true"/>
 		<intercept-url pattern="/rest/**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<http-basic/>		
 		<!-- <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" /> -->
