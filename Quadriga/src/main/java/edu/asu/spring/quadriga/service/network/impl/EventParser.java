@@ -59,8 +59,10 @@ public class EventParser {
     private IMarshallingService marshallingService;
 
     
-    public void parseStatement(String relationEventId, Map<String, Node> nodes, List<Link> links) throws JAXBException, QStoreStorageException {
-        ElementEventsType elementEventType = getElementEventTypeFromCreationEventTypeID(relationEventId);
+    public void parseStatement(String relationEventId,
+                               ElementEventsType elementEventType,
+                               Map<String, Node> nodes,
+                               List<Link> links) {
         List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
         Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
          
@@ -169,20 +171,6 @@ public class EventParser {
         }
         
         node.getStatementIds().add(statementId);
-    }
-    
-    private ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
-            throws JAXBException, QStoreStorageException {
-        String xml = qstoreConnector.getCreationEvent(relationEventId);
-        ElementEventsType elementEventType = null;
-        if (xml == null) {
-            throw new QStoreStorageException(
-                    "Some issue retriving data from Qstore, Please check the logs related to Qstore");
-        } else {
-            // Initialize ElementEventsType object for relation event
-            elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
-        }
-        return elementEventType;
     }
     
 }

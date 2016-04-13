@@ -1,13 +1,11 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.*;
 
 import javax.xml.bind.JAXBException;
 
+import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +41,13 @@ public class NetworkTransformer implements INetworkTransformer {
     @Autowired
     private EventParser parser;
 
+    @Autowired
+    private ElementEventTypeDownloadService elementEventTypeDownloadService;
+
     private static final Logger logger = LoggerFactory
             .getLogger(NetworkTransformer.class);
+
+    private static int NUM_THREADS = 4;
 
     /**
      * 
@@ -53,26 +56,40 @@ public class NetworkTransformer implements INetworkTransformer {
     @Override
     public ITransformedNetwork transformNetwork(
             List<INetworkNodeInfo> networkTopNodesList) {
-        Map<String, Node> nodes = new HashMap<String, Node>();
-        List<Link> links = new ArrayList<Link>();
+        Map<String, Node> nodes = new HashMap<>();
+        List<Link> links = new ArrayList<>();
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
 
-        if (networkTopNodesList != null && networkTopNodesList.size() > 0) {
-            for (INetworkNodeInfo networkNodeInfo : networkTopNodesList) {
-                if (networkNodeInfo.getStatementType().equals(
-                        INetworkManager.RELATIONEVENT)) {
-                    try {
-                        parser.parseStatement(networkNodeInfo.getId(),
-                                nodes, links);
-                    } catch (JAXBException e) {
-                        logger.error("Issue while parsing the JAXB object",
-                                e);
-                    } catch (QStoreStorageException e) {
-                        logger.error("QStore retrieve error", e);
-                    }
-                }
-            }
+        if (networkTopNodesList == null || networkTopNodesList.size() == 0) {
+            // return the trasnformed network
+            return transformedNetwork;
         }
+
+        // networkTopNode list has size > 0
+        // Create executors and tasks
+        ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
+        // Completion service
+        CompletionService<ElementEventsType> completionService = new
+                ExecutorCompletionService<>(executorService);
+
+        // submit tasks
+        networkTopNodesList.forEach((networkNodeInfo) -> {
+            Callable<ElementEventsType> callable = elementEventTypeDownloadService
+                    .getElementEventTypeDownloadTask(networkNodeInfo.getId());
+            completionService.submit(callable);
+        });
+
+        // check for callabale executions
+        networkTopNodesList.forEach((networkNodeInfo -> {
+            try {
+                Future<ElementEventsType> future = completionService.take();
+                // take() will block if none are executed
+                ElementEventsType elementEventsType = future.get();
+                parser.parseStatement(networkNodeInfo.getId(), elementEventsType, nodes, links);
+            } catch (InterruptedException | ExecutionException e) {
+                logger.error("Issue while retrieving and marshalling object", e);
+            }
+        }));
 
         // Instead of sending null
         // send an empty transformed network
