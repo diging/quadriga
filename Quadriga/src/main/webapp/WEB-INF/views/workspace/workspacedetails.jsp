@@ -20,11 +20,12 @@
 			"bAutoWidth" : false
 		});
 	});
-	function drawModal(){
-	$('#txtModal').on('click',function(){
-		alert("clicked");
+	$('#txtModal').on('shown.bs.modal', function(event){
+		console.log("event triggered");
+		var link = $(event.relatedTarget);
+		var txtid = link.data('txtId');
+		console.log(txtid)
 	});
-	}
 </script>
 
 
@@ -337,7 +338,7 @@
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
 									<td width="25%" align="center">
-									<a data-toggle="modal" data-target="#txtModal" href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid=${textfile.textId}"><c:out
+									<a data-toggle="modal" data-target="#txtModal" data-txtId="${textfile.textId}" href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid=${textfile.textId}"><c:out
 											value="${textfile.fileName}"></c:out></a></td>
 									<td width="25%" align="center"><c:out
 											value="${textfile.refId}"></c:out></td>
@@ -430,7 +431,7 @@
 		</td>
 	</tr>
 </table>
-<div class="modal fade" id="txtModal" tabindex="-1" role="dialog" aria-labelledby=""txtModal"" aria-hidden="true">
+<div class="modal" id="txtModal" tabindex="-1" role="dialog" aria-labelledby="txtModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
