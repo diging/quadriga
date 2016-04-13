@@ -79,6 +79,8 @@ public class NetworkTransformer implements INetworkTransformer {
                 logger.error("Issue while retrieving and marshalling object", e);
             }
         }));
+        // finally shutdown the service
+        executorService.shutdown();
 
         // Instead of sending null
         // send an empty transformed network
