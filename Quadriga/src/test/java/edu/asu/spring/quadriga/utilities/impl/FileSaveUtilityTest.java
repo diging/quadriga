@@ -27,6 +27,7 @@ public class FileSaveUtilityTest {
     
     @Before
     public void init() throws Exception{
+        System.out.println(tempFolder.getRoot());
         File tempFile = tempFolder.newFile("test.txt");
         FileUtils.fileWrite(tempFile.getAbsolutePath(), "testdata");
         
