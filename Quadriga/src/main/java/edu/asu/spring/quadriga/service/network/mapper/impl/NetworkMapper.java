@@ -53,6 +53,7 @@ public class NetworkMapper implements INetworkMapper{
 			network = networkFactory.createNetworkObject();
 			network.setNetworkId(networksDTO.getNetworkid());
 			network.setNetworkName(networksDTO.getNetworkname());
+		//	network.setCreatedDate(networkDTO.getCreateddate());
 
 			IWorkspaceNetwork networkworkspace = networkworkspacemapper.getNetworkWorkspaceByNetworkDTO(networksDTO, network);
 			network.setNetworkWorkspace(networkworkspace);
@@ -200,11 +201,12 @@ public class NetworkMapper implements INetworkMapper{
 				network.setNetworkId(networkDTO.getNetworkid());
 				network.setNetworkName(networkDTO.getNetworkname());
 				network.setStatus(networkDTO.getStatus());
+				network.setCreatedDate(networkDTO.getCreateddate());
 				IWorkspaceNetwork networkworkspace = networkworkspacemapper.getNetworkWorkspaceByNetworkDTO(networkDTO, network);
 				network.setNetworkWorkspace(networkworkspace);
 				if(networkDTO.getNetworkowner() != null)
 					network.setCreator(userDeepMapper.getUser(networkDTO.getNetworkowner()));
-				networkList.add(network);	
+				networkList.add(network);
 			}
 		}
 		return networkList;

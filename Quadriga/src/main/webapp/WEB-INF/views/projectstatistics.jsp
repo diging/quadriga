@@ -12,10 +12,16 @@
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3projectstatistics.js"></script>
 <script type="text/javascript">
-var data = '${jsonstring}'; 
+var labelCount = '${labelCount}'; 
+var submittedNetworksData = '${submittedNetworksData}';
+var approvedNetworksData = '${approvedNetworksData}';
+var rejectedNetworksData = '${rejectedNetworksData}';
 document.body.onload = function()
 {
-	d3ProjectStatistics(data);
+	d3ProjectStatistics(labelCount);
+	d3ProjectActivity(submittedNetworksData);
+	d3ProjectActivity(approvedNetworksData);
+	d3ProjectActivity(rejectedNetworksData);
 }
 </script> 
 <h1>Project Statistics</h1>
