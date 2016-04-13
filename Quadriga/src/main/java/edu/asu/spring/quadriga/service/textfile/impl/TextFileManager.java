@@ -44,7 +44,8 @@ public class TextFileManager implements ITextFileManager {
         txtFile.setTextId(txtId);
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
         txtFileDTO.setTextId(txtId);
-        return fileSaveServ.saveFileToLocal(txtFile) && txtFileDAO.saveTextFileDTO(txtFileDTO);
+        txtFileDAO.saveNewDTO(txtFileDTO);
+        return fileSaveServ.saveFileToLocal(txtFile);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class TextFileManager implements ITextFileManager {
     @Override
     public String retrieveTextFileContent(String txtId) throws FileStorageException {
 
-        TextFileDTO tfDTO = txtFileDAO.getTextFileDTO(txtId);
+        TextFileDTO tfDTO = txtFileDAO.getDTO(txtId);
         String fileName= tfDTO.getFilename();
         if(!fileName.contains("."))
             fileName+=".txt";

@@ -21,19 +21,6 @@ public interface ITextFileDAO extends IBaseDAO<TextFileDTO> {
      */
     public abstract List<TextFileDTO> getTextFileDTObyWsId(String wsId);
 
-    /**
-     * @param textId
-     *            Text Id for the corresponding text file.
-     * @return Returns a Text file object
-     */
-    public abstract TextFileDTO getTextFileDTO(String textId);
 
-    /**
-     * @param txtFileDTO
-     *            TextFile DTO to be stored in the database.
-     * @return Returns true if text file is saved successfully else false.
-     * @throws QuadrigaStorageException
-     */
-    public abstract boolean saveTextFileDTO(TextFileDTO txtFileDTO) throws QuadrigaStorageException;
 
 }
