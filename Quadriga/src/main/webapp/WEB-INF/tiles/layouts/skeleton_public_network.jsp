@@ -14,6 +14,8 @@
 	rel='stylesheet' type='text/css'>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script src="${pageContext.servletContext.contextPath}/resources/js/d3.min.js" charset="utf-8"></script>
+
 <title><tiles:insertAttribute name="title" /></title>
 
 
