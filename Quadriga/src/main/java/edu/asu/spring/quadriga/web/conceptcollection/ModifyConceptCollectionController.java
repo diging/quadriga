@@ -28,86 +28,81 @@ import edu.asu.spring.quadriga.validator.ConceptCollectionValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
-public class ModifyConceptCollectionController 
-{
-	@Autowired
-	private IConceptCollectionFactory collectionFactory;
-	
-	@Autowired
-	private IConceptCollectionManager conceptControllerManager;
-	
-	@Autowired
-	private IModifyConceptCollectionManager collectionManager;
-	
-	@Autowired
-	private ConceptCollectionValidator validator;
-	
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
+public class ModifyConceptCollectionController {
+    @Autowired
+    private IConceptCollectionFactory collectionFactory;
 
-		binder.setValidator(validator);
-	}
-	
-	/**
-	 * This method retrieves the concept collection details for updation.
-	 * @param collectionid
-	 * @param principal
-	 * @return ModelAndView
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
-	@RequestMapping(value="auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.GET)
-	public ModelAndView updateConceptCollectionDetials(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
-	{
-		ModelAndView model;
-		IConceptCollection collection;
-		String userName;
-		
-		userName = principal.getName();
-		
-		model = new ModelAndView("auth/conceptcollections/updatecollectiondetails");
-		//retrieve the collection details
-		collection = collectionFactory.createConceptCollectionObject();
-		collection.setConceptCollectionId(collectionid);
-		conceptControllerManager.fillCollectionDetails(collection,userName);
-		model.getModelMap().put("collection", collection);
-		model.getModelMap().put("success", 0);
-		
-		return model;
-	}
-	
-	/**
-	 * This method updates the concept collection details.
-	 * @param collection
-	 * @param result
-	 * @param collectionid
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 3, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
-	@RequestMapping(value="auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.POST)
-	public ModelAndView updateConceptCollectionDetails(@Validated @ModelAttribute("collection")ConceptCollection collection,BindingResult result,
-			@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
-	{
-		ModelAndView model;
-		String userName;
-		
-		userName = principal.getName();
-		
-		model = new ModelAndView("auth/conceptcollections/updatecollectiondetails");
-		if(result.hasErrors())
-		{
-			model.getModelMap().put("collection", collection);
-			model.getModelMap().put("success", 0);
-		}
-		else
-		{
-			collectionManager.updateCollectionDetails(collection, userName);
-			model.getModelMap().put("success", 1);
-		}
-		return model;
-	}
+    @Autowired
+    private IConceptCollectionManager conceptControllerManager;
+
+    @Autowired
+    private IModifyConceptCollectionManager collectionManager;
+
+    @Autowired
+    private ConceptCollectionValidator validator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+
+        binder.setValidator(validator);
+    }
+
+    /**
+     * This method retrieves the concept collection details for updation.
+     * 
+     * @param collectionid
+     * @param principal
+     * @return ModelAndView
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = { RoleNames.ROLE_CC_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.GET)
+    public ModelAndView updateConceptCollectionDetials(
+            @PathVariable("collectionid") String collectionid,
+            Principal principal) throws QuadrigaStorageException,
+            QuadrigaAccessException {
+        ModelAndView model = new ModelAndView(
+                "auth/conceptcollections/updatecollectiondetails");
+        // retrieve the collection details
+        IConceptCollection collection = conceptControllerManager
+                .getConceptCollection(collectionid);
+        model.getModelMap().put("collection", collection);
+        model.getModelMap().put("success", 0);
+
+        return model;
+    }
+
+    /**
+     * This method updates the concept collection details.
+     * 
+     * @param collection
+     * @param result
+     * @param collectionid
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 3, userRole = { RoleNames.ROLE_CC_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.POST)
+    public ModelAndView updateConceptCollectionDetails(
+            @Validated @ModelAttribute("collection") ConceptCollection collection,
+            BindingResult result,
+            @PathVariable("collectionid") String collectionid,
+            Principal principal) throws QuadrigaStorageException,
+            QuadrigaAccessException {
+        String userName = principal.getName();
+
+        ModelAndView model = new ModelAndView(
+                "auth/conceptcollections/updatecollectiondetails");
+        if (result.hasErrors()) {
+            model.getModelMap().put("collection", collection);
+            model.getModelMap().put("success", 0);
+        } else {
+            collectionManager.updateCollectionDetails(collection, userName);
+            model.getModelMap().put("success", 1);
+        }
+        return model;
+    }
 
 }
