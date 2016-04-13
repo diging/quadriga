@@ -33,7 +33,7 @@ public class PassThroughProjectDAO extends BaseDAO<PassThroughProjectDTO> implem
     @SuppressWarnings("unchecked")
     @Override
     public String addPassThroughProject(String userid, IPassThroughProject project) throws QuadrigaStorageException {
-        String projectId = messages.getProperty("project_internalid.name") + generateUniqueID();
+        String projectId = generateUniqueID();
 
         IUser user = userManager.getUser(userid);
 
@@ -59,5 +59,10 @@ public class PassThroughProjectDAO extends BaseDAO<PassThroughProjectDTO> implem
 
         List<PassThroughProjectDTO> projectDTOs = query.list();
         return projectDTOs;
+    }
+
+    @Override
+    public String getIdPrefix() {
+        return messages.getProperty("project_id.prefix");
     }
 }

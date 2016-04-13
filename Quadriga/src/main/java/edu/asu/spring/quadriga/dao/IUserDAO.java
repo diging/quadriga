@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Ram Kumar Kumaresan
  *
  */
-public interface IUserDAO 
+public interface IUserDAO extends IBaseDAO<QuadrigaUserDTO>
 {
 	
 	/**
@@ -97,11 +97,9 @@ public interface IUserDAO
 	 * This method returns the user object for the given username
 	 * @param userName
 	 * @return
-	 * @throws QuadrigaStorageException
 	 * @author kiran batna
 	 */
-	public abstract QuadrigaUserDTO getUserDTO(String userName)
-			throws QuadrigaStorageException;
+	public abstract QuadrigaUserDTO getUserDTO(String userName);
 
 	/**
 	 * This method inserts the quadiriga Admin user record into the daabase

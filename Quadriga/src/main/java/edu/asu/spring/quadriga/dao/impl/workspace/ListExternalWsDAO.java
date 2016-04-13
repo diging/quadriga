@@ -23,6 +23,7 @@ public class ListExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements 
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("rawtypes")
     @Override
     public boolean isExternalWorkspaceExists(String workspaceId) throws QuadrigaStorageException {
         List externalWorkspaceid = null;
@@ -41,6 +42,7 @@ public class ListExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements 
         return false;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public String getInternalWorkspaceId(String externalWorkspaceid) {
 

@@ -1,13 +1,11 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
 import java.util.Date;
-import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListExternalWsDAO;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -33,8 +31,9 @@ public class ExternalWSManager implements IExternalWSManager {
     private ProjectDTOMapper projectMapper;
 
     @Autowired
-    private SessionFactory sessionFactory;
+    private IUserDAO userDAO;
 
+    @Override
     public boolean isExternalWorkspaceExists(String externalWorkspaceId)
             throws QuadrigaStorageException, QuadrigaAccessException {
         return externalWorkspaceDAO.isExternalWorkspaceExists(externalWorkspaceId);
@@ -49,11 +48,8 @@ public class ExternalWSManager implements IExternalWSManager {
         ExternalWorkspaceDTO workspaceDTO = new ExternalWorkspaceDTO();
         workspaceDTO.setWorkspacename(externalWorkspaceName);
         workspaceDTO.setDescription("External Workspace");
-        // TODO Move this to DAO
-        Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
-        query.setParameter("username", user.getUserName());
-        List<QuadrigaUserDTO> quadrigaUsers = query.list();
-        workspaceDTO.setWorkspaceowner(quadrigaUsers.get(0));
+        QuadrigaUserDTO owner = userDAO.getDTO(user.getUserName());
+        workspaceDTO.setWorkspaceowner(owner);
         workspaceDTO.setIsarchived(false);
         workspaceDTO.setIsdeactivated(false);
         workspaceDTO.setUpdatedby(user.getName());
