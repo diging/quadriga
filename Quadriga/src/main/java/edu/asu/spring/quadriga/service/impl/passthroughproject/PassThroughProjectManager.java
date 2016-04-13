@@ -25,6 +25,7 @@ import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDocumentReader;
@@ -84,25 +85,30 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     }
 
     @Override
-    public String callQStore(String xml, IUser user)
-            throws QStoreStorageException, QuadrigaStorageException, QuadrigaAccessException, JAXBException,
-            ParserConfigurationException, SAXException, IOException, NoSuchRoleException, DocumentParserException {
-        // TODO This should not be hardcoded here.
-        String networkName = "VogenWeb_Details";
+    public String callQStore(String xml, IUser user) throws QStoreStorageException, DocumentParserException {
+        String networkName = Constants.VOGONWEB_NETWORK_NAME;
 
         String userid = user.getUserName();
-        Document document = passThroughProjectDocumentReader.getXMLParser(xml);
+        String networkId = null;
+        try {
+            Document document = passThroughProjectDocumentReader.getXMLParser(xml);
 
-        String projectId = passThroughProjectDocumentReader.getProjectID(document, userid);
+            String projectId = passThroughProjectDocumentReader.getProjectID(document, userid);
 
-        String workspaceId = passThroughProjectDocumentReader.getWorsapceID(document, projectId, userid);
+            String workspaceId = passThroughProjectDocumentReader.getWorsapceID(document, projectId, userid);
 
-        String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
+            String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
+            String responseFromQStore = networkManager.storeNetworks(annotatedText);
+            networkId = networkManager.storeNetworkDetails(responseFromQStore, user, networkName, workspaceId,
+                    INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
 
-        String responseFromQStore = networkManager.storeNetworks(annotatedText);
-        String networkId = networkManager.storeNetworkDetails(responseFromQStore, user, networkName, workspaceId,
-                INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
+        } catch (ParserConfigurationException | SAXException | IOException | NoSuchRoleException
+                | QuadrigaStorageException | JAXBException | QuadrigaAccessException e) {
+            throw new DocumentParserException(e);
+
+        }
         return networkId;
+
     }
 
     @Override

@@ -9,11 +9,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -33,8 +30,6 @@ import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectMan
 
 @Service
 public class PassThroughProjectDocumentReader implements IPassThroughProjectDocumentReader {
-
-    private static final Logger logger = LoggerFactory.getLogger(PassThroughProjectDocumentReader.class);
 
     @Autowired
     private IPassThroughProjectManager passThroughProjectManager;
@@ -140,28 +135,18 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
 
     private String getTagId(Document document, String tagName) {
 
-        try {
-            Node node = document.getElementsByTagName(tagName).item(0);
-            if (node == null) {
-                return null;
-            }
-            NamedNodeMap nodeAttributeMap = node.getAttributes();
-            Node idNode = nodeAttributeMap.getNamedItem("id");
-            return idNode.getNodeValue();
-        } catch (DOMException ex) {
-            logger.error("Problem while processing id for tag->" + tagName + " in xml. So returning null");
+        Node node = document.getElementsByTagName(tagName).item(0);
+        if (node == null) {
             return null;
         }
+        NamedNodeMap nodeAttributeMap = node.getAttributes();
+        Node idNode = nodeAttributeMap.getNamedItem("id");
+        return idNode.getNodeValue();
     }
 
     private String getTagValue(Document document, String tagName) {
-        try {
-            Node tagNode = document.getElementsByTagName(tagName).item(0);
-            return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
-        } catch (DOMException ex) {
-            logger.info("Exception occurred while processsing tag ->" + tagName + ". So returning null");
-            return null;
-        }
+        Node tagNode = document.getElementsByTagName(tagName).item(0);
+        return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
     }
 
     private String processProject(String userid, IPassThroughProject project)
