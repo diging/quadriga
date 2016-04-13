@@ -35,6 +35,9 @@
 		<intercept-url pattern="/auth/searchitems/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/dictionaries/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/editing/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
+		<intercept-url pattern="/auth/transformation/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
+		<intercept-url pattern="/auth/uploadTransformation/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
+		<intercept-url pattern="/auth/selectTransformationFiles/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/networks/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/users/**" access="hasRole('ROLE_QUADRIGA_USER_ADMIN')"/>
 		<intercept-url pattern="/requests/*" access="hasRole('ROLE_QUADRIGA_NOACCOUNT')"/>
