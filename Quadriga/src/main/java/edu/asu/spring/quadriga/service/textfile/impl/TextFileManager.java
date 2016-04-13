@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.textfile.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,30 +44,7 @@ public class TextFileManager implements ITextFileManager {
         txtFile.setTextId(txtId);
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
         txtFileDTO.setTextId(txtId);
-        boolean fsStatus = saveTextFileLocal(txtFile);
-        boolean dbStatus = saveTextFileDB(txtFileDTO);
-        return fsStatus && dbStatus;
-    }
-
-    /**
-     * @param txtFile
-     *            TextFile object to be updated in the database
-     * @return returns true if file is successfully saved else returns false.
-     * @throws QuadrigaStorageException
-     */
-    private boolean saveTextFileDB(TextFileDTO tfDTO) throws QuadrigaStorageException {
-        return txtFileDAO.saveTextFileDTO(tfDTO);
-    }
-
-    /**
-     * @param txtFile
-     *            TextFile object to be updated in the FileSystem
-     * @return returns true if file is successfully saved else returns false.
-     * @throws IOException
-     */
-    private boolean saveTextFileLocal(ITextFile txtFile) throws FileStorageException {
-        return fileSaveServ.saveFileToLocal(txtFile);
-
+        return fileSaveServ.saveFileToLocal(txtFile) && txtFileDAO.saveTextFileDTO(txtFileDTO);
     }
 
     @Override

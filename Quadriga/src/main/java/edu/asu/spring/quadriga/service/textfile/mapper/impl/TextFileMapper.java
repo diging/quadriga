@@ -1,8 +1,5 @@
 package edu.asu.spring.quadriga.service.textfile.mapper.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
