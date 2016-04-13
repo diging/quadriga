@@ -97,9 +97,7 @@ public class AddWSController {
     public ModelAndView addWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
             BindingResult result, @PathVariable("projectid") String projectid, Principal principal)
                     throws QuadrigaStorageException, QuadrigaAccessException {
-        ModelAndView model;
-        String userName = principal.getName();
-        IUser user;
+        ModelAndView model;        
         model = new ModelAndView("auth/workbench/workspace/addworkspace");
         if (result.hasErrors()) {
             model.getModelMap().put("workspace", workspace);
@@ -107,6 +105,8 @@ public class AddWSController {
             model.getModelMap().put("success", 0);
             return model;
         } else {
+            String userName = principal.getName();
+            IUser user;
             user = userManager.getUser(userName);
             workspace.setOwner(user);
             modifyWSManger.addWorkspaceToProject(workspace, projectid);
