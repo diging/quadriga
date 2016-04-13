@@ -25,14 +25,13 @@ public class ViewTextController {
     private ITextFileManager tfManager;
 
     @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/viewtext", method = RequestMethod.GET)
-    @ResponseBody
-    public String viewTextfile(@RequestParam("txtid") String txtId, HttpServletResponse response,
+    public HttpServletResponse viewTextfile(@RequestParam("txtid") String txtId, HttpServletResponse response,
             HttpServletRequest request)
                     throws QuadrigaStorageException, QuadrigaAccessException, FileStorageException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
-        return tfManager.retrieveTextFileContent(txtId);
-       
+        response.getWriter().write(tfManager.retrieveTextFileContent(txtId));
+        return response;
     }
 
 }
