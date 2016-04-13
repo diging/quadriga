@@ -337,7 +337,7 @@
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
 									<td width="25%" align="center">
-									<a id="txtModal" click="drawModal()" href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid=${textfile.textId}"><c:out
+									<a data-toggle="modal" data-target="#txtModal" href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid=${textfile.textId}"><c:out
 											value="${textfile.fileName}"></c:out></a></td>
 									<td width="25%" align="center"><c:out
 											value="${textfile.refId}"></c:out></td>
@@ -430,3 +430,20 @@
 		</td>
 	</tr>
 </table>
+<div class="modal fade" id="txtModal" tabindex="-1" role="dialog" aria-labelledby=""txtModal"" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Modal Body</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+  </div>
+</div>
