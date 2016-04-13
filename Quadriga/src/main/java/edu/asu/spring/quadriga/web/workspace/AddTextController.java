@@ -119,7 +119,6 @@ public class AddTextController {
             txtFile.setProjectId(projid);
             try {
                 if (tfManager.saveTextFile(txtFile)) {
-                    tfManager.retrieveTextFiles(workspaceid);
                     redirectAttributes.addFlashAttribute("show_success_alert", true);
                     redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
                 } else {
@@ -128,7 +127,7 @@ public class AddTextController {
                 }
             } catch (FileStorageException fse) {
                 redirectAttributes.addFlashAttribute("show_error_alert", true);
-                redirectAttributes.addFlashAttribute("error_alert_msg", "Unable to save text file. Please check the default directory.");
+                redirectAttributes.addFlashAttribute("error_alert_msg", "The file could not be saved. If the problem persists, please contact an administrator.");
                 
             }
         }

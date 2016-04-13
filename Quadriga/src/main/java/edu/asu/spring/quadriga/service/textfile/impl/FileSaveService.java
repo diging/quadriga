@@ -21,12 +21,10 @@ public class FileSaveService implements IFileSaveService {
     @Qualifier("txtfileSaveUtil")
     @Autowired
     private IFileSaveUtility fileManager;
-    private ITextFile txtFile;
 
     @Override
     public boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException {
-        this.txtFile = txtFile;
-        return saveMetadata() && saveFileContent();
+        return saveMetadata(txtFile) && saveFileContent(txtFile);
     }
 
     /**
@@ -34,20 +32,20 @@ public class FileSaveService implements IFileSaveService {
      * @throws IOException
      * @throws FileStorageException
      */
-    private boolean saveMetadata() throws FileStorageException {
+    private boolean saveMetadata(ITextFile txtFile) throws FileStorageException {
         StringBuilder fileContent = new StringBuilder();
         fileContent.append("WsId:" + txtFile.getWorkspaceId() + "\n");
         fileContent.append("ProjectId:" + txtFile.getProjectId() + "\n");
         fileContent.append("ReferenceId:" + txtFile.getRefId() + "\n");
         fileContent.append("TextFileId:" + txtFile.getTextId() + "\n");
         String filePath = txtFile.getTextId();
-        if(fileManager.saveFiletoDir(filePath, "/meta.properties", fileContent.toString().getBytes())){
+        if (fileManager.saveFiletoDir(filePath, "/meta.properties", fileContent.toString().getBytes())) {
             return true;
-        }
-        else return false;
+        } else
+            return false;
     }
 
-    private boolean saveFileContent() throws FileStorageException {
+    private boolean saveFileContent(ITextFile txtFile) throws FileStorageException {
         String fileName = txtFile.getFileName();
         String saveTxtFile;
         if (fileName.contains(".")) {
@@ -61,10 +59,10 @@ public class FileSaveService implements IFileSaveService {
         } catch (UnsupportedEncodingException e) {
             throw new FileStorageException(e);
         }
-        if(fileManager.saveFiletoDir(txtFile.getTextId(), saveTxtFile, fileContentBytes)){
-        return true;
-        }
-        else return false;
+        if (fileManager.saveFiletoDir(txtFile.getTextId(), saveTxtFile, fileContentBytes)) {
+            return true;
+        } else
+            return false;
     }
 
 }

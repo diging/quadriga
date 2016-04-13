@@ -2,16 +2,12 @@ package edu.asu.spring.quadriga.utilities.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
 
-@Service
 public class FileSaveUtility implements IFileSaveUtility {
 
     private String textFileLocation;

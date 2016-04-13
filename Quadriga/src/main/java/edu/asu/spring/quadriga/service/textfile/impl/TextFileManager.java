@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.textfile.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
-import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileShallowMapper;
+import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
 import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
 
 /**
@@ -35,7 +36,7 @@ public class TextFileManager implements ITextFileManager {
     private IFileSaveUtility fileManager;
 
     @Autowired
-    private ITextFileShallowMapper tfSMapper;
+    private ITextFileMapper tfSMapper;
 
     
     @Override
@@ -73,7 +74,12 @@ public class TextFileManager implements ITextFileManager {
     @Override
     public List<ITextFile> retrieveTextFiles(String wsId) {
         List<TextFileDTO> tfDTOList = txtFileDAO.getTextFileDTObyWsId(wsId);
-        return tfSMapper.getTextFileList(tfDTOList);
+        List<ITextFile> tfList = new ArrayList<>();
+        for(TextFileDTO tfDTO : tfDTOList)
+        {
+            tfList.add(tfSMapper.getTextFile(tfDTO));
+        }
+        return tfList;
 
     }
 

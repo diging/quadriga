@@ -6,18 +6,12 @@ import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 
 /**
- * @author Nischal Samji Interface for MApping DTO Objects and Domain Objects
+ * @author Nischal Samji Interface for Mapping DTO Objects and Domain Objects
  *         back and forth.
  *
  */
-public interface ITextFileShallowMapper {
-    /**
-     * @param wsId
-     *            Workspace ID for the TextFiles to be retrieved.
-     * @return Returns a list of TextFile Objects.
-     */
-    public abstract List<ITextFile> getTextFileList(List<TextFileDTO> txtFileDTOList);
-
+public interface ITextFileMapper {
+    
     /**
      * @param textId
      *            TextFile ID for the TextFiles to be retrieved.
