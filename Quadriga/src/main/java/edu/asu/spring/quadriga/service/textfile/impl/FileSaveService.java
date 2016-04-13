@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.textfile.impl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +24,7 @@ public class FileSaveService implements IFileSaveService {
     private ITextFile txtFile;
 
     @Override
-    public boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException, IOException {
+    public boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException {
         this.txtFile = txtFile;
         return saveMetadata() && saveFileContent();
     }
@@ -33,7 +34,7 @@ public class FileSaveService implements IFileSaveService {
      * @throws IOException
      * @throws FileStorageException
      */
-    private boolean saveMetadata() throws IOException, FileStorageException {
+    private boolean saveMetadata() throws FileStorageException {
         StringBuilder fileContent = new StringBuilder();
         fileContent.append("WsId:" + txtFile.getWorkspaceId() + "\n");
         fileContent.append("ProjectId:" + txtFile.getProjectId() + "\n");
@@ -46,7 +47,7 @@ public class FileSaveService implements IFileSaveService {
         else return false;
     }
 
-    private boolean saveFileContent() throws IOException, FileStorageException {
+    private boolean saveFileContent() throws FileStorageException {
         String fileName = txtFile.getFileName();
         String saveTxtFile;
         if (fileName.contains(".")) {
@@ -54,7 +55,12 @@ public class FileSaveService implements IFileSaveService {
         } else {
             saveTxtFile = ("/" + fileName + ".txt");
         }
-        byte[] fileContentBytes = txtFile.getFileContent().getBytes("UTF-8");
+        byte[] fileContentBytes;
+        try {
+            fileContentBytes = txtFile.getFileContent().getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new FileStorageException(e);
+        }
         if(fileManager.saveFiletoDir(txtFile.getTextId(), saveTxtFile, fileContentBytes)){
         return true;
         }

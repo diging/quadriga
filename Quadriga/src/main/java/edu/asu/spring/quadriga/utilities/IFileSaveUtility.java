@@ -24,7 +24,7 @@ public interface IFileSaveUtility {
      * @throws IOException
      */
     public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent)
-            throws FileStorageException, FileNotFoundException, IOException;
+            throws FileStorageException;
 
     /**
      * @param fileName
@@ -35,5 +35,5 @@ public interface IFileSaveUtility {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public String readFileContent(String fileName, String dirName) throws FileStorageException, IOException;
+    public String readFileContent(String fileName, String dirName) throws FileStorageException;
 }

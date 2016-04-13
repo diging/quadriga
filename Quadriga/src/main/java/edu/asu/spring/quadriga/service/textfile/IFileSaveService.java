@@ -18,5 +18,5 @@ public interface IFileSaveService {
      * @throws IOException
      * @throws FileStorageException
      */
-    boolean saveFileToLocal(ITextFile txtFile) throws IOException, FileStorageException;
+    boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException;
 }

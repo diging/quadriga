@@ -105,7 +105,7 @@ public class AddTextController {
             @Validated @ModelAttribute("textfile") TextFile txtFile, BindingResult result,
             @PathVariable("workspaceid") String workspaceid, @PathVariable("projectid") String projid,
             RedirectAttributes redirectAttributes)
-                    throws FileStorageException, QuadrigaAccessException, QuadrigaStorageException, IOException {
+                    throws QuadrigaAccessException, QuadrigaStorageException {
 
         ModelAndView model = new ModelAndView();
         model.getModelMap().put("workspaceId", workspaceid);
@@ -117,13 +117,19 @@ public class AddTextController {
             model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/" + workspaceid);
             txtFile.setWorkspaceId(workspaceid);
             txtFile.setProjectId(projid);
-            if (tfManager.saveTextFile(txtFile)) {
-                tfManager.retrieveTextFiles(workspaceid);
-                redirectAttributes.addFlashAttribute("show_success_alert", true);
-                redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
-            } else {
+            try {
+                if (tfManager.saveTextFile(txtFile)) {
+                    tfManager.retrieveTextFiles(workspaceid);
+                    redirectAttributes.addFlashAttribute("show_success_alert", true);
+                    redirectAttributes.addFlashAttribute("success_alert_msg", "The text file is successfully saved");
+                } else {
+                    redirectAttributes.addFlashAttribute("show_error_alert", true);
+                    redirectAttributes.addFlashAttribute("error_alert_msg", "Error while saving the text file.");
+                }
+            } catch (FileStorageException fse) {
                 redirectAttributes.addFlashAttribute("show_error_alert", true);
-                redirectAttributes.addFlashAttribute("show_error_alert", "Error while saving the text file.");
+                redirectAttributes.addFlashAttribute("error_alert_msg", "Unable to save text file. Please check the default directory.");
+                
             }
         }
         return model;
