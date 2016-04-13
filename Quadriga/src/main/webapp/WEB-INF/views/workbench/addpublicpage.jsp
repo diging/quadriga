@@ -18,7 +18,7 @@
 								$("#title_err1").html("Title Is Mandatory");
 								mandatory = 1;
 							}else{
-								$("#title_err1").html('');
+								$("#title_err1").html(''); 
 							}
 							if(desc.length < 1){
 								$("#desc_err1").html("Description Is Mandatory");
