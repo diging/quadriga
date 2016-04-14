@@ -30,15 +30,17 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class PublicWebsiteSettings {
 
-	@Autowired
-	private IRetrieveProjectManager projectManager;
-
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/projects/{ProjectUnixName}/settings",method = RequestMethod.GET)
-	public String showSettings(Model model,	Principal principal, @PathVariable("ProjectUnixName") String projectId, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
-		model.addAttribute(project);
-		return "auth/settings";
-	}
+    @Autowired
+    private IRetrieveProjectManager projectManager;
+    
+    
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/projects/{ProjectId}/settings", method = RequestMethod.GET)
+    public String showSettings(@PathVariable("ProjectId") String projectId, Model model, Principal principal) throws QuadrigaStorageException {
+        IProject project = projectManager.getProjectDetails(projectId);
+        model.addAttribute(project);
+        return "auth/settings";
+    }
 
 }

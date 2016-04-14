@@ -19,36 +19,36 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 
 @Repository
-public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO  {
+public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO {
 
-	/**
-	 * 
-	 * @param projectId
-	 *            Returns a DTO if already present for the given projectId
-	 * @return
-	 */
+    /**
+     * 
+     * @param projectId
+     *            Returns a DTO if already present for the given projectId
+     * @return
+     */
 
-	public AboutTextDTO getDTOByProjectId(String projectId) throws QuadrigaStorageException {
-		AboutTextDTO aboutTextDTO;
-		try {
-			Query query = sessionFactory.getCurrentSession().getNamedQuery("AboutTextDTO.findByProjectId");
-			query.setParameter("projectId", projectId);
-			List<AboutTextDTO> aboutTextDTOList = query.list();
-			if (aboutTextDTOList.size() != 0)
-				aboutTextDTO = aboutTextDTOList.get(0);
-			else
-				return null;
-		} catch (HibernateException e) {
-			throw ( new QuadrigaStorageException("System error", e)) ; 
-			
-		}
+    public AboutTextDTO getDTOByProjectId(String projectId) throws QuadrigaStorageException {
+        AboutTextDTO aboutTextDTO;
+        try {
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("AboutTextDTO.findByProjectId");
+            query.setParameter("projectId", projectId);
+            List<AboutTextDTO> aboutTextDTOList = query.list();
+            if (aboutTextDTOList.size() != 0)
+                aboutTextDTO = aboutTextDTOList.get(0);
+            else
+                return null;
+        } catch (HibernateException e) {
+            throw (new QuadrigaStorageException("System error", e));
 
-		return aboutTextDTO;
-	}
+        }
 
-	@Override
-	public AboutTextDTO getDTO(String id) {
-		return getDTO(AboutTextDTO.class, id);
-	}
+        return aboutTextDTO;
+    }
+
+    @Override
+    public AboutTextDTO getDTO(String id) {
+        return getDTO(AboutTextDTO.class, id);
+    }
 
 }

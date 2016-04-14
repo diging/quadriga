@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+
 
 /**
  * This controller is to map project/about page for public website. A formatted
@@ -27,19 +27,18 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @Controller
 public class WebsiteAboutController {
 
-	@Autowired
-	private IRetrieveProjectManager projectManager;
+   
+    @Autowired
+    private IAboutTextManager aboutTextManager;
 
-	@Autowired
-	private IAboutTextManager aboutTextManager;
-
-	@RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
-	public String showAbout(@PathVariable("ProjectUnixName") String unixName, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project, Model model,
-			Principal principal) throws QuadrigaStorageException {
-		String projectId = project.getProjectId();
-		model.addAttribute("project", project);
-		model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
-		return "sites/public/PublicWebsiteAbout";
-	}
+    @RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
+    public String showAbout(@PathVariable("ProjectUnixName") String unixName,
+            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project, Model model, Principal principal)
+            throws QuadrigaStorageException {
+        String projectId = project.getProjectId();
+        model.addAttribute("project", project);
+        model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
+        return "sites/public/PublicWebsiteAbout";
+    }
 
 }
