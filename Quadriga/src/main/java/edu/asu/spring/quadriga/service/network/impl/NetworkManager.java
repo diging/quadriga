@@ -44,6 +44,7 @@ import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.INetworkXML;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
@@ -1128,10 +1129,5 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     }
     
-    @Override
-    public String storeText(String xml, String projectid, String workspaceid)
-            throws NetworkXMLParseException, QuadrigaStorageException, IOException, FileStorageException {
-        return networkXMLParser.storeText(xml, projectid, workspaceid);
-    }
 
 }

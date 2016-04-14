@@ -24,11 +24,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
-import edu.asu.spring.quadriga.exceptions.FileStorageException;
+import edu.asu.spring.quadriga.domain.network.INetworkXML;
 import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
-import edu.asu.spring.quadriga.service.textfile.impl.TextFileManager;
 
 /**
  * 
@@ -38,13 +37,14 @@ import edu.asu.spring.quadriga.service.textfile.impl.TextFileManager;
 @Service
 public class NetworkXMLParser implements INetworkXMLParser {
 
+        
     @Autowired
-    private TextFileManager txtFileManager;
+    private INetworkXML networkXML;
 
     @Override
     @Transactional
-    public String storeText(String xml, String projectid, String workspaceid)
-            throws NetworkXMLParseException, QuadrigaStorageException, IOException, FileStorageException {
+    public INetworkXML parseXML(String xml, String projectid, String workspaceid)
+            throws NetworkXMLParseException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         DocumentBuilder builder;
@@ -58,7 +58,8 @@ public class NetworkXMLParser implements INetworkXMLParser {
 
         NodeList textNodeList = document.getElementsByTagName("text");
         if (textNodeList.getLength() == 0) {
-            return xml;
+            networkXML.setNetworkXMLString(xml);
+            return networkXML;
         }
         String text = textNodeList.item(0).getTextContent();
 
@@ -81,13 +82,14 @@ public class NetworkXMLParser implements INetworkXMLParser {
         txtfile.setWorkspaceId(workspaceid);
         txtfile.setRefId(handleID);
         
-        txtFileManager.saveTextFile(txtfile);
+        networkXML.setTextFile(txtfile);
         
         Element e = document.getDocumentElement();
         e.removeChild(textNodeList.item(0));
         e.removeChild(handle.item(0));
         e.removeChild(fileName.item(0));
-        return documentToString(document);
+        networkXML.setNetworkXMLString(documentToString(document));
+        return networkXML;
 
     }
 

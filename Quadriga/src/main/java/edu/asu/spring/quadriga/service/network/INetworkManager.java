@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventO
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.INetworkXML;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
@@ -326,8 +327,5 @@ public interface INetworkManager {
     String getSourceReferenceFromElementEventsType(ElementEventsType elementEventsType);
 
     public String storeNetworks(String xml) throws QStoreStorageException;
-
-    public abstract String storeText(String xml, String projectid, String workspaceid)
-            throws NetworkXMLParseException, QuadrigaStorageException, IOException, FileStorageException;
 
 }
