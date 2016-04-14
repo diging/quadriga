@@ -44,15 +44,14 @@ $(document).ready(function() {
 			<span class="byline">manage your network projects here</span>
 		</header>
  --%>
- 
+
+<header>
+	<h2>&nbsp;Welcome back <sec:authentication property="principal.username" />!</h2>
+	<span class="byline">&nbsp;&nbsp;The following projects have recently been updated</span>
+</header> 
 
 <!--  if there are projects -->
 <c:if test="${not empty projects}">
-<p>
-&nbsp;&nbsp;&nbsp;&nbsp;Welcome back</i><span style="margin-left: 5px;"><sec:authentication property="principal.username" /></span>! 
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;The following projects have recently been updated
-</p>
 
 <c:forEach items="${projects}" var="project" varStatus="status">
 	<c:if test="${status.index % 2 == 0}">
