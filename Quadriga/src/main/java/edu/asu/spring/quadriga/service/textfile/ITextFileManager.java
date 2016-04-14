@@ -28,7 +28,7 @@ public interface ITextFileManager {
      * @return Returns a list of TextFile objects to be displayed on workspace
      *         details page.
      */
-    List<ITextFile> retrieveTextFiles(String wsId);
+    List<ITextFile> retrieveTextFiles(String wsId) throws QuadrigaStorageException;
 
     /**
      * Retrieve the text file content as a string.

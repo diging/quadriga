@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
  *
  */
 @Service
+@Transactional
 public class TextFileManager implements ITextFileManager {
 
     @Autowired
@@ -50,7 +51,7 @@ public class TextFileManager implements ITextFileManager {
     }
 
     @Override
-    public List<ITextFile> retrieveTextFiles(String wsId) {
+    public List<ITextFile> retrieveTextFiles(String wsId) throws QuadrigaStorageException {
         List<TextFileDTO> tfDTOList = txtFileDAO.getTextFileDTObyWsId(wsId);
         List<ITextFile> tfList = new ArrayList<>();
         for(TextFileDTO tfDTO : tfDTOList)

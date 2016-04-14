@@ -38,7 +38,6 @@ import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
 public class NetworkXMLParser implements INetworkXMLParser {
 
         
-    @Autowired
     private INetworkXML networkXML;
 
     @Override

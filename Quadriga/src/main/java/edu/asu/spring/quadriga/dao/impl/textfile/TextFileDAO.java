@@ -38,7 +38,7 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
     private static final Logger logger = LoggerFactory.getLogger(TextFileDAO.class);
 
     @Override
-    public List<TextFileDTO> getTextFileDTObyWsId(String wsId) {
+    public List<TextFileDTO> getTextFileDTObyWsId(String wsId) throws QuadrigaStorageException {
 
         List<TextFileDTO> tfDTO = null;
         try {
@@ -47,8 +47,8 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
             query.setParameter("wsId", wsId);
             tfDTO = (List<TextFileDTO>) query.list();
         } catch (HibernateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("TextFile List associated with workspace id"+wsId, e);
+            throw new QuadrigaStorageException();
         }
         return tfDTO;
 

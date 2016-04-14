@@ -19,7 +19,7 @@ public interface ITextFileDAO extends IBaseDAO<TextFileDTO> {
      *            Workspace Id to retrieve textfiles in the related workspace.
      * @return Returns a list of TextFiles related to the workspace
      */
-    public abstract List<TextFileDTO> getTextFileDTObyWsId(String wsId);
+    public abstract List<TextFileDTO> getTextFileDTObyWsId(String wsId) throws QuadrigaStorageException;
 
 
 
