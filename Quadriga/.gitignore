@@ -4,3 +4,4 @@
 *.iml
 *.project
 /bin/
+.DS_Store

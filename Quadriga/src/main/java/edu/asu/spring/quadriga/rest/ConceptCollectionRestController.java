@@ -198,7 +198,7 @@ public class ConceptCollectionRestController {
         JSONArray ja = new JSONArray();
         try {
             conceptCollectionList = workspaceCCManager.listWorkspaceCC(
-                    workspaceId, userId);    
+                    workspaceId);    
                 
         }catch (QuadrigaStorageException e) {
             logger.error("QuadrigaStorageException:", e);
@@ -339,7 +339,7 @@ public class ConceptCollectionRestController {
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             String userId = principal.getName();
-            List<IWorkspaceConceptCollection> collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+            List<IWorkspaceConceptCollection> collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId);
             Template template = engine.getTemplate("velocitytemplates/workspaceconceptcollections.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", collectionsList);
@@ -490,12 +490,16 @@ public class ConceptCollectionRestController {
     public ResponseEntity<String> getConceptList(@PathVariable("collectionID") String collectionID, ModelMap model,
             HttpServletRequest req, Principal principal) throws RestException {
         StringWriter sw = new StringWriter();
-        IConceptCollection collection = collectionFactory.createConceptCollectionObject();
+        IConceptCollection collection;
+        try {
+            collection = conceptControllerManager.getConceptCollection(collectionID);
+        } catch (QuadrigaStorageException e1) {
+            throw new RestException(500, e1);
+        }
         collection.setConceptCollectionId(collectionID);
         try {
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
-            conceptControllerManager.fillCollectionDetails(collection, principal.getName());
             Template template = engine.getTemplate("velocitytemplates/conceptdetails.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("list", collection.getConceptCollectionConcepts());
