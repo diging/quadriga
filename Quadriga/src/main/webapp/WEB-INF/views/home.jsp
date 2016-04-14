@@ -45,10 +45,13 @@ $(document).ready(function() {
 		</header>
  --%>
  
+
 <!--  if there are projects -->
 <c:if test="${not empty projects}">
 <p>
-       Recently updated projects...
+&nbsp;&nbsp;&nbsp;&nbsp;Welcome back</i><span style="margin-left: 5px;"><sec:authentication property="principal.username" /></span>! 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The following projects have recently been updated
 </p>
 
 <c:forEach items="${projects}" var="project" varStatus="status">
@@ -60,7 +63,11 @@ $(document).ready(function() {
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}">${project.projectName}</a> 
 		<span class="project_owner">
 		Owned by: ${project.owner.name}
+		</span><br>
+		<span class="project_last_updated_date">
+		Last Updated Date: ${project.updatedDate}
 		</span>
+		
 		<hr style="clear: right">
 		${project.description}
 		

@@ -939,6 +939,11 @@
 		float:right;
 	}
 	
+	span.project_last_updated_date {
+		font-size: 13px;
+		float:right;
+	}
+	
 	div.toggleBtn img {
 		vertical-align: middle;
 		margin-bottom: 4px;
