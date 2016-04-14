@@ -55,3 +55,7 @@
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a>
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
+<div>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Workspaces </a>
+</div>
+
