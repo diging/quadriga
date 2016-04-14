@@ -875,7 +875,21 @@
 			value="/WEB-INF/views/editing/networkshistory.jsp" />
 	</definition>
 
+	<definition name="base.definition.public.sites" 
+		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp" >
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation" value="" />
+		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="currentPage" value="sites" />
+	</definition>
 
+	<!-- Sites pages -->
+	<definition name="sites" extends="base.definition.public.sites">
+		<put-attribute name="title" value="Quadriga - Public Sites" />
+		<put-attribute name="navigation"
+			value="/WEB-INF/views/public/sitesnavbarleft.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
+	</definition>
 </tiles-definitions>
 
 	
