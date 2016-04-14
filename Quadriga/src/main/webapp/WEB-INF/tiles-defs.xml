@@ -677,12 +677,13 @@
 			value="/WEB-INF/views/exceptions/storageissue.jsp" />
 	</definition>
 	<definition name="auth/accessissue" extends="base.definition">
-		<put-attribute name="title" value="Quadriga - Acces issue" />
+		<put-attribute name="title" value="Quadriga - Access issue" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/exceptions/accessissue.jsp" />
 	</definition>
 	<definition name="404" extends="base.definition.public">
 		<put-attribute name="title" value="Quadriga - Page Not Found" />
+		<put-attribute name="navigation" value="" />
 		<put-attribute name="content" value="/WEB-INF/views/exceptions/404.jsp" />
 	</definition>
 
