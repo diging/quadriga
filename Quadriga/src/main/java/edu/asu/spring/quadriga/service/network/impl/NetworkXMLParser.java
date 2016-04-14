@@ -37,13 +37,11 @@ import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
 @Service
 public class NetworkXMLParser implements INetworkXMLParser {
 
-        
     private INetworkXML networkXML;
 
     @Override
     @Transactional
-    public INetworkXML parseXML(String xml, String projectid, String workspaceid)
-            throws NetworkXMLParseException {
+    public INetworkXML parseXML(String xml, String projectid, String workspaceid) throws NetworkXMLParseException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         DocumentBuilder builder;
@@ -80,9 +78,9 @@ public class NetworkXMLParser implements INetworkXMLParser {
         txtfile.setProjectId(projectid);
         txtfile.setWorkspaceId(workspaceid);
         txtfile.setRefId(handleID);
-        
+
         networkXML.setTextFile(txtfile);
-        
+
         Element e = document.getDocumentElement();
         e.removeChild(textNodeList.item(0));
         e.removeChild(handle.item(0));

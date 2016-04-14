@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -44,14 +43,11 @@ import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.network.INetworkXML;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
-import edu.asu.spring.quadriga.exceptions.FileStorageException;
-import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
