@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.publicwebsite.IProjectStats;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 import edu.asu.spring.quadriga.transform.Node;
 
@@ -55,7 +56,7 @@ public class ProjectStats implements IProjectStats {
     private IProjectCollaboratorManager projectCollaboratorManager;
 
     @Autowired
-    private IProjectDeepMapper projectDeepMapper;
+    private IRetrieveProjectManager projectManager;
 
     @Override
     public List<IConceptStats> getConceptCount(List<INetwork> networks)
@@ -105,9 +106,9 @@ public class ProjectStats implements IProjectStats {
         List<IProjectCollaborator> projectCollaboratorList = projectCollaboratorManager
                 .getProjectCollaborators(projectId);
 
-        if (projectCollaboratorList == null)
+        if (projectCollaboratorList == null) {
             return mapUserWorkspace;
-
+        }
         // loop through each collaborator
         for (IProjectCollaborator projectCollaborator : projectCollaboratorList) {
             if (projectCollaborator.getCollaborator() != null) {
@@ -119,10 +120,12 @@ public class ProjectStats implements IProjectStats {
             }
         }
 
-        String username = projectDeepMapper.getProjectDetails(projectId)
+        String username = projectManager.getProjectDetails(projectId)
                 .getOwner().getUserName();
-        if (username == null)
+
+        if (username == null) {
             return mapUserWorkspace;
+        }
 
         UserStats userStats = (UserStats) retrieveUserWorkspaceStats(projectId,
                 username);
@@ -150,9 +153,10 @@ public class ProjectStats implements IProjectStats {
         List<INetwork> networksList = networkManager
                 .getNetworksInProject(projectid);
 
-        if (networksList == null)
+        if (networksList == null) {
             return mapUserNetworks;
-
+        }
+        
         for (INetwork network : networksList) {
             if (network.getCreator() != null) {
                 String username = network.getCreator().getUserName();
