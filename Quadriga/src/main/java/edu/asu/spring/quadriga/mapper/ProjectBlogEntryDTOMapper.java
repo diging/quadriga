@@ -40,7 +40,7 @@ public class ProjectBlogEntryDTOMapper extends BaseMapper {
         projectBlogEntryDTO.setDescription(projectBlogEntry.getDescription());
         projectBlogEntryDTO.setCreatedDate(projectBlogEntry.getCreatedDate());
 
-        String username = projectBlogEntry.getAuthor().getName();
+        String username = projectBlogEntry.getAuthor().getUserName();
         QuadrigaUserDTO author = getUserDTO(username);
         projectBlogEntryDTO.setProjectBlogEntryAuthorDTO(author);
         projectBlogEntryDTO.setAuthor(author.getUsername());

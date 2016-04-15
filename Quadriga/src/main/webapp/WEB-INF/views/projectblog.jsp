@@ -12,7 +12,7 @@
 	<!-- Link to create blog entry -->
 	<div align="right">
 		<a
-			href="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblogentry"><i
+			href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/addprojectblogentry?projectId=${project.projectId}"><i
 			class="fa fa-plus-circle"></i> Add a new entry</a>
 	</div>
 	<br>

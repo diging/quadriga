@@ -31,30 +31,40 @@
 
 <article class="is-page-content">
 	<form:form commandName="projectBlogEntry" method="POST"
-		action="${pageContext.servletContext.contextPath}/sites/${project.projectId}/addprojectblogentry">
+		action="${pageContext.servletContext.contextPath}/sites/${project.unixName}/addprojectblogentry">
 
 		<header>
 			<h2>Create new blog entry</h2>
 		</header>
 
-		<!-- Create project blog entry button at top right corner -->
-		<div style="text-align: right;">
-			<input class="btn btn-primary" type="submit" value="Create Entry"
-				style="width: 15%; align: center;">
-		</div>
-		<br>
 		<table style="width: 100%">
 			<tr>
-				<td><form:textarea path="title" id="title"
+				<td style="color:red;"><form:errors path="title" class="ui-state-error-text"></form:errors>
+					<br> <form:errors path="description"
+						class="ui-state-error-text"></form:errors>
+					<!-- Create project blog entry button at top right corner -->
+					</td>
+					<td style="width: 15%"><div style="text-align: right;">
+						<input class="btn btn-primary" type="submit" value="Create Entry"
+							style="width: 100%; align: center;">
+					</div>
+					<br>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan=2><form:textarea path="title" id="title"
 						placeholder="Enter Title Here"
-						style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center" /></td>
+						style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center" /><br>
+				</td>
 			</tr>
 			<tr>
-				<td><form:textarea path="description" id="description" /></td>
+				<td colspan=2><form:textarea path="description" id="description" /></td>
 			</tr>
-
 		</table>
-	
+
+		<input type="hidden" name="projectId" value="${project.projectId}">
+
 		<br>
 
 		<!-- Create project blog entry button at top right corner -->
@@ -62,7 +72,7 @@
 			<input class="btn btn-primary" type="submit" value="Create Entry"
 				style="width: 15%; align: center;">
 		</div>
-		
+
 	</form:form>
 </article>
 
