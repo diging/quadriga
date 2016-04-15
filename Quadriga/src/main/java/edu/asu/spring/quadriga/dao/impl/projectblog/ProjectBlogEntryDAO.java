@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 @Service
 public class ProjectBlogEntryDAO extends BaseDAO<ProjectBlogEntryDTO> implements IProjectBlogEntryDAO {
 
-    private static final int DEFAULT_LIST_COUNT = 0;
+    private static final int DEFAULT_LIST_COUNT = 5;
 
     @Resource(name = "projectconstants")
     private Properties messages;
