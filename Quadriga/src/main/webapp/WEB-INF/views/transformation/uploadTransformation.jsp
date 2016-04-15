@@ -16,7 +16,8 @@ function submitClick(id){
 
 <c:choose>
 <c:when test="${success == 0}">
-<form name="selectTransformFiles" method="post" class="form-horizontal" action="${pageContext.servletContext.contextPath}/auth/uploadTransformation" modelAttribute="UploadTransformationBackingBean">
+<form name="selectTransformFiles" method="post" class="form-horizontal" action="${pageContext.servletContext.contextPath}/auth/uploadTransformation" modelAttribute="UploadTransformationBackingBean" enctype="multipart/form-data"> 
+<!--    -->
 <div id="mappingDiv" class="col-md-5" style="border:1px solid#A89E9E; border-radius:10px;"> <!-- style="border:1px solid#A89E9E; border-radius:10px;" -->
 
 <h4 style="text-align:center"><u> Upload Mapping File </u> </h4>
@@ -32,7 +33,7 @@ function submitClick(id){
 </div>
 
 <div class="form-group required">
-<div class="col-md-12"><input type="file" class="form-control" id="mappingFile" name="mappingFile" required="required"></div>
+<div class="col-md-12"><input type="file" class="form-control" id="mappingFile" name="file" required="required"></div>
 </div>
 
 
@@ -54,7 +55,7 @@ function submitClick(id){
 </div>
 
 <div class="form-group required">
-<div class="col-md-12"><input type="file" class="form-control" id="transformFile" name="transformFile"  required="required"></div>
+<div class="col-md-12"><input type="file" class="form-control" id="file" name="transformFile"  required="required"></div>
 </div>
 
 

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.service.uploadtransformation.IUploadTransformationManager;
 
 /**
@@ -29,8 +32,9 @@ public class UploadTransformationController {
 	private IUploadTransformationManager uploadTnfmManager;
 	
 	@RequestMapping(value="auth/uploadTransformation",method=RequestMethod.POST)
-	public String uploadTransformationFiles(@ModelAttribute("UploadTransformationBackingBean") UploadTransformationBackingBean formBean, ModelMap model,Principal principal, HttpServletRequest request) throws IOException{
-				
+	public String uploadTransformationFiles(@ModelAttribute("UploadTransformationBackingBean") UploadTransformationBackingBean formBean, ModelMap map, 
+			@RequestParam("file") MultipartFile[] file,RedirectAttributes redirectAttributes) throws IOException{
+
 		String mappingTitle = formBean.getMappingTitle();
 		String mappingDescription=""+formBean.getMappingDescription();				
 		System.out.println("Mapping File Title is: "+mappingTitle);
@@ -42,7 +46,7 @@ public class UploadTransformationController {
 		System.out.println("Tranformation File Description is: "+transformDescription);
 		uploadTnfmManager.saveMetaData(mappingTitle, mappingDescription, transformTitle, transformDescription);
 				
-		request.setAttribute("success", 1);
+		map.addAttribute("success", 1);
 		return "auth/uploadTransformation";
 	}
 }

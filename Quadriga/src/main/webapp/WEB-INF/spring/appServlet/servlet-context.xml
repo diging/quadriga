@@ -48,6 +48,14 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
+	 
+	 <beans:bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+ 
+         <!-- setting maximum upload size -->
+        <beans:property name="maxUploadSize" value="100000000" />
+ 
+    </beans:bean>
 
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 
