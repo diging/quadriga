@@ -2,9 +2,17 @@ package edu.asu.spring.quadriga.dto;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import javax.persistence.Id;
+
 @Entity
-@Table(name = "trns_files")
-public class UploadTransfomationFilesDTO {
+@Table(name = "tbl_transfomationfiles_metadata")
+@XmlRootElement
+public class UploadTransfomationFilesDTO implements Serializable {
+
+	
+	private static final long serialVersionUID = 1L;
 
 	public UploadTransfomationFilesDTO(String mappingTitle,
 			String mappingDescription, String transfomationTitle,
@@ -16,6 +24,16 @@ public class UploadTransfomationFilesDTO {
 		this.transformationDescription = transformationDescription;
 	}
 	
+	@Id
+	private String Id;
+	public String getId() {
+		return Id;
+	}
+	
+	public void setId(String id) {
+		Id = id;
+	}
+
 	@Column(name = "Mapping_Title")
 	private String  mappingTitle;
 	@Column(name = "Mapping_Description")
