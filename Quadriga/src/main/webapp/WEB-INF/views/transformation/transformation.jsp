@@ -34,15 +34,17 @@
 		$("#selectAllTransformations").click(function(){
 			$(".transformationList").prop('checked',$(this).prop('checked'));
 		});
-		
+
+			
 	});
 	
 </script>
 <script type="text/javascript">
 $(document).ready(function () {
     $('#confirmationTransformation').click(function () {
-    	if(jQuery('#divProjectList input[type=checkbox]:checked').length && jQuery('#headingTwo input[type=checkbox]:checked').length) {
-        	var projects = [];
+    	if((jQuery('#divProjectList input[type=checkbox]:checked').length || jQuery('#individualNetworks input[type=checkbox]:checked').length) && jQuery('#headingTwo input[type=checkbox]:checked').length) {
+       		
+    		var projects = [];
             $.each($("input[name='project']:checked"), function(){            
                 projects.push($(this).val());
             });        
@@ -62,8 +64,8 @@ $(document).ready(function () {
        						        $(this).parent().appendTo("form");
        						    },
        						    
-	       						 buttons: { "Submit": function() { $(this).dialog("close"); },"Cancel": function() { $(this).dialog("close"); } },
-       							
+	       						buttons: { "Submit": function() { $(this).dialog("close"); },"Cancel": function() { $(this).dialog("close"); } },
+    							
 				        		open: function(){           
 				        			var projects = [];
 				        	        $.each($("input[name='project']:checked"), function(){            
@@ -74,8 +76,16 @@ $(document).ready(function () {
 				        	        $.each($("input[name='transformation']:checked"), function(){            
 				        	            transformations.push($(this).val());
 				        	        });
-    			
-				        			jQuery("#contentholder").html("<h3>Transformations:</h3> "+transformations.join("<br/>")+""+" <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")+"");	
+				        	        
+				        	        var networks = [];
+				        	        $.each($("input[name='individualnetwork']:checked"), function(){            
+				        	            var arrayofNetworks =$(this).val().split(","); 
+				        	        	networks.push(arrayofNetworks[0]);
+				        	        	if((jQuery.inArray(arrayofNetworks[1], projects) == -1)){
+					        	        	projects.push(arrayofNetworks[1]);				        	        		
+				        	        	}
+				        	        });				        	      
+				        			jQuery("#contentholder").html("<h3>Transformations:</h3> "+transformations.join("<br/>")+""+" <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")+" <br/> <br/><h3>Networks</h3> " + networks.join("<br/>"));	
 				        		}  		
 				        	  }
         					);   
@@ -130,7 +140,7 @@ $(document).ready(function () {
       		<h4 class="panel-title">   
         		<div class="checkbox1" id="divProjectList"> 
         		<label>
-      				<input type="checkbox" value="${project.projectName}"  name="project" class="projectList"> 
+      				<input type="checkbox" value="${project.projectName}" id="${project.projectName}" name="project" class="projectList"> 
         		</label>
         		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#${project}" aria-expanded="true" aria-controls="${project}">
     			${project.projectName}
@@ -150,10 +160,12 @@ $(document).ready(function () {
 								<c:forEach var="network" items="${networkMap[project.projectName]}">	
 									 <div class="col-md-4">
 									 <summary>
-										<input type="checkbox" >
+									 <div class="selectAllNetworks" id="individualNetworks">
+										<input type="checkbox" value="${network.networkName},${project.projectName}" name="individualnetwork" class="selectAllNetworks">
 										<a href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.networkId}">
 										<c:out value="${network.networkName}"></c:out>
 										</a>
+									</div>
 									</summary>
 									<li>Workspace: <c:out	value="${network.networkWorkspace.workspace.workspaceName}"></c:out></li>
 									<li>Submitted by: <c:out value="${network.creator.userName}"></c:out>
