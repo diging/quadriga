@@ -36,8 +36,11 @@ $("input[type=button]").button().click(function(event) {
 	onload="d3visualizepublic(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
 
 
-<input type="submit" onclick="goFullscreen('chart')"  class="fa fa-2x" style="float: left" value="&#xf0b2;"/>
 
+<button type="submit" onclick="goFullscreen('chart')" style="float: left">
+    <i class="fa fa-arrows-alt"></i> 
+    
+</button>
 <!-- <div id="dspace_metadata"></div>  -->
 
 <c:if test="${isNetworkEmpty}">
