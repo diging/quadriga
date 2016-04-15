@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.web.uploadtransformation;
 
-import java.io.File;
+
 
 public class UploadTransformationBackingBean {
 	
@@ -23,17 +23,18 @@ public class UploadTransformationBackingBean {
 	public void setMappingDescription(String mappingDescription) {
 		this.mappingDescription = mappingDescription;
 	}
-	public String getTransfomationTitle() {
+	public String getTransformTitle() {
 		return transformTitle;
 	}
-	public void setTransfomationTitle(String transfomationTitle) {
-		this.transformTitle = transfomationTitle;
+	public void setTransformTitle(String transformTitle) {
+		this.transformTitle = transformTitle;
 	}
-	public String getTransformationDescription() {
+	public String getTransformDescription() {
 		return transformDescription;
 	}
-	public void setTransformationDescription(String transformationDescription) {
-		this.transformDescription = transformationDescription;
+	public void setTransformDescription(String transformDescription) {
+		this.transformDescription = transformDescription;
 	}
+
 
 }

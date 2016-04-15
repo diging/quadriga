@@ -26,9 +26,7 @@ public class UploadTransformationManager implements
 				transformationDescription);
 		tranformDTO.setId(uploadTransformationDAO.generateUniqueID());
 		uploadTransformationDAO.saveNewDTO(tranformDTO);
-		
-		
-
+				
 	}
 
 }

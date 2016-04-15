@@ -36,8 +36,8 @@ public class UploadTransformationController {
 		System.out.println("Mapping File Title is: "+mappingTitle);
 		System.out.println("Mapping File Description is: "+mappingDescription);
 		
-		String transformTitle= formBean.getTransfomationTitle();		
-		String transformDescription = formBean.getTransformationDescription();	    
+		String transformTitle= formBean.getTransformTitle();		
+		String transformDescription = formBean.getTransformDescription();	    
 		System.out.println("Transfomation File Title is: "+transformTitle);
 		System.out.println("Tranformation File Description is: "+transformDescription);
 		uploadTnfmManager.saveMetaData(mappingTitle, mappingDescription, transformTitle, transformDescription);
