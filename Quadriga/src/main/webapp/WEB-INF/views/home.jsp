@@ -48,7 +48,7 @@ $(document).ready(function() {
 <header>
 	<h2>&nbsp;Welcome back <sec:authentication property="principal.username" />!</h2>
 	<span class="byline">&nbsp;&nbsp;The following projects have recently been updated</span>
-</header> 
+</header>
 
 <!--  if there are projects -->
 <c:if test="${not empty projects}">
@@ -63,8 +63,9 @@ $(document).ready(function() {
 		<span class="project_owner">
 		Owned by: ${project.owner.name}
 		</span><br>
+    <input type="hidden" value="${project.updatedDate.time}" class="project-date-value">
 		<span class="project_last_updated_date">
-		Last Updated Date: ${project.updatedDate}
+		Last Updated Date:  <span class="project-date"></span>
 		</span>
 		
 		<hr style="clear: right">
@@ -100,6 +101,20 @@ $(document).ready(function() {
 	</section>
 	<!-- /Highlight -->
 </article>
+
+<script>
+    function getLocalDate(date) {
+        var dt = new Date(date);
+        var minutes = dt.getTimezoneOffset();
+        dt = new Date(dt.getTime() + minutes * 60000);
+        return dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString();
+    }
+    $('.recentProjectList').each(function(key, val) {
+        var date = $(val).find('.project-date-value').val()
+        var dateString = getLocalDate(parseInt(date))
+        $(val).parent().find('.project-date').html(dateString)
+    })
+</script>
 
 <!-- /Content -->
 
