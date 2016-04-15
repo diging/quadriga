@@ -3,20 +3,6 @@
 
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
-<!-- Content -->
-<script>
-	$(function() {
-		$("input[type=submit]").button().click(function(event) {
-		});
-		$("input[type=button]").button().click(function(event) {
-		});
-	});
-
-	function submitClick(id) {
-		location.href = "${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}";
-	}
-</script>
-
 <!-- Script to generate rich text editor -->
 <script>
 	tinymce
@@ -64,14 +50,6 @@
 		</table>
 
 		<input type="hidden" name="projectId" value="${project.projectId}">
-
-		<br>
-
-		<!-- Create project blog entry button at top right corner -->
-		<div style="text-align: right;">
-			<input class="btn btn-primary" type="submit" value="Create Entry"
-				style="width: 15%; align: center;">
-		</div>
 
 	</form:form>
 </article>

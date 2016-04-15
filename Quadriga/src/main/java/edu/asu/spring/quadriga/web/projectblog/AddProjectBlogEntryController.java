@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.web.projectblog;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,13 +22,11 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
-import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.AddProjectBlogEntryValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -39,7 +36,6 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  *
  * @author PawanMahalle
  */
-@PropertySource(value = "classpath:/user.properties")
 @Controller
 public class AddProjectBlogEntryController {
 
@@ -52,32 +48,30 @@ public class AddProjectBlogEntryController {
     @Autowired
     private IProjectBlogEntryManager projectBlogEntryManager;
 
-    @Autowired
-    private IRetrieveProjectManager projectManager;
-
     /**
      * Attach the custom validator to the Spring context
      */
-    @InitBinder
+    @InitBinder("projectBlogEntry")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
     }
 
     /**
-     * provides form to add project blog entry details to the authorized user.
-     * Only project owners and admins are allowed to add entry to the blog.
+     * provides form to add project blog entry details to an authorized user.
+     * Only project owners and admins are allowed to add blog entry to the
+     * project.
      * 
      * @param projectUnixName
-     *            The project Unix name
+     *            The project unix name passed into url
+     * @param project
+     *            project instance obtained using @InjectProject annotation
      * @param projectId
-     *            The id assigned to project by framework
+     *            project id passed as request parameter from project blog page
      * @param model
-     *            Model instance
-     * @return view to add new project blog entry
+     *            model object
+     * @return page to add project blog entries.
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
-     *             This exception is thrown when user other than project admin
-     *             and owner tries to add project blog entry.
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
@@ -91,6 +85,7 @@ public class AddProjectBlogEntryController {
             return "forbidden";
         }
 
+        // Add the critical data to model object
         model.addAttribute("projectBlogEntry", new ProjectBlogEntry());
         model.addAttribute("project", project);
 
@@ -103,13 +98,22 @@ public class AddProjectBlogEntryController {
      * project blog entries page.
      * 
      * @param projectBlogEntry
-     *            instance of {@linkplain IProjectBlogEntry} to be added to
-     *            table
+     *            {@linkplain ProjectBlogEntry} instance passed as model
+     *            attribute
      * @param result
+     *            result of form validation using
+     *            {@linkplain AddProjectBlogEntryValidator}
+     * @param projectUnixName
+     *            The project unix name passed into url
+     * @param project
+     *            project instance obtained using @InjectProject annotation
      * @param projectId
-     * @param model
+     *            project id passed as request parameter from project blog page
      * @param principal
-     * @return
+     *            principal object which is required to fetch information about
+     *            logged in user.
+     * @return model for project blog page if form entries are correct otherwise
+     *         returns model for current page with error messages
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */

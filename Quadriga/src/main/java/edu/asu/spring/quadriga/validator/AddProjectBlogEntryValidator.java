@@ -6,16 +6,11 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 
 @Service
-
 /**
  * This class acts as validator of form data coming from
- * 
- * <pre>
- * addprojectblogentry.jsp
- * </pre>
+ * <code>addprojectblogentry.jsp</code>
  * 
  * @author PawanMahalle
  *
@@ -24,9 +19,7 @@ public class AddProjectBlogEntryValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
-        return arg0.isAssignableFrom(ProjectBlogEntry.class) || arg0.isAssignableFrom(Project.class);
-        // TODO: Verify need for project class
-        // return arg0.isAssignableFrom(ProjectBlogEntry.class);
+        return arg0.isAssignableFrom(ProjectBlogEntry.class);
     }
 
     /**
@@ -42,6 +35,5 @@ public class AddProjectBlogEntryValidator implements Validator {
         // validate all the input parameters
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "title", "blog_title.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "blog_description.required");
-
     }
 }

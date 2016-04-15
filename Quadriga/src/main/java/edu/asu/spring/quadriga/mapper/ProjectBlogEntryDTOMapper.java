@@ -21,7 +21,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class ProjectBlogEntryDTOMapper extends BaseMapper {
 
     @Autowired 
-    IUserManager userManager;
+    private IUserManager userManager;
     
     /**
      * generates {@linkplain ProjectBlogEntryDTO} when {@linkplain IProjectBlogEntry} is

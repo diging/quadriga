@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({ @NamedQuery(name = "ProjectBlogEntryDTO.findAll", query = "SELECT pb FROM ProjectBlogEntryDTO pb"),
         @NamedQuery(name = "ProjectBlogEntryDTO.findByProjectId", query = "SELECT p FROM ProjectBlogEntryDTO p WHERE p.projectid = :projectId order by createdDate desc"), })
 public class ProjectBlogEntryDTO implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id

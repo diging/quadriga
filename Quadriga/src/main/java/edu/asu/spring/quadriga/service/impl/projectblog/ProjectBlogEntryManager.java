@@ -16,8 +16,8 @@ import edu.asu.spring.quadriga.mapper.ProjectBlogEntryDTOMapper;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 
 /**
- * This class provides method to perform operations on {@linkplain IProjectBlogEntry}
- * instance.
+ * This class provides method to add and retrieve {@linkplain IProjectBlogEntry}
+ * instances from table <tbl_projectblogentry>
  * 
  * @author PawanMahalle
  *
@@ -50,12 +50,14 @@ public class ProjectBlogEntryManager implements IProjectBlogEntryManager {
      * {@inheritDoc}
      */
     @Override
-    public List<IProjectBlogEntry> getProjectBlogEntryList(String projectId) throws QuadrigaStorageException {
+    public List<IProjectBlogEntry> getProjectBlogEntryList(String projectId, Integer limit)
+            throws QuadrigaStorageException {
 
-        List<ProjectBlogEntryDTO> projectBlogEntryDTOList = projectBlogEntryDAO.getProjectBlogEntryDTOList(projectId);
-        
+        List<ProjectBlogEntryDTO> projectBlogEntryDTOList = projectBlogEntryDAO.getProjectBlogEntryDTOListByProjectId(projectId,
+                limit);
+
         List<IProjectBlogEntry> projectBlogEntryList = new ArrayList<>();
-        for(ProjectBlogEntryDTO projectBlogEntryDTO: projectBlogEntryDTOList){
+        for (ProjectBlogEntryDTO projectBlogEntryDTO : projectBlogEntryDTOList) {
             projectBlogEntryList.add(projectBlogEntryDTOMapper.getProjectBlogEntry(projectBlogEntryDTO));
         }
         return projectBlogEntryList;

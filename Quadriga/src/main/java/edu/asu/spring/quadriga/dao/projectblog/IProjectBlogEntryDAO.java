@@ -31,6 +31,6 @@ public interface IProjectBlogEntryDAO extends IBaseDAO<ProjectBlogEntryDTO> {
      * @return
      * @throws QuadrigaStorageException
      */
-    List<ProjectBlogEntryDTO> getProjectBlogEntryDTOList(String projectid) throws QuadrigaStorageException;
+    List<ProjectBlogEntryDTO> getProjectBlogEntryDTOListByProjectId(String projectid, Integer limit) throws QuadrigaStorageException;
 
 }
