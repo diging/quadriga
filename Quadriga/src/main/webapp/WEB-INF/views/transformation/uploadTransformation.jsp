@@ -45,12 +45,12 @@ function submitClick(id){
 
 <div class="form-group required">
 <label for="transformTitle" class="col-md-4 control-label" style="font-weight:bold;"> Title</label>
-<div class="col-md-8"><input type="text" class="form-control"  name="transformTitle" required="required"></div>
+<div class="col-md-8"><input type="text" class="form-control"  id="transformTitle" name="transformTitle" required="required"></div>
 </div>
 	
 <div class="form-group">
 <label for="transfomrDesciption" class="col-md-4 control-label" style="font-weight:bold;">Description </label>
-<div class="col-md-8"> <textarea class="form-control" rows="2"  name="transfomrDescription" placeholder="This field is optional"></textarea></div>
+<div class="col-md-8"> <textarea class="form-control" rows="2"  id="transformDescription" name="transformDescription" placeholder="This field is optional"></textarea></div>
 </div>
 
 <div class="form-group required">

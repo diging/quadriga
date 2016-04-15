@@ -8,9 +8,9 @@ public class UploadTransformationBackingBean {
 	private String mappingDescription;
 	/*private File mappingFile;*/
 	
-	private String transfomationTitle;
-	private String transformationDescription;
-	/*private File tranformationFile;*/
+	private String transformTitle;
+	private String transformDescription;
+	/*private File tranformFile;*/
 	public String getMappingTitle() {
 		return mappingTitle;
 	}
@@ -24,16 +24,16 @@ public class UploadTransformationBackingBean {
 		this.mappingDescription = mappingDescription;
 	}
 	public String getTransfomationTitle() {
-		return transfomationTitle;
+		return transformTitle;
 	}
 	public void setTransfomationTitle(String transfomationTitle) {
-		this.transfomationTitle = transfomationTitle;
+		this.transformTitle = transfomationTitle;
 	}
 	public String getTransformationDescription() {
-		return transformationDescription;
+		return transformDescription;
 	}
 	public void setTransformationDescription(String transformationDescription) {
-		this.transformationDescription = transformationDescription;
+		this.transformDescription = transformationDescription;
 	}
 
 }

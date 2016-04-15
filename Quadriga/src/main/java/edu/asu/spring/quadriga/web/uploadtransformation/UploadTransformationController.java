@@ -38,9 +38,9 @@ public class UploadTransformationController {
 		
 		String transformTitle= formBean.getTransfomationTitle();		
 		String transformDescription = formBean.getTransformationDescription();	    
-		System.out.println("Transfomation File Description is: "+transformTitle);
-		System.out.println("Tranformation File Name is: "+transformDescription);
-		uploadTnfmManager.saveAbout(mappingTitle, mappingDescription, transformTitle, transformDescription);
+		System.out.println("Transfomation File Title is: "+transformTitle);
+		System.out.println("Tranformation File Description is: "+transformDescription);
+		uploadTnfmManager.saveMetaData(mappingTitle, mappingDescription, transformTitle, transformDescription);
 				
 		request.setAttribute("success", 1);
 		return "auth/uploadTransformation";

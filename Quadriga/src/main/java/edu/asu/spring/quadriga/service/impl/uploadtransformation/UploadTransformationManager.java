@@ -7,6 +7,7 @@ import edu.asu.spring.quadriga.service.uploadtransformation.IUploadTransformatio
 import edu.asu.spring.quadriga.dao.impl.uploadTransformation.UploadTransformationDAO;
 import edu.asu.spring.quadriga.dao.uploadtransformation.IUploadTransformationDAO;
 import edu.asu.spring.quadriga.dto.UploadTransfomationFilesDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -16,12 +17,14 @@ public class UploadTransformationManager implements
 	@Autowired
 	private UploadTransformationDAO uploadTransformationDAO;
 
+	@Transactional
 	@Override
-	public void saveAbout(String mappingTitle, String mappingDescription,
+	public void saveMetaData(String mappingTitle, String mappingDescription,
 			String transformationTitle, String transformationDescription) {
 		UploadTransfomationFilesDTO tranformDTO = new UploadTransfomationFilesDTO(
 				mappingTitle, mappingDescription, transformationTitle,
 				transformationDescription);
+		tranformDTO.setId(uploadTransformationDAO.generateUniqueID());
 		uploadTransformationDAO.saveNewDTO(tranformDTO);
 		
 		
