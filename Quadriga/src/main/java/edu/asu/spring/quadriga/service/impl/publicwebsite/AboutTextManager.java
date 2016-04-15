@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.impl.publicwebsite;
 
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,17 +31,11 @@ public class AboutTextManager implements IAboutTextManager {
         if (aboutTextDTO == null) {
             aboutTextDTO = new AboutTextDTO();
             aboutTextDTO.setId(aboutTextDAO.generateUniqueID());
-            aboutTextDTO.setProjectId(projectId);
-            aboutTextDTO.setTitle(title);
-            aboutTextDTO.setDescription(description);
-            aboutTextDAO.saveNewDTO(aboutTextDTO);
-        } else {
-            aboutTextDTO.setProjectId(projectId);
-            aboutTextDTO.setTitle(title);
-            aboutTextDTO.setDescription(description);
-            aboutTextDAO.updateDTO(aboutTextDTO);
         }
-
+        aboutTextDTO.setProjectId(projectId);
+        aboutTextDTO.setTitle(title);
+        aboutTextDTO.setDescription(description);
+        aboutTextDAO.saveOrUpdateDTO(aboutTextDTO);
     }
 
     @Transactional

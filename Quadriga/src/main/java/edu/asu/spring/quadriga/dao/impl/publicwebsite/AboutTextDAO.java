@@ -51,4 +51,6 @@ public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO
         return getDTO(AboutTextDTO.class, id);
     }
 
+    
+
 }
