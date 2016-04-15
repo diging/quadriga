@@ -24,9 +24,7 @@ public class AddProjectBlogEntryValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
-        return arg0.isAssignableFrom(ProjectBlogEntry.class) || arg0.isAssignableFrom(Project.class);
-        // TODO: Verify need for project class
-        // return arg0.isAssignableFrom(ProjectBlogEntry.class);
+        return arg0.isAssignableFrom(ProjectBlogEntry.class); 
     }
 
     /**

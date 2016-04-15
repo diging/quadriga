@@ -58,7 +58,7 @@ public class AddProjectBlogEntryController {
     /**
      * Attach the custom validator to the Spring context
      */
-    @InitBinder
+    @InitBinder("projectBlogEntry")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
     }
