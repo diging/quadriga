@@ -240,4 +240,42 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 		return projectList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public IProject getProjectDetailsForSearch(ProjectDTO projectDTO, String pattern) throws QuadrigaStorageException{
+		IProject projectProxy = null;
+		
+		if(projectDTO != null){
+			projectProxy = new ProjectProxy(projectManager);
+			projectProxy.setProjectId(projectDTO.getProjectid());
+			projectProxy.setProjectName(projectDTO.getProjectname());
+			projectProxy.setDescription(searchLines(projectDTO.getDescription(), pattern));
+			projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+			projectProxy.setUnixName(projectDTO.getUnixname());
+			projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
+			projectProxy.setCreatedBy(projectDTO.getCreatedby());
+			projectProxy.setCreatedDate(projectDTO.getCreateddate());
+			projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
+			projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
+		}
+		
+		return projectProxy;
+	}
+
+	private String searchLines(String description, String pattern) {
+		String[] temp = description.split("\\.");
+		StringBuffer finalDescription = new StringBuffer();
+		for(int i=0; i<temp.length; i++){
+			if(temp[i].matches(".*"+pattern+".*")){
+				finalDescription.append(temp[i])
+								.append(".")
+								.append(temp[i+1]);
+			}
+		}
+		return finalDescription.toString();
+	}
+	
 }

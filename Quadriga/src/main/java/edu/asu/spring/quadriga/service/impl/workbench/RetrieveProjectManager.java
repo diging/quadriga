@@ -235,7 +235,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
         List<IProject> projectList = new ArrayList<IProject>();
         if(projectDTOList!=null) {
             for(ProjectDTO projectDTO : projectDTOList){
-                projectList.add(projectShallowMapper.getProjectDetails(projectDTO));
+                projectList.add(projectShallowMapper.getProjectDetailsForSearch(projectDTO, searchTerm));
             }
         }       
         return projectList;

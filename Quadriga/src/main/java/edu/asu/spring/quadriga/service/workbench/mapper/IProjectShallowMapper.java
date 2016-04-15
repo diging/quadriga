@@ -82,5 +82,8 @@ public interface IProjectShallowMapper {
 	public abstract IProject getProjectDetails(ProjectDTO projectDTO)
 			throws QuadrigaStorageException;
 
+	IProject getProjectDetailsForSearch(ProjectDTO projectDTO, String pattern)
+			throws QuadrigaStorageException;
+
 	
 }
