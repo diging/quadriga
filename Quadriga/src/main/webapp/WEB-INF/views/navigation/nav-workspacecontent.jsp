@@ -19,52 +19,26 @@
 							.children('a').attr('href');
 				});
 	});
-
-	$(document)
-			.ready(
-					function() {
-						$
-								.ajax({
-									url : "${pageContext.servletContext.contextPath}/auth/rest/workspace/"
-											+ "${workspacedetails.workspaceId}"
-											+ "/dictionaries.json",
-									type : "GET",
-									success : function(data) {
-										$
-												.each(
-														data,
-														function(index, value) {
-															$(
-																	"#workspaceDictionaries")
-																	.prepend(
-																			"<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'><i class='fa fa-book'></i> "
-																					+ value['name']
-																					+ "</a><br>");
-														});
-									}
-								});
-
-						$
-								.ajax({
-									url : "${pageContext.servletContext.contextPath}/auth/rest/workspace/"
-											+ "${workspacedetails.workspaceId}"
-											+ "/conceptcollections.json",
-									type : "GET",
-									success : function(data) {
-										$
-												.each(
-														data,
-														function(index, value) {
-															$(
-																	"#workspaceConceptCollections")
-																	.prepend(
-																			"<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'><i class='fa fa-list-alt'></i> "
-																					+ value['name']
-																					+ "</a><br>");
-														});
-									}
-								});
-					});
+	
+	$(document).ready(function(){
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/workspace/"+ "${workspacedetails.workspaceId}"+ "/dictionaries.json",
+			  type : "GET",
+	          success: function(data){
+	              $.each(data, function( index, value ) {
+	            	  $( "#workspaceDictionaries" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'><i class='fa fa-book'></i> "+value['name']+"</a><br>");
+	              });
+	          }
+		  });
+		  
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/workspace/"+ "${workspacedetails.workspaceId}"+ "/conceptcollections.json",
+			  type : "GET",
+	          success: function(data){
+	              $.each(data, function( index, value ) {
+	            	 $( "#workspaceConceptCollections" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'><i class='fa fa-list-alt'></i> "+value['name']+"</a><br>");
+	              });
+	          }
+		  });
+	});
 </script>
 <div>
 	<ul>
@@ -74,25 +48,18 @@
 		</a></li>
 	</ul>
 </div>
-<h5 class="major" style="margin-top: 0.5em; margin-bottom: 0em;">
+<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
 	<span>Dictionaries</span>
 </h5>
 <div id="workspaceDictionaries">
-	<a
-		href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i
-		class="fa fa-plus-circle"></i> Add</a> <a
-		href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i
-		class="fa fa-times-circle"></i> Delete</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
-<h5 class="major" style="margin-top: 0.5em; margin-bottom: 0em;">
+<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
 	<span>Concept Collections</span>
 </h5>
-<div id="workspaceConceptCollections">
-	<a
-		href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i
-		class="fa fa-plus-circle"></i> Add</a> <a
-		href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i
-		class="fa fa-times-circle"></i> Delete</a>
+<div id="workspaceConceptCollections">		
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
-
 
