@@ -5,9 +5,12 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.Callable;
+import javax.xml.bind.JAXBException;
+import java.util.concurrent.Future;
 
 /**
  * Created by Vikranth on 4/12/2016.
@@ -25,42 +28,24 @@ public class ElementEventTypeDownloadService {
     private IQStoreConnector qstoreConnector;
 
     /**
-     * This method would create a new Callabale object to download data from qstore
-     * and process for a relation event id
+     * Asynchronously fetch the data from qstore and marshall the xml
      * @param relationEventId Relation event id
-     * @return retrieveElementEvetsTypeCallable
+     * @return future
+     * @throws QStoreStorageException
+     * @throws JAXBException
      */
-    public Callable<ElementEventsType> getElementEventTypeDownloadTask(String relationEventId) {
-        return new RetrieveElementEventsTypeCallable(relationEventId);
-    }
+    @Async
+    public Future<ElementEventsType> getElementEventTypeAsync(String relationEventId)
+            throws QStoreStorageException, JAXBException {
+        String xml = qstoreConnector.getCreationEvent(relationEventId);
 
-    /**
-     * Callable class to retrieve the xml from qstore and marshall
-     */
-    private class RetrieveElementEventsTypeCallable implements Callable<ElementEventsType> {
-
-        private String relationEventId;
-
-        /**
-         * Set the relation event id
-         * @param relationEventId Relation event id
-         */
-        private RetrieveElementEventsTypeCallable(String relationEventId) {
-            this.relationEventId = relationEventId;
+        if (xml == null) {
+            throw new QStoreStorageException("Unable to download data from QStore for" +
+                    " relation event id: " + relationEventId);
         }
-
-        @Override
-        public ElementEventsType call() throws Exception {
-            // Get the xml from qstore
-            String xml = qstoreConnector.getCreationEvent(relationEventId);
-
-            if (xml == null) {
-                throw new QStoreStorageException("Unable to download data from QStore for" +
-                        " relation event id: " + relationEventId);
-            }
-            // convert the xml to ElementEventsType object
-            return marshallingService.unMarshalXmlToElementEventsType(xml);
-        }
+        // convert the xml to ElementEventsType object
+        ElementEventsType elementEventsType = marshallingService.unMarshalXmlToElementEventsType(xml);
+        // asyn task ends here
+        return new AsyncResult<>(elementEventsType);
     }
-
 }

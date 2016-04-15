@@ -1,12 +1,10 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
 import java.util.*;
-import java.util.concurrent.*;
 
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
@@ -31,12 +29,7 @@ public class NetworkTransformer implements INetworkTransformer {
     private EventParser parser;
 
     @Autowired
-    private ElementEventTypeDownloadService elementEventTypeDownloadService;
-
-    private static final Logger logger = LoggerFactory
-            .getLogger(NetworkTransformer.class);
-
-    private static int NUM_THREADS = 4;
+    private NetworkDownloadService networkDownloadService;
 
     /**
      * 
@@ -44,43 +37,33 @@ public class NetworkTransformer implements INetworkTransformer {
      */
     @Override
     public ITransformedNetwork transformNetwork(
-            List<INetworkNodeInfo> networkTopNodesList) {
+            List<INetworkNodeInfo> networkNodeInfoList) {
         Map<String, Node> nodes = new HashMap<>();
         List<Link> links = new ArrayList<>();
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
 
-        if (networkTopNodesList == null || networkTopNodesList.size() == 0) {
+        if (networkNodeInfoList == null || networkNodeInfoList.size() == 0) {
             // return the trasnformed network
             return transformedNetwork;
         }
 
-        // networkTopNode list has size > 0
-        // Create executors and tasks
-        ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
-        // Completion service
-        CompletionService<ElementEventsType> completionService = new
-                ExecutorCompletionService<>(executorService);
+        List<ElementEventsType> elementEventsTypeList = networkDownloadService
+                .getElementEventTypes(networkNodeInfoList);
 
-        // submit tasks
-        networkTopNodesList.forEach((networkNodeInfo) -> {
-            Callable<ElementEventsType> callable = elementEventTypeDownloadService
-                    .getElementEventTypeDownloadTask(networkNodeInfo.getId());
-            completionService.submit(callable);
-        });
+        // loop through all the elementEventsTypeList and parse the staement
+        // We made sure that networkNodeInfoList and elementEventsTypeList
+        // have same size.
 
-        // check for callabale executions
-        networkTopNodesList.forEach((networkNodeInfo -> {
-            try {
-                Future<ElementEventsType> future = completionService.take();
-                // take() will block if none are executed
-                ElementEventsType elementEventsType = future.get();
-                parser.parseStatement(networkNodeInfo.getId(), elementEventsType, nodes, links);
-            } catch (InterruptedException | ExecutionException e) {
-                logger.error("Issue while retrieving and marshalling object", e);
+        int index = 0;
+        for (INetworkNodeInfo networkNodeInfo: networkNodeInfoList) {
+            ElementEventsType elementEventsType = elementEventsTypeList.get(index++);
+            // Do not proceed if the elementEventsType is null
+            // null implies there is some exception while retrieving the dataj
+            if (elementEventsType == null) {
+                continue;
             }
-        }));
-        // finally shutdown the service
-        executorService.shutdown();
+            parser.parseStatement(networkNodeInfo.getId(), elementEventsType, nodes, links);
+        }
 
         // Instead of sending null
         // send an empty transformed network
