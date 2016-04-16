@@ -252,13 +252,13 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>20030203.000550</version>			
+			<version>20030203.000550</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
-		</dependency>
+ 		</dependency>		
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
@@ -482,7 +482,7 @@
 					</webResources>
 				</configuration>
 			</plugin>
- 			<plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
 				<executions>
@@ -497,7 +497,7 @@
 					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
 					<revisionOnScmFailure></revisionOnScmFailure>
-					<format>#{0} ({1,date})</format>
+					<!-- <format>#{0} ({1,date})</format> -->
 					<items>
 						<item>buildNumber\d*</item>
 						<item>timestamp</item>
@@ -518,7 +518,7 @@
 		</resources>
 	</build>
 
- 	<scm>
+	<scm>
 		<connection>scm:svn:http://none</connection>
 		<url>scm:svn:https://none</url>
 	</scm>
