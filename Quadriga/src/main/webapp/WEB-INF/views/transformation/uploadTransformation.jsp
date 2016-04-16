@@ -9,7 +9,7 @@
 
 <script>
 function submitClick(id){
-	location.href = "${pageContext.servletContext.contextPath}/auth/transformation/upload";
+	location.href = "${pageContext.servletContext.contextPath}/auth/transformation/selectTransformationFiles";
 }
 </script>
 

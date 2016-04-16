@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.web.uploadtransformation;
 
-
-
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +31,14 @@ public class UploadTransformationController {
 		String mappingTitle = formBean.getMappingTitle();
 		String mappingDescription=""+formBean.getMappingDescription();				
 		String mappingFileName = file[0].getOriginalFilename();
-		System.out.println("Mapping File Title is: "+mappingTitle);
-		System.out.println("Mapping File Description is: "+mappingDescription);
-		System.out.println("Mapping File Name is: "+ mappingFileName);
 		
 		String transformTitle= formBean.getTransformTitle();		
 		String transformDescription = formBean.getTransformDescription();	    
 		String transfomrFileName=file[1].getOriginalFilename();
-		System.out.println("Transfomation File Title is: "+transformTitle);
-		System.out.println("Tranformation File Description is: "+transformDescription);
-		System.out.println("Transformation File Name is: "+transfomrFileName);
 		
 		uploadTnfmManager.saveMetaData(mappingTitle, mappingDescription, mappingFileName, transformTitle, transformDescription, transfomrFileName);
-				
+		//files needs to saved here only meta data is being saved in database		
+		
 		map.addAttribute("success", 1);
 		return "auth/uploadTransformation";
 	}
