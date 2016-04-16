@@ -18,12 +18,11 @@ public class SelectTranformationFiles {
 	 * @param model
 	 * @param principal
 	 * @param request
-	 * This method redirect to uploadTranformation.jsp and sets an attribute  named success to value 0. 
-	 * Success attribute is used to display only part of the jsp page
+	 * This method redirect to uploadTranformation.jsp 
 	 * @return
 	 */
 	public String selectTransformationFiles(HttpServletRequest request){		
-		request.setAttribute("success", 0);
+		/*request.setAttribute("success", 0);*/
 		return "auth/uploadTransformation";
 	}
 }

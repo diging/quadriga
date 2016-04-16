@@ -29,7 +29,7 @@ public class UploadTransformationController {
 			@RequestParam("file") MultipartFile[] file) throws IOException{
 
 		String mappingTitle = formBean.getMappingTitle();
-		String mappingDescription=""+formBean.getMappingDescription();				
+		String mappingDescription=formBean.getMappingDescription();				
 		String mappingFileName = file[0].getOriginalFilename();
 		
 		String transformTitle= formBean.getTransformTitle();		
@@ -39,7 +39,9 @@ public class UploadTransformationController {
 		uploadTnfmManager.saveMetaData(mappingTitle, mappingDescription, mappingFileName, transformTitle, transformDescription, transfomrFileName);
 		//files needs to saved here only meta data is being saved in database		
 		
-		map.addAttribute("success", 1);
+		map.addAttribute("show_success_alert",true);
+		map.addAttribute("success_alert_msg","Upload Successful");
+		//map.addAttribute("success", 1);
 		return "auth/uploadTransformation";
 	}
 }
