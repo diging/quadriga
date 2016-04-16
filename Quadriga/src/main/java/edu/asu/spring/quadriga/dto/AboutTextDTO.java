@@ -35,10 +35,10 @@ public class AboutTextDTO implements Serializable, IAboutText {
 	@Column(name = "ProjectId")
 	private String projectId;
 
-	@Column(name = "title")
+	@Column(name = "title", columnDefinition="text")
 	private String title;
 
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition="text")
 	private String description;
 
 	public String getId() {
