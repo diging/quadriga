@@ -52,8 +52,8 @@
 
 </script>
 
-<h2>About Project - Edit</h2>
-<span class="byline">${project.unixName}</span>
+<h2>Project : ${project.unixName}</h2>
+<span class="byline">Edit about text for ${project.unixName}</span>
 <form method="post"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/saveabout"
 	modelAttribute="AboutTextBackingBean">
