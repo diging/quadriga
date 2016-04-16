@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.rest;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,12 +29,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
@@ -46,7 +49,11 @@ import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
+import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -79,6 +86,12 @@ public class NetworkRestController {
 
     @Autowired
     private IUserManager userManager;
+    
+    @Autowired
+    private IRetrieveProjectManager projectManager;
+    
+    @Autowired
+    private INetworkTransformationManager transformationManager;
 
     /**
      * Rest interface for uploading XML for networks http://<<URL>:
@@ -663,5 +676,67 @@ public class NetworkRestController {
         return new ResponseEntity<String>(res.toString(), httpHeaders, HttpStatus.OK);
 
     }
+    
+    
+    /**
+     * Rest interface to search concept in list of projects
+     * http://<<URL>:<PORT>>/quadriga/rest/sites/networks/search/{conceptId}/{projectIds}
+     * networks
+     * 
+     * @param conceptId
+     * @param projectIds
+     * @param response
+     * @param accept
+     * @param principal
+     * @return status
+     * @throws RestException
+     */
+    
+    @RequestMapping(value = "rest/sites/networks/search", method = RequestMethod.GET, produces = "application/xml")
+    public ResponseEntity<String> getSearchTransformedNetwork(@RequestParam("conceptId") String conceptId, @RequestParam("projectIds") List<String> projectIds,
+            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
+    	
+    	List<IProject> projectList = new ArrayList<>();
+    	
+    	try {    		
+    		for(String projectId : projectIds){
+        		IProject project = projectManager.getProjectDetails(projectId);
+        		if(project!=null){
+        			projectList.add(project);
+        		}
+        	}
+    		
+    		if(projectList.size()==0){
+                String errorMsg = errorMessageRest.getErrorMsg("Projects doesn't exist");
+                return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+        	}
 
+    		ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(
+        			projectIds, conceptId);	
+    		
+    		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            engine.init();
+            Template template = engine.getTemplate("velocitytemplates/transformationdetails.vm");
+            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            context.put("nodeList", new ArrayList<Node>(transformedNetwork.getNodes().values()));
+            context.put("linkList", transformedNetwork.getLinks());
+            StringWriter writer = new StringWriter();
+            template.merge(context, writer);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_XML);
+            return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            throw new RestException(404, e);
+        } catch (ParseErrorException e) {
+            throw new RestException(500, e);
+        } catch (MethodInvocationException e) {
+            throw new RestException(500, e);
+        } catch (QuadrigaStorageException e) {
+            throw new RestException(500, e);
+        } catch (QuadrigaAccessException e) {
+            throw new RestException(403, e);
+        } catch (Exception e) {
+            throw new RestException(500, e);
+        }
+    }
 }

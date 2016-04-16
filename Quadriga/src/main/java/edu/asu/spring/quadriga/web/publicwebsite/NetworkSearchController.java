@@ -149,49 +149,4 @@ public class NetworkSearchController {
 
         return "sites/networks/searchednetwork";
     }
-
-
-    @RequestMapping(value = "sites/networks/search", method = RequestMethod.GET)
-    public String getSearchTransformedNetwork(@RequestParam("conceptId") String conceptId,@RequestParam("projectName") List<String> projectNames,
-                                              Model model)
-        throws QuadrigaStorageException {
-    	List<String> projectIds = new ArrayList<>();
-    	List<IProject> projectList = new ArrayList<>();
-    	for(String projectName : projectNames){
-    		IProject project = projectManager.getProjectDetailsByUnixName(projectName);
-    		if(project!=null){
-    			projectList.add(project);
-    			projectIds.add(project.getProjectId());
-    		}
-    	}
-    	if(projectList.size()==0){
-    		return "forbidden";
-    	}
-    	ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetwork(
-    			projectIds, conceptId);
-    	String json = null;
-        if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-        }
-        if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-            model.addAttribute("isNetworkEmpty", true);
-        }
-        
-        String lemma = "";
-        String searchNodeLabel = "";
-        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
-        
-        if (reply != null && reply.getConceptEntry().size() > 0) {
-            searchNodeLabel = reply.getConceptEntry().get(0).getLemma();
-            lemma = reply.getConceptEntry().get(0).getDescription();
-        }
-        
-        model.addAttribute("jsonstring", json);
-        model.addAttribute("networkid", "\"\"");
-        model.addAttribute("searchNodeLabel", searchNodeLabel);
-        model.addAttribute("description", lemma);
-    	
-        return "sites/networks/searchednetwork";
-    }
-    
 }
