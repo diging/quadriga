@@ -9,16 +9,15 @@
 
 <script>
 function submitClick(id){
-	location.href = "${pageContext.servletContext.contextPath}/auth/selectTransformationFiles";
+	location.href = "${pageContext.servletContext.contextPath}/auth/transformation/uploadFiles";
 }
 </script>
-
 
 <c:choose>
 <c:when test="${success == 0}">
 <form name="selectTransformFiles" method="post" class="form-horizontal" action="${pageContext.servletContext.contextPath}/auth/uploadTransformation" modelAttribute="UploadTransformationBackingBean" enctype="multipart/form-data"> 
-<!--    -->
-<div id="mappingDiv" class="col-md-5" style="border:1px solid#A89E9E; border-radius:10px;"> <!-- style="border:1px solid#A89E9E; border-radius:10px;" -->
+
+<div id="mappingDiv" class="col-md-5" style="border:1px solid#A89E9E; border-radius:10px;"> 
 
 <h4 style="text-align:center"><u> Upload Mapping File </u> </h4>
 
@@ -36,9 +35,7 @@ function submitClick(id){
 <div class="col-md-12"><input type="file" class="form-control" id="mappingFile" name="file" required="required"></div>
 </div>
 
-
 </div>
-
 
 <div id="transfomrDiv" class="col-md-offset-1 col-md-5" style="border:1px solid#A89E9E; border-radius:10px;">
 
@@ -58,7 +55,6 @@ function submitClick(id){
 <div class="col-md-12"><input type="file" class="form-control" id="file" name="transformFile"  required="required"></div>
 </div>
 
-
 </div>
 
 <div class="form-group">
@@ -74,5 +70,12 @@ function submitClick(id){
 					<li><input type="button" id="sucessButton" onClick="submitClick();"
 						value='Okay'></li>
 				</ul>
-		  </c:when>  
+		  </c:when>
+<c:when test="${success == 2}">
+		  <span class="byline">Upload Unsuccessful. Please follow specifications and try again</span>
+		<ul>
+					<li><input type="button" id="sucessButton" onClick="submitClick();"
+						value='Okay'></li>
+				</ul>
+		  </c:when>		    
 </c:choose>

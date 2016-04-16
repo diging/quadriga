@@ -10,9 +10,19 @@ import javax.persistence.Id;
 @Table(name = "tbl_transfomationfiles_metadata")
 @XmlRootElement
 public class UploadTransfomationFilesDTO implements Serializable {
-
 	
 	private static final long serialVersionUID = 1L;
+	@Id
+	private String Id;
+	@Column(name = "Mapping_Title")
+	private String  mappingTitle;
+	@Column(name = "Mapping_Description")
+	private String mappingDescription;
+	
+	@Column(name = "Transform_Title")
+	private String transfomationTitle;
+	@Column(name = "TransformDescription")
+	private String transformationDescription;
 
 	public UploadTransfomationFilesDTO(String mappingTitle,
 			String mappingDescription, String transfomationTitle,
@@ -24,28 +34,12 @@ public class UploadTransfomationFilesDTO implements Serializable {
 		this.transformationDescription = transformationDescription;
 	}
 	
-	@Id
-	private String Id;
 	public String getId() {
 		return Id;
-	}
-	
+	}	
 	public void setId(String id) {
 		Id = id;
 	}
-
-	@Column(name = "Mapping_Title")
-	private String  mappingTitle;
-	@Column(name = "Mapping_Description")
-	private String mappingDescription;
-	/*private File mappingFile;*/
-	
-	@Column(name = "Transform_Title")
-	private String transfomationTitle;
-	@Column(name = "TransformDescription")
-	private String transformationDescription;
-	/*private File tranformationFile;*/
-	
 	public String getMappingTitle() {
 		return mappingTitle;
 	}
