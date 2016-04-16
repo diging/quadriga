@@ -9,7 +9,7 @@
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 
 	<properties>
-		<java-version>1.8</java-version>
+		<java-version>1.7</java-version>
 		<org.springframework-version>4.2.5.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.7.3</org.aspectj-version>
 		<org.slf4j-version>1.7.5</org.slf4j-version>
@@ -482,7 +482,7 @@
 					</webResources>
 				</configuration>
 			</plugin>
-<!-- 			<plugin>
+ 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
 				<executions>
@@ -505,7 +505,7 @@
 					<format>#{0} ({1,date,yyyy-MM-dd HH:mm:ss})</format>
 				</configuration>
 			</plugin>
- -->		</plugins>
+		</plugins>
 
 		<resources>
 			<resource>
@@ -518,11 +518,11 @@
 		</resources>
 	</build>
 
-<!-- 	<scm>
+ 	<scm>
 		<connection>scm:svn:http://none</connection>
 		<url>scm:svn:https://none</url>
 	</scm>
- -->
+
 	<reporting>
 		<plugins>
 			<plugin>

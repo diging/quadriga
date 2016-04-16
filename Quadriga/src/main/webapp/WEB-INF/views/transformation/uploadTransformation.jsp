@@ -7,12 +7,6 @@
 }
 </style>
 
-<!-- <script>
-function submitClick(id){
-	location.href = "${pageContext.servletContext.contextPath}/auth/transformation/selectTransformationFiles";
-}
-</script>
- -->
 <form name="selectTransformFiles" method="post" class="form-horizontal" action="${pageContext.servletContext.contextPath}/auth/transformation/upload" enctype="multipart/form-data" modelAttribute="UploadTransformationBackingBean"> 
 <div id="mappingDiv" class="col-md-5" style="border:1px solid#A89E9E; border-radius:10px;"> 
 
@@ -60,20 +54,3 @@ function submitClick(id){
 </div>
 
 </form>
-<%-- </c:when>
-<c:when test="${success == 1}">
-		  <span class="byline">Transformation Files uploaded successfully</span>
-		<ul>
-					<li><input type="button" id="sucessButton" onClick="submitClick();"
-						value='Okay'></li>
-				</ul>
-		  </c:when>
-<c:when test="${success == 2}">
-		  <span class="byline">Upload Unsuccessful. Please follow specifications and try again</span>
-		<ul>
-					<li><input type="button" id="sucessButton" onClick="submitClick();"
-						value='Okay'></li>
-				</ul>
-		  </c:when>		    
-</c:choose>
- --%>
