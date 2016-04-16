@@ -9,14 +9,13 @@
 
 <script>
 function submitClick(id){
-	location.href = "${pageContext.servletContext.contextPath}/auth/transformation/uploadFiles";
+	location.href = "${pageContext.servletContext.contextPath}/auth/transformation/upload";
 }
 </script>
 
 <c:choose>
 <c:when test="${success == 0}">
-<form name="selectTransformFiles" method="post" class="form-horizontal" action="${pageContext.servletContext.contextPath}/auth/uploadTransformation" modelAttribute="UploadTransformationBackingBean" enctype="multipart/form-data"> 
-
+<form name="selectTransformFiles" method="post" class="form-horizontal" action="${pageContext.servletContext.contextPath}/auth/transformation/upload" enctype="multipart/form-data" modelAttribute="UploadTransformationBackingBean"> 
 <div id="mappingDiv" class="col-md-5" style="border:1px solid#A89E9E; border-radius:10px;"> 
 
 <h4 style="text-align:center"><u> Upload Mapping File </u> </h4>
@@ -47,12 +46,12 @@ function submitClick(id){
 </div>
 	
 <div class="form-group">
-<label for="transfomrDesciption" class="col-md-4 control-label" style="font-weight:bold;">Description </label>
+<label for="transfomrmDesciption" class="col-md-4 control-label" style="font-weight:bold;">Description </label>
 <div class="col-md-8"> <textarea class="form-control" rows="2"  id="transformDescription" name="transformDescription" placeholder="This field is optional"></textarea></div>
 </div>
 
 <div class="form-group required">
-<div class="col-md-12"><input type="file" class="form-control" id="file" name="transformFile"  required="required"></div>
+<div class="col-md-12"><input type="file" class="form-control" id="tranformFile" name="file"  required="required"></div>
 </div>
 
 </div>

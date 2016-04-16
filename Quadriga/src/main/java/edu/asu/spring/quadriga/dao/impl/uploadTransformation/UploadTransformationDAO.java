@@ -6,7 +6,7 @@ import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dto.UploadTransfomationFilesDTO;
 
 /**
- * DAO class to upload tranformation files
+ * DAO class to upload transformation files
  * @author JayaVenkat
  *
  */

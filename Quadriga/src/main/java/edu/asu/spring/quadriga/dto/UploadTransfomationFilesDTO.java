@@ -18,20 +18,24 @@ public class UploadTransfomationFilesDTO implements Serializable {
 	private String  mappingTitle;
 	@Column(name = "Mapping_Description")
 	private String mappingDescription;
-	
+	@Column(name = "MappingFile")
+	private String mappingFile;
 	@Column(name = "Transform_Title")
 	private String transfomationTitle;
 	@Column(name = "TransformDescription")
 	private String transformationDescription;
-
+    @Column(name="Transform_File")
+    private String transformFile;
 	public UploadTransfomationFilesDTO(String mappingTitle,
-			String mappingDescription, String transfomationTitle,
-			String transformationDescription) {
+			String mappingDescription, String mappingFile, String transfomationTitle,
+			String transformationDescription, String transfomrFile) {
 		super();
 		this.mappingTitle = mappingTitle;
 		this.mappingDescription = mappingDescription;
+		this.mappingFile = mappingFile;
 		this.transfomationTitle = transfomationTitle;
 		this.transformationDescription = transformationDescription;
+		this.transformFile = transfomrFile;
 	}
 	
 	public String getId() {
@@ -63,6 +67,22 @@ public class UploadTransfomationFilesDTO implements Serializable {
 	}
 	public void setTransformationDescription(String transformationDescription) {
 		this.transformationDescription = transformationDescription;
+	}
+
+	public String getMappingFile() {
+		return mappingFile;
+	}
+
+	public void setMappingFile(String mappingFile) {
+		this.mappingFile = mappingFile;
+	}
+
+	public String getTransformFile() {
+		return transformFile;
+	}
+
+	public void setTransformFile(String transformFile) {
+		this.transformFile = transformFile;
 	}
 
 }
