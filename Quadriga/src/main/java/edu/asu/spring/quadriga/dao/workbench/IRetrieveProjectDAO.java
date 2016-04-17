@@ -52,7 +52,7 @@ public interface IRetrieveProjectDAO
 	 * Retrieves the project details associated it unix name.
 	 * @param unixName
 	 * @return IProject - project object containing details associated with given unix name.
-	 * @throws QuadrigaStorageException
+-	 * @throws QuadrigaStorageException
 	 */
 //	IProject getProjectDetailsByUnixName(String unixName)
 //			throws QuadrigaStorageException;
@@ -113,6 +113,7 @@ public interface IRetrieveProjectDAO
 
 	ProjectDTO getProjectDTOByUnixName(String unixName)
 			throws QuadrigaStorageException;
-	
 
+	List<ProjectDTO> getAllProjectsDTOByAccessibility(String accessibility)
+			throws QuadrigaStorageException;
 }
