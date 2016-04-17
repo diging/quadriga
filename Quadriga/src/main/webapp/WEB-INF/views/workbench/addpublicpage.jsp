@@ -15,19 +15,19 @@
 							var order = $("#order1").val();
 							var mandatory = 0;
 							if(titles.length < 1){
-								$("#title_err1").html("Title Is Mandatory");
+								$("#title_err1").html("Please provide a title");
 								mandatory = 1;
 							}else{
 								$("#title_err1").html(''); 
 							}
 							if(desc.length < 1){
-								$("#desc_err1").html("Description Is Mandatory");
+								$("#desc_err1").html("Please provide a description");
 								mandatory =1;
 							}else{
 								$("#desc_err1").html('');
 							}
-							if(order == 0){
-								$("#order_err1").html("Order Is Mandatory");
+							if(order != 1 && order != 2 && order != 3){
+								$("#order_err1").html("Possible values are 1, 2, or 3.");
 								mandatory =1 
 							}else{
 								$("#order_err1").html('');
@@ -40,10 +40,10 @@
 							data["order"] = $("#order1").val();
 							$
 									.ajax({
-										type : "GET",
-										url : "${pageContext.servletContext.contextPath}/auth/workbench/${ppprojectid}/addpublicpage1",
+										type : "POST",
+										url : "${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess",
 										data : {
-											data1 : JSON.stringify(data)
+											data : JSON.stringify(data)
 										},
 										success : function(e) {
 											$("#title1").val('');
@@ -67,19 +67,19 @@
 							var order = $("#order2").val();
 							var mandatory = 0;
 							if(titles.length < 1){
-								$("#title_err2").html("Title Is Mandatory");
+								$("#title_err2").html("Please provide a title");
 								mandatory = 1;
 							}else{
 								$("#title_err2").html('');
 							}
 							if(desc.length < 1){
-								$("#desc_err2").html("Description Is Mandatory");
+								$("#desc_err2").html("Please provide a description");
 								mandatory =1;
 							}else{
 								$("#desc_err2").html('');
 							}
-							if(order == 0){
-								$("#order_err2").html("Order Is Mandatory");
+							if(order != 1 && order != 2 && order != 3){
+								$("#order_err2").html("Possible values are 1, 2, or 3.");
 								mandatory =1 
 							}else{
 								$("#order_err2").html('');
@@ -92,8 +92,8 @@
 							data["order"] = $("#order2").val();
 							$
 									.ajax({
-										type : "GET",
-										url : "${pageContext.servletContext.contextPath}/auth/workbench/${ppprojectid}/addpublicpage1",
+										type : "POST",
+										url : "${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess",
 										data : {
 											data1 : JSON.stringify(data)
 										},
@@ -119,19 +119,19 @@
 							var order = $("#order3").val();
 							var mandatory = 0;
 							if(titles.length < 1){
-								$("#title_err3").html("Title Is Mandatory");
+								$("#title_err3").html("Please provide a title");
 								mandatory = 1;
 							}else{
 								$("#title_err3").html('');
 							}
 							if(desc.length < 1){
-								$("#desc_err3").html("Description Is Mandatory");
+								$("#desc_err3").html("Please provide a description");
 								mandatory =1;
 							}else{
 								$("#desc_err3").html('');
 							}
-							if(order == 0){
-								$("#order_err3").html("Order Is Mandatory");
+							if(order != 1 && order != 2 && order != 3){
+								$("#order_err3").html("Possible values are 1, 2, or 3.");
 								mandatory =1 
 							}else{
 								$("#order_err3").html('');
@@ -144,10 +144,10 @@
 							data["order"] = $("#order3").val();
 							$
 									.ajax({
-										type : "GET",
-										url : "${pageContext.servletContext.contextPath}/auth/workbench/${ppprojectid}/addpublicpage1",
+										type : "POST",
+										url : "${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess",
 										data : {
-											data1 : JSON.stringify(data)
+											data : JSON.stringify(data)
 										},
 										success : function(e) {
 											$("#title3").val('');
@@ -163,7 +163,7 @@
 </script>
 <article class="is-page-content">
 	<form:form commandName="publicpage" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${ppprojectid}/addpublicpage1">		
+		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">		
 		<header>
 			<h2>Editing Text Contents to be shown</h2>
 			<span class="byline">Please fill in the following information:</span>
@@ -195,7 +195,7 @@
 		</table>
 	</form:form>
 	<form:form commandName="publicpage" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${ppprojectid}/addpublicpage">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Title *</td>
@@ -223,7 +223,7 @@
 		</table>
 	</form:form>
 	<form:form commandName="publicpage" method="POST" 
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${ppprojectid}/addpublicpage1">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Title *</td>

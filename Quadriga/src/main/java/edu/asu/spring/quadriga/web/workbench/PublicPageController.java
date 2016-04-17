@@ -44,21 +44,21 @@ public class PublicPageController {
         ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
         model.getModelMap().put("publicpage",
                 publicPageFactory.createPublicPageObject());
-        model.getModelMap().put("ppprojectid", projectid);
+        model.getModelMap().put("publicpageprojectid", projectid);
         return model;
     }
 
     /**
-     * This method is used update the Text blocks in the Public settings page
+     * This method is used update the database with the information provided in the Public settings page
      *
      * @return json
      */
 
-    @RequestMapping(method = RequestMethod.GET, value = "auth/workbench/{projectid}/addpublicpage1")
+    @RequestMapping(method = RequestMethod.POST, value = "auth/workbench/{projectid}/addpublicpagesuccess")
     public @ResponseBody ResponseEntity<String> getExistingConcepts(
-            @RequestParam("data1") String data1)
+            @RequestParam("data") String data)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        if (data1.isEmpty())
+        if (data.isEmpty())
             return null;
         try {
             return new ResponseEntity<String>("Successfully updated",
