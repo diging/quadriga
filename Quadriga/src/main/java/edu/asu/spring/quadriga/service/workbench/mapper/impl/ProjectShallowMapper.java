@@ -268,11 +268,16 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 	private String searchLines(String description, String pattern) {
 		String[] temp = description.split("\\.");
 		StringBuffer finalDescription = new StringBuffer();
+		int linesCount = 0;
 		for(int i=0; i<temp.length; i++){
-			if(temp[i].matches(".*"+pattern+".*")){
-				finalDescription.append(temp[i])
-								.append(".")
-								.append(temp[i+1]);
+			if(temp[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*") && linesCount < 4){
+				if(i+1 < temp.length && temp[i+1].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
+					finalDescription.append(temp[i])
+									.append("...");
+				} else{
+					finalDescription.append(temp[i]);
+				}
+				linesCount++;
 			}
 		}
 		return finalDescription.toString();

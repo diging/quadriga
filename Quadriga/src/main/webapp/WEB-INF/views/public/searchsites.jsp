@@ -52,8 +52,7 @@
 						value="Lead by ${sitesList.owner.name}"></c:out></span>
 			</p>
 			<div>
-				<span class="comment more"> <c:out
-						value="${sitesList.description}"></c:out></span>
+				<c:out value="${sitesList.description}"></c:out>
 			</div>
 		</div>
 	</c:forEach>
