@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,6 +46,10 @@ public class TextUploadRestController {
 
     @Autowired
     private IRestMessage errorMessageRest;
+    
+
+    @Autowired
+    private ServletContext servletContext;
 
     @RequestMapping(value = "rest/project/{projectid}/workspace/{workspaceid}/uploadtext", method = RequestMethod.POST, produces = "application/xml")
     public ResponseEntity<String> uploadText(@PathVariable("workspaceid") String wsId,
@@ -84,6 +89,7 @@ public class TextUploadRestController {
             template.merge(context, writer);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
+            System.out.println(request.getLocalAddr());
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.CREATED);
         } catch (FileNotFoundException e) {
             throw new RestException(404, e);

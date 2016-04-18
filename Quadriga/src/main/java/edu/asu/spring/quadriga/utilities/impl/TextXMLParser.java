@@ -35,8 +35,10 @@ public class TextXMLParser implements ITextXMLParser {
         try {
             builder = factory.newDocumentBuilder();
             document = builder.parse(new InputSource(new StringReader(xml)));
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (ParserConfigurationException | IOException e) {
             throw new TextFileParseException(e);
+        } catch (SAXException sae) {
+            throw new TextFileParseException("This XML file is not well formed");
         }
 
         NodeList textNodeList = document.getElementsByTagName("text");
@@ -49,6 +51,8 @@ public class TextXMLParser implements ITextXMLParser {
             throw new TextFileParseException("Handle must be specified in the input XML");
         } else if (fileNameNode.getLength() == 0) {
             throw new TextFileParseException("File name must be specified in the input XML");
+        } else if (textNodeList.getLength() == 0) {
+            throw new TextFileParseException("File content must be specified in the input XML");
         }
 
         String fileContent = textNodeList.item(0).getTextContent();
