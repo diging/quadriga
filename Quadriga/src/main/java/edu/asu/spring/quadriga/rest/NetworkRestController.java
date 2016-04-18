@@ -148,7 +148,7 @@ public class NetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 
         }
-        INetworkXML nwXML = nwXMLfactory.createNetworkXMLObject();
+        INetworkXML nwXML = null;
         try {
             nwXML = nwXMLParser.parseXML(xml, projectid, workspaceid);
         } catch (NetworkXMLParseException e) {

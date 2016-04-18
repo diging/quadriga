@@ -45,6 +45,9 @@
 	<!-- Reference the hibernate -->
 	<beans:import resource="../hibernate/hibernate.cfg.xml"/>
 	
+	<task:executor id="executor" pool-size="5"/>
+    <task:annotation-driven executor="executor" />
+	
 	<cache:annotation-driven />
     <beans:bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
         <beans:property name="cacheManager"><beans:ref bean="ehcache"/></beans:property>
@@ -60,3 +63,4 @@
      		<beans:property name="textFileLocation" value="${textfile.url}"/>
         </beans:bean>
 	</beans:beans>
+
