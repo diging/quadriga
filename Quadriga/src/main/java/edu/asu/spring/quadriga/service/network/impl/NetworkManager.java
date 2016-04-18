@@ -639,28 +639,22 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private NetworkEntry parseNewAppellationEvent(NewNetworkDetailsCache newNetworkDetailCache,
             CreationEvent creationEvent) {
 
-        List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
-        Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
         NetworkEntry entry = new NetworkEntry();
         
-        while (elementsIterator.hasNext()) {
-            JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-            if (element.getName().toString().contains("id")) {
-                String id = element.getValue().toString();
-                if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                    entry = newNetworkDetailCache.getById(id);
-                } else {
-                    entry.setId(id);
-                    entry.setType(INetworkManager.APPELLATIONEVENT);
-                    entry.setTop(true);
-                    newNetworkDetailCache.addEntry(entry);
-                }
-            }
-            if (element.getName().toString().endsWith("}refId")) {
-                entry.setRefId(element.getValue().toString());
+        if (creationEvent.getId() != null && !creationEvent.getId().isEmpty()) {
+            String id = creationEvent.getId();
+            if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                entry = newNetworkDetailCache.getById(id);
+            } else {
+                entry.setId(id);
+                entry.setType(INetworkManager.APPELLATIONEVENT);
+                entry.setTop(true);
+                newNetworkDetailCache.addEntry(entry);
             }
         }
-
+        if (creationEvent.getRefId() != null && !creationEvent.getRefId().isEmpty()) {
+            entry.setRefId(creationEvent.getRefId());
+        }
         return entry;
     }
 
@@ -681,27 +675,21 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private NetworkEntry parseNewRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,
             CreationEvent creationEvent) {
 
-        List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
-        Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
         NetworkEntry entry = new NetworkEntry();
         
-        while (elementsIterator.hasNext()) {
-            JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-
-            // get relation event id
-            if (element.getName().toString().contains("id")) {
-                String id = element.getValue().toString();
-                if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                    entry = newNetworkDetailCache.getById(id);
-                } else {
-                    entry.setId(id);
-                    entry.setType(INetworkManager.RELATIONEVENT);
-                    entry.setTop(true);
-                    newNetworkDetailCache.addEntry(entry);
-                }
+        // get relation event id
+        if (creationEvent.getId() != null && !creationEvent.getId().isEmpty()) {
+            String id = creationEvent.getId();
+            if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                entry = newNetworkDetailCache.getById(id);
+            } else {
+                entry.setId(id);
+                entry.setType(INetworkManager.RELATIONEVENT);
+                entry.setTop(true);
+                newNetworkDetailCache.addEntry(entry);
             }
-            
-        }
+        }        
+        
         RelationEventType relationEventType = (RelationEventType) (creationEvent);
         try {
             // Go Recursively and check for Relation event within a relation
@@ -816,29 +804,24 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             return parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache,
                     appellationEventType);
         } else {
-            List<JAXBElement<?>> elementsList = relationEventType.getIdOrCreatorOrCreationDate();
-            Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
             NetworkEntry entry = new NetworkEntry();
             
-            while (elementsIterator.hasNext()) {
-                JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-
-                if (element.getName().toString().contains("id")) {
-                    String id = element.getValue().toString();
-                    if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                        entry = newNetworkDetailCache.getById(id);
-                    } else {
-                        entry.setId(id);
-                        entry.setType(INetworkManager.RELATIONEVENT);
-                        entry.setTop(true);
-                        newNetworkDetailCache.addEntry(entry);
-                    }
-                }
-
-                if (element.getName().toString().endsWith("}refId")) {
-                    entry.setRefId(element.getValue().toString());
+            if (relationEventType.getId() != null && !relationEventType.getId().isEmpty()) {
+                String id = relationEventType.getId();
+                if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                    entry = newNetworkDetailCache.getById(id);
+                } else {
+                    entry.setId(id);
+                    entry.setType(INetworkManager.RELATIONEVENT);
+                    entry.setTop(true);
+                    newNetworkDetailCache.addEntry(entry);
                 }
             }
+
+            if (relationEventType.getRefId() != null && !relationEventType.getRefId().isEmpty()) {
+                entry.setRefId(relationEventType.getRefId());
+            }
+            
             NetworkEntry nestedEntry = parseIntoRelationEventElement(relationEventType, newNetworkDetailCache);
             if (nestedEntry != null) {
                 nestedEntry.setTop(false);
@@ -871,28 +854,22 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             return null;
         } else {
             logger.debug("AE1 found object");
-            List<JAXBElement<?>> elementsList = appellationEventType.getIdOrCreatorOrCreationDate();
-            Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
             NetworkEntry entry = new NetworkEntry();
             
-            while (elementsIterator.hasNext()) {
-                JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-
-                if (element.getName().toString().contains("id")) {
-                    String id = element.getValue().toString();
-                    if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                        entry = newNetworkDetailCache.getById(id);
-                    } else {
-                        entry.setId(id);
-                        entry.setType(INetworkManager.APPELLATIONEVENT);
-                        entry.setTop(false);
-                        newNetworkDetailCache.addEntry(entry);
-                    }
+            if (appellationEventType.getId() != null && !appellationEventType.getId().isEmpty()) {
+                String id = appellationEventType.getId();
+                if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                    entry = newNetworkDetailCache.getById(id);
+                } else {
+                    entry.setId(id);
+                    entry.setType(INetworkManager.APPELLATIONEVENT);
+                    entry.setTop(false);
+                    newNetworkDetailCache.addEntry(entry);
                 }
+            }
 
-                if (element.getName().toString().endsWith("}refId")) {
-                    entry.setRefId(element.getValue().toString());
-                }
+            if (appellationEventType.getRefId() != null && !appellationEventType.getRefId().isEmpty()) {
+                entry.setRefId(appellationEventType.getRefId());
             }
             
             return entry;

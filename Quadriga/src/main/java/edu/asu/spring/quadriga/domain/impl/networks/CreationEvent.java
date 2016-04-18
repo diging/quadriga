@@ -50,55 +50,29 @@ import javax.xml.datatype.XMLGregorianCalendar;
 })
 public abstract class CreationEvent {
 
-    @XmlElementRefs({
-        @XmlElementRef(name = "creation_date", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "internal_refId", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "interpretation_creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "creation_place", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "refId", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class)
-    })
-    protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
-
     @XmlElement(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
     private String sourceReference;
-
-    /**
-     * Gets the value of the idOrCreatorOrCreationDate property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the idOrCreatorOrCreationDate property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getIdOrCreatorOrCreationDate().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
-     * 
-     */
-    public List<JAXBElement<?>> getIdOrCreatorOrCreationDate() {
-        if (idOrCreatorOrCreationDate == null) {
-            idOrCreatorOrCreationDate = new ArrayList<JAXBElement<?>>();
-        }
-        return this.idOrCreatorOrCreationDate;
-    }
+    
+    @XmlElement(name = "creation_date", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String creationDate;
+    
+    @XmlElement(name = "internal_refId", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String internalRefId;
+    
+    @XmlElement(name = "creator", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String creator;
+    
+    @XmlElement(name = "interpretation_creator", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String interpretationCreator;
+    
+    @XmlElement(name = "creation_place", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String creationPlace;
+    
+    @XmlElement(name = "refId", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String refId;
+    
+    @XmlElement(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String id;
 
     public String getSourceReference() {
         return sourceReference;
@@ -107,4 +81,62 @@ public abstract class CreationEvent {
     public void setSourceReference(String sourceReference) {
         this.sourceReference = sourceReference;
     }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getInternalRefId() {
+        return internalRefId;
+    }
+
+    public void setInternalRefId(String internalRefId) {
+        this.internalRefId = internalRefId;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getInterpretationCreator() {
+        return interpretationCreator;
+    }
+
+    public void setInterpretationCreator(String interpretationCreator) {
+        this.interpretationCreator = interpretationCreator;
+    }
+
+    public String getCreationPlace() {
+        return creationPlace;
+    }
+
+    public void setCreationPlace(String creationPlace) {
+        this.creationPlace = creationPlace;
+    }
+
+    public String getRefId() {
+        return refId;
+    }
+
+    public void setRefId(String refId) {
+        this.refId = refId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
 }

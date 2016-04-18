@@ -175,7 +175,7 @@ public class EventParser {
             label.append(type.getTermInterpertation());
             label.append(" ");
         }
-        node.setId(event.getAppellationEventID());
+        node.setId(event.getId());
         node.setConceptId(label.toString().trim());
         // set the source reference
         node.setSourceReference(event.getSourceReference());
