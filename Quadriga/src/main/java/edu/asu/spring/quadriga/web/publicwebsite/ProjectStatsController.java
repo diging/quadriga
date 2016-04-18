@@ -145,6 +145,34 @@ public class ProjectStatsController {
 		return contributionsJson;    	
 	}
 
+	private JSONArray getWorkspaceContribution (IProject project) throws JSONException
+	{
+		String DATE_FORMAT = "dd-MMM-yy";
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+		JSONArray workspaceCount = new JSONArray();
+		HashMap<String, Integer> contributionCount = new HashMap<String, Integer>();
+		
+		for(IProjectWorkspace ws : project.getProjectWorkspaces())
+		{
+			if(contributionCount.containsKey(sdf.format(ws.getCreatedDate())))
+			{
+				contributionCount.put(sdf.format(ws.getCreatedDate()), contributionCount.get(sdf.format(ws.getCreatedDate()))+1);
+			}
+			else
+			{
+				contributionCount.put(sdf.format(ws.getCreatedDate()), 1);
+			}	
+		}
+		for(Entry<String, Integer> entry : contributionCount.entrySet())
+		{
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("date", entry.getKey());
+			jsonObject.put("count", entry.getValue());
+			workspaceCount.put(jsonObject);
+		}
+		return workspaceCount;      	
+	}
+
 	/**
 	 * This method gives the visualization of how often concepts appear in the
 	 * networks
@@ -172,11 +200,11 @@ public class ProjectStatsController {
 		}
 
 		String projectId = project.getProjectId();
+		
 		List<INetwork> networks = networkmanager.getNetworksInProject(projectId);
 		List<IConceptStats> conceptsWithCount = null;
 		JSONArray submittedNetworkCount = null, approvedNetworkCount = null, rejectedNetworkCount  = null, workspaceCount = null;
-		String submittedNetworks = null, approvedNetworks = null, rejectedNetworks = null;
-		
+		 
 		if (!networks.isEmpty()) {
 			conceptsWithCount = projectStats.getConceptCount(networks);
 
@@ -201,15 +229,15 @@ public class ProjectStatsController {
 			submittedNetworkCount= getContributionCountByStatus(networks,SUBMITTED);
 			approvedNetworkCount= getContributionCountByStatus(networks,APPROVED);
 			rejectedNetworkCount= getContributionCountByStatus(networks,REJECTED);
-			
-			submittedNetworks = submittedNetworkCount.toString();
-			approvedNetworks = approvedNetworkCount.toString();
-			rejectedNetworks = rejectedNetworkCount.toString();
+			workspaceCount = getWorkspaceContribution(project);
+			 
 		}
+
 		model.addAttribute("project", project);
-		model.addAttribute("submittedNetworksData",submittedNetworks);
-		model.addAttribute("approvedNetworksData",approvedNetworks);
-		model.addAttribute("rejectedNetworksData",rejectedNetworks);
+		model.addAttribute("submittedNetworksData",submittedNetworkCount.toString());
+		model.addAttribute("approvedNetworksData",approvedNetworkCount.toString());
+		model.addAttribute("rejectedNetworksData",rejectedNetworkCount.toString());
+		model.addAttribute("workspaceData",workspaceCount.toString());
 		return "sites/project/statistics";
 	}
 }

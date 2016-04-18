@@ -16,14 +16,24 @@ var labelCount = '${labelCount}';
 var submittedNetworksData = '${submittedNetworksData}';
 var approvedNetworksData = '${approvedNetworksData}';
 var rejectedNetworksData = '${rejectedNetworksData}';
+var workspaceData = '${workspaceData}';
 document.body.onload = function()
 {
 	d3ProjectStatistics(labelCount);
-	d3ProjectActivity(submittedNetworksData);
-	d3ProjectActivity(approvedNetworksData);
-	d3ProjectActivity(rejectedNetworksData);
+	d3ProjectActivity(submittedNetworksData,"submit");
+	d3ProjectActivity(approvedNetworksData,"approved");
+	d3ProjectActivity(rejectedNetworksData,"rejected");
+	d3ProjectActivity(workspaceData,"workspace");
 }
 </script> 
-<h1>Project Statistics</h1>
+<h3>Project Statistics</h3>
 <div id='stats'></div>
+<h3>Submitted Networks </h3>
+<div id='submit'></div>
+<h3>Approved Networks</h3>
+<div id='approved'></div>
+<h3>Rejected Networks</h3>
+<div id='rejected'></div>
+<h3>Workspace</h3>
+<div id='workspace'></div>
 
