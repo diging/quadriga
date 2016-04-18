@@ -31,7 +31,7 @@
 	<table width="100%">
 		<tr>
 			<td style="width: 85%"><input type="text" class="form-control"
-				placeholder="Search Public Sites Repository" name="searchTerm"
+				placeholder="Search Public Sites" name="searchTerm"
 				tabindex="1" onkeypress="handle(event)" value="${searchTerm}"
 				autocapitalize="off"></td>
 			<td style="width: 2%"></td>

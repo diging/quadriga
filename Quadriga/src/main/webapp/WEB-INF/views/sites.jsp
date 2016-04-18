@@ -26,7 +26,7 @@
 	action="${pageContext.servletContext.contextPath}/sites/searchTerm"
 	method='POST'>
 	<input type="text" class="form-control"
-		placeholder="Search Public Sites Repository" name="searchTerm"
+		placeholder="Search Public Sites" name="searchTerm"
 		tabindex="1" onkeypress="handle(event)" autocapitalize="off">
 
 	</br>
