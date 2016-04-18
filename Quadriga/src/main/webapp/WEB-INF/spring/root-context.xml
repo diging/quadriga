@@ -45,11 +45,8 @@
 	<!-- Reference the hibernate -->
 	<beans:import resource="../hibernate/hibernate.cfg.xml"/>
 
-    <bean id="executorService" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
-        <constructor-arg value="10" />
-    </bean>
     <task:executor id="executor" pool-size="5"/>
-    <task:annotation-driven executor="executorService" />
+    <task:annotation-driven executor="executor" />
 	
 	<cache:annotation-driven />
     <beans:bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
