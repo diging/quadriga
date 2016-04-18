@@ -23,10 +23,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.domain.factory.networks.INetworkXMLFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.network.INetworkXML;
 import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
 
 /**
@@ -37,11 +37,16 @@ import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
 @Service
 public class NetworkXMLParser implements INetworkXMLParser {
 
+    @Autowired
+    private INetworkXMLFactory nwXMLFactory;
+
     private INetworkXML networkXML;
 
     @Override
     @Transactional
     public INetworkXML parseXML(String xml, String projectid, String workspaceid) throws NetworkXMLParseException {
+        
+        networkXML = nwXMLFactory.createNetworkXMLObject();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         DocumentBuilder builder;

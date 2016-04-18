@@ -5,15 +5,15 @@ import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
 public class NetworkXML implements INetworkXML {
 
-    private String NetworkXMLString;
+    private String networkXMLString;
     private ITextFile textFile;
 
     public String getNetworkXMLString() {
-        return NetworkXMLString;
+        return networkXMLString;
     }
 
     public void setNetworkXMLString(String networkXMLString) {
-        NetworkXMLString = networkXMLString;
+        this.networkXMLString = networkXMLString;
     }
 
     public ITextFile getTextFile() {
