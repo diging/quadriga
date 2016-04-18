@@ -119,11 +119,11 @@ public class EventParser {
             }
 
             Node objectNode = parseSubjectOrObjectEvent(
-                    relation.getObjectType(relation).getAppellationEvent(),
+                    relation.getObjectType().getAppellationEvent(),
                     statementId, leafNodes, links);
             if (objectNode == null) {
                 objectNode = parseSubjectOrObjectEvent(
-                        relation.getObjectType(relation).getRelationEvent(),
+                        relation.getObjectType().getRelationEvent(),
                         statementId, leafNodes, links);
             }
 

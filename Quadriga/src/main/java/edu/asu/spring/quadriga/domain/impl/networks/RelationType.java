@@ -152,9 +152,9 @@ public class RelationType {
      * @param rt : RelationType
      * @return SubjectObjectType
      */
-    public SubjectObjectType getObjectType(RelationType rt){
+    public SubjectObjectType getObjectType(){
         SubjectObjectType objectType = null;
-        List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+        List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
         Iterator <JAXBElement<?>> I2 = e3.iterator();
         while(I2.hasNext()){
             JAXBElement<?> element = (JAXBElement<?>) I2.next();
