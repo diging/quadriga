@@ -34,10 +34,11 @@ public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO
             Query query = sessionFactory.getCurrentSession().getNamedQuery("AboutTextDTO.findByProjectId");
             query.setParameter("projectId", projectId);
             List<AboutTextDTO> aboutTextDTOList = query.list();
-            if (aboutTextDTOList.size() != 0)
+            if (aboutTextDTOList.size() != 0) {
                 aboutTextDTO = aboutTextDTOList.get(0);
-            else
+            } else {
                 return null;
+            }
         } catch (HibernateException e) {
             throw (new QuadrigaStorageException("System error", e));
 
@@ -50,7 +51,5 @@ public class AboutTextDAO extends BaseDAO<AboutTextDTO> implements IAboutTextDAO
     public AboutTextDTO getDTO(String id) {
         return getDTO(AboutTextDTO.class, id);
     }
-
-    
 
 }
