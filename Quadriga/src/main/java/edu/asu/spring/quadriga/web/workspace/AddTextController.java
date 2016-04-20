@@ -1,6 +1,9 @@
 package edu.asu.spring.quadriga.web.workspace;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -71,11 +74,13 @@ public class AddTextController {
     public ModelAndView addTextFileForm(@PathVariable("workspaceid") String workspaceid,
             @PathVariable("projectid") String projid) throws QuadrigaStorageException, QuadrigaAccessException {
 
+        List<String> accList = new ArrayList<>(Arrays.asList("Select", "Private", "Public"));
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
         model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
         model.getModelMap().put("workspaceId", workspaceid);
         model.getModelMap().put("myProjectId", projid);
         model.getModelMap().put("success", "0");
+        model.getModelMap().put("accessibilityList",accList);
         return model;
     }
 

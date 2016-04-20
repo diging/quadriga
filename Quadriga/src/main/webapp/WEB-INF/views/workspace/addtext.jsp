@@ -29,6 +29,10 @@
 						<td><form:errors path="fileContent" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
+					<td style="width: 170px">Accessibility</td>
+					<td><form:select path="accessibility" items="${accessibilityList}" /></td>
+					</tr>
+					<tr>
 						<td><input type="submit" value="Save Textfile"></td>
 					</tr>
 					<tr>

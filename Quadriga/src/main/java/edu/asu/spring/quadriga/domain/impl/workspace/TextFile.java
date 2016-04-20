@@ -16,7 +16,8 @@ public class TextFile implements ITextFile {
     private String textId;
     private String fileContent;
     private String refId;
-
+    private String accessibility;
+    
     @Override
     public String getFileName() {
         return fileName;
@@ -70,6 +71,14 @@ public class TextFile implements ITextFile {
 
     public void setRefId(String refId) {
         this.refId = refId;
+    }
+
+    public String getAccessibility() {
+        return accessibility;
+    }
+
+    public void setAccessibility(String accessibility) {
+        this.accessibility = accessibility;
     }
 
 }
