@@ -36,7 +36,9 @@ public class AddTextValidator implements Validator {
                 || (filename.matches("[a-zA-Z0-9_-]{3,30}[.][a-zA-Z]{2,4}$")))) {
             err.rejectValue("fileName", "filename.proper");
         }
-
+        if(txtFile.getAccessibility().equals("Select")){
+            err.rejectValue("accessibility","accessibility.required");
+        }
     }
 
 }

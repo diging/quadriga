@@ -53,6 +53,7 @@ public class AddTextController {
         binder.setValidator(txtValidator);
     }
 
+    private List<String> accList = new ArrayList<>(Arrays.asList("Select", "Private", "Public"));
     /**
      * Method to generate a view to generate a view to add new text file.
      * 
@@ -74,7 +75,7 @@ public class AddTextController {
     public ModelAndView addTextFileForm(@PathVariable("workspaceid") String workspaceid,
             @PathVariable("projectid") String projid) throws QuadrigaStorageException, QuadrigaAccessException {
 
-        List<String> accList = new ArrayList<>(Arrays.asList("Select", "Private", "Public"));
+        
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
         model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
         model.getModelMap().put("workspaceId", workspaceid);
@@ -112,12 +113,14 @@ public class AddTextController {
             RedirectAttributes redirectAttributes)
                     throws QuadrigaAccessException, QuadrigaStorageException {
 
+        
         ModelAndView model = new ModelAndView();
         model.getModelMap().put("workspaceId", workspaceid);
         model.getModelMap().put("myProjectId", projid);
         if (result.hasErrors()) {
             model.setViewName("auth/workbench/workspace/addtext");
             model.getModelMap().put("textfile", txtFile);
+            model.getModelMap().put("accessibilityList", accList);
         } else {
             model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/" + workspaceid);
             txtFile.setWorkspaceId(workspaceid);
