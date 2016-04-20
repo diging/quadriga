@@ -156,11 +156,6 @@ public class NetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
-        if (nwXML == null) {
-            String errorMsg = errorMessageRest.getErrorMsg("Unable to parse the file with text from XML");
-            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
         String res = null;
         try {
             res = networkManager.storeNetworks(nwXML.getNetworkXMLString());
