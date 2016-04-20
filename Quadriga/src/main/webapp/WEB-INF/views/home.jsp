@@ -112,7 +112,7 @@ $(document).ready(function() {
     $('.recentProjectList').each(function(key, val) {
         var date = $(val).find('.project-date-value').val()
         var dateString = getLocalDate(parseInt(date))
-        $(val).parent().find('.project-date').html(dateString)
+        $(val).find('.project-date').html(dateString)
     })
 </script>
 
