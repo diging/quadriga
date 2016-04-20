@@ -11,7 +11,19 @@
 	
 -->
  <script type="text/javascript" charset="utf8">
-	$(document).ready(function() {
+	function checkCheckboxes( id, pID ){
+		alert(id);
+		alert(pID);
+	
+	    $('#'+pID).find(':checkbox').each(function(){		    
+	       
+	    	jQuery(this).attr('checked', $('#' + id).is(':checked'));
+			
+	    });     
+
+	}
+ 	
+ $(document).ready(function() {
 		$("ul.pagination1").quickPagination({
 			pageSize: "10"
 		});
@@ -33,11 +45,8 @@
 		});
 		$("#selectAllTransformations").click(function(){
 			$(".transformationList").prop('checked',$(this).prop('checked'));
-		});
-
-			
+		});		
 	});
-	
 </script>
 <script type="text/javascript">
 $(document).ready(function () {
@@ -140,7 +149,7 @@ $(document).ready(function () {
       		<h4 class="panel-title">   
         		<div class="checkbox1" id="divProjectList"> 
         		<label>
-      				<input type="checkbox" value="${project.projectName}" id="${project.projectName}" name="project" class="projectList" onClick=myfunction(this.id);> 
+      				<input type="checkbox" value="${project.projectName}" id="checkAllNetworks" onclick="checkCheckboxes(this.id, '${project.projectName}');"  name="project" class="projectList" data-param1="${project.projectName}" > 
         		</label>
         		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#${project}" aria-expanded="true" aria-controls="${project}">
     			${project.projectName}
@@ -156,12 +165,14 @@ $(document).ready(function () {
 							<ul>							
 								<div class="container-fluid">
 								<div class="row">
+								
 								<c:if test="${not empty networkMap[project.projectName]}">
+								 <script type="text/javascript" charset="utf8">var networkArr=[];</script>
 								<c:forEach var="network" items="${networkMap[project.projectName]}">	
 									 <div class="col-md-4">
 									 <summary>
 									 <div class="selectAllNetworks" id="individualNetworks">
-										<input type="checkbox" value="${network.networkName},${project.projectName}" name="individualnetwork" class="selectAllNetworks">
+										<input type="checkbox" value="${network.networkName},${project.projectName}" name="individualnetwork" class="networks">
 										<a href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.networkId}">
 										<c:out value="${network.networkName}"></c:out>
 										</a>
