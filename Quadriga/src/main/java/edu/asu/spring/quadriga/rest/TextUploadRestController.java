@@ -3,7 +3,9 @@ package edu.asu.spring.quadriga.rest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,15 +49,14 @@ public class TextUploadRestController {
     @Autowired
     private IRestMessage errorMessageRest;
     
-
-    @Autowired
-    private ServletContext servletContext;
+    @Resource(name = "projectconstants")
+    private Properties messages;    
 
     @RequestMapping(value = "rest/project/{projectid}/workspace/{workspaceid}/uploadtext", method = RequestMethod.POST, produces = "application/xml")
     public ResponseEntity<String> uploadText(@PathVariable("workspaceid") String wsId,
             @PathVariable("projectid") String projId, HttpServletResponse response, HttpServletRequest request,
             @RequestBody String xml) throws RestException {
-
+        String textURI = messages.getProperty("textfiles_location.url");
         ITextFile txtFile = null;
         try {
             txtFile = txtXMLParser.parseTextXML(xml, wsId, projId);
@@ -84,7 +85,7 @@ public class TextUploadRestController {
             context.put("filename", txtFile.getFileName());
             context.put("wsid", txtFile.getWorkspaceId());
             context.put("projid", txtFile.getProjectId());
-            context.put("texturi","dummyuri");
+            context.put("texturi",textURI+"/"+"dummy");
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             HttpHeaders httpHeaders = new HttpHeaders();

@@ -60,7 +60,7 @@
         
     
      <beans:bean id="txtfileSaveUtil" class="edu.asu.spring.quadriga.utilities.impl.FileSaveUtility">
-     		<beans:property name="textFileLocation" value="${textfile.url}"/>
+     		<beans:property name="textFileLocation" value="${textfiles.location}"/>
         </beans:bean>
 	</beans:beans>
 
