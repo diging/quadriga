@@ -207,3 +207,4 @@ public class QStoreConnector implements IQStoreConnector {
         return "Basic " + new String(encodedAuth);
     }
 }
+
