@@ -30,7 +30,7 @@
 		<quadriga.admin.username>admin</quadriga.admin.username>
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
-		<textfile.location>/users/nischalsamji</textfile.location>
+		<textfiles.location>/users/nischalsamji</textfiles.location>
 	</properties>
 
 	<dependencies>
