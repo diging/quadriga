@@ -10,6 +10,7 @@
 		var titles = $("#title" + idValue).val();
 		var desc = $("#description" + idValue).val();
 		var order = $("#order" + idValue).val();
+		console.log(order);
 		var mandatory = 0;
 		if (titles.length < 1) {
 			$("#title_err" + idValue).html("Please provide a title");
@@ -23,7 +24,7 @@
 		} else {
 			$("#desc_err" + idValue).html('');
 		}
-		if (order != 1 && order != 2 && order != 3) {
+		if (order == "select") {
 			$("#order_err" + idValue).html("Possible values are 1, 2, or 3.");
 			mandatory = 1
 		} else {
@@ -77,8 +78,13 @@
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
-				<td style="width: 1px"><form:input type="number" path="order"
-						size="60" id="order1" /></td>
+				<td style="width: 1px">
+				<select id="order1" path="order">
+				  <option selected value="select">--Select--</option>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				</select>
 				<td><div id="order_err1"></div></td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
@@ -107,8 +113,13 @@
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
-				<td style="width: 1px"><form:input type="number" path="order"
-						size="60" id="order2" /></td>
+				<td style="width: 1px">
+				<select id="order2" path="order">
+				  <option selected value="select">--Select--</option>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				</select>
 				<td><div id="order_err2"></div></td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
@@ -136,8 +147,13 @@
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
-				<td style="width: 1px"><form:input type="number" path="order"
-						size="60" id="order3" /></td>
+				<td style="width: 1px">
+				<select id="order3" path="order">
+				  <option selected value="select">--Select--</option>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				</select>
 				<td><div id="order_err3"></div></td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>

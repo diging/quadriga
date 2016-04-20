@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.web.workbench;
 
-import java.util.Properties;
-import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
@@ -25,9 +24,10 @@ public class PublicPageController {
 
     @Autowired
     private IPublicPageFactory publicPageFactory;
-
-    @Resource(name = "projectconstants")
-    private Properties messages;
+    
+    //This will be uncommented in QUAD-111
+    /*@Autowired
+    private IModifyPublicPageContentManager publicPageContentManager;*/
 
     /**
      * This method is called during the load of Public page settings form
@@ -55,16 +55,14 @@ public class PublicPageController {
      */
 
     @RequestMapping(method = RequestMethod.POST, value = "auth/workbench/{projectid}/addpublicpagesuccess")
-    public @ResponseBody ResponseEntity<String> getExistingConcepts(
+    public @ResponseBody ResponseEntity<String> addpublicpagesuccess(
             @RequestParam("data") String data)
             throws QuadrigaStorageException, QuadrigaAccessException {
         if (data.isEmpty())
             return null;
-        try {
+        else
+            //Manager class will be called here
             return new ResponseEntity<String>("Successfully updated",
                     HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 }
