@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
-import edu.asu.spring.quadriga.dao.workspace.IListExternalWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IExternalWsDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.service.workspace.IExternalWSManager;
 public class ExternalWSManager implements IExternalWSManager {
 
     @Autowired
-    private IListExternalWsDAO externalWorkspaceDAO;
+    private IExternalWsDAO externalWorkspaceDAO;
 
     @Autowired
     private IProjectDAO projectDao;
@@ -36,7 +36,11 @@ public class ExternalWSManager implements IExternalWSManager {
     @Override
     public boolean isExternalWorkspaceExists(String externalWorkspaceId)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        return externalWorkspaceDAO.isExternalWorkspaceExists(externalWorkspaceId);
+        ExternalWorkspaceDTO externalWorkspaceDTO = externalWorkspaceDAO.getExternalWorkspace(externalWorkspaceId);
+        if (externalWorkspaceDTO != null) {
+            return true;
+        }
+        return false;
     }
 
     @Override

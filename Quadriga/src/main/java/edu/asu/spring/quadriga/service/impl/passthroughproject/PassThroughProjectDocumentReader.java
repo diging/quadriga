@@ -95,7 +95,7 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
     }
 
     @Override
-    public String getWorsapceID(Document document, String projectId, String userid)
+    public String getWorkspaceID(Document document, String projectId, String userid)
             throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
 
         String workspaceName = getTagValue(document, "workspace");

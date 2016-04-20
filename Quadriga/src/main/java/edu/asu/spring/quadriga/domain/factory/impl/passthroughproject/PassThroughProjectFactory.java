@@ -6,6 +6,10 @@ import edu.asu.spring.quadriga.domain.factory.passthroughproject.IPassThroughPro
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProject;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 
+/**
+ * Factory class for creating {@link PassThroughProject}
+ * 
+ */
 @Service
 public class PassThroughProjectFactory implements IPassThroughProjectFactory {
 

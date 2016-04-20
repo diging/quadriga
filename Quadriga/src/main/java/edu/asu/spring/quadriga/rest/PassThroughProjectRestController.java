@@ -24,6 +24,11 @@ import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 
+/**
+ * 
+ * Controller for pass through projects rest apis exposed to other clients
+ *
+ */
 @Controller
 public class PassThroughProjectRestController {
 

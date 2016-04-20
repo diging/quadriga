@@ -18,7 +18,7 @@ public interface IPassThroughProjectDocumentReader {
 
     String getProjectID(Document document, String userid) throws QuadrigaStorageException, NoSuchRoleException;
 
-    String getWorsapceID(Document document, String projectId, String userid)
+    String getWorkspaceID(Document document, String projectId, String userid)
             throws JAXBException, QuadrigaStorageException, QuadrigaAccessException;
 
     String getAnnotateData(String xml);
