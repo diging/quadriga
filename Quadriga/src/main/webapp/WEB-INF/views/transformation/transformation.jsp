@@ -140,7 +140,7 @@ $(document).ready(function () {
       		<h4 class="panel-title">   
         		<div class="checkbox1" id="divProjectList"> 
         		<label>
-      				<input type="checkbox" value="${project.projectName}" id="${project.projectName}" name="project" class="projectList"> 
+      				<input type="checkbox" value="${project.projectName}" id="${project.projectName}" name="project" class="projectList" onClick=myfunction(this.id);> 
         		</label>
         		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#${project}" aria-expanded="true" aria-controls="${project}">
     			${project.projectName}
