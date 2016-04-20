@@ -36,6 +36,7 @@ import edu.asu.spring.quadriga.domain.factory.networks.INetworkXMLFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetworkXML;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
@@ -88,7 +89,7 @@ public class NetworkRestController {
 
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
-    
+
     @Autowired
     private INetworkXMLFactory nwXMLfactory;
 
@@ -173,19 +174,19 @@ public class NetworkRestController {
         String networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid,
                 INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
 
-        // TODO: Send email to all editors of a workspace
-        // TODO: Get the workspace editors from the workspaceid
+        ITextFile textFileContent = nwXML.getTextFile();
 
-        try {
-            tfManager.saveTextFile(nwXML.getTextFile());
-        } catch (FileStorageException e) {
-            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
-            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (QuadrigaStorageException e) {
-            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
-            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+        if (textFileContent != null) {
+            try {
+                tfManager.saveTextFile(textFileContent);
+            } catch (FileStorageException e) {
+                String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+                return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (QuadrigaStorageException e) {
+                String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+                return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.valueOf(accept));
         httpHeaders.set("networkid", networkId);
