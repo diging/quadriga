@@ -24,10 +24,16 @@ import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
+import edu.asu.spring.quadriga.rest.PassThroughProjectRestController;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDocumentReader;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 
+/**
+ * 
+ * This class contains utility methods to process the xml file submitted to
+ * {@link PassThroughProjectRestController}
+ */
 @Service
 public class PassThroughProjectDocumentReader implements IPassThroughProjectDocumentReader {
 
@@ -95,7 +101,7 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
     }
 
     @Override
-    public String getWorsapceID(Document document, String projectId, String userid)
+    public String getWorkspaceID(Document document, String projectId, String userid)
             throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
 
         String workspaceName = getTagValue(document, "workspace");

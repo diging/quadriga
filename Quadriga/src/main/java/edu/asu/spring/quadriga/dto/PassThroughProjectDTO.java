@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.dto;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -22,19 +21,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class PassThroughProjectDTO extends ProjectDTO {
     private static final long serialVersionUID = 1L;
 
-    @Basic(optional = false)
     @Column(name = "externaluserid")
     private String externalUserId;
 
-    @Basic(optional = false)
     @Column(name = "externalusername")
     private String externalUserName;
 
-    @Basic(optional = false)
     @Column(name = "client")
     private String client;
 
-    @Basic(optional = false)
     @Column(name = "externalprojectid")
     private String externalProjectid;
 

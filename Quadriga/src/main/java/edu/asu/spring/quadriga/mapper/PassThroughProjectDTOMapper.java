@@ -9,6 +9,11 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 
+/**
+ * The purpose of this class is to map the PassThroughProjectDTO class objects
+ * to the PassThroughProject domain objects used in Quadriga
+ * 
+ */
 @Service
 public class PassThroughProjectDTOMapper extends BaseMapper {
 

@@ -15,17 +15,21 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
+import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.PassThroughProjectDTOMapper;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
+import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDocumentReader;
@@ -33,6 +37,13 @@ import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectMan
 import edu.asu.spring.quadriga.service.workspace.IExternalWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
+/**
+ * 
+ * This class has all the Pass through project service layer functions. It
+ * includes the handling DB and controller services.
+ * 
+ *
+ */
 @Service
 public class PassThroughProjectManager extends BaseManager implements IPassThroughProjectManager {
 
@@ -51,6 +62,15 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Autowired
     private IProjectSecurityChecker projectSecurityChecker;
 
+    @Autowired
+    private IUserManager userManager;
+
+    @Autowired
+    private IUserDAO userDAO;
+
+    @Autowired
+    private PassThroughProjectDTOMapper projectMapper;
+
     @Resource(name = "projectconstants")
     private Properties messages;
 
@@ -60,7 +80,17 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Override
     @Transactional
     public String addPassThroughProject(String userid, IPassThroughProject project) throws QuadrigaStorageException {
-        return projectDao.addPassThroughProject(userid, project);
+        String projectId = projectDao.generateUniqueID();
+        QuadrigaUserDTO owner = userDAO.getDTO(userid);
+        IUser user = userManager.getUser(userid);
+
+        PassThroughProjectDTO projectDTO = projectMapper.getPassThroughProjectDTO(project, user);
+        projectDTO.setProjectid(projectId);
+        projectDTO.setProjectowner(owner);
+
+        projectDao.addPassThroughProject(projectDTO);
+
+        return projectId;
     }
 
     @Override
@@ -95,7 +125,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
             String projectId = passThroughProjectDocumentReader.getProjectID(document, userid);
 
-            String workspaceId = passThroughProjectDocumentReader.getWorsapceID(document, projectId, userid);
+            String workspaceId = passThroughProjectDocumentReader.getWorkspaceID(document, projectId, userid);
 
             String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
             String responseFromQStore = networkManager.storeNetworks(annotatedText);

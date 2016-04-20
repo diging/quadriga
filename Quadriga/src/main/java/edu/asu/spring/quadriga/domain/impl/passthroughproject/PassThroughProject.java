@@ -1,11 +1,13 @@
 package edu.asu.spring.quadriga.domain.impl.passthroughproject;
 
-import org.springframework.stereotype.Service;
-
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 
-@Service
+/**
+ * @description PassThroughProject class describing the properties of a
+ *              PassThroughProject object
+ *
+ */
 public class PassThroughProject extends Project implements IPassThroughProject {
     private String externalUserId;
 

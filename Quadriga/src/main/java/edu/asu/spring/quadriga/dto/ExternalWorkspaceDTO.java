@@ -1,12 +1,15 @@
 package edu.asu.spring.quadriga.dto;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * This class represents the column mappings for the workspace table.
+ * 
+ */
 @Entity
 @XmlRootElement
 @NamedQueries({ @NamedQuery(name = "ExternalWorkspaceDTO.findAll", query = "SELECT w FROM ExternalWorkspaceDTO w"),
@@ -15,12 +18,8 @@ import javax.xml.bind.annotation.XmlRootElement;
         @NamedQuery(name = "ExternalWorkspaceDTO.getWorkspaceIdFromExternalWorkspaceId", query = "SELECT w.workspaceid FROM ExternalWorkspaceDTO w WHERE w.externalWorkspaceid = :externalWorkspaceid"), })
 public class ExternalWorkspaceDTO extends WorkspaceDTO {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
-    @Basic(optional = false)
     @Column(name = "externalWorkspaceid")
     private String externalWorkspaceid;
 

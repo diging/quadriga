@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
-import edu.asu.spring.quadriga.dao.workspace.IListExternalWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IExternalWsDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
@@ -18,11 +18,18 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 import edu.asu.spring.quadriga.service.workspace.IExternalWSManager;
 
+/**
+ * 
+ * This class has all the service layer functions to modify and get external
+ * workspace information.
+ * 
+ *
+ */
 @Service
 public class ExternalWSManager implements IExternalWSManager {
 
     @Autowired
-    private IListExternalWsDAO externalWorkspaceDAO;
+    private IExternalWsDAO externalWorkspaceDAO;
 
     @Autowired
     private IProjectDAO projectDao;
@@ -36,7 +43,11 @@ public class ExternalWSManager implements IExternalWSManager {
     @Override
     public boolean isExternalWorkspaceExists(String externalWorkspaceId)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        return externalWorkspaceDAO.isExternalWorkspaceExists(externalWorkspaceId);
+        ExternalWorkspaceDTO externalWorkspaceDTO = externalWorkspaceDAO.getExternalWorkspace(externalWorkspaceId);
+        if (externalWorkspaceDTO != null) {
+            return true;
+        }
+        return false;
     }
 
     @Override
