@@ -48,18 +48,13 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
             tfDTO = (List<TextFileDTO>) query.list();
         } catch (HibernateException e) {
             logger.error("TextFile List associated with workspace id"+wsId, e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return tfDTO;
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.asu.spring.quadriga.dao.impl.BaseDAO#getDTO(java.lang.String)
-     * Returns a Text DTO for db operations
-     */
+    
     @Override
     public TextFileDTO getDTO(String id) {
         return getDTO(TextFileDTO.class, id);
