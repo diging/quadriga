@@ -40,8 +40,8 @@
 			
 			<tr>
 				<td colspan=2><form:textarea path="title" id="title"
-						placeholder="Enter Title Here"
-						style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center" /><br>
+						placeholder="Enter Title"
+						style="width: 100%; border : solid 1px; height: 84px; border-color : #D3D3D3; font-weight: bold; font-size: 24px; vertical-align: bottom; align: center; text-align: center; padding : 20px 0" /><br>
 				</td>
 			</tr>
 			<tr>

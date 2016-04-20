@@ -15,15 +15,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface IProjectBlogEntryDAO extends IBaseDAO<ProjectBlogEntryDTO> {
 
     /**
-     * fetches {@linkplain ProjectBlogEntryDTO} instance when project blog id is
-     * provided
-     * 
-     * @param id
-     * @return
-     */
-    ProjectBlogEntryDTO getProjectBlogEntryDTO(String id);
-
-    /**
      * fetches the list of project blog entries for given project when project
      * id is provided
      * 

@@ -39,16 +39,8 @@ public class ProjectBlogEntryDAO extends BaseDAO<ProjectBlogEntryDTO> implements
      * {@inheritDoc}
      */
     @Override
-    public ProjectBlogEntryDTO getProjectBlogEntryDTO(String id) {
-        return getDTO(ProjectBlogEntryDTO.class, id);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public ProjectBlogEntryDTO getDTO(String id) {
-        return getProjectBlogEntryDTO(id);
+        return getDTO(ProjectBlogEntryDTO.class, id);
     }
 
     /**

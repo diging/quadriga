@@ -30,7 +30,7 @@
 					<div class="panel panel-default">
 
 						<div class="panel-heading">
-							<h3>${projectBlogEntry.title}</h3>
+							<h3 style="margin-top: 10px">${projectBlogEntry.title}</h3>
 						</div>
 
 						<div class="panel-body">
