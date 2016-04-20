@@ -6,10 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.asu.spring.quadriga.conceptpower.impl.ConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
-import edu.asu.spring.quadriga.transform.TransformNode;
-
+//import edu.asu.spring.quadriga.transform.TransformNode;
+import edu.asu.spring.quadriga.service.network.transform.impl.TransformNode;
 /**
  * This class matches multiple original file and
  * the mapping file to find matching graph amongst them.
@@ -27,6 +28,7 @@ public class MatchGraphs {
 	private List<CreationEvent> events;
 	// total number of nodes to find match from
 	private int totalNodes = 0;
+	private ConceptpowerConnector conceptpower;
 	/*
 	 * This would store the list of nodes found from a single mapping between
 	 * original and mapping file
@@ -55,10 +57,12 @@ public class MatchGraphs {
 		if (fileMapping != null && events != null) {
 			for (ITransformation m : fileMapping) {
 				GraphMapper mapper = new GraphMapper();
-				EventGraphMapper eventMapper = new EventGraphMapper();
+				EventGraphMapper eventMapper = new EventGraphMapper(conceptpower);
 				List<TransformNode> nodes = new ArrayList<TransformNode>();
 				List<Node> foundNodes = new ArrayList<Node>();
-				String orgFilePath = ResourceProvider.getWorkspacePath()
+
+				// Path of the transformation file that will be retrieved from db using DTO which is uploaded in quad-138
+				String orgFilePath = "";/*ResourceProvider.getWorkspacePath()
 						+ m.getOrigFile()
 								.replace(
 										("." + FileConstants.GRAPHML_FILEEXTENSION),
@@ -67,16 +71,18 @@ public class MatchGraphs {
 														m.getMappingKey()
 																.length() - 4)
 														+ "." + FileConstants.GRAPHML_FILEEXTENSION));
-				mapper.createGraph(orgFilePath);
+	*/			mapper.createGraph(orgFilePath);
 				/*
 				 * Get the Path provided by user, to retrieve Concepts, from the
 				 * select Page
 				 */
-				eventMapper.buildGraphs(events, selectPage.getConceptPath());
+				eventMapper.buildGraphs(events, ""/*selectPage.getConceptPath()*/);
 				totalNodes = eventMapper.getStartNodes().size();
 				foundNodes = finder.findPattern(eventMapper.getStartNodes(),
 						mapper.getStartNode());
-				String mappingFilePath = ResourceProvider.getWorkspacePath()
+				
+				// Path that will be retrieved from db using DTO which is uploaded in quad-138
+				String mappingFilePath =""; /*ResourceProvider.getWorkspacePath()
 						+ m.getMappingFile()
 								.replace(
 										("." + FileConstants.GRAPHML_FILEEXTENSION),
@@ -84,7 +90,7 @@ public class MatchGraphs {
 												+ (m.getMappingKey().substring(
 														m.getMappingKey()
 																.length() - 4)
-														+ "." + FileConstants.GRAPHML_FILEEXTENSION));
+														+ "." + FileConstants.GRAPHML_FILEEXTENSION));*/
 				mapper.createMapping(mappingFilePath);
 
 				nodes = transformer.transform(foundNodes,
@@ -142,10 +148,10 @@ public class MatchGraphs {
 			 * To transform we pass the Transform nodes and the selected Concept
 			 * URL path and the template to which result is to map.
 			 */
-			turtle = transformer.getXGMML(nodesList,
-					selectPage.getConceptPath(), selectPage.getTemplatePath(),
+/*			turtle = transformer.getXGMML(nodesList,
+				"",""	selectPage.getConceptPath(), selectPage.getTemplatePath(),
 					isMergeDuplicateNodes);
-
+*/
 		}
 		return turtle;
 	}
