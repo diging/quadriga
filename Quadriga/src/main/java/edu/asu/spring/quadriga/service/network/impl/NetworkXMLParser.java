@@ -40,13 +40,10 @@ public class NetworkXMLParser implements INetworkXMLParser {
     @Autowired
     private INetworkXMLFactory nwXMLFactory;
 
-    private INetworkXML networkXML;
-
     @Override
     @Transactional
     public INetworkXML parseXML(String xml, String projectid, String workspaceid) throws NetworkXMLParseException {
-        
-        networkXML = nwXMLFactory.createNetworkXMLObject();
+        INetworkXML networkXML = nwXMLFactory.createNetworkXMLObject();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         DocumentBuilder builder;
