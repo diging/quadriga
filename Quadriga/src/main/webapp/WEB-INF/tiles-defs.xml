@@ -677,14 +677,14 @@
 			value="/WEB-INF/views/exceptions/storageissue.jsp" />
 	</definition>
 	<definition name="auth/accessissue" extends="base.definition">
-		<put-attribute name="title" value="Quadriga - Acces issue" />
+		<put-attribute name="title" value="Quadriga - Access issue" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/exceptions/accessissue.jsp" />
 	</definition>
 	<definition name="404" extends="base.definition.public">
 		<put-attribute name="title" value="Quadriga - Page Not Found" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/exceptions/404.jsp" />
+		<put-attribute name="navigation" value="" />
+		<put-attribute name="content" value="/WEB-INF/views/exceptions/404.jsp" />
 	</definition>
 
 	<!-- Networks -->
@@ -875,7 +875,21 @@
 			value="/WEB-INF/views/editing/networkshistory.jsp" />
 	</definition>
 
+	<definition name="base.definition.public.sites" 
+		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp" >
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation" value="" />
+		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="currentPage" value="sites" />
+	</definition>
 
+	<!-- Sites pages -->
+	<definition name="sites" extends="base.definition.public.sites">
+		<put-attribute name="title" value="Quadriga - Public Sites" />
+		<put-attribute name="navigation"
+			value="/WEB-INF/views/public/sitesnavbarleft.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
+	</definition>
 </tiles-definitions>
 
 	

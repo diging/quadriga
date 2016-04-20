@@ -2,19 +2,19 @@ package edu.asu.spring.quadriga.domain.settings;
 
 public interface IAboutText {
 
-	public String getId();
+    public String getId();
 
-	public void setId(String id);
+    public void setId(String id);
 
-	public String getProjectId();
+    public String getProjectId();
 
-	public void setProjectId(String projectId);
+    public void setProjectId(String projectId);
 
-	public String getTitle();
+    public String getTitle();
 
-	public void setTitle(String title);
+    public void setTitle(String title);
 
-	public String getDescription();
+    public String getDescription();
 
-	public void setDescription(String description);
+    public void setDescription(String description);
 }

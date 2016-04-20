@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.impl.publicwebsite;
 
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,28 +19,29 @@ import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 @Service
 public class AboutTextManager implements IAboutTextManager {
 
-	@Autowired
-	private IAboutTextDAO aboutTextDAO;
+    @Autowired
+    private IAboutTextDAO aboutTextDAO;
 
-	@Transactional
-	@Override
-	public void saveAbout(String projectId, String title, String description) throws QuadrigaStorageException {
-		AboutTextDTO aboutTextDTO;
-		aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
-		
-		if (aboutTextDTO == null)
-			aboutTextDTO = new AboutTextDTO();
+    @Transactional
+    @Override
+    public void saveAbout(String projectId, String title, String description) throws QuadrigaStorageException {
 
-		aboutTextDTO.setProjectId(projectId);
-		aboutTextDTO.setTitle(title);
-		aboutTextDTO.setDescription(description);
-		aboutTextDAO.saveNewDTO(aboutTextDTO);
-	}
+        AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
 
-	@Transactional
-	@Override
-	public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException {
-		return aboutTextDAO.getDTOByProjectId(projectId);
-	}
+        if (aboutTextDTO == null) {
+            aboutTextDTO = new AboutTextDTO();
+            aboutTextDTO.setId(aboutTextDAO.generateUniqueID());
+        }
+        aboutTextDTO.setProjectId(projectId);
+        aboutTextDTO.setTitle(title);
+        aboutTextDTO.setDescription(description);
+        aboutTextDAO.saveOrUpdateDTO(aboutTextDTO);
+    }
+
+    @Transactional
+    @Override
+    public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException {
+        return aboutTextDAO.getDTOByProjectId(projectId);
+    }
 
 }

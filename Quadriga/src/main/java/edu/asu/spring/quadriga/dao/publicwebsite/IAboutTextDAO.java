@@ -13,6 +13,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IAboutTextDAO extends IBaseDAO<AboutTextDTO> {
 
-	AboutTextDTO getDTOByProjectId(String projectId) throws QuadrigaStorageException;
+    AboutTextDTO getDTOByProjectId(String projectId) throws QuadrigaStorageException;
+    
 
 }

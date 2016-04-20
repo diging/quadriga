@@ -32,44 +32,43 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class WebsiteAboutEditController {
 
-	@Autowired
-	private IRetrieveProjectManager projectManager;
+    @Autowired
+    private IAboutTextManager aboutTextManager;
 
-	@Autowired
-	private IAboutTextManager aboutTextManager;
+    @Autowired
+    private IRetrieveProjectManager projectManager;
+    
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/projects/{ProjectId}/settings/editabout", method = RequestMethod.GET)
+    public String editAbout(@PathVariable("ProjectId") String projectId, Model model, Principal principal)
+            throws QuadrigaStorageException {
+        model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
+        IProject project = projectManager.getProjectDetails(projectId);
+        model.addAttribute("project", project);
+        return "auth/editabout";
+    }
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-		@RequestMapping(value = "auth/workbench/projects/{ProjectUnixName}/settings/editabout", method = RequestMethod.GET)
-		public String editAbout(@PathVariable("ProjectUnixName") String unixName, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project, Model model,
-				Principal principal) throws QuadrigaStorageException {
-			model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(project.getProjectId()));
-			model.addAttribute("project", project);
-			return "auth/editabout";
-		}
+    /**
+     * . Any change made in the about project page is updated into the database
+     * here and a "You successfully edited the about text" message is displayed.
+     * 
+     * @author Rajat Aggarwal
+     *
+     */
 
-	/**
-	 * . Any change made in the about project page is updated into the database
-	 * here and a "You successfully edited the about text" message is displayed.
-	 * 
-	 * @author Rajat Aggarwal
-	 *
-	 */
-
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/projects/{ProjectUnixName}/settings/saveabout", method = RequestMethod.POST)
-	public String saveAbout(@PathVariable("ProjectUnixName") String unixName,
-			@InjectProject(unixNameParameter = "ProjectUnixName") IProject project,
-			@ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Model model, Principal principal)
-			throws QuadrigaStorageException {
-		String projectId = project.getProjectId();
-		aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
-		model.addAttribute("show_success_alert", true);
-		model.addAttribute("success_alert_msg", "You successfully edited the about text");
-		model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
-		model.addAttribute("project", project);
-		return "auth/editabout";
-	}
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/projects/{ProjectId}/settings/saveabout", method = RequestMethod.POST)
+    public String saveAbout(@PathVariable("ProjectId") String projectId, @ModelAttribute("AboutTextBackingBean") AboutTextBackingBean formBean, Model model, Principal principal)
+            throws QuadrigaStorageException {
+        aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
+        IProject project = projectManager.getProjectDetails(projectId);
+        model.addAttribute("show_success_alert", true);
+        model.addAttribute("success_alert_msg", "You successfully edited the about text");
+        model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));
+        model.addAttribute("project", project);
+        return "auth/editabout";
+    }
 
 }
