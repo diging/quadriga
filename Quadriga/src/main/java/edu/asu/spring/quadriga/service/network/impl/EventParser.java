@@ -118,11 +118,11 @@ public class EventParser {
             }
 
             Node objectNode = parseSubjectOrObjectEvent(
-                    relation.getObjectType(relation).getAppellationEvent(),
+                    relation.getObjectType().getAppellationEvent(),
                     statementId, leafNodes, links);
             if (objectNode == null) {
                 objectNode = parseSubjectOrObjectEvent(
-                        relation.getObjectType(relation).getRelationEvent(),
+                        relation.getObjectType().getRelationEvent(),
                         statementId, leafNodes, links);
             }
 
@@ -174,7 +174,7 @@ public class EventParser {
             label.append(type.getTermInterpertation());
             label.append(" ");
         }
-        node.setId(event.getAppellationEventID());
+        node.setId(event.getId());
         node.setConceptId(label.toString().trim());
         // set the source reference
         node.setSourceReference(event.getSourceReference());
