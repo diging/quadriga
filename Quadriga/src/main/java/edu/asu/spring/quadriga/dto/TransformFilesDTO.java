@@ -4,7 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.io.Serializable;
+
 import javax.persistence.Id;
 
 /**
@@ -25,32 +27,35 @@ public class TransformFilesDTO implements Serializable {
 	String title;
 	@Column(name="Description")
 	String description;
+	@Column(name = "Pattern_FileName")
+	private String patternFileName;
+	@Column(name = "Pattern_Title")
+	private String patternTitle;
+	@Column(name = "Pattern_Description")
+	private String patternDescription;
+	@Column(name = "Mapping_FileName")
+	private String mappingFileName;
 	@Column(name = "Mapping_Title")	
 	private String mappingTitle;
 	@Column(name = "Mapping_Description")
 	private String mappingDescription;
-	@Column(name = "MappingFile")
-	private String mappingFile;
-	@Column(name = "Transform_Title")
-	private String transfomationTitle;
-	@Column(name = "TransformDescription")
-	private String transformationDescription;
-	@Column(name = "Transform_File")
-	private String transformFile;
 
-	public TransformFilesDTO(String title, String description, String mappingTitle,
-			String mappingDescription, String mappingFile,
-			String transfomationTitle, String transformationDescription,
-			String transfomrFile) {
+	public TransformFilesDTO() {
+		super();
+	}
+
+	public TransformFilesDTO(String title, String description,
+			 String patternFileName, String patternTitle, String patternDescription,
+			 String mappingFileName,String mappingTitle, String mappingDescription) {
 		super();
 		this.title = title;
 		this.description = description;
+		this.patternTitle = patternTitle;
+		this.patternDescription = patternDescription;
+		this.patternFileName = patternFileName;
 		this.mappingTitle = mappingTitle;
 		this.mappingDescription = mappingDescription;
-		this.mappingFile = mappingFile;
-		this.transfomationTitle = transfomationTitle;
-		this.transformationDescription = transformationDescription;
-		this.transformFile = transfomrFile;
+		this.mappingFileName = mappingFileName;
 	}
 
 	public String getId() {
@@ -77,36 +82,57 @@ public class TransformFilesDTO implements Serializable {
 		this.mappingDescription = mappingDescription;
 	}
 
-	public String getTransfomationTitle() {
-		return transfomationTitle;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setTransfomationTitle(String transfomationTitle) {
-		this.transfomationTitle = transfomationTitle;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getTransformationDescription() {
-		return transformationDescription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setTransformationDescription(String transformationDescription) {
-		this.transformationDescription = transformationDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public String getMappingFile() {
-		return mappingFile;
+	public String getPatternTitle() {
+		return patternTitle;
 	}
 
-	public void setMappingFile(String mappingFile) {
-		this.mappingFile = mappingFile;
+	public void setPatternTitle(String patternTitle) {
+		this.patternTitle = patternTitle;
 	}
 
-	public String getTransformFile() {
-		return transformFile;
+	public String getPatternDescription() {
+		return patternDescription;
 	}
 
-	public void setTransformFile(String transformFile) {
-		this.transformFile = transformFile;
+	public void setPatternDescription(String patternDescription) {
+		this.patternDescription = patternDescription;
 	}
+
+	public String getPatternFileName() {
+		return patternFileName;
+	}
+
+	public void setPatternFile(String patternFileName) {
+		this.patternFileName = patternFileName;
+	}
+
+	public String getMappingFileName() {
+		return mappingFileName;
+	}
+
+	public void setMappingFile(String mappingFileName) {
+		this.mappingFileName = mappingFileName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 
 }

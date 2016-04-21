@@ -10,19 +10,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
  *
  */
 @Controller
-public class ShowTranformationFilesUI {
+public class ShowTranformationFilesUiController {
 	
-	@RequestMapping( value="auth/transformation/selectTransformationFiles",method=RequestMethod.GET)
 	/**
 	 * 
-	 * @param model
-	 * @param principal
-	 * @param request
 	 * This method will show uploadTranformation.jsp to user 
 	 * @return
 	 */
-	public String selectTransformationFiles(HttpServletRequest request){		
-		/*request.setAttribute("success", 0);*/
+	@RequestMapping( value="auth/transformation/selectTransformationFiles",method=RequestMethod.GET)	
+	public String selectTransformationFiles(HttpServletRequest request){				
 		return "auth/uploadTransformation";
 	}
 }

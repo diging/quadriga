@@ -10,7 +10,12 @@ package edu.asu.spring.quadriga.web.transformation;
 public class TransformFilesBackingBean {
 
 	private String title;
-    private String description;
+    private String description;	
+	private String patternTitle;
+	private String patternDescription;
+	private String mappingTitle;
+	private String mappingDescription;
+
 	public String getTitle() {
 		return title;
 	}
@@ -27,11 +32,6 @@ public class TransformFilesBackingBean {
 		this.description = description;
 	}
 
-	private String mappingTitle;
-	private String mappingDescription;
-	private String transformTitle;
-	private String transformDescription;
-    
 	public String getMappingTitle() {
 		return mappingTitle;
 	}
@@ -48,20 +48,20 @@ public class TransformFilesBackingBean {
 		this.mappingDescription = mappingDescription;
 	}
 
-	public String getTransformTitle() {
-		return transformTitle;
+	public String getPatternTitle() {
+		return patternTitle;
 	}
 
-	public void setTransformTitle(String transformTitle) {
-		this.transformTitle = transformTitle;
+	public void setPatternTitle(String patternTitle) {
+		this.patternTitle = patternTitle;
 	}
 
-	public String getTransformDescription() {
-		return transformDescription;
+	public String getPatternDescription() {
+		return patternDescription;
 	}
 
-	public void setTransformDescription(String transformDescription) {
-		this.transformDescription = transformDescription;
+	public void setPatternDescription(String patternDescription) {
+		this.patternDescription = patternDescription;
 	}
 
 }

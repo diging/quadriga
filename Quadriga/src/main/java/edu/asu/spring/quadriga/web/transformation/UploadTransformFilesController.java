@@ -31,15 +31,15 @@ public class UploadTransformFilesController {
 		String title = formBean.getTitle();
 		String description = formBean.getDescription();
 		
+		String patternTitle= formBean.getPatternTitle();		
+		String patternDescription = formBean.getPatternDescription();	    
+		String patternFileName=file[0].getOriginalFilename();
+		
 		String mappingTitle = formBean.getMappingTitle();
 		String mappingDescription=formBean.getMappingDescription();				
-		String mappingFileName = file[0].getOriginalFilename();
-		
-		String transformTitle= formBean.getTransformTitle();		
-		String transformDescription = formBean.getTransformDescription();	    
-		String transfomrFileName=file[1].getOriginalFilename();
-	    		
-		uploadTnfmManager.saveTransformation(title, description, mappingFileName, mappingTitle, mappingDescription, transfomrFileName, transformTitle, transformDescription );
+		String mappingFileName = file[1].getOriginalFilename();
+					    		
+		uploadTnfmManager.saveTransformation(title, description, patternFileName, patternTitle, patternDescription, mappingFileName, mappingTitle, mappingDescription);
 		//Only meta data is being saved in database. Saving files is not yet done..  		
 		
 		map.addAttribute("show_success_alert",true);
