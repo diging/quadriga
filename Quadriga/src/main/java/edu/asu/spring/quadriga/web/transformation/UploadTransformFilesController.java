@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 public class UploadTransformFilesController {
 
 	@Autowired
-	private ITransformationManager uploadTnfmManager;
+	private ITransformationManager transformationManager;
 	
 	@RequestMapping(value="auth/transformation/upload",method=RequestMethod.POST)
 	public String uploadTransformFiles(@ModelAttribute("TransformationFilesBackingBean") TransformFilesBackingBean formBean, ModelMap map, 
@@ -39,7 +39,7 @@ public class UploadTransformFilesController {
 		String mappingDescription=formBean.getMappingDescription();				
 		String mappingFileName = file[1].getOriginalFilename();
 					    		
-		uploadTnfmManager.saveTransformation(title, description, patternFileName, patternTitle, patternDescription, mappingFileName, mappingTitle, mappingDescription);
+		transformationManager.saveTransformation(title, description, patternFileName, patternTitle, patternDescription, mappingFileName, mappingTitle, mappingDescription);
 		//Only meta data is being saved in database. Saving files is not yet done..  		
 		
 		map.addAttribute("show_success_alert",true);
