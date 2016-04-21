@@ -39,9 +39,6 @@ public class ProjectBlogEntryDTOMapperTest {
     private static final String PROJECT_ID = "PROJ_ID_DUMMY";
 
     @Mock
-    ProjectBlogEntryDTOMapper projectBlogEntryDTOMapper = Mockito.mock(ProjectBlogEntryDTOMapper.class);
-
-    @Mock
     IUserManager userManager = Mockito.mock(UserManager.class);
 
     @InjectMocks
@@ -89,12 +86,12 @@ public class ProjectBlogEntryDTOMapperTest {
     }
 
     private void assertProjectBlogEntryMapping(IProjectBlogEntry projectBlogEntry) {
-        assertEquals(projectBlogEntry.getProjectBlogEntryId(), ID);
-        assertEquals(projectBlogEntry.getTitle(), TITLE);
-        assertEquals(projectBlogEntry.getDescription(), DESCRIPTION);
-        assertEquals(projectBlogEntry.getAuthor().getName(), AUTHOR_NAME);
-        assertEquals(projectBlogEntry.getCreatedDate(), CREATED_DATE);
-        assertEquals(projectBlogEntry.getProjectId(), PROJECT_ID);
+        assertEquals(ID, projectBlogEntry.getProjectBlogEntryId());
+        assertEquals(TITLE, projectBlogEntry.getTitle());
+        assertEquals(DESCRIPTION, projectBlogEntry.getDescription());
+        assertEquals(AUTHOR_NAME, projectBlogEntry.getAuthor().getName());
+        assertEquals(CREATED_DATE, projectBlogEntry.getCreatedDate());
+        assertEquals(PROJECT_ID, projectBlogEntry.getProjectId());
     }
 
     /**
@@ -161,12 +158,12 @@ public class ProjectBlogEntryDTOMapperTest {
     }
 
     private void assertProjectBlogEntryDTOMapping(ProjectBlogEntryDTO projectBlogEntryDTO) {
-        assertEquals(projectBlogEntryDTO.getProjectBlogEntryId(), ID);
-        assertEquals(projectBlogEntryDTO.getTitle(), TITLE);
-        assertEquals(projectBlogEntryDTO.getDescription(), DESCRIPTION);
-        assertEquals(projectBlogEntryDTO.getCreatedDate(), CREATED_DATE);
-        assertEquals(projectBlogEntryDTO.getProjectid(), PROJECT_ID);
-        assertEquals(projectBlogEntryDTO.getProjectBlogEntryAuthorDTO().getUsername(), AUTHOR_NAME);
+        assertEquals(ID, projectBlogEntryDTO.getProjectBlogEntryId());
+        assertEquals(TITLE, projectBlogEntryDTO.getTitle());
+        assertEquals(DESCRIPTION, projectBlogEntryDTO.getDescription());
+        assertEquals(CREATED_DATE, projectBlogEntryDTO.getCreatedDate());
+        assertEquals(PROJECT_ID, projectBlogEntryDTO.getProjectid());
+        assertEquals(AUTHOR_NAME, projectBlogEntryDTO.getProjectBlogEntryAuthorDTO().getUsername());
     }
 
 }

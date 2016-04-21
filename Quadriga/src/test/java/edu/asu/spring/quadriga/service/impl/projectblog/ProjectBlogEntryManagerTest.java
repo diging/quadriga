@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.impl.projectblog;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class ProjectBlogEntryManagerTest {
      * @throws QuadrigaStorageException
      */
     @Test
-    public void Test() throws QuadrigaStorageException {
+    public void getProjectBlogEntryListTest() throws QuadrigaStorageException {
 
         // Creating dummy list of blog entry DTOs to return
         List<ProjectBlogEntryDTO> projectBlogEntryDTOList = new ArrayList<>();
@@ -117,22 +118,16 @@ public class ProjectBlogEntryManagerTest {
     private void assertProjectBlogEntryList(List<IProjectBlogEntry> projectBlogEntryList) {
 
         // Assert that exactly 2 entries are fetched
-        assertEquals(projectBlogEntryList.size(), 2);
+        assertEquals(2, projectBlogEntryList.size());
 
-        // Assert the details of first blog fetched only when atleast one entry
-        // is fetched
-        // If there are fewer entries than expected, first assert will fail and
-        // NullPointerException is avoided
-        if (projectBlogEntryList.size() >= 1) {
-            assertEquals(projectBlogEntryList.get(0).getProjectBlogEntryId(), BLGE_ID_1);
-            assertEquals(projectBlogEntryList.get(0).getTitle(), TITLE_1);
-            assertEquals(projectBlogEntryList.get(0).getDescription(), DESCRIPTION_1);
-        }
-        if (projectBlogEntryList.size() >= 2) {
-            assertEquals(projectBlogEntryList.get(1).getProjectBlogEntryId(), BLGE_ID_2);
-            assertEquals(projectBlogEntryList.get(1).getTitle(), TITLE_2);
-            assertEquals(projectBlogEntryList.get(1).getDescription(), DESCRIPTION_2);
-        }
+        assertEquals(BLGE_ID_1, projectBlogEntryList.get(0).getProjectBlogEntryId());
+        assertEquals(TITLE_1, projectBlogEntryList.get(0).getTitle());
+        assertEquals(DESCRIPTION_1, projectBlogEntryList.get(0).getDescription());
+
+        assertEquals(BLGE_ID_2, projectBlogEntryList.get(1).getProjectBlogEntryId());
+        assertEquals(TITLE_2, projectBlogEntryList.get(1).getTitle());
+        assertEquals(DESCRIPTION_2, projectBlogEntryList.get(1).getDescription());
+
     }
 
     private ProjectBlogEntryDTO createProjectBlogEntryDTO(String id, String title, String description) {
@@ -169,6 +164,12 @@ public class ProjectBlogEntryManagerTest {
         // Calling the method to test
         projectBlogEntryManagerUnderTest.addNewProjectBlogEntry(projectBlogEntry);
 
+        //Assert that id is assigned to projectBlogEntry object by addNewProjectBlogEntry method
+        assertEquals(UNIQUE_BLGE_ID, projectBlogEntry.getProjectBlogEntryId());
+        
+        //Assert that projectBlogEntry has date assigned by addNewProjectBlogEntry method
+        assertNotNull(projectBlogEntry.getCreatedDate());
+        
         // Verifying that saveNewDTO method is called
         verify(projectBlogEntryDAO).saveNewDTO(projectBlogEntryDTO);
     }
