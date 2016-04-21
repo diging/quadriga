@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.dto;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Column;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
 
@@ -17,16 +16,15 @@ import javax.persistence.Id;
  */
 @Entity
 @Table(name = "tbl_transfomationfiles_metadata")
-@XmlRootElement
 public class TransformFilesDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	private String Id;
 	@Column(name="Title")
-	String title;
+	private String title;
 	@Column(name="Description")
-	String description;
+	private String description;
 	@Column(name = "Pattern_FileName")
 	private String patternFileName;
 	@Column(name = "Pattern_Title")
@@ -133,6 +131,5 @@ public class TransformFilesDTO implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 
 }

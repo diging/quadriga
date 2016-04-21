@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.web.transformation;
 
 /**
- * BackingBean class which is used to store the data in the form to upload
+ * BackingBean class stores the data in the form to upload
  * transformation files
  * 
  * @author JayaVenkat
@@ -10,7 +10,7 @@ package edu.asu.spring.quadriga.web.transformation;
 public class TransformFilesBackingBean {
 
 	private String title;
-    private String description;	
+	private String description;
 	private String patternTitle;
 	private String patternDescription;
 	private String mappingTitle;
