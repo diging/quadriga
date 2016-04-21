@@ -12,13 +12,8 @@
 -->
  <script type="text/javascript" charset="utf8">
 	function checkCheckboxes( id, pID ){
-		alert(id);
-		alert(pID);
-	
-	    $('#'+pID).find(':checkbox').each(function(){		    
-	       
+	    $('#'+pID).find(':checkbox').each(function(){		    	       
 	    	jQuery(this).attr('checked', $('#' + id).is(':checked'));
-			
 	    });     
 
 	}
