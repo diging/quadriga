@@ -81,10 +81,6 @@ public class AddProjectBlogEntryController {
             @RequestParam("projectId") String projectId, Model model)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        if (project == null) {
-            return "forbidden";
-        }
-
         // Add the critical data to model object
         model.addAttribute("projectBlogEntry", new ProjectBlogEntry());
         model.addAttribute("project", project);
