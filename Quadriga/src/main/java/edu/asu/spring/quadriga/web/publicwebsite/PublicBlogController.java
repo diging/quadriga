@@ -31,10 +31,6 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class PublicBlogController {
 
-    // Default number of blogs to display when projectblogentry.list.count is
-    // absent or ill-formatted.
-    private static final Integer DEFAULT_BLOG_ENTRIES_COUNT = 5;
-
     @Autowired
     private Environment env;
 
@@ -69,7 +65,7 @@ public class PublicBlogController {
 
         // Fetch blog entries for a project identified by project unix name
         String projectId = project.getProjectId();
-        Integer count = getBlogEntryCount();
+        Integer count = Integer.parseInt(env.getProperty("projectblogentry.list.count"));
         List<IProjectBlogEntry> projectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId,
                 count);
 
@@ -100,34 +96,5 @@ public class PublicBlogController {
         }
 
         return "sites/projectblog";
-    }
-
-    /**
-     * reads the number of blog entries to be displayed from user properties
-     * file using {@linkplain Environment} object
-     * 
-     * @return number of blog entries to be displayed specified as
-     *         <code>projectblogentry.list.count<code> property.
-     */
-    private Integer getBlogEntryCount() {
-
-        Integer count = null;
-
-        // Check if property to set limit on number of project blog entries to
-        // be fetched is specified in as environment variable.
-        if (env.getProperty("projectblogentry.list.count") != null) {
-            try {
-                count = Integer.parseInt(env.getProperty("projectblogentry.list.count"));
-            } catch (NumberFormatException ex) {
-                // If invalid numeric value is set in the environment property,
-                // use default value
-                count = DEFAULT_BLOG_ENTRIES_COUNT;
-            }
-        } else {
-            // If the environment property is not present, use default value
-            count = DEFAULT_BLOG_ENTRIES_COUNT;
-        }
-
-        return count;
     }
 }
