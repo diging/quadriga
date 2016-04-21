@@ -32,10 +32,15 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+import edu.asu.spring.quadriga.domain.factory.networks.INetworkXMLFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkXML;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.exceptions.FileStorageException;
+import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -46,6 +51,8 @@ import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
+import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -60,7 +67,13 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 public class NetworkRestController {
 
     @Autowired
+    private INetworkXMLParser nwXMLParser;
+
+    @Autowired
     private INetworkManager networkManager;
+
+    @Autowired
+    private ITextFileManager tfManager;
 
     @Autowired
     private IRestMessage errorMessageRest;
@@ -76,6 +89,9 @@ public class NetworkRestController {
 
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
+
+    @Autowired
+    private INetworkXMLFactory nwXMLfactory;
 
     @Autowired
     private IUserManager userManager;
@@ -133,26 +149,44 @@ public class NetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
 
         }
-        
+        INetworkXML nwXML = null;
+        try {
+            nwXML = nwXMLParser.parseXML(xml, projectid, workspaceid);
+        } catch (NetworkXMLParseException e) {
+            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+        }
+
         String res = null;
-        try{
-            res = networkManager.storeNetworks(xml);
-        } catch(QStoreStorageException e){
+        try {
+            res = networkManager.storeNetworks(nwXML.getNetworkXMLString());
+        } catch (QStoreStorageException e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (res == null) {
-            String errorMsg = "Please provide correct XML in body of the post request. Qstore system is not accepting your XML";
+            String errorMsg = errorMessageRest.getErrorMsg(
+                    "Please provide correct XML in body of the post request. Qstore system is not accepting your XML");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
 
-        String networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,
-                "", INetworkManager.VERSION_ZERO);
+        String networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid,
+                INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
 
-        // TODO: Send email to all editors of a workspace
-        // TODO: Get the workspace editors from the workspaceid
+        ITextFile textFileContent = nwXML.getTextFile();
 
+        if (textFileContent != null) {
+            try {
+                tfManager.saveTextFile(textFileContent);
+            } catch (FileStorageException e) {
+                String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+                return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (QuadrigaStorageException e) {
+                String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+                return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.valueOf(accept));
         httpHeaders.set("networkid", networkId);
@@ -174,8 +208,9 @@ public class NetworkRestController {
      */
     @RequestMapping(value = "rest/networkstatus/{NetworkId}", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getNetworkStatus(@PathVariable("NetworkId") String networkId,
-            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
-        
+            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
+                    throws RestException {
+
         try {
             INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
@@ -183,7 +218,7 @@ public class NetworkRestController {
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
             String status = networkManager.getNetworkStatusCode(network.getStatus()) + "";
-            
+
             IUser user = userManager.getUser(principal.getName());
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
@@ -214,7 +249,7 @@ public class NetworkRestController {
             throw new RestException(500, e);
         } catch (Exception e) {
             throw new RestException(500, e);
-        } 
+        }
 
     }
 
@@ -241,8 +276,9 @@ public class NetworkRestController {
      */
     @RequestMapping(value = "rest/network/{NetworkId}/annotations", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getNetworkAnnotations(@PathVariable("NetworkId") String networkId,
-            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
-        
+            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
+                    throws RestException {
+
         try {
             INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
@@ -294,7 +330,8 @@ public class NetworkRestController {
      */
     @RequestMapping(value = "rest/workspace/{workspaceid}/networks", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getWorkspaceNetworkList(@PathVariable("workspaceid") String workspaceId,
-            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
+            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
+                    throws RestException {
         try {
             IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
             if (workspace == null) {
@@ -346,7 +383,8 @@ public class NetworkRestController {
      */
     @RequestMapping(value = "rest/workspace/{workspaceid}/rejectednetworks", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getWorkspaceRejectedNetworkList(@PathVariable("workspaceid") String workspaceId,
-            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
+            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
+                    throws RestException {
 
         try {
             IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
@@ -398,7 +436,8 @@ public class NetworkRestController {
      */
     @RequestMapping(value = "rest/workspace/{workspaceid}/approvednetworks", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getApprovedNetworks(@PathVariable("workspaceid") String workspaceId,
-            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
+            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
+                    throws RestException {
 
         try {
             IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
@@ -447,8 +486,8 @@ public class NetworkRestController {
      * @throws RestException
      */
     @RequestMapping(value = "rest/network/{networkid}", method = RequestMethod.GET, produces = "application/xml")
-    public ResponseEntity<String> getNetwork(@PathVariable("networkid") String networkId,
-            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
+    public ResponseEntity<String> getNetwork(@PathVariable("networkid") String networkId, HttpServletResponse response,
+            String accept, Principal principal, HttpServletRequest req) throws RestException {
 
         try {
             INetwork network = networkManager.getNetwork(networkId);
@@ -532,7 +571,8 @@ public class NetworkRestController {
      */
     @RequestMapping(value = "rest/network/{networkid}/all", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getNetworkDetails(@PathVariable("networkid") String networkId,
-            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
+            HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
+                    throws RestException {
 
         try {
             INetwork network = networkManager.getNetwork(networkId);
@@ -627,15 +667,15 @@ public class NetworkRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        
+
         String res = null;
-        try{
+        try {
             res = networkManager.storeNetworks(xml);
-        } catch(QStoreStorageException e){
+        } catch (QStoreStorageException e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
+
         if (res == null) {
             String errorMsg = errorMessageRest.getErrorMsg(
                     "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML");
@@ -643,7 +683,7 @@ public class NetworkRestController {
         }
         String networkNameUpdateStatus = "";
         if (!(networkName == null || networkName.equals(network.getNetworkName()) || networkName.equals(""))) {
-                networkNameUpdateStatus = networkManager.updateNetworkName(networkId, networkName);
+            networkNameUpdateStatus = networkManager.updateNetworkName(networkId, networkName);
             if (!(networkNameUpdateStatus.equals("success"))) {
                 String errorMsg = errorMessageRest.getErrorMsg("DB Issue, please try after sometime");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -654,8 +694,8 @@ public class NetworkRestController {
         editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
         int latestVersion = networkManager.getLatestVersionOfNetwork(networkId) + 1;
         networkId = networkManager.storeNetworkDetails(res, user, networkName,
-                network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK,
-                networkId, latestVersion);
+                network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK, networkId,
+                latestVersion);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.valueOf(accept));

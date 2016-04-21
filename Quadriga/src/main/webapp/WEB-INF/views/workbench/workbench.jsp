@@ -64,7 +64,7 @@ ${project.projectName} <span style="font-size: 12px"><span title="No access" cla
 		</li>
 	</c:forEach>
 	<c:if test="${empty  project.projectWorkspaces}">
-		There are workspaces.
+		There are no workspaces.
 	</c:if>
 	</ul>
 	</div>

@@ -44,8 +44,8 @@
 	
 	<!-- Reference the hibernate -->
 	<beans:import resource="../hibernate/hibernate.cfg.xml"/>
-
-    <task:executor id="executor" pool-size="5"/>
+	
+	<task:executor id="executor" pool-size="5"/>
     <task:annotation-driven executor="executor" />
 	
 	<cache:annotation-driven />
@@ -53,8 +53,14 @@
         <beans:property name="cacheManager"><beans:ref bean="ehcache"/></beans:property>
     </beans:bean>
 
+	
     <beans:bean id="ehcache"
         class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
         p:config-location="classpath:ehcache.xml" />
         
-</beans:beans>
+    
+     <beans:bean id="txtfileSaveUtil" class="edu.asu.spring.quadriga.utilities.impl.FileSaveUtility">
+     		<beans:property name="textFileLocation" value="${textfiles.location}"/>
+        </beans:bean>
+	</beans:beans>
+
