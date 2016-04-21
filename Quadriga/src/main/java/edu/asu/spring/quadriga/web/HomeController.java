@@ -80,7 +80,7 @@ public class HomeController {
     private String term;
 
     @Autowired 
-	private IRetrieveProjectManager projectManager;
+    private IRetrieveProjectManager projectManager;
     
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
