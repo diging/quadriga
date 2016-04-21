@@ -204,28 +204,71 @@ $(document).ready(function () {
 </c:choose>
 </div>
 
+
+
+
+
+
+
+
 <div class="row">
 <div class="col-md-8"><span class="byline"><input type="checkbox" id="selectAllTransformations">  List of available transformations.</span></div>
 </div>
+
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <c:choose>
 	<c:when test="${not empty transformationsList}">
-		<ul class="pagination1">
-			<c:forEach var="transformations" items="${transformationsList}">
+	<ul class="pagination1">
+	<c:forEach var="transformations" items="${transformationsList}">
 				<div class="panel panel-default">
     				<div class="panel-heading" role="tab" id="headingTwo">
-      				<h4 class="panel-title">   
-						<li>
-							<input type="checkbox" value="${transformations.title}" name="transformation" class="transformationList">
-							&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${transformations.title}"></c:out>
-						</li>
-		    		</h4>
+      					<h4 class="panel-title">   
+							<li>
+								<div class="panel-heading" role="tab" id="headingOne">
+      								<h1 class="panel-title">   
+       							 		<div class="checkbox1" id="divTransformationList"> 
+        									<label>
+												<li>
+													<input type="checkbox" value="${transformations.title}" name="transformation" class="transformationList">
+													&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${transformations.title}"></c:out>
+												</li>       		
+         									</label>
+      									</div>
+      								</h1>
+    							</div>
+    						</li>
+    					</h4>
+    				</div>    		
+					<div id="${transformations.title}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      					<div class="panel-body">   				
+   							<ul class="networkToggleList">
+								<li>
+								<details>
+									<ul>							
+										<div class="container-fluid">
+											<div class="row">	
+											 	<summary>
+											 	<div class="PatternsAndMappingsTransformations" id="${transformations.mappingFileName},${transformations.patternFileName}">
+													Mapping File: <c:out value="${transformations.mappingFileName}"></c:out>
+													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pattern File: <c:out value="${transformations.patternFileName}"></c:out>
+												</div>
+												</summary>
+											</div>
+										</div>			
+									</ul>
+								</details>
+								</li>
+							</ul>
+       					</div>
     				</div>
-				</div>				
-			</c:forEach>
-		</ul>
-	</c:when>	
-</c:choose>
+  				</div>
+	</c:forEach>
+	</ul>
+	</c:when>
+	<c:otherwise>
+			<spring:message code="empty.Transformations" />
+	</c:otherwise>
+	</c:choose>
 </div>
 
 <input type="button" value='Submit Project and Transformations' id="confirmationTransformation"/>

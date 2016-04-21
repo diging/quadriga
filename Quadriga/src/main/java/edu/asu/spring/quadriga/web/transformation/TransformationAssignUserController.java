@@ -94,10 +94,7 @@ public class TransformationAssignUserController {
             }
             networkMap.get(project.getProjectName()).add(network);
         }
-        
-        /*List<TransformFilesDTO> transformationsList = new ArrayList<TransformFilesDTO>();  */
         List<TransformFilesDTO> transformationsList = transformManager.getTransformationsList();
-
         model.addAttribute("projects", projects);
         model.addAttribute("networkMap", networkMap);
         model.addAttribute("transformationsList", transformationsList);

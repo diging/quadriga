@@ -57,9 +57,9 @@
 					<li><a
 						href="${pageContext.servletContext.contextPath}/auth/editing">Editing</a></li>
 					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/transformation/selectTransformationFiles">Upload_TransformationFiles</a></li>
-					<li><a
 						href="${pageContext.servletContext.contextPath}/auth/transformation">Transformations</a></li>
+					<li><a
+						href="${pageContext.servletContext.contextPath}/auth/transformation/selectTransformationFiles">Upload</a></li>
 				</ul></li>
 		</sec:authorize>
 		<sec:authorize access="permitAll">
