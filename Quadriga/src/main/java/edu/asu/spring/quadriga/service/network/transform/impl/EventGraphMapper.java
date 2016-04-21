@@ -51,7 +51,7 @@ public class EventGraphMapper {
 	 * @param events A list of events to be transformed.
 	 * @param conceptPath Path to a Conceptpower instance to retrieve concept information from.
 	 */
-	public void buildGraphs(List<CreationEvent> events, String conceptPath) {
+	public void buildGraphs(List<CreationEvent> events) {
 		List<CreationEvent> unreferenced = new ArrayList<CreationEvent>();
 		Map<String, Node> nodeMap = new HashMap<String, Node>();
 		Map<String, Relation> relationMap = new HashMap<String, Relation>();

@@ -1,14 +1,13 @@
 package edu.asu.spring.quadriga.service.network.transform.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import edu.asu.spring.quadriga.conceptpower.impl.ConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
-import edu.asu.spring.quadriga.transform.TransformNode;
 
 /**
  * This class matches multiple original file and
@@ -22,24 +21,13 @@ import edu.asu.spring.quadriga.transform.TransformNode;
  */
 public class MatchGraphs {
 
+    @Autowired
 	private PatternFinder finder;
-	private String turtle;
-	private List<CreationEvent> events;
-	// total number of nodes to find match from
-	private int totalNodes = 0;
-	/*
-	 * This would store the list of nodes found from a single mapping between
-	 * original and mapping file
-	 */
-	private List<List<TransformNode>> nodesList;
-	private Transformer transformer;
-
-	public MatchGraphs(List<CreationEvent> event) {
-		finder = new PatternFinder();
-		this.events = event;
-		nodesList = new ArrayList<List<TransformNode>>();
-	}
-
+    
+    @Autowired
+    private ConceptpowerConnector cpConnector;
+	
+	
 	/**
 	 * This method takes the pair of original and mapping file and finds the
 	 * matching graph between them.
@@ -48,31 +36,24 @@ public class MatchGraphs {
 	 * @return turtle which is the matched graph result
 	 */
 	public String matchGraphs(List<ITransformation> fileMapping,
-			boolean isMergeDuplicateNodes) {
+			List<CreationEvent> events) {
 
-		nodesList = new ArrayList<List<TransformNode>>();
+		List<List<TransformNode>>nodesList = new ArrayList<List<TransformNode>>();
 
 		if (fileMapping != null && events != null) {
 			for (ITransformation m : fileMapping) {
 				GraphMapper mapper = new GraphMapper();
-				EventGraphMapper eventMapper = new EventGraphMapper();
+				EventGraphMapper eventMapper = new EventGraphMapper(cpConnector);
 				List<TransformNode> nodes = new ArrayList<TransformNode>();
 				List<Node> foundNodes = new ArrayList<Node>();
-				String orgFilePath = ResourceProvider.getWorkspacePath()
-						+ m.getOrigFile()
-								.replace(
-										("." + FileConstants.GRAPHML_FILEEXTENSION),
-										"_"
-												+ (m.getMappingKey().substring(
-														m.getMappingKey()
-																.length() - 4)
-														+ "." + FileConstants.GRAPHML_FILEEXTENSION));
-				mapper.createGraph(orgFilePath);
+				String patternFilePath = m.getPatternFilePath();
+				mapper.createGraph(patternFilePath);
+				
 				/*
 				 * Get the Path provided by user, to retrieve Concepts, from the
 				 * select Page
 				 */
-				eventMapper.buildGraphs(events, selectPage.getConceptPath());
+				eventMapper.buildGraphs(events);
 				totalNodes = eventMapper.getStartNodes().size();
 				foundNodes = finder.findPattern(eventMapper.getStartNodes(),
 						mapper.getStartNode());

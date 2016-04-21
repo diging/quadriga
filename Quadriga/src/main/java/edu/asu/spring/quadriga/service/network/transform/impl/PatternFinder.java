@@ -3,12 +3,15 @@ package edu.asu.spring.quadriga.service.network.transform.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 /**
  * This class finds graphs that match the given pattern.
  * 
  * @author Julia Damerow
  *
  */
+@Service
 public class PatternFinder {
 
 	/**
