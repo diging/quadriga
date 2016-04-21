@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -21,6 +22,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.domain.IUserStats;
 
 /**
  * This controller has all the mappings required to view the statistics of the
@@ -60,8 +62,10 @@ public class ProjectStatsController {
         for (int i = 0; i < length; i++) {
             JSONObject jsonObject = new JSONObject();
             IConceptStats conceptStats = conceptsList.get(i);
-            jsonObject.put("conceptId", conceptStats.getConceptId().replace("\"", ""));
-            jsonObject.put("description", conceptStats.getDescription().replace("\"", ""));
+            jsonObject.put("conceptId",
+                    conceptStats.getConceptId().replace("\"", ""));
+            jsonObject.put("description", conceptStats.getDescription()
+                    .replace("\"", ""));
             jsonObject.put("label", conceptStats.getLemma().replace("\"", ""));
             jsonObject.put("count", conceptStats.getCount());
             jsonArray.put(jsonObject);
@@ -97,16 +101,16 @@ public class ProjectStatsController {
         List<INetwork> networks = networkmanager
                 .getNetworksInProject(projectId);
         List<IConceptStats> conceptsWithCount = null;
-
+        List<IUserStats> userStats;
         if (!networks.isEmpty()) {
             conceptsWithCount = projectStats.getConceptCount(networks);
-
+            userStats = projectStats.getUserStats(projectId);
             try {
                 JSONArray jArray = null;
                 int cnt = getCount(conceptsWithCount);
                 jArray = getTopConceptsJson(conceptsWithCount.subList(0, cnt),
                         cnt);
-                String jsonData = jArray.toString(); 
+                String jsonData = jArray.toString();
                 model.addAttribute("jsonstring", jsonData);
                 model.addAttribute("networkid", "\"\"");
 
