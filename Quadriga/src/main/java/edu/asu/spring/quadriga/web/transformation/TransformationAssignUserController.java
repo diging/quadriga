@@ -16,6 +16,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -23,89 +26,83 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-/*
+import edu.asu.spring.quadriga.web.login.RoleNames;
+/**
  * This class will list all the networks approved by the user and 
  * display approved networks and some dummy transformations for
  * the data
  * 
- *  @author: Jaydatta Nagarkar.
- * */
-
+ * @author: Jaydatta Nagarkar.
+ * 
+ */
 @Controller
 public class TransformationAssignUserController {
-	@Autowired
-	private INetworkManager networkManager;
+    @Autowired
+    private INetworkManager networkManager;
 
-	@Autowired
-	private IEditorManager editorManager;
+    @Autowired
+    private IEditorManager editorManager;
 
-	@Autowired
-	private IUserManager userManager;
+    @Autowired
+    private IUserManager userManager;
 
+    @Autowired
+    private IProject projectManager;
 
-	@Autowired
-	private IProject projectManager;
-	
-	private static final Logger logger = LoggerFactory
-			.getLogger(TransformationAssignUserController.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(TransformationAssignUserController.class);
 
+    /**
+     * List networks assigned to a User
+     * 
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR,
+            RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_QUADRIGA_ADMIN}) })
+    @RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
+    private String listTransformations(ModelMap model, Principal principal)
+            throws QuadrigaStorageException {
+        IUser user = userManager.getUser(principal.getName());
 
-	/**
-	 * List networks assigned to a User
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
-	public String listNetworksAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUser(principal.getName());
-		
-		
-		List<INetwork> approvedNetworkList=null;
-		List<String> dummyTransformations = new ArrayList<String>();
+        List<String> dummyTransformations = new ArrayList<String>();
+        Set<IProject> projects = new HashSet<>();
+        Map<String, List<INetwork>> networkMap = new HashMap<>();
+        List<INetwork> approvedNetworkList = null;
+        try {
+            approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);        
+        } catch (QuadrigaStorageException e) {
+            logger.error("Error fetching list of approved networks", e);
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg","There was an error retrieving the list of approved networks.");
+            return "auth/transformation";
+         }
 
-		List<INetwork> userlist =null;
-		
-		Set<String> projects = new HashSet<>();
-		Map<String,List<INetwork>> networkMap = new HashMap<>();
-		
-		try{
-			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
-		
-			for(INetwork network : approvedNetworkList)
-			{
-				String projectName = network.getNetworkWorkspace().getWorkspace().getProjectWorkspace().getProject().getProjectName();
-				List<INetwork> networkPerProjectList; 
-				if(networkMap.get(projectName)==null)
-					networkPerProjectList = new ArrayList<INetwork>();
-				else
-					networkPerProjectList = networkMap.get(projectName);
-						
-				networkPerProjectList.add(network);			
-				projects.add(projectName);
-				networkMap.put(projectName, networkPerProjectList);
-			}
-			dummyTransformations.add("dummyData");
-			dummyTransformations.add("dummyData2");
-			dummyTransformations.add("dummyData3");
-			dummyTransformations.add("dummyData4");
-			dummyTransformations.add("dummyData5");
-			dummyTransformations.add("dummyData6");
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-	
-		
-		
-		
-		model.addAttribute("projects", projects);
-		model.addAttribute("networkMap", networkMap);		
-		model.addAttribute("userId", user.getUserName());
-		model.addAttribute("dummyTransformations", dummyTransformations);
-		
-		return "auth/transformation";
-	}
+        for (INetwork network : approvedNetworkList) {
+            IProject project = network.getNetworkWorkspace().getWorkspace()
+                    .getProjectWorkspace().getProject();
+            if (networkMap.get(project.getProjectName()) == null) {
+                networkMap.put(project.getProjectName(),new ArrayList<INetwork>());
+                projects.add(project);
+            }
+            networkMap.get(project.getProjectName()).add(network);
+        }
+        dummyTransformations.add("dummyData");
+        dummyTransformations.add("dummyData2");
+        dummyTransformations.add("dummyData3");
+        dummyTransformations.add("dummyData4");
+        dummyTransformations.add("dummyData5");
+        dummyTransformations.add("dummyData6");
+        
 
-	
+        model.addAttribute("projects", projects);
+        model.addAttribute("networkMap", networkMap);
+        model.addAttribute("dummyTransformations", dummyTransformations);
+
+        return "auth/transformation";
+    }
 }
