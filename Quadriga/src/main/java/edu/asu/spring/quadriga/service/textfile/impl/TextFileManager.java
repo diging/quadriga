@@ -64,12 +64,11 @@ public class TextFileManager implements ITextFileManager {
 
     @Override
     public String retrieveTextFileContent(String txtId) throws FileStorageException {
-
         TextFileDTO tfDTO = txtFileDAO.getDTO(txtId);
         String fileName= tfDTO.getFilename();
         if(!fileName.contains("."))
             fileName+=".txt";
-        return fileManager.readFileContent(fileName, tfDTO.getTextId());
+        return fileSaveServ.retrieveFileFromLocal(fileName, txtId);
 
         
     }

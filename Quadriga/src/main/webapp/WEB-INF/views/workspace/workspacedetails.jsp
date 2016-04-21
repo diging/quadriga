@@ -32,7 +32,13 @@
 				  contentType: "text/plain",
 				  success:function(details){
 					 $('.modal-body').text(details);
-				  }				
+				  },
+				  
+			error:function (xhr, ajaxOptions){
+			    if(xhr.status==404) {
+			    	 $('.modal-body').text("Error while retrieving the text content.");
+			    }
+			}
 				});
 			
 		});

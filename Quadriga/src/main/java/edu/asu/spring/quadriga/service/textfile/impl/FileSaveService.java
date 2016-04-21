@@ -65,4 +65,9 @@ public class FileSaveService implements IFileSaveService {
             return false;
     }
 
+    @Override
+    public String retrieveFileFromLocal(String fileName, String txtId) throws FileStorageException {        
+        return fileManager.readFileContent(fileName, txtId);
+    }
+
 }
