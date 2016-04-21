@@ -100,7 +100,7 @@ public class TransformationAssignUserController {
 
         model.addAttribute("projects", projects);
         model.addAttribute("networkMap", networkMap);
-        model.addAttribute("dummyTransformations", transformationsList);
+        model.addAttribute("transformationsList", transformationsList);
 
         return "auth/transformation";
     }
