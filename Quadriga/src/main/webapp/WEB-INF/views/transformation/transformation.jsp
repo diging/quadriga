@@ -209,15 +209,15 @@ $(document).ready(function () {
 </div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <c:choose>
-	<c:when test="${not empty dummyTransformations}">
+	<c:when test="${not empty transformationsList}">
 		<ul class="pagination1">
-			<c:forEach var="transformations" items="${dummyTransformations}">
+			<c:forEach var="transformations" items="${transformationsList}">
 				<div class="panel panel-default">
     				<div class="panel-heading" role="tab" id="headingTwo">
       				<h4 class="panel-title">   
 						<li>
-							<input type="checkbox" value="${transformations}" name="transformation" class="transformationList">
-							&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${transformations}"></c:out>
+							<input type="checkbox" value="${transformations.title}" name="transformation" class="transformationList">
+							&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${transformations.title}"></c:out>
 						</li>
 		    		</h4>
     				</div>
