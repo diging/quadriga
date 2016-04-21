@@ -4,6 +4,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +88,16 @@ public class QStoreConnector implements IQStoreConnector {
     public String getQStoreGetPOSTURL() {
         return qStoreURL + qStoreURL_Get_POST;
     }
+    
+    @PostConstruct
+    public void init() {
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+        messageConverters.add(new StringHttpMessageConverter());
+        messageConverters.add(new MarshallingHttpMessageConverter(
+                jaxbMarshaller, jaxbMarshaller));
+
+        restTemplate.setMessageConverters(messageConverters);
+    }
 
     /* (non-Javadoc)
      * @see edu.asu.spring.quadriga.service.qstore.impl.IQStoreConnector#getCreationEvent(java.lang.String)
@@ -93,18 +105,14 @@ public class QStoreConnector implements IQStoreConnector {
     @Override
     @Cacheable(value="creationEvent")
     public String getCreationEvent(String id) throws QStoreStorageException {
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new StringHttpMessageConverter());
-        messageConverters.add(new MarshallingHttpMessageConverter(
-                jaxbMarshaller, jaxbMarshaller));
-
-        restTemplate.setMessageConverters(messageConverters);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_XML);
+        
+        // set media types
+        List<MediaType> mediaTypes = new ArrayList<MediaType>();
+        mediaTypes.add(MediaType.APPLICATION_XML);
         headers.setAccept(mediaTypes);
+        
         String authHeader = getAuthHeader();
         headers.set("Authorization", authHeader);
         ResponseEntity<String> response = null;
