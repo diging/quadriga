@@ -16,12 +16,16 @@ import javax.persistence.Id;
 @Entity
 @Table(name = "tbl_transfomationfiles_metadata")
 @XmlRootElement
-public class UploadTransfomationFilesDTO implements Serializable {
+public class TransformFilesDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	private String Id;
-	@Column(name = "Mapping_Title")
+	@Column(name="Title")
+	String title;
+	@Column(name="Description")
+	String description;
+	@Column(name = "Mapping_Title")	
 	private String mappingTitle;
 	@Column(name = "Mapping_Description")
 	private String mappingDescription;
@@ -34,11 +38,13 @@ public class UploadTransfomationFilesDTO implements Serializable {
 	@Column(name = "Transform_File")
 	private String transformFile;
 
-	public UploadTransfomationFilesDTO(String mappingTitle,
+	public TransformFilesDTO(String title, String description, String mappingTitle,
 			String mappingDescription, String mappingFile,
 			String transfomationTitle, String transformationDescription,
 			String transfomrFile) {
 		super();
+		this.title = title;
+		this.description = description;
 		this.mappingTitle = mappingTitle;
 		this.mappingDescription = mappingDescription;
 		this.mappingFile = mappingFile;

@@ -1,11 +1,11 @@
-package edu.asu.spring.quadriga.service.impl.uploadtransformation;
+package edu.asu.spring.quadriga.service.impl.transformation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.service.uploadtransformation.ITransformationManager;
-import edu.asu.spring.quadriga.dao.impl.uploadTransformation.UploadTransformationDAO;
-import edu.asu.spring.quadriga.dto.UploadTransfomationFilesDTO;
+import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
+import edu.asu.spring.quadriga.dao.impl.transform.TransformFilesDAO;
+import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -19,19 +19,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransformationManager implements ITransformationManager {
 
 	@Autowired
-	private UploadTransformationDAO uploadTransformationDAO;
+	private TransformFilesDAO uploadTransformationDAO;
 
 	@Transactional
 	@Override
-	public void saveMetaData(String mappingTitle, String mappingDescription,
+	public void saveTransformation(String title, String description, String mappingTitle, String mappingDescription,
 			String mappingFileName, String transformationTitle,
 			String transformationDescription, String transformationFileName) {
-		UploadTransfomationFilesDTO tranformDTO = new UploadTransfomationFilesDTO(
-				mappingTitle, mappingDescription, mappingFileName,
+		TransformFilesDTO tranformDTO = new TransformFilesDTO(
+				title, description, mappingTitle, mappingDescription, mappingFileName,
 				transformationTitle, transformationDescription,
 				transformationFileName);
 		tranformDTO.setId(uploadTransformationDAO.generateUniqueID());
-		uploadTransformationDAO.saveNewDTO(tranformDTO);
+		uploadTransformationDAO.saveTransformDTO(tranformDTO);
 
 	}
 

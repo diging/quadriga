@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.uploadtransformation;
+package edu.asu.spring.quadriga.web.transformation;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  *
  */
 @Controller
-public class SelectTranformationFiles {
+public class ShowTranformationFilesUI {
 	
 	@RequestMapping( value="auth/transformation/selectTransformationFiles",method=RequestMethod.GET)
 	/**
@@ -18,7 +18,7 @@ public class SelectTranformationFiles {
 	 * @param model
 	 * @param principal
 	 * @param request
-	 * This method redirect to uploadTranformation.jsp 
+	 * This method will show uploadTranformation.jsp to user 
 	 * @return
 	 */
 	public String selectTransformationFiles(HttpServletRequest request){		

@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.uploadtransformation;
+package edu.asu.spring.quadriga.web.transformation;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.asu.spring.quadriga.service.uploadtransformation.ITransformationManager;
+import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 
 /**
  * 
@@ -19,15 +19,18 @@ import edu.asu.spring.quadriga.service.uploadtransformation.ITransformationManag
  * This is a controller which takes request from uploadTransfomation.jsp to upload transformation files
  */
 @Controller
-public class UploadTransformationController {
+public class UploadTransformFilesController {
 
 	@Autowired
 	private ITransformationManager uploadTnfmManager;
 	
 	@RequestMapping(value="auth/transformation/upload",method=RequestMethod.POST)
-	public String uploadTransformationFiles(@ModelAttribute("UploadTransformationBackingBean") UploadTransformationBackingBean formBean, ModelMap map, 
+	public String uploadTransformFiles(@ModelAttribute("TransformationFilesBackingBean") TransformFilesBackingBean formBean, ModelMap map, 
 			@RequestParam("file") MultipartFile[] file) throws IOException{
 
+		String title = formBean.getTitle();
+		String description = formBean.getDescription();
+		
 		String mappingTitle = formBean.getMappingTitle();
 		String mappingDescription=formBean.getMappingDescription();				
 		String mappingFileName = file[0].getOriginalFilename();
@@ -35,13 +38,12 @@ public class UploadTransformationController {
 		String transformTitle= formBean.getTransformTitle();		
 		String transformDescription = formBean.getTransformDescription();	    
 		String transfomrFileName=file[1].getOriginalFilename();
-		
-		uploadTnfmManager.saveMetaData(mappingTitle, mappingDescription, mappingFileName, transformTitle, transformDescription, transfomrFileName);
-		//files needs to saved here only meta data is being saved in database		
+	    		
+		uploadTnfmManager.saveTransformation(title, description, mappingFileName, mappingTitle, mappingDescription, transfomrFileName, transformTitle, transformDescription );
+		//Only meta data is being saved in database. Saving files is not yet done..  		
 		
 		map.addAttribute("show_success_alert",true);
 		map.addAttribute("success_alert_msg","Upload Successful");
-		//map.addAttribute("success", 1);
 		return "auth/uploadTransformation";
 	}
 }
