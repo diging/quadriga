@@ -22,10 +22,12 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 /**
  * This class will list all the networks approved by the user and 
@@ -37,7 +39,10 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  */
 @Controller
 public class TransformationAssignUserController {
-    @Autowired
+	@Autowired
+    private ITransformationManager transformManager; 
+	    
+	@Autowired
     private INetworkManager networkManager;
 
     @Autowired
@@ -68,8 +73,6 @@ public class TransformationAssignUserController {
     private String listTransformations(ModelMap model, Principal principal)
             throws QuadrigaStorageException {
         IUser user = userManager.getUser(principal.getName());
-
-        List<String> dummyTransformations = new ArrayList<String>();
         Set<IProject> projects = new HashSet<>();
         Map<String, List<INetwork>> networkMap = new HashMap<>();
         List<INetwork> approvedNetworkList = null;
@@ -91,17 +94,13 @@ public class TransformationAssignUserController {
             }
             networkMap.get(project.getProjectName()).add(network);
         }
-        dummyTransformations.add("dummyData");
-        dummyTransformations.add("dummyData2");
-        dummyTransformations.add("dummyData3");
-        dummyTransformations.add("dummyData4");
-        dummyTransformations.add("dummyData5");
-        dummyTransformations.add("dummyData6");
         
+        /*List<TransformFilesDTO> transformationsList = new ArrayList<TransformFilesDTO>();  */
+        List<TransformFilesDTO> transformationsList = transformManager.getTransformationsList();
 
         model.addAttribute("projects", projects);
         model.addAttribute("networkMap", networkMap);
-        model.addAttribute("dummyTransformations", dummyTransformations);
+        model.addAttribute("dummyTransformations", transformationsList);
 
         return "auth/transformation";
     }
