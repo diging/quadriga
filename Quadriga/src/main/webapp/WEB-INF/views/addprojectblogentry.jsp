@@ -9,9 +9,19 @@
 			.init({
 				selector : '#description',
 				height : 300,
+				fontsize_formats: "8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 22pt 24pt 48pt 72pt",
+				theme: 'modern',
 				plugins : 'advlist autolink save link image lists charmap print preview',
 				menubar : false,
-				toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons'
+				toolbar : 'undo redo | fontsizeselect | fontselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons',
+				setup : function(ed)
+				{
+				    ed.on('init', function() 
+				    {
+				        this.getDoc().body.style.fontSize = '14px';
+				    });
+				}
+				
 			});
 </script>
 

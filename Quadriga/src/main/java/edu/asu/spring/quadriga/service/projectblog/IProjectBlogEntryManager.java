@@ -17,8 +17,8 @@ import edu.asu.spring.quadriga.service.impl.projectblog.ProjectBlogEntryManager;
 public interface IProjectBlogEntryManager {
 
     /**
-     * populates the details of a project blog entry and uses DAO to add an
-     * entry into database table <code>tbl_projectblogentry</code>
+     * generates unique id and sets creation date for project blog
+     * entry and uses DAO object to store the blog entry
      * 
      * @param projectBlogEntry
      *            instance of {@linkplain IProjectBlogEntry} interface.
