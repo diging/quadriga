@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
-import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
-import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * 
@@ -28,10 +24,6 @@ public class UploadTransformFilesController {
 	@Autowired
 	private ITransformationManager transformationManager;
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-			RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR,
-			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-			RoleNames.ROLE_QUADRIGA_ADMIN }) })
 	@RequestMapping(value="auth/transformation/upload",method=RequestMethod.POST)
 	public String uploadTransformFiles(@ModelAttribute("TransformationFilesBackingBean") TransformFilesBackingBean formBean, ModelMap map, 
 			@RequestParam("file") MultipartFile[] file) throws IOException{

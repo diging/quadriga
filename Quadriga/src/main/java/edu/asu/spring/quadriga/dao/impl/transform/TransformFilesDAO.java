@@ -1,8 +1,7 @@
 package edu.asu.spring.quadriga.dao.impl.transform;
+
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
-
 import edu.asu.spring.quadriga.dao.transform.ITransformFilesDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;
@@ -13,7 +12,6 @@ import edu.asu.spring.quadriga.dto.TransformFilesDTO;
  * @author JayaVenkat
  *
  */
-@SuppressWarnings("rawtypes")
 @Repository
 public class TransformFilesDAO extends BaseDAO implements
 		ITransformFilesDAO {
@@ -23,18 +21,15 @@ public class TransformFilesDAO extends BaseDAO implements
 	 */
 	@Override
 	public List<TransformFilesDTO> getAllTransformations(){
-		@SuppressWarnings("unchecked")
 		List<TransformFilesDTO> transformList = sessionFactory.getCurrentSession().createCriteria(TransformFilesDTO.class).list();
 		return transformList;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getDTO(String id) {		
 		return getDTO(TransformFilesDTO.class, id);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void saveTransformDTO(TransformFilesDTO tranformDTO) {
 		saveNewDTO(tranformDTO);				

@@ -63,4 +63,5 @@ public class TransformFilesBackingBean {
 	public void setPatternDescription(String patternDescription) {
 		this.patternDescription = patternDescription;
 	}
+
 }
