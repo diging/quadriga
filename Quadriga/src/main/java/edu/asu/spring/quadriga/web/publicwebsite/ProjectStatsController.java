@@ -1,9 +1,13 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
+
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+
+import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -27,7 +31,12 @@ import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
+
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
+
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.domain.IUserStats;
+
 
 /**
  * This controller has all the mappings required to view the statistics of the
@@ -68,8 +77,10 @@ public class ProjectStatsController {
         for (int i = 0; i < length; i++) {
             JSONObject jsonObject = new JSONObject();
             IConceptStats conceptStats = conceptsList.get(i);
-            jsonObject.put("conceptId", conceptStats.getConceptId().replace("\"", ""));
-            jsonObject.put("description", conceptStats.getDescription().replace("\"", ""));
+            jsonObject.put("conceptId",
+                    conceptStats.getConceptId().replace("\"", ""));
+            jsonObject.put("description", conceptStats.getDescription()
+                    .replace("\"", ""));
             jsonObject.put("label", conceptStats.getLemma().replace("\"", ""));
             jsonObject.put("count", conceptStats.getCount());
             jsonArray.put(jsonObject);
@@ -101,21 +112,26 @@ public class ProjectStatsController {
 
         List<INetwork> networks = networkmanager.getNetworksInProject(projectId);
         List<IConceptStats> conceptsWithCount = null;
+
         JSONArray submittedNetworkCount = null;;
         JSONArray approvedNetworkCount = null;
         JSONArray rejectedNetworkCount  = null;
         JSONArray workspaceCount = null;
 
+        List<IUserStats> userStats;
+
         if (!networks.isEmpty()) {
             conceptsWithCount = projectStats.getConceptCount(networks);
-
+            userStats = projectStats.getUserStats(projectId);
             try {
                 JSONArray jArray = null;
                 int cnt = getCount(conceptsWithCount);
                 jArray = getTopConceptsJson(conceptsWithCount.subList(0, cnt),
                         cnt);
+
                 String jsonData = jArray.toString(); 
                 model.addAttribute("labelCount", jsonData);
+
                 model.addAttribute("networkid", "\"\"");
 
             } catch (JSONException e) {
