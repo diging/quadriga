@@ -38,34 +38,33 @@ public class AboutTextManagerTest {
 
         Mockito.when(mockedAboutTextDAO.generateUniqueID()).thenReturn("UniqueId1");
         aboutTextManager.saveAbout("1st", "Title", "Description");
-        
+
         Mockito.verify(mockedAboutTextDAO).generateUniqueID();
 
         argument = ArgumentCaptor.forClass(AboutTextDTO.class);
         Mockito.verify(mockedAboutTextDAO).saveOrUpdateDTO(argument.capture());
-        assertEquals("UniqueId1",argument.getValue().getId());
+        assertEquals("UniqueId1", argument.getValue().getId());
         assertEquals("1st", argument.getValue().getProjectId());
         assertEquals("Title", argument.getValue().getTitle());
         assertEquals("Description", argument.getValue().getDescription());
-        
+
     }
 
     @Test
     public void testSaveAboutUpdateDTO() throws QuadrigaStorageException {
-        
+
         aboutTextManager.saveAbout("1st", "NewTitle", "NewDescription");
-        
+
         AboutTextDTO dto = new AboutTextDTO();
         dto.setProjectId("1st");
         dto.setTitle("NewTitle");
         dto.setDescription("NewDescription");
         Mockito.when(mockedAboutTextDAO.getDTOByProjectId("1st")).thenReturn(dto);
 
-        
         aboutTextManager.saveAbout("1st", "NewTitle2", "NewDescription2");
 
         Mockito.verify(mockedAboutTextDAO, Mockito.times(1)).generateUniqueID();
-        
+
         argument = ArgumentCaptor.forClass(AboutTextDTO.class);
         Mockito.verify(mockedAboutTextDAO, Mockito.times(2)).saveOrUpdateDTO(argument.capture());
         assertEquals("1st", argument.getValue().getProjectId());
