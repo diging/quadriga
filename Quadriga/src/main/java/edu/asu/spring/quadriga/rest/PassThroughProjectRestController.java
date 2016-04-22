@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,12 +17,19 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProjectInfo;
+import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.exceptions.DocumentParserException;
+import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDocumentReader;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 
 /**
@@ -41,6 +49,12 @@ public class PassThroughProjectRestController {
     @Autowired
     private IRestMessage errorMessageRest;
 
+    @Autowired
+    private IPassThroughProjectDocumentReader passThroughProjectDocumentReader;
+
+    @Autowired
+    private INetworkManager networkManager;
+
     @RequestMapping(value = "rest/passthroughproject", method = RequestMethod.POST)
     public ResponseEntity<String> getPassThroughProject(HttpServletRequest request,
             @RequestHeader("Accept") String accept, HttpServletResponse response, @RequestBody String xml,
@@ -55,8 +69,27 @@ public class PassThroughProjectRestController {
         String userid = principal.getName();
         String networkId = null;
         try {
-            networkId = passThroughProjectManager.callQStore(xml, userManager.getUser(userid));
-        } catch (QStoreStorageException | DocumentParserException | QuadrigaStorageException e) {
+            IUser user = userManager.getUser(userid);
+            PassThroughProjectInfo passThroughProjectInfo = passThroughProjectDocumentReader
+                    .getPassThroughProjectInfo(xml);
+
+            IPassThroughProject project = passThroughProjectDocumentReader
+                    .getPassThroughProject(passThroughProjectInfo);
+
+            String projectId = passThroughProjectManager.savePassThroughProject(user, project);
+
+            String workspaceId = passThroughProjectManager.createWorkspaceForExternalProject(passThroughProjectInfo,
+                    projectId, user);
+
+            String network = passThroughProjectDocumentReader.getNetwork(xml);
+
+            String responseFromQStore = networkManager.storeNetworks(network);
+
+            networkId = networkManager.storeNetworkDetails(responseFromQStore, user,
+                    passThroughProjectInfo.getNetworkName(), workspaceId, INetworkManager.NEWNETWORK, "",
+                    INetworkManager.VERSION_ZERO);
+        } catch (QStoreStorageException | DocumentParserException | QuadrigaStorageException | NoSuchRoleException
+                | JAXBException | QuadrigaAccessException e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }

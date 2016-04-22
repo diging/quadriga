@@ -1,26 +1,15 @@
 package edu.asu.spring.quadriga.service.passthroughproject;
 
-import java.io.IOException;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProjectInfo;
+import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
+import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 
 public interface IPassThroughProjectDocumentReader {
 
-    Document getXMLParser(String xml) throws ParserConfigurationException, SAXException, IOException;
+    IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo);
 
-    String getProjectID(Document document, String userid) throws QuadrigaStorageException, NoSuchRoleException;
+    String getNetwork(String xml);
 
-    String getWorkspaceID(Document document, String projectId, String userid)
-            throws JAXBException, QuadrigaStorageException, QuadrigaAccessException;
-
-    String getAnnotateData(String xml);
+    PassThroughProjectInfo getPassThroughProjectInfo(String xml) throws DocumentParserException;
 
 }

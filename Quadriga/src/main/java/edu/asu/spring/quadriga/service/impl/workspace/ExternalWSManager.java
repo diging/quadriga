@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.service.workspace.IExternalWSManager;
 
 /**
@@ -58,7 +59,7 @@ public class ExternalWSManager implements IExternalWSManager {
 
         ExternalWorkspaceDTO workspaceDTO = new ExternalWorkspaceDTO();
         workspaceDTO.setWorkspacename(externalWorkspaceName);
-        workspaceDTO.setDescription("External Workspace");
+        workspaceDTO.setDescription(Constants.DEFAULT_WORKSPACE_DESCRIPTION);
         QuadrigaUserDTO owner = userDAO.getDTO(user.getUserName());
         workspaceDTO.setWorkspaceowner(owner);
         workspaceDTO.setIsarchived(false);
