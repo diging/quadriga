@@ -5,8 +5,22 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script>
+$(function() {
+$("#submit1").click(function(){perform()});
+$("#submit2").click(function(){perform()});
+$("#submit3").click(function(){perform()});
+
+
+});
+
+function perform(){
+    console.log(  $(this).parent().parent().find('#title1').val()  );
+    console.log("success");
+}
 	function performAction(idValue) {
 		var data = {};
+		var test = $(this).siblings('input').val();
+		console.log(test);
 		var titles = $("#title" + idValue).val();
 		var desc = $("#description" + idValue).val();
 		var order = $("#order" + idValue).val();
@@ -53,6 +67,7 @@
 					}
 				});
 	}
+
 </script>
 <article class="is-page-content">
 	<form:form commandName="publicpage" method="POST"
@@ -64,7 +79,7 @@
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Title *</td>
-				<td style="width: 400px"><form:input path="title" size="60"
+				<td style="width: 400px"><form:input path="title" size="60" class="title"
 						id="title1" /></td>
 				<td><div id="title_err1"></div></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
@@ -89,7 +104,7 @@
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
-				<td><input type="button" id="submit1" onclick="performAction('1')"
+				<td><input type="button" id="submit1" 
 					value="SAVE"></td>
 			</tr>
 		</table>
