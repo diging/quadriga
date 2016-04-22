@@ -1,4 +1,3 @@
-
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -95,4 +94,4 @@
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
 <hr>
-<a href=""><i class="fa fa-cog"></i> Public Page Settings</a>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addpublicpage"><i class="fa fa-cog"></i> Public Page Settings</a>
