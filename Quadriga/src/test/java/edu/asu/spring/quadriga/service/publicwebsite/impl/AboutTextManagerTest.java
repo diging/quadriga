@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.publicwebsite.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -53,8 +52,6 @@ public class AboutTextManagerTest {
     @Test
     public void testSaveAboutUpdateDTO() throws QuadrigaStorageException {
 
-        aboutTextManager.saveAbout("1st", "NewTitle", "NewDescription");
-
         AboutTextDTO dto = new AboutTextDTO();
         dto.setProjectId("1st");
         dto.setTitle("NewTitle");
@@ -63,10 +60,10 @@ public class AboutTextManagerTest {
 
         aboutTextManager.saveAbout("1st", "NewTitle2", "NewDescription2");
 
-        Mockito.verify(mockedAboutTextDAO, Mockito.times(1)).generateUniqueID();
+        Mockito.verify(mockedAboutTextDAO, Mockito.times(0)).generateUniqueID();
 
         argument = ArgumentCaptor.forClass(AboutTextDTO.class);
-        Mockito.verify(mockedAboutTextDAO, Mockito.times(2)).saveOrUpdateDTO(argument.capture());
+        Mockito.verify(mockedAboutTextDAO, Mockito.times(1)).saveOrUpdateDTO(argument.capture());
         assertEquals("1st", argument.getValue().getProjectId());
         assertEquals("NewTitle2", argument.getValue().getTitle());
         assertEquals("NewDescription2", argument.getValue().getDescription());
