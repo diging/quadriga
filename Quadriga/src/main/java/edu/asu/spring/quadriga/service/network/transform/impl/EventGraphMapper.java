@@ -5,15 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import edu.asu.spring.quadriga.conceptpower.impl.ConceptpowerConnector;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.PrintedRepresentationType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
+import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermPartType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 
@@ -27,11 +26,11 @@ import edu.asu.spring.quadriga.domain.impl.networks.TermType;
  */
 public class EventGraphMapper {
     
-    private ConceptpowerConnector conceptpower;
+    private IConceptpowerConnector conceptpower;
 
 	private List<Node> startNodes;
 
-	public EventGraphMapper(ConceptpowerConnector conceptpower) {
+	public EventGraphMapper(IConceptpowerConnector conceptpower) {
 		startNodes = new ArrayList<Node>();
 		this.conceptpower = conceptpower;
 	}
@@ -60,7 +59,7 @@ public class EventGraphMapper {
 		MainLoop: for (CreationEvent event : events) {
 			if (event instanceof AppellationEventType) {
 				Node node = new Node();
-				node.setId(event.hashCode() + "");
+				node.setId(event.getId() + "");
 				node.setEventId(node.getId());
 				
 				List<TermType> terms = ((AppellationEventType) event).getTerms();
@@ -80,7 +79,7 @@ public class EventGraphMapper {
     						node.setConcept(interpretation);
     						ConceptpowerReply reply = conceptpower.getById(interpretation);
     						if (reply.getConceptEntry().size() > 0) {
-        						node.setType(reply.getConceptEntry().get(0).getType());
+        						node.setType(reply.getConceptEntry().get(0).getTypeUri());
     						}
     					}
 				    }
@@ -91,7 +90,7 @@ public class EventGraphMapper {
 				
 				if (((RelationEventType)event).getRelation() != null &&((RelationEventType)event).getRelation().getSubjectType() != null && ((RelationEventType)event).getRelation().getObjectType() != null && ((RelationEventType)event).getRelation().getPredicateType() != null) {
 					Node node = new Node();
-					node.setId(((RelationEventType)event).getRelation().hashCode() + "" + ((RelationEventType)event).getRelation().getPredicateType().hashCode() + "");
+					node.setId(((RelationEventType)event).getRelation().getId() + "" + ((RelationEventType)event).getRelation().getPredicateType().getAppellationEvent().getId() + "");
 					node.setEventId(node.getId());
 					
 					List<TermType> terms = ((RelationEventType) event).getRelation().getPredicateType().getAppellationEvent().getTerms();
@@ -111,7 +110,7 @@ public class EventGraphMapper {
     							node.setConcept(interpretation);
     							ConceptpowerReply reply = conceptpower.getById(interpretation);
                                 if (reply.getConceptEntry().size() > 0) {
-                                    node.setType(reply.getConceptEntry().get(0).getType());
+                                    node.setType(reply.getConceptEntry().get(0).getTypeUri());
                                 }
     						}
     					}
@@ -122,7 +121,7 @@ public class EventGraphMapper {
 					Relation relNode = new Relation();
 					
 					RelationType relation = ((RelationEventType)event).getRelation();
-					relNode.setId(relation.hashCode() + "" + relation.getPredicateType().hashCode() + "");
+					relNode.setId(relation.getId() + "" + relation.getPredicateType().getAppellationEvent().getId() + "");
 					relNode.setEventId(relNode.getId());
 					relationMap.put(relNode.getId(), relNode);
 				}
@@ -135,14 +134,19 @@ public class EventGraphMapper {
 						
 				RelationType rel = ((RelationEventType)checkAgains).getRelation();
 				if (rel != null) {
-					if (rel.getSubjectType() != null && rel.getSubjectType().hashCode() == event.hashCode()) {
+				    CreationEvent subj = rel.getSubjectType().getAppellationEvent() == null ? rel.getSubjectType().getRelationEvent() : rel.getSubjectType().getAppellationEvent();
+					if (rel.getSubjectType() != null && subj.getId().equals(event.getId())) {
 						continue MainLoop;
 					}
-					if (rel.getPredicateType() != null && rel.getPredicateType().hashCode() == event.hashCode())
-						continue MainLoop;
 					
-					if (rel.getObjectType() != null && rel.getObjectType().hashCode() == event.hashCode())
+					if (rel.getPredicateType() != null && rel.getPredicateType().getAppellationEvent().getId().equals(event.getId())) {
 						continue MainLoop;
+					}
+					
+					CreationEvent obj = rel.getObjectType().getAppellationEvent() == null ? rel.getObjectType().getRelationEvent() : rel.getObjectType().getAppellationEvent();
+					if (rel.getObjectType() != null && obj.getId().equals(event.getId())) {
+						continue MainLoop;
+					}
 				}
 			}
 			
@@ -157,17 +161,19 @@ public class EventGraphMapper {
 					RelationType relation = ((RelationEventType) event).getRelation();
 					if (relation.getSubjectType() != null && relation.getObjectType() != null && relation.getPredicateType() != null) {
 						
-						Relation rel = relationMap.get(relation.hashCode() + "" + relation.getPredicateType().hashCode());
-						rel.setPredicate(nodeMap.get(relation.hashCode() + "" + relation.getPredicateType().hashCode()));
+						Relation rel = relationMap.get(relation.getId() + "" + relation.getPredicateType().getAppellationEvent().getId());
+						rel.setPredicate(nodeMap.get(relation.getId() + "" + relation.getPredicateType().getAppellationEvent().getId()));
 						
 						String id = "";
 						if (relation.getSubjectType().getRelationEvent() != null) {
 						    RelationEventType relationET = (RelationEventType)relation.getSubjectType().getRelationEvent();
-							id = relationET.getRelation().hashCode() + "" + relationET.getRelation().getPredicateType().hashCode() + "";
+							id = relationET.getRelation().getId() + "" + relationET.getRelation().getPredicateType().getAppellationEvent().getId();
 						}
 						Node subject = relationMap.get(id);
 						if (subject == null) {
-							subject = nodeMap.get(relation.getSubjectType().getAppellationEvent().hashCode() + "");
+						    SubjectObjectType soType = relation.getSubjectType();
+						    AppellationEventType appelType = soType.getAppellationEvent();
+							subject = nodeMap.get(appelType.getId() + "");
 						}
 						rel.setSubject(subject);
 						
@@ -175,11 +181,11 @@ public class EventGraphMapper {
 						String objId = "";
 						if (relation.getObjectType().getRelationEvent() != null && (relation.getObjectType().getRelationEvent().getRelation() != null && relation.getObjectType().getRelationEvent().getRelation().getPredicateType() != null)) {
 							RelationEventType relationET = relation.getObjectType().getRelationEvent();
-						    objId = relationET.getRelation().hashCode() + "" + relationET.getRelation().getPredicateType().hashCode();
+						    objId = relationET.getRelation().getId() + "" + relationET.getRelation().getPredicateType().getAppellationEvent().getId();
 						}
 						Node object = relationMap.get(objId);
 						if (object == null) {
-							object = nodeMap.get(relation.getObjectType().getAppellationEvent().hashCode() + "");
+							object = nodeMap.get(relation.getObjectType().getAppellationEvent().getId());
 						}
 						rel.setObject(object);
 						
@@ -191,7 +197,7 @@ public class EventGraphMapper {
 		
 		for (CreationEvent event : unreferenced) {
 			if (event instanceof AppellationEventType) {
-				Node start = nodeMap.get(event.hashCode() + "");
+				Node start = nodeMap.get(event.getId() + "");
 				if (start != null)
 					startNodes.add(copyGraph(start));
 			}
@@ -199,9 +205,9 @@ public class EventGraphMapper {
 				if (((RelationEventType) event).getRelation() != null) {
 					RelationType relation = ((RelationEventType) event).getRelation();
 					if (relation.getSubjectType() != null && relation.getObjectType() != null && relation.getPredicateType() != null) {
-						Node start = relationMap.get(relation.hashCode() + "" + relation.getPredicateType().hashCode());
+						Node start = relationMap.get(relation.getId() + "" + relation.getPredicateType().getAppellationEvent().getId());
 						if (start == null)
-							start = nodeMap.get(relation.hashCode() + "" + relation.getPredicateType().hashCode());
+							start = nodeMap.get(relation.getId() + "" + relation.getPredicateType().getAppellationEvent().getId());
 						if (start != null && isGraphComplete(start))
 							startNodes.add(copyGraph(start));
 					}

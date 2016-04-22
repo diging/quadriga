@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.conceptpower.impl.ConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 
@@ -19,11 +20,11 @@ import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
  */
 public class Transformer {
 	
-	private String ontologyConnectorURL;
-	private ConceptpowerConnector conceptpower;
+	
+	private IConceptpowerConnector conceptpower;
 	private Map<String, TransformLink> statementLinkMap;
 	
-	public Transformer(ConceptpowerConnector conceptpower) {
+	public Transformer(IConceptpowerConnector conceptpower) {
 	    this.conceptpower = conceptpower;
 		statementLinkMap = new HashMap<String, TransformLink>();
 	}
@@ -78,7 +79,7 @@ public class Transformer {
 				mappedNode.setType(corrNode.getType());
 				mappedNode.setCorrespondingId(correspondingId);
 				
-				ConceptpowerReply reply = conceptpower.getById(concept);
+				ConceptpowerReply reply = conceptpower.getById(corrNode.getConcept());
 	            if (reply != null) {
 	                if (reply.getConceptEntry().size() > 0) {
 	                    mappedNode.setConceptName(reply.getConceptEntry().get(0).getLemma());

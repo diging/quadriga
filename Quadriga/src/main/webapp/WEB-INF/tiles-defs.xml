@@ -65,6 +65,11 @@
     </definition>
 
 
+    <!-- checks -->
+    <definition name="check" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/checks.jsp" />
+    </definition>
+    
 
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.nonav">
