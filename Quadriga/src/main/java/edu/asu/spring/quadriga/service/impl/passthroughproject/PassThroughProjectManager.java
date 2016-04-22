@@ -1,24 +1,22 @@
 package edu.asu.spring.quadriga.service.impl.passthroughproject;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProjectInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -28,7 +26,6 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.PassThroughProjectDTOMapper;
-import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
@@ -77,9 +74,8 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Autowired
     private IPassThroughProjectDocumentReader passThroughProjectDocumentReader;
 
-    @Override
     @Transactional
-    public String addPassThroughProject(String userid, IPassThroughProject project) throws QuadrigaStorageException {
+    private String addPassThroughProject(String userid, IPassThroughProject project) throws QuadrigaStorageException {
         String projectId = projectDao.generateUniqueID();
         QuadrigaUserDTO owner = userDAO.getDTO(userid);
         IUser user = userManager.getUser(userid);
@@ -93,9 +89,8 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         return projectId;
     }
 
-    @Override
     @Transactional
-    public String getInternalProjectId(String externalProjectid, String userid)
+    private String getInternalProjectId(String externalProjectid, String userid)
             throws QuadrigaStorageException, NoSuchRoleException {
 
         List<PassThroughProjectDTO> projectDTOs = projectDao.getExternalProjects(externalProjectid);
@@ -115,36 +110,38 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     }
 
     @Override
-    public String callQStore(String xml, IUser user) throws QStoreStorageException, DocumentParserException {
-        String networkName = Constants.VOGONWEB_NETWORK_NAME;
+    public String storePassThroughProjectInfo(String xml, IUser user) throws DocumentParserException, NoSuchRoleException,
+            QuadrigaStorageException, JAXBException, QuadrigaAccessException, QStoreStorageException {
 
         String userid = user.getUserName();
-        String networkId = null;
-        try {
-            Document document = passThroughProjectDocumentReader.getXMLParser(xml);
 
-            String projectId = passThroughProjectDocumentReader.getProjectID(document, userid);
+        PassThroughProjectInfo passThroughProjectInfo = passThroughProjectDocumentReader.getPassThroughProjectInfo(xml);
 
-            String workspaceId = passThroughProjectDocumentReader.getWorkspaceID(document, projectId, userid);
+        IPassThroughProject project = passThroughProjectDocumentReader.getPassThroughProject(passThroughProjectInfo,
+                userid);
 
-            String annotatedText = passThroughProjectDocumentReader.getAnnotateData(xml);
-            String responseFromQStore = networkManager.storeNetworks(annotatedText);
-            networkId = networkManager.storeNetworkDetails(responseFromQStore, user, networkName, workspaceId,
-                    INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
+        String projectId = savePassThroughProject(userid, project);
 
-        } catch (ParserConfigurationException | SAXException | IOException | NoSuchRoleException
-                | QuadrigaStorageException | JAXBException | QuadrigaAccessException e) {
-            throw new DocumentParserException(e);
+        String workspaceId = createWorkspaceForExternalProject(passThroughProjectInfo, projectId, user);
 
-        }
+        String network = passThroughProjectDocumentReader.getNetwork(xml);
+
+        String responseFromQStore = networkManager.storeNetworks(network);
+
+        String networkId = networkManager.storeNetworkDetails(responseFromQStore, user,
+                passThroughProjectInfo.getNetworkName(), workspaceId, INetworkManager.NEWNETWORK, "",
+                INetworkManager.VERSION_ZERO);
+
         return networkId;
 
     }
 
-    @Override
     @Transactional
-    public String createWorkspaceForExternalProject(String externalWorkspaceId, String externalWorkspaceName,
-            String projectId, IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+    private String createWorkspaceForExternalProject(PassThroughProjectInfo passThroughProjectInfo, String projectId,
+            IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
+
+        String externalWorkspaceId = passThroughProjectInfo.getExternalWorkspaceId();
+        String externalWorkspaceName = passThroughProjectInfo.getWorkspaceName();
 
         boolean isExternalWorkspaceExists = externalWSManager.isExternalWorkspaceExists(externalWorkspaceId);
         String workspaceId = null;
@@ -168,4 +165,14 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     }
 
+    private String savePassThroughProject(String userid, IPassThroughProject project)
+            throws QuadrigaStorageException, NoSuchRoleException {
+
+        String internalProjetid = getInternalProjectId(project.getExternalProjectid(), userid);
+
+        if (StringUtils.isEmpty(internalProjetid)) {
+            return addPassThroughProject(userid, project);
+        }
+        return internalProjetid;
+    }
 }

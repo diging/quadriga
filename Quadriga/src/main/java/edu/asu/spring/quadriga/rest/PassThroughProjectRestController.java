@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.exceptions.DocumentParserException;
+import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IRestMessage;
@@ -55,8 +58,9 @@ public class PassThroughProjectRestController {
         String userid = principal.getName();
         String networkId = null;
         try {
-            networkId = passThroughProjectManager.callQStore(xml, userManager.getUser(userid));
-        } catch (QStoreStorageException | DocumentParserException | QuadrigaStorageException e) {
+            networkId = passThroughProjectManager.storePassThroughProjectInfo(xml, userManager.getUser(userid));
+        } catch (QStoreStorageException | DocumentParserException | QuadrigaStorageException | NoSuchRoleException
+                | JAXBException | QuadrigaAccessException e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }

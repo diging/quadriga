@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.service.impl.passthroughproject;
 import java.io.IOException;
 import java.io.StringReader;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,17 +16,13 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factory.passthroughproject.IPassThroughProjectFactory;
+import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProjectInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
-import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.rest.PassThroughProjectRestController;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDocumentReader;
-import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 
 /**
  * 
@@ -38,16 +33,9 @@ import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectMan
 public class PassThroughProjectDocumentReader implements IPassThroughProjectDocumentReader {
 
     @Autowired
-    private IPassThroughProjectManager passThroughProjectManager;
-
-    @Autowired
-    private IUserManager userManager;
-
-    @Autowired
     private IPassThroughProjectFactory passthrprojfactory;
 
-    @Override
-    public Document getXMLParser(String xml) throws ParserConfigurationException, SAXException, IOException {
+    private Document getXMLDocument(String xml) throws ParserConfigurationException, SAXException, IOException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -57,7 +45,52 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
     }
 
     @Override
-    public String getProjectID(Document document, String userid) throws QuadrigaStorageException, NoSuchRoleException {
+    public IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo, String userid) {
+
+        IPassThroughProject project = passthrprojfactory.createPassThroughProjectObject();
+        project.setExternalProjectid(passThroughProjectInfo.getExternalProjectId());
+        project.setExternalUserName(passThroughProjectInfo.getExternalUserName());
+        project.setExternalUserId(passThroughProjectInfo.getExternalUserId());
+        project.setProjectName(passThroughProjectInfo.getName());
+        project.setDescription(passThroughProjectInfo.getDescription());
+        project.setClient(passThroughProjectInfo.getSender());
+
+        return project;
+    }
+
+    @Override
+    public String getNetwork(String xml) {
+
+        int startIndex = xml.indexOf("<element_events");
+        int endIndex = xml.indexOf("</element_events>");
+
+        return StringUtils.substring(xml, startIndex, endIndex + 17);
+    }
+
+    private String getTagId(Document document, String tagName) {
+
+        Node node = document.getElementsByTagName(tagName).item(0);
+        if (node == null) {
+            return null;
+        }
+        NamedNodeMap nodeAttributeMap = node.getAttributes();
+        Node idNode = nodeAttributeMap.getNamedItem("id");
+        return idNode.getNodeValue();
+    }
+
+    private String getTagValue(Document document, String tagName) {
+        Node tagNode = document.getElementsByTagName(tagName).item(0);
+        return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
+    }
+
+    @Override
+    public PassThroughProjectInfo getPassThroughProjectInfo(String xml) throws DocumentParserException {
+        Document document = null;
+        try {
+            document = getXMLDocument(xml);
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            throw new DocumentParserException(e);
+        }
 
         String externalProjectId = getTagId(document, "project");
         if (externalProjectId == null) {
@@ -89,21 +122,6 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
             sender = Constants.VOGONWEB_SENDER;
         }
 
-        IPassThroughProject project = passthrprojfactory.createPassThroughProjectObject();
-        project.setExternalProjectid(externalProjectId);
-        project.setExternalUserName(externalUserName);
-        project.setExternalUserId(externalUserId);
-        project.setProjectName(name);
-        project.setDescription(description);
-        project.setClient(sender);
-
-        return processProject(userid, project);
-    }
-
-    @Override
-    public String getWorkspaceID(Document document, String projectId, String userid)
-            throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
-
         String workspaceName = getTagValue(document, "workspace");
         if (workspaceName == null) {
             workspaceName = Constants.DEFAULT_WORKSPACE_NAME;
@@ -113,51 +131,22 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
         if (externalWorkspaceId == null) {
             externalWorkspaceId = Constants.DEFAULT_WORKSPACE_ID;
         }
-
-        return processWorkspace(externalWorkspaceId, workspaceName, projectId, userid);
-    }
-
-    @Override
-    public String getAnnotateData(String xml) {
-
-        int startIndex = xml.indexOf("<element_events");
-        int endIndex = xml.indexOf("</element_events>");
-
-        return StringUtils.substring(xml, startIndex, endIndex + 17);
-    }
-
-    private String processWorkspace(String externalWorkspaceId, String externalWorkspaceName, String projectId,
-            String userid) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
-        IUser user = userManager.getUser(userid);
-        return passThroughProjectManager.createWorkspaceForExternalProject(externalWorkspaceId, externalWorkspaceName,
-                projectId, user);
-    }
-
-    private String getTagId(Document document, String tagName) {
-
-        Node node = document.getElementsByTagName(tagName).item(0);
-        if (node == null) {
-            return null;
+        String networkName = getTagValue(document, "network_name");
+        if (networkName == null) {
+            networkName = Constants.VOGONWEB_NETWORK_NAME;
         }
-        NamedNodeMap nodeAttributeMap = node.getAttributes();
-        Node idNode = nodeAttributeMap.getNamedItem("id");
-        return idNode.getNodeValue();
-    }
 
-    private String getTagValue(Document document, String tagName) {
-        Node tagNode = document.getElementsByTagName(tagName).item(0);
-        return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
-    }
+        PassThroughProjectInfo info = new PassThroughProjectInfo();
+        info.setExternalProjectId(externalProjectId);
+        info.setExternalUserId(externalUserId);
+        info.setExternalUserName(externalUserName);
+        info.setName(name);
+        info.setDescription(description);
+        info.setSender(sender);
+        info.setWorkspaceName(workspaceName);
+        info.setExternalWorkspaceId(externalWorkspaceId);
+        info.setNetworkName(networkName);
 
-    private String processProject(String userid, IPassThroughProject project)
-            throws QuadrigaStorageException, NoSuchRoleException {
-
-        String internalProjetid = passThroughProjectManager.getInternalProjectId(project.getExternalProjectid(),
-                userid);
-
-        if (StringUtils.isEmpty(internalProjetid)) {
-            return passThroughProjectManager.addPassThroughProject(userid, project);
-        }
-        return internalProjetid;
+        return info;
     }
 }
