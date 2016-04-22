@@ -53,8 +53,7 @@ public class NetworkMapper implements INetworkMapper{
 			network = networkFactory.createNetworkObject();
 			network.setNetworkId(networksDTO.getNetworkid());
 			network.setNetworkName(networksDTO.getNetworkname());
-		//	network.setCreatedDate(networkDTO.getCreateddate());
-
+		
 			IWorkspaceNetwork networkworkspace = networkworkspacemapper.getNetworkWorkspaceByNetworkDTO(networksDTO, network);
 			network.setNetworkWorkspace(networkworkspace);
 
