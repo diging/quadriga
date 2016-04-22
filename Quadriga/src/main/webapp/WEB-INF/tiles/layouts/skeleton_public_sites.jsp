@@ -13,58 +13,83 @@
 	rel='stylesheet' type='text/css'>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+<script
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
+
 <title><tiles:insertAttribute name="title" /></title>
 
 <!-- Bootstrap core CSS -->
 <link
-	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+	rel="stylesheet">
 
 <!-- Custom styles for this template -->
 <link
 	href="${pageContext.servletContext.contextPath}/resources/public/css/navbar.css"
 	rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
 <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+<script
+	src="${pageContext.servletContext.contextPath}/resources/js/paginator/jquery.quick.pagination.js"></script>
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/js/paginator/style.css">
 
 <script type="text/javascript" charset="utf8">
-			
-			
-			$(document).ready(function() {
-			    // Configure/customize these variables.
-			    var showChar = 100;  // How many characters are shown by default
-			    var ellipsestext = "...";
-			    var moretext = "Show more >";
-			    var lesstext = "Show less";
-			    
-			    $('.more').each(function() {
-			        var content = $(this).html();
-			        if(content.length > showChar) {
-			            var c = content.substr(0, showChar);
-			            var h = content.substr(showChar, content.length - showChar);			 
-			            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
-			 
-			            $(this).html(html);
-			        }
-			    });
-			 
-			    $(".morelink").click(function(){
-			        if($(this).hasClass("less")) {
-			            $(this).removeClass("less");
-			            $(this).html(moretext);
-			        } else {
-			            $(this).addClass("less");
-			            $(this).html(lesstext);
-			        }
-			        $(this).parent().prev().toggle();
-			        $(this).prev().toggle();
-			        return false;
-			    });
-			});
-			
-		</script>
+	$(document)
+			.ready(
+					function() {
+						// Configure/customize these variables.
+						var showChar = 100; // How many characters are shown by default
+						var ellipsestext = "...";
+						var moretext = "Show more >";
+						var lesstext = "Show less";
+
+						$('.more')
+								.each(
+										function() {
+											var content = $(this).html();
+											if (content.length > showChar) {
+												var c = content.substr(0,
+														showChar);
+												var h = content.substr(
+														showChar,
+														content.length
+																- showChar);
+												var html = c
+														+ '<span class="moreellipses">'
+														+ ellipsestext
+														+ '&nbsp;</span><span class="morecontent"><span>'
+														+ h
+														+ '</span>&nbsp;&nbsp;<a href="" class="morelink">'
+														+ moretext
+														+ '</a></span>';
+
+												$(this).html(html);
+											}
+										});
+
+						$(".morelink").click(function() {
+							if ($(this).hasClass("less")) {
+								$(this).removeClass("less");
+								$(this).html(moretext);
+							} else {
+								$(this).addClass("less");
+								$(this).html(lesstext);
+							}
+							$(this).parent().prev().toggle();
+							$(this).prev().toggle();
+							return false;
+						});
+					});
+</script>
 <style type="text/css">
 .morecontent span {
 	display: none;

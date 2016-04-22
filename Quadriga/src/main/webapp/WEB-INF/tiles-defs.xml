@@ -846,7 +846,7 @@
 		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
 	</definition>
 	
-	<!-- Sites pages -->
+	<!-- Search Sites pages -->
 	<definition name="searchsites" extends="base.definition.public.sites">
 		<put-attribute name="title" value="Quadriga - Public Sites" />
 		<put-attribute name="navigation"

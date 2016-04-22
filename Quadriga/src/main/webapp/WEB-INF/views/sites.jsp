@@ -3,12 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
-<link rel="stylesheet"
-	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
-<script
-	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
-
-
 <script>
 	$(document).ready(function() {
 		$('#example').DataTable();
