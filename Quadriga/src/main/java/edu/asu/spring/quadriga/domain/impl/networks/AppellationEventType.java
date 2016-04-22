@@ -46,8 +46,7 @@ import javax.xml.bind.annotation.XmlType;
     "termOrExternalRefId"
 })
 public class AppellationEventType
-    extends CreationEvent
-{
+    extends CreationEvent {
 
     @XmlElements({
         @XmlElement(name = "term", type = TermType.class),
@@ -113,18 +112,6 @@ public class AppellationEventType
 		while(elementsIterator.hasNext()){
 			JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
 			if(element.getName().toString().contains("id")){
-				return element.getValue().toString();
-			}
-		}
-		return null;
-    }
-    
-    public String getAppellationSourceReference(){
-		List<JAXBElement<?>> elementsList = this.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
-		while(elementsIterator.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-			if(element.getName().toString().contains("source_reference")){
 				return element.getValue().toString();
 			}
 		}

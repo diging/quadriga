@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +41,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 
 	@Autowired
 	private IProjectCollaboratorManager projectManager;
+	
+	@Autowired
+	private Environment env;
 
 	/**
 	 * This method returns the list of projects associated with
@@ -55,7 +61,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		projectList =  projectShallowMapper.getProjectList(sUserName);
 		return projectList;
 	}
-
+	
 	/**
 	 * This method retrieves the list of projects associated with the logged in user as a collaborator. 
 	 * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
@@ -198,40 +204,77 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		}
 		return false;
 	}
-
+	
 	/**
-	 * This method retrieves the list of projects associated with the accessibility of the project. 
-	 * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
-	 * @param accessibility - accessibility of the project.
-	 * @return List<IProject> - list of projects associated with the accessibility of the project.
+	 * This method returns the list of recently updated top 5 projects associated with
+	 * the logged in user.
+	 * @param sUserName
+	 * @return List - list of recently updated projects.
 	 * @throws QuadrigaStorageException
+	 * @author Suraj Nilapwar
 	 */
 	@Override
 	@Transactional
-	public List<IProject> getProjectListByAccessibility(String accessibility) throws QuadrigaStorageException {
-		List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOByAccessibility(accessibility);
-		List<IProject> projectList = new ArrayList<IProject>();
-		if(projectDTOList!=null) {
-			for(ProjectDTO projectDTO : projectDTOList){
-				projectList.add(projectShallowMapper.getProjectDetails(projectDTO));
+	public List<IProject> getRecentProjectList(String sUserName) throws QuadrigaStorageException{
+		List<IProject> projectsList = new ArrayList<IProject>();
+		List<String> projectIds = new ArrayList<String>();
+		
+		List<IProject> projectListAsOwner;
+		projectListAsOwner =  projectShallowMapper.getProjectList(sUserName);
+		if(projectListAsOwner != null){
+			for (IProject p : projectListAsOwner) {
+				projectsList.add(getProjectDetails(p.getProjectId()));
+				projectIds.add(p.getProjectId());
 			}
-		}       
-		return projectList;
+		}
+		List<IProject> projectListAsCollaborator; 
+		projectListAsCollaborator = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);;
+		if(projectListAsCollaborator != null){
+			for (IProject p : projectListAsCollaborator) {
+				if (!projectIds.contains(p.getProjectId())){
+					projectsList.add(getProjectDetails(p.getProjectId()));		
+					projectIds.add(p.getProjectId());
+				}
+			}
+		}
+		Collections.sort(projectsList, new Comparator<IProject>() {
+			@Override
+			public int compare(IProject o1, IProject o2) {
+				return o2.getUpdatedDate().compareTo(o1.getUpdatedDate());
+			}
+		});
+		
+		int count;
+		String recentProjectCount = env.getProperty("project.recent.list.count");
+		if(recentProjectCount!=null){
+			count = Integer.parseInt(recentProjectCount);
+		}
+		else{
+			count = projectsList.size();
+		}
+		
+		List<IProject> recentProjectsList;
+		if(projectsList!=null && recentProjectCount!=null && projectsList.size()>count){
+			recentProjectsList = new ArrayList<IProject>(projectsList.subList(0, count));
+		}
+		else{
+			recentProjectsList = new ArrayList<IProject>(projectsList);
+		}
+		
+		return recentProjectsList;
 	}
-	
-   /**
-     * This method retrieves the list of projects associated with the search Term and 
-     * accessibility of the project. 
-     * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
-     * @param searchTerm - The search term which is a text, searched in name and description of the project.
-     * @param accessibility - accessibility of the project.
-     * @return List<IProject> - list of projects associated with the given searchTerm and accessibility of the project.
- * @throws QuadrigaStorageException 
-     */
+
+	/**
+    * This method retrieves the list of projects associated with the accessibility of the project. 
+    * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
+    * @param accessibility - accessibility of the project.
+    * @return List<IProject> - list of projects associated with the accessibility of the project.
+    * @throws QuadrigaStorageException
+    */
     @Override
     @Transactional
-    public List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException {
-        List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm, accessibility);
+    public List<IProject> getProjectListByAccessibility(String accessibility) throws QuadrigaStorageException {
+        List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOByAccessibility(accessibility);
         List<IProject> projectList = new ArrayList<IProject>();
         if(projectDTOList!=null) {
             for(ProjectDTO projectDTO : projectDTOList){
@@ -240,5 +283,4 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
         }       
         return projectList;
     }
-
 }

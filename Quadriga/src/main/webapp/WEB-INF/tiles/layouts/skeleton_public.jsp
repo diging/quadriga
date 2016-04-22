@@ -17,8 +17,9 @@
     <link href="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="${pageContext.servletContext.contextPath}/resources/public/css/navbar.css" rel="stylesheet">
-
+    <link href="${pageContext.servletContext.contextPath}/resources/public/css/navbar.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.servletContext.contextPath}/resources/public/css/base.css" rel="stylesheet" type="text/css">
+	
 	<!-- Search template -->
 	  <link href="${pageContext.servletContext.contextPath}/resources/public/css/search.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -44,7 +45,12 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
+            <c:if test="${not empty project}">
             <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">${project.projectName}</a>
+            </c:if>
+            <c:if test="${empty project}">
+            <a class="navbar-brand" href="">Quadriga</a>
+            </c:if>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">

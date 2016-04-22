@@ -15,28 +15,26 @@ $(document).ready(function() {
 } );
 </script>
 <!-- Content -->
-<input type="text" class="form-control" placeholder="Search Public Sites Repository" tabindex="1" autocapitalize="off">
-
-</br>
-	<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
-		<thead>
+<table id="example" class="table table-striped table-bordered"
+	cellspacing="0" width="100%">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Description</th>
+			<th>Project Lead</th>
+			<th>Project URL</th>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach var="sitesList" items="${projectList}">
 			<tr>
-				<th>Title</th>
-				<th>Description</th>
-				<th>Project Lead</th>
-				<th>Project URL</th>
+				<td style="width: 15%"><c:out value="${sitesList.projectName}"></c:out></td>
+				<td style="width: 30%"><span class="comment more"> <c:out
+							value="${sitesList.description}"></c:out></span></td>
+				<td style="width: 20%"><c:out value="${sitesList.owner.name}"></c:out></td>
+				<td style="width: 35%"><a
+					href="${pageContext.servletContext.contextPath}/sites/${sitesList.unixName}">http://quadriga.asu.edu/sites/${sitesList.unixName}</a></td>
 			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="sitesList" items="${projectList}">
-				<tr>
-					<td style="width: 15%"><c:out value="${sitesList.projectName}"></c:out></td>
-					<td style="width: 30%"><span class="comment more"> <c:out
-								value="${sitesList.description}"></c:out></span></td>
-					<td style="width: 20%"><c:out value="${sitesList.owner.name}"></c:out></td>
-					<td style="width: 35%"><a
-						href="${pageContext.servletContext.contextPath}/sites/${sitesList.unixName}">http://quadriga.asu.edu/sites/${sitesList.unixName}</a></td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+		</c:forEach>
+	</tbody>
+</table>
