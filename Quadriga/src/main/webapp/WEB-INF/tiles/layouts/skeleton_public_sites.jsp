@@ -37,10 +37,6 @@
 	src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 <script
 	src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
-<script
-	src="${pageContext.servletContext.contextPath}/resources/js/paginator/jquery.quick.pagination.js"></script>
-<link rel="stylesheet"
-	href="${pageContext.servletContext.contextPath}/resources/js/paginator/style.css">
 
 <script type="text/javascript" charset="utf8">
 	$(document)
