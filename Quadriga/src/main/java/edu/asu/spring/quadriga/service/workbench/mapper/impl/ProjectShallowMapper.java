@@ -273,7 +273,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 			if(temp[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*") && linesCount < 4){
 				if(i+1 < temp.length && temp[i+1].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
 					finalDescription.append(temp[i])
-									.append("...");
+									.append("........");
 				} else{
 					finalDescription.append(temp[i]);
 				}
