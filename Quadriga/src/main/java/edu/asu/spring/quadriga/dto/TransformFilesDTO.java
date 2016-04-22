@@ -3,9 +3,7 @@ package edu.asu.spring.quadriga.dto;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Column;
-
 import java.io.Serializable;
-
 import javax.persistence.Id;
 
 /**
@@ -131,5 +129,4 @@ public class TransformFilesDTO implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 }
