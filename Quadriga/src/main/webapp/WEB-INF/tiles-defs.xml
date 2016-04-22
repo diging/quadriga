@@ -728,12 +728,6 @@
 	</definition>
 
 
-	<definition name="auth/saveabout" extends="base.definition">
-		<put-attribute name="currentPage" value="saveabout" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/settings/editAbout.jsp" />
-	</definition>
-
 	<definition name="auth/editabout" extends="base.definition">
 		<put-attribute name="currentPage" value="editabout" />
 		<put-attribute name="content"
