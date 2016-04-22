@@ -11,16 +11,11 @@
 	
 -->
  <script type="text/javascript" charset="utf8">
-	function checkCheckboxes( id, pID ){
-		alert(id);
-		alert(pID);
-	
-	    $('#'+pID).find(':checkbox').each(function(){		    
-	       
-	    	jQuery(this).attr('checked', $('#' + id).is(':checked'));
-			
-	    });     
-
+	function checkCheckboxes( id, pID,status ){
+		$('#'+pID).find(':checkbox').each(function(){		    
+	    	jQuery(this).prop('checked', status);
+		});		
+		
 	}
  	
  $(document).ready(function() {
@@ -41,7 +36,10 @@
 		});
 		
 		$("#selectAllProjects").click(function(){
+			status=$(this).prop('checked');
 			$(".projectList").prop('checked',$(this).prop('checked'));
+			$(".networks").prop('checked',$(this).prop('checked'));
+			
 		});
 		$("#selectAllTransformations").click(function(){
 			$(".transformationList").prop('checked',$(this).prop('checked'));
@@ -149,7 +147,7 @@ $(document).ready(function () {
       		<h4 class="panel-title">   
         		<div class="checkbox1" id="divProjectList"> 
         		<label>
-      				<input type="checkbox" value="${project.projectName}" id="checkAllNetworks" onclick="checkCheckboxes(this.id, '${project.projectName}');"  name="project" class="projectList" data-param1="${project.projectName}" > 
+      				<input type="checkbox" value="${project.projectName}" id="checkAllNetworks" onclick="checkCheckboxes(this.id, '${project.projectName}',this.checked);"  name="project" class="projectList" data-param1="${project.projectName}" > 
         		</label>
         		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#${project}" aria-expanded="true" aria-controls="${project}">
     			${project.projectName}
@@ -167,7 +165,6 @@ $(document).ready(function () {
 								<div class="row">
 								
 								<c:if test="${not empty networkMap[project.projectName]}">
-								 <script type="text/javascript" charset="utf8">var networkArr=[];</script>
 								<c:forEach var="network" items="${networkMap[project.projectName]}">	
 									 <div class="col-md-4">
 									 <summary>
