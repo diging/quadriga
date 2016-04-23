@@ -6,8 +6,6 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +17,6 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
-import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
@@ -31,7 +28,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Repository
-public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
+public class ListWsDAO extends BaseDAO<WorkspaceDTO> implements IListWsDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -44,8 +41,6 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
 
     @Autowired
     private NetworkDTOMapper networkDTOMapper;
-
-    private static final Logger logger = LoggerFactory.getLogger(ListWsDAO.class);
 
     /**
      * {@inheritDoc}
@@ -65,8 +60,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("List workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceList;
     }
@@ -85,8 +79,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
             workspaceDTOList = query.list();
 
         } catch (HibernateException e) {
-            logger.error("List workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceDTOList;
     }
@@ -106,8 +99,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
             workspaceDTOList = query.list();
 
         } catch (HibernateException e) {
-            logger.error("List workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceDTOList;
     }
@@ -130,8 +122,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("List workspace associated with collaborator  :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceList;
     }
@@ -152,8 +143,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
             workspaceDTOList = query.list();
 
         } catch (HibernateException e) {
-            logger.error("List workspace associated with collaborator  :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceDTOList;
     }
@@ -179,8 +169,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("Retrieve active workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceList;
     }
@@ -203,8 +192,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
 
             workspaceDTOList = query.list();
         } catch (HibernateException e) {
-            logger.error("Retrieve active workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceDTOList;
     }
@@ -230,8 +218,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("retrieve active workspace of collaborator :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceList;
     }
@@ -254,8 +241,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
 
             workspaceDTOList = query.list();
         } catch (HibernateException e) {
-            logger.error("retrieve active workspace of collaborator :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceDTOList;
     }
@@ -282,8 +268,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("Retrieve archived workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceList;
     }
@@ -308,8 +293,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
             query.setParameter("isarchived", true);
             workspaceDTOList = query.list();
         } catch (HibernateException e) {
-            logger.error("Retrieve archived workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceDTOList;
     }
@@ -336,8 +320,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("retrieve deactive workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceList;
     }
@@ -362,8 +345,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
             workspaceDTOList = query.list();
 
         } catch (HibernateException e) {
-            logger.error("retrieve deactive workspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceDTOList;
     }
@@ -385,8 +367,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("listActiveWorkspace method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceList;
     }
@@ -404,8 +385,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
             }
         } catch (HibernateException e) {
-            logger.error("Retrieve workspace details method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspace;
     }
@@ -426,8 +406,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 bitstreamList = workspaceDspaceDTOMapper.getBitstreamList(workspaceDspaceDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("Retrieve bit streams method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return bitstreamList;
     }
@@ -447,8 +426,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 networkList = networkDTOMapper.getNetworkList(nwDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("getWorkspaceNetworkList method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return networkList;
     }
@@ -467,8 +445,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 workspaceName = workspaceDTO.getWorkspacename();
             }
         } catch (HibernateException e) {
-            logger.error("getWorkspaceName method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return workspaceName;
     }
@@ -490,8 +467,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 networkList = networkDTOMapper.getNetworkList(networksDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("getWorkspaceRejectedNetworkList method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return networkList;
     }
@@ -517,7 +493,6 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Error in fetching workspace id from concept collection: ", e);
             throw new QuadrigaStorageException(e);
         }
 
@@ -543,8 +518,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
                 networkList = networkDTOMapper.getNetworkList(networksDTOList);
             }
         } catch (HibernateException e) {
-            logger.error("getWorkspaceRejectedNetworkList method :", e);
-            throw new QuadrigaStorageException();
+            throw new QuadrigaStorageException(e);
         }
         return networkList;
     }
@@ -553,5 +527,4 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
     public WorkspaceDTO getDTO(String id) {
         return getDTO(WorkspaceDTO.class, id);
     }
-
 }
