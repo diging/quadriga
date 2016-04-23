@@ -408,5 +408,4 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
             throw new QuadrigaStorageException(e);
         }
     }
-
 }

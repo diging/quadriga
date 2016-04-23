@@ -8,23 +8,23 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IRetrieveProjectManager {
 
-	public abstract IProject getProjectDetails(String projectId)
-			throws QuadrigaStorageException;
-	public abstract IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException;
+    public abstract IProject getProjectDetails(String projectId)
+            throws QuadrigaStorageException;
+    public abstract IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException;
 
-	public abstract List<IProject> getProjectList(String sUserName)
-			throws QuadrigaStorageException;
+    public abstract List<IProject> getProjectList(String sUserName)
+            throws QuadrigaStorageException;
 
-	public abstract List<IProjectCollaborator> getCollaboratingUsers(String projectId) throws QuadrigaStorageException;
+    public abstract List<IProjectCollaborator> getCollaboratingUsers(String projectId) throws QuadrigaStorageException;
 
-	public abstract List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
-			throws QuadrigaStorageException;
+    public abstract List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
+            throws QuadrigaStorageException;
 
-	public abstract List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
-			throws QuadrigaStorageException;
+    public abstract List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
+            throws QuadrigaStorageException;
 
-	public abstract List<IProject> getCollaboratorProjectList(String sUserName)
-			throws QuadrigaStorageException;
+    public abstract List<IProject> getCollaboratorProjectList(String sUserName)
+            throws QuadrigaStorageException;
 
 	public abstract List<IProject> getProjectListByCollaboratorRole(String sUserName,String role)
 			throws QuadrigaStorageException;
@@ -37,4 +37,7 @@ public interface IRetrieveProjectManager {
 	
 	public abstract List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException;
 
+    
+	public abstract List<IProject> getRecentProjectList(String sUserName)
+			throws QuadrigaStorageException;
 }

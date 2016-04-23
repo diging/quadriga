@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
@@ -51,6 +52,7 @@ public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
      */
     @SuppressWarnings("unchecked")
     @Override
+    @Transactional
     public List<IWorkSpace> listWorkspace(String projectid, String username) throws QuadrigaStorageException {
         List<IWorkSpace> workspaceList = null;
         try {
