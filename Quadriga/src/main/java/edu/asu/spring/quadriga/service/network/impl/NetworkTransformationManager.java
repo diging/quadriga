@@ -81,6 +81,15 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         return transformedNetwork;
     }
 
+
+    /**
+	 * This method returns the transformation network in provided project for given conceptId.
+	 * @param projectIds
+	 * @param conceptId
+	 * @return ITransformedNetwork
+	 * @throws QuadrigaStorageException
+	 * @author suraj nilapwar
+	 */
     @Override
     public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId)
         throws QuadrigaStorageException {
@@ -94,7 +103,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // get the transformed network of all the networks in a project
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
         // create finalnetwork using conceptId 
-        ITransformedNetwork finalTransformedNetwork = getfinalTransformedNetwork(transformedNetwork,conceptId);
+        ITransformedNetwork finalTransformedNetwork = getFinalTransformedNetwork(transformedNetwork,conceptId);
 
         return finalTransformedNetwork;
     }
@@ -111,7 +120,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         return networkList;
     }
     
-    
+    /**
+	 * This method returns the transformation network in provided list of projects for given conceptId.
+	 * @param projectIds
+	 * @param conceptId
+	 * @return ITransformedNetwork
+	 * @throws QuadrigaStorageException
+	 * @author suraj nilapwar
+	 */
     @Override
     public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId)
         throws QuadrigaStorageException {
@@ -132,7 +148,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // get the transformed network of all the networks in projects
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
         // create finalnetwork using conceptId 
-        ITransformedNetwork finalTransformedNetwork = getfinalTransformedNetwork(transformedNetwork,conceptId);
+        ITransformedNetwork finalTransformedNetwork = getFinalTransformedNetwork(transformedNetwork,conceptId);
         
         return finalTransformedNetwork;  
      }
@@ -199,7 +215,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         return new TransformedNetwork(updatedNodes, links);
     }
     
-    public ITransformedNetwork getfinalTransformedNetwork(ITransformedNetwork transformedNetwork, String conceptId)
+    private ITransformedNetwork getFinalTransformedNetwork(ITransformedNetwork transformedNetwork, String conceptId)
     {
         // Filter the nodes with the concept id
         // add all the statement ids to a set
