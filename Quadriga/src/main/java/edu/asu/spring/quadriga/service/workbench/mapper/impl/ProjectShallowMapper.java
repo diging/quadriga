@@ -247,7 +247,6 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 	@Transactional
 	public IProject getProjectDetailsForSearch(ProjectDTO projectDTO, String pattern) throws QuadrigaStorageException{
 		IProject projectProxy = null;
-		
 		if(projectDTO != null){
 			projectProxy = new ProjectProxy(projectManager);
 			projectProxy.setProjectId(projectDTO.getProjectid());
@@ -261,10 +260,15 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 			projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
 			projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
 		}
-		
 		return projectProxy;
 	}
 
+	/**
+	 * Returns formated String for description and pattern
+	 * @param description project description
+	 * @param pattern search string
+	 * @return formated description
+	 */
 	private String searchLines(String description, String pattern) {
 		String[] temp = description.split("\\.");
 		StringBuffer finalDescription = new StringBuffer();
@@ -282,5 +286,4 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 		}
 		return finalDescription.toString();
 	}
-	
 }
