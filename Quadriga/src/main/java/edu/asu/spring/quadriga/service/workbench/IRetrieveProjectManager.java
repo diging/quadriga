@@ -40,4 +40,7 @@ public interface IRetrieveProjectManager {
     
 	public abstract List<IProject> getRecentProjectList(String sUserName)
 			throws QuadrigaStorageException;
+	
+	public abstract List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) 
+			throws QuadrigaStorageException;
 }
