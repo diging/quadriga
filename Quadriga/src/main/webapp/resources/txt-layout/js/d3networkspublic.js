@@ -26,7 +26,7 @@ function d3visualizepublic(graph, networkId, path,type) {
 	// Layout size
 	var width = $('#chart').parent().width();
 	console.log(width);
-	height = "500";
+	var height = $('#chart').parent().height();
 	var layout;
 	var color = d3.scale.category20();
 	var svg_id ="svg_id";
@@ -52,8 +52,8 @@ function d3visualizepublic(graph, networkId, path,type) {
 
 
 	var vis = d3.select("#chart").append("svg:svg")
-			.attr("width", width)
-			.attr("height", height)
+			.attr("width", "100%")
+			.attr("height", "100%")
 			.append('svg:g')
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))

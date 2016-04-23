@@ -58,6 +58,8 @@ $("input[type=button]").button().click(function(event) {
 
 <script type="text/javascript">
 
+//# sourceURL=dynamicScript.js 
+
   function goFullscreen(id) {
 	  document.getElementById('chart').style='position: fixed; top: 0; bottom :0; left: 0; right :0';
     // Get the element that we want to take into fullscreen mode
@@ -101,6 +103,9 @@ $("input[type=button]").button().click(function(event) {
 </script>
 
 <script type="text/javascript">
+
+//# sourceURL=dynamicScript2.js 
+
 function clear()
 {
 
