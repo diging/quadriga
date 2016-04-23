@@ -163,26 +163,20 @@ public class ConceptcollectionController {
         return "auth/conceptcollections/details";
     }
 
-    private void fillModel(String collection_id, ModelMap model, String username)
+    private void fillModel(String collectionId, ModelMap model, String username)
             throws QuadrigaStorageException, QuadrigaAccessException,
             JSONException {
-        IConceptCollection collection = collectionFactory
-                .createConceptCollectionObject();
-        collection.setConceptCollectionId(collection_id);
-        conceptControllerManager.fillCollectionDetails(collection, username);
+        IConceptCollection collection = conceptControllerManager.getConceptCollection(collectionId);
         model.addAttribute("concept", collection);
         conceptControllerManager.getCollaborators(collection);
-        model.addAttribute("collectionid", collection_id);
+        model.addAttribute("collectionid", collectionId);
 
-        String jsTreeData = conceptControllerManager.getProjectsTree(username,
-                collection_id);
-        model.addAttribute("core", jsTreeData);
         model.addAttribute("owner",
                 collection.getOwner().getUserName().equals(username));
 
         // TODO: showCollaboratingUsers() should be changed with mapper
         List<IConceptCollectionCollaborator> collaboratingUsers = conceptControllerManager
-                .showCollaboratingUsers(collection_id);
+                .showCollaboratingUsers(collectionId);
         model.addAttribute("collaboratingUsers", collaboratingUsers);
     }
 
@@ -389,8 +383,7 @@ public class ConceptcollectionController {
             deletedConceptNr = selectedIds.length;
         }
 
-        conceptControllerManager.fillCollectionDetails(conceptCollection,
-                principal.getName());
+        conceptControllerManager.fillConceptCollection(conceptCollection);;
 
         fillModel(collectionId, model, principal.getName());
         if (deletedConceptNr > 0) {
