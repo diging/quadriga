@@ -6,17 +6,17 @@
 <script>
 	$(document).ready(function() {
 		$('#example1').DataTable({
-	        "searching": false
-	    });
+			"searching" : false
+		});
 	});
-	
+
 	function handle(e) {
 		if (e.keyCode === 13) {
 			document.getElementById("sites1").submit();
 		}
 		return false;
 	}
-	
+
 	function callMethod() {
 		document.getElementById("sites1").submit();
 	}
@@ -48,22 +48,17 @@
 		<tbody>
 			<c:forEach var="sitesList" items="${projectList}">
 				<tr>
-					<td>
-						<div
-							style="padding-top: 20px; margin-top: 20px; margin-bottom: 10px; border-top: 1px solid #eee;">
-							<p>
-								<a
-									style="color: #4078c0; text-decoration: none; font-weight: bold; line-height: 1.2;"
-									href="${pageContext.servletContext.contextPath}/sites/${sitesList.unixName}">${sitesList.projectName}
-								</a> <br> <span
-									style="font-size: 12px !important; color: #767676 !important"><c:out
-										value="Lead by ${sitesList.owner.name}"></c:out> </span>
-							</p>
-							<div>
-								<c:out value="${sitesList.description}"></c:out>
-							</div>
+					<td><a
+						style="color: #4078c0; font-weight: bold; line-height: 0.5;"
+						href="${pageContext.servletContext.contextPath}/sites/${sitesList.unixName}">${sitesList.projectName}
+					</a> <br>
+					<span style="font-size: 10px !important; color: #767676 !important"><c:out
+								value="Lead by ${sitesList.owner.name}"></c:out> </span>
+						<p>
+						<div>
+							<c:out value="${sitesList.description}"></c:out>
 						</div>
-					</td>
+						</p></td>
 				</tr>
 			</c:forEach>
 		</tbody>
