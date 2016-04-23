@@ -26,18 +26,21 @@ public interface IRetrieveProjectManager {
     public abstract List<IProject> getCollaboratorProjectList(String sUserName)
             throws QuadrigaStorageException;
 
-	public abstract List<IProject> getProjectListByCollaboratorRole(String sUserName,String role)
-			throws QuadrigaStorageException;
-	
-	boolean getPublicProjectWebsiteAccessibility(String unixName) throws QuadrigaStorageException;
-	
-	boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) throws QuadrigaStorageException;
-	
-	public abstract List<IProject> getProjectListByAccessibility(String name)throws QuadrigaStorageException;
-	
-	public abstract List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException;
+    public abstract List<IProject> getProjectListByCollaboratorRole(String sUserName,String role)
+            throws QuadrigaStorageException;
 
+    boolean getPublicProjectWebsiteAccessibility(String unixName) 
+            throws QuadrigaStorageException;
+    
+    boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) 
+            throws QuadrigaStorageException;
+    
+    public abstract List<IProject> getProjectListByAccessibility(String name)
+            throws QuadrigaStorageException;
     
 	public abstract List<IProject> getRecentProjectList(String sUserName)
+			throws QuadrigaStorageException;
+	
+	public abstract List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) 
 			throws QuadrigaStorageException;
 }

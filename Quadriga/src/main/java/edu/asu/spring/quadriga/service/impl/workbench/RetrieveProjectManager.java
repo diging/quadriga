@@ -263,28 +263,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		
 		return recentProjectsList;
 	}
-	
-   /**
-     * This method retrieves the list of projects associated with the search Term and 
-     * accessibility of the project. 
-     * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
-     * @param searchTerm - The search term which is a text, searched in name and description of the project.
-     * @param accessibility - accessibility of the project.
-     * @return List<IProject> - list of projects associated with the given searchTerm and accessibility of the project.
- * @throws QuadrigaStorageException 
-     */
-    @Override
-    @Transactional
-    public List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException {
-        List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm, accessibility);
-        List<IProject> projectList = new ArrayList<IProject>();
-        if(projectDTOList!=null) {
-            for(ProjectDTO projectDTO : projectDTOList){
-                projectList.add(projectShallowMapper.getProjectDetailsForSearch(projectDTO, searchTerm));
-            }
-        }       
-        return projectList;
-    }
+
 	/**
     * This method retrieves the list of projects associated with the accessibility of the project. 
     * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
@@ -303,5 +282,27 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
             }
         }       
         return projectList;
+    }
+
+    /**
+     * This method retrieves the list of projects associated with the search Term and 
+     * accessibility of the project. 
+     * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
+     * @param searchTerm - The search term which is a text, searched in name and description of the project.
+     * @param accessibility - accessibility of the project.
+     * @return List<IProject> - list of projects associated with the given searchTerm and accessibility of the project.
+     * @throws QuadrigaStorageException 
+     */
+    @Override
+    @Transactional
+    public List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException {
+    	List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm, accessibility);
+    	List<IProject> projectList = new ArrayList<IProject>();
+    	if(projectDTOList!=null) {
+    		for(ProjectDTO projectDTO : projectDTOList){
+    			projectList.add(projectShallowMapper.getProjectDetailsForSearch(projectDTO, searchTerm));
+    		}
+    	}       
+    	return projectList;
     }
 }
