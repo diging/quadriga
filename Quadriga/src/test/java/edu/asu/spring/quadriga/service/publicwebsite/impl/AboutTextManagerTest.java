@@ -1,7 +1,8 @@
 package edu.asu.spring.quadriga.service.publicwebsite.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.dao.impl.publicwebsite.AboutTextDAO;
 import edu.asu.spring.quadriga.dao.publicwebsite.IAboutTextDAO;
+import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.impl.publicwebsite.AboutTextManager;
@@ -68,6 +70,18 @@ public class AboutTextManagerTest {
         assertEquals("NewTitle2", argument.getValue().getTitle());
         assertEquals("NewDescription2", argument.getValue().getDescription());
 
+    }
+    
+    @Test
+    public void testgetDTOByProjectId() throws QuadrigaStorageException{
+    	AboutTextDTO dto = new AboutTextDTO();
+    	dto.setProjectId("test1");
+    	dto.setTitle("TestTitle");
+        Mockito.when(mockedAboutTextDAO.getDTOByProjectId("test1")).thenReturn(dto);
+
+        IAboutText result = aboutTextManager.getAboutTextByProjectId("test1");
+        assertNotNull(result);
+        assertEquals("TestTitle", result.getTitle());
     }
 
 }
