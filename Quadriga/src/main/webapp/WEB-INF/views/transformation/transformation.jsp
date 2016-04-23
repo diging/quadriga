@@ -85,9 +85,11 @@ $(document).ready(function () {
 				        	        });
 				        	        
 				        	        var networks = [];
+				        	        var networkID=[];
 				        	        $.each($("input[name='individualnetwork']:checked"), function(){            
 				        	            var arrayofNetworks =$(this).val().split(","); 
 				        	        	networks.push(arrayofNetworks[0]);
+				        	        	networkID.push(arrayofNetworks[2]);
 				        	        	if((jQuery.inArray(arrayofNetworks[1], projects) == -1)){
 					        	        	projects.push(arrayofNetworks[1]);				        	        		
 				        	        	}
@@ -169,7 +171,7 @@ $(document).ready(function () {
 									 <div class="col-md-4">
 									 <summary>
 									 <div class="selectAllNetworks" id="individualNetworks">
-										<input type="checkbox" value="${network.networkName},${project.projectName}" name="individualnetwork" class="networks">
+										<input type="checkbox" value="${network.networkName},${project.projectName},${network.networkId}" name="individualnetwork" class="networks">
 										<a href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.networkId}">
 										<c:out value="${network.networkName}"></c:out>
 										</a>
