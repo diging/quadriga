@@ -31,8 +31,7 @@ public class TransformationManager implements ITransformationManager {
 				description, patternFileName, patternTitle, patternDescription,
 				mappingFileName, mappingTitle, mappingDescription);
 		tranformDTO.setId(transformationDAO.generateUniqueID());
-		transformationDAO.saveTransformDTO(tranformDTO);
-
+		transformationDAO.saveNewDTO(tranformDTO);
 	}
 
 	@Transactional

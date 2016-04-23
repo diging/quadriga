@@ -7,7 +7,7 @@ import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 
 /**
- * DAO class to  save or get data from tbl_transfomationfiles_metadata
+ * DAO class to  save , get data from tbl_transfomationfiles_metadata
  * 
  * @author JayaVenkat
  *
@@ -17,7 +17,7 @@ public class TransformFilesDAO extends BaseDAO implements
 		ITransformFilesDAO {
 
 	/**
-	 * This method will return list of DTO objects and each DTO object corresponds to on transformation
+	 * This method will return list of DTO objects and each DTO object corresponds to one transformation
 	 */
 	@Override
 	public List<TransformFilesDTO> getAllTransformations(){
@@ -28,11 +28,6 @@ public class TransformFilesDAO extends BaseDAO implements
 	@Override
 	public Object getDTO(String id) {		
 		return getDTO(TransformFilesDTO.class, id);
-	}
-
-	@Override
-	public void saveTransformDTO(TransformFilesDTO tranformDTO) {
-		saveNewDTO(tranformDTO);				
 	}
 		
 }
