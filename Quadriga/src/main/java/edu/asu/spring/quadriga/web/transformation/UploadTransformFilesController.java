@@ -58,7 +58,7 @@ public class UploadTransformFilesController {
 			model.getModelMap().put("error_alert_msg","Please upload all the required files");
             return model;
 		}	
-		else if(file[0].getSize()!=0||file[1].getSize()!=0){
+		else if(file[0].getSize()==0||file[1].getSize()==0){
 			model.getModelMap().put("show_error_alert",true);
 			model.getModelMap().put("error_alert_msg","Please upload all the required files");
             return model;
