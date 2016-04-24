@@ -13,14 +13,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.asu.spring.quadriga.domain.impl.networks.Transformation;
-import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
+import edu.asu.spring.quadriga.exceptions.QuadrigaGeneratorException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.transform.impl.Generator;
 import edu.asu.spring.quadriga.service.network.transform.impl.MatchGraphs;
 import edu.asu.spring.quadriga.service.network.transform.impl.TransformNode;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.web.workbench.AddCollaboratorController;
 
 @Controller
 public class TransformationTestController {
@@ -37,9 +37,12 @@ public class TransformationTestController {
     
     @Autowired
     private INetworkManager networkManager;
+    
+    @Autowired
+    private Generator generator;
 
     @RequestMapping(value = "checks/transformation")
-    public String transformTest() throws QuadrigaStorageException, IOException {
+    public String transformTest() throws QuadrigaStorageException, IOException, QuadrigaGeneratorException {
         
         Resource patternRes = new ClassPathResource("transformation/Pe_Pe_engagesWith.graphml");
         Resource transformationRes = new ClassPathResource("transformation/triple_engagesWith.graphml");
@@ -55,6 +58,7 @@ public class TransformationTestController {
         
         List<List<TransformNode>> results = matchGraphs.matchGraphs(transformations, networkIds);
         logger.info("Check results for transformations: " + results);
+        logger.info(generator.generateText(results, null, true));
         
         return "check";
     }

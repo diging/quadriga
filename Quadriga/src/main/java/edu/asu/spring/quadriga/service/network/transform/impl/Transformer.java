@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.conceptpower.impl.ConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 
 /**
