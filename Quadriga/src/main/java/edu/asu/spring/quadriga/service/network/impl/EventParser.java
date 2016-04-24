@@ -64,14 +64,13 @@ public class EventParser {
 
     @Autowired
     private IMarshallingService marshallingService;
-
-    public void parseStatement(String relationEventId, Map<String, Node> nodes,
-            List<Link> links) throws JAXBException, QStoreStorageException {
-        ElementEventsType elementEventType = getElementEventTypeFromCreationEventTypeID(relationEventId);
-        List<CreationEvent> creationEventList = elementEventType
-                .getRelationEventOrAppellationEvent();
-        Iterator<CreationEvent> creationEventIterator = creationEventList
-                .iterator();
+    
+    public void parseStatement(String relationEventId,
+                               ElementEventsType elementEventType,
+                               Map<String, Node> nodes,
+                               List<Link> links) {
+        List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
+        Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
 
         while (creationEventIterator.hasNext()) {
             CreationEvent event = creationEventIterator.next();
@@ -202,21 +201,4 @@ public class EventParser {
     private String getDescription(ConceptpowerReply re) {
         return re.getConceptEntry().get(0).getDescription();
     }
-
-    private ElementEventsType getElementEventTypeFromCreationEventTypeID(
-            String relationEventId) throws JAXBException,
-            QStoreStorageException {
-        String xml = qstoreConnector.getCreationEvent(relationEventId);
-        ElementEventsType elementEventType = null;
-        if (xml == null) {
-            throw new QStoreStorageException(
-                    "Some issue retriving data from Qstore, Please check the logs related to Qstore");
-        } else {
-            // Initialize ElementEventsType object for relation event
-            elementEventType = marshallingService
-                    .unMarshalXmlToElementEventsType(xml);
-        }
-        return elementEventType;
-    }
-
 }
