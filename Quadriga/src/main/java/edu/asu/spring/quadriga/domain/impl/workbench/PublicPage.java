@@ -2,6 +2,13 @@ package edu.asu.spring.quadriga.domain.impl.workbench;
 
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 
+/**
+ * @description : Public Page class describing the properties of a Public Page
+ *              object
+ * 
+ * @author : Prasanth Priya Nesan
+ * 
+ */
 public class PublicPage implements IPublicPage { 
     private String title;
     private String description;

@@ -868,5 +868,3 @@
 		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
 	</definition>
 </tiles-definitions>
-
-	

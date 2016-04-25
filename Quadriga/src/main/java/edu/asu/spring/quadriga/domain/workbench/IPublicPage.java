@@ -1,5 +1,12 @@
 package edu.asu.spring.quadriga.domain.workbench;
 
+/**
+ * @description : interface to implement PublicPage class.
+ * 
+ * @author : Prasanth Priya Nesan
+ *
+ */
+
 public interface IPublicPage {
 
     public abstract String getTitle();
