@@ -54,7 +54,7 @@ public class TransformationTestController {
         transformations.add(transform);
         
         List<String> networkIds = new ArrayList<String>();
-        networkIds.add("ff9d92ae-761b-4e12-907d-94efed0796c2");
+        networkIds.add("NETt7Ql92");
         
         List<List<TransformNode>> results = matchGraphs.matchGraphs(transformations, networkIds);
         logger.info("Check results for transformations: " + results);
