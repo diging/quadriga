@@ -121,9 +121,9 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     }
     
     /**
-	 * This method returns the transformation network in provided list of projects for given conceptId.
-	 * @param projectIds
-	 * @param conceptId
+	 * This method returns the transformation network for searched concept under provided project list
+	 * @param projectIds : List of projectIds for projects to search under
+	 * @param conceptId : Id of concept to search
 	 * @return ITransformedNetwork
 	 * @throws QuadrigaStorageException
 	 * @author suraj nilapwar

@@ -44,9 +44,9 @@ import edu.asu.spring.quadriga.transform.Node;
  * 
  */
 @Controller
-public class ConceptRestController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ConceptRestController.class);
+public class SearchNetworkRestController {
+
+    private static final Logger logger = LoggerFactory.getLogger(SearchNetworkRestController.class);
 
     @Autowired
     private IRestMessage errorMessageRest;
@@ -74,7 +74,7 @@ public class ConceptRestController {
      * @throws RestException
      */
     
-    @RequestMapping(value = "rest/concept/search", method = RequestMethod.GET, produces = "application/xml")
+    @RequestMapping(value = "rest/network/search", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getSearchTransformedNetwork(@RequestParam("conceptId") String conceptId, @RequestParam("projectIds") List<String> projectIds,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req) throws RestException {
     	
@@ -92,15 +92,22 @@ public class ConceptRestController {
                     projectList.add(project);
                 }
             }
+    	    
     		
             if(projectList.size()==0){
-                String errorMsg = errorMessageRest.getErrorMsg("Projects don't exist");
+                String errorMsg = errorMessageRest.getErrorMsg("Projects don't exist.");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
 
-            ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(
+            ITransformedNetwork transformedNetwork;
+            try{
+                transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(
         			projectIds, conceptId);	
-    		
+            }catch(QuadrigaStorageException e){
+                throw new RestException(403, e);
+	    	}
+            
+            
     	    VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/transformationdetails.vm");
@@ -114,17 +121,7 @@ public class ConceptRestController {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            throw new RestException(404, e);
-        } catch (ParseErrorException e) {
-            throw new RestException(500, e);
-        } catch (MethodInvocationException e) {
-            throw new RestException(500, e);
-        } catch (QuadrigaStorageException e) {
-            throw new RestException(500, e);
-        } catch (QuadrigaAccessException e) {
-            throw new RestException(403, e);
-        } catch (Exception e) {
+        }catch (Exception e) {
             throw new RestException(500, e);
         }
     }
