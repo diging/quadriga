@@ -143,11 +143,6 @@ public class ProjectStatsController {
         List<INetwork> networks = networkmanager.getNetworksInProject(projectId);
         List<IConceptStats> conceptsWithCount = null;
 
-        JSONArray submittedNetworkCount = null;;
-        JSONArray approvedNetworkCount = null;
-        JSONArray rejectedNetworkCount  = null;
-        JSONArray workspaceCount = null;
-
         List<IUserStats> userStats;
 
         if (!networks.isEmpty()) {
@@ -173,17 +168,20 @@ public class ProjectStatsController {
                 model.addAttribute("error_alert_msg", errorMsg.toString());
             }
 
-            submittedNetworkCount= getContributionCountJson(networks,SUBMITTED);
-            approvedNetworkCount= getContributionCountJson(networks,INetworkStatus.APPROVED);
-            rejectedNetworkCount= getContributionCountJson(networks,INetworkStatus.REJECTED);
-            workspaceCount = getWorkspaceContributionJson(project);
+            JSONArray submittedNetworkCount = getContributionCountJson(networks,SUBMITTED);
+            JSONArray approvedNetworkCount= getContributionCountJson(networks,INetworkStatus.APPROVED);
+            JSONArray rejectedNetworkCount= getContributionCountJson(networks,INetworkStatus.REJECTED);
+            JSONArray workspaceCount = getWorkspaceContributionJson(project);
+            
+            model.addAttribute("submittedNetworksData",submittedNetworkCount.toString());
+            model.addAttribute("approvedNetworksData",approvedNetworkCount.toString());
+            model.addAttribute("rejectedNetworksData",rejectedNetworkCount.toString());
+            model.addAttribute("workspaceData",workspaceCount.toString());
+            model.addAttribute("networks", networks);
+            model.addAttribute("project", project);
+            return "sites/project/statistics";
         }
 
-        model.addAttribute("project", project);
-        model.addAttribute("submittedNetworksData",submittedNetworkCount.toString());
-        model.addAttribute("approvedNetworksData",approvedNetworkCount.toString());
-        model.addAttribute("rejectedNetworksData",rejectedNetworkCount.toString());
-        model.addAttribute("workspaceData",workspaceCount.toString());
-        return "sites/project/statistics";
+        return "NoNetworks";
     }
 }
