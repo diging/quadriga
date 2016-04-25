@@ -29,61 +29,62 @@ import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 @Controller
 public class UploadTransformFilesController {
 
-	@Autowired
-	private ITransformationManager transformationManager;
+    @Autowired
+    private ITransformationManager transformationManager;
 
-	@Autowired
-	private TransfomationFilesValidator validator;
+    @Autowired
+    private TransfomationFilesValidator validator;
 
-	@InitBinder("transformationFilesBackingBean")
-	protected void initBinder(WebDataBinder binder) {
-		binder.setValidator(validator);
-	}
+    @InitBinder("transformationFilesBackingBean")
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(validator);
+    }
 
-	@RequestMapping(value = "auth/transformation/upload", method = RequestMethod.POST)
-	public ModelAndView  uploadTransformFiles(
-			@Validated @ModelAttribute("transformationFilesBackingBean") TransformFilesBackingBean formBean,
-			BindingResult result, ModelMap map,
-			@RequestParam("file") MultipartFile[] file) throws IOException {
+    @RequestMapping(value = "auth/transformation/upload", method = RequestMethod.POST)
+    public ModelAndView uploadTransformFiles(
+            @Validated @ModelAttribute("transformationFilesBackingBean") TransformFilesBackingBean formBean,
+            BindingResult result, ModelMap map,
+            @RequestParam("file") MultipartFile[] file) throws IOException {
 
-		ModelAndView model;
-		model = new ModelAndView("auth/uploadTransformation");
-		if (result.hasErrors()) {			
-			model.getModelMap().put("show_error_alert",true);
-			model.getModelMap().put("error_alert_msg","Please enter all the required fields");
+        ModelAndView model;
+        model = new ModelAndView("auth/uploadTransformation");
+        if (result.hasErrors()) {
+            model.getModelMap().put("show_error_alert", true);
+            model.getModelMap().put("error_alert_msg",
+                    "Please enter all the required fields");
             return model;
-		}		
-		else if(file.length !=2){
-			model.getModelMap().put("show_error_alert",true);
-			model.getModelMap().put("error_alert_msg","Please upload all the required files");
+        } else if (file.length != 2) {
+            model.getModelMap().put("show_error_alert", true);
+            model.getModelMap().put("error_alert_msg",
+                    "Please upload all the required files");
             return model;
-		}	
-		else if(file[0].getSize()==0||file[1].getSize()==0){
-			model.getModelMap().put("show_error_alert",true);
-			model.getModelMap().put("error_alert_msg","Please upload all the required files");
+        } else if (file[0].getSize() == 0 || file[1].getSize() == 0) {
+            model.getModelMap().put("show_error_alert", true);
+            model.getModelMap().put("error_alert_msg",
+                    "Please upload all the required files");
             return model;
-		}
-		else{
-		String title = formBean.getTitle();
-		String description = formBean.getDescription();
+        } else {
+            String title = formBean.getTitle();
+            String description = formBean.getDescription();
 
-		String patternTitle = formBean.getPatternTitle();
-		String patternDescription = formBean.getPatternDescription();
-		String patternFileName = file[0].getOriginalFilename();
+            String patternTitle = formBean.getPatternTitle();
+            String patternDescription = formBean.getPatternDescription();
+            String patternFileName = file[0].getOriginalFilename();
 
-		String mappingTitle = formBean.getMappingTitle();
-		String mappingDescription = formBean.getMappingDescription();
-		String mappingFileName = file[1].getOriginalFilename();
+            String mappingTitle = formBean.getMappingTitle();
+            String mappingDescription = formBean.getMappingDescription();
+            String mappingFileName = file[1].getOriginalFilename();
 
-		transformationManager.saveTransformation(title, description,
-				patternFileName, patternTitle, patternDescription,
-				mappingFileName, mappingTitle, mappingDescription);
-		// Only meta data is being saved in database. Saving files is not yet done..
+            transformationManager.saveTransformation(title, description,
+                    patternFileName, patternTitle, patternDescription,
+                    mappingFileName, mappingTitle, mappingDescription);
+            // Only meta data is being saved in database. Saving files is not
+            // yet done..
 
-		model.getModelMap().put("show_success_alert", true);
-		model.getModelMap().put("success_alert_msg", "Upload Successful");
-		return model;
-		}
-		
-	}
+            model.getModelMap().put("show_success_alert", true);
+            model.getModelMap().put("success_alert_msg", "Upload Successful");
+            return model;
+        }
+
+    }
 }

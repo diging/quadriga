@@ -18,21 +18,26 @@ import java.util.List;
 @Service
 public class TransformationManager implements ITransformationManager {
 
-	@Autowired
-	private TransformFilesDAO transformationDAO;
+    @Autowired
+    private TransformFilesDAO transformationDAO;
 
-	@Transactional
-	@Override
-	public void saveTransformation(String title, String description, String patternFileName, String patternTitle, String patternDescription, String mappingFileName, String mappingTitle, String mappingDescription) {
-		TransformFilesDTO tranformDTO = new TransformFilesDTO(title, description, patternFileName, patternTitle, patternDescription, mappingFileName, mappingTitle, mappingDescription);
-		tranformDTO.setId(transformationDAO.generateUniqueID());
-		transformationDAO.saveNewDTO(tranformDTO);
-	}
+    @Transactional
+    @Override
+    public void saveTransformation(String title, String description,
+            String patternFileName, String patternTitle,
+            String patternDescription, String mappingFileName,
+            String mappingTitle, String mappingDescription) {
+        TransformFilesDTO tranformDTO = new TransformFilesDTO(title,
+                description, patternFileName, patternTitle, patternDescription,
+                mappingFileName, mappingTitle, mappingDescription);
+        tranformDTO.setId(transformationDAO.generateUniqueID());
+        transformationDAO.saveNewDTO(tranformDTO);
+    }
 
-	@Transactional
-	@Override
-	public List<TransformFilesDTO> getTransformationsList() {
-		return transformationDAO.getAllTransformations();
-	}
+    @Transactional
+    @Override
+    public List<TransformFilesDTO> getTransformationsList() {
+        return transformationDAO.getAllTransformations();
+    }
 
 }
