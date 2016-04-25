@@ -25,20 +25,6 @@ public class ExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements IExt
     /**
      * {@inheritDoc}
      */
-    @Override
-    public String getInternalWorkspaceId(String externalWorkspaceid) {
-        String internalProjectId = null;
-        ExternalWorkspaceDTO externalWorkspace = getExternalWorkspace(externalWorkspaceid);
-        if (externalWorkspace != null) {
-            internalProjectId = externalWorkspace.getWorkspaceid();
-        }
-        return internalProjectId;
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     @Override
     public ExternalWorkspaceDTO getExternalWorkspace(String externalWorkspaceid) {

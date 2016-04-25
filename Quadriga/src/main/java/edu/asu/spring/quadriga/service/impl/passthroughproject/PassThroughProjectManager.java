@@ -14,8 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
-import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.domain.factory.passthroughproject.IPassThroughProjectFactory;
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProjectInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
@@ -40,9 +41,6 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class PassThroughProjectManager extends BaseManager implements IPassThroughProjectManager {
 
     @Autowired
-    private IWorkspaceDAO workspaceDao;
-
-    @Autowired
     private IExternalWSManager externalWSManager;
 
     @Autowired
@@ -57,19 +55,20 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Autowired
     private PassThroughProjectDTOMapper projectMapper;
 
+    @Autowired
+    private IPassThroughProjectFactory passthrprojfactory;
+
     @Resource(name = "projectconstants")
     private Properties messages;
 
     private String addPassThroughProject(IUser user, IPassThroughProject project) throws QuadrigaStorageException {
-        String projectId = projectDao.generateUniqueID();
         QuadrigaUserDTO owner = userDAO.getDTO(user.getUserName());
         PassThroughProjectDTO projectDTO = projectMapper.getPassThroughProjectDTO(project, user);
-        projectDTO.setProjectid(projectId);
         projectDTO.setProjectowner(owner);
 
-        projectDao.addPassThroughProject(projectDTO);
+        projectDao.saveNewDTO(projectDTO);
 
-        return projectId;
+        return projectDTO.getProjectid();
     }
 
     private String getInternalProjectId(String externalProjectid, String userid)
@@ -106,8 +105,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
             // externalWorkspace table
             // Create a new externalWorkspaceId and InternalWorkspaceId and then
             // call storeNetworkDetails
-            workspaceId = workspaceDao.generateUniqueID();
-            externalWSManager.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName, workspaceId,
+            workspaceId = externalWSManager.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName,
                     projectId, user);
         } else {
             // Get the workspace Id related to the external workspace Id
@@ -133,4 +131,20 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         }
         return internalProjetid;
     }
+
+    @Override
+    public IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo, String userid) {
+        String projectId = projectDao.generateUniqueID();
+        IPassThroughProject project = passthrprojfactory.createPassThroughProjectObject();
+        project.setExternalProjectid(passThroughProjectInfo.getExternalProjectId());
+        project.setExternalUserName(passThroughProjectInfo.getExternalUserName());
+        project.setExternalUserId(passThroughProjectInfo.getExternalUserId());
+        project.setProjectName(passThroughProjectInfo.getName());
+        project.setDescription(passThroughProjectInfo.getDescription());
+        project.setClient(passThroughProjectInfo.getSender());
+        project.setProjectAccess(EProjectAccessibility.PUBLIC);
+        project.setProjectId(projectId);
+        return project;
+    }
+
 }

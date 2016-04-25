@@ -8,7 +8,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -16,9 +15,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.domain.factory.passthroughproject.IPassThroughProjectFactory;
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProjectInfo;
-import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.rest.PassThroughProjectRestController;
@@ -32,9 +29,6 @@ import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectDoc
 @Service
 public class PassThroughProjectDocumentReader implements IPassThroughProjectDocumentReader {
 
-    @Autowired
-    private IPassThroughProjectFactory passthrprojfactory;
-
     private Document getXMLDocument(String xml) throws ParserConfigurationException, SAXException, IOException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -42,20 +36,6 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
         Document doc = builder.parse(new InputSource(new StringReader(xml)));
         doc.getDocumentElement().normalize();
         return doc;
-    }
-
-    @Override
-    public IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo) {
-
-        IPassThroughProject project = passthrprojfactory.createPassThroughProjectObject();
-        project.setExternalProjectid(passThroughProjectInfo.getExternalProjectId());
-        project.setExternalUserName(passThroughProjectInfo.getExternalUserName());
-        project.setExternalUserId(passThroughProjectInfo.getExternalUserId());
-        project.setProjectName(passThroughProjectInfo.getName());
-        project.setDescription(passThroughProjectInfo.getDescription());
-        project.setClient(passThroughProjectInfo.getSender());
-
-        return project;
     }
 
     @Override

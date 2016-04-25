@@ -26,14 +26,6 @@ public class PassThroughProjectDAO extends BaseDAO<PassThroughProjectDTO> implem
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void addPassThroughProject(PassThroughProjectDTO projectDTO) throws QuadrigaStorageException {
-        saveNewDTO(projectDTO);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("unchecked")
     @Override
     public List<PassThroughProjectDTO> getExternalProjects(String externalProjectid) throws QuadrigaStorageException {

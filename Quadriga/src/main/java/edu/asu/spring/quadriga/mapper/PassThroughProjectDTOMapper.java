@@ -5,7 +5,6 @@ import java.util.Date;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 
@@ -20,7 +19,6 @@ public class PassThroughProjectDTOMapper extends BaseMapper {
     public PassThroughProjectDTO getPassThroughProjectDTO(IPassThroughProject project, IUser user) {
         PassThroughProjectDTO projectDTO = new PassThroughProjectDTO();
         // internal project details
-        // projectDTO.setProjectid(projectId);
         projectDTO.setProjectname(project.getProjectName());
         projectDTO.setDescription(project.getDescription());
         // Since we are not passing unix name in REST request, we are assigning
@@ -32,7 +30,7 @@ public class PassThroughProjectDTOMapper extends BaseMapper {
         projectDTO.setCreateddate(new Date());
         projectDTO.setUpdatedby(user.getUserName());
         projectDTO.setUpdateddate(new Date());
-        projectDTO.setAccessibility(EProjectAccessibility.PUBLIC.name());
+        projectDTO.setAccessibility(project.getProjectAccess().name());
 
         // external project details
         projectDTO.setExternalProjectid(project.getExternalProjectid());

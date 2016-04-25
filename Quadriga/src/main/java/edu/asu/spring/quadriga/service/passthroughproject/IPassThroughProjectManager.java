@@ -17,4 +17,6 @@ public interface IPassThroughProjectManager {
     String createWorkspaceForExternalProject(PassThroughProjectInfo passThroughProjectInfo, String projectId,
             IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException;
 
+    IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo, String userid);
+
 }
