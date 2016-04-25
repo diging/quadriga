@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.domain;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -14,8 +15,8 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
  */
 public interface IContributionStatsManager {
     
-    JSONArray getContributionCountByStatus (List<INetwork> networks, String status) throws JSONException;
+    HashMap<String, Integer> getContributionCountByStatus (List<INetwork> networks, String status) throws JSONException;
     
-    JSONArray getWorkspaceContribution (IProject project) throws JSONException;
+    HashMap<String, Integer> getWorkspaceContribution (IProject project) throws JSONException;
 
 }

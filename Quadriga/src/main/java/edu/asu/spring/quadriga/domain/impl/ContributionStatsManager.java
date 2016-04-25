@@ -16,20 +16,23 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 
 /**
- * This method returns Json Array containing date and corresponding count of number 
- * of networks that were Approved/Rejected/Submitted depending on 'status' 
+ * This class is used to get the contribution count of network and workspace 
  * @author Bharath Srikantan
- * @throws JSONException 
- *
  */
 @Service
 public class ContributionStatsManager implements IContributionStatsManager {
 
+    /**
+     * This method returns HashMap containing date as string and corresponding count of number 
+     * of networks that were Approved/Rejected/Submitted depending on 'status' 
+     * @author Bharath Srikantan
+     * @throws JSONException 
+     *
+     */
     @Override
-    public JSONArray getContributionCountByStatus (List<INetwork> networks, String status) throws JSONException {
+    public HashMap<String, Integer> getContributionCountByStatus (List<INetwork> networks, String status) throws JSONException {
         String DATE_FORMAT = "dd-MMM-yy";
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-        JSONArray contributionsJson = new JSONArray();
         HashMap<String, Integer> contributionCount = new HashMap<String, Integer>();
 
         for(INetwork network : networks) { 
@@ -42,20 +45,20 @@ public class ContributionStatsManager implements IContributionStatsManager {
                 }
             }
         }
-        for(Entry<String, Integer> entry : contributionCount.entrySet()) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("date", entry.getKey());
-            jsonObject.put("count", entry.getValue());
-            contributionsJson.put(jsonObject);
-        }
-        return contributionsJson;       
+        return contributionCount;       
     }
 
+    /**
+     * This method returns HashMap containing date as string and corresponding count of number 
+     * of workspace created on that date. 
+     * @author Bharath Srikantan
+     * @throws JSONException 
+     *
+     */
     @Override
-    public JSONArray getWorkspaceContribution (IProject project) throws JSONException {
+    public HashMap<String, Integer> getWorkspaceContribution (IProject project) throws JSONException {
         String DATE_FORMAT = "dd-MMM-yy";
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-        JSONArray workspaceCount = new JSONArray();
         HashMap<String, Integer> contributionCount = new HashMap<String, Integer>();
 
         for(IProjectWorkspace ws : project.getProjectWorkspaces()) {
@@ -66,13 +69,7 @@ public class ContributionStatsManager implements IContributionStatsManager {
                 contributionCount.put(workspaceCreationDate, 1);
             }   
         }
-        for(Entry<String, Integer> entry : contributionCount.entrySet()) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("date", entry.getKey());
-            jsonObject.put("count", entry.getValue());
-            workspaceCount.put(jsonObject);
-        }
-        return workspaceCount;          
+        return contributionCount;          
     }
 
 }
