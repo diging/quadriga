@@ -10,10 +10,11 @@ import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
  * 
  */
 public class PublicPage implements IPublicPage { 
+    private String PublicPageId;
     private String title;
     private String description;
     private int order;
-
+    private String projectId;
     
     /**
      * retrieves the Title
@@ -60,5 +61,23 @@ public class PublicPage implements IPublicPage {
     public void setOrder(int order) {
         this.order = order;
     }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getPublicPageId() {
+        return PublicPageId;
+    }
+
+    public void setPublicPageId(String publicPageId) {
+        PublicPageId = publicPageId;
+    }
+    
+    
 
 }

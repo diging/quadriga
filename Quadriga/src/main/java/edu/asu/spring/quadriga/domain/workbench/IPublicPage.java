@@ -21,4 +21,12 @@ public interface IPublicPage {
 
     public abstract void setOrder(int order);
 
+    public abstract String getProjectId();
+
+    public abstract void setProjectId(String projectId);
+   
+    public abstract String getPublicPageId();
+
+    public abstract void setPublicPageId(String publicPageId);
+
 }

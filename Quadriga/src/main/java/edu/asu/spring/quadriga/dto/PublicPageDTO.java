@@ -6,59 +6,100 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 @Entity
 @Table(name = "tbl_publicpage")
+// @Entity
+//@Table(name = "tbl_projectblogentry")
+@XmlRootElement
+@NamedQueries({ @NamedQuery(name = "PublicPageDTO.findAll", query = "SELECT pp FROM PublicPageDTO pp"),
+        @NamedQuery(name = "PublicPageDTO.findByProjectId", query = "SELECT p FROM PublicPageDTO p WHERE p.projectid = :projectId"), })
+public class PublicPageDTO implements Serializable {
 
-public class PublicPageDTO implements Serializable 
-{
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "publicpageid")
+    private String publicpageid;
     
-    @Basic(optional = false)
     @Column(name = "title")
     private String title;
-    @Basic(optional = false)
+    
+    @Lob
     @Column(name = "description")
     private String description;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "order")
-    private int order;
+    
+    @Column(name = "entryorder")
+    private int entryorder;
 
-   
-	public PublicPageDTO() {
-    }
-
-    public PublicPageDTO(String title, String description, int order) {
-        this.title = title;
-        this.description = description;
-        this.order = order;
-            }
-
+    @Column(name="projectid")
+    private String projectid;
+    
+    @JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
+    @ManyToOne
+    private ProjectDTO projectDTO;
 
     public String getTitle() {
-		return title;
-	}
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public int getOrder() {
-		return order;
-	}
 
-	public void setOrder(int order) {
-		this.order = order;
-	}
+    public int getEntryorder() {
+        return entryorder;
+    }
+
+    public void setEntryorder(int entryorder) {
+        this.entryorder = entryorder;
+    }
+
+    public String getProjectid() {
+        return projectid;
+    }
+
+    public void setProjectid(String projectid) {
+        this.projectid = projectid;
+    }
+
+    public ProjectDTO getProjectDTO() {
+        return projectDTO;
+    }
+
+    public void setProjectDTO(ProjectDTO projectDTO) {
+        this.projectDTO = projectDTO;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public String getPublicpageid() {
+        return publicpageid;
+    }
+
+    public void setPublicpageid(String publicpageid) {
+        this.publicpageid = publicpageid;
+    }
+    
+    
+    
 }

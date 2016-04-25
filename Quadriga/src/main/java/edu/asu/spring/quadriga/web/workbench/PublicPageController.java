@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.web.workbench;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,10 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factory.workbench.IPublicPageFactory;
+import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.IModifyPublicPageContentManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
@@ -25,9 +29,8 @@ public class PublicPageController {
     @Autowired
     private IPublicPageFactory publicPageFactory;
     
-    //This will be uncommented in QUAD-111
-    /*@Autowired
-    private IModifyPublicPageContentManager publicPageContentManager;*/
+    @Autowired
+    private IModifyPublicPageContentManager publicPageContentManager;
 
     /**
      * This method is called during the load of Public page settings form
@@ -48,21 +51,25 @@ public class PublicPageController {
         return model;
     }
 
+    
     /**
      * This method is used update the database with the information provided in the Public settings page
      *
      * @return json
+     * @throws JSONException 
      */
 
     @RequestMapping(method = RequestMethod.POST, value = "auth/workbench/{projectid}/addpublicpagesuccess")
     public @ResponseBody ResponseEntity<String> addpublicpagesuccess(
-            @RequestParam("data") String data)
-            throws QuadrigaStorageException, QuadrigaAccessException {
-        if (data.isEmpty())
-            return null;
-        else
-            //Manager class will be called here
-            return new ResponseEntity<String>("Successfully updated",
-                    HttpStatus.OK);
+            @RequestParam("data") JSONObject data, @PathVariable("projectid") String projectid)
+            throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
+
+        PublicPage publicpageentry = new PublicPage();
+        publicpageentry.setTitle(data.getString("title"));
+        publicpageentry.setDescription(data.getString("desc"));
+        publicpageentry.setOrder(data.getInt("order"));
+        publicpageentry.setProjectId(projectid);
+        publicPageContentManager.addNewPublicPageContent(publicpageentry);
+        return new ResponseEntity<String>("Successfully updated", HttpStatus.OK);
     }
 }

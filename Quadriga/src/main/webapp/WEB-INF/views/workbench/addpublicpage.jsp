@@ -6,50 +6,45 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script>
 $(function() {
-$("#submit1").click(function(){perform()});
-$("#submit2").click(function(){perform()});
-$("#submit3").click(function(){perform()});
-
-
+$("#submit1").click(function(){performAction(this)});
+$("#submit2").click(function(){performAction(this)});
+$("#submit3").click(function(){performAction(this)});
 });
-
-function perform(){
-    console.log(  $(this).parent().parent().find('#title1').val()  );
-    console.log("success");
+function perform(obj){
+    //var a = $(obj).parent().parent().parent();
+    var a = $(obj).closest('div.publicpageform').find('.titleValue').val();
+    console.log(a);
 }
-	function performAction(idValue) {
+	function performAction(obj) {
 		var data = {};
-		var test = $(this).siblings('input').val();
-		console.log(test);
-		var titles = $("#title" + idValue).val();
-		var desc = $("#description" + idValue).val();
-		var order = $("#order" + idValue).val();
-		console.log(order);
+		var title = $(obj).closest('div.publicpageform').find('.titleValue').val();
+		var desc = $(obj).closest('div.publicpageform').find('.descValue').val();
+		var order = $(obj).closest('div.publicpageform').find('.orderValue').val();
 		var mandatory = 0;
-		if (titles.length < 1) {
-			$("#title_err" + idValue).html("Please provide a title");
+		if (title.length < 1) {
+			$(obj).closest('div.publicpageform').find('#title_err').html("Please provide a title");
 			mandatory = 1;
 		} else {
-			$("#title_err" + idValue).html('');
+			$(obj).closest('div.publicpageform').find('#title_err').html('');
 		}
 		if (desc.length < 1) {
-			$("#desc_err" + idValue).html("Please provide a description");
+			$(obj).closest('div.publicpageform').find('#desc_err').html("Please provide a description");
 			mandatory = 1;
 		} else {
-			$("#desc_err" + idValue).html('');
+			$(obj).closest('div.publicpageform').find('#desc_err').html('');
 		}
 		if (order == "select") {
-			$("#order_err" + idValue).html("Possible values are 1, 2, or 3.");
+			$(obj).closest('div.publicpageform').find('#order_err').html("Possible values are 1, 2, or 3.");
 			mandatory = 1
 		} else {
-			$("#order_err" + idValue).html('');
+			$(obj).closest('div.publicpageform').find('#order_err').html('');
 		}
 		if (mandatory) {
 			return false;
 		}
-		data["title"] = $("#title" + idValue).val();
-		data["desc"] = $("#description" + idValue).val();
-		data["order"] = $("#order" + idValue).val();
+		data["title"] = title;
+		data["desc"] = desc;
+		data["order"] = order;
 		$
 				.ajax({
 					type : "POST",
@@ -58,16 +53,15 @@ function perform(){
 						data : JSON.stringify(data)
 					},
 					success : function(e) {
-						$("#title" + idValue).val('');
-						$("#description" + idValue).val('');
-						$("#order" + idValue).val('');
+						$(obj).closest('div.publicpageform').find('.titleValue').val('');
+						$(obj).closest('div.publicpageform').find('.descValue').val('');
+						$(obj).closest('div.publicpageform').find('.orderValue').val('');
 					},
 					error : function(e) {
 						console.log("ERROR: ", e);
 					}
 				});
 	}
-
 </script>
 <article class="is-page-content">
 	<form:form commandName="publicpage" method="POST"
@@ -76,106 +70,115 @@ function perform(){
 			<h2>Editing Text Contents to be shown</h2>
 			<span class="byline">Please fill in the following information:</span>
 		</header>
+		<div class="publicpageform">
 		<table style="width: 100%">
+		
 			<tr>
 				<td style="width: 170px">Title *</td>
-				<td style="width: 400px"><form:input path="title" size="60" class="title"
+				<td style="width: 400px"><input path="title" size="60" class="titleValue"
 						id="title1" /></td>
-				<td><div id="title_err1"></div></td>
+				<td><div id="title_err"></div></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description *</td>
 				<td><form:textarea path="description" cols="60" rows="6"
-						id="description1" /></td>
-				<td><div id="desc_err1"></div></td>
+						id="description1" class="descValue" /></td>
+				<td><div id="desc_err"></div></td>
 				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
 				<td style="width: 1px">
-				<select id="order1" path="order">
+				<select id="order1" path="order" class="orderValue">
 				  <option selected value="select">--Select--</option>
 				  <option value="1">1</option>
 				  <option value="2">2</option>
 				  <option value="3">3</option>
 				</select>
-				<td><div id="order_err1"></div></td>
+				<td><div id="order_err"></div></td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td><input type="button" id="submit1" 
 					value="SAVE"></td>
 			</tr>
+		
 		</table>
+		</div>
 	</form:form>
 	<form:form commandName="publicpage" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
+		<div class="publicpageform">
 		<table style="width: 100%">
+		
 			<tr>
 				<td style="width: 170px">Title *</td>
 				<td style="width: 400px"><form:input path="title" size="60"
-						id="title2" /></td>
-				<td><div id="title_err2"></div></td>
+						id="title2" class="titleValue"/></td>
+				<td><div id="title_err"></div></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description *</td>
 				<td><form:textarea path="description" cols="60" rows="6"
-						id="description2" /></td>
-				<td><div id="desc_err2"></div></td>
+						id="description2" class="descValue"/></td>
+				<td><div id="desc_err"></div></td>
 				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
 				<td style="width: 1px">
-				<select id="order2" path="order">
+				<select id="order2" path="order" class="orderValue">
 				  <option selected value="select">--Select--</option>
 				  <option value="1">1</option>
 				  <option value="2">2</option>
 				  <option value="3">3</option>
 				</select>
-				<td><div id="order_err2"></div></td>
+				<td><div id="order_err"></div></td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
-				<td><input type="button" value="SAVE"  onclick="performAction('2')" id="submit2"></td>
+				<td><input type="button" value="SAVE" id="submit2"></td>
 			</tr>
 		</table>
+		</div>
 	</form:form>
 	<form:form commandName="publicpage" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
+		<div class="publicpageform">
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Title *</td>
 				<td style="width: 400px"><form:input path="title" size="60"
-						id="title3" /></td>
-				<td><div id="title_err3"></div></td>
+						id="title3" class="titleValue" /></td>
+				<td><div id="title_err"></div></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description *</td>
 				<td><form:textarea path="description" cols="60" rows="6"
-						id="description3" /></td>
-				<td><div id="desc_err3"></div></td>
+						id="description3" class="descValue"/></td>
+				<td><div id="desc_err"></div></td>
 				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
 				<td style="width: 1px">
-				<select id="order3" path="order">
+				<select id="order3" path="order" class="orderValue">
 				  <option selected value="select">--Select--</option>
 				  <option value="1">1</option>
 				  <option value="2">2</option>
 				  <option value="3">3</option>
 				</select>
-				<td><div id="order_err3"></div></td>
+				<td><div id="order_err"></div></td>
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
-				<td><input type="button" value="SAVE" onclick="performAction('3')" id="submit3"></td>
+				<td><input type="button" value="SAVE" id="submit3"></td>
 			</tr>
 		</table>
+		</div>
 	</form:form>
 </article>
 
