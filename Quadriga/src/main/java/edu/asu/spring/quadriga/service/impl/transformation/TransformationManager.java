@@ -23,13 +23,8 @@ public class TransformationManager implements ITransformationManager {
 
 	@Transactional
 	@Override
-	public void saveTransformation(String title, String description,
-			String patternFileName, String patternTitle,
-			String patternDescription, String mappingFileName,
-			String mappingTitle, String mappingDescription) {
-		TransformFilesDTO tranformDTO = new TransformFilesDTO(title,
-				description, patternFileName, patternTitle, patternDescription,
-				mappingFileName, mappingTitle, mappingDescription);
+	public void saveTransformation(String title, String description, String patternFileName, String patternTitle, String patternDescription, String mappingFileName, String mappingTitle, String mappingDescription) {
+		TransformFilesDTO tranformDTO = new TransformFilesDTO(title, description, patternFileName, patternTitle, patternDescription, mappingFileName, mappingTitle, mappingDescription);
 		tranformDTO.setId(transformationDAO.generateUniqueID());
 		transformationDAO.saveNewDTO(tranformDTO);
 	}
