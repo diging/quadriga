@@ -44,7 +44,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	
 	@Autowired
 	private Environment env;
-
+	
 	/**
 	 * This method returns the list of projects associated with
 	 * the logged in user. It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
@@ -295,14 +295,43 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
      */
     @Override
     @Transactional
-    public List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException {
+    public List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException{
     	List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm, accessibility);
     	List<IProject> projectList = new ArrayList<IProject>();
     	if(projectDTOList!=null) {
     		for(ProjectDTO projectDTO : projectDTOList){
-    			projectList.add(projectShallowMapper.getProjectDetailsForSearch(projectDTO, searchTerm));
+    			projectList.add(searchLines(projectDTO, searchTerm));
     		}
     	}       
     	return projectList;
     }
+
+	/**
+	 * Returns formated String for description and pattern
+	 * @param projectDTO projectDTO
+	 * @param pattern search string
+	 * @return IProject with formated description
+	 * @throws QuadrigaStorageException 
+	 */
+	private IProject searchLines(ProjectDTO projectDTO, String pattern) throws QuadrigaStorageException {
+		IProject projectProxy = projectShallowMapper.getProjectDetails(projectDTO);
+		
+		String description = projectProxy.getDescription();
+		String[] temp = description.split("\\.");
+		StringBuilder finalDescription = new StringBuilder();
+		int linesCount = 0;
+		for(int i=0; i<temp.length; i++){
+			if(temp[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*") && linesCount < 4){
+				if(i+1 < temp.length && temp[i+1].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
+					finalDescription.append(temp[i]).append("........");
+				} else{
+					finalDescription.append(temp[i]);
+				}
+				linesCount++;
+			}
+		}
+		projectProxy.setDescription(finalDescription.toString());
+		
+		return projectProxy;
+	}
 }

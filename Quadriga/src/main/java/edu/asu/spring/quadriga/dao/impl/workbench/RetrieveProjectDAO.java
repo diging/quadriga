@@ -404,7 +404,7 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
             return projectDTOList;
         }
         catch(HibernateException e) {
-            logger.info("getAllProjectsDTO By SearchTerm And Accessiblity method :"+e.getMessage());  
+            logger.error("getAllProjectsDTO By SearchTerm And Accessiblity method :"+e.getMessage());  
             throw new QuadrigaStorageException(e);
         }
     }

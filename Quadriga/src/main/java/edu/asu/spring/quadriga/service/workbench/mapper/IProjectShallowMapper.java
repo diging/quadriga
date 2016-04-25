@@ -82,14 +82,4 @@ public interface IProjectShallowMapper {
 	 */
 	public abstract IProject getProjectDetails(ProjectDTO projectDTO)
 			throws QuadrigaStorageException;
-
-	/**
-	 * This class should get a {@link IProject} of domain class type {@link ProjectProxy} for a {@link ProjectDTO} and {@link Pattern}
-	 * @param projectDTO								{@link ProjectDTO} object
-	 * @param pattern									{@link pattern} string
-	 * @return											Returns the {@link IProject} object
-	 * @throws QuadrigaStorageException					Throws the storage exception when the method has issues to access the database
-	 */
-	public abstract IProject getProjectDetailsForSearch(ProjectDTO projectDTO, String pattern)
-			throws QuadrigaStorageException;
 }

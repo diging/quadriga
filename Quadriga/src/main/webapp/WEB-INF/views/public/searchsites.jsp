@@ -5,7 +5,7 @@
 
 <script>
 	$(document).ready(function() {
-		$('#example1').DataTable({
+		$('#searchResults').DataTable({
 			"searching" : false
 		});
 	});
@@ -15,10 +15,6 @@
 			document.getElementById("sites1").submit();
 		}
 		return false;
-	}
-
-	function callMethod() {
-		document.getElementById("sites1").submit();
 	}
 </script>
 
@@ -33,12 +29,11 @@
 				autocapitalize="off"></td>
 			<td style="width: 2%"></td>
 			<td style="width: 25%"><input type="submit" value="Search"
-				style="width: 100%; height: 115%; font-weight: bold;" tabindex="2"
-				onclick="callMethod()"></td>
+				style="width: 100%; height: 115%; font-weight: bold;" tabindex="2"></td>
 		</tr>
 	</table>
 	</br>
-	<table id="example1" class="table table-striped table-bordered"
+	<table id="searchResults" class="table table-striped table-bordered"
 		cellspacing="0" width="100%">
 		<thead>
 			<tr>
