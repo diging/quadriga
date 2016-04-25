@@ -827,6 +827,16 @@
 		<put-attribute name="content" value="/WEB-INF/views/projectstatistics.jsp" />
 	</definition>
 
+        <definition name="sites/projectblog" extends="base.definition.public">
+		<put-attribute name="currentPage" value="projectblog" />
+		<put-attribute name="content" value="/WEB-INF/views/projectblog.jsp" />
+	</definition>
+	
+	<definition name="sites/addprojectblogentry" extends="base.definition.public">
+		<put-attribute name="currentPage" value="projectblog" />
+		<put-attribute name="content" value="/WEB-INF/views/addprojectblogentry.jsp" />
+	</definition>
+	
 	<!-- Explore combined network -->
 
 	<definition name="sites/networks/explore" extends="base.definition.public.network">
