@@ -47,8 +47,6 @@ public class RetrieveProjectManagerTest {
 
 		Mockito.verify(mockedDBConnect).getAllProjectsDTOByAccessibility("PUBLIC");
 		Mockito.verify(mockedProjectShallowMapper).getProjectDetails(Matchers.any(ProjectDTO.class));
-
-
 		Mockito.verify(mockedDBConnect, times(1)).getAllProjectsDTOByAccessibility("PUBLIC");
 		Mockito.verify(mockedProjectShallowMapper, times(1)).getProjectDetails(Matchers.any(ProjectDTO.class));
 
@@ -65,8 +63,6 @@ public class RetrieveProjectManagerTest {
 
 		Mockito.verify(mockedDBConnect).getAllProjectsDTOByAccessibility("PUBLIC");
 		Mockito.verifyNoMoreInteractions(mockedProjectShallowMapper);
-
-
 		Mockito.verify(mockedDBConnect, times(1)).getAllProjectsDTOByAccessibility("PUBLIC");
 		Mockito.verify(mockedProjectShallowMapper, times(0)).getProjectDetails(Matchers.any(ProjectDTO.class));
 
