@@ -55,5 +55,17 @@
 
 </c:if>
 
-
+<div class="row">
+	<h2>Recent Project Blog</h2>
+	<h3>${projectBlogEntryList.title}</h3>
+	<p>
+	<i>Posted by ${projectBlogEntryList.author.name} on ${projectBlogEntryList.createdDate}</i>
+	</p>
+	<p>${projectBlogEntryList.description} ... </p>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblogdetails">Read
+			More</a>
+	</p>
+</div>
 
