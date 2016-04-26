@@ -94,8 +94,20 @@ public class AboutTextManagerTest {
         assertEquals("Newestdescription", result.getDescription());
         assertEquals("Test1", result.getId());
     }
-
-	
+    
+	@Test
+	public void testAboutTextNull() throws QuadrigaStorageException{
+		AboutTextDTO dto = new AboutTextDTO();
+		Mockito.when(mockedAboutTextDAO.getDTOByProjectId("test24")).thenReturn(dto);
+		IAboutText result = aboutTextManager.getAboutTextByProjectId("test24");
+		Mockito.verify(mockedAboutTextDAO, Mockito.times(1)).getDTOByProjectId("test24");
+		assertEquals(null, result.getProjectId());
+		assertEquals(null, result.getTitle());
+        assertEquals(null, result.getDescription());
+        assertEquals(null, result.getId());
+		
+		
+	}
 		// TODO Auto-generated method stub
 		
 	}
