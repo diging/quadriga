@@ -27,6 +27,7 @@ public class AboutTextManagerTest {
     private IAboutTextDAO mockedAboutTextDAO = Mockito.mock(AboutTextDAO.class);
 
     private ArgumentCaptor<AboutTextDTO> argument;
+    
 
     @Before
     public void setUp() throws QuadrigaStorageException {
@@ -43,6 +44,7 @@ public class AboutTextManagerTest {
         Mockito.verify(mockedAboutTextDAO).generateUniqueID();
 
         argument = ArgumentCaptor.forClass(AboutTextDTO.class);
+        
         Mockito.verify(mockedAboutTextDAO).saveOrUpdateDTO(argument.capture());
         assertEquals("UniqueId1", argument.getValue().getId());
         assertEquals("1st", argument.getValue().getProjectId());
@@ -73,15 +75,29 @@ public class AboutTextManagerTest {
     }
     
     @Test
-    public void testgetDTOByProjectId() throws QuadrigaStorageException{
+    public void testAboutTextByProjectId() throws QuadrigaStorageException{
     	AboutTextDTO dto = new AboutTextDTO();
     	dto.setProjectId("test1");
     	dto.setTitle("TestTitle");
-        Mockito.when(mockedAboutTextDAO.getDTOByProjectId("test1")).thenReturn(dto);
-
+    	dto.setDescription("Newestdescription");
+    	dto.setId("Test1");
+       
+    	Mockito.when(mockedAboutTextDAO.getDTOByProjectId("test1")).thenReturn(dto);
+    	
         IAboutText result = aboutTextManager.getAboutTextByProjectId("test1");
+        
+        Mockito.verify(mockedAboutTextDAO, Mockito.times(1)).getDTOByProjectId("test1");
+
         assertNotNull(result);
+        assertEquals("test1", result.getProjectId());
         assertEquals("TestTitle", result.getTitle());
+        assertEquals("Newestdescription", result.getDescription());
+        assertEquals("Test1", result.getId());
     }
 
-}
+	
+		// TODO Auto-generated method stub
+		
+	}
+
+
