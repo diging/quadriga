@@ -136,6 +136,38 @@ public abstract class CreationEvent {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result
+                + ((sourceReference == null) ? 0 : sourceReference.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CreationEvent other = (CreationEvent) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (sourceReference == null) {
+            if (other.sourceReference != null)
+                return false;
+        } else if (!sourceReference.equals(other.sourceReference))
+            return false;
+        return true;
+    }
     
     
 }

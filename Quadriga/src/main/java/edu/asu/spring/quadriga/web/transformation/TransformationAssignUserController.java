@@ -65,10 +65,6 @@ public class TransformationAssignUserController {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-			RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR,
-			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-			RoleNames.ROLE_QUADRIGA_ADMIN }) })
 	@RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
 	private String listTransformations(ModelMap model, Principal principal)
 			throws QuadrigaStorageException {

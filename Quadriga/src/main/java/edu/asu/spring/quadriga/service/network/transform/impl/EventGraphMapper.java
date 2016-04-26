@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
@@ -50,7 +51,7 @@ public class EventGraphMapper {
 	 * @param events A list of events to be transformed.
 	 * @param conceptPath Path to a Conceptpower instance to retrieve concept information from.
 	 */
-	public void buildGraphs(List<CreationEvent> events) {
+	public void buildGraphs(Set<CreationEvent> events) {
 		List<CreationEvent> unreferenced = new ArrayList<CreationEvent>();
 		Map<String, Node> nodeMap = new HashMap<String, Node>();
 		Map<String, Relation> relationMap = new HashMap<String, Relation>();
@@ -159,6 +160,7 @@ public class EventGraphMapper {
 			if (event instanceof RelationEventType &&  ((RelationEventType)event).getRelation() != null &&((RelationEventType)event).getRelation().getSubjectType() != null && ((RelationEventType)event).getRelation().getObjectType() != null && ((RelationEventType)event).getRelation().getPredicateType() != null) {
 				if (((RelationEventType) event).getRelation() != null  &&((RelationEventType)event).getRelation().getSubjectType() != null && ((RelationEventType)event).getRelation().getObjectType() != null && ((RelationEventType)event).getRelation().getPredicateType() != null) {
 					RelationType relation = ((RelationEventType) event).getRelation();
+					// make sure subject, predicate, and object all exist
 					if (relation.getSubjectType() != null && relation.getObjectType() != null && relation.getPredicateType() != null) {
 						
 						Relation rel = relationMap.get(relation.getId() + "" + relation.getPredicateType().getAppellationEvent().getId());

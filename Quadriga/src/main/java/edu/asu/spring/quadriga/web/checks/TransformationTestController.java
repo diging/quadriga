@@ -57,10 +57,7 @@ public class TransformationTestController {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-			RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR,
-			RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-			RoleNames.ROLE_QUADRIGA_ADMIN }) })
+
     @RequestMapping(value = "checks/transformation", method=RequestMethod.POST)
     public String transformTest(@RequestParam("project") String project, 
     							@RequestParam("transformation") String transformation,

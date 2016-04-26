@@ -1,7 +1,9 @@
 package edu.asu.spring.quadriga.service.network.transform.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -73,9 +76,14 @@ public class MatchGraphs {
 	
 	private List<List<TransformNode>> runTransformations(List<CreationEvent> events, List<ITransformation> fileMappings) {
 	    List<List<TransformNode>>nodesList = new ArrayList<List<TransformNode>>();
+	    
+	    Set<CreationEvent> allEvents = new HashSet<CreationEvent>();
+	    for (CreationEvent event : events) {
+	        addEvents(event, allEvents);
+	    }
 
         
-        if (fileMappings != null && events != null) {
+        if (fileMappings != null && allEvents != null) {
             for (ITransformation m : fileMappings) {
                 GraphMapper mapper = new GraphMapper();
                 EventGraphMapper eventMapper = new EventGraphMapper(cpConnector);
@@ -90,7 +98,7 @@ public class MatchGraphs {
                 String orgFilePath = m.getPatternFilePath();
                 mapper.createGraph(orgFilePath);
 
-                eventMapper.buildGraphs(events);
+                eventMapper.buildGraphs(allEvents);
 
                 List<Node> foundNodes = finder.findPattern(eventMapper.getStartNodes(),
                         mapper.getStartNode());
@@ -156,4 +164,29 @@ public class MatchGraphs {
         return nodesList;
 	}
 
+	
+	private void addEvents(CreationEvent eventToAdd, Set<CreationEvent> events) {
+	    // if the given event has already been added, then return here
+	    if (!events.add(eventToAdd)) {
+	        return;
+	    }
+	    if (eventToAdd instanceof RelationEventType) {
+	        // add subject
+	        CreationEvent subject = ((RelationEventType) eventToAdd).getRelation().getSubjectType().getAppellationEvent();
+	        if (subject == null) {
+	            subject = ((RelationEventType) eventToAdd).getRelation().getSubjectType().getRelationEvent();
+	        }
+	        addEvents(subject, events);      
+	        
+	        // add predicate
+	        addEvents(((RelationEventType) eventToAdd).getRelation().getPredicateType().getAppellationEvent(), events);
+	        
+	        // add object
+	        CreationEvent object = ((RelationEventType) eventToAdd).getRelation().getObjectType().getAppellationEvent();
+            if (object == null) {
+                object = ((RelationEventType) eventToAdd).getRelation().getObjectType().getRelationEvent();
+            }
+            addEvents(object, events);  
+	    }
+	}
 }
