@@ -106,15 +106,4 @@ public class AppellationEventType
 		return termTypeList;
     }
     
-    public String getAppellationEventID(){
-		List<JAXBElement<?>> elementsList = this.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
-		while(elementsIterator.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-			if(element.getName().toString().contains("id")){
-				return element.getValue().toString();
-			}
-		}
-		return null;
-    }
 }

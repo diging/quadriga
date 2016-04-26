@@ -52,7 +52,6 @@ public class RelationType {
 
     @XmlElementRefs({
         @XmlElementRef(name = "creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_place", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_date", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "external_refId", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
@@ -65,6 +64,13 @@ public class RelationType {
 
     @XmlElement(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
     private String sourceReference;
+    
+    @XmlElement(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String id;
+
+    public String getId() {
+        return id;
+    }
 
     /**
      * Gets the value of the idOrCreatorOrCreationDate property.
@@ -152,9 +158,9 @@ public class RelationType {
      * @param rt : RelationType
      * @return SubjectObjectType
      */
-    public SubjectObjectType getObjectType(RelationType rt){
+    public SubjectObjectType getObjectType(){
         SubjectObjectType objectType = null;
-        List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+        List<JAXBElement<?>> e3 = getIdOrCreatorOrCreationDate();
         Iterator <JAXBElement<?>> I2 = e3.iterator();
         while(I2.hasNext()){
             JAXBElement<?> element = (JAXBElement<?>) I2.next();
