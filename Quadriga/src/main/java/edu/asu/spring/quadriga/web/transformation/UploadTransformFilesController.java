@@ -51,17 +51,17 @@ public class UploadTransformFilesController {
         if (result.hasErrors()) {
             model.getModelMap().put("show_error_alert", true);
             model.getModelMap().put("error_alert_msg",
-                    "Please enter all the required fields");
+                    "Please enter all the required fields.");
             return model;
         } else if (file.length != 2) {
             model.getModelMap().put("show_error_alert", true);
             model.getModelMap().put("error_alert_msg",
-                    "Please upload all the required files");
+                    "Please upload all the required files.");
             return model;
         } else if (file[0].getSize() == 0 || file[1].getSize() == 0) {
             model.getModelMap().put("show_error_alert", true);
             model.getModelMap().put("error_alert_msg",
-                    "Please upload all the required files");
+                    "Please upload all the required files.");
             return model;
         } else {
             String title = formBean.getTitle();
@@ -82,7 +82,7 @@ public class UploadTransformFilesController {
             // yet done..
 
             model.getModelMap().put("show_success_alert", true);
-            model.getModelMap().put("success_alert_msg", "Upload Successful");
+            model.getModelMap().put("success_alert_msg", "Upload Successful.");
             return model;
         }
 

@@ -11,7 +11,10 @@ import edu.asu.spring.quadriga.dto.TransformFilesDTO;
  */
 public interface ITransformationManager {
 
-	public void saveTransformation(String title, String description, String mappingTitle, String mappingDescription, String mappingFileName, String transfomrTitle, String transfomrDesc, String transformationFileName);
-	public List<TransformFilesDTO> getTransformationsList();
-	
+    public void saveTransformation(String title, String description,
+            String mappingTitle, String mappingDescription,
+            String mappingFileName, String transfomrTitle,
+            String transfomrDesc, String transformationFileName);
+    public List<TransformFilesDTO> getTransformationsList();
+
 }

@@ -31,7 +31,7 @@ public class TransfomationFilesValidator implements Validator {
                 "title is required");
         ValidationUtils.rejectIfEmptyOrWhitespace(error, "patternTitle",
                 "patternTitle is required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(error, "title",
+        ValidationUtils.rejectIfEmptyOrWhitespace(error, "mappingTitle",
                 "mappingTitle is required");
     }
 
