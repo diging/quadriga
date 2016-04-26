@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.domain.factory.workbench.IPublicPageFactory;
 import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.IModifyPublicPageContentManager;
+import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
@@ -30,7 +30,7 @@ public class PublicPageController {
     private IPublicPageFactory publicPageFactory;
     
     @Autowired
-    private IModifyPublicPageContentManager publicPageContentManager;
+    private IPublicPageManager publicPageContentManager;
 
     /**
      * This method is called during the load of Public page settings form

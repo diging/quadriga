@@ -14,10 +14,10 @@ import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.dto.PublicPageDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.PublicPageDTOMapper;
-import edu.asu.spring.quadriga.service.workbench.IModifyPublicPageContentManager;
+import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
 
 @Service
-public class ModifyPublicPageContentManager implements IModifyPublicPageContentManager {
+public class PublicPageManager implements IPublicPageManager {
     
     @Autowired
     private IPublicPageDAO publicPageDao;
@@ -35,4 +35,10 @@ public class ModifyPublicPageContentManager implements IModifyPublicPageContentM
         PublicPageDTO publicPageDTO = publicPageDTOMapper.getPublicPageDTO(publicPage);
         publicPageDao.saveNewDTO(publicPageDTO);
     }
+
+	@Override
+	public IPublicPage retrievePublicPageContent(projectid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

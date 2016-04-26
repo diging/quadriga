@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.service.workbench;
 
+import java.util.List;
+
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IModifyPublicPageContentManager {
+public interface IPublicPageManager {
 
     void addNewPublicPageContent(IPublicPage publicPage) throws QuadrigaStorageException;
+    List<IPublicPage> retrievePublicPageContent(String projectid);
 
 	}
