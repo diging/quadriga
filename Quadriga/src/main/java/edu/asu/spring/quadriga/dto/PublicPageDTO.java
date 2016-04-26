@@ -6,39 +6,46 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "tbl_publicpage")
+@XmlRootElement
 
-public class PublicPageDTO implements Serializable 
-{
-    private static final long serialVersionUID = 1L;
-    
-    @Basic(optional = false)
-    @Column(name = "title")
-    private String title;
-    @Basic(optional = false)
-    @Column(name = "description")
-    private String description;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "order")
-    private int order;
+@NamedQueries({ @NamedQuery(name = "PublicPageDTO.findAll", query = "SELECT pp FROM PublicPageDTO pp"),
+		@NamedQuery(name = "PublicPageDTO.findByProjectId", query = "SELECT p FROM PublicPageDTO p WHERE p.projectid = :projectId"), })
+public class PublicPageDTO implements Serializable {
 
-   
-	public PublicPageDTO() {
-    }
+	private static final long serialVersionUID = 1L;
 
-    public PublicPageDTO(String title, String description, int order) {
-        this.title = title;
-        this.description = description;
-        this.order = order;
-            }
+	@Id
+	@Column(name = "publicpageid")
+	private String publicpageid;
 
+	@Column(name = "title")
+	private String title;
 
-    public String getTitle() {
+	@Lob
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "entryorder")
+	private int entryorder;
+
+	@Column(name = "projectid")
+	private String projectid;
+
+	@JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
+	@ManyToOne
+	private ProjectDTO projectDTO;
+
+	public String getTitle() {
 		return title;
 	}
 
@@ -54,11 +61,40 @@ public class PublicPageDTO implements Serializable
 		this.description = description;
 	}
 
-	public int getOrder() {
-		return order;
+	public int getEntryorder() {
+		return entryorder;
 	}
 
-	public void setOrder(int order) {
-		this.order = order;
+	public void setEntryorder(int entryorder) {
+		this.entryorder = entryorder;
 	}
+
+	public String getProjectid() {
+		return projectid;
+	}
+
+	public void setProjectid(String projectid) {
+		this.projectid = projectid;
+	}
+
+	public ProjectDTO getProjectDTO() {
+		return projectDTO;
+	}
+
+	public void setProjectDTO(ProjectDTO projectDTO) {
+		this.projectDTO = projectDTO;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public String getPublicpageid() {
+		return publicpageid;
+	}
+
+	public void setPublicpageid(String publicpageid) {
+		this.publicpageid = publicpageid;
+	}
+
 }
