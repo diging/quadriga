@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.rest;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -62,7 +64,7 @@ public class SearchNetworkRestController {
     
     /**
      * Rest interface to search concept in list of projects
-     * http://<<URL>:<PORT>>/quadriga/rest/networks/search/{conceptId}/{projectIds}
+     * http://<<URL>:<PORT>>/quadriga/rest/networks/search
      * http://localhost:8080/quadriga/rest/networks/search?conceptId=http://www.digitalhps.org/concepts/CON516ec8c2-20bc-4f35-ae1e-ad908db9d662&projectIds=PROJfFnfnn,PROJFgGPpk
      * 
      * @param conceptId: ConceptId for searching node
@@ -80,49 +82,52 @@ public class SearchNetworkRestController {
     	
     	List<IProject> projectList = new ArrayList<>();
     	
-    	try {    		
-    	    for(String projectId : projectIds){
-    	    	IProject project = null;
-    	    	try{
-                    project = projectManager.getProjectDetails(projectId);
-    	    	}catch(QuadrigaStorageException e){
-    	    		logger.error("QuadrigaStorageException:", e);
-    	    	}
-                if(project!=null){
-                    projectList.add(project);
-                }
+    	for(String projectId : projectIds){
+    	    IProject project = null;
+    	    try{
+                project = projectManager.getProjectDetails(projectId);
+    	    }catch(QuadrigaStorageException e){
+    	        logger.error("QuadrigaStorageException:", e);
+    	    }
+            if(project!=null){
+                projectList.add(project);
             }
-    	    
-    		
-            if(projectList.size()==0){
-                String errorMsg = errorMessageRest.getErrorMsg("Projects don't exist.");
-                return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
-            }
-
-            ITransformedNetwork transformedNetwork;
-            try{
-                transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(
-        			projectIds, conceptId);	
-            }catch(QuadrigaStorageException e){
-                throw new RestException(403, e);
-	    	}
-            
-            
-    	    VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
-            engine.init();
-            Template template = engine.getTemplate("velocitytemplates/transformationdetails.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-            context.put("nodeList", new ArrayList<Node>(transformedNetwork.getNodes().values()));
-            context.put("linkList", transformedNetwork.getLinks());
-            context.put("graphId", conceptId);
-            
-            StringWriter writer = new StringWriter();
-            template.merge(context, writer);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.APPLICATION_XML);
-            return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
-        }catch (Exception e) {
-            throw new RestException(500, e);
         }
+    	    	
+        if(projectList.size()==0){
+            String errorMsg = errorMessageRest.getErrorMsg("Projects don't exist.");
+            return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
+        }
+
+        ITransformedNetwork transformedNetwork;
+        try{
+            transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(
+            projectIds, conceptId);	
+        }catch(QuadrigaStorageException e){
+            throw new RestException(403, e);
+	    }
+        
+		try {
+		    VelocityEngine engine = restVelocityFactory.getVelocityEngine(req); 
+		    engine.init();
+		    Template template = engine.getTemplate("velocitytemplates/transformationdetails.vm");
+		    VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+	        context.put("nodeList", new ArrayList<Node>(transformedNetwork.getNodes().values()));
+	        context.put("linkList", transformedNetwork.getLinks());
+	        context.put("graphId", conceptId);          
+	        StringWriter writer = new StringWriter();
+	        template.merge(context, writer);
+	        HttpHeaders httpHeaders = new HttpHeaders();
+	        httpHeaders.setContentType(MediaType.APPLICATION_XML);
+	        return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
+		}catch (IOException e) {
+		    throw new RestException(500, e);
+		}catch (ResourceNotFoundException e) {
+		    throw new RestException(404, e);
+		}catch (ParseErrorException e) {
+		    throw new RestException(500, e);
+		}catch (Exception e) {
+		    throw new RestException(500, e);
+		} 
     }
 }

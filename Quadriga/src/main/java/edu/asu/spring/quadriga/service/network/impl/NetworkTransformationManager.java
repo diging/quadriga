@@ -121,7 +121,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     }
     
     /**
-	 * This method returns the transformation network for searched concept under provided project list
+	 * This method searches for concept specified by conceptId in the networks of projects specified by project Ids and
+	 * returns transformed networks of all projects specified by projectIds containing given conceptId.
 	 * @param projectIds : List of projectIds for projects to search under
 	 * @param conceptId : Id of concept to search
 	 * @return ITransformedNetwork
