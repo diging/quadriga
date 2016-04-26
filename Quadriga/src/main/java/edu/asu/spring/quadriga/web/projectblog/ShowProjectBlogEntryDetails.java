@@ -48,12 +48,11 @@ public class ShowProjectBlogEntryDetails {
      *             Database storage exception thrown
      */
     @RequestMapping(value = "sites/{ProjectUnixName}/projectblogdetails", method = RequestMethod.POST)
-    public String projectblogdetails(Model model,@ModelAttribute("latestProjectBlogEntry") ProjectBlogEntry latestProjectBlogEntry, @PathVariable("ProjectUnixName") String unixName, 
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
+    public String projectblogdetails(Model model,@ModelAttribute("latestProjectBlogEntry") ProjectBlogEntry latestProjectBlogEntry) throws QuadrigaStorageException {
 
         // Fetch blog entries for a project identified by project unix name
         model.addAttribute("latestProjectBlogEntry", latestProjectBlogEntry);
-        model.addAttribute("project", project);
+        //model.addAttribute("project", project);
         return "sites/projectblogdetails";
     }
 

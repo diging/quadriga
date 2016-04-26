@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -97,6 +98,7 @@ public class WebsiteProjectController {
         Integer count = 1;
         List<IProjectBlogEntry> latestProjectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId,
                 count);
+        model.addAttribute("projectBlogEntry",new ProjectBlogEntry());
         if (latestProjectBlogEntryList.size() < 1 ) {
             model.addAttribute("blogEntryExists",false);
         }

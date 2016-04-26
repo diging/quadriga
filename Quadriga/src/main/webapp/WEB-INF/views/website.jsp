@@ -66,10 +66,10 @@
 		<p>
 		<form:form commandName="projectBlogEntry" method="POST"
 				action="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblogdetails">				
-			<input type="hidden" path="title" id="title" value="${latestProjectBlogEntry.title}" />
-			<input type="hidden" path="description" id="description" value="${latestProjectBlogEntry.description}" />
-			<input type="hidden" path="createdDate" id="createdDate" value="${latestProjectBlogEntry.createdDate}" />
-			<input type="hidden" path="author" id="author" value="${latestProjectBlogEntry.author}" />
+			<form:hidden path="title" id="title" value="${latestProjectBlogEntry.title}" />
+			<form:hidden path="description" id="description" value="${latestProjectBlogEntry.description}" />
+			<form:hidden path="createdDate" id="createdDate" value="${latestProjectBlogEntry.createdDate}" />
+			<form:hidden path="author" id="author" value="${latestProjectBlogEntry.author}" />
 			<input class="btn btn-primary" type="submit" value="Read More" style="width: 100%; align: center;">
 		</form:form>
 		</p>
