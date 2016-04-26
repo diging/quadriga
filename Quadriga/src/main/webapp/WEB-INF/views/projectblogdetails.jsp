@@ -10,17 +10,17 @@
 			<!-- Blog Entries Column -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3>${projectBlogEntryList[0].title}</h3>
+					<h3>${latestProjectBlogEntry.title}</h3>
 				</div>
 
 				<div class="panel-body">
 					<p>
 						Posted on
 						<fmt:formatDate type="both" dateStyle="long" timeStyle="long"
-							value="${projectBlogEntryList[0].createdDate}" />
+							value="${latestProjectBlogEntry.createdDate}" />
 					</p>
-					<p>Author: ${projectBlogEntryList[0].author.name}</p>
-					<p>${projectBlogEntryList[0].description}</p>
+					<p>Author: ${latestProjectBlogEntry.author.name}</p>
+					<p>${latestProjectBlogEntry.description}</p>
 				</div>
 
 			</div>

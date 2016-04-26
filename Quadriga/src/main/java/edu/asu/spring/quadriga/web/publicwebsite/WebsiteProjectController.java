@@ -66,20 +66,7 @@ public class WebsiteProjectController {
         this.projectManager = projectManager;
     }
 
-    public String firstWords(String input, int words) {
-    for (int i = 0; i < input.length(); i++) {
-        // When a space is encountered, reduce words remaining by 1.
-        if (input.charAt(i) == ' ') {
-        words--;
-        }
-        // If no more words remaining, return a substring.
-        if (words == 0) {
-        return input.substring(0, i);
-        }
-    }
-    // Error case.
-    return "";
-    }
+
     
     /**
      * This method displays the public or external Website for the particular
@@ -108,17 +95,16 @@ public class WebsiteProjectController {
         // Fetch blog entries for a project identified by project unix name
         String projectId = project.getProjectId();
         Integer count = 1;
-        List<IProjectBlogEntry> projectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId,
+        List<IProjectBlogEntry> latestProjectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId,
                 count);
-        IProjectBlogEntry recentprojectblog = projectBlogEntryList.get(0);
-        String parseddescription = recentprojectblog.getDescription();
-        org.jsoup.nodes.Document dom = Jsoup.parse(parseddescription);
-        String text = dom.text();
-        parseddescription = firstWords(text, 40);              
-        recentprojectblog.setDescription(parseddescription);
-        
-        model.addAttribute("projectBlogEntryList", recentprojectblog);
-
+        if (latestProjectBlogEntryList.size() < 1 ) {
+            model.addAttribute("blogEntryExists",false);
+        }
+        else {
+            model.addAttribute("blogEntryExists",true);
+            model.addAttribute("latestProjectBlogEntrySnippet",latestProjectBlogEntryList.get(0).getSnippet(40));
+            model.addAttribute("latestProjectBlogEntry", latestProjectBlogEntryList.get(0));
+        }
         model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 
         if (user == null) {
@@ -248,55 +234,6 @@ public class WebsiteProjectController {
         return "sites/networks/explore";
 
     }
-    
-    /**
-     * This method displays the recent project blog
-     * 
-     * If the project has been set to 'accessible', then the public website page
-     * is displayed. If the project does not exist then an error page is shown.
-     * 
-     * @param unixName
-     *            unix name that is given to the project at the time of its
-     *            creation
-     * @param model
-     *            Model object to map values to view
-     * @return returns a string to access the external website main page
-     * @throws QuadrigaStorageException
-     *             Database storage exception thrown
-     */
-    @RequestMapping(value = "sites/{ProjectUnixName}/projectblogdetails", method = RequestMethod.GET)
-    public String projectblogdetails(Model model, @PathVariable("ProjectUnixName") String unixName, Principal principal,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
-
-        String user = null;
-        if (principal != null) {
-            user = principal.getName();
-        }
-        // Fetch blog entries for a project identified by project unix name
-        String projectId = project.getProjectId();
-        Integer count = 1;
-        List<IProjectBlogEntry> projectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId,
-                count);
-        
-        if (user == null) {
-            if (projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
-                model.addAttribute("projectBlogEntryList", projectBlogEntryList);
-                model.addAttribute("project", project);
-                return "sites/projectblogdetails";
-            } else {
-                return "forbidden";
-            }
-        }
-
-        if (projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
-                || projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
-            model.addAttribute("projectBlogEntryList", projectBlogEntryList);
-            model.addAttribute("project", project);
-            return "sites/projectblogdetails";
-
-        } else {
-            return "forbidden";
-        }
-    }
+   
 
 }

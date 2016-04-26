@@ -54,18 +54,24 @@
 </div>
 
 </c:if>
-
-<div class="row">
-	<h2>Recent Project Blog</h2>
-	<h3>${projectBlogEntryList.title}</h3>
-	<p>
-	<i>Posted by ${projectBlogEntryList.author.name} on ${projectBlogEntryList.createdDate}</i>
-	</p>
-	<p>${projectBlogEntryList.description} ... </p>
-	<p>
-		<a
-			href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblogdetails">Read
-			More</a>
-	</p>
-</div>
-
+<c:if test="${blogEntryExists}">
+	<div class="row">
+		<h2>Recent Project Blog</h2>
+		<h3>${latestProjectBlogEntry.title}</h3>
+		<p>
+			<i>Posted by ${latestProjectBlogEntry.author.name} on
+				${latestProjectBlogEntry.createdDate}</i>
+		</p>
+		<p>${latestProjectBlogEntrySnippet}...</p>
+		<p>
+		<form:form commandName="projectBlogEntry" method="POST"
+				action="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblogdetails">				
+			<input type="hidden" path="title" id="title" value="${latestProjectBlogEntry.title}" />
+			<input type="hidden" path="description" id="description" value="${latestProjectBlogEntry.description}" />
+			<input type="hidden" path="createdDate" id="createdDate" value="${latestProjectBlogEntry.createdDate}" />
+			<input type="hidden" path="author" id="author" value="${latestProjectBlogEntry.author}" />
+			<input class="btn btn-primary" type="submit" value="Read More" style="width: 100%; align: center;">
+		</form:form>
+		</p>
+	</div>
+</c:if>
