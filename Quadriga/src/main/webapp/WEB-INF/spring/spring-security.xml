@@ -32,6 +32,7 @@
 		<intercept-url pattern="/auth/rest/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/conceptcollections/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/conceptdetails/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
+		<intercept-url pattern="/auth/transformation/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/searchitems/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/dictionaries/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/editing/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
@@ -67,4 +68,5 @@
 		<authentication-provider ref="authProvider"></authentication-provider>
 	</authentication-manager>
 	
+
 </beans:beans>
