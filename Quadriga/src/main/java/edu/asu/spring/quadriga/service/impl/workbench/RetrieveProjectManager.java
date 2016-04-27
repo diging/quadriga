@@ -306,32 +306,27 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
     	return projectList;
     }
 
-	/**
-	 * Returns formated String for description and pattern
-	 * @param projectDTO projectDTO
-	 * @param pattern search string
-	 * @return IProject with formated description
-	 * @throws QuadrigaStorageException 
-	 */
-	private IProject searchLines(ProjectDTO projectDTO, String pattern) throws QuadrigaStorageException {
-		IProject projectProxy = projectShallowMapper.getProjectDetails(projectDTO);
-		
-		String description = projectProxy.getDescription();
-		String[] temp = description.split("\\.");
-		StringBuilder finalDescription = new StringBuilder();
-		int linesCount = 0;
-		for(int i=0; i<temp.length; i++){
-			if(temp[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*") && linesCount < 4){
-				if(i+1 < temp.length && temp[i+1].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
-					finalDescription.append(temp[i]).append("........");
-				} else{
-					finalDescription.append(temp[i]);
-				}
-				linesCount++;
-			}
-		}
-		projectProxy.setDescription(finalDescription.toString());
-		
-		return projectProxy;
-	}
+    /**
+     * Returns formated String for description and pattern
+     * @param projectDTO projectDTO
+     * @param pattern search string
+     * @return IProject with formated description
+     * @throws QuadrigaStorageException 
+     */
+    @SuppressWarnings("static-access")
+    private IProject searchLines(ProjectDTO projectDTO, String pattern) throws QuadrigaStorageException {
+    	IProject projectProxy = projectShallowMapper.getProjectDetails(projectDTO);
+
+    	String description = projectProxy.getDescription();
+    	String[] temp = description.split("\\.");
+    	String finalDescription = null;
+    	for(int i=0; i<temp.length; i++){
+    		if(temp[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
+    			finalDescription = finalDescription.join("[...]", temp[i]);
+    		}
+    	}
+    	projectProxy.setDescription(finalDescription);
+
+    	return projectProxy;
+    }
 }
