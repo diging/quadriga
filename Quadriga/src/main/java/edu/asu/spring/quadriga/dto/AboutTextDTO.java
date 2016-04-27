@@ -20,7 +20,6 @@ import edu.asu.spring.quadriga.domain.settings.IAboutText;
 
 @Entity
 @Table(name = "tbl_about_text")
-@XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "AboutTextDTO.findByProjectId", query = "SELECT a FROM AboutTextDTO a where a.projectId= :projectId") })
 
@@ -29,7 +28,7 @@ public class AboutTextDTO implements Serializable, IAboutText {
     private static final long serialVersionUID = 1103019135158917211L;
 
     @Id
-    private String Id;
+    private String id;
 
     @Column(name = "ProjectId")
     private String projectId;
@@ -41,11 +40,11 @@ public class AboutTextDTO implements Serializable, IAboutText {
     private String description;
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getProjectId() {
