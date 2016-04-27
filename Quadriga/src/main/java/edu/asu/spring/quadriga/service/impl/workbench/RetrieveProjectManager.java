@@ -318,8 +318,8 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
         IProject projectProxy = projectShallowMapper.getProjectDetails(projectDTO);
 
         String description = projectProxy.getDescription();
-    	String[] temp = description.split("\\.");
-    	String finalDescription = null;
+        String[] temp = description.split("\\.");
+        String finalDescription = null;
         for(int i=0; i<temp.length; i++){
             if(temp[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
                 finalDescription = finalDescription.join("[...]", temp[i]);
