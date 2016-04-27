@@ -58,24 +58,7 @@ $("input[type=button]").button().click(function(event) {
 <script type="text/javascript">
 
   function goFullscreen(id) {
-	  document.getElementById('chart').style='position: fixed; top: 0; bottom :0; left: 0; right :0';
-    // Get the element that we want to take into fullscreen mode
-    var a = document.getElementById('chart');
-    
-    var svgDoc= document.getElementsByTagName('svg')[0];
-       
-	svgDoc.setAttribute("height", "100%");
-	svgDoc.setAttribute("width", "100%");
     var element = document.getElementById(id);
-
-
-
-    // These function will not exist in the browsers that don't support fullscreen mode yet, 
-
-    // so we'll have to check to see if they're available before calling them.
-
-
-
     if (element.mozRequestFullScreen) {
 
       // This is how to go into fullscren mode in Firefox
@@ -103,20 +86,13 @@ $("input[type=button]").button().click(function(event) {
 <script type="text/javascript">
 function clear()
 {
-
 	var element=document.getElementById('chart');
 	element.style.removeProperty('position');//=null;
 	element.style.top=null;
 	element.style.bottom=null;
 	element.style.right=null;
 	element.style.left=null;
-	var width = "500";
-	height = "500";
-	 var svgDoc= document.getElementsByTagName('svg')[0];
-	svgDoc.setAttribute("height", height);
-	svgDoc.setAttribute("width", width);
 }
-
 </script>
 
 <script>

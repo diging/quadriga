@@ -25,7 +25,6 @@ function d3visualizepublic(graph, networkId, path,type) {
 	}
 	// Layout size
 	var width = $('#chart').parent().width();
-	console.log(width);
 	var height = $('#chart').parent().height();
 	var layout;
 	var color = d3.scale.category20();
