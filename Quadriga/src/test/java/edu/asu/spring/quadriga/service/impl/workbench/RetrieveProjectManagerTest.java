@@ -41,12 +41,12 @@ public class RetrieveProjectManagerTest {
 	@Test
 	public void checkOnlyPublicProjectsAreReturned() throws QuadrigaStorageException{
 		Mockito.when(mockedDBConnect.getAllProjectsDTOByAccessibility("PUBLIC")).thenReturn(createPublicProjectDTOList());
-		Mockito.when(mockedProjectShallowMapper.getProjectDetails(Matchers.any(ProjectDTO.class)))
-		.thenReturn(createPublicIProject());
-		List<IProject> projectList = retrieveProjectManagerUnderTest.getProjectListByAccessibility("PUBLIC");
+		Mockito.when(mockedProjectShallowMapper
+				.getProjectDetails(Matchers.any(ProjectDTO.class)))
+				.thenReturn(createPublicIProject());
+		List<IProject> projectList = retrieveProjectManagerUnderTest
+				.getProjectListByAccessibility("PUBLIC");
 
-		Mockito.verify(mockedDBConnect).getAllProjectsDTOByAccessibility("PUBLIC");
-		Mockito.verify(mockedProjectShallowMapper).getProjectDetails(Matchers.any(ProjectDTO.class));
 		Mockito.verify(mockedDBConnect, times(1)).getAllProjectsDTOByAccessibility("PUBLIC");
 		Mockito.verify(mockedProjectShallowMapper, times(1)).getProjectDetails(Matchers.any(ProjectDTO.class));
 
@@ -61,8 +61,6 @@ public class RetrieveProjectManagerTest {
 		Mockito.when(mockedDBConnect.getAllProjectsDTOByAccessibility("PUBLIC")).thenReturn(new ArrayList<ProjectDTO>());
 		List<IProject> projectList = retrieveProjectManagerUnderTest.getProjectListByAccessibility("PUBLIC");
 
-		Mockito.verify(mockedDBConnect).getAllProjectsDTOByAccessibility("PUBLIC");
-		Mockito.verifyNoMoreInteractions(mockedProjectShallowMapper);
 		Mockito.verify(mockedDBConnect, times(1)).getAllProjectsDTOByAccessibility("PUBLIC");
 		Mockito.verify(mockedProjectShallowMapper, times(0)).getProjectDetails(Matchers.any(ProjectDTO.class));
 
