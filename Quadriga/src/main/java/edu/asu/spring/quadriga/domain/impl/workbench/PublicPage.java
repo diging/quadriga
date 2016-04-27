@@ -4,7 +4,7 @@ package edu.asu.spring.quadriga.domain.impl.workbench;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 
 public class PublicPage implements IPublicPage {
-	private String PublicPageId;
+	private String publicPageId;
 	private String title;
 	private String description;
 	private int order;
@@ -65,11 +65,11 @@ public class PublicPage implements IPublicPage {
 	}
 
 	public String getPublicPageId() {
-		return PublicPageId;
+		return publicPageId;
 	}
 
 	public void setPublicPageId(String publicPageId) {
-		PublicPageId = publicPageId;
+		this.publicPageId = publicPageId;
 	}
 
 }

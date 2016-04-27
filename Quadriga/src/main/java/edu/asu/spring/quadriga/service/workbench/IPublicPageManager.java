@@ -7,7 +7,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IPublicPageManager {
 
-    void addNewPublicPageContent(IPublicPage publicPage) throws QuadrigaStorageException;
-    List<IPublicPage> retrievePublicPageContent(String projectid);
+    void saveOrUpdatePublicPage(IPublicPage publicPage) throws QuadrigaStorageException;
+    List<IPublicPage> retrievePublicPageContent(String projectid) throws QuadrigaStorageException;
 
 	}

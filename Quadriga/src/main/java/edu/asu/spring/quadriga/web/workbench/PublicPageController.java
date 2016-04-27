@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.web.workbench;
 
+import java.util.List;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factory.workbench.IPublicPageFactory;
 import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
+import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
@@ -44,13 +47,20 @@ public class PublicPageController {
     public ModelAndView publicPageSettingsForm(
             @PathVariable("projectid") String projectid)
             throws QuadrigaStorageException, QuadrigaAccessException {
+        List<IPublicPage> publicPageList = publicPageContentManager
+                .retrievePublicPageContent(projectid);
         ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
-        model.getModelMap().put("publicpage",
-                publicPageFactory.createPublicPageObject());
+        model.getModelMap().put("publicpagelist", publicPageList);
+        model.getModel().put("publicpage", publicPageFactory.createPublicPageObject());
         model.getModelMap().put("publicpageprojectid", projectid);
+        
+        for(IPublicPage publicPage : publicPageList){
+            model.getModel().put("publicpageObject"+publicPageList.indexOf(publicPage), publicPage);
+        }
+        
+        
         return model;
     }
-
     
     /**
      * This method is used update the database with the information provided in the Public settings page
@@ -63,13 +73,14 @@ public class PublicPageController {
     public @ResponseBody ResponseEntity<String> addpublicpagesuccess(
             @RequestParam("data") JSONObject data, @PathVariable("projectid") String projectid)
             throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
-
+        
         PublicPage publicpageentry = new PublicPage();
         publicpageentry.setTitle(data.getString("title"));
         publicpageentry.setDescription(data.getString("desc"));
         publicpageentry.setOrder(data.getInt("order"));
         publicpageentry.setProjectId(projectid);
-        publicPageContentManager.addNewPublicPageContent(publicpageentry);
+        publicpageentry.setPublicPageId(data.getString("publicpageid"));
+        publicPageContentManager.saveOrUpdatePublicPage(publicpageentry);
         return new ResponseEntity<String>("Successfully updated", HttpStatus.OK);
     }
 }

@@ -10,13 +10,10 @@ $("#submit1").click(function(){performAction(this)});
 $("#submit2").click(function(){performAction(this)});
 $("#submit3").click(function(){performAction(this)});
 });
-function perform(obj){
-    //var a = $(obj).parent().parent().parent();
-    var a = $(obj).closest('div.publicpageform').find('.titleValue').val();
-    console.log(a);
-}
+
 	function performAction(obj) {
 		var data = {};
+		var publicpageid = $(obj).closest('div.publicpageform').find('.publicpageid').val();
 		var title = $(obj).closest('div.publicpageform').find('.titleValue').val();
 		var desc = $(obj).closest('div.publicpageform').find('.descValue').val();
 		var order = $(obj).closest('div.publicpageform').find('.orderValue').val();
@@ -45,6 +42,7 @@ function perform(obj){
 		data["title"] = title;
 		data["desc"] = desc;
 		data["order"] = order;
+		data["publicpageid"] = publicpageid;
 		$
 				.ajax({
 					type : "POST",
@@ -53,9 +51,7 @@ function perform(obj){
 						data : JSON.stringify(data)
 					},
 					success : function(e) {
-						$(obj).closest('div.publicpageform').find('.titleValue').val('');
-						$(obj).closest('div.publicpageform').find('.descValue').val('');
-						$(obj).closest('div.publicpageform').find('.orderValue').val('');
+						
 					},
 					error : function(e) {
 						console.log("ERROR: ", e);
@@ -76,21 +72,21 @@ function perform(obj){
 			<tr>
 				<td style="width: 170px">Title *</td>
 				<td style="width: 400px"><input path="title" size="60" class="titleValue"
-						id="title1" /></td>
+						id="title1" value="${publicpageObject0.title}"/></td>
 				<td><div id="title_err"></div></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description *</td>
-				<td><form:textarea path="description" cols="60" rows="6"
-						id="description1" class="descValue" /></td>
+				<td><textarea path="description" cols="60" rows="6"
+						id="description1" class="descValue" >${publicpageObject0.description}</textarea></td>
 				<td><div id="desc_err"></div></td>
 				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
 				<td style="width: 1px">
-				<select id="order1" path="order" class="orderValue">
+				<select id="order1" path="order" class="orderValue" value="${publicpageObject0.order}" >
 				  <option selected value="select">--Select--</option>
 				  <option value="1">1</option>
 				  <option value="2">2</option>
@@ -100,7 +96,8 @@ function perform(obj){
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
-				<td><input type="button" id="submit1" 
+				
+				<td><input type="hidden" class ="publicpageid" value="${publicpageObject0.publicPageId}"><input type="button" id="submit1" 
 					value="SAVE"></td>
 			</tr>
 		
@@ -115,21 +112,21 @@ function perform(obj){
 			<tr>
 				<td style="width: 170px">Title *</td>
 				<td style="width: 400px"><form:input path="title" size="60"
-						id="title2" class="titleValue"/></td>
+						id="title2" class="titleValue" value="${publicpageObject1.title}"/></td>
 				<td><div id="title_err"></div></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description *</td>
-				<td><form:textarea path="description" cols="60" rows="6"
-						id="description2" class="descValue"/></td>
+				<td><textarea path="description" cols="60" rows="6"
+						id="description2" class="descValue" >${publicpageObject1.description}</textarea></td>
 				<td><div id="desc_err"></div></td>
 				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
 				<td style="width: 1px">
-				<select id="order2" path="order" class="orderValue">
+				<select id="order2" path="order" class="orderValue" value="${publicpageObject1.order}>
 				  <option selected value="select">--Select--</option>
 				  <option value="1">1</option>
 				  <option value="2">2</option>
@@ -139,7 +136,7 @@ function perform(obj){
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
-				<td><input type="button" value="SAVE" id="submit2"></td>
+				<td><input type="hidden" class ="publicpageid" value="${publicpageObject1.publicPageId}"><input type="button" value="SAVE" id="submit2"></td>
 			</tr>
 		</table>
 		</div>
@@ -151,21 +148,21 @@ function perform(obj){
 			<tr>
 				<td style="width: 170px">Title *</td>
 				<td style="width: 400px"><form:input path="title" size="60"
-						id="title3" class="titleValue" /></td>
+						id="title3" class="titleValue" value="${publicpageObject2.title}"/></td>
 				<td><div id="title_err"></div></td>
 				<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description *</td>
-				<td><form:textarea path="description" cols="60" rows="6"
-						id="description3" class="descValue"/></td>
+				<td><textarea path="description" cols="60" rows="6"
+						id="description3" class="descValue">${publicpageObject2.description}</textarea></td>
 				<td><div id="desc_err"></div></td>
 				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="width: 170px">Order Preference *</td>
 				<td style="width: 1px">
-				<select id="order3" path="order" class="orderValue">
+				<select id="order3" path="order" class="orderValue" value="${publicpageObject2.order}>
 				  <option selected value="select">--Select--</option>
 				  <option value="1">1</option>
 				  <option value="2">2</option>
@@ -175,7 +172,7 @@ function perform(obj){
 				<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
-				<td><input type="button" value="SAVE" id="submit3"></td>
+				<td><input type="hidden" class ="publicpageid" value="${publicpageObject2.publicPageId}"><input type="button" value="SAVE" id="submit3"></td>
 			</tr>
 		</table>
 		</div>
