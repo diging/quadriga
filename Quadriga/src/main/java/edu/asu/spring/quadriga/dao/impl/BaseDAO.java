@@ -113,6 +113,11 @@ public abstract class BaseDAO<T> implements IBaseDAO<T> {
     public void deleteDTO(T dto) {
         sessionFactory.getCurrentSession().delete(dto);
     }
+    
+    @Override
+    public void saveOrUpdateDTO(T dto){
+        sessionFactory.getCurrentSession().saveOrUpdate(dto);
+    }
 
     protected void deleteObject(Object object) {
         sessionFactory.getCurrentSession().delete(object);
