@@ -35,6 +35,7 @@ $("input[type=button]").button().click(function(event) {
 <body
 	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
 
+<<<<<<< HEAD
 
 
 
@@ -53,3 +54,88 @@ $("input[type=button]").button().click(function(event) {
 
 <div id="log"></div>
 
+=======
+<button type="submit" onclick="goFullscreen('chart')" style="float: left">
+    <i class="fa fa-arrows-alt"></i> 
+    
+</button>
+
+
+<!-- <div id="dspace_metadata"></div>  -->
+
+
+
+
+<div id="chart"></div>
+
+<div id="inner-details"></div>
+<div id="allannot_details">
+<table id = annotationsTable></table>
+</div>
+
+
+<div id="log"></div>
+<script type="text/javascript">
+
+  function goFullscreen(id) {
+    var element = document.getElementById(id);
+    if (element.mozRequestFullScreen) {
+
+      // This is how to go into fullscren mode in Firefox
+
+      // Note the "moz" prefix, which is short for Mozilla.
+
+      element.mozRequestFullScreen();
+
+    } else if (element.webkitRequestFullScreen) {
+
+      // This is how to go into fullscreen mode in Chrome and Safari
+
+      // Both of those browsers are based on the Webkit project, hence the same prefix.
+
+      element.webkitRequestFullScreen();
+
+   }
+    
+   // Hooray, now we're in fullscreen mode!
+
+  }
+
+</script>
+
+<script type="text/javascript">
+function clear()
+{
+	var element=document.getElementById('chart');
+	element.style.removeProperty('position');//=null;
+	element.style.top=null;
+	element.style.bottom=null;
+	element.style.right=null;
+	element.style.left=null;
+}
+</script>
+
+<script>
+if (document.addEventListener)
+{
+    document.addEventListener('webkitfullscreenchange', exitHandler, false);
+    document.addEventListener('mozfullscreenchange', exitHandler, false);
+    document.addEventListener('fullscreenchange', exitHandler, false);
+    document.addEventListener('MSFullscreenChange', exitHandler, false);
+}
+
+function exitHandler()
+{
+    if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null)
+    {
+    	if(window.innerWidth == screen.width && window.innerHeight == screen.height) {
+
+    	}
+    	else
+    	{
+    		clear();
+    	}
+    }
+}
+</script>
+>>>>>>> refs/heads/develop

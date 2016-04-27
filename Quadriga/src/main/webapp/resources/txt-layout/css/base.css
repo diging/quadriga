@@ -159,4 +159,18 @@ a {
     font-size:10px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     padding:7px;
+<<<<<<< HEAD
+=======
+}
+
+/* Network full screen*/
+#chart {
+	height: 100%;
+	width: 100%;
+	min-height: 500px;
+}
+
+#chart>svg {
+	min-height: 500px;
+>>>>>>> refs/heads/develop
 }

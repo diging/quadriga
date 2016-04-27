@@ -384,6 +384,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/showInactiveWorkspace.jsp" />
 	</definition>
+
 	<definition name="auth/workbench/workspace/showArchivedWorkspace"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="List of Archived Workspaces" />
@@ -620,6 +621,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/showWordSearch.jsp" />
 	</definition>
+
 	<!-- Adding Public page settings -start -->
 	<definition name="auth/workbench/addpublicpage" extends="base.definition.workbench.nav">
 		<put-attribute name="title"
@@ -629,10 +631,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addpublicpage.jsp" />
 	</definition>
-	<!-- Adding Public Page settings END -->
-	<!-- <definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries"> 
-		<put-attribute name="content" value="/WEB-INF/views/dictionary/dictionaryChild.jsp"/> 
-		</definition> -->
 
 
 
@@ -694,8 +692,7 @@
 	<definition name="404" extends="base.definition.public">
 		<put-attribute name="title" value="Quadriga - Page Not Found" />
 		<put-attribute name="navigation" value="" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/exceptions/404.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/exceptions/404.jsp" />
 	</definition>
 
 	<!-- Networks -->
@@ -730,9 +727,34 @@
 		<put-attribute name="content" value="/WEB-INF/views/networksearch.jsp" />
 	</definition>
 
+
+	<definition name="sites/public/PublicWebsiteAbout" extends="base.definition.public">
+		<put-attribute name="currentPage" value="about" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/public/publicwebsiteabout.jsp" />
+	</definition>
+
+
+	<definition name="auth/editabout" extends="base.definition">
+		<put-attribute name="currentPage" value="editabout" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/settings/publicWebsiteEditAbout.jsp" />
+	</definition>
+
+	<definition name="auth/settings" extends="base.definition">
+		<put-attribute name="currentPage" value="settings" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/settings/publicwebsitesettings.jsp" />
+	</definition>
+
+
+
 	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks"> 
-		<put-attribute name="title" value="Quadriga Networks visualize" /> <put-attribute 
-		name="content" value="/WEB-INF/views/editing/networks.jsp" /> </definition> -->
+		<put-attribute name="title" value="Quadriga Networks visualize" /> <definition 
+		name="sites/networks/visualize" extends="base.definition.networks"> <put-attribute 
+		name="title" value="Quadriga Networks visualize" /> <put-attribute name="content" 
+		value="/WEB-INF/views/editing/networks.jsp" /> </definition> -->
+
 
 
 	<!-- editing -->
@@ -743,10 +765,14 @@
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="currentPage" value="editing" />
 	</definition>
+
 	<definition name="auth/editing" extends="base.definition">
+
 		<put-attribute name="title" value="Quadriga Editing" />
+
 		<put-attribute name="content" value="/WEB-INF/views/editing/editing.jsp" />
 	</definition>
+
 	<definition name="auth/editing/approvedrejectednetworks"
 		extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Assigned User" />
@@ -790,9 +816,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/editingnetworks.jsp" />
 	</definition>
-
-
-
 	<definition name="auth/networks/visualize" extends="base.definition.rightnav">
 		<put-attribute name="currentPage" value="networks" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
@@ -811,7 +834,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/networkvisual.jsp" />
 	</definition>
- 
+
 	<definition name="sites/networks/visualize" extends="base.definition.public.network">
 		<put-attribute name="currentPage" value="networks" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
@@ -820,23 +843,25 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
- 
+
 	<definition name="sites/project/statistics" extends="base.definition.public">
 		<put-attribute name="title" value="Project statistics" />
 		<put-attribute name="currentPage" value="statistics" />
-		<put-attribute name="content" value="/WEB-INF/views/projectstatistics.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/projectstatistics.jsp" />
 	</definition>
 
-        <definition name="sites/projectblog" extends="base.definition.public">
+	<definition name="sites/projectblog" extends="base.definition.public">
 		<put-attribute name="currentPage" value="projectblog" />
 		<put-attribute name="content" value="/WEB-INF/views/projectblog.jsp" />
 	</definition>
-	
+
 	<definition name="sites/addprojectblogentry" extends="base.definition.public">
 		<put-attribute name="currentPage" value="projectblog" />
-		<put-attribute name="content" value="/WEB-INF/views/addprojectblogentry.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/addprojectblogentry.jsp" />
 	</definition>
-	
+
 	<!-- Explore combined network -->
 
 	<definition name="sites/networks/explore" extends="base.definition.public.network">
@@ -862,8 +887,8 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/networkshistory.jsp" />
 	</definition>
-	<definition name="base.definition.public.sites" 
-		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp" >
+	<definition name="base.definition.public.sites"
+		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation" value="" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
@@ -878,3 +903,4 @@
 		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
 	</definition>
 </tiles-definitions>
+
