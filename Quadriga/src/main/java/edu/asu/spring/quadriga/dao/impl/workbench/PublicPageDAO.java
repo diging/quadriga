@@ -12,32 +12,28 @@ import edu.asu.spring.quadriga.dto.PublicPageDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
-public class PublicPageDAO extends BaseDAO<PublicPageDTO> implements
-        IPublicPageDAO {
+public class PublicPageDAO extends BaseDAO<PublicPageDTO> implements IPublicPageDAO {
 
-    @Override
-    public PublicPageDTO getDTO(String id) {
-        return getDTO(PublicPageDTO.class, id);
-    }
+	@Override
+	public PublicPageDTO getDTO(String id) {
+		return getDTO(PublicPageDTO.class, id);
+	}
 
-    @Override
-    public String getIdPrefix() {
-        return messages.getProperty("publicpage_id.prefix");
-    }
+	@Override
+	public String getIdPrefix() {
+		return messages.getProperty("publicpage_id.prefix");
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<PublicPageDTO> getPublicPageDTOsByProjectId(String projectId)
-            throws QuadrigaStorageException {
-        try {
-            Query query = sessionFactory
-                    .getCurrentSession()
-                    .createQuery(
-                            "from PublicPageDTO page where page.projectid = :projectId");
-            query.setParameter("projectId", projectId);
-            return query.list();
-        } catch (HibernateException e) {
-            throw new QuadrigaStorageException(e);
-        }
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PublicPageDTO> getPublicPageDTOsByProjectId(String projectId) throws QuadrigaStorageException {
+		try {
+			Query query = sessionFactory.getCurrentSession()
+					.createQuery("from PublicPageDTO page where page.projectid = :projectId");
+			query.setParameter("projectId", projectId);
+			return query.list();
+		} catch (HibernateException e) {
+			throw new QuadrigaStorageException(e);
+		}
+	}
 }

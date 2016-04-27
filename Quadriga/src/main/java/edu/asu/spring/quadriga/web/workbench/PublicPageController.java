@@ -29,58 +29,55 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class PublicPageController {
 
-    @Autowired
-    private IPublicPageFactory publicPageFactory;
-    
-    @Autowired
-    private IPublicPageManager publicPageContentManager;
+	@Autowired
+	private IPublicPageFactory publicPageFactory;
 
-    /**
-     * This method is called during the load of Public page settings form
-     *
-     * @return model - model object
-     */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN,
-            RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/workbench/{projectid}/addpublicpage", method = RequestMethod.GET)
-    public ModelAndView publicPageSettingsForm(
-            @PathVariable("projectid") String projectid)
-            throws QuadrigaStorageException, QuadrigaAccessException {
-        List<IPublicPage> publicPageList = publicPageContentManager
-                .retrievePublicPageContent(projectid);
-        ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
-        model.getModelMap().put("publicpagelist", publicPageList);
-        model.getModel().put("publicpage", publicPageFactory.createPublicPageObject());
-        model.getModelMap().put("publicpageprojectid", projectid);
-        
-        for(IPublicPage publicPage : publicPageList){
-            model.getModel().put("publicpageObject"+publicPageList.indexOf(publicPage), publicPage);
-        }
-        
-        
-        return model;
-    }
-    
-    /**
-     * This method is used update the database with the information provided in the Public settings page
-     *
-     * @return json
-     * @throws JSONException 
-     */
+	@Autowired
+	private IPublicPageManager publicPageContentManager;
 
-    @RequestMapping(method = RequestMethod.POST, value = "auth/workbench/{projectid}/addpublicpagesuccess")
-    public @ResponseBody ResponseEntity<String> addpublicpagesuccess(
-            @RequestParam("data") JSONObject data, @PathVariable("projectid") String projectid)
-            throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
-        
-        PublicPage publicpageentry = new PublicPage();
-        publicpageentry.setTitle(data.getString("title"));
-        publicpageentry.setDescription(data.getString("desc"));
-        publicpageentry.setOrder(data.getInt("order"));
-        publicpageentry.setProjectId(projectid);
-        publicpageentry.setPublicPageId(data.getString("publicpageid"));
-        publicPageContentManager.saveOrUpdatePublicPage(publicpageentry);
-        return new ResponseEntity<String>("Successfully updated", HttpStatus.OK);
-    }
+	/**
+	 * This method is called during the load of Public page settings form
+	 *
+	 * @return model - model object
+	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+	@RequestMapping(value = "auth/workbench/{projectid}/addpublicpage", method = RequestMethod.GET)
+	public ModelAndView publicPageSettingsForm(@PathVariable("projectid") String projectid)
+			throws QuadrigaStorageException, QuadrigaAccessException {
+		List<IPublicPage> publicPageList = publicPageContentManager.retrievePublicPageContent(projectid);
+		ModelAndView model = new ModelAndView("auth/workbench/addpublicpage");
+		model.getModelMap().put("publicpagelist", publicPageList);
+		model.getModel().put("publicpage", publicPageFactory.createPublicPageObject());
+		model.getModelMap().put("publicpageprojectid", projectid);
+
+		for (IPublicPage publicPage : publicPageList) {
+			model.getModel().put("publicpageObject" + publicPageList.indexOf(publicPage), publicPage);
+		}
+
+		return model;
+	}
+
+	/**
+	 * This method is used update the database with the information provided in
+	 * the Public settings page
+	 *
+	 * @return json
+	 * @throws JSONException
+	 */
+
+	@RequestMapping(method = RequestMethod.POST, value = "auth/workbench/{projectid}/addpublicpagesuccess")
+	public @ResponseBody ResponseEntity<String> addpublicpagesuccess(@RequestParam("data") JSONObject data,
+			@PathVariable("projectid") String projectid)
+			throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
+
+		PublicPage publicpageentry = new PublicPage();
+		publicpageentry.setTitle(data.getString("title"));
+		publicpageentry.setDescription(data.getString("desc"));
+		publicpageentry.setOrder(data.getInt("order"));
+		publicpageentry.setProjectId(projectid);
+		publicpageentry.setPublicPageId(data.getString("publicpageid"));
+		publicPageContentManager.saveOrUpdatePublicPage(publicpageentry);
+		return new ResponseEntity<String>("Successfully updated", HttpStatus.OK);
+	}
 }

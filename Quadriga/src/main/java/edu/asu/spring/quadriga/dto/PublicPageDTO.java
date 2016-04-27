@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;

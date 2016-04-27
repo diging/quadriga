@@ -1,4 +1,3 @@
-
 package edu.asu.spring.quadriga.domain.impl.workbench;
 
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
