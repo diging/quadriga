@@ -293,18 +293,18 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
      * @return List<IProject> - list of projects associated with the given searchTerm and accessibility of the project.
      * @throws QuadrigaStorageException 
      */
-    @Override
-    @Transactional
-    public List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException{
-    	List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm, accessibility);
-    	List<IProject> projectList = new ArrayList<IProject>();
-    	if(projectDTOList!=null) {
-    		for(ProjectDTO projectDTO : projectDTOList){
-    			projectList.add(searchLines(projectDTO, searchTerm));
-    		}
-    	}       
-    	return projectList;
-    }
+     @Override
+     @Transactional
+     public List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException{
+         List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm, accessibility);
+         List<IProject> projectList = new ArrayList<IProject>();
+         if(projectDTOList!=null) {
+             for(ProjectDTO projectDTO : projectDTOList){
+                 projectList.add(searchLines(projectDTO, searchTerm));
+             }
+         }       
+         return projectList;
+     }
 
     /**
      * Returns formated String for description and pattern
@@ -315,17 +315,17 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
      */
     @SuppressWarnings("static-access")
     private IProject searchLines(ProjectDTO projectDTO, String pattern) throws QuadrigaStorageException {
-    	IProject projectProxy = projectShallowMapper.getProjectDetails(projectDTO);
+        IProject projectProxy = projectShallowMapper.getProjectDetails(projectDTO);
 
-    	String description = projectProxy.getDescription();
+        String description = projectProxy.getDescription();
     	String[] temp = description.split("\\.");
     	String finalDescription = null;
-    	for(int i=0; i<temp.length; i++){
-    		if(temp[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
-    			finalDescription = finalDescription.join("[...]", temp[i]);
-    		}
-    	}
-    	projectProxy.setDescription(finalDescription);
+        for(int i=0; i<temp.length; i++){
+            if(temp[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
+                finalDescription = finalDescription.join("[...]", temp[i]);
+            }
+        }
+        projectProxy.setDescription(finalDescription);
 
     	return projectProxy;
     }
