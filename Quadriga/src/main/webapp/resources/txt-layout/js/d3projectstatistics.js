@@ -8,7 +8,7 @@
 
 function d3ProjectStatistics(data) {
 
-	var margin = {top: 40, right: 20, bottom: 30, left: 200},
+	var margin = {top: 40, right: 20, bottom: 30, left: 300},
 	width = 960 - margin.left - margin.right,
 	height = 500 - margin.top - margin.bottom;
 
@@ -80,15 +80,15 @@ function d3ProjectStatistics(data) {
 
 function d3ProjectActivity(data,divSection) {
 
-	var margin = {top: 40, right: 20, bottom: 30, left: 200},
+	var margin = {top: 40, right: 20, bottom: 30, left: 300},
 	width = 960 - margin.left - margin.right,
 	height = 500 - margin.top - margin.bottom;
 
 	var parseDate = d3.time.format("%d-%b-%y").parse,
 	bisectDate = d3.bisector(function(d) { return d.date; }).left,
-	formatValue = d3.format(",.2f"),
+	formatValue = d3.format("d"),
 	formatCurrency = function(d) { return + formatValue(d); };
-
+	
 	var x = d3.time.scale()
 	.range([0, width]);
 
@@ -98,10 +98,11 @@ function d3ProjectActivity(data,divSection) {
 	var xAxis = d3.svg.axis()
 	.scale(x)
 	.orient("bottom");
-
+	
 	var yAxis = d3.svg.axis()
 	.scale(y)
-	.orient("left");
+	.orient("left")
+	.tickFormat(d3.format("d"))
 
 	var area = d3.svg.area()
 	.x(function(d) { return x(d.date); })
@@ -115,7 +116,7 @@ function d3ProjectActivity(data,divSection) {
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	data = JSON.parse(data);
-
+	
 	data.forEach(function(d) {
 		d.date = parseDate(d.date);
 		d.count = +d.count;
@@ -171,7 +172,7 @@ function d3ProjectActivity(data,divSection) {
 		var x0 = x.invert(d3.mouse(this)[0]),
 		i = bisectDate(data, x0, 1),
 		d0 = data[i - 1],
-		d1 = data[i],
+		d1 = i==1? data[i-1]:data[i],
 		d = x0 - d0.date > d1.date - x0 ? d1 : d0;
 		focus.attr("transform", "translate(" + x(d.date) + "," + y(d.count) + ")");
 		focus.select("text").text(formatCurrency(d.count));

@@ -26,11 +26,10 @@ public class ContributionStatsManager implements IContributionStatsManager {
      * This method returns HashMap containing date as string and corresponding count of number 
      * of networks that were Approved/Rejected/Submitted depending on 'status' 
      * @author Bharath Srikantan
-     * @throws JSONException 
      *
      */
     @Override
-    public HashMap<String, Integer> getContributionCountByStatus (List<INetwork> networks, String status) throws JSONException {
+    public HashMap<String, Integer> getContributionCountByStatus (List<INetwork> networks, String status) {
         String DATE_FORMAT = "dd-MMM-yy";
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         HashMap<String, Integer> contributionCount = new HashMap<String, Integer>();
@@ -52,11 +51,10 @@ public class ContributionStatsManager implements IContributionStatsManager {
      * This method returns HashMap containing date as string and corresponding count of number 
      * of workspace created on that date. 
      * @author Bharath Srikantan
-     * @throws JSONException 
      *
      */
     @Override
-    public HashMap<String, Integer> getWorkspaceContribution (IProject project) throws JSONException {
+    public HashMap<String, Integer> getWorkspaceContribution (IProject project) {
         String DATE_FORMAT = "dd-MMM-yy";
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         HashMap<String, Integer> contributionCount = new HashMap<String, Integer>();
