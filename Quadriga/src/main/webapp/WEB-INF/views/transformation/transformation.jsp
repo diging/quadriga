@@ -46,6 +46,7 @@
 		});		
 	});
 </script>
+
 <script type="text/javascript">
 $(document).ready(function () {
     $('#confirmationTransformation').click(function () {
@@ -59,6 +60,18 @@ $(document).ready(function () {
             $.each($("input[name='transformation']:checked"), function(){            
                 transformations.push($(this).val());
             });
+            var networks = [];
+	        var networkID=[];
+	        var networkIDvariable="";
+	        $.each($("input[name='individualnetwork']:checked"), function(){            
+	            var arrayofNetworks =$(this).val().split(","); 
+	        	networks.push(arrayofNetworks[0]);
+	        	networkID.push(arrayofNetworks[2]);
+	        	networkIDvariable = networkIDvariable +","+ arrayofNetworks[2]  ;
+	        	if((jQuery.inArray(arrayofNetworks[1], projects) == -1)){
+    	        	projects.push(arrayofNetworks[1]);				        	        		
+	        	}
+	        });
         	$('#confirm').dialog({ modal: true,
         						draggable:false,
         						resizable:false,
@@ -70,31 +83,17 @@ $(document).ready(function () {
        							open: function (type, data) {
        						        $(this).parent().appendTo("form");
        						    },
-       						    
-	       						buttons: { "Submit": function() { $(this).dialog("close"); },"Cancel": function() { $(this).dialog("close"); } },
+	       						buttons: { "Submit": function(
+	       								) { 
+			        	            document.getElementById('sanitized_network_id').value = networkID;
+				        	        $('#sanitized_network_id').val(networkIDvariable);
+				        	        document.getElementById('form1').submit();
+	       							$(this).dialog("close"); },"Cancel": function() { $(this).dialog("close"); } },
     							
-				        		open: function(){           
-				        			var projects = [];
-				        	        $.each($("input[name='project']:checked"), function(){            
-				        	            projects.push($(this).val());
-				        	        });
-				        			
-				        			var transformations = [];
-				        	        $.each($("input[name='transformation']:checked"), function(){            
-				        	            transformations.push($(this).val());
-				        	        });
-				        	        
-				        	        var networks = [];
-				        	        var networkID=[];
-				        	        $.each($("input[name='individualnetwork']:checked"), function(){            
-				        	            var arrayofNetworks =$(this).val().split(","); 
-				        	        	networks.push(arrayofNetworks[0]);
-				        	        	networkID.push(arrayofNetworks[2]);
-				        	        	if((jQuery.inArray(arrayofNetworks[1], projects) == -1)){
-					        	        	projects.push(arrayofNetworks[1]);				        	        		
-				        	        	}
-				        	        });				        	      
-				        			jQuery("#contentholder").html("<h3>Transformations:</h3> "+transformations.join("<br/>")+""+" <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")+" <br/> <br/><h3>Networks</h3> " + networks.join("<br/>"));	
+				        		open: function(){              
+				        	        jQuery("#contentholder").html("<h3>Transformations:</h3> "+transformations.join("<br/>")+""+" <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")+" <br/> <br/><h3>Networks</h3> " + networks.join("<br/>"));             
+				        	            return false;        			
+				        						        		
 				        		}  		
 				        	  }
         					);   
@@ -129,13 +128,17 @@ $(document).ready(function () {
 </style>
 
 
+<form action="${pageContext.servletContext.contextPath}/checks/transformation" method="POST" id="form1" >
+
 <div>
 <header>
 	<h2><label><input type="checkbox" id="selectAllProjects"></label> Projects</h2>
 	</header>
 </div>
 
-
+<%
+	String ids = "";
+%>
             
 
 
@@ -172,6 +175,7 @@ $(document).ready(function () {
 									 <summary>
 									 <div class="selectAllNetworks" id="individualNetworks">
 										<input type="checkbox" value="${network.networkName},${project.projectName},${network.networkId}" name="individualnetwork" class="networks">
+										<input type="hidden" value="${network.networkId}" name="individualnetworks" class="networks">
 										<a href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.networkId}">
 										<c:out value="${network.networkName}"></c:out>
 										</a>
@@ -271,6 +275,7 @@ $(document).ready(function () {
 </div>
 
 <input type="button" value='Submit Project and Transformations' id="confirmationTransformation"/>
+<input type="hidden" id="sanitized_network_id" name ="sanitized_network_id" value="1234">
 <div id="confirm" style="display:none;">
 	<center><h4>Are you sure you want to transform the following <br>networks with below transformation files?</h4> </center>   
 	<p id="contentholder">
@@ -282,3 +287,4 @@ $(document).ready(function () {
  	<p id="alertholder">
  	</p>
 </div>
+</form>

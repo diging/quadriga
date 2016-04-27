@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.transformation;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 
 /**
@@ -33,6 +37,9 @@ public class UploadTransformFilesController {
     private ITransformationManager transformationManager;
 
     @Autowired
+    private IUserManager userManager;
+    
+    @Autowired
     private TransfomationFilesValidator validator;
 
     @InitBinder("transformationFilesBackingBean")
@@ -43,8 +50,8 @@ public class UploadTransformFilesController {
     @RequestMapping(value = "auth/transformation/upload", method = RequestMethod.POST)
     public ModelAndView uploadTransformFiles(
             @Validated @ModelAttribute("transformationFilesBackingBean") TransformFilesBackingBean formBean,
-            BindingResult result, ModelMap map,
-            @RequestParam("file") MultipartFile[] file) throws IOException {
+            BindingResult result, ModelMap map,Principal principal,
+            @RequestParam("file") MultipartFile[] file) throws IOException, QuadrigaStorageException {
 
         ModelAndView model;
         model = new ModelAndView("auth/uploadTransformation");
@@ -66,7 +73,8 @@ public class UploadTransformFilesController {
         } else {
             String title = formBean.getTitle();
             String description = formBean.getDescription();
-
+            IUser user= userManager.getUser(principal.getName());
+            String userName = user.getName();
             String patternTitle = formBean.getPatternTitle();
             String patternDescription = formBean.getPatternDescription();
             String patternFileName = file[0].getOriginalFilename();
@@ -77,7 +85,7 @@ public class UploadTransformFilesController {
 
             transformationManager.saveTransformation(title, description,
                     patternFileName, patternTitle, patternDescription,
-                    mappingFileName, mappingTitle, mappingDescription);
+                    mappingFileName, mappingTitle, mappingDescription,userName);
             // Only meta data is being saved in database. Saving files is not
             // yet done..
 

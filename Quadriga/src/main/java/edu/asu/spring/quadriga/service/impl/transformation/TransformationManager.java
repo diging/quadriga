@@ -26,10 +26,10 @@ public class TransformationManager implements ITransformationManager {
     public void saveTransformation(String title, String description,
             String patternFileName, String patternTitle,
             String patternDescription, String mappingFileName,
-            String mappingTitle, String mappingDescription) {
+            String mappingTitle, String mappingDescription,String userName) {
         TransformFilesDTO tranformDTO = new TransformFilesDTO(title,
                 description, patternFileName, patternTitle, patternDescription,
-                mappingFileName, mappingTitle, mappingDescription);
+                mappingFileName, mappingTitle, mappingDescription, userName);
         tranformDTO.setId(transformationDAO.generateUniqueID());
         transformationDAO.saveNewDTO(tranformDTO);
     }

@@ -72,11 +72,11 @@ public class TransformProjectsController {
     @RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
     private String listTransformations(ModelMap model, Principal principal)
             throws QuadrigaStorageException {
-        IUser user = userManager.getUser(principal.getName());
         Set<IProject> projects = new HashSet<>();
         Map<String, List<INetwork>> networkMap = new HashMap<>();
         List<INetwork> approvedNetworkList = null;
         try {
+            IUser user = userManager.getUser(principal.getName());
             approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
         } catch (QuadrigaStorageException e) {
             logger.error("Error fetching list of approved networks", e);
@@ -85,7 +85,6 @@ public class TransformProjectsController {
                     "There was an error retrieving the list of approved networks.");
             return "auth/transformation";
         }
-
         for (INetwork network : approvedNetworkList) {
             IProject project = network.getNetworkWorkspace().getWorkspace()
                     .getProjectWorkspace().getProject();

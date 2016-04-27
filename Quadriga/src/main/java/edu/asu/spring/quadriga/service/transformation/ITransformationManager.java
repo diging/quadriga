@@ -14,7 +14,7 @@ public interface ITransformationManager {
     public void saveTransformation(String title, String description,
             String mappingTitle, String mappingDescription,
             String mappingFileName, String transfomrTitle,
-            String transfomrDesc, String transformationFileName);
+            String transfomrDesc, String transformationFileName,String userName);
     public List<TransformFilesDTO> getTransformationsList();
 
 }

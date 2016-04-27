@@ -20,7 +20,7 @@ public class TransformFilesDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    private String Id;
+    private String id;
     @Column(name = "Title")
     private String title;
     @Column(name = "Description")
@@ -37,7 +37,8 @@ public class TransformFilesDTO implements Serializable {
     private String mappingTitle;
     @Column(name = "Mapping_Description")
     private String mappingDescription;
-
+    @Column (name="User_Name")
+    private String userName;
     public TransformFilesDTO() {
         super();
     }
@@ -45,7 +46,7 @@ public class TransformFilesDTO implements Serializable {
     public TransformFilesDTO(String title, String description,
             String patternFileName, String patternTitle,
             String patternDescription, String mappingFileName,
-            String mappingTitle, String mappingDescription) {
+            String mappingTitle, String mappingDescription,String userName) {
         super();
         this.title = title;
         this.description = description;
@@ -55,14 +56,15 @@ public class TransformFilesDTO implements Serializable {
         this.mappingTitle = mappingTitle;
         this.mappingDescription = mappingDescription;
         this.mappingFileName = mappingFileName;
+        this.userName = userName;
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getMappingTitle() {
@@ -129,6 +131,13 @@ public class TransformFilesDTO implements Serializable {
         this.mappingFileName = mappingFileName;
     }
 
+    public void setUserName(String userName){
+        this.userName = userName;
+    }
+    
+    public String getUserName(){
+        return userName;
+    }
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
