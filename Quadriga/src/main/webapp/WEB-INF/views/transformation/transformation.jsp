@@ -202,7 +202,7 @@ $(document).ready(function () {
 </ul>
 </c:when>
 <c:otherwise>
-		<spring:message code="empty.networks" />
+		<spring:message code="empty.networks" text="No Networks available"/>
 	</c:otherwise>
 </c:choose>
 </div>
@@ -269,7 +269,7 @@ $(document).ready(function () {
 	</ul>
 	</c:when>
 	<c:otherwise>
-			<spring:message code="empty.Transformations" />
+			<spring:message code="empty.Transformations" text="No Transformations available"/>
 	</c:otherwise>
 	</c:choose>
 </div>
