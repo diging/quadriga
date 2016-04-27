@@ -46,11 +46,11 @@ public class SitesController {
 	 * @return
 	 * @throws QuadrigaStorageException 
 	 */
-	@RequestMapping(value = "sites/searchTerm", method = RequestMethod.POST)
-	public String showPublicProjectsWithSearchTerm(@RequestParam("searchTerm") String searchTerm, Model model) throws QuadrigaStorageException {
-		List<IProject> projectList = retrieveProjectManager.getProjectListBySearchTermAndAccessiblity(searchTerm, EProjectAccessibility.PUBLIC.name());
-		model.addAttribute("searchTerm", searchTerm);
-		model.addAttribute("projectList", projectList);
-		return "searchsites";
-	}
+     @RequestMapping(value = "sites/searchTerm", method = RequestMethod.POST)
+     public String showPublicProjectsWithSearchTerm(@RequestParam("searchTerm") String searchTerm, Model model) throws QuadrigaStorageException {
+         List<IProject> projectList = retrieveProjectManager.getProjectListBySearchTermAndAccessiblity(searchTerm, EProjectAccessibility.PUBLIC.name());
+         model.addAttribute("searchTerm", searchTerm);
+         model.addAttribute("projectList", projectList);
+         return "searchsites";
+     }
 }
