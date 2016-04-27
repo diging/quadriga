@@ -24,14 +24,14 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 public class RetrieveProjectManagerTest {
 
-	@InjectMocks
-	private RetrieveProjectManager retrieveProjectManagerUnderTest;
-
 	@Mock
 	private IRetrieveProjectDAO mockedDBConnect = Mockito.mock(IRetrieveProjectDAO.class);
 
 	@Mock
 	private IProjectShallowMapper mockedProjectShallowMapper = Mockito.mock(IProjectShallowMapper.class);
+
+	@InjectMocks
+	private RetrieveProjectManager retrieveProjectManagerUnderTest;
 
 	@Before
 	public void setUp() throws QuadrigaStorageException {
@@ -41,19 +41,16 @@ public class RetrieveProjectManagerTest {
 	@Test
 	public void checkOnlyPublicProjectsAreReturned() throws QuadrigaStorageException{
 		Mockito.when(mockedDBConnect.getAllProjectsDTOByAccessibility("PUBLIC")).thenReturn(createPublicProjectDTOList());
-		Mockito.when(mockedProjectShallowMapper
-				.getProjectDetails(Matchers.any(ProjectDTO.class)))
-				.thenReturn(createPublicIProject());
-		List<IProject> projectList = retrieveProjectManagerUnderTest
-				.getProjectListByAccessibility("PUBLIC");
-
-		Mockito.verify(mockedDBConnect, times(1)).getAllProjectsDTOByAccessibility("PUBLIC");
-		Mockito.verify(mockedProjectShallowMapper, times(1)).getProjectDetails(Matchers.any(ProjectDTO.class));
+		Mockito.when(mockedProjectShallowMapper.getProjectDetails(Matchers.any(ProjectDTO.class))).thenReturn(createPublicIProject());
+		List<IProject> projectList = retrieveProjectManagerUnderTest.getProjectListByAccessibility("PUBLIC");
 
 		assertNotNull(projectList);
 		assertEquals(1, projectList.size());
 		assertEquals("test Project1", projectList.get(0).getProjectName());
 		assertEquals(EProjectAccessibility.PUBLIC, projectList.get(0).getProjectAccess());
+		
+		Mockito.verify(mockedDBConnect, times(1)).getAllProjectsDTOByAccessibility("PUBLIC");
+		Mockito.verify(mockedProjectShallowMapper, times(1)).getProjectDetails(Matchers.any(ProjectDTO.class));
 	}
 
 	@Test
@@ -61,11 +58,11 @@ public class RetrieveProjectManagerTest {
 		Mockito.when(mockedDBConnect.getAllProjectsDTOByAccessibility("PUBLIC")).thenReturn(new ArrayList<ProjectDTO>());
 		List<IProject> projectList = retrieveProjectManagerUnderTest.getProjectListByAccessibility("PUBLIC");
 
-		Mockito.verify(mockedDBConnect, times(1)).getAllProjectsDTOByAccessibility("PUBLIC");
-		Mockito.verify(mockedProjectShallowMapper, times(0)).getProjectDetails(Matchers.any(ProjectDTO.class));
-
 		assertNotNull(projectList);
 		assertEquals(0, projectList.size());
+		
+		Mockito.verify(mockedDBConnect, times(1)).getAllProjectsDTOByAccessibility("PUBLIC");
+		Mockito.verify(mockedProjectShallowMapper, times(0)).getProjectDetails(Matchers.any(ProjectDTO.class));
 	}
 
 	private List<ProjectDTO> createPublicProjectDTOList(){
