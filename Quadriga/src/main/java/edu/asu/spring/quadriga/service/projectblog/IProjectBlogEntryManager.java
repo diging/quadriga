@@ -38,4 +38,6 @@ public interface IProjectBlogEntryManager {
      * @throws QuadrigaStorageException
      */
     List<IProjectBlogEntry> getProjectBlogEntryList(String projectId, Integer count) throws QuadrigaStorageException;
+    IProjectBlogEntry getProjectBlogEntryDetails(String projectBlogEntryId) throws QuadrigaStorageException ;
+
 }

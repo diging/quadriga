@@ -1,28 +1,21 @@
 package edu.asu.spring.quadriga.web.projectblog;
 
-import java.security.Principal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
-import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 
 /**
- * This controller shows the latest project blog entry
- * in a new page
+ * This controller shows the latest project blog entry in a new page
  * 
  * @author Kavinya, Pawan
  *
@@ -47,13 +40,21 @@ public class ShowProjectBlogEntryDetails {
      * @throws QuadrigaStorageException
      *             Database storage exception thrown
      */
-    @RequestMapping(value = "sites/{ProjectUnixName}/projectblogdetails", method = RequestMethod.POST)
-    public String projectblogdetails(Model model,@ModelAttribute("latestProjectBlogEntry") ProjectBlogEntry latestProjectBlogEntry) throws QuadrigaStorageException {
+    @RequestMapping(value = "sites/{ProjectUnixName}/projectblogdetails/{projectBlogEntryId}", method = RequestMethod.GET)
+    public ModelAndView projectblogdetails(
+            @PathVariable("ProjectUnixName") String ProjectUnixName,
+            @PathVariable("projectBlogEntryId") String projectBlogEntryId,
+            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
+            throws QuadrigaStorageException {
 
-        // Fetch blog entries for a project identified by project unix name
-        model.addAttribute("latestProjectBlogEntry", latestProjectBlogEntry);
-        //model.addAttribute("project", project);
-        return "sites/projectblogdetails";
+        ModelAndView model = new ModelAndView("sites/projectblogdetails");
+        model.getModelMap().put("project", project);
+
+        IProjectBlogEntry projectBlogEntry = projectBlogEntryManager.getProjectBlogEntryDetails(projectBlogEntryId);
+        model.getModelMap().put("projectBlogEntry", projectBlogEntry);
+
+        return model;
+
     }
 
 }

@@ -64,14 +64,7 @@
 		</p>
 		<p>${latestProjectBlogEntrySnippet}...</p>
 		<p>
-		<form:form commandName="projectBlogEntry" method="POST"
-				action="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblogdetails">				
-			<form:hidden path="title" id="title" value="${latestProjectBlogEntry.title}" />
-			<form:hidden path="description" id="description" value="${latestProjectBlogEntry.description}" />
-			<form:hidden path="createdDate" id="createdDate" value="${latestProjectBlogEntry.createdDate}" />
-			<form:hidden path="author" id="author" value="${latestProjectBlogEntry.author}" />
-			<input class="btn btn-primary" type="submit" value="Read More" style="width: 100%; align: center;">
-		</form:form>
+		<a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblogdetails/${latestProjectBlogEntry.projectBlogEntryId}">	Read More </a>	
 		</p>
 	</div>
 </c:if>

@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.projectblog.IProjectBlogEntryDAO;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectBlogEntryDTO;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectBlogEntryDTOMapper;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
@@ -30,6 +34,7 @@ public class ProjectBlogEntryManager implements IProjectBlogEntryManager {
 
     @Autowired
     private ProjectBlogEntryDTOMapper projectBlogEntryDTOMapper;
+
 
     /**
      * {@inheritDoc}
@@ -62,5 +67,18 @@ public class ProjectBlogEntryManager implements IProjectBlogEntryManager {
         }
         return projectBlogEntryList;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IProjectBlogEntry getProjectBlogEntryDetails (String projectBlogEntryId)
+            throws QuadrigaStorageException {
+      
+        ProjectBlogEntryDTO projectBlogEntryDTO = projectBlogEntryDAO.getDTO(projectBlogEntryId);
+        IProjectBlogEntry projectBlogEntry = projectBlogEntryDTOMapper.getProjectBlogEntry(projectBlogEntryDTO);
+        return projectBlogEntry;
+    }
+    
 
 }
