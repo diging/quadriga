@@ -16,9 +16,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
-import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
-import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -28,7 +25,7 @@ import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * This class will list all the networks approved by the user and display
@@ -42,8 +39,12 @@ public class TransformProjectsController {
     @Autowired
     private ITransformationManager transformManager;
 
+    
     @Autowired
     private INetworkManager networkManager;
+    
+    @Autowired
+    private IRetrieveProjectManager retrieveProjectManager;
 
     @Autowired
     private IEditorManager editorManager;
@@ -65,19 +66,15 @@ public class TransformProjectsController {
      * @return
      * @throws QuadrigaStorageException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR,
-            RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-            RoleNames.ROLE_QUADRIGA_ADMIN }) })
     @RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
     private String listTransformations(ModelMap model, Principal principal)
             throws QuadrigaStorageException {
+        IUser user = userManager.getUser(principal.getName());
         Set<IProject> projects = new HashSet<>();
         Map<String, List<INetwork>> networkMap = new HashMap<>();
-        List<INetwork> approvedNetworkList = null;
+        List<IProject> retrievedProjects=new ArrayList<IProject>();
         try {
-            IUser user = userManager.getUser(principal.getName());
-            approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
+            retrievedProjects=retrieveProjectManager.getProjectList(user.getName());        
         } catch (QuadrigaStorageException e) {
             logger.error("Error fetching list of approved networks", e);
             model.addAttribute("show_error_alert", true);
@@ -85,7 +82,21 @@ public class TransformProjectsController {
                     "There was an error retrieving the list of approved networks.");
             return "auth/transformation";
         }
-        for (INetwork network : approvedNetworkList) {
+        List<INetwork> networks = new ArrayList<INetwork>();
+        for(int i=0; i < retrievedProjects.size();i++){
+        	networks.addAll(networkManager.getNetworksInProject(retrievedProjects.get(i).getProjectId()));
+        }
+        
+        List<INetwork> AllNetworkList = new ArrayList<INetwork>();
+        for(int i=0; i < networks.size();i++){
+        	if(networks.get(i).getStatus().equalsIgnoreCase("APPROVED")){
+        		AllNetworkList.add(networks.get(i));
+        	}
+        }
+        
+        
+        
+        for (INetwork network : AllNetworkList) {
             IProject project = network.getNetworkWorkspace().getWorkspace()
                     .getProjectWorkspace().getProject();
             if (networkMap.get(project.getProjectName()) == null) {
