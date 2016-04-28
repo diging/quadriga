@@ -66,5 +66,4 @@
    		</authentication-provider>
 		<authentication-provider ref="authProvider"></authentication-provider>
 	</authentication-manager>
-	
 </beans:beans>
