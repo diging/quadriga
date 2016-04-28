@@ -44,7 +44,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	
 	@Autowired
 	private Environment env;
-
+	
 	/**
 	 * This method returns the list of projects associated with
 	 * the logged in user. It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
@@ -282,5 +282,52 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
             }
         }       
         return projectList;
+    }
+
+    /**
+     * This method retrieves the list of projects associated with the search Term and 
+     * accessibility of the project. 
+     * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
+     * @param searchTerm - The search term which is a text, searched in name and description of the project.
+     * @param accessibility - accessibility of the project.
+     * @return List<IProject> - list of projects associated with the given searchTerm and accessibility of the project.
+     * @throws QuadrigaStorageException 
+     */
+     @Override
+     @Transactional
+     public List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException{
+         List<ProjectDTO> projectDTOList = dbConnect.getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm, accessibility);
+         List<IProject> projectList = new ArrayList<IProject>();
+         if(projectDTOList!=null) {
+             for(ProjectDTO projectDTO : projectDTOList){
+                 projectList.add(searchLines(projectDTO, searchTerm));
+             }
+         }       
+         return projectList;
+     }
+
+    /**
+     * Returns formated String for description and pattern
+     * @param projectDTO projectDTO
+     * @param pattern search string
+     * @return IProject with formated description
+     * @throws QuadrigaStorageException 
+     */
+    private IProject searchLines(ProjectDTO projectDTO, String pattern) throws QuadrigaStorageException {
+        IProject projectProxy = projectShallowMapper.getProjectDetails(projectDTO);
+
+        String description = projectProxy.getDescription();
+        String[] tempDescription = description.split("\\.");
+        ArrayList<String> descriptionList = new ArrayList<String>();
+        for(int i=0; i<tempDescription.length; i++){
+            if(tempDescription[i].toLowerCase().matches(".*"+pattern.toLowerCase()+".*")){
+            	descriptionList.add(tempDescription[i]);
+            }
+        }
+        String finalDescription = null;
+        finalDescription = String.join(" [...]", descriptionList);
+        projectProxy.setDescription(finalDescription.length()>500?finalDescription.substring(0, 500):finalDescription);
+
+    	return projectProxy;
     }
 }

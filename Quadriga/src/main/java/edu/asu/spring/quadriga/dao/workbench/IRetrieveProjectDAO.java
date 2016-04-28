@@ -116,4 +116,7 @@ public interface IRetrieveProjectDAO
 
 	List<ProjectDTO> getAllProjectsDTOByAccessibility(String accessibility)
 			throws QuadrigaStorageException;
+	
+	List<ProjectDTO> getAllProjectsDTOBySearchTermAndAccessiblity(String searchTerm, String accessibility)
+			throws QuadrigaStorageException;
 }
