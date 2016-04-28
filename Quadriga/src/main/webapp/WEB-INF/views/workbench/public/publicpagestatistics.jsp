@@ -28,11 +28,15 @@
 
 	});
 </script>
+<header>
+	<h2>Set preference for settings</h2>
+</header>
+
 <input type="button" value="Select All" name="selectAll">
 <input type="button" value="Deselect All" name="deselectAll">
 
-<form:form method="POST" modelAttribute="publicstatisticspage"
-	action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/submitpublicstatistics">
+<form:form method="POST" modelAttribute="statisticsSettingsBean"
+	action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/submitstatistics">
 
 	<table class="display dataTable" cellpadding="0" cellspacing="0"
 		border="0" style="width: 100%">
@@ -46,16 +50,16 @@
 		<tbody>
 			<c:forEach items="${statistics}" var="statistic">
 				<tr>
-				    <c:choose>
-					    <c:when test="${statistic.value}">
-							<td><form:checkbox path="names" value="${statistic.key}"
+					<c:choose>
+						<c:when test="${statistic.isChecked}">
+							<td><form:checkbox path="names" value="${statistic.name}"
 									checked="checked" /></td>
 						</c:when>
 						<c:otherwise>
-							<td><form:checkbox path="names" value="${statistic.key}" /></td>
+							<td><form:checkbox path="names" value="${statistic.name}" /></td>
 						</c:otherwise>
 					</c:choose>
-					<td><font size="3"> <c:out value="${statistic.key}"></c:out>
+					<td><font size="3"> <c:out value="${statistic.name}"></c:out>
 					</font></td>
 				</tr>
 			</c:forEach>

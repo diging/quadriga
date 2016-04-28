@@ -21,5 +21,5 @@
 	class="fa fa-info-circle"></i> About Page</a>
 <br>
 <a
-	href="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/loadpublicstatistics"><i
+	href="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/statistics"><i
 	class="fa fa-bar-chart"></i> Statistics Page</a>

@@ -14,5 +14,4 @@ public interface IPublicPageFactory {
 
     public abstract IPublicPage clonePublicPageObject(IPublicPage publicpage);
 
-    public abstract IPublicPage createPublicStatisticsPageObject();
 }

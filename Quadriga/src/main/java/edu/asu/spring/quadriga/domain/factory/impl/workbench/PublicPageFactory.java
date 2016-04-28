@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.factory.workbench.IPublicPageFactory;
 import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
-import edu.asu.spring.quadriga.domain.impl.workbench.PublicStatisticsPage;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 
 /**
@@ -22,11 +21,6 @@ public class PublicPageFactory implements IPublicPageFactory {
     @Override
     public IPublicPage createPublicPageObject() {
         return new PublicPage();
-    }
-
-    @Override
-    public IPublicPage createPublicStatisticsPageObject() {
-        return new PublicStatisticsPage();
     }
 
     /**

@@ -17,7 +17,7 @@ import javax.persistence.Embeddable;
  * @author Ajay Modi
  */
 @Embeddable
-public class ProjectStatisticsDTOPK implements Serializable {
+public class StatisticsSettingsDTOPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,15 +28,15 @@ public class ProjectStatisticsDTOPK implements Serializable {
     @Column(name = "name")
     private String name;
 
-    public ProjectStatisticsDTOPK() {
+    public StatisticsSettingsDTOPK() {
     }
 
-    public ProjectStatisticsDTOPK(String projectid, String name) {
+    public StatisticsSettingsDTOPK(String projectid, String name) {
         this.projectid = projectid;
         this.name = name;
     }
 
-    public ProjectStatisticsDTOPK(String name) {
+    public StatisticsSettingsDTOPK(String name) {
         this.name = name;
     }
 
@@ -66,10 +66,10 @@ public class ProjectStatisticsDTOPK implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof ProjectStatisticsDTOPK)) {
+        if (!(object instanceof StatisticsSettingsDTOPK)) {
             return false;
         }
-        ProjectStatisticsDTOPK other = (ProjectStatisticsDTOPK) object;
+        StatisticsSettingsDTOPK other = (StatisticsSettingsDTOPK) object;
         if ((this.projectid == null && other.projectid != null)
                 || (this.projectid != null && !this.projectid
                         .equals(other.projectid))) {

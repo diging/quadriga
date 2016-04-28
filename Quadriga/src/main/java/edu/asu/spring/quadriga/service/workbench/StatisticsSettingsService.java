@@ -2,18 +2,19 @@ package edu.asu.spring.quadriga.service.workbench;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.settings.IStatisticDAO;
-import edu.asu.spring.quadriga.dto.ProjectStatisticsDTO;
+import edu.asu.spring.quadriga.dao.workbench.settings.IStatisticSettingsDAO;
+import edu.asu.spring.quadriga.domain.IStatisticsSettings;
+import edu.asu.spring.quadriga.dto.StatisticsSettingsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.validator.NotEmptyList;
+import edu.asu.spring.quadriga.mapper.StatisticsSettingsDTOMapper;
 
 /**
  * this class holds the list of statistics settings for a project and used in
@@ -23,96 +24,66 @@ import edu.asu.spring.quadriga.profile.validator.NotEmptyList;
  *
  */
 @Service
+@PropertySource(value = "classpath:/settings.properties")
 public class StatisticsSettingsService {
 
     @Autowired
-    private IStatisticDAO statisticDao;
+    private IStatisticSettingsDAO statisticSettingsDao;
+
+    @Autowired
+    private Environment env;
 
     @Transactional
-    public void updateRow(String projectId, String name, Boolean isChecked)
+    public void addOrUpdateStatisticsSettings(String projectId, String[] names)
             throws QuadrigaStorageException {
-        statisticDao.upsertStatisticsSettings(projectId, name, isChecked);
-    }
-
-    @Transactional
-    public void updateSettings(String projectId, String[] names)
-            throws QuadrigaStorageException {
-        List<String> statisticsSettingsList = getStatisticsSettingsList(projectId);
+        String[] defaultValues = getDefaultStatisticsSettings();
         List<String> namesList = Arrays.asList(names);
-        if (statisticsSettingsList != null && statisticsSettingsList.size() > 0) {
-            for (String name : statisticsSettingsList) {
-                if (namesList.contains(name)) {
-                    updateRow(projectId, name, true);
-                } else {
-                    updateRow(projectId, name, false);
-                }
+        for (String name : defaultValues) {
+            StatisticsSettingsDTO statisticsSettingsDTO = null;
+            if (namesList.contains(name)) {
+                statisticsSettingsDTO = new StatisticsSettingsDTO(projectId,
+                        name, true);
+            } else {
+                statisticsSettingsDTO = new StatisticsSettingsDTO(projectId,
+                        name, false);
             }
+
+            statisticSettingsDao
+                    .saveOrUpdateStatisticsSettings(statisticsSettingsDTO);
         }
     }
 
     @Transactional
-    public List<ProjectStatisticsDTO> getStatisticsSettingsDTOList(
-            String projectId) throws QuadrigaStorageException {
-        List<ProjectStatisticsDTO> statisticsDTOList = statisticDao
-                .getStatisticsSettings(projectId);
-        return statisticsDTOList;
-    }
-
-    public List<String> getNames(List<ProjectStatisticsDTO> statisticsDTOList)
+    public List<IStatisticsSettings> getStatisticsSettingsList(String projectId)
             throws QuadrigaStorageException {
-        List<String> names = new ArrayList<String>();
-        if (statisticsDTOList != null && statisticsDTOList.size() > 0) {
-            for (ProjectStatisticsDTO psDTO : statisticsDTOList) {
-                String name = psDTO.getProjectStatisticsDTOPK().getName();
-                names.add(name);
+        List<StatisticsSettingsDTO> statisticsDTOList = null;
+        String[] defaultValues = getDefaultStatisticsSettings();
+        statisticsDTOList = statisticSettingsDao
+                .getStatisticsSettings(projectId);
+        if (statisticsDTOList.size() == 0) {
+            statisticsDTOList = new ArrayList<StatisticsSettingsDTO>();
+            for (String name : defaultValues) {
+                StatisticsSettingsDTO statisticsSettingsDTO = new StatisticsSettingsDTO(
+                        projectId, name, false);
+                statisticsDTOList.add(statisticsSettingsDTO);
             }
         }
-        return names;
-    }
 
-    @Transactional
-    public List<String> getStatisticsSettingsList(String projectId)
-            throws QuadrigaStorageException {
-        List<ProjectStatisticsDTO> statisticsDTOList = statisticDao
-                .getStatisticsSettings(projectId);
-        if (statisticsDTOList == null || statisticsDTOList.size() == 0) {
-            return new ArrayList<String>(getdefaultMapSettings().keySet());
+        List<IStatisticsSettings> statisticsSettingsList = new ArrayList<IStatisticsSettings>();
+        for (StatisticsSettingsDTO statisticsSettingsDTO : statisticsDTOList) {
+            IStatisticsSettings s = StatisticsSettingsDTOMapper
+                    .getStatisticsSettings(statisticsSettingsDTO);
+            statisticsSettingsList.add(s);
         }
-        List<String> names = getNames(statisticsDTOList);
-        return names;
+
+        return statisticsSettingsList;
     }
 
-    public Map<String, Boolean> convertIntoMap(
-            List<ProjectStatisticsDTO> statisticsDTOList)
-            throws QuadrigaStorageException {
-        Map<String, Boolean> statisticsSettings = new HashMap<String, Boolean>();
-        if (statisticsDTOList != null && statisticsDTOList.size() > 0) {
-            for (ProjectStatisticsDTO psDTO : statisticsDTOList) {
-                String name = psDTO.getProjectStatisticsDTOPK().getName();
-                Boolean isChecked = psDTO.getIschecked();
-                statisticsSettings.put(name, isChecked);
-            }
-        }
-        return statisticsSettings;
-    }
+    private String[] getDefaultStatisticsSettings() {
 
-    public Map<String, Boolean> getdefaultMapSettings() {
-        Map<String, Boolean> statisticsSettings = new HashMap<String, Boolean>();
-        statisticsSettings.put("concept statistics", false);
-        statisticsSettings.put("user statistics", false);
-        return statisticsSettings;
-    }
-
-    @Transactional
-    public Map<String, Boolean> getStatisticsSettingsMap(String projectId)
-            throws QuadrigaStorageException {
-        List<ProjectStatisticsDTO> statisticsDTOList = statisticDao
-                .getStatisticsSettings(projectId);
-        if (statisticsDTOList == null || statisticsDTOList.size() == 0) {
-            return getdefaultMapSettings();
-        }
-        Map<String, Boolean> statisticsSettings = convertIntoMap(statisticsDTOList);
-        return statisticsSettings;
+        String propertyValue = env.getProperty("statistics.settings");
+        String[] settings = propertyValue.split(",");
+        return settings;
     }
 
 }

@@ -2,9 +2,7 @@ package edu.asu.spring.quadriga.dao.workbench.settings;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.dto.ProjectStatisticsDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
+import edu.asu.spring.quadriga.dto.StatisticsSettingsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -14,18 +12,18 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Ajay Modi
  * 
  */
-public interface IStatisticDAO {
+public interface IStatisticSettingsDAO {
 
     /**
      * Updates settings entry for a particular statistics
      * 
-     * @param projectId
-     * @param name
-     * @param isChecked
+     * @param statsSettingsDTO
+     * @return
      * @throws QuadrigaStorageException
      */
-    public abstract void upsertStatisticsSettings(String projectId,
-            String name, Boolean isChecked) throws QuadrigaStorageException;
+    public abstract int saveOrUpdateStatisticsSettings(
+            StatisticsSettingsDTO statsSettingsDTO)
+            throws QuadrigaStorageException;
 
     /**
      * Get settings for statistics for entire project
@@ -34,7 +32,7 @@ public interface IStatisticDAO {
      * @throws QuadrigaStorageException
      */
 
-    public abstract List<ProjectStatisticsDTO> getStatisticsSettings(
+    public abstract List<StatisticsSettingsDTO> getStatisticsSettings(
             String projectId) throws QuadrigaStorageException;
 
 }
