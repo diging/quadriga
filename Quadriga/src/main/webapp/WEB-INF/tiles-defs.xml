@@ -384,6 +384,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/showInactiveWorkspace.jsp" />
 	</definition>
+
 	<definition name="auth/workbench/workspace/showArchivedWorkspace"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="List of Archived Workspaces" />
@@ -620,6 +621,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/showWordSearch.jsp" />
 	</definition>
+
 	<!-- Adding Public page settings -start -->
 	<definition name="auth/workbench/addpublicpage" extends="base.definition.workbench.nav">
 		<put-attribute name="title"
@@ -742,6 +744,33 @@
 		<put-attribute name="title" value="Quadriga Networks visualize" /> <put-attribute 
 		name="content" value="/WEB-INF/views/editing/networks.jsp" /> </definition> -->
 
+	<definition name="sites/public/PublicWebsiteAbout" extends="base.definition.public">
+		<put-attribute name="currentPage" value="about" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/public/publicwebsiteabout.jsp" />
+	</definition>
+
+
+	<definition name="auth/editabout" extends="base.definition">
+		<put-attribute name="currentPage" value="editabout" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/settings/publicWebsiteEditAbout.jsp" />
+	</definition>
+
+	<definition name="auth/settings" extends="base.definition">
+		<put-attribute name="currentPage" value="settings" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/settings/publicwebsitesettings.jsp" />
+	</definition>
+
+
+
+	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks"> 
+		<put-attribute name="title" value="Quadriga Networks visualize" /> <definition 
+		name="sites/networks/visualize" extends="base.definition.networks"> <put-attribute 
+		name="title" value="Quadriga Networks visualize" /> <put-attribute name="content" 
+		value="/WEB-INF/views/editing/networks.jsp" /> </definition> -->
+
 
 	<!-- editing -->
 	<definition name="base.definition.editing" extends="base.definition">
@@ -751,10 +780,12 @@
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="currentPage" value="editing" />
 	</definition>
+
 	<definition name="auth/editing" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Editing" />
 		<put-attribute name="content" value="/WEB-INF/views/editing/editing.jsp" />
 	</definition>
+
 	<definition name="auth/editing/approvedrejectednetworks"
 		extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Assigned User" />
@@ -798,8 +829,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/editingnetworks.jsp" />
 	</definition>
-
-
 
 	<definition name="auth/networks/visualize" extends="base.definition.rightnav">
 		<put-attribute name="currentPage" value="networks" />
@@ -887,5 +916,3 @@
 		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
 	</definition>
 </tiles-definitions>
-
-	

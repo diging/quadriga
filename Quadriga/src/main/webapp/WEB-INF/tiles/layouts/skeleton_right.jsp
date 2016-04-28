@@ -20,7 +20,7 @@
 <link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ul-pagination-styles.css" />
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 <link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css" rel="stylesheet" />
-
+ <link href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/base.css" rel="stylesheet" type="text/css">
 <link	href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"	rel="stylesheet" />
 <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/font-awesome-4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">

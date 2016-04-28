@@ -42,4 +42,6 @@ public interface IBaseDAO<T> {
     public abstract void deleteDTO(T dto);
 
     public abstract T getDTO(String id);
+
+    public abstract void saveOrUpdateDTO(T dto);
 }
