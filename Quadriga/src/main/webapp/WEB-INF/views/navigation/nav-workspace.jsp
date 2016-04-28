@@ -95,8 +95,6 @@
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
 <hr>
-<<<<<<< HEAD
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addpublicpage"><i class="fa fa-cog"></i> Public Page Settings</a>
-=======
+
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Public Page Settings</a>
->>>>>>> refs/heads/develop
+

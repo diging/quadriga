@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.workbench;
+package edu.asu.spring.quadriga.web.settings;
 
 import java.util.List;
 
@@ -24,16 +24,20 @@ import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
-public class PublicPageController {
+public class PublicPageSettingsController {
 
 	@Autowired
 	private IPublicPageFactory publicPageFactory;
 
 	@Autowired
 	private IPublicPageManager publicPageContentManager;
+	
+	@Autowired
+	private IRetrieveProjectManager projectManager;
 
 	/**
 	 * This method is called during the load of Public page settings form
@@ -42,7 +46,7 @@ public class PublicPageController {
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
 			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-	@RequestMapping(value = "auth/workbench/{projectid}/addpublicpage", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/workbench/projects/{projectid}/settings", method = RequestMethod.GET)
 	public ModelAndView publicPageSettingsForm(@PathVariable("projectid") String projectid)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		List<IPublicPage> publicPageList = publicPageContentManager.retrievePublicPageContent(projectid);
@@ -50,6 +54,7 @@ public class PublicPageController {
 		model.getModelMap().put("publicpagelist", publicPageList);
 		model.getModel().put("publicpage", publicPageFactory.createPublicPageObject());
 		model.getModelMap().put("publicpageprojectid", projectid);
+		model.getModel().put("project", projectManager.getProjectDetails(projectid));
 
 		for (IPublicPage publicPage : publicPageList) {
 			model.getModel().put("publicpageObject" + publicPageList.indexOf(publicPage), publicPage);
