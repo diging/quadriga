@@ -83,20 +83,18 @@ public class TransformProjectsController {
             return "auth/transformation";
         }
         List<INetwork> networks = new ArrayList<INetwork>();
-        for(int i=0; i < retrievedProjects.size();i++){
-        	networks.addAll(networkManager.getNetworksInProject(retrievedProjects.get(i).getProjectId()));
+        for(IProject retrievedProj: retrievedProjects){
+        	networks.addAll(networkManager.getNetworksInProject(retrievedProj.getProjectId()));
         }
         
-        List<INetwork> AllNetworkList = new ArrayList<INetwork>();
-        for(int i=0; i < networks.size();i++){
-        	if(networks.get(i).getStatus().equalsIgnoreCase("APPROVED")){
-        		AllNetworkList.add(networks.get(i));
-        	}
+        List<INetwork> allNetworkList = new ArrayList<INetwork>();
+        for(INetwork individualNetworks: networks){
+          	if(individualNetworks.getStatus().equalsIgnoreCase("APPROVED")){
+        		allNetworkList.add(individualNetworks);
+          	}
         }
         
-        
-        
-        for (INetwork network : AllNetworkList) {
+        for (INetwork network : allNetworkList) {
             IProject project = network.getNetworkWorkspace().getWorkspace()
                     .getProjectWorkspace().getProject();
             if (networkMap.get(project.getProjectName()) == null) {
