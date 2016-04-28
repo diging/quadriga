@@ -79,7 +79,6 @@ $(document).ready(function () {
        							width:'auto',
        							height:'auto',
        							title:"Confirm transformation",
-        	   							
        							open: function (type, data) {
        						        $(this).parent().appendTo("form");
        						    },
@@ -90,8 +89,8 @@ $(document).ready(function () {
 				        	        document.getElementById('form1').submit();
 	       							$(this).dialog("close"); },"Cancel": function() { $(this).dialog("close"); } },
     							
-				        		open: function(){              
-				        	        jQuery("#contentholder").html("<h3>Transformations:</h3> "+transformations.join("<br/>")+""+" <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")+" <br/> <br/><h3>Networks</h3> " + networks.join("<br/>"));             
+				        		open: function(){   
+				        			jQuery("#contentholder").html("<h3>Transformations:</h3> "+transformations.join("<br/>")+""+" <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")+" <br/> <br/><h3>Networks</h3> " + networks.join("<br/>"));             
 				        	            return false;        			
 				        						        		
 				        		}  		
@@ -99,22 +98,21 @@ $(document).ready(function () {
         					);   
     					}
 		    	
-    				else{
+    				else {
 				 		$('#alert').dialog({ modal: true,
-						draggable:false,
-						resizable:false,
-						position:'center',
-						width:'auto',
-						height:'auto',
-						title:"Transformation cannot be processed. ",
-									
-						open: function (type, data) {
-						    $(this).parent().appendTo("form");
-						    },
-						 buttons: { "Okay": function() { $(this).dialog("close"); } },
-		    				});	
-						jQuery("#alertholder").html("Please select at least one transformation and project.");
-		    			}
+							draggable:false,
+							resizable:false,
+							position:'center',
+							width:'auto',
+							height:'auto',
+							title:"Transformation cannot be processed. ",
+							open: function (type, data) {
+							    $(this).parent().appendTo("form");
+							},
+							buttons: { "Okay": function() { $(this).dialog("close"); } },
+			    		});	
+					 	jQuery("#alertholder").html("Please select at least one transformation and project.");
+		    		}
     });    
 });
 </script>
@@ -124,6 +122,13 @@ $(document).ready(function () {
   display: inline;
   margin: 0 1em 0 1em;
   width: 30%;
+}
+
+.ui-dialog{
+	position:absolute;
+	top:70px;
+	left:600px;
+	z-index:999;
 }
 </style>
 
