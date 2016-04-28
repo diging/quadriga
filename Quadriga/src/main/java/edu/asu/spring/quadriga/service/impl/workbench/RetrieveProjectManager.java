@@ -313,7 +313,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
      * @return IProject with formated description
      * @throws QuadrigaStorageException 
      */
-    @SuppressWarnings("static-access")
     private IProject searchLines(ProjectDTO projectDTO, String pattern) throws QuadrigaStorageException {
         IProject projectProxy = projectShallowMapper.getProjectDetails(projectDTO);
 
@@ -326,7 +325,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
             }
         }
         String finalDescription = null;
-        finalDescription = finalDescription.join("[...]", descriptionList);
+        finalDescription = String.join(" [...]", descriptionList);
         projectProxy.setDescription(finalDescription.length()>500?finalDescription.substring(0, 500):finalDescription);
 
     	return projectProxy;
