@@ -25,8 +25,8 @@ function d3visualize(graph, networkId, path,type) {
 		alert("no network");
 	}
 	// Layout size
-	var width = 500,
-	height = 500;
+	var width = $('#chart').parent().width();
+	var height = $('#chart').parent().height();
 	var layout;
 	var color = d3.scale.category20();
 	// Preparing the force directed graph
@@ -53,8 +53,8 @@ function d3visualize(graph, networkId, path,type) {
 
 
 	var vis = d3.select("#chart").append("svg:svg")
-			.attr("width", width)
-			.attr("height", height)
+			.attr("width", "100%")
+			.attr("height", "100%")
 			.append('svg:g')
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
