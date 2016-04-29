@@ -68,14 +68,14 @@ public class TransformProjectsController {
      * @throws QuadrigaStorageException
      */
     @RequestMapping(value = "auth/transformation", method = RequestMethod.GET )
-    private String listTransformations(ModelMap model, Principal principal)
+    public String listTransformations(ModelMap model, Principal principal)
             throws QuadrigaStorageException {
         IUser user = userManager.getUser(principal.getName());
         Set<IProject> projects = new HashSet<>();
         Map<String, List<INetwork>> networkMap = new HashMap<>();
         List<IProject> retrievedProjects=new ArrayList<IProject>();
         try {
-            retrievedProjects=retrieveProjectManager.getProjectList(user.getName());
+            retrievedProjects=retrieveProjectManager.getProjectList(user.getUserName());
             if (retrievedProjects == null) {
                 retrievedProjects = new ArrayList<IProject>();
             }
