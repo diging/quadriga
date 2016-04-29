@@ -331,8 +331,22 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/bitstreams.jsp" />
 	</definition>
+<<<<<<< HEAD
 
 	<!-- add/update/delete workspace pages -START -->
+=======
+	
+	<!--  add/ textfile pages -START -->
+	<definition name="auth/workbench/workspace/addtext"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Add Text" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/addtext.jsp" />
+	</definition>
+	
+	
+	<!--  add/update/delete workspace pages -START -->
+>>>>>>> branch 'QUAD-79' of https://github.com/diging/quadriga.git
 	<definition name="auth/workbench/workspace/addworkspace"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Add Workspace" />

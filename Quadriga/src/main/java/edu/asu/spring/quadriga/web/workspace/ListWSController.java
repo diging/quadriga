@@ -49,9 +49,7 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.workspace.WorkspaceManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
@@ -641,12 +639,7 @@ public class ListWSController
 		String fileid = networkManager.getSourceReferenceURL(networkId,networkManager.getLatestVersionOfNetwork(networkId));
 		logger.info("Source reference ID " + fileid);
 		
-		//String metaData = wsManager.getItemMetadataAsJson(fileid, dspaceUsername, dspacePassword, dspaceKeys);
-//		
-//		if(metaData!=null){
-//			return metaData;
-//		}
-		
+	
 		return null;
 	}
 }

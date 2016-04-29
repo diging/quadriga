@@ -30,6 +30,7 @@
 		<quadriga.admin.username>admin</quadriga.admin.username>
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
+		<textfiles.location></textfiles.location>
 	</properties>
 
 	<dependencies>
@@ -231,7 +232,7 @@
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
-			<version>2.0</version>
+			<version>2.2.12</version>
 		</dependency>
 
 		<dependency>
@@ -284,9 +285,9 @@
 
 		<!-- Hibernate library dependecy start -->
 		<dependency>
-			<groupId>dom4j</groupId>
+			<groupId>org.dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-			<version>1.6.1</version>
+			<version>2.0.0</version>
 		</dependency>
 
 		<dependency>
