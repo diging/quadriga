@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.workbench.mapper;
 
 import java.util.List;
-import java.util.regex.PatternSyntaxException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
