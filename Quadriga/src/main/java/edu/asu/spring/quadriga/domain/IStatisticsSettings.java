@@ -17,6 +17,10 @@ public interface IStatisticsSettings {
 
     public abstract void setName(String name);
 
+    public abstract String getMessage();
+
+    public abstract void setMessage(String message);
+
     public abstract Boolean getIsChecked();
 
     public abstract void setIsChecked(Boolean ischecked);

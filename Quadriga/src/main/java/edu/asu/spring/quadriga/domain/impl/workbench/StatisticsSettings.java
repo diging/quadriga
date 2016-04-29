@@ -14,10 +14,21 @@ public class StatisticsSettings implements IStatisticsSettings {
     private String projectId;
     private String name;
     private Boolean isChecked;
+    private String message;
 
     @Override
     public String getProjectId() {
         return projectId;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override

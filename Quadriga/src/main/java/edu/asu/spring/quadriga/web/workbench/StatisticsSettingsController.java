@@ -27,7 +27,6 @@ public class StatisticsSettingsController {
     @Autowired
     private StatisticsSettingsService statsSettingsService;
 
-    @Autowired
     private StatisticsSettingsBean statisticsSettingsBean;
 
     /**
@@ -51,8 +50,11 @@ public class StatisticsSettingsController {
         List<IStatisticsSettings> statisticsSettingsList = statsSettingsService
                 .getStatisticsSettingsList(projectid);
         model.getModelMap().put("statistics", statisticsSettingsList);
+
+        statisticsSettingsBean = new StatisticsSettingsBean();
         model.getModelMap().put("statisticsSettingsBean",
                 statisticsSettingsBean);
+
         return model;
     }
 
@@ -72,6 +74,7 @@ public class StatisticsSettingsController {
             QuadrigaAccessException {
         ModelAndView model = new ModelAndView("redirect:/auth/workbench/"
                 + projectid + "/statistics");
+
         try {
             String[] names = statisticsSettingsBean.getNames();
             statsSettingsService
@@ -79,7 +82,7 @@ public class StatisticsSettingsController {
             attr.addFlashAttribute("show_success_alert", true);
             attr.addFlashAttribute("success_alert_msg",
                     "Settings has been updated successfully.");
-        } catch (Exception e) {
+        } catch (QuadrigaStorageException e) {
             StringBuffer errorMsg = new StringBuffer();
             attr.addFlashAttribute("show_error_alert", true);
             errorMsg.append(e.getMessage());

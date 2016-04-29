@@ -5,10 +5,11 @@
 package edu.asu.spring.quadriga.dto;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -24,50 +25,65 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "StatisticsSettingsDTO.findAll", query = "SELECT p FROM StatisticsSettingsDTO p"),
-        @NamedQuery(name = "StatisticsSettingsDTO.findByProjectid", query = "SELECT p FROM StatisticsSettingsDTO p WHERE p.statisticsSettingsDTOPK.projectid = :projectid"),
-        @NamedQuery(name = "StatisticsSettingsDTO.findByName", query = "SELECT p FROM StatisticsSettingsDTO p WHERE p.statisticsSettingsDTOPK.projectid = :projectid and p.statisticsSettingsDTOPK.name = :name"), })
+        @NamedQuery(name = "StatisticsSettingsDTO.findByProjectid", query = "SELECT p FROM StatisticsSettingsDTO p WHERE p.projectid = :projectid"),
+        @NamedQuery(name = "StatisticsSettingsDTO.findByName", query = "SELECT p FROM StatisticsSettingsDTO p WHERE p.projectid = :projectid and p.name = :name"), })
 public class StatisticsSettingsDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @EmbeddedId
-    protected StatisticsSettingsDTOPK statisticsSettingsDTOPK;
+    // @EmbeddedId
+    // protected StatisticsSettingsDTOPK statisticsSettingsDTOPK;
+
+    @Id
+    @Basic(optional = false)
+    @Column(name = "id")
+    private String id;
+
+    @Basic(optional = false)
+    @Column(name = "projectid")
+    private String projectid;
+
+    @Basic(optional = false)
+    @Column(name = "name")
+    private String name;
 
     @Basic(optional = false)
     @Column(name = "ischecked")
     private Boolean ischecked;
 
-    public String getProjectId() {
-        return this.statisticsSettingsDTOPK.getProjectid();
+    public String getProjectid() {
+        return projectid;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setProjectid(String projectid) {
+        this.projectid = projectid;
     }
 
     public String getName() {
-        return this.statisticsSettingsDTOPK.getName();
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public StatisticsSettingsDTO() {
     }
 
-    public StatisticsSettingsDTO(
-            StatisticsSettingsDTOPK projectStatisticsDTOPK, Boolean isChecked) {
-        this.statisticsSettingsDTOPK = projectStatisticsDTOPK;
-        this.ischecked = isChecked;
-    }
-
-    public StatisticsSettingsDTO(String projectid, String name,
+    public StatisticsSettingsDTO(String id, String projectid, String name,
             Boolean isChecked) {
-        this.statisticsSettingsDTOPK = new StatisticsSettingsDTOPK(projectid,
-                name);
+        this.id = id;
+        this.projectid = projectid;
+        this.name = name;
         this.ischecked = isChecked;
-    }
-
-    public StatisticsSettingsDTOPK getProjectStatisticsDTOPK() {
-        return statisticsSettingsDTOPK;
-    }
-
-    public void setProjectStatisticsDTOPK(
-            StatisticsSettingsDTOPK projectStatisticsDTOPK) {
-        this.statisticsSettingsDTOPK = projectStatisticsDTOPK;
     }
 
     public Boolean getIschecked() {
@@ -81,8 +97,7 @@ public class StatisticsSettingsDTO implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (statisticsSettingsDTOPK != null ? statisticsSettingsDTOPK
-                .hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -92,9 +107,8 @@ public class StatisticsSettingsDTO implements Serializable {
             return false;
         }
         StatisticsSettingsDTO other = (StatisticsSettingsDTO) object;
-        if ((this.statisticsSettingsDTOPK == null && other.statisticsSettingsDTOPK != null)
-                || (this.statisticsSettingsDTOPK != null && !this.statisticsSettingsDTOPK
-                        .equals(other.statisticsSettingsDTOPK))) {
+        if ((this.id == null && other.id != null)
+                || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;

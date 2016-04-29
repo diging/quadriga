@@ -41,6 +41,23 @@ public class StatisticSettingsDAO extends BaseDAO<StatisticsSettingsDTO>
         }
     }
 
+    @Override
+    public StatisticsSettingsDTO getStatisticsSettings(String projectId,
+            String name) throws QuadrigaStorageException {
+        try {
+            Query query = sessionFactory.getCurrentSession().getNamedQuery(
+                    "StatisticsSettingsDTO.findByName");
+            query.setParameter("projectid", projectId);
+            query.setParameter("name", name);
+            StatisticsSettingsDTO statsSettingsDTO = (StatisticsSettingsDTO) query
+                    .uniqueResult();
+            return statsSettingsDTO;
+
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
+        }
+    }
+
     /**
      * This method save or update the statistics settings
      * 
@@ -64,7 +81,7 @@ public class StatisticSettingsDAO extends BaseDAO<StatisticsSettingsDTO>
 
     @Override
     public StatisticsSettingsDTO getDTO(String id) {
-        return null;
+        return getDTO(StatisticsSettingsDTO.class, id);
     }
 
 }

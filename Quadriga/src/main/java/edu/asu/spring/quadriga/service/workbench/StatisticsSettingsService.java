@@ -28,7 +28,10 @@ import edu.asu.spring.quadriga.mapper.StatisticsSettingsDTOMapper;
 public class StatisticsSettingsService {
 
     @Autowired
-    private IStatisticSettingsDAO statisticSettingsDao;
+    private IStatisticSettingsDAO statisticSettingsDAO;
+
+    @Autowired
+    private StatisticsSettingsDTOMapper statisticSettingsDTOMapper;
 
     @Autowired
     private Environment env;
@@ -36,19 +39,30 @@ public class StatisticsSettingsService {
     @Transactional
     public void addOrUpdateStatisticsSettings(String projectId, String[] names)
             throws QuadrigaStorageException {
-        String[] defaultValues = getDefaultStatisticsSettings();
+        List<String> defaultValues = getDefaultStatisticsSettingsTypes();
         List<String> namesList = Arrays.asList(names);
         for (String name : defaultValues) {
-            StatisticsSettingsDTO statisticsSettingsDTO = null;
+            StatisticsSettingsDTO statisticsSettingsDTO = statisticSettingsDAO
+                    .getStatisticsSettings(projectId, name);
             if (namesList.contains(name)) {
-                statisticsSettingsDTO = new StatisticsSettingsDTO(projectId,
-                        name, true);
+                if (statisticsSettingsDTO == null) {
+                    statisticsSettingsDTO = new StatisticsSettingsDTO(
+                            statisticSettingsDAO.generateUniqueID(), projectId,
+                            name, true);
+                } else {
+                    statisticsSettingsDTO.setIschecked(true);
+                }
             } else {
-                statisticsSettingsDTO = new StatisticsSettingsDTO(projectId,
-                        name, false);
+                if (statisticsSettingsDTO == null) {
+                    statisticsSettingsDTO = new StatisticsSettingsDTO(
+                            statisticSettingsDAO.generateUniqueID(), projectId,
+                            name, false);
+                } else {
+                    statisticsSettingsDTO.setIschecked(false);
+                }
             }
 
-            statisticSettingsDao
+            statisticSettingsDAO
                     .saveOrUpdateStatisticsSettings(statisticsSettingsDTO);
         }
     }
@@ -57,21 +71,22 @@ public class StatisticsSettingsService {
     public List<IStatisticsSettings> getStatisticsSettingsList(String projectId)
             throws QuadrigaStorageException {
         List<StatisticsSettingsDTO> statisticsDTOList = null;
-        String[] defaultValues = getDefaultStatisticsSettings();
-        statisticsDTOList = statisticSettingsDao
+        List<String> defaultValues = getDefaultStatisticsSettingsTypes();
+        statisticsDTOList = statisticSettingsDAO
                 .getStatisticsSettings(projectId);
         if (statisticsDTOList.size() == 0) {
             statisticsDTOList = new ArrayList<StatisticsSettingsDTO>();
             for (String name : defaultValues) {
                 StatisticsSettingsDTO statisticsSettingsDTO = new StatisticsSettingsDTO(
-                        projectId, name, false);
+                        statisticSettingsDAO.generateUniqueID(), projectId,
+                        name, false);
                 statisticsDTOList.add(statisticsSettingsDTO);
             }
         }
 
         List<IStatisticsSettings> statisticsSettingsList = new ArrayList<IStatisticsSettings>();
         for (StatisticsSettingsDTO statisticsSettingsDTO : statisticsDTOList) {
-            IStatisticsSettings s = StatisticsSettingsDTOMapper
+            IStatisticsSettings s = statisticSettingsDTOMapper
                     .getStatisticsSettings(statisticsSettingsDTO);
             statisticsSettingsList.add(s);
         }
@@ -79,10 +94,9 @@ public class StatisticsSettingsService {
         return statisticsSettingsList;
     }
 
-    private String[] getDefaultStatisticsSettings() {
-
+    private List<String> getDefaultStatisticsSettingsTypes() {
         String propertyValue = env.getProperty("statistics.settings");
-        String[] settings = propertyValue.split(",");
+        List<String> settings = Arrays.asList(propertyValue.split(","));
         return settings;
     }
 

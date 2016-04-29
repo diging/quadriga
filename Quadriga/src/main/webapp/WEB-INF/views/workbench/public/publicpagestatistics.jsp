@@ -59,7 +59,7 @@
 							<td><form:checkbox path="names" value="${statistic.name}" /></td>
 						</c:otherwise>
 					</c:choose>
-					<td><font size="3"> <c:out value="${statistic.name}"></c:out>
+					<td><font size="3"> <c:out value="${statistic.message}"></c:out>
 					</font></td>
 				</tr>
 			</c:forEach>
