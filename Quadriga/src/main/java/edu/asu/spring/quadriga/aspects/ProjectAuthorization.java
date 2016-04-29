@@ -94,6 +94,36 @@ public class ProjectAuthorization implements IAuthorization
 		return haveAccess;
 	}
 	
+	
+	   /**
+     * This checks the access permissions for the logged in user for the 
+     * given list of project ids
+     * @param : userName - logged in user
+     * @param : userRoles - set of roles for which the user should be checked 
+     * for access.
+     * @param : projectIds - list of projectId 
+     * @throws : QuadrigaStorageException, QuadrigaAccessException
+     * @return : hasAccess - true
+     *           no Access - false
+     */
+    @Override
+    public boolean chkAuthorization(String userName, List<String> projectIds,String[] userRoles) 
+            throws QuadrigaStorageException, QuadrigaAccessException
+    {
+        boolean haveAccess;
+        haveAccess = false;
+        for(String projectId : projectIds)
+        {
+            haveAccess = chkAuthorization(userName, projectId, userRoles);
+            if(!haveAccess)
+            {
+                break;
+            }
+        }
+        return haveAccess;
+    }
+
+		
 	/**
 	 * This checks if the logged in user is associated with any project and possess
 	 * any of the specified roles.

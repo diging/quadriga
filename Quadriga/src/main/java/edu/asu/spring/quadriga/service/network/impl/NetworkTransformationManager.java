@@ -75,6 +75,89 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         if (networkList == null) {
             return null;
         }
+        
+        ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
+        
+        return transformedNetwork;
+    }
+
+
+    /**
+     * This method returns a network that consists of all the statements in the given projects that contain the provided
+     * concept id.
+     * @param projectIds
+     * @param conceptId
+     * @return ITransformedNetwork
+     * @throws QuadrigaStorageException
+     * @author suraj nilapwar
+     */
+    @Override
+    public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId)
+        throws QuadrigaStorageException {
+        // get the transformed network and search for the concept id
+        List<INetwork> networkList = getNetworkList(projectId);
+
+        if (networkList == null) {
+            return null;
+        }
+
+        // get the transformed network of all the networks in a project
+        ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
+        // create finalnetwork using conceptId 
+        ITransformedNetwork finalTransformedNetwork = getFinalTransformedNetwork(transformedNetwork,conceptId);
+
+        return finalTransformedNetwork;
+    }
+
+    private List<INetwork> getNetworkList(String projectId) throws QuadrigaStorageException {
+        List<INetwork> networkList;
+        try {
+            networkList = networkManager.getNetworksInProject(projectId);
+        } catch (QuadrigaStorageException e) {
+            throw new QuadrigaStorageException("Database error while getting networks of a project" +
+                    " with id: " + projectId, e);
+        }
+
+        return networkList;
+    }
+    
+    /**
+	 * This method searches for concept specified by conceptId in the networks of projects specified by project Ids and
+	 * returns transformed networks of all projects specified by projectIds containing given conceptId.
+	 * @param projectIds : List of projectIds for projects to search under
+	 * @param conceptId : Id of concept to search
+	 * @return ITransformedNetwork
+	 * @throws QuadrigaStorageException
+	 * @author suraj nilapwar
+	 */
+    @Override
+    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId)
+        throws QuadrigaStorageException {
+    	// get the transformed network and search for the concept id
+        List<INetwork> networkList = new ArrayList<>();
+        
+        for(String projectId : projectIds){
+        	List<INetwork> networks = getNetworkList(projectId);
+        	if(networks != null){
+        		networkList.addAll(networks);
+        	}
+        }
+        
+        if (networkList.size()==0) {
+            return null;
+        }
+
+        // get the transformed network of all the networks in projects
+        ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
+        // create finalnetwork using conceptId 
+        ITransformedNetwork finalTransformedNetwork = getFinalTransformedNetwork(transformedNetwork,conceptId);
+        
+        return finalTransformedNetwork;  
+     }
+
+    @Override
+    public ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList)
+            throws QuadrigaStorageException {
 
         List<INetworkNodeInfo> networkNodeInfoList = new ArrayList<INetworkNodeInfo>();
         for (INetwork network : networkList) {
@@ -133,20 +216,9 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // return new network with updated nodes and links
         return new TransformedNetwork(updatedNodes, links);
     }
-
-    @Override
-    public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId)
-        throws QuadrigaStorageException {
-        // get the transformed network and search for the concept id
-        List<INetwork> networkList = getNetworkList(projectId);
-
-        if (networkList == null) {
-            return null;
-        }
-
-        // get the transformed network of all the networks in a project
-        ITransformedNetwork transformedNetwork = getTransformedNetworkOfProject(projectId);
-
+    
+    private ITransformedNetwork getFinalTransformedNetwork(ITransformedNetwork transformedNetwork, String conceptId)
+    {
         // Filter the nodes with the concept id
         // add all the statement ids to a set
         Set<String> statementIdSearchSet = new HashSet<String>();
@@ -196,17 +268,5 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         return new TransformedNetwork(finalNodes, finalLinks);
-    }
-
-    private List<INetwork> getNetworkList(String projectId) throws QuadrigaStorageException {
-        List<INetwork> networkList;
-        try {
-            networkList = networkManager.getNetworksInProject(projectId);
-        } catch (QuadrigaStorageException e) {
-            throw new QuadrigaStorageException("Database error while getting networks of a project" +
-                    " with id: " + projectId, e);
-        }
-
-        return networkList;
     }
 }
