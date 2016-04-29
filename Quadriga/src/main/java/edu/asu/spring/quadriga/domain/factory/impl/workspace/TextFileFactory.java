@@ -7,8 +7,9 @@ import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
 /**
- * @author Nischal Samji Implementation class for TextFile Interface. Creates
- *         TextFile Beans
+ * Implementation class for TextFile Interface. Creates TextFile Beans
+ * 
+ * @author Nischal Samji
  *
  */
 @Service

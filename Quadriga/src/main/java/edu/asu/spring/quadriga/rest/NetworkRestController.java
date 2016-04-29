@@ -91,9 +91,6 @@ public class NetworkRestController {
     private IRestVelocityFactory restVelocityFactory;
 
     @Autowired
-    private INetworkXMLFactory nwXMLfactory;
-
-    @Autowired
     private IUserManager userManager;
 
     /**
@@ -156,11 +153,11 @@ public class NetworkRestController {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-
+        
         String res = null;
-        try {
+        try{
             res = networkManager.storeNetworks(nwXML.getNetworkXMLString());
-        } catch (QStoreStorageException e) {
+        } catch(QStoreStorageException e){
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -210,7 +207,7 @@ public class NetworkRestController {
     public ResponseEntity<String> getNetworkStatus(@PathVariable("NetworkId") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
                     throws RestException {
-
+        
         try {
             INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
@@ -218,7 +215,7 @@ public class NetworkRestController {
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
             String status = networkManager.getNetworkStatusCode(network.getStatus()) + "";
-
+            
             IUser user = userManager.getUser(principal.getName());
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
@@ -249,7 +246,7 @@ public class NetworkRestController {
             throw new RestException(500, e);
         } catch (Exception e) {
             throw new RestException(500, e);
-        }
+        } 
 
     }
 
@@ -278,7 +275,7 @@ public class NetworkRestController {
     public ResponseEntity<String> getNetworkAnnotations(@PathVariable("NetworkId") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
                     throws RestException {
-
+        
         try {
             INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
@@ -667,15 +664,15 @@ public class NetworkRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-
+        
         String res = null;
-        try {
+        try{
             res = networkManager.storeNetworks(xml);
-        } catch (QStoreStorageException e) {
+        } catch(QStoreStorageException e){
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
+        
         if (res == null) {
             String errorMsg = errorMessageRest.getErrorMsg(
                     "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML");
@@ -683,7 +680,7 @@ public class NetworkRestController {
         }
         String networkNameUpdateStatus = "";
         if (!(networkName == null || networkName.equals(network.getNetworkName()) || networkName.equals(""))) {
-            networkNameUpdateStatus = networkManager.updateNetworkName(networkId, networkName);
+                networkNameUpdateStatus = networkManager.updateNetworkName(networkId, networkName);
             if (!(networkNameUpdateStatus.equals("success"))) {
                 String errorMsg = errorMessageRest.getErrorMsg("DB Issue, please try after sometime");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -703,5 +700,5 @@ public class NetworkRestController {
         return new ResponseEntity<String>(res.toString(), httpHeaders, HttpStatus.OK);
 
     }
-
-}
+    
+ }

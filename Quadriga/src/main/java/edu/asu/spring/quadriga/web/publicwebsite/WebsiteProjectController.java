@@ -87,7 +87,6 @@ public class WebsiteProjectController {
         }
 
         model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
-
         if (user == null) {
             if (projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
                 model.addAttribute("project", project);
@@ -163,7 +162,7 @@ public class WebsiteProjectController {
     public String visualizeNetworks(@PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, ModelMap model, Principal principal,
             @InjectProject(unixNameParameter = "projectUnixName") IProject project)
-                    throws QuadrigaStorageException, JAXBException {
+            throws QuadrigaStorageException, JAXBException {
         INetwork network = networkmanager.getNetwork(networkId);
         if (network == null) {
             return "auth/accessissue";
@@ -198,7 +197,7 @@ public class WebsiteProjectController {
     @RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
     public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName, Model model,
             @InjectProject(unixNameParameter = "projectUnixName") IProject project)
-                    throws JAXBException, QuadrigaStorageException {
+            throws JAXBException, QuadrigaStorageException {
 
         ITransformedNetwork transformedNetwork = transformationManager
                 .getTransformedNetworkOfProject(project.getProjectId());

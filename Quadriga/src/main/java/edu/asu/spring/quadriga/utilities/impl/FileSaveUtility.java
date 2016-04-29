@@ -42,7 +42,7 @@ public class FileSaveUtility implements IFileSaveUtility {
             fos.write(fileContent);
             fos.close();
         } catch (IOException e) {
-            throw new FileStorageException("Default directory not specified in configuration");
+            throw new FileStorageException(e);
         }
 
         return true;
@@ -60,14 +60,14 @@ public class FileSaveUtility implements IFileSaveUtility {
             fis.read(fileBytes);
 
         } catch (IOException e) {
-            throw new FileStorageException("Default directory not specified in configuration");
+            throw new FileStorageException(e);
         } finally {
             try {
                 if (fis != null) {
                     fis.close();
                 }
             } catch (IOException e) {
-                throw new FileStorageException("Default directory not specified in configuration");
+                throw new FileStorageException(e);
             }
 
         }

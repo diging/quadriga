@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_textfiles")
-@XmlRootElement
 public class TextFileDTO implements Serializable {
 
     private static final long serialVersionUID = -1798070786993154676L;
