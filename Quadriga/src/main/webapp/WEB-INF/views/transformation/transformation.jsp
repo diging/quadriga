@@ -144,8 +144,6 @@ $(document).ready(function () {
 </style>
 
 
-<form action="${pageContext.servletContext.contextPath}/checks/transformation" method="GET" id="form1" >
-
 <form action="${pageContext.servletContext.contextPath}/checks/transformation" method="POST" id="form1" >
 
 <div>

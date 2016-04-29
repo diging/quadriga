@@ -5,20 +5,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
-import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
-import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.impl.networks.Transformation;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
 import edu.asu.spring.quadriga.exceptions.QuadrigaGeneratorException;
@@ -28,7 +27,6 @@ import edu.asu.spring.quadriga.service.network.transform.impl.Generator;
 import edu.asu.spring.quadriga.service.network.transform.impl.MatchGraphs;
 import edu.asu.spring.quadriga.service.network.transform.impl.TransformNode;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class TransformationTestController {
@@ -61,7 +59,7 @@ public class TransformationTestController {
     @RequestMapping(value = "checks/transformation", method=RequestMethod.POST)
     public String transformTest(@RequestParam("project") String project, 
     							@RequestParam("transformation") String transformation,
-    							@RequestParam("sanitized_network_id") String networkID) throws QuadrigaStorageException, IOException, QuadrigaGeneratorException {
+    							@RequestParam("sanitized_network_id") String networkID, Model model) throws QuadrigaStorageException, IOException, QuadrigaGeneratorException {
         
         Resource patternRes = new ClassPathResource("transformation/Pe_Pe_engagesWith.graphml");
         Resource transformationRes = new ClassPathResource("transformation/triple_engagesWith.graphml");
@@ -78,7 +76,8 @@ public class TransformationTestController {
 
         List<List<TransformNode>> results = matchGraphs.matchGraphs(transformations, networkIds);
         logger.info("Check results for transformations: " + results);
-        logger.info(generator.generateText(results, null, true));
+        String graphString = generator.generateText(results, null, true);
+        model.addAttribute("graph", StringEscapeUtils.escapeHtml(graphString));
         
         System.out.println("In TransformationTestController transformTest method");
         return "check";
