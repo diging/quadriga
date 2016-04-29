@@ -91,9 +91,6 @@ public class NetworkRestController {
     private IRestVelocityFactory restVelocityFactory;
 
     @Autowired
-    private INetworkXMLFactory nwXMLfactory;
-
-    @Autowired
     private IUserManager userManager;
 
     /**

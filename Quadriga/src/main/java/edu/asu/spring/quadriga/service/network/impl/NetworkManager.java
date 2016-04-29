@@ -55,7 +55,6 @@ import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -99,9 +98,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Autowired
     private IWorkspaceManager workspaceManager;
     
-    @Autowired
-    private INetworkXMLParser networkXMLParser;
-
     /**
      * 
      * {@inheritDoc}
