@@ -239,5 +239,5 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 		
 		return projectList;
 	}
-	
 }
+
