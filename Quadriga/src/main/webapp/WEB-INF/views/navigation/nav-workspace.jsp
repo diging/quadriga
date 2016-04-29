@@ -97,4 +97,3 @@
 <hr>
 
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Public Page Settings</a>
-

@@ -18,7 +18,7 @@
     </ul>
 </div>
 
-<h2 class="major">
+<h2 class="major" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/settings">
 	<span>Settings</span>
 </h2>
 <a
@@ -26,5 +26,9 @@
    
 <br>
 <a
-	href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout""><i
+	href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout"><i
 	class="fa fa-info-circle"></i> About Page</a>
+<br>
+<a
+    href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/statistics"><i
+    class="fa fa-bar-chart"></i> Statistics Page</a>
