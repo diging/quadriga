@@ -18,10 +18,11 @@
 <li ${currentPage == "networksearch" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/search">Search</a></li>
 <c:if test="${username != null}">
-	<li><a class="fa fa-user"
-		style="margin: 0px 10px 0px 0px; padding: 0px 0px 0px 0px; font-size: 80%">
-			${username} </a> <a href="/quadriga/logout"
-		style="margin: 2px 10px; padding: 0px 0px 0px 0px; font-size: 80%">
-			Logout </a></li>
+	<li class="two-row-li"><div class="navbar-two-rows"><i class="fa fa-user"></i>
+			${username}</div>
+	    <div class="navbar-two-rows"><i class="fa fa-sign-out"></i><a href="/quadriga/logout"
+		class="navbar-two-rows">
+			Logout </a></div>
+	</li>
 </c:if>
 
