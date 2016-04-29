@@ -25,13 +25,13 @@ import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.validator.WorkspaceValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
-public class AddWSController
-{
+public class AddWSController {
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;
 
@@ -58,16 +58,19 @@ public class AddWSController
 	
 	/**
 	 * This is called on the addworkspace form load.
+     * 
 	 * @param     model
 	 * @return    String - containing the path to addworkspace jsp page.
 	 * @throws QuadrigaStorageException 
 	 * @author    Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
 	@RequestMapping(value="auth/workbench/{projectid}/addworkspace", method=RequestMethod.GET)
-	public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException, QuadrigaAccessException
-	{
+    public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid)
+            throws QuadrigaStorageException, QuadrigaAccessException {
 		ModelAndView model;
 		
 			model = new ModelAndView("auth/workbench/workspace/addworkspace");
@@ -79,34 +82,32 @@ public class AddWSController
 
 	/**
 	 * This calls workspace manager to add workspace details into the database.
+     * 
 	 * @param    workspace
 	 * @param    model
 	 * @param    principal
-	 * @return   String - On success loads success page and on failure loads
-	 *                   the same form with error messages.
+     * @return String - On success loads success page and on failure loads the
+     *         same form with error messages.
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
+            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
 	@RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.POST)
-	public ModelAndView addWorkSpaceRequest(@Validated @ModelAttribute("workspace")WorkSpace workspace,BindingResult result,
-			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
-	{
-		ModelAndView model;
-		String userName = principal.getName();
-		IUser user;
-		model = new ModelAndView("auth/workbench/workspace/addworkspace");
-			if(result.hasErrors())
-			{
+    public ModelAndView addWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
+            BindingResult result, @PathVariable("projectid") String projectid, Principal principal)
+                    throws QuadrigaStorageException, QuadrigaAccessException {
+        ModelAndView model = new ModelAndView("auth/workbench/workspace/addworkspace");
+        if (result.hasErrors()) {
 				model.getModelMap().put("workspace", workspace);
 				model.getModelMap().put("wsprojectid", projectid);
 				model.getModelMap().put("success", 0);
 				return model;
-			}
-			else
-			{
-			user = userManager.getUser(userName);
+        } else {
+            String userName = principal.getName();
+            IUser user= userManager.getUser(userName);
 			workspace.setOwner(user);
 			modifyWSManger.addWorkspaceToProject(workspace, projectid);
 			model.getModelMap().put("success", 1);
