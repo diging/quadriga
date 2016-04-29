@@ -46,8 +46,6 @@ import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -81,12 +79,6 @@ public class NetworkRestController {
 
     @Autowired
     private IUserManager userManager;
-    
-    @Autowired
-    private IRetrieveProjectManager projectManager;
-    
-    @Autowired
-    private INetworkTransformationManager transformationManager;
 
     /**
      * Rest interface for uploading XML for networks http://<<URL>:
