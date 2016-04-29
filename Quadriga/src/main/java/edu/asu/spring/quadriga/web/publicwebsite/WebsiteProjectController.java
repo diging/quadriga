@@ -84,9 +84,6 @@ public class WebsiteProjectController {
         String user = null;
         if (principal != null) {
             user = principal.getName();
-            String name = principal.getName(); // get logged in username
-            model.addAttribute("username", name);
-
         }
 
         model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
@@ -219,4 +216,3 @@ public class WebsiteProjectController {
     }
 
 }
-
