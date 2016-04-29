@@ -40,7 +40,14 @@
 		  });
 	});
 </script>
-
+<div>
+	<ul>
+		<li><a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}"><span
+				class="glyphicon glyphicon-circle-arrow-left"></span> All Workspaces
+		</a></li>
+	</ul>
+</div>
 <h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
 	<span>Dictionaries</span>
 </h5>
@@ -55,3 +62,4 @@
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a>
 	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
 </div>
+

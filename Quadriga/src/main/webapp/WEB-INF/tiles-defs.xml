@@ -737,7 +737,6 @@
 		<put-attribute name="content" value="/WEB-INF/views/networksearch.jsp" />
 	</definition>
 
-
 	<definition name="sites/public/PublicWebsiteAbout" extends="base.definition.public">
 		<put-attribute name="currentPage" value="about" />
 		<put-attribute name="content"

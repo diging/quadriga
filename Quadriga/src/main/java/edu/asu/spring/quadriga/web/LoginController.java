@@ -1,17 +1,17 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import edu.asu.spring.quadriga.aspects.annotations.NoAuthorizationCheck;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * The controller to manage the login step performed by every user in Quadriga Database
@@ -24,11 +24,12 @@ public class LoginController {
 	@Autowired
 	IUserManager userManager;
 	IUser user;
-
+    
 	/**
 	 * A valid authenticated user is redirected to the home page.
 	 * 
 	 * @return 		Returned to the home page of Quadriga.
+	 * @throws QuadrigaStorageException 
 	 */
 	@NoAuthorizationCheck
 	@RequestMapping(value = "auth/welcome", method = RequestMethod.GET)
@@ -38,8 +39,7 @@ public class LoginController {
 		// Get the LDAP-authenticated userid
 		String sUserId = principal.getName();		
 		model.addAttribute("username", sUserId);
-		
-		return "auth/home";
+		return "redirect:home";
 
 	}
 
