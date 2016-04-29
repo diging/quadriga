@@ -8,7 +8,7 @@
 <li ${currentPage == "home" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">Home</a></li>
 <li ${currentPage == "about" ? "class=\"active\"" : ""}><a
-    href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/about">About</a></li>
+	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/about">About</a></li>
 <li ${currentPage == "projectblog" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblog">Project
 		Blog</a></li>
@@ -24,7 +24,7 @@
 	<li><a class="fa fa-user"
 		style="margin: 5px 0px 0px 0px; padding: 0px 0px 0px 0px; font-size: 80%; text-align: center">
 			<sec:authentication property="principal.username" />
-	</a> <a href="/quadriga/logout"
+	</a> <a href="<c:url value="/logout" />"
 		style="margin: 0px 10px; padding: 0px 0px 0px 0px; font-size: 80%; text-align: right">
 			Logout </a></li>
 </sec:authorize>
