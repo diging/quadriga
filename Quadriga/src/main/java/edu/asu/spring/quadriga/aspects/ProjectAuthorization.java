@@ -101,7 +101,7 @@ public class ProjectAuthorization implements IAuthorization
      * @param : userName - logged in user
      * @param : userRoles - set of roles for which the user should be checked 
      * for access.
-     * @param : projectId 
+     * @param : projectIds - list of projectId 
      * @throws : QuadrigaStorageException, QuadrigaAccessException
      * @return : hasAccess - true
      *           no Access - false
