@@ -99,7 +99,7 @@ $(document).ready(function () {
 				        	        $('#sanitized_network_id').val(networkIDvariable);
 				        	        document.getElementById('form1').submit();
 	       							$(this).dialog("close"); },"Cancel": function() { $(this).dialog("close"); } },
-    							
+    			
 				        		open: function(){   
 				        			jQuery("#contentholder").html("<h3>Transformations:</h3> "+transformations.join("<br/>")+""+" <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")+" <br/> <br/><h3>Networks</h3> " + networks.join("<br/>"));             
 				        	            return false;        			
@@ -145,6 +145,8 @@ $(document).ready(function () {
 
 
 <form action="${pageContext.servletContext.contextPath}/checks/transformation" method="GET" id="form1" >
+
+<form action="${pageContext.servletContext.contextPath}/checks/transformation" method="POST" id="form1" >
 
 <div>
 <header>
