@@ -75,7 +75,10 @@ public class TransformProjectsController {
         Map<String, List<INetwork>> networkMap = new HashMap<>();
         List<IProject> retrievedProjects=new ArrayList<IProject>();
         try {
-            retrievedProjects=retrieveProjectManager.getProjectList(user.getName());        
+            retrievedProjects=retrieveProjectManager.getProjectList(user.getName());
+            if (retrievedProjects == null) {
+                retrievedProjects = new ArrayList<IProject>();
+            }
         } catch (QuadrigaStorageException e) {
             logger.error("Error fetching list of approved networks", e);
             model.addAttribute("show_error_alert", true);
