@@ -44,22 +44,18 @@ public class StatisticsSettingsService {
         for (String name : defaultValues) {
             StatisticsSettingsDTO statisticsSettingsDTO = statisticSettingsDAO
                     .getStatisticsSettings(projectId, name);
+
+            if (statisticsSettingsDTO == null) {
+                statisticsSettingsDTO = new StatisticsSettingsDTO(
+                        statisticSettingsDAO.generateUniqueID(), projectId,
+                        name, true);
+            }
+
             if (namesList.contains(name)) {
-                if (statisticsSettingsDTO == null) {
-                    statisticsSettingsDTO = new StatisticsSettingsDTO(
-                            statisticSettingsDAO.generateUniqueID(), projectId,
-                            name, true);
-                } else {
-                    statisticsSettingsDTO.setIschecked(true);
-                }
+                statisticsSettingsDTO.setIschecked(true);
             } else {
-                if (statisticsSettingsDTO == null) {
-                    statisticsSettingsDTO = new StatisticsSettingsDTO(
-                            statisticSettingsDAO.generateUniqueID(), projectId,
-                            name, false);
-                } else {
-                    statisticsSettingsDTO.setIschecked(false);
-                }
+
+                statisticsSettingsDTO.setIschecked(false);
             }
 
             statisticSettingsDAO

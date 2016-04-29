@@ -27,8 +27,6 @@ public class StatisticsSettingsController {
     @Autowired
     private StatisticsSettingsService statsSettingsService;
 
-    private StatisticsSettingsBean statisticsSettingsBean;
-
     /**
      * This method loads necessary settings option for statistics page if user
      * have sufficient permission
@@ -51,7 +49,7 @@ public class StatisticsSettingsController {
                 .getStatisticsSettingsList(projectid);
         model.getModelMap().put("statistics", statisticsSettingsList);
 
-        statisticsSettingsBean = new StatisticsSettingsBean();
+        StatisticsSettingsBean statisticsSettingsBean = new StatisticsSettingsBean();
         model.getModelMap().put("statisticsSettingsBean",
                 statisticsSettingsBean);
 
@@ -82,6 +80,7 @@ public class StatisticsSettingsController {
             attr.addFlashAttribute("show_success_alert", true);
             attr.addFlashAttribute("success_alert_msg",
                     "Settings has been updated successfully.");
+            model.getModelMap().put("publicpageprojectid", projectid);
         } catch (QuadrigaStorageException e) {
             StringBuffer errorMsg = new StringBuffer();
             attr.addFlashAttribute("show_error_alert", true);
