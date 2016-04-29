@@ -83,13 +83,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
 
     /**
-	 * This method returns the transformation network in provided project for given conceptId.
-	 * @param projectIds
-	 * @param conceptId
-	 * @return ITransformedNetwork
-	 * @throws QuadrigaStorageException
-	 * @author suraj nilapwar
-	 */
+     * This method returns a network that consists of all the statements in the given projects that contain the provided
+     * concept id.
+     * @param projectIds
+     * @param conceptId
+     * @return ITransformedNetwork
+     * @throws QuadrigaStorageException
+     * @author suraj nilapwar
+     */
     @Override
     public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId)
         throws QuadrigaStorageException {
