@@ -32,10 +32,6 @@ public class TextFileManager implements ITextFileManager {
     @Autowired
     private IFileSaveService fileSaveServ;
 
-    @Qualifier("txtfileSaveUtil")
-    @Autowired
-    private IFileSaveUtility fileManager;
-
     @Autowired
     private ITextFileMapper tfSMapper;
 
