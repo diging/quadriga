@@ -1,5 +1,7 @@
 <li ${currentPage == "home" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">Home</a></li>
+<li ${currentPage == "about" ? "class=\"active\"" : ""}><a
+	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/about">About</a></li>
 <li ${currentPage == "projectblog" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblog">Project
 		Blog</a></li>
@@ -16,4 +18,3 @@
 </a> <a href="/quadriga/logout"
 	style="margin: 2px 10px; padding: 0px 0px 0px 0px; font-size: 80%">
 		Logout </a></li>
-

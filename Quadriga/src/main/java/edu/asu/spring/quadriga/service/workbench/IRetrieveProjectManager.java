@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IRetrieveProjectManager {
@@ -39,5 +40,8 @@ public interface IRetrieveProjectManager {
             throws QuadrigaStorageException;
     
 	public abstract List<IProject> getRecentProjectList(String sUserName)
+			throws QuadrigaStorageException;
+	
+	public abstract List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) 
 			throws QuadrigaStorageException;
 }

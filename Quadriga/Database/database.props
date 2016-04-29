@@ -1,4 +1,0 @@
-dbname=quadriga
-dbuser=root
-dbadmin=root
-mysqllocation='B:\Program Files\MySQL\MySQL Server 5.6\bin\mysql.exe'
