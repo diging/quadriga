@@ -12,23 +12,23 @@
 <div>
     <ul>
         <li><a
-            href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${publicpageprojectid}"><span
+            href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><span
                 class="glyphicon glyphicon-circle-arrow-left"></span> Back to Project
         </a></li>
     </ul>
 </div>
 
-<h2 class="major" href="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/settings">
+<h2 class="major" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/settings">
 	<span>Settings</span>
 </h2>
 <a
-    href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${publicpageprojectid}/settings"><i class="fa fa-cog"></i> Main Page Settings</a>
+    href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Main Page Settings</a>
    
 <br>
 <a
-	href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${publicpageprojectid}/settings/editabout"><i
+	href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout"><i
 	class="fa fa-info-circle"></i> About Page</a>
 <br>
 <a
-    href="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/statistics"><i
+    href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/statistics"><i
     class="fa fa-bar-chart"></i> Statistics Page</a>

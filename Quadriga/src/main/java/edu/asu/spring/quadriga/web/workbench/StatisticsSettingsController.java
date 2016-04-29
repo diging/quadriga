@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.workbench;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,8 +17,10 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IStatisticsSettings;
 import edu.asu.spring.quadriga.domain.impl.workbench.StatisticsSettingsBean;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workbench.StatisticsSettingsService;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -26,6 +29,9 @@ public class StatisticsSettingsController {
 
     @Autowired
     private StatisticsSettingsService statsSettingsService;
+
+    @Autowired
+    IRetrieveProjectManager projectManager;
 
     /**
      * This method loads necessary settings option for statistics page if user
@@ -44,7 +50,9 @@ public class StatisticsSettingsController {
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         ModelAndView model = new ModelAndView("auth/workbench/publicstatistics");
-        model.getModelMap().put("publicpageprojectid", projectid);
+        IProject project = projectManager.getProjectDetails(projectid);
+        model.getModelMap().put("project", project);
+
         List<IStatisticsSettings> statisticsSettingsList = statsSettingsService
                 .getStatisticsSettingsList(projectid);
         model.getModelMap().put("statistics", statisticsSettingsList);
@@ -80,7 +88,7 @@ public class StatisticsSettingsController {
             attr.addFlashAttribute("show_success_alert", true);
             attr.addFlashAttribute("success_alert_msg",
                     "Settings has been updated successfully.");
-            model.getModelMap().put("publicpageprojectid", projectid);
+            model.getModelMap().put("projectid", projectid);
         } catch (QuadrigaStorageException e) {
             StringBuffer errorMsg = new StringBuffer();
             attr.addFlashAttribute("show_error_alert", true);

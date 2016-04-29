@@ -36,7 +36,7 @@
 <input type="button" value="Deselect All" name="deselectAll">
 
 <form:form method="POST" modelAttribute="statisticsSettingsBean"
-	action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/submitstatistics">
+	action="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/submitstatistics">
 
 	<table class="display dataTable" cellpadding="0" cellspacing="0"
 		border="0" style="width: 100%">
