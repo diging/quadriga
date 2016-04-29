@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.rest;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,14 +28,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
@@ -50,10 +47,8 @@ import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
-import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**

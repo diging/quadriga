@@ -35,6 +35,23 @@ $("input[type=button]").button().click(function(event) {
 <body
 	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
 
+
+
+<!-- <div id="dspace_metadata"></div>  -->
+
+
+
+
+<div id="chart"></div>
+
+<div id="inner-details"></div>
+<div id="allannot_details">
+<table id = annotationsTable></table>
+</div>
+
+
+<div id="log"></div>
+
 <button type="submit" onclick="goFullscreen('chart')" style="float: left">
     <i class="fa fa-arrows-alt"></i> 
     
@@ -118,3 +135,24 @@ function exitHandler()
     }
 }
 </script>
+>>>>>>> refs/heads/develop
+=======
+
+
+
+<!-- <div id="dspace_metadata"></div>  -->
+
+
+
+
+<div id="chart"></div>
+
+<div id="inner-details"></div>
+<div id="allannot_details">
+<table id = annotationsTable></table>
+</div>
+
+
+<div id="log"></div>
+
+>>>>>>> refs/heads/story/QUAD-153
