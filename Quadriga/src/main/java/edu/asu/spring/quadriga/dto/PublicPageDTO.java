@@ -16,88 +16,88 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "tbl_publicpage")
 @XmlRootElement
-
-@NamedQueries({ @NamedQuery(name = "PublicPageDTO.findAll", query = "SELECT pp FROM PublicPageDTO pp"),
-		@NamedQuery(name = "PublicPageDTO.findByProjectId", query = "SELECT p FROM PublicPageDTO p WHERE p.projectid = :projectId"), })
+@NamedQueries({
+        @NamedQuery(name = "PublicPageDTO.findAll", query = "SELECT pp FROM PublicPageDTO pp"),
+        @NamedQuery(name = "PublicPageDTO.findByProjectId", query = "SELECT p FROM PublicPageDTO p WHERE p.projectid = :projectId"), })
 public class PublicPageDTO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "publicpageid")
-	private String publicpageid;
+    @Id
+    @Column(name = "publicpageid")
+    private String publicpageid;
 
-	@Column(name = "title")
-	private String title;
+    @Column(name = "title")
+    private String title;
 
-	@Lob
-	@Column(name = "description")
-	private String description;
+    @Lob
+    @Column(name = "description")
+    private String description;
 
-	@Column(name = "entryorder")
-	private int entryorder;
+    @Column(name = "entryorder")
+    private int entryorder;
 
-	@Column(name = "projectid")
-	private String projectid;
+    @Column(name = "projectid")
+    private String projectid;
 
-	@JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
-	@ManyToOne
-	private ProjectDTO projectDTO;
-	
-	private String linkTo;
+    @JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
+    @ManyToOne
+    private ProjectDTO projectDTO;
+
+    private String linkTo;
     private String linkText;
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public int getEntryorder() {
-		return entryorder;
-	}
+    public int getEntryorder() {
+        return entryorder;
+    }
 
-	public void setEntryorder(int entryorder) {
-		this.entryorder = entryorder;
-	}
+    public void setEntryorder(int entryorder) {
+        this.entryorder = entryorder;
+    }
 
-	public String getProjectid() {
-		return projectid;
-	}
+    public String getProjectid() {
+        return projectid;
+    }
 
-	public void setProjectid(String projectid) {
-		this.projectid = projectid;
-	}
+    public void setProjectid(String projectid) {
+        this.projectid = projectid;
+    }
 
-	public ProjectDTO getProjectDTO() {
-		return projectDTO;
-	}
+    public ProjectDTO getProjectDTO() {
+        return projectDTO;
+    }
 
-	public void setProjectDTO(ProjectDTO projectDTO) {
-		this.projectDTO = projectDTO;
-	}
+    public void setProjectDTO(ProjectDTO projectDTO) {
+        this.projectDTO = projectDTO;
+    }
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 
-	public String getPublicpageid() {
-		return publicpageid;
-	}
+    public String getPublicpageid() {
+        return publicpageid;
+    }
 
-	public void setPublicpageid(String publicpageid) {
-		this.publicpageid = publicpageid;
-	}
+    public void setPublicpageid(String publicpageid) {
+        this.publicpageid = publicpageid;
+    }
 
     public String getLinkTo() {
         return linkTo;
