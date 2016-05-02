@@ -43,6 +43,9 @@ public class PublicPageDTO implements Serializable {
 	@JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
 	@ManyToOne
 	private ProjectDTO projectDTO;
+	
+	private String linkTo;
+    private String linkText;
 
 	public String getTitle() {
 		return title;
@@ -95,4 +98,20 @@ public class PublicPageDTO implements Serializable {
 	public void setPublicpageid(String publicpageid) {
 		this.publicpageid = publicpageid;
 	}
+
+    public String getLinkTo() {
+        return linkTo;
+    }
+
+    public void setLinkTo(String linkTo) {
+        this.linkTo = linkTo;
+    }
+
+    public String getLinkText() {
+        return linkText;
+    }
+
+    public void setLinkText(String linkText) {
+        this.linkText = linkText;
+    }
 }

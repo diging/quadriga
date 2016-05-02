@@ -8,6 +8,8 @@ public class PublicPage implements IPublicPage {
 	private String description;
 	private int order;
 	private String projectId;
+	private String linkTo;
+	private String linkText;
 
 	/**
 	 * retrieves the Title
@@ -70,5 +72,21 @@ public class PublicPage implements IPublicPage {
 	public void setPublicPageId(String publicPageId) {
 		this.publicPageId = publicPageId;
 	}
+
+    public String getLinkTo() {
+        return linkTo;
+    }
+
+    public void setLinkTo(String linkTo) {
+        this.linkTo = linkTo;
+    }
+
+    public String getLinkText() {
+        return linkText;
+    }
+
+    public void setLinkText(String linkText) {
+        this.linkText = linkText;
+    }
 
 }

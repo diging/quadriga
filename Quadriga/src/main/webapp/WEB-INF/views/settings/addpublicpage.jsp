@@ -16,6 +16,9 @@ $("#submit3").click(function(){performAction(this)});
 		var title = $(obj).closest('div.publicpageform').find('.titleValue').val();
 		var desc = $(obj).closest('div.publicpageform').find('.descValue').val();
 		var order = $(obj).closest('div.publicpageform').find('.orderValue').val();
+		var linkTo = $(obj).closest('div.publicpageform').find('.linkTo').val();
+		var linkText = $(obj).closest('div.publicpageform').find('.linkText').val();
+		
 		var mandatory = 0;
 		if (title.length < 1) {
 			$(obj).closest('div.publicpageform').find('#title_err').html("Please provide a title");
@@ -35,13 +38,32 @@ $("#submit3").click(function(){performAction(this)});
 		} else {
 			$(obj).closest('div.publicpageform').find('#order_err').html('');
 		}
+		
+		if (linkTo.length < 1) {
+			$(obj).closest('div.publicpageform').find('#linkTo_err').html("Please specify where to link to.");
+            mandatory = 1;
+		} else {
+            $(obj).closest('div.publicpageform').find('#linkTo_err').html('');
+        }
+		
+		/*if (linkText.length < 1) {
+            $(obj).closest('div.publicpageform').find('#linkText_err').html("Please specify a link text.");
+            mandatory = 1;
+        } else {
+            $(obj).closest('div.publicpageform').find('#linkText_err').html('');
+        }*/
+		
 		if (mandatory) {
 			return false;
 		}
+		
+		/* if all checks pass submit */
 		data["title"] = title;
 		data["desc"] = desc;
 		data["order"] = order;
 		data["publicpageid"] = publicpageid;
+		data["linkTo"] = linkTo;
+		data["linkText"] = linkText;
 		$
 				.ajax({
 					type : "POST",
@@ -53,7 +75,7 @@ $("#submit3").click(function(){performAction(this)});
 						$(obj).closest('div.publicpageform').find('#success_message').html('Successfully Updated');
 					},
 					error : function(e) {
-						console.log("ERROR: ", e);
+						console.log("ERROR: ", e.responseText);
 					}
 				});
 	}
@@ -84,9 +106,22 @@ $("#submit3").click(function(){performAction(this)});
 							class="ui-state-error-text"></form:errors></td>
 				</tr>
 				<tr>
+				    <td style="vertical-align: top">Link to *</td>
+				    <td><form:select path="linkTo" class="linkTo" items="${linkTypes}" /></td>
+				    <td><div id="linkTo_err"></div></td>
+				    <td></td>
+				</tr>
+				<tr>
+                    <td style="vertical-align: top">Link Text *</td>
+                    <td style="width: 1px"><input class="linkText" type="text" id="linkText1"
+                        path="linkText"></td>
+                    <td><div id="linkText_err"></div></td>
+                    <td></td>
+                </tr>
+				<tr>
 					<td style="width: 170px">Order Preference *</td>
 					<td style="width: 1px"><input type="number" id="order1"
-						path="order" class="orderValue" value="${publicpageObject0.order}">
+						path="order" class="orderValue" value="${publicpageObject0.order}"></td>
 					<td><div id="order_err"></div></td>
 					<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 				</tr>
