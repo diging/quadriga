@@ -20,9 +20,9 @@ import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
- * @author Nischal Samji
+ * Data Access Object for performing Text File Operations.
  * 
- *         Data Access Object for performing Text File Operations.
+ * @author Nischal Samji
  *
  */
 @Repository
@@ -47,19 +47,17 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
             query.setParameter("wsId", wsId);
             tfDTO = (List<TextFileDTO>) query.list();
         } catch (HibernateException e) {
-            logger.error("TextFile List associated with workspace id"+wsId, e);
+            logger.error("TextFile List associated with workspace id" + wsId, e);
             throw new QuadrigaStorageException(e);
         }
         return tfDTO;
 
     }
 
-    
     @Override
     public TextFileDTO getDTO(String id) {
         return getDTO(TextFileDTO.class, id);
     }
-
 
     @Override
     public String getIdPrefix() {

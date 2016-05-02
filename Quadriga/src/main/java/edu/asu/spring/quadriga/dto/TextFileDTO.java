@@ -10,9 +10,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Nischal Samji
+ * DTO for Text File Operations
  * 
- *         DTO for Text File Operations
+ * @author Nischal Samji
  *
  */
 @Entity
@@ -22,7 +22,7 @@ public class TextFileDTO implements Serializable {
     private static final long serialVersionUID = -1798070786993154676L;
 
     @Id
-    @Column(name = "textid", unique=true)
+    @Column(name = "textid", unique = true)
     private String textId;
     @Column(name = "refid")
     private String refId;

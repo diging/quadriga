@@ -6,7 +6,9 @@ import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 
 /**
- * @author Nischal Samji Interface for File Save Service methods
+ * Interface for File Save Service methods
+ * 
+ * @author Nischal Samji
  *
  */
 public interface IFileSaveService {
@@ -19,14 +21,13 @@ public interface IFileSaveService {
      * @throws FileStorageException
      */
     boolean saveFileToLocal(ITextFile txtFile) throws FileStorageException;
-    
+
     /**
      * @param filename
-     *         Name of the file to be retrieved.
+     *            Name of the file to be retrieved.
      * @param txtId
-     *          ID of the Textfile in Quadriga, also the directory.
-     * @return
-     *          returns content of the file as a string.
+     *            ID of the Textfile in Quadriga, also the directory.
+     * @return returns content of the file as a string.
      * @throws FileStorageException
      */
     String retrieveFileFromLocal(String filename, String txtId) throws FileStorageException;
