@@ -80,7 +80,7 @@ public class TextUploadRestController {
             engine.init();
             Template template =  engine.getTemplate("velocitytemplates/textfile.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-            context.put("textid", "dummy");
+            context.put("textid", txtFile.getTextId());
             context.put("refid", txtFile.getRefId());
             context.put("filename", txtFile.getFileName());
             context.put("wsid", txtFile.getWorkspaceId());
