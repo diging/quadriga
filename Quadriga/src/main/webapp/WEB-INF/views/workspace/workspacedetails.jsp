@@ -28,12 +28,13 @@
 			var link = $(event.relatedTarget);
 			
 			var txtid = link.data('txtid');
-			
+			var txtname = link.data('txtname');
 			$.ajax({
 				  type : "GET",
 				  url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid="+txtid,
 				  contentType: "text/plain",
 				  success:function(details){
+					 $('.modal-title').text(txtname);
 					 $('.modal-body').text(details);
 				  },
 				  
@@ -361,7 +362,7 @@
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
 									<td width="25%" align="center">
-									<a data-toggle="modal" data-target="#txtModal" data-txtId="${textfile.textId}"><c:out
+									<a data-toggle="modal" data-target="#txtModal" data-txtid="${textfile.textId}" data-txtname="${textfile.fileName}"><c:out
 											value="${textfile.fileName}"></c:out></a></td>
 									<td width="25%" align="center"><c:out
 											value="${textfile.refId}"></c:out></td>
@@ -453,7 +454,7 @@
     <div class="modal-dialog">
         <div class="modal-content ">
             <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Text Content</h4>
+            <h4 class="modal-title" id="myModalLabel"></h4>
             </div>
             <div class="modal-body">
 
