@@ -366,9 +366,6 @@
 									<td width="25%" align="center"><c:out
 											value="${textfile.refId}"></c:out></td>
 								</tr>
-								<script>
-								
-								</script>
 							</c:forEach>
 						</tbody>
 					</table>
@@ -377,12 +374,7 @@
 					<spring:message code="empty.textfiles" />
 				</c:otherwise>
 			</c:choose>
-		</td>
-		<hr>
-
-		<hr>
-		<!-- Display Networks -->
-		<c:choose>
+			<hr> <!-- Display Networks --> <c:choose>
 				<c:when test="${not empty networkList}">
 					<span class="byline">Networks belonging to this workspace</span>
 					<hr>
@@ -400,8 +392,7 @@
 							<c:forEach var="network" items="${networkList}">
 								<tr>
 									<td width="25%" align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${network.network.networkName}"></c:out>" />
+										type="hidden" value="<c:out value="${network.network.networkName}"></c:out>" />
 										<c:out value="${network.network.networkName}"></c:out></td>
 									<td width="25%" align="center"><c:out
 											value="${network.network.creator.userName}"></c:out></td>
@@ -421,6 +412,7 @@
 			</c:choose>
 		</td>
 
+		
 		<!-- Display collaborators -->
 		<td style="width: 200px">
 			<h3 class="major">
@@ -459,7 +451,7 @@
 </table>
 <div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog" aria-labelledby="txtModal" aria-hidden="true" >
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content ">
             <div class="modal-header">
             <h4 class="modal-title" id="myModalLabel">Text Content</h4>
             </div>
