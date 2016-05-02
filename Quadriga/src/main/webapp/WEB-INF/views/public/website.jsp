@@ -40,21 +40,21 @@
   <div class="col-lg-4">
     <h2>${blocks[0].title}</h2>
     <p>${blocks[0].description}</p>
-    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/browsenetworks" role="button">Browse</a></p>
+    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/${blocks[0].linkTo}" role="button">${blocks[0].linkText}</a></p>
   </div>
 </c:if>
 <c:if test="${not empty blocks[1]}">
   <div class="col-lg-4">
     <h2>${blocks[1].title}</h2>
     <p>${blocks[1].description}</p>
-    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/networks" role="button">Explore</a></p>
+    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/${blocks[1].linkTo}" role="button">${blocks[1].linkText}</a></p>
  </div>
  </c:if>
  <c:if test="${not empty blocks[2]}">
   <div class="col-lg-4">
-    <h2>${blocks[3].title}</h2>
-    <p>${blocks[3].description}</p>
-    <p><a class="btn btn-primary" href="#" role="button">Search</a></p>
+    <h2>${blocks[2].title}</h2>
+    <p>${blocks[2].description}</p>
+    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/${blocks[2].linkTo}" role="button">${blocks[2].linkText}</a></p>
   </div>
 </c:if>
 </div>

@@ -1,6 +1,8 @@
 package edu.asu.spring.quadriga.web.settings;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,23 +62,36 @@ public class PublicPageSettingsController {
 		model.getModel().put("publicpage", publicPageFactory.createPublicPageObject());
 		model.getModelMap().put("publicpageprojectid", projectid);
 		model.getModel().put("project", projectManager.getProjectDetails(projectid));
+		
+		Collections.sort(publicPageList, new Comparator<IPublicPage>() {
+
+            @Override
+            public int compare(IPublicPage o1, IPublicPage o2) {
+               return o1.getOrder() - o2.getOrder();
+            }
+        });
 
 		for (IPublicPage publicPage : publicPageList) {
 			model.getModel().put("publicpageObject" + publicPageList.indexOf(publicPage), publicPage);
 		}
 		
-		Map<String, String> linkTypes = new HashMap<String, String>();
+		Map<String, String> linkTypes = getLinkTargetMap();
+		
+		model.getModel().put("linkTypes", linkTypes);
+
+		return model;
+	}
+
+    private Map<String, String> getLinkTargetMap() {
+        Map<String, String> linkTypes = new HashMap<String, String>();
 		linkTypes.put(IPublicPageBlockLinkTargets.ABOUT, "About Text");
 		linkTypes.put(IPublicPageBlockLinkTargets.BLOG, "Project Blog");
 		linkTypes.put(IPublicPageBlockLinkTargets.BROWSE, "Browse Networks");
 		linkTypes.put(IPublicPageBlockLinkTargets.EXPLORE, "Explore Combined Network");
 		linkTypes.put(IPublicPageBlockLinkTargets.SEARCH, "Search Networks");
 		linkTypes.put(IPublicPageBlockLinkTargets.STATS, "Project Statistics");
-		
-		model.getModel().put("linkTypes", linkTypes);
-
-		return model;
-	}
+        return linkTypes;
+    }
 
 	/**
 	 * This method is used update the database with the information provided in
@@ -93,7 +108,7 @@ public class PublicPageSettingsController {
 
 	    List<String> validationFailed = new ArrayList<String>();    
 	    
-		PublicPage publicpageentry = new PublicPage();
+		IPublicPage publicpageentry = new PublicPage();
 		if (validate("title", validationFailed, data)) {
 	        publicpageentry.setTitle(data.getString("title"));
 	    }
@@ -117,8 +132,12 @@ public class PublicPageSettingsController {
 		
 		String linkTo = data.getString("linkTo");
 		if (validate("linkTo", validationFailed, data)) {
-		    publicpageentry.setLinkTo(linkTo);
-	        
+		    Map<String, String> linkTypes = getLinkTargetMap();
+		    if (!linkTypes.keySet().contains(linkTo)) {
+		        validationFailed.add("linkTo");
+		    } else {
+		        publicpageentry.setLinkTo(linkTo);
+		    }
 		}
 		
 		String linkText = data.getString("linkText");
@@ -128,9 +147,8 @@ public class PublicPageSettingsController {
 		
 		if (!validationFailed.isEmpty()) {
 		    JSONObject fieldList = new JSONObject();
-		    JSONArray array = new JSONArray();
-		    validationFailed.forEach(item -> array.put(item));
-		    fieldList.append("fields", array);
+		    fieldList.put("fields", validationFailed);
+		    
 		    return new ResponseEntity<String>(fieldList.toString(), HttpStatus.BAD_REQUEST);
 		}
 		

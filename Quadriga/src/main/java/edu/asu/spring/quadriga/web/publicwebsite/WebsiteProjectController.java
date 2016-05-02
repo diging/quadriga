@@ -3,7 +3,9 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -26,6 +28,7 @@ import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.publicwebsite.IPublicPageBlockLinkTargets;
 import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
@@ -95,6 +98,9 @@ public class WebsiteProjectController {
                 return o1.getOrder() - o2.getOrder();
             }
         });
+        
+        Map<String, String> linkToMap = getLinkTargetMap();
+        publicPages.forEach(item -> item.setLinkTo(linkToMap.get(item.getLinkTo())));
         
         model.addAttribute("blocks", publicPages);
         
@@ -224,6 +230,20 @@ public class WebsiteProjectController {
 
         return "sites/networks/explore";
 
+    }
+    
+    /*
+     * This is kind of ugly and should be replace with a better solution. But well, it works.
+     */
+    private Map<String, String> getLinkTargetMap() {
+        Map<String, String> linkTypes = new HashMap<String, String>();
+        linkTypes.put(IPublicPageBlockLinkTargets.ABOUT, "about");
+        linkTypes.put(IPublicPageBlockLinkTargets.BLOG, "projectBlog");
+        linkTypes.put(IPublicPageBlockLinkTargets.BROWSE, "browsenetworks");
+        linkTypes.put(IPublicPageBlockLinkTargets.EXPLORE, "networks");
+        linkTypes.put(IPublicPageBlockLinkTargets.SEARCH, "search");
+        linkTypes.put(IPublicPageBlockLinkTargets.STATS, "statistics");
+        return linkTypes;
     }
 
 }

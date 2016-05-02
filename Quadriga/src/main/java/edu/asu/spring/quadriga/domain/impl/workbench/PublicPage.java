@@ -73,18 +73,22 @@ public class PublicPage implements IPublicPage {
 		this.publicPageId = publicPageId;
 	}
 
+    @Override
     public String getLinkTo() {
         return linkTo;
     }
 
+    @Override
     public void setLinkTo(String linkTo) {
         this.linkTo = linkTo;
     }
 
+    @Override
     public String getLinkText() {
         return linkText;
     }
 
+    @Override
     public void setLinkText(String linkText) {
         this.linkText = linkText;
     }

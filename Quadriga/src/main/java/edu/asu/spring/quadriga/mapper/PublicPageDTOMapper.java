@@ -17,6 +17,8 @@ public class PublicPageDTOMapper extends BaseMapper {
 		publicPage.setDescription(publicPageDTO.getDescription());
 		publicPage.setOrder(publicPageDTO.getEntryorder());
 		publicPage.setProjectId(publicPageDTO.getProjectid());
+		publicPage.setLinkText(publicPageDTO.getLinkText());
+		publicPage.setLinkTo(publicPageDTO.getLinkTo());
 		return publicPage;
 	}
 
@@ -27,6 +29,8 @@ public class PublicPageDTOMapper extends BaseMapper {
 		publicPageDTO.setDescription(publicPage.getDescription());
 		publicPageDTO.setEntryorder(publicPage.getOrder());
 		publicPageDTO.setProjectid(publicPage.getProjectId());
+		publicPageDTO.setLinkText(publicPage.getLinkText());
+		publicPageDTO.setLinkTo(publicPage.getLinkTo());
 		return publicPageDTO;
 	}
 }
