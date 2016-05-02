@@ -1,3 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
+
+
 <li ${currentPage == "home" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">Home</a></li>
 <li ${currentPage == "about" ? "class=\"active\"" : ""}><a
@@ -13,6 +20,13 @@
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/statistics">Statistics</a></li>
 <li ${currentPage == "networksearch" ? "class=\"active\"" : ""}><a
 	href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/search">Search</a></li>
-
-
+<sec:authorize access="isAuthenticated()">
+	<li class="two-row-li">
+	   <div class="navbar-two-rows"><i class="fa fa-user"></i>
+	       <sec:authentication property="principal.username" />
+	   </div>
+	   <div class="navbar-two-rows"><i class="fa fa-sign-out"></i>
+	       <a href="<c:url value="/logout" />"class="navbar-two-rows">
+            Logout </a></div>
+</sec:authorize>
 

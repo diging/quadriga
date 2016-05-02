@@ -149,5 +149,4 @@ public class NetworkSearchController {
 
         return "sites/networks/searchednetwork";
     }
-
 }

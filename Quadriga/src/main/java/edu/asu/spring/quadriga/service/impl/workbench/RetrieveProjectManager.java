@@ -44,7 +44,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	
 	@Autowired
 	private Environment env;
-	
+
 	/**
 	 * This method returns the list of projects associated with
 	 * the logged in user. It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
@@ -331,4 +331,3 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
     	return projectProxy;
     }
 }
-

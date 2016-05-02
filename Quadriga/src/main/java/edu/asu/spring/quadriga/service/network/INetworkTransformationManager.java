@@ -1,5 +1,8 @@
 package edu.asu.spring.quadriga.service.network;
 
+import java.util.List;
+
+import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 
@@ -28,5 +31,11 @@ public interface INetworkTransformationManager {
 			throws QuadrigaStorageException;
 
 	ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId)
+			throws QuadrigaStorageException;
+	
+	ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId)
+			throws QuadrigaStorageException;
+	
+	ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList)
 			throws QuadrigaStorageException;
 }
