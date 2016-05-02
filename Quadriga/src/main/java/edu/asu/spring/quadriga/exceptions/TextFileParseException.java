@@ -1,5 +1,12 @@
 package edu.asu.spring.quadriga.exceptions;
 
+/**
+ * Custom Exception for Text File Parsing errors
+ * 
+ * @author Nischal Samji
+ * 
+ *
+ */
 public class TextFileParseException extends Exception{
     private static final long serialVersionUID = 8523464165493041575L;
 

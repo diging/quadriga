@@ -106,7 +106,7 @@ public class TextUploadRestController {
             context.put("filename", txtFile.getFileName());
             context.put("wsid", txtFile.getWorkspaceId());
             context.put("projid", txtFile.getProjectId());
-            context.put("texturi", textURI + "/" + "dummy");
+            context.put("texturi", textURI + "/" + txtFile.getTextId());
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             HttpHeaders httpHeaders = new HttpHeaders();
