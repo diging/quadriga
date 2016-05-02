@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.web.workspace;
 
+
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,86 +32,87 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class AddWSController {
-    @Autowired
-    private IWorkspaceFactory workspaceFactory;
+	@Autowired
+	private IWorkspaceFactory workspaceFactory;
 
-    @Autowired
-    IUserManager userManager;
+	@Autowired 
+	IUserManager userManager;
 
-    @Autowired
-    IModifyWSManager modifyWSManger;
+	@Autowired
+	IModifyWSManager modifyWSManger;
 
-    @Autowired
-    IWSSecurityChecker workspaceSecurity;
+	@Autowired
+	IWSSecurityChecker workspaceSecurity;
+	
+	@Autowired
+	WorkspaceValidator validator;
+	
+	/**
+	 * Attach the custom validator to the Spring context
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
 
-    @Autowired
-    WorkspaceValidator validator;
-
-    /**
-     * Attach the custom validator to the Spring context
-     */
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-
-        binder.setValidator(validator);
-    }
-
-    /**
-     * This is called on the addworkspace form load.
+		binder.setValidator(validator);
+	}
+	
+	/**
+	 * This is called on the addworkspace form load.
      * 
-     * @param model
-     * @return String - containing the path to addworkspace jsp page.
-     * @throws QuadrigaStorageException
-     * @author Kiran Kumar Batna
-     * @throws QuadrigaAccessException
-     */
+	 * @param     model
+	 * @return    String - containing the path to addworkspace jsp page.
+	 * @throws QuadrigaStorageException 
+	 * @author    Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
+	 */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
             RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
-    @RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.GET)
+	@RequestMapping(value="auth/workbench/{projectid}/addworkspace", method=RequestMethod.GET)
     public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        ModelAndView model;
-        model = new ModelAndView("auth/workbench/workspace/addworkspace");
-        model.getModelMap().put("workspace", workspaceFactory.createWorkspaceObject());
-        model.getModelMap().put("wsprojectid", projectid);
-        model.getModelMap().put("success", 0);
-        return model;
-    }
+		ModelAndView model;
+		
+			model = new ModelAndView("auth/workbench/workspace/addworkspace");
+			model.getModelMap().put("workspace", workspaceFactory.createWorkspaceObject());
+			model.getModelMap().put("wsprojectid", projectid);
+			model.getModelMap().put("success", 0);
+			return model;
+	}
 
-    /**
-     * This calls workspace manager to add workspace details into the database.
+	/**
+	 * This calls workspace manager to add workspace details into the database.
      * 
-     * @param workspace
-     * @param model
-     * @param principal
+	 * @param    workspace
+	 * @param    model
+	 * @param    principal
      * @return String - On success loads success page and on failure loads the
      *         same form with error messages.
-     * @throws QuadrigaStorageException
-     * @author Kiran Kumar Batna
-     * @throws QuadrigaAccessException
-     */
+	 * @throws  QuadrigaStorageException
+	 * @author  Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
+	 */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
             RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
-    @RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.POST)
     public ModelAndView addWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
             BindingResult result, @PathVariable("projectid") String projectid, Principal principal)
                     throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addworkspace");
         if (result.hasErrors()) {
-            model.getModelMap().put("workspace", workspace);
-            model.getModelMap().put("wsprojectid", projectid);
-            model.getModelMap().put("success", 0);
-            return model;
+				model.getModelMap().put("workspace", workspace);
+				model.getModelMap().put("wsprojectid", projectid);
+				model.getModelMap().put("success", 0);
+				return model;
         } else {
             String userName = principal.getName();
             IUser user= userManager.getUser(userName);
-            workspace.setOwner(user);
-            modifyWSManger.addWorkspaceToProject(workspace, projectid);
-            model.getModelMap().put("success", 1);
-            model.getModelMap().put("wsprojectid", projectid);
-            return model;
-        }
-    }
+			workspace.setOwner(user);
+			modifyWSManger.addWorkspaceToProject(workspace, projectid);
+			model.getModelMap().put("success", 1);
+			model.getModelMap().put("wsprojectid", projectid);
+			return model;
+			}
+	}
 }

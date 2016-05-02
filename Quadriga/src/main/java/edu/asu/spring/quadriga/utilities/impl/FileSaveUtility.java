@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
@@ -42,7 +43,7 @@ public class FileSaveUtility implements IFileSaveUtility {
             fos.write(fileContent);
             fos.close();
         } catch (IOException e) {
-            throw new FileStorageException("Default directory not specified in configuration");
+            throw new FileStorageException(e);
         }
 
         return true;
@@ -60,18 +61,22 @@ public class FileSaveUtility implements IFileSaveUtility {
             fis.read(fileBytes);
 
         } catch (IOException e) {
-            throw new FileStorageException("Default directory not specified in configuration");
+            throw new FileStorageException(e);
         } finally {
             try {
                 if (fis != null) {
                     fis.close();
                 }
             } catch (IOException e) {
-                throw new FileStorageException("Default directory not specified in configuration");
+                throw new FileStorageException(e);
             }
 
         }
-        return new String(fileBytes);
+        try {
+            return new String(fileBytes,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new FileStorageException(e);
+        }
     }
 
 }

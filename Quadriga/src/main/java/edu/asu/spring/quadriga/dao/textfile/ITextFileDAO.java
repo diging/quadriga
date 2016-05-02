@@ -7,9 +7,9 @@ import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
- * @author Nischal Samji
+ * Interface for TextFileDAO Operations
  * 
- *         Interface for TextFileDAO Operations
+ * @author Nischal Samji
  *
  */
 public interface ITextFileDAO extends IBaseDAO<TextFileDTO> {
@@ -20,7 +20,5 @@ public interface ITextFileDAO extends IBaseDAO<TextFileDTO> {
      * @return Returns a list of TextFiles related to the workspace
      */
     public abstract List<TextFileDTO> getTextFileDTObyWsId(String wsId) throws QuadrigaStorageException;
-
-
 
 }

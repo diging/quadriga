@@ -6,7 +6,9 @@ import java.io.IOException;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 
 /**
- * @author Nischal Samji Interface for file Save and retrieve operations
+ * Interface for file Save and retrieve operations
+ * 
+ * @author Nischal Samji
  *
  */
 public interface IFileSaveUtility {
@@ -23,8 +25,7 @@ public interface IFileSaveUtility {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent)
-            throws FileStorageException;
+    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws FileStorageException;
 
     /**
      * @param fileName

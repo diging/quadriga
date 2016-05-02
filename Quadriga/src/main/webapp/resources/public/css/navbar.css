@@ -57,3 +57,15 @@ table.networks {
 	width: 96%;
 }
 
+li.two-row-li {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: center;
+}
+
+div.navbar-two-rows, div.navbar-two-rows a {
+	padding: 2px 0px 2px 0px;
+	margin: 2px 0px 2px 0px;
+	font-size: 11px;
+	color: white;
+}

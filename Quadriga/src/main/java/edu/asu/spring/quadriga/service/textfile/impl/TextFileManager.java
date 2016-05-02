@@ -32,30 +32,27 @@ public class TextFileManager implements ITextFileManager {
     @Autowired
     private IFileSaveService fileSaveServ;
 
-    @Qualifier("txtfileSaveUtil")
-    @Autowired
-    private IFileSaveUtility fileManager;
-
     @Autowired
     private ITextFileMapper tfSMapper;
 
-    
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, QuadrigaStorageException {
         String txtId = txtFileDAO.generateUniqueID();
         txtFile.setTextId(txtId);
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
         txtFileDTO.setTextId(txtId);
-        txtFileDAO.saveNewDTO(txtFileDTO);
-        return fileSaveServ.saveFileToLocal(txtFile);
+        boolean status = fileSaveServ.saveFileToLocal(txtFile);
+        if (status == true) {
+            txtFileDAO.saveNewDTO(txtFileDTO);
+        }
+        return status;
     }
 
     @Override
     public List<ITextFile> retrieveTextFiles(String wsId) throws QuadrigaStorageException {
         List<TextFileDTO> tfDTOList = txtFileDAO.getTextFileDTObyWsId(wsId);
         List<ITextFile> tfList = new ArrayList<>();
-        for(TextFileDTO tfDTO : tfDTOList)
-        {
+        for (TextFileDTO tfDTO : tfDTOList) {
             tfList.add(tfSMapper.getTextFile(tfDTO));
         }
         return tfList;
@@ -64,14 +61,12 @@ public class TextFileManager implements ITextFileManager {
 
     @Override
     public String retrieveTextFileContent(String txtId) throws FileStorageException {
-
         TextFileDTO tfDTO = txtFileDAO.getDTO(txtId);
-        String fileName= tfDTO.getFilename();
-        if(!fileName.contains("."))
-            fileName+=".txt";
-        return fileManager.readFileContent(fileName, tfDTO.getTextId());
+        String fileName = tfDTO.getFilename();
+        if (!fileName.contains("."))
+            fileName += ".txt";
+        return fileSaveServ.retrieveFileFromLocal(fileName, txtId);
 
-        
     }
 
 }

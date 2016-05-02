@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<sec:authentication var="principal" property="principal" />
 
 <script>
     $(document).ready(function() {
@@ -13,12 +11,26 @@
         $("ul.pagination1").quickPagination({
             pageSize : "3"
         });
+	});
         
+	$(function() 
+			{
+				    $( "#tabs" ).tabs();
+			});
         
-    });
+	/* inactiveWS()
+	{
+		location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showInactiveWorkspace';
+	} */
     
 </script>
 
+<style>
+   .tabs
+   {
+	font-size: 80%;
+   }
+</style>
 
 <table style="width: 100%">
     <tr>
@@ -26,17 +38,15 @@
         <td>
             <h2>Project: ${project.projectName}</h2>
             <div>${project.description}</div>
-            <c:if test="${owner=='1' or isProjectAdmin}">
             <div style="text-align:right">
-            <a class = "editProject" href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project
             </a>
             </div>
             
             <div style="text-align:right">
-            <a class = "editProject" href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"><i class="fa fa-pencil-square-o"></i> Edit Project URL
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project URL
             </a>
             </div>
-            </c:if>
             
             <hr>
             <div class="user">Owned by: ${project.owner.name} <c:if test="${owner=='1'}">(<a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">Change</a>)</c:if></div>
@@ -52,17 +62,16 @@
                     <img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses.png"> You are an Editor on this Project
                     (<a href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.projectId}">Remove me as Editor</a>)
                     </c:if>
-            
+
+			
             <hr> <!--  Display associated workspace -->
             
             <strong>Workspaces in this project:</strong>
             <ul>
             <c:forEach var="workspace" items="${workspaceList}">
-                <li class="ws">
+				<li class="ws with-icon">
                     <a
-                    href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}">
-                    <i class="fa fa-folder-open"></i>
-                    <c:out
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
                             value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
                         
                     <c:out
@@ -71,21 +80,17 @@
             </c:forEach>
             
             <c:forEach var="workspace" items="${collabworkspacelist}">
-            <li  class="ws">
-                 <a
-                    href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}">
-                 <i class="fa fa-folder-open"></i>
-                 <c:out
+			<li  class="ws with-icon"><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
                     value="${workspace.workspaceName}"></c:out></a> (Collaborator)<br> <c:out
                     value="${workspace.description}"></c:out></li>
             </c:forEach>
             </ul>
             
-            <c:if test="${owner=='1' or isProjectAdmin}">
+				
             <div style="float:right;">
-                <a class="addworkspace" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace"><i class="fa fa-plus-circle"></i> Add Workspace</a>
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add Workspace</a>
             </div>
-            </c:if>
             
             <div style="clear:right;">
             <c:if test="${empty workspaceList}">
@@ -133,18 +138,10 @@
                 <hr>
                 <c:choose>
                     <c:when test="${owner=='1'}">
-                        <ul>
-                        <li>
                             <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
-                                <i class="fa fa-archive"></i> Show Inactive Workspace <span><c:out value="(${deactivatedWSSize})" /></span>
+						<img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/archive.png"> Show Inactive Workspace
                             </a> 
-                        </li>
-                        <li>
-                            <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showarchivedworkspace">
-                                <i class="fa fa-archive"></i> Show Archived Workspace <span><c:out value="(${archivedWSSize})" /></span>
-                            </a>
-                        </li>
-                        </ul>                       
+													
                     </c:when>
                 
                 </c:choose>
@@ -154,7 +151,7 @@
                 <c:if test="${owner=='1'}">
                     
 
-                    <i class="fa fa-ban"></i> </span>
+					<span class="glyphicon glyphicon-ban-circle"></span>
                     <a href="#" onclick="return confirmProjectDeletion()">Delete
                         Project</a>
                 </c:if>
@@ -185,7 +182,7 @@
                                     });
                 }
             </script>
-            <div id="dialog-delete-project-confirm" title="Confirm Delete?" style="display: none;">
+			<div id="dialog-delete-project-confirm" title="Confirm Delete?">
                 You are about to delete a project, this is not reversible.</br> Do you want to proceed?</div>
         </td>
         
@@ -196,24 +193,21 @@
                     <span>Collaborators</span>
                 </h3>
                 <c:if test="${not empty project.projectCollaborators}">
-                    <ul>
+					<ul class="collaborators">
                         <c:forEach var="projectcollaborator"
                             items="${project.projectCollaborators}">
-                            <li>
-                            <i class="fa fa-user"></i> <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
+							<li><c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
                             </li>
                         </c:forEach>
                     </ul>
                 </c:if>
-                <c:if test="${owner=='1' or isProjectAdmin}">
                 <div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
                 <ul class="colltools">
-                    <li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle"></i> Add</a></li>
-                    <li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-minus-circle"></i> Delete</a></li>
-                    <li><a class = "collabEdit" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil"></i> Update</a></li>
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">Add</a></li>
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators">Delete</a></li>
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/pen.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators">Update</a></li>
                 </ul>
                 </div>
-                </c:if>
             </section>
         </td>
     </tr>

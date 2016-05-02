@@ -8,11 +8,14 @@
 		$("input[type=button]").button().click(function(event) {
 			return;
 		});
+
 		$("input[type=submit]").button().click(function(event) {
 			event.preventDefault();
 		});
 
+		
 	});
+
 	$(document).ready(function() {
 		activeTable = $('.dataTable').dataTable({
 			"bJQueryUI" : true,
@@ -25,14 +28,21 @@
 			var link = $(event.relatedTarget);
 			
 			var txtid = link.data('txtid');
-			
+			var txtname = link.data('txtname');
 			$.ajax({
 				  type : "GET",
 				  url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid="+txtid,
 				  contentType: "text/plain",
 				  success:function(details){
+					 $('.modal-title').text(txtname);
 					 $('.modal-body').text(details);
-				  }				
+				  },
+				  
+			error:function (xhr, ajaxOptions){
+			    if(xhr.status==404) {
+			    	 $('.modal-body').text("Error while retrieving the text content.");
+			    }
+			}
 				});
 			
 		});
@@ -104,56 +114,58 @@
 				</c:when>
 
 			</c:choose> <br /> <script>
-				$(document)
-						.ready(
-								function() {
-									$('a.login-window')
-											.click(
-													function() {
-														location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";
-													});
-								});
-			</script> <script>
-						function funConfirmDeletion() {
-							var pos = [ $(window).width() / 4, 50 ];
-							// Define the Dialog and its properties.
+						$(document)
+								.ready(
+										function() {
 
-							$("#dialog-confirm")
+											$('a.login-window')
+													.click(
+															function() {
+																location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";
+															});
+
+										});
+			</script> <script>
+							function funConfirmDeletion() {
+								var pos = [ $(window).width() / 4, 50 ];
+								// Define the Dialog and its properties.
+								
+								$("#dialog-confirm")
 									.html(
 											"Are you sure you want to delete the workspace?")
-									.dialog(
-											{
-												resizable : false,
-												modal : true,
-												title : "Delete Workspace",
-												height : 180,
-												width : 650,
-												position : pos,
-												buttons : {
-													"Yes" : function() {
+										.dialog(
+												{
+													resizable : false,
+													modal : true,
+													title : "Delete Workspace",
+													height : 180,
+													width : 650,
+													position : pos,
+													buttons : {
+														"Yes" : function() {
 														$(this).dialog('close');
-														location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteSingleWorkspace/${workspaceid}?projectId=${myprojectid}';
-														return false;
-													},
-													"No" : function() {
+															location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteSingleWorkspace/${workspaceid}?projectId=${myprojectid}';
+															return false;
+														},
+														"No" : function() {
 														$(this).dialog('close');
-														return false;
+															return false;
+														}
 													}
-												}
-											});
-						}
-					</script>
+												});
+							}
+						</script>
 
 			<div id="dialog-confirm" title="Confirm ?"></div> <c:if
 				test="${isDeactivated == true}">
 				<a href="#" onclick="return confirmWorkspaceActivation();">
-					Activate Workspace</a>&nbsp;&nbsp; 
+                                Activate Workspace</a>&nbsp;&nbsp; 
                         </c:if> <c:if test="${isDeactivated == false }">
 				<font color="#CCCCCC" title="The workspace is already activated.">
 					Activate Workspace&nbsp;&nbsp; </font>
 			</c:if> <c:if test="${isDeactivated == false}">
 				<a href="#" onclick="return confirmWorkspaceDeactivation();">
-					Deactivate Workspace</a>&nbsp;&nbsp; 
+                                Deactivate Workspace</a>&nbsp;&nbsp; 
                         </c:if> <c:if test="${isDeactivated == true }">
 				<font color="#CCCCCC" title="The workspace is already deactivated.">
 					Deactivate Workspace&nbsp;&nbsp; </font>
@@ -165,11 +177,11 @@
 					Workspace</a>&nbsp;&nbsp;
 						</c:if> <c:if test="${isDeactivated == true}">
 				<a href="#" onclick="return funConfirmDeletion();">Delete
-					Workspace</a>
+                                Workspace</a>
 			</c:if> <c:if test="${isDeactivated == false }">
-				<font color="#CCCCCC"
-					title="Only deactivated workspaces can be deleted.">Delete
-					Workspace</font>
+                            <font color="#CCCCCC"
+                                title="Only deactivated workspaces can be deleted.">Delete
+                                Workspace</font>
 			</c:if> <script>
 				function confirmWorkspaceDeactivation() {
 					// Define the Dialog and its properties.
@@ -226,10 +238,11 @@
 										}
 									});
 				}
+
 				function confirmArchive(isArchive) {
 					isArchive = !!isArchive;
 					var txt = isArchive ? 'Archive' : 'Unarchive';
-					var pos = [ $(window).width() / 4, 50 ];
+					var pos = [$(window).width() / 4, 50];
 					var url = '${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}';
 					var path = isArchive ? '/archiveworkspace'
 							: '/unarchiveworkspace';
@@ -240,24 +253,24 @@
 					$('#dialog-confirm').html(
 							'Are you sure you want to ' + txt
 									+ ' this workspace?').dialog({
-						resizable : false,
-						modal : true,
-						title : title,
-						height : 180,
-						width : 650,
-						position : pos,
-						buttons : {
-							"Yes" : function() {
-								$(this).dialog('close');
-								location.href = url + path;
-								return false;
-							},
-							"No" : function() {
-								$(this).dialog('close');
-								return false;
-							}
-						}
-					});
+								resizable: false,
+								modal: true,
+								title: title,
+								height: 180,
+								width: 650,
+								position: pos,
+								buttons: {
+									"Yes": function () {
+										$(this).dialog('close');
+										location.href = url + path;
+										return false;
+									},
+									"No": function () {
+										$(this).dialog('close');
+										return false;
+									}
+								}
+							});
 				}
 			</script> <c:choose>
 				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
@@ -349,14 +362,11 @@
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
 									<td width="25%" align="center">
-									<a data-toggle="modal" data-target="#txtModal" data-txtId="${textfile.textId}"><c:out
+									<a data-toggle="modal" data-target="#txtModal" data-txtid="${textfile.textId}" data-txtname="${textfile.fileName}"><c:out
 											value="${textfile.fileName}"></c:out></a></td>
 									<td width="25%" align="center"><c:out
 											value="${textfile.refId}"></c:out></td>
 								</tr>
-								<script>
-								
-								</script>
 							</c:forEach>
 						</tbody>
 					</table>
@@ -365,50 +375,45 @@
 					<spring:message code="empty.textfiles" />
 				</c:otherwise>
 			</c:choose>
-		</td>
-		<hr>
-
-		<hr>
-		<!-- Display Networks -->
-		<c:choose>
-			<c:when test="${not empty networkList}">
-				<span class="byline">Networks belonging to this workspace</span>
-				<hr>
-				<table style="width: 100%" class="display dataTable">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Network Owner</th>
-							<th>Status</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<c:forEach var="network" items="${networkList}">
+			<hr> <!-- Display Networks --> <c:choose>
+				<c:when test="${not empty networkList}">
+					<span class="byline">Networks belonging to this workspace</span>
+					<hr>
+					<table style="width: 100%" class="display dataTable">
+						<thead>
 							<tr>
-								<td width="25%" align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${network.network.networkName}"></c:out>" />
-									<c:out value="${network.network.networkName}"></c:out></td>
-								<td width="25%" align="center"><c:out
-										value="${network.network.creator.userName}"></c:out></td>
-								<td width="25%" align="center"><c:out
-										value="${network.network.status}"></c:out></td>
-								<td width="25%" align="center"><input type=button
-									onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.network.networkId}'"
-									value='View'></td>
+								<th>Name</th>
+								<th>Network Owner</th>
+								<th>Status</th>
+								<th>Action</th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</c:when>
-			<c:otherwise>
-				<spring:message code="empty.networks" />
-			</c:otherwise>
-		</c:choose>
+						</thead>
+
+						<tbody>
+							<c:forEach var="network" items="${networkList}">
+								<tr>
+									<td width="25%" align="center"><input name="items"
+										type="hidden" value="<c:out value="${network.network.networkName}"></c:out>" />
+										<c:out value="${network.network.networkName}"></c:out></td>
+									<td width="25%" align="center"><c:out
+											value="${network.network.creator.userName}"></c:out></td>
+									<td width="25%" align="center"><c:out
+											value="${network.network.status}"></c:out></td>
+									<td width="25%" align="center"><input type=button
+										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.network.networkId}'"
+										value='View'></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<spring:message code="empty.networks" />
+				</c:otherwise>
+			</c:choose>
 		</td>
 
+		
 		<!-- Display collaborators -->
 		<td style="width: 200px">
 			<h3 class="major">
@@ -445,14 +450,14 @@
 		</td>
 	</tr>
 </table>
-<div class="modal" id="txtModal" tabindex="-1" role="dialog" aria-labelledby="txtModal" aria-hidden="true">
+<div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog" aria-labelledby="txtModal" aria-hidden="true" >
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content ">
             <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Text Content</h4>
+            <h4 class="modal-title" id="myModalLabel"></h4>
             </div>
             <div class="modal-body">
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
