@@ -37,7 +37,7 @@ public class ViewTextController {
     public ResponseEntity<String> viewTextfile(@RequestParam("txtid") String txtId, HttpServletResponse response,
             HttpServletRequest request) throws QuadrigaAccessException {
         response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("ISO-8859-1");
 
         String respMessage = null;
         try {
