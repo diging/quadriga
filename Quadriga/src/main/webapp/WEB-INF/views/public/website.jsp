@@ -36,11 +36,13 @@
 </div>
 
 <div class="row">
+<c:if test="${blocks[0]}">
   <div class="col-lg-4">
-    <h2>Browse the networks of this project!</h2>
-    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+    <h2>blocks[0].title</h2>
+    <p>blocks[0].description</p>
     <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/browsenetworks" role="button">Browse</a></p>
   </div>
+ </c:if>
   <div class="col-lg-4">
     <h2>Explore the combined graph!</h2>
     <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>

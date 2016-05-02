@@ -723,7 +723,7 @@
 	<!-- external website -->
 	<definition name="sites/website" extends="base.definition.public">
 		<put-attribute name="currentPage" value="home" />
-		<put-attribute name="content" value="/WEB-INF/views/website.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/public/website.jsp" />
 	</definition>
 
 	<definition name="sites/browseNetworks" extends="base.definition.public">
