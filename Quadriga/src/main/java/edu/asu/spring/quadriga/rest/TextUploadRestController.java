@@ -34,6 +34,12 @@ import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.utilities.ITextXMLParser;
 
+/**
+ * Controller for receiving Textfiles from the Rest end point
+ * 
+ * @author Nischal Samji
+ * 
+ */
 @Controller
 public class TextUploadRestController {
 
@@ -48,10 +54,25 @@ public class TextUploadRestController {
 
     @Autowired
     private IRestMessage errorMessageRest;
-    
-    @Resource(name = "projectconstants")
-    private Properties messages;    
 
+    @Resource(name = "projectconstants")
+    private Properties messages;
+
+    /**
+     * @param wsId
+     *            WorkspaceId for the Textfile as a path variable.
+     * @param projId
+     *            Project for the Textfile as a path variable.
+     * @param response
+     *            Generic HTTP Response Object for returning the XML response
+     * @param request
+     *            Generic HTTP REUEST Object for RECEIVING the XML response
+     * @param xml
+     *            XML content as a string
+     * @return Returns a Response Entity that contains with the information
+     *         about the stored Textfile
+     * @throws RestException
+     */
     @RequestMapping(value = "rest/project/{projectid}/workspace/{workspaceid}/uploadtext", method = RequestMethod.POST, produces = "application/xml")
     public ResponseEntity<String> uploadText(@PathVariable("workspaceid") String wsId,
             @PathVariable("projectid") String projId, HttpServletResponse response, HttpServletRequest request,
@@ -78,14 +99,14 @@ public class TextUploadRestController {
         try {
             engine = restVelocityFactory.getVelocityEngine(request);
             engine.init();
-            Template template =  engine.getTemplate("velocitytemplates/textfile.vm");
+            Template template = engine.getTemplate("velocitytemplates/textfile.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
             context.put("textid", txtFile.getTextId());
             context.put("refid", txtFile.getRefId());
             context.put("filename", txtFile.getFileName());
             context.put("wsid", txtFile.getWorkspaceId());
             context.put("projid", txtFile.getProjectId());
-            context.put("texturi",textURI+"/"+"dummy");
+            context.put("texturi", textURI + "/" + "dummy");
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -99,7 +120,6 @@ public class TextUploadRestController {
         } catch (Exception e) {
             throw new RestException(500, e);
         }
-        
-      
+
     }
 }
