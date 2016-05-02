@@ -73,7 +73,7 @@ public class FileSaveUtility implements IFileSaveUtility {
 
         }
         try {
-            return new String(fileBytes,"ISO-8859-1");
+            return new String(fileBytes,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new FileStorageException(e);
         }
