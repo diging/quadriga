@@ -12,18 +12,18 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
@@ -38,62 +38,53 @@ import edu.asu.spring.quadriga.service.IUserProfileManager;
 @Controller
 public class UserRestController {
 
-	@Autowired
-	private IUserProfileManager profileManager;
-	
-	@Autowired
-	private IRestVelocityFactory restVelocityFactory;
-	
-	private static final Logger logger = LoggerFactory
-			.getLogger(DictionaryRestController.class);
+    @Autowired
+    private IUserProfileManager profileManager;
 
-	@Autowired
-	private IUserManager userManager;
+    @Autowired
+    private IRestVelocityFactory restVelocityFactory;
 
-	
+    @Autowired
+    private IUserManager userManager;
 
-	/**
-	 * Rest interface to fetch the user details
-	 * http://<<URL>:<PORT>>/quadriga/rest/userdetails/{username}
-	 * http://localhost:8080/quadriga/rest/userdetails/test
-	 * 
-	 * @author Lohith Dwaraka
-	 * @param userId
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "rest/userdetails", method = RequestMethod.GET, produces = "application/xml")
-	@ResponseBody
-	public String getUserDetails( ModelMap model, Principal principal, HttpServletRequest req)
-			throws Exception {
-		
-		IUser userDetails = userManager.getUser(principal.getName());
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
-		List<IProfile> authFiles = profileManager.getUserProfiles(userDetails.getUserName());
-		Template template = null;
-		try {
-			engine.init();
-			template = engine
-					.getTemplate("velocitytemplates/userDetails.vm");
-			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("userdetails", userDetails);
-			context.put("list", authFiles);
-			StringWriter writer = new StringWriter();
-			template.merge(context, writer);
-			return writer.toString();
-		} catch (ResourceNotFoundException e) {
-			logger.error("Exception:", e);
-			throw new RestException(404);
-		} catch (ParseErrorException e) {
-			
-			logger.error("Exception:", e);
-			throw new RestException(404);
-		} catch (MethodInvocationException e) {
-			
-			logger.error("Exception:", e);
-			throw new RestException(404);
-		}
-	
-	}
+    /**
+     * Rest interface to fetch the user details http://<<URL>:
+     * <PORT>>/quadriga/rest/userdetails/
+     * http://localhost:8080/quadriga/rest/userdetails/
+     * 
+     * @author Lohith Dwaraka
+     * @param userId
+     * @param model
+     * @return
+     * @throws RestException
+     */
+    @RequestMapping(value = "rest/userdetails", method = RequestMethod.GET, produces = "application/xml")
+    public ResponseEntity<String> getUserDetails(ModelMap model, Principal principal, HttpServletRequest req)
+            throws RestException {
+
+        try {
+            IUser userDetails = userManager.getUser(principal.getName());
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            List<IProfile> authFiles = profileManager.getUserProfiles(userDetails.getUserName());
+            engine.init();
+            Template template = engine.getTemplate("velocitytemplates/userDetails.vm");
+            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            context.put("userdetails", userDetails);
+            context.put("list", authFiles);
+            StringWriter writer = new StringWriter();
+            template.merge(context, writer);
+            return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            throw new RestException(404, e);
+        } catch (ParseErrorException e) {
+            throw new RestException(500, e);
+        } catch (MethodInvocationException e) {
+            throw new RestException(500, e);
+        } catch (QuadrigaStorageException e) {
+            throw new RestException(500, e);
+        } catch (Exception e) {
+            throw new RestException(500, e);
+        }
+
+    }
 }

@@ -10,28 +10,22 @@ import org.codehaus.jettison.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 
 /**
  * This class will handle list {@link INetwork} of the {@link IUser} and fetch the {@link INetwork} details from DB and QStore.
@@ -43,53 +37,19 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 public class NetworkListController {
 
 	@Autowired
-	INetworkManager networkManager;
+	private INetworkManager networkManager;
+	
+	@Autowired
+    private INetworkTransformationManager transformationManager;
+    
+    @Autowired
+    private ID3Creator d3Creator;
 
 	@Autowired
-	@Qualifier("restTemplate")
-	RestTemplate restTemplate;
-
-	@Autowired
-	@Qualifier("jaxbMarshaller")
-	Jaxb2Marshaller jaxbMarshaller;
-
-	@Autowired
-	IListWSManager wsManager;
-
-	@Autowired
-	@Qualifier("marshallingConverter")
-	MarshallingHttpMessageConverter marshallingConverter;
-
-	@Autowired
-	IRetrieveProjectManager projectManager;
-
-	@Autowired
-	IUserManager userManager;
-
-	@Autowired
-	IEditingNetworkAnnotationManager editingNetworkAnnotationManager;
-
-	@Autowired
-	@Qualifier("qStoreURL")
-	private String qStoreURL;
-
-	@Autowired
-	@Qualifier("qStoreURL_Add")
-	private String qStoreURL_Add;
-
-	@Autowired
-	@Qualifier("qStoreURL_Get")
-	private String qStoreURL_Get;
+	private IUserManager userManager;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkListController.class);
-
-	/*
-	 * Prepare the QStore GET URL
-	 */
-	public String getQStoreGetURL() {
-		return qStoreURL+""+qStoreURL_Get;
-	}
 
 	/**
 	 * This method helps in listing of network belonging to the user in tree view. 
@@ -157,12 +117,13 @@ public class NetworkListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork= transformationManager.getTransformedNetwork(networkId);
+		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		if(networkJSon!=null){
-			json = networkJSon.getJson();
+		if(transformedNetwork!=null){
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 
@@ -190,19 +151,16 @@ public class NetworkListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 
 		logger.info("Source reference ID " + networkManager.getSourceReferenceURL(networkId, networkManager.getLatestVersionOfNetwork(networkId)));
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		List<ID3Node> nodeList = null;
-		if(networkJSon!=null){
-			json = networkJSon.getJson();
-			nodeList =networkJSon.getNodeList();
+		if(transformedNetwork!=null){
+		    json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
-		model.addAttribute("nodeList",nodeList);
 		return "auth/editing/editnetworks";
 	}
 

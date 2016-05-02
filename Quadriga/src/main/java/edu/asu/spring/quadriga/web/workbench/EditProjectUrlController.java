@@ -47,7 +47,7 @@ public class EditProjectUrlController {
     @Resource(name = "projectconstants")
     private Properties messages;
 
-    private static final Logger logger = LoggerFactory.getLogger(ModifyProjectController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EditProjectUrlController.class);
 
     /**
      * Attach the custom validator to the Spring context

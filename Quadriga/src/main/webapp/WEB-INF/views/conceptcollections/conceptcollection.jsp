@@ -30,10 +30,11 @@ You own these concept collections:
 <ul>
    <c:forEach var="concept" items="${conceptlist}">
    
-   <li class="cc with-icon">
+   <li class="cc">
    <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}">
-             <c:out value="${concept.conceptCollectionName}"></c:out>
-      </a> <br> 
+        <i class="fa fa-list-alt"></i>     
+        <c:out value="${concept.conceptCollectionName}"></c:out>
+   </a> <br> 
         <c:out value="${concept.description}"></c:out>
    </li>
    </c:forEach>
@@ -45,7 +46,7 @@ You don't own any concept collections.
 </div>
 
 <div style="float:right;">
-	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/addCollectionsForm">Add Concept Collection</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/addCollectionsForm"><i class="fa fa-plus-circle"></i> Add Concept Collection</a>
 </div>
 <br/>
 
@@ -54,7 +55,8 @@ You don't own any concept collections.
     You collaborate on these concept collections:
     <ul>
     <c:forEach var="concept" items="${collaborationlist}">
-    <li class="cc with-icon">
+    <li class="cc">
+       <i class="fa fa-list-alt"></i>  
        <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}">
               <c:out value="${concept.conceptCollectionName}"></c:out>
        </a> <br> 

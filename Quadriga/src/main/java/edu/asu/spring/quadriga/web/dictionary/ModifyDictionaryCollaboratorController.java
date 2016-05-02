@@ -134,7 +134,7 @@ public class ModifyDictionaryCollaboratorController
 	 @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 3, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/dictionaries/{dictionaryid}/updatecollaborators", method=RequestMethod.POST)
 	 public ModelAndView updateCollaboratorForm(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
-			 BindingResult result,@PathVariable("dictionaryid") String dictionaryid,Principal principal) throws QuadrigaStorageException
+			 BindingResult result,@PathVariable("dictionaryid") String dictionaryid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	 {
 			ModelAndView model;
 			List<ModifyCollaborator> dictCollaborators;

@@ -4,9 +4,19 @@
 <!-- Content -->
 <script>
 	$(document).ready(function() {
+		var oldUnixName = $("#unixName").val();
+		$("#editProject").prop("disabled",true);
+		
 		$("#unixName").keyup(function(event) {
 			var keyedInput = $("#unixName").val();
 			$("#UnixURL").text('${unixnameurl}' + keyedInput);
+			
+			if(keyedInput != oldUnixName) {
+				$("#editProject").prop("disabled",false);
+			}
+			else {
+				$("#editProject").prop("disabled",true);
+			}
 		});
 		$("#dialog-confirm").dialog({
 			autoOpen : false,
@@ -41,7 +51,6 @@ div.projectDiv {
 input {
 	position: relative;
 	width: 125px;
-	height: 30px;
 }
 </style>
 

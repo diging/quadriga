@@ -20,6 +20,8 @@
 <link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ul-pagination-styles.css" />
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700" rel="stylesheet" />
+<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/font-awesome-4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/config.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel.min.js"></script>
@@ -65,11 +67,11 @@
 			<sec:authorize access="isAuthenticated()">
 				<div>
 					<div class="loggedInMsg">
-						Welcome <span class="user" style="margin-left: 5px;"><sec:authentication
+						Welcome <i class="fa fa-user"></i><span style="margin-left: 5px;"><sec:authentication
 								property="principal.username" /></span>!
 					</div>
 					<div class="loggedOutLink">
-						<a href="<c:url value='/j_spring_security_logout' />">Logout</a>
+						<a href="<c:url value='/logout' />">Logout</a>
 					</div>
 					<hr class="clearLoggedIn">
 				</div>
@@ -143,7 +145,8 @@
 					href="http://html5up.net/">HTML5 UP</a>
 			</div>
 			<!-- /Copyright -->
-<div> Version: ${buildNumber}</div>
+<div> <c:set var="PR" value="${pullrequest}" />
+			    Version: ${buildNumber}<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if> </div>
             
 		</div>
 	</footer>

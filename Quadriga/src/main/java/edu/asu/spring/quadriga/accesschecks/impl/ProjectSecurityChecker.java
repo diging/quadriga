@@ -11,7 +11,9 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectAccessDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -26,6 +28,10 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
 
     @Autowired
     private IProjectAccessDAO accessManager;
+    
+    @Autowired
+    private IQuadrigaRoleManager roleManager;
+
 
     /**
      * This method checks if the user is Quadriga Admin
@@ -100,12 +106,19 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
      * @return boolean - TRUE if the user is project owner else FALSE
      * @throws QuadrigaStorageException
      * @author kiranbatna
+     * @throws NoSuchRoleException 
      */
     @Override
     @Transactional
     public boolean isCollaborator(String userName, String collaboratorRole,
-            String projectId) throws QuadrigaStorageException {
-        return accessManager.isCollaborator(userName, collaboratorRole,
+            String projectId) throws QuadrigaStorageException, NoSuchRoleException {
+        IQuadrigaRole role = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
+        
+        if (role == null) {
+            throw new NoSuchRoleException("The role " + collaboratorRole + " does not exist.");
+        }
+        
+        return accessManager.isCollaborator(userName, role.getDBid(),
                 projectId);
     }
 

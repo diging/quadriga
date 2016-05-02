@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -44,4 +45,7 @@ public interface IQuadrigaRoleManager {
 
 
     public abstract IQuadrigaRole getQuadrigaRoleById(String type, String id);
+
+
+    public abstract List<IQuadrigaRole> getSelectableQuarigaRoles(String type);
 }

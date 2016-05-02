@@ -34,8 +34,11 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformer;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -48,13 +51,19 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class EditingListController {
 
 	@Autowired
-	INetworkManager networkManager;
+	private INetworkManager networkManager;
+	
+	@Autowired
+	private INetworkTransformationManager transformationManager;
+	
+	@Autowired
+	private ID3Creator d3Creator;
 
 	@Autowired
-	IEditorManager editorManager;
+	private IEditorManager editorManager;
 
 	@Autowired
-	IUserManager userManager;
+	private IUserManager userManager;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingListController.class);
@@ -197,17 +206,17 @@ public class EditingListController {
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=1,userRole={})})
 	@RequestMapping(value = "auth/editing/visualize/{networkId}", method = RequestMethod.GET)
-	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, QuadrigaAccessException {
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
-		String json = null;
-		if(networkJSon!=null){
-			json = networkJSon.getJson();
+		String json = "";
+		if(transformedNetwork!=null){
+			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 
@@ -232,12 +241,12 @@ public class EditingListController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.D3JQUERY,versionNo);
+		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId, versionNo);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
-		if(networkJSon!=null){
-			json = networkJSon.getJson();
+		if(transformedNetwork!=null){
+		    json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
 		}
 		model.addAttribute("jsonstring",json);
 		return "auth/editing/visualize";

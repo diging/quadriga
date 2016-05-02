@@ -1,0 +1,16 @@
+.page-404 {
+    font-size: 120px;
+    font-weight: bold;
+    color: #7C91A7;
+    float: right;
+}
+
+#chart {
+	height: 100%;
+	width: 100%;
+	min-height: 500px;
+}
+
+#chart>svg {
+	min-height: 500px;
+}

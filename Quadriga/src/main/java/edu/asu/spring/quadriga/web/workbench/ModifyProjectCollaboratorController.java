@@ -109,7 +109,7 @@ public class ModifyProjectCollaboratorController
         //add the collaborator roles to the model
 		model.getModelMap().put("projcollabroles", collaboratorRoles);
 		model.getModelMap().put("collaboratorform", collaboratorForm);
-		model.getModelMap().put("projectid", projectid);
+		model.getModelMap().put("myprojectid", projectid);
 		model.getModel().put("projectname", project.getProjectName());
 		model.getModelMap().put("projectdesc",project.getDescription());
 		model.getModelMap().put("success", 0);
@@ -150,7 +150,7 @@ public class ModifyProjectCollaboratorController
 				model.getModelMap().put("collaboratorform", collaboratorForm);
 				model.getModel().put("projectname", project.getProjectName());
 				model.getModelMap().put("projectdesc",project.getDescription());
-				model.getModelMap().put("projectid", projectid);
+				model.getModelMap().put("myprojectid", projectid);
 				
 				//retrieve the collaborator roles and assign it to a map
 				//fetch the roles that can be associated to the workspace collaborator
@@ -176,7 +176,7 @@ public class ModifyProjectCollaboratorController
 					}
 					
 					projectCollaboratorManager.updateCollaborators(projectid, collabUser, collabRoles.toString().substring(1), userName);
-					
+					model.getModelMap().put("myprojectid", projectid);
 					model.getModelMap().put("success", 1);
 				}
 			}

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
-import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -24,9 +23,6 @@ import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
  */
 @Service("dictionaryAuthorization")
 public class DictionaryAuthorization implements IAuthorization {
-   
-    @Autowired
-    private IDictionaryFactory dictionaryFactory;
 
     @Autowired
     private IDictionaryManager dictonaryManager;
@@ -53,6 +49,9 @@ public class DictionaryAuthorization implements IAuthorization {
         IDictionary dictionary = dictonaryManager
                 .getDictionaryDetails(accessObjectId);
 
+        if(dictionary == null){
+            throw new QuadrigaAccessException();
+        }
         // check if the user is a dictionary owner
         String dictionaryOwner = dictionary.getOwner().getUserName();
         if (userName.equals(dictionaryOwner)) {
@@ -111,6 +110,13 @@ public class DictionaryAuthorization implements IAuthorization {
             throws QuadrigaStorageException, QuadrigaAccessException {
         return false;
 
+    }
+
+    @Override
+    public boolean chkAuthorization(String userName, List<String> accessObjectId, String[] userRoles)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

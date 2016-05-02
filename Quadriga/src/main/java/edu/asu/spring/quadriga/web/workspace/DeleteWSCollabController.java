@@ -20,8 +20,8 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
@@ -29,10 +29,10 @@ public class DeleteWSCollabController
 {
 	
 	@Autowired
-	IWorkspaceCollaboratorManager wsCollabManager;
+	private IWorkspaceCollaboratorManager wsCollabManager;
 	
 	@Autowired
-	private IListWSManager retrieveWSManager;
+	private IWorkspaceManager workspaceManager;
 	
 	/**
 	 * Retrieve the collaborators associated with the workspace for deletion
@@ -52,7 +52,7 @@ public class DeleteWSCollabController
 		model = new ModelAndView("auth/workbench/workspace/deletecollaborators");
 		
 		String userName = principal.getName();
-		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
+		IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceid, userName);
 		
 		//fetch all the collaborating users and their roles
 		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
@@ -89,7 +89,7 @@ public class DeleteWSCollabController
 		model = new ModelAndView("auth/workbench/workspace/deletecollaborators");
 		
 		String loggedInUser = principal.getName();
-		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, loggedInUser);
+		IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceid, loggedInUser);
 		
 		// fetch the selected values
 		values = req.getParameterValues("wscollabchecked");

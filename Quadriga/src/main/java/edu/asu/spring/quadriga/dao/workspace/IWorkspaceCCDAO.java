@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
-import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IWorkspaceCCDAO {
@@ -15,18 +14,8 @@ public interface IWorkspaceCCDAO {
 	 * @throws			SQLException
 	 * @author          Lohith Dwaraka
 	 */
-	public abstract String addWorkspaceCC(String workspaceId,
+	public abstract void addWorkspaceCC(String workspaceId,
 			String CCId, String userId) throws QuadrigaStorageException;
-
-	/**
-	 * Method to list the Concept collection in workspace
-	 * @param workspaceId
-	 * @param userId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract WorkspaceDTO listWorkspaceCC(String workspaceId, String userId)
-			throws QuadrigaStorageException;
 
 	/**
 	 * Method to delete the concept collection from workspace

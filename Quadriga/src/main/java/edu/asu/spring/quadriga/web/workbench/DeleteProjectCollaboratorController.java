@@ -83,7 +83,7 @@ public class DeleteProjectCollaboratorController {
 		collaboratorForm.setCollaborators(modifyCollaborator);
 		
 		modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);
-		modelAndView.getModelMap().put("projectId", projectId);
+		modelAndView.getModelMap().put("myprojectId", projectId);
 		modelAndView.getModel().put("projectname", project.getProjectName());
 		modelAndView.getModelMap().put("projectdesc",project.getDescription());
 		
@@ -113,7 +113,7 @@ public class DeleteProjectCollaboratorController {
 			modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);
 			modelAndView.getModelMap().put("success", 0);
 			modelAndView.getModelMap().put("error", 1);
-			modelAndView.getModelMap().put("projectId", projectId);
+			modelAndView.getModelMap().put("myprojectId", projectId);
 			modelAndView.getModel().put("projectname", project.getProjectName());
 			modelAndView.getModelMap().put("projectdesc",project.getDescription());
 		}
@@ -130,7 +130,7 @@ public class DeleteProjectCollaboratorController {
 			    }
 			}
 			modelAndView.getModelMap().put("success", 1);
-			modelAndView.getModelMap().put("projectId", projectId);
+			modelAndView.getModelMap().put("myprojectId", projectId);
 		}
 		
 		return modelAndView;	

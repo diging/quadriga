@@ -40,7 +40,6 @@ import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
@@ -50,9 +49,11 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.workspace.WorkspaceManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -78,7 +79,7 @@ public class ListWSController
 	public final static int FAILURE = 0;
 
 	@Autowired
-	private	IListWSManager wsManager;
+	private	IWorkspaceManager wsManager;
 
 	@Autowired
 	private IWSSecurityChecker workspaceSecurity;
@@ -195,16 +196,6 @@ public class ListWSController
 	}
 
 
-	public IListWSManager getWsManager() {
-		return wsManager;
-	}
-
-
-	public void setWsManager(IListWSManager wsManager) {
-		this.wsManager = wsManager;
-	}
-
-	
 	/**
 	 * Handle the request to view masked dspace keys and also allow an user to update the keys.
 	 * 
@@ -280,30 +271,8 @@ public class ListWSController
 	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
 	{
 		String userName = principal.getName();
-		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid,userName);
 
-		
-		//Check bitstream access in dspace. 
-		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
-		if(this.getDspaceKeys() != null) {
-			model.addAttribute("dspaceKeys", "true");
-		}
-
-		//Check if the dspace authentication is correct.
-		List<IWorkspaceBitStream> workspaceBitStreams = null;
-		if(dspaceManager.validateDspaceCredentials(this.dspaceUsername, this.dspacePassword, this.dspaceKeys))
-		{
-			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
-		}
-		else
-		{	
-			//Set a flag to indicate the error in dspace login credentials.
-			model.addAttribute("wrongDspaceLogin", "true");
-			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), null, null, null);
-		}
-		
-		workspace.setWorkspaceBitStreams(workspaceBitStreams);
-		
 
 		//retrieve the collaborators associated with the workspace
 		List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
@@ -335,6 +304,7 @@ public class ListWSController
 		
 		//Including a condition to check if the workspace is not deactive. If the workspace is deactive adding attribute to make delete button disabled
 		model.addAttribute("isDeactivated", wsManager.getDeactiveStatus(workspaceid));
+		model.addAttribute("isArchived", wsManager.isWorkspaceArchived(workspaceid));
 		
 		return "auth/workbench/workspace/workspacedetails";
 	}
@@ -357,7 +327,7 @@ public class ListWSController
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/changedspacelogin", method = RequestMethod.POST)
-	public String changeDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {
+	public String changeDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) throws QuadrigaAccessException {
 		String dspaceUsername = req.getParameter("username");
 		String dspacePassword = req.getParameter("password");
 		String dspacePublicAccess = req.getParameter("dspacePublicAccess");
@@ -417,7 +387,7 @@ public class ListWSController
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/{communityId}", method = RequestMethod.GET)
-	public String workspaceCommunityRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
+	public String workspaceCommunityRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("communityId") String communityId, ModelMap model, Principal principal) throws QuadrigaAccessException{
 
 		String communityName = dspaceManager.getCommunityName(communityId);
 
@@ -446,7 +416,7 @@ public class ListWSController
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/collection/{collectionId}", method = RequestMethod.GET)
-	public String workspaceItemListRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
+	public String workspaceItemListRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) throws QuadrigaAccessException {
 
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
@@ -494,7 +464,7 @@ public class ListWSController
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/collection/item", method = RequestMethod.GET)
-	public String workspaceBitStreamListRequest(@PathVariable("workspaceId") String workspaceId,@RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId, ModelMap model, Principal principal){
+	public String workspaceBitStreamListRequest(@PathVariable("workspaceId") String workspaceId,@RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId, ModelMap model, Principal principal) throws QuadrigaAccessException{
 
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
@@ -658,30 +628,6 @@ public class ListWSController
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 
-	/**
-	 * Handle the request to delete bitstream(s) from a workspace. Gets the list of authroized bistreams from Dspace for the user and deletes based on that authorization.
-	 * 
-	 * @param workspaceId					The id of the workspace from which the bitstream(s) are to deleted. 
-	 * @param bitstreamids					The id(s) of the bitstream(s) which are to deleted from the workspace.
-	 * @return								Return to the workspace page.
-	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
-	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
-	 * @author 								Ram Kumar Kumaresan
-	 * @throws QuadrigaException 
-	 * @throws QuadrigaAccessException 
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/deletebitstreams", method = RequestMethod.POST)
-	public String deleteBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException, QuadrigaAccessException{
-
-		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceId,principal.getName());
-		//Check bitstream access in dspace. 
-		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
-		List<IWorkspaceBitStream> workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
-
-		dspaceManager.deleteBitstreamFromWorkspace(workspaceId, bitstreamids, workspaceBitStreams, principal.getName());
-		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-	}
 	
 	@RequestMapping(value = "/auth/editing/getitemmetadata/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String viewDspaceMetaData(HttpServletRequest request,
@@ -695,11 +641,11 @@ public class ListWSController
 		String fileid = networkManager.getSourceReferenceURL(networkId,networkManager.getLatestVersionOfNetwork(networkId));
 		logger.info("Source reference ID " + fileid);
 		
-		String metaData = wsManager.getItemMetadataAsJson(fileid, dspaceUsername, dspacePassword, dspaceKeys);
-		
-		if(metaData!=null){
-			return metaData;
-		}
+		//String metaData = wsManager.getItemMetadataAsJson(fileid, dspaceUsername, dspacePassword, dspaceKeys);
+//		
+//		if(metaData!=null){
+//			return metaData;
+//		}
 		
 		return null;
 	}

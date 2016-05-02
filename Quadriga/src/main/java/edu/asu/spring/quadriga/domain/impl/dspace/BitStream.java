@@ -265,4 +265,11 @@ public class BitStream implements IBitStream{
 		return buf.toString();
 	}
 
+    @Override
+    public String toString() {
+        return "BitStream [getLoadStatus()=" + getLoadStatus() + ", getId()=" + getId() + ", getMimeType()="
+                + getMimeType() + ", getName()=" + getName() + ", getSize()=" + getSize() + ", getItemName()="
+                + getItemName() + "]";
+    }
+
 }

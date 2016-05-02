@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.web.manageusers.beans.ApproveAccount;
 
 /**
  * The controller to manage the user management part of the Quadriga.
@@ -34,41 +35,7 @@ public class UserController {
 	@Autowired
 	private IQuadrigaRoleManager rolemanager;
 
-	public IUserManager getUsermanager() {
-		return usermanager;
-	}
-
-	public void setUsermanager(IUserManager usermanager) {
-		this.usermanager = usermanager;
-	}
-
-	/**
-	 * Admins are provided with the list of open user requets, active users and inactive users 
-	 * 
-	 * @return 	Return to the user management page of the quadriga
-	 */
-	@RequestMapping(value = "auth/users/manage", method = RequestMethod.GET)
-	public String manageUsers(ModelMap model, Principal principal) throws QuadrigaStorageException
-	{
-		//Get all User Requests
-		List<IUser> userRequestsList = usermanager.getUserRequests();
-		model.addAttribute("userRequestsList", userRequestsList);
-
-		//Get all Active Users
-		List<IUser> activeUserList = usermanager.getAllActiveUsers();
-		model.addAttribute("activeUserList", activeUserList);
-
-		//Get all Inactive Users
-		List<IUser> inactiveUserList = usermanager.getAllInActiveUsers();
-		model.addAttribute("inactiveUserList", inactiveUserList);
-
-		//Get all Quadriga roles
-		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles(IQuadrigaRoleManager.MAIN_ROLES);
-		model.addAttribute("quadrigaroles",quadrigaRoles);
-		model.addAttribute("quadrolessize",quadrigaRoles.size());
-
-		return "auth/users/manage";
-	}
+	
 
 	/**
 	 * Admins are provided with the list of open user requests
@@ -82,6 +49,8 @@ public class UserController {
 	{
 		List<IUser> userRequestsList = usermanager.getUserRequests();
 		model.addAttribute("userRequestsList", userRequestsList);
+		model.addAttribute("userRoles", rolemanager.getSelectableQuarigaRoles(IQuadrigaRoleManager.MAIN_ROLES));
+		model.addAttribute("approveAccount", new ApproveAccount());
 		return "auth/users/requests";
 	}
 
@@ -92,7 +61,7 @@ public class UserController {
 	 * @return	Return to the user management page of the quadriga	
 	 * @throws QuadrigaStorageException 
 	 */
-	@RequestMapping(value = "auth/users/access/{accessRights}", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/users/access/{accessRights:.+}", method = RequestMethod.GET)
 	@Transactional
 	public String userAccessHandler(@PathVariable("accessRights") String sAccessRights, ModelMap model, Principal principal) throws QuadrigaStorageException
 	{

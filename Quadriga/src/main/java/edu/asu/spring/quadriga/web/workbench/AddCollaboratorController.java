@@ -154,7 +154,7 @@ public class AddCollaboratorController {
         model.getModel().put("collaborator", collaborator);
         model.getModel().put("projectname", project.getProjectName());
         model.getModelMap().put("projectdesc", project.getDescription());
-        model.getModelMap().put("projectid", projectid);
+        model.getModelMap().put("myprojectid", projectid);
 
         // retrieve the collaborators who are not associated with project
         // TODO: getProjectNonCollaborators() method has not been changed for
@@ -219,7 +219,7 @@ public class AddCollaboratorController {
                     .getProjectDetails(projectid);
             model.getModelMap().put("projectname", project.getProjectName());
             model.getModelMap().put("projectdesc", project.getDescription());
-            model.getModelMap().put("projectid", projectid);
+            model.getModelMap().put("myprojectid", projectid);
 
             if (result.hasErrors()) {
                 model.getModelMap().put("collaborator", collaborator);

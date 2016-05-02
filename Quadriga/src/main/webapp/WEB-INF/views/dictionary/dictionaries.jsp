@@ -55,10 +55,13 @@
 	    You own these Dictionaries:
 	    <ul>
             <c:forEach var="dictionary" items="${dictinarylist}">
-                <li class="dt with-icon"><a
+                <li class="dt">
+                <a
                     href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
+                        <i class="fa fa-book"></i>
                         <c:out value="${dictionary.dictionaryName}"></c:out>
-                </a> <br> <c:out value="${dictionary.description}"></c:out>
+                </a> 
+                <br> <c:out value="${dictionary.description}"></c:out>
                 </li>
             </c:forEach>
         </ul>
@@ -68,16 +71,18 @@
 </div>
 
 <div style="float:right;">
-	<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">Add Dictionary</a>
+	<i class="fa fa-plus-circle"></i> <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">Add Dictionary</a>
 </div>
 </br>
 <c:if test="${not empty dictionaryCollabList}">
     You participate in these Dictionaries:
     <ul>
         <c:forEach var="dictionary" items="${dictionaryCollabList}">
-            <li class="dt with-icon"><a
+            <li class="dt">
+            <a
                 href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.dictionaryId}">
-                    <c:out value="${dictionary.dictionaryName}"></c:out>
+                <i class="fa fa-book"></i>
+                <c:out value="${dictionary.dictionaryName}"></c:out>
             </a> <br> <c:out value="${dictionary.description}"></c:out>
             </li>
         </c:forEach>

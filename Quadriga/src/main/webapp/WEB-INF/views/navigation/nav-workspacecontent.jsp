@@ -19,104 +19,47 @@
 							.children('a').attr('href');
 				});
 	});
+	
+	$(document).ready(function(){
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/workspace/"+ "${workspacedetails.workspaceId}"+ "/dictionaries.json",
+			  type : "GET",
+	          success: function(data){
+	              $.each(data, function( index, value ) {
+	            	  $( "#workspaceDictionaries" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'><i class='fa fa-book'></i> "+value['name']+"</a><br>");
+	              });
+	          }
+		  });
+		  
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/workspace/"+ "${workspacedetails.workspaceId}"+ "/conceptcollections.json",
+			  type : "GET",
+	          success: function(data){
+	              $.each(data, function( index, value ) {
+	            	 $( "#workspaceConceptCollections" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'><i class='fa fa-list-alt'></i> "+value['name']+"</a><br>");
+	              });
+	          }
+		  });
+	});
 </script>
-<h2 class="major">
-	<span>Menu</span>
-</h2>
-<div id="workspacemenu">
+<div>
 	<ul>
-		<li
-			data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Workspace
-			<ul>
-				<li
-					data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/addworkspace">Add</a></li>
-				<li
-					data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"}'>
-					<c:if test="${isDeactivated == true}">
-						<a href="#" onclick="return funConfirmDeletion();">Delete</a>
-					</c:if> <c:if test="${isDeactivated == false }">
-						<font color="#CCCCCC"
-							title="Only deactivated workspaces can be deleted.">Delete
-							Workspace</font>
-					</c:if>
-				</li>
-				<li
-					data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'>
-
-					<c:if test="${isDeactivated == false}">
-						<a href="#" onclick="return confirmWorkspaceDeactivation();">Deactivate</a>
-
-
-					</c:if> <c:if test="${isDeactivated == true }">
-						<font color="#CCCCCC"
-							title="The workspace is already deactivated."> Deactivate
-							Workspace</a>&nbsp;&nbsp;
-						</font>
-
-					</c:if>
-
-				</li>
-
-				<li
-					data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'>
-
-					<c:if test="${isDeactivated == true}">
-						<a href="#" onclick="return confirmWorkspaceActivation();">Activate</a>
-					</c:if> <c:if test="${isDeactivated == false }">
-						<font color="#CCCCCC" title="The workspace is already activated.">
-							Activate Workspace</a>&nbsp;&nbsp;
-						</font>
-					</c:if>
-
-				</li>
-			</ul>
-		</li>
-
-
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Dictionary
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/dictionaries">List</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary">Delete</a></li>
-			</ul>
-		</li>
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collections
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/conceptcollections">List</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections">Delete</a></li>
-			</ul>
-		</li>
-		<!-- 
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addcollaborators">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletecollaborators">Delete</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/pen.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/updatecollaborators">Update</a></li>
-			</ul>
-		</li>
-		-->
+		<li><a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}"><span
+				class="glyphicon glyphicon-circle-arrow-left"></span> All Workspaces
+		</a></li>
 	</ul>
 </div>
+<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
+	<span>Dictionaries</span>
+</h5>
+<div id="workspaceDictionaries">
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
+</div>
+<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
+	<span>Concept Collections</span>
+</h5>
+<div id="workspaceConceptCollections">		
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a>
+	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+</div>
+

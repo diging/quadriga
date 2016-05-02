@@ -66,5 +66,5 @@ public class SearchResult implements ISearchResult {
         return true;
     }
 
-	
+
 }

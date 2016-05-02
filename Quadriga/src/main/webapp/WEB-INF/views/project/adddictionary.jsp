@@ -88,13 +88,12 @@
 		<c:when test="${not empty dictinarylist}">
 
 			<form method="POST">
-
 				<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}'"
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"
 	value='Okay'/>
 	<br />
 				 <input type="submit" value="Add Dictionary"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/adddictionaries'" />
+					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionaries'" />
 
 				<br /> <br />
 				<table style="width: 100%" cellpadding="0" cellspacing="0"

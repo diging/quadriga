@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.User;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -67,7 +68,7 @@ public class TransferDictionaryOwnerController
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value="auth/dictionaries/transfer/{dictionaryid}", method = RequestMethod.GET)
-	public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException
+	public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		
 		ModelAndView model = new ModelAndView("auth/dictionaries/changedictionaryowner");
@@ -115,7 +116,7 @@ public class TransferDictionaryOwnerController
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value="auth/dictionaries/changedictionaryowner/{dictionaryid}", method = RequestMethod.POST)
     public String transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid,Principal principal, ModelMap model,
-			@Validated @ModelAttribute("user")User collaboratorUser, BindingResult result) throws QuadrigaStorageException, QuadrigaException, JSONException
+			@Validated @ModelAttribute("user")User collaboratorUser, BindingResult result) throws QuadrigaStorageException, QuadrigaException, JSONException, QuadrigaAccessException
 	{
 		
 		

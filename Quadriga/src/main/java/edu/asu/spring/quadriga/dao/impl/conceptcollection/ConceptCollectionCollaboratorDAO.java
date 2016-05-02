@@ -1,6 +1,9 @@
 package edu.asu.spring.quadriga.dao.impl.conceptcollection;
 
 import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -15,7 +18,7 @@ public class ConceptCollectionCollaboratorDAO extends
 		BaseDAO<ConceptCollectionCollaboratorDTO> implements
 		IConceptCollectionCollaboratorDAO {
 
-	@Override
+    @Override
 	public ConceptCollectionCollaboratorDTO getDTO(String id) {
 		return getDTO(ConceptCollectionCollaboratorDTO.class, id);
 	}
@@ -33,5 +36,4 @@ public class ConceptCollectionCollaboratorDAO extends
 
 		return query.list();
 	}
-
 }

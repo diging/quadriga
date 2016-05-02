@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 
 /*
@@ -19,7 +20,7 @@ import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 
 public class QuadrigaRoleTest {
 	
-	private QuadrigaRole quadrigaRole; 
+	private IQuadrigaRole quadrigaRole; 
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

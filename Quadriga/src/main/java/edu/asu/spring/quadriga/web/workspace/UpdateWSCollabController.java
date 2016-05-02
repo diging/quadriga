@@ -29,8 +29,8 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -56,7 +56,7 @@ public class UpdateWSCollabController
 	private ModifyCollaboratorFormManager collaboratorFormManager;
 	
 	@Autowired
-	private IListWSManager retrieveWSManager;
+	private IWorkspaceManager wsManager;
 	
 	/**
 	 * Custom validator to validate the input selection form the user
@@ -105,7 +105,7 @@ public class UpdateWSCollabController
 		//create model view
 		model = new ModelAndView("auth/workbench/workspace/updatecollaborators");
 		String userName = principal.getName();
-		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
 		
 		//retrieve the list of Collaborators and their roles.
 		collaboratorList = collaboratorFormManager.modifyWorkspaceCollaboratorManager(workspaceid);
@@ -163,7 +163,7 @@ public class UpdateWSCollabController
 			model.getModelMap().put("success", 0);
 
 			//add the workspace details
-			IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
+			IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
 			model.getModelMap().put("workspacename",workspace.getWorkspaceName());
 			model.getModelMap().put("workspacedesc", workspace.getDescription());
 			

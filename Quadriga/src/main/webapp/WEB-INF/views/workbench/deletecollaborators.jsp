@@ -38,13 +38,13 @@ $(function() {
 });
 	
 function submitClick(id){
-	location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}';
+	location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}';
 }
 
 </script> 
 
 <form:form method="POST" commandName="collaboratorForm" 
-action="${pageContext.servletContext.contextPath}/auth/workbench/${projectId}/deletecollaborators">
+action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectId}/deletecollaborators">
 <c:choose>
 <c:when test="${success == '0'}">
 <c:if test="${not empty collaboratorForm.collaborators}">

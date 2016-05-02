@@ -174,7 +174,7 @@ public class WorkspaceDictionaryDAO extends BaseDAO<WorkspaceDictionaryDTO> impl
 			
 			for(DictionaryDTO dictionaryDTO : dictionaryDTOList)
 			{
-				dictionary = dictionaryDeepMapper.getDictionaryDetails(dictionaryDTO.getDictionaryid());
+				dictionary = dictionaryDeepMapper.getDictionaryDetails(dictionaryDTO);
 				dictionaryList.add(dictionary);
 			}
 			

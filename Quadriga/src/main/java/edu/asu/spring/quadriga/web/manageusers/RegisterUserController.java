@@ -20,12 +20,12 @@ import edu.asu.spring.quadriga.web.manageusers.beans.NewUserAccountValidator;
 @Controller
 public class RegisterUserController {
 
-    @Autowired 
+    @Autowired
     private IUserManager usermanager;
-    
+
     @InitBinder("accountRequest")
     protected void initBinder(WebDataBinder binder) {
-       binder.setValidator(new NewUserAccountValidator());
+        binder.setValidator(new NewUserAccountValidator());
     }
 
     @RequestMapping(value = "register")
@@ -33,28 +33,32 @@ public class RegisterUserController {
         model.addAttribute("request", new AccountRequest());
         return "register";
     }
-    
+
     @RequestMapping(value = "register-user")
-    public String registerUser(ModelMap model, @Valid @ModelAttribute AccountRequest request, BindingResult result) throws QuadrigaStorageException {
+    public String registerUser(ModelMap model, @Valid @ModelAttribute AccountRequest request, BindingResult result)
+            throws QuadrigaStorageException {
         if (result.hasErrors()) {
             model.addAttribute("request", request);
             model.addAttribute("errors", result);
             return "register";
         }
-        
+
         boolean success = false;
+        String username = request.getUsername();
         try {
+            request.setUsername(username.toLowerCase());
             success = usermanager.addNewUser(request);
         } catch (UsernameExistsException e) {
-           model.addAttribute("errormsg_username_in_use", "Username already in use.");
-           request.setPassword("");
-           request.setRepeatedPassword("");
-           model.addAttribute("request", request);
-           return "register";
+            model.addAttribute("errormsg_username_in_use", "Username already in use.");
+            request.setUsername(username);
+            request.setPassword("");
+            request.setRepeatedPassword("");
+            model.addAttribute("request", request);
+            return "register";
         } catch (QuadrigaStorageException e) {
             throw e;
         }
-        
+
         if (!success) {
             model.addAttribute("errormsg_failure", "Sorry, user could not be added.");
             request.setPassword("");
@@ -62,7 +66,7 @@ public class RegisterUserController {
             model.addAttribute("request", request);
             return "register";
         }
-        
+
         model.addAttribute("successmsg", "User account request created. An administrator will review your request.");
         return "redirect:/login";
     }
