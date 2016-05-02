@@ -13,6 +13,7 @@ $(document).ready(function() {
 
 <article class="is-page-content">
 
+
 <header>
 	<h2>&nbsp;Welcome back <sec:authentication property="principal.username" />!</h2>
 	<span class="byline">&nbsp;&nbsp;The following projects have recently been updated</span>

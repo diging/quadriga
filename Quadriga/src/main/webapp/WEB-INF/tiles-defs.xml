@@ -305,6 +305,13 @@
 			value="/WEB-INF/views/workbench/dspacelogin/keys.jsp" />
 	</definition>
 
+	<!--  add/ textfile pages -START -->
+	<definition name="auth/workbench/workspace/addtext"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Add Text" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/addtext.jsp" />
+	</definition>
 
 	<!-- Workspace pages -->
 	<definition name="auth/workbench/workspace/communities"
