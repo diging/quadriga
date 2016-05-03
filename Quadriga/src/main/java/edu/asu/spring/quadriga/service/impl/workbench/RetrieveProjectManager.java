@@ -235,7 +235,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
                     .iterator();
             while (projectCollabIterator.hasNext()) {
                 String collab = projectCollabIterator.next().getCollaborator()
-                        .getUserObj().getName();
+                        .getUserObj().getUserName();
                 collaboratorNames.add(collab.toLowerCase());
             }
         }
@@ -244,7 +244,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
         String access = project.getProjectAccess().toString();
 
         if (access.equals("PRIVATE")) {
-            if (project.getOwner().getName().toLowerCase().equals(user)
+            if (project.getOwner().getUserName().toLowerCase().equals(user)
                     || collaboratorNames.contains(user)) {
                 return true;
             }
