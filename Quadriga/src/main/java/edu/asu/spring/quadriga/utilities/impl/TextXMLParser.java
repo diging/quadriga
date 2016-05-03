@@ -19,6 +19,11 @@ import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.TextFileParseException;
 import edu.asu.spring.quadriga.utilities.ITextXMLParser;
 
+/**
+ * Implementation class for ITextXMLParser
+ * @author Nischal Samji
+ *
+ */
 @Service
 public class TextXMLParser implements ITextXMLParser {
 
