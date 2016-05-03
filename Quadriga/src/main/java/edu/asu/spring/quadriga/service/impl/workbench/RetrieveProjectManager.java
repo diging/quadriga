@@ -230,7 +230,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
             while (projectCollabIterator.hasNext()) {
                 String collab = projectCollabIterator.next().getCollaborator()
                         .getUserObj().getName();
-                collaboratorNames.add(collab);
+                collaboratorNames.add(collab.toLowerCase());
             }
         }
         String access = project.getProjectAccess().toString();
