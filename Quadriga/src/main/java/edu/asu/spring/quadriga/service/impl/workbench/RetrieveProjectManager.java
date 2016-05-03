@@ -239,7 +239,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
                 collaboratorNames.add(collab.toLowerCase());
             }
         }
-        logger.debug("Collaborators: " + collaboratorNames);
+        logger.trace("Collaborators: " + collaboratorNames);
         
         String access = project.getProjectAccess().toString();
 
