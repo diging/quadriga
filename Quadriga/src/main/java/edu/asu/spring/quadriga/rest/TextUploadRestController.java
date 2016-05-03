@@ -59,6 +59,7 @@ public class TextUploadRestController {
     private Properties messages;
 
     /**
+     * Controller method for handling Rest requests for Text Uploads
      * @param wsId
      *            WorkspaceId for the Textfile as a path variable.
      * @param projId
@@ -66,7 +67,7 @@ public class TextUploadRestController {
      * @param response
      *            Generic HTTP Response Object for returning the XML response
      * @param request
-     *            Generic HTTP REUEST Object for RECEIVING the XML response
+     *            Generic HTTP Request Object for RECEIVING the XML response
      * @param xml
      *            XML content as a string
      * @return Returns a Response Entity that contains with the information
