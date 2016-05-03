@@ -1,7 +1,13 @@
 package edu.asu.spring.quadriga.web.settings;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +29,7 @@ import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.publicwebsite.IPublicPageBlockLinkTargets;
 import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -55,13 +62,36 @@ public class PublicPageSettingsController {
 		model.getModel().put("publicpage", publicPageFactory.createPublicPageObject());
 		model.getModelMap().put("publicpageprojectid", projectid);
 		model.getModel().put("project", projectManager.getProjectDetails(projectid));
+		
+		Collections.sort(publicPageList, new Comparator<IPublicPage>() {
+
+            @Override
+            public int compare(IPublicPage o1, IPublicPage o2) {
+               return o1.getOrder() - o2.getOrder();
+            }
+        });
 
 		for (IPublicPage publicPage : publicPageList) {
 			model.getModel().put("publicpageObject" + publicPageList.indexOf(publicPage), publicPage);
 		}
+		
+		Map<String, String> linkTypes = getLinkTargetMap();
+		
+		model.getModel().put("linkTypes", linkTypes);
 
 		return model;
 	}
+
+    private Map<String, String> getLinkTargetMap() {
+        Map<String, String> linkTypes = new HashMap<String, String>();
+		linkTypes.put(IPublicPageBlockLinkTargets.ABOUT, "About Text");
+		linkTypes.put(IPublicPageBlockLinkTargets.BLOG, "Project Blog");
+		linkTypes.put(IPublicPageBlockLinkTargets.BROWSE, "Browse Networks");
+		linkTypes.put(IPublicPageBlockLinkTargets.EXPLORE, "Explore Combined Network");
+		linkTypes.put(IPublicPageBlockLinkTargets.SEARCH, "Search Networks");
+		linkTypes.put(IPublicPageBlockLinkTargets.STATS, "Project Statistics");
+        return linkTypes;
+    }
 
 	/**
 	 * This method is used update the database with the information provided in
@@ -76,13 +106,62 @@ public class PublicPageSettingsController {
 			@PathVariable("projectid") String projectid)
 			throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 
-		PublicPage publicpageentry = new PublicPage();
-		publicpageentry.setTitle(data.getString("title"));
-		publicpageentry.setDescription(data.getString("desc"));
-		publicpageentry.setOrder(data.getInt("order"));
+	    List<String> validationFailed = new ArrayList<String>();    
+	    
+		IPublicPage publicpageentry = new PublicPage();
+		if (validate("title", validationFailed, data)) {
+	        publicpageentry.setTitle(data.getString("title"));
+	    }
+		
+		String description = data.getString("desc");
+		if (validate("desc", validationFailed, data)) {
+		    publicpageentry.setDescription(description);
+		}
+		
+		int order = data.getInt("order");
+		if (validate("order", validationFailed, data)) {
+		    publicpageentry.setOrder(order);
+		}
+		
 		publicpageentry.setProjectId(projectid);
-		publicpageentry.setPublicPageId(data.getString("publicpageid"));
+		
+		String pageId = data.getString("publicpageid");
+		if (pageId != null && !pageId.trim().isEmpty()) {
+		    publicpageentry.setPublicPageId(pageId);
+		}
+		
+		String linkTo = data.getString("linkTo");
+		if (validate("linkTo", validationFailed, data)) {
+		    Map<String, String> linkTypes = getLinkTargetMap();
+		    if (!linkTypes.keySet().contains(linkTo)) {
+		        validationFailed.add("linkTo");
+		    } else {
+		        publicpageentry.setLinkTo(linkTo);
+		    }
+		}
+		
+		String linkText = data.getString("linkText");
+		if (validate("linkText", validationFailed, data)) {
+		    publicpageentry.setLinkText(linkText);
+		}
+		
+		if (!validationFailed.isEmpty()) {
+		    JSONObject fieldList = new JSONObject();
+		    fieldList.put("fields", validationFailed);
+		    
+		    return new ResponseEntity<String>(fieldList.toString(), HttpStatus.BAD_REQUEST);
+		}
+		
 		publicPageContentManager.saveOrUpdatePublicPage(publicpageentry);
 		return new ResponseEntity<String>("Successfully updated", HttpStatus.OK);
+	}
+	
+	private boolean validate(String field, List<String> validationList, JSONObject data) throws JSONException {
+	    String value = data.getString(field);
+        if (value == null || value.trim().isEmpty()) {
+            validationList.add(field);
+            return false;
+        } 
+        return true;
 	}
 }

@@ -36,21 +36,27 @@
 </div>
 
 <div class="row">
+<c:if test="${not empty blocks[0]}">
   <div class="col-lg-4">
-    <h2>Browse the networks of this project!</h2>
-    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/browsenetworks" role="button">Browse</a></p>
+    <h2>${blocks[0].title}</h2>
+    <p>${blocks[0].description}</p>
+    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/${blocks[0].linkTo}" role="button">${blocks[0].linkText}</a></p>
   </div>
+</c:if>
+<c:if test="${not empty blocks[1]}">
   <div class="col-lg-4">
-    <h2>Explore the combined graph!</h2>
-    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/networks" role="button">Explore</a></p>
+    <h2>${blocks[1].title}</h2>
+    <p>${blocks[1].description}</p>
+    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/${blocks[1].linkTo}" role="button">${blocks[1].linkText}</a></p>
  </div>
+ </c:if>
+ <c:if test="${not empty blocks[2]}">
   <div class="col-lg-4">
-    <h2>Search the graph!</h2>
-    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-    <p><a class="btn btn-primary" href="#" role="button">Search</a></p>
+    <h2>${blocks[2].title}</h2>
+    <p>${blocks[2].description}</p>
+    <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/${blocks[2].linkTo}" role="button">${blocks[2].linkText}</a></p>
   </div>
+</c:if>
 </div>
 
 </c:if>
