@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -31,10 +32,11 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  * will result in a project object filled with the information of the project
  * with the unix name "unixName".
  * 
- * @author jdamerow
+ * @author Julia Damerow
  *
  */
 @Aspect
+@Order(value = 10)
 @Component
 public class InjectProjectAspect {
 
@@ -86,7 +88,7 @@ public class InjectProjectAspect {
                     project = projectManager.getProjectDetailsByUnixName(projectUnixName);
 
                     if (project == null)
-                        return "404";
+                        return "public/404";
 
                     // replace the annotated project parameter with the
                     // retrieved project

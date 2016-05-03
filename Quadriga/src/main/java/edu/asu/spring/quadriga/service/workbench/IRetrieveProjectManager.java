@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
-import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IRetrieveProjectManager {
@@ -33,7 +32,7 @@ public interface IRetrieveProjectManager {
     boolean getPublicProjectWebsiteAccessibility(String unixName) 
             throws QuadrigaStorageException;
     
-    boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) 
+    boolean canAccessProjectWebsite(String unixName, String user) 
             throws QuadrigaStorageException;
     
     public abstract List<IProject> getProjectListByAccessibility(String name)
