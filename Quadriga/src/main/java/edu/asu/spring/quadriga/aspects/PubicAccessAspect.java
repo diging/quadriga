@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.aspects;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.AnnotationMisconfigurationException;
+import edu.asu.spring.quadriga.rest.ConceptCollectionRestController;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
@@ -35,6 +38,9 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @Order(value = 100)
 @Component
 public class PubicAccessAspect {
+    
+    private static final Logger logger = LoggerFactory.getLogger(PubicAccessAspect.class);
+
 
     @Autowired
     private IRetrieveProjectManager projectManager;
@@ -72,6 +78,7 @@ public class PubicAccessAspect {
                         project.getUnixName(), userName))) {
             return joinPoint.proceed();
         } else {
+            logger.info("Access denied to: " + userName);
             return "public/forbidden";
         }
     }
