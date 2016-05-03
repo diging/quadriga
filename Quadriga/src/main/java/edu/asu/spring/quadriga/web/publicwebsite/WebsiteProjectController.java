@@ -132,6 +132,7 @@ public class WebsiteProjectController {
      * @throws QuadrigaStorageException
      *             Database storage exception thrown
      */
+    @CheckPublicAccess(projectIndex = 4)
     @RequestMapping(value = "sites/{ProjectUnixName}/browsenetworks", method = RequestMethod.GET)
     public String browseNetworks(
             @PathVariable("ProjectUnixName") String unixName,
@@ -170,6 +171,7 @@ public class WebsiteProjectController {
      * @throws JAXBException
      *             JAXB exception while getting the JSON
      */
+    @CheckPublicAccess(projectIndex = 5)
     @RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
     public String visualizeNetworks(
             @PathVariable("projectUnixName") String unixName,
@@ -211,6 +213,7 @@ public class WebsiteProjectController {
      * @throws JAXBException
      * @throws QuadrigaStorageException
      */
+    @CheckPublicAccess(projectIndex = 3)
     @RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
     public String visualizeAllNetworks(
             @PathVariable("projectUnixName") String projectUnixName,

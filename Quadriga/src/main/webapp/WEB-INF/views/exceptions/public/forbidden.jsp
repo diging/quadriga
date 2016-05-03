@@ -5,7 +5,7 @@
     <div class="col-md-6">
       <h1>Unauthorized</h1>
       <p>We're sorry but you are not authorized to see this page. If you have an account with Quadriga you could
-       log in and try again. </p>
+       <a href="${pageContext.servletContext.contextPath}">log in</a> and try again. </p>
     </div>
     
     <div class="col-md-6">
