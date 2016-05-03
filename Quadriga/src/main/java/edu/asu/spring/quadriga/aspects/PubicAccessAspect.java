@@ -78,7 +78,7 @@ public class PubicAccessAspect {
                         project.getUnixName(), userName))) {
             return joinPoint.proceed();
         } else {
-            logger.info("Access denied to: " + userName);
+            logger.debug("Access denied to: " + userName);
             return "public/forbidden";
         }
     }

@@ -6,12 +6,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
+import edu.asu.spring.quadriga.aspects.PubicAccessAspect;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -25,6 +28,9 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 @Service
 public class RetrieveProjectManager implements IRetrieveProjectManager {
+    
+    private static final Logger logger = LoggerFactory.getLogger(RetrieveProjectManager.class);
+    
     @Autowired
     private IRetrieveProjectDAO dbConnect;
 
@@ -233,6 +239,8 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
                 collaboratorNames.add(collab.toLowerCase());
             }
         }
+        logger.debug("Collaborators: " + collaboratorNames);
+        
         String access = project.getProjectAccess().toString();
 
         if (access.equals("PRIVATE")) {
