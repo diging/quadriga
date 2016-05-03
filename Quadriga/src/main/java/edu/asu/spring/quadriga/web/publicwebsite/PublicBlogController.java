@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -58,6 +59,7 @@ public class PublicBlogController {
      * @throws QuadrigaStorageException
      * @throws NoSuchRoleException
      */
+    @CheckPublicAccess(projectIndex = 3)
     @RequestMapping(value = "sites/{ProjectUnixName}/projectblog", method = RequestMethod.GET)
     public String projectBlog(@PathVariable("ProjectUnixName") String projectUnixName, Model model,
             @InjectProject(unixNameParameter = "ProjectUnixName") IProject project, Principal principal)
