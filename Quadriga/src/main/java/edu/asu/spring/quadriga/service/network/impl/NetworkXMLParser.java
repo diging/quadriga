@@ -26,8 +26,11 @@ import org.xml.sax.SAXException;
 import edu.asu.spring.quadriga.domain.factory.networks.INetworkXMLFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.network.INetworkXML;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
+import edu.asu.spring.quadriga.exceptions.TextFileParseException;
 import edu.asu.spring.quadriga.service.network.INetworkXMLParser;
+import edu.asu.spring.quadriga.utilities.ITextXMLParser;
 
 /**
  * 
@@ -40,9 +43,13 @@ public class NetworkXMLParser implements INetworkXMLParser {
     @Autowired
     private INetworkXMLFactory nwXMLFactory;
 
+    @Autowired
+    private ITextXMLParser textXMLParser;
+
     @Override
     @Transactional
-    public INetworkXML parseXML(String xml, String projectid, String workspaceid) throws NetworkXMLParseException {
+    public INetworkXML parseXML(String xml, String projectid, String workspaceid)
+            throws NetworkXMLParseException, TextFileParseException {
         INetworkXML networkXML = nwXMLFactory.createNetworkXMLObject();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -60,26 +67,11 @@ public class NetworkXMLParser implements INetworkXMLParser {
             networkXML.setNetworkXMLString(xml);
             return networkXML;
         }
-        String text = textNodeList.item(0).getTextContent();
+
+        ITextFile txtfile = textXMLParser.parseTextXML(xml, workspaceid, projectid);
 
         NodeList handle = document.getElementsByTagName("handle");
         NodeList fileName = document.getElementsByTagName("file_name");
-        if (handle.getLength() == 0 && fileName.getLength() == 0) {
-            throw new NetworkXMLParseException("Handle and file name must be specified in the input XML");
-        } else if (handle.getLength() == 0) {
-            throw new NetworkXMLParseException("Handle must be specified in the input XML");
-        } else if (fileName.getLength() == 0) {
-            throw new NetworkXMLParseException("File name must be specified in the input XML");
-        }
-
-        String handleID = handle.item(0).getTextContent();
-        String filename = fileName.item(0).getTextContent();
-        TextFile txtfile = new TextFile();
-        txtfile.setFileContent(text);
-        txtfile.setFileName(filename);
-        txtfile.setProjectId(projectid);
-        txtfile.setWorkspaceId(workspaceid);
-        txtfile.setRefId(handleID);
 
         networkXML.setTextFile(txtfile);
 

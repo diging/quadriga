@@ -112,7 +112,6 @@ public class TextUploadRestController {
             template.merge(context, writer);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
-            System.out.println(request);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.CREATED);
         } catch (FileNotFoundException e) {
             throw new RestException(404, e);
