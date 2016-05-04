@@ -64,6 +64,15 @@ public class TextXMLParser implements ITextXMLParser {
         String fileContent = textNodeList.item(0).getTextContent();
         String fileName = fileNameNode.item(0).getTextContent();
         String refId = handleNode.item(0).getTextContent();
+        
+        if (fileContent.isEmpty()) {
+            throw new TextFileParseException("Specify File Content in the XML");
+        } else if (fileName.isEmpty()) {
+            throw new TextFileParseException("Filename cannot be empty");
+        } else if (refId.isEmpty()) {
+            throw new TextFileParseException("Handle cannot be empty");
+        } 
+        
         ITextFile txtFile = txtFileFactory.createTextFileObject();
         txtFile.setFileContent(fileContent);
         txtFile.setFileName(fileName);
