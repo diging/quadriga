@@ -86,6 +86,7 @@ public class TextUploadRestController {
         try {
             txtFile = txtXMLParser.parseTextXML(xml, wsId, projId);
         } catch (TextFileParseException tfe) {
+            logger.error("Error in Text Rest Controller:" + tfe.getMessage());
             String errorMsg = errorMessageRest.getErrorMsg(tfe.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
