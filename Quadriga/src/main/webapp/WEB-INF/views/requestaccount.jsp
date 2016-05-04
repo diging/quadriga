@@ -12,7 +12,7 @@
 		method='POST'>
 		<table>
 		<tr>
-			<td>Name: </td><td><form:input  path="name" /></f:input></td>
+			<td>Name: </td><td><form:input  path="name" /></td>
 		</tr>
 		<tr>
 			<td>Username:</td><td><form:input  path="username"/></td>

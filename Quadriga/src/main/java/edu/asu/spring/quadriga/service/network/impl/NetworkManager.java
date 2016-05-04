@@ -4,7 +4,6 @@ import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,17 +36,11 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
-import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -61,13 +54,11 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -639,28 +630,22 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private NetworkEntry parseNewAppellationEvent(NewNetworkDetailsCache newNetworkDetailCache,
             CreationEvent creationEvent) {
 
-        List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
-        Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
         NetworkEntry entry = new NetworkEntry();
         
-        while (elementsIterator.hasNext()) {
-            JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-            if (element.getName().toString().contains("id")) {
-                String id = element.getValue().toString();
-                if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                    entry = newNetworkDetailCache.getById(id);
-                } else {
-                    entry.setId(id);
-                    entry.setType(INetworkManager.APPELLATIONEVENT);
-                    entry.setTop(true);
-                    newNetworkDetailCache.addEntry(entry);
-                }
-            }
-            if (element.getName().toString().endsWith("}refId")) {
-                entry.setRefId(element.getValue().toString());
+        if (creationEvent.getId() != null && !creationEvent.getId().isEmpty()) {
+            String id = creationEvent.getId();
+            if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                entry = newNetworkDetailCache.getById(id);
+            } else {
+                entry.setId(id);
+                entry.setType(INetworkManager.APPELLATIONEVENT);
+                entry.setTop(true);
+                newNetworkDetailCache.addEntry(entry);
             }
         }
-
+        if (creationEvent.getRefId() != null && !creationEvent.getRefId().isEmpty()) {
+            entry.setRefId(creationEvent.getRefId());
+        }
         return entry;
     }
 
@@ -681,27 +666,21 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private NetworkEntry parseNewRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,
             CreationEvent creationEvent) {
 
-        List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
-        Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
         NetworkEntry entry = new NetworkEntry();
         
-        while (elementsIterator.hasNext()) {
-            JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-
-            // get relation event id
-            if (element.getName().toString().contains("id")) {
-                String id = element.getValue().toString();
-                if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                    entry = newNetworkDetailCache.getById(id);
-                } else {
-                    entry.setId(id);
-                    entry.setType(INetworkManager.RELATIONEVENT);
-                    entry.setTop(true);
-                    newNetworkDetailCache.addEntry(entry);
-                }
+        // get relation event id
+        if (creationEvent.getId() != null && !creationEvent.getId().isEmpty()) {
+            String id = creationEvent.getId();
+            if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                entry = newNetworkDetailCache.getById(id);
+            } else {
+                entry.setId(id);
+                entry.setType(INetworkManager.RELATIONEVENT);
+                entry.setTop(true);
+                newNetworkDetailCache.addEntry(entry);
             }
-            
-        }
+        }        
+        
         RelationEventType relationEventType = (RelationEventType) (creationEvent);
         try {
             // Go Recursively and check for Relation event within a relation
@@ -816,29 +795,24 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             return parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache,
                     appellationEventType);
         } else {
-            List<JAXBElement<?>> elementsList = relationEventType.getIdOrCreatorOrCreationDate();
-            Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
             NetworkEntry entry = new NetworkEntry();
             
-            while (elementsIterator.hasNext()) {
-                JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-
-                if (element.getName().toString().contains("id")) {
-                    String id = element.getValue().toString();
-                    if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                        entry = newNetworkDetailCache.getById(id);
-                    } else {
-                        entry.setId(id);
-                        entry.setType(INetworkManager.RELATIONEVENT);
-                        entry.setTop(true);
-                        newNetworkDetailCache.addEntry(entry);
-                    }
-                }
-
-                if (element.getName().toString().endsWith("}refId")) {
-                    entry.setRefId(element.getValue().toString());
+            if (relationEventType.getId() != null && !relationEventType.getId().isEmpty()) {
+                String id = relationEventType.getId();
+                if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                    entry = newNetworkDetailCache.getById(id);
+                } else {
+                    entry.setId(id);
+                    entry.setType(INetworkManager.RELATIONEVENT);
+                    entry.setTop(true);
+                    newNetworkDetailCache.addEntry(entry);
                 }
             }
+
+            if (relationEventType.getRefId() != null && !relationEventType.getRefId().isEmpty()) {
+                entry.setRefId(relationEventType.getRefId());
+            }
+            
             NetworkEntry nestedEntry = parseIntoRelationEventElement(relationEventType, newNetworkDetailCache);
             if (nestedEntry != null) {
                 nestedEntry.setTop(false);
@@ -871,28 +845,22 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             return null;
         } else {
             logger.debug("AE1 found object");
-            List<JAXBElement<?>> elementsList = appellationEventType.getIdOrCreatorOrCreationDate();
-            Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
             NetworkEntry entry = new NetworkEntry();
             
-            while (elementsIterator.hasNext()) {
-                JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-
-                if (element.getName().toString().contains("id")) {
-                    String id = element.getValue().toString();
-                    if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                        entry = newNetworkDetailCache.getById(id);
-                    } else {
-                        entry.setId(id);
-                        entry.setType(INetworkManager.APPELLATIONEVENT);
-                        entry.setTop(false);
-                        newNetworkDetailCache.addEntry(entry);
-                    }
+            if (appellationEventType.getId() != null && !appellationEventType.getId().isEmpty()) {
+                String id = appellationEventType.getId();
+                if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                    entry = newNetworkDetailCache.getById(id);
+                } else {
+                    entry.setId(id);
+                    entry.setType(INetworkManager.APPELLATIONEVENT);
+                    entry.setTop(false);
+                    newNetworkDetailCache.addEntry(entry);
                 }
+            }
 
-                if (element.getName().toString().endsWith("}refId")) {
-                    entry.setRefId(element.getValue().toString());
-                }
+            if (appellationEventType.getRefId() != null && !appellationEventType.getRefId().isEmpty()) {
+                entry.setRefId(appellationEventType.getRefId());
             }
             
             return entry;
@@ -1025,13 +993,13 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             // Check if event is Appellation event
             if (creationEvent instanceof AppellationEventType) {
                 AppellationEventType appellationEventType = (AppellationEventType) creationEvent;
-                return appellationEventType.getAppellationSourceReference();
+                return appellationEventType.getSourceReference();
             }
             // Check if event is Relation event
             if (creationEvent instanceof RelationEventType) {
                 RelationEventType relationEventType = (RelationEventType) creationEvent;
 
-                return relationEventType.getRelationEventSourceReference();
+                return relationEventType.getSourceReference();
             }
         }
 

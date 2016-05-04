@@ -12,8 +12,11 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300'
 	rel='stylesheet' type='text/css'>
+<link href="${pageContext.servletContext.contextPath}/resources/public/css/base.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script src="${pageContext.servletContext.contextPath}/resources/js/d3.min.js" charset="utf-8"></script>
+
 <title><tiles:insertAttribute name="title" /></title>
 
 

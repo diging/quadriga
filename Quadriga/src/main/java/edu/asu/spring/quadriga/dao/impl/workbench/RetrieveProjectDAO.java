@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.dao.impl.workbench;
 
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -360,6 +361,51 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
         return getDTO(ProjectDTO.class, id);
     }
 	
+    /**
+	 * 
+	 * This method fetches all the  projects with the given accessibility
+	 * 
+	 * Uses Hibernate to get {@link ProjectDTO} of a {@link IProject} ID. 
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProjectDTO> getAllProjectsDTOByAccessibility(String accessibility) throws QuadrigaStorageException  {
+		List<ProjectDTO> projectDTOList = null;
+		try {
+			Query query = sessionFactory.getCurrentSession().createQuery("from ProjectDTO project where project.accessibility = :accessibility");
+			query.setParameter("accessibility", accessibility);
+			projectDTOList =  query.list();
+			return projectDTOList;
+		}
+		catch(HibernateException e) {
+			logger.info("getAllProjectsDTO By Accessibility method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+	}
 	
-
+    /**
+     * 
+     * This method fetches all the projects that contain the given search term and accessibility
+     * 
+     * Uses Hibernate to get {@link ProjectDTO} of a {@link IProject} ID. 
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<ProjectDTO> getAllProjectsDTOBySearchTermAndAccessiblity(String searchTerm, String accessibility) throws QuadrigaStorageException  {
+        List<ProjectDTO> projectDTOList = null;
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery("from ProjectDTO project where project.accessibility=:accessibility AND "
+                                                        + "(project.description like :searchTerm "
+                                                        + " OR "
+                                                        + "project.projectname like :searchTerm )");
+            query.setParameter("accessibility", accessibility);
+            query.setParameter("searchTerm", "%"+searchTerm+"%");
+            projectDTOList =  query.list();
+            return projectDTOList;
+        }
+        catch(HibernateException e) {
+            logger.error("getAllProjectsDTO By SearchTerm And Accessiblity method :"+e.getMessage());  
+            throw new QuadrigaStorageException(e);
+        }
+    }
 }

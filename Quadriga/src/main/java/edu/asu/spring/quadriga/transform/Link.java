@@ -1,15 +1,11 @@
 package edu.asu.spring.quadriga.transform;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class Link {
 
     private Node subject;
     private Node object;
     private String label;
+    private String sourceReference;
     private String statementId;
     
     public Node getSubject() {
@@ -34,6 +30,14 @@ public class Link {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getSourceReference() {
+        return sourceReference;
+    }
+
+    public void setSourceReference(String sourceReference) {
+        this.sourceReference = sourceReference;
     }
 
     public String getStatementId() {

@@ -218,12 +218,7 @@ public class ConceptCollectionProxy implements IConceptCollection {
 	 */
 	private void setConceptCollectionDetails(){
 		try{
-			
-			 try {
-				this.conceptCollectionManager.fillCollectionDetails(this.conceptCollection,this.owner.getName());
-			} catch (QuadrigaAccessException e) {
-				logger.error("Issue accessing database from Concept Collection proxy",e);
-			}
+			 this.conceptCollectionManager.fillConceptCollection(this.conceptCollection);
 		}catch(QuadrigaStorageException e){
 			logger.error("Issue accessing database from Concept Collection proxy",e);
 		}
