@@ -24,7 +24,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.factory.networks.INetworkXMLFactory;
-import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.network.INetworkXML;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;

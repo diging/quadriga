@@ -6,13 +6,14 @@ import java.io.StringWriter;
 import java.util.Properties;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,8 @@ public class TextUploadRestController {
 
     @Resource(name = "projectconstants")
     private Properties messages;
+    
+    private static final Logger logger = LoggerFactory.getLogger(TextUploadRestController.class);
 
     /**
      * Controller method for handling Rest requests for Text Uploads
@@ -89,9 +92,11 @@ public class TextUploadRestController {
         try {
             tfManager.saveTextFile(txtFile);
         } catch (QuadrigaStorageException e) {
+            logger.error("Error in Text Rest Controller:" + e.getMessage());
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (FileStorageException e) {
+            logger.error("Error in Text Rest Controller:" + e.getMessage());
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -114,10 +119,13 @@ public class TextUploadRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.CREATED);
         } catch (FileNotFoundException e) {
-            throw new RestException(404, e);
+            logger.error("Error in Text Rest Controller:" + e.getMessage());
+            throw new RestException(500, e);
         } catch (IOException e) {
-            throw new RestException(404, e);
+            logger.error("Error in Text Rest Controller:" + e.getMessage());
+            throw new RestException(500, e);
         } catch (Exception e) {
+            logger.error("Error in Text Rest Controller:" + e.getMessage());
             throw new RestException(500, e);
         }
 
