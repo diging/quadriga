@@ -69,7 +69,7 @@ public class LoginControllerTest {
 	public void testValidUserHandle() throws SQLException {
 
 		//Valid and Active user
-		assertEquals(loginController.validUserHandle(model, principal, authentication),"auth/home");
+		assertEquals(loginController.validUserHandle(model, principal, authentication),"redirect:home");
 
 	}
 

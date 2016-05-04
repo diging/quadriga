@@ -2,6 +2,6 @@
 /buildNumber.properties
 /.idea/
 *.iml
-.settings/
 *.project
 /bin/
+.DS_Store

@@ -141,6 +141,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo) {
         String projectId = projectDao.generateUniqueID();
