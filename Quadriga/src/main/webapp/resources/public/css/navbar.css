@@ -19,6 +19,14 @@ body {
  color: #E1EAF3;
 }
 
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: white;
+}
+
+.navbar-default .navbar-toggle {
+	color: white;
+}
+
 .navbar-colored {
 	background-color: #487FB7;
 	z-index: 100;
