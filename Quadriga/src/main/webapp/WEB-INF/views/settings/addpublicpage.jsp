@@ -5,43 +5,71 @@
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script>
-$(function() {
-$("#submit1").click(function(){performAction(this)});
-$("#submit2").click(function(){performAction(this)});
-$("#submit3").click(function(){performAction(this)});
-});
+//@ sourceURL=filename.js
+	$(function() {
+		$("#submit1").click(function(){performAction(this)});
+		$("#submit2").click(function(){performAction(this)});
+		$("#submit3").click(function(){performAction(this)});
+	});
+    
+	function setErrorMsg(obj, field, msg) {
+		$(obj).closest('div.publicpageform').find('#' + field + '_err').html(msg);
+	}
+
 	function performAction(obj) {
 		var data = {};
 		var publicpageid = $(obj).closest('div.publicpageform').find('.publicpageid').val();
 		var title = $(obj).closest('div.publicpageform').find('.titleValue').val();
 		var desc = $(obj).closest('div.publicpageform').find('.descValue').val();
 		var order = $(obj).closest('div.publicpageform').find('.orderValue').val();
+		var linkTo = $(obj).closest('div.publicpageform').find('.linkTo').val();
+		var linkText = $(obj).closest('div.publicpageform').find('.linkText').val();
+		
 		var mandatory = 0;
 		if (title.length < 1) {
-			$(obj).closest('div.publicpageform').find('#title_err').html("Please provide a title");
+			setErrorMsg(obj, 'title', 'Please provide a title');
 			mandatory = 1;
 		} else {
-			$(obj).closest('div.publicpageform').find('#title_err').html('');
+			setErrorMsg(obj, 'title', '');
 		}
 		if (desc.length < 1) {
-			$(obj).closest('div.publicpageform').find('#desc_err').html("Please provide a description");
+			setErrorMsg(obj, 'desc', 'Please provide a description');
 			mandatory = 1;
 		} else {
-			$(obj).closest('div.publicpageform').find('#desc_err').html('');
+			setErrorMsg(obj, 'desc', '');
 		}
 		if (order <=0 || order >3) {
-			$(obj).closest('div.publicpageform').find('#order_err').html("Possible values are 1, 2, or 3.");
+			setErrorMsg(obj, 'order', 'Possible values are 1, 2, or 3.');
 			mandatory = 1
 		} else {
-			$(obj).closest('div.publicpageform').find('#order_err').html('');
+			setErrorMsg(obj, 'order', '');
 		}
+		
+		if (linkTo.length < 1) {
+			setErrorMsg(obj, 'linkTo', 'Please specify where to link to.');
+			mandatory = 1;
+		} else {
+			setErrorMsg(obj, 'linkTo', '');
+        }
+		
+		if (linkText.length < 1) {
+			setErrorMsg(obj, 'linkText', 'Please specify a link text.');
+            mandatory = 1;
+        } else {
+        	setErrorMsg(obj, 'linkText', '');
+        }
+		
 		if (mandatory) {
 			return false;
 		}
+		
+		/* if all checks pass submit */
 		data["title"] = title;
 		data["desc"] = desc;
 		data["order"] = order;
 		data["publicpageid"] = publicpageid;
+		data["linkTo"] = linkTo;
+		data["linkText"] = linkText;
 		$
 				.ajax({
 					type : "POST",
@@ -53,7 +81,12 @@ $("#submit3").click(function(){performAction(this)});
 						$(obj).closest('div.publicpageform').find('#success_message').html('Successfully Updated');
 					},
 					error : function(e) {
-						console.log("ERROR: ", e);
+						response = JSON.parse(e.responseText)
+						console.log("ERROR: ", e.responseText);
+						fieldArray = response["fields"];
+						fieldArray.forEach(function(entry) {
+							setErrorMsg(obj, entry, 'Please specify a value for this field.');
+						});
 					}
 				});
 	}
@@ -84,9 +117,22 @@ $("#submit3").click(function(){performAction(this)});
 							class="ui-state-error-text"></form:errors></td>
 				</tr>
 				<tr>
+				    <td style="vertical-align: top">Link to *</td>
+				    <td><form:select path="linkTo" class="linkTo" items="${linkTypes}" /></td>
+				    <td><div id="linkTo_err"></div></td>
+				    <td></td>
+				</tr>
+				<tr>
+                    <td style="vertical-align: top">Link Text *</td>
+                    <td style="width: 1px"><input class="linkText" type="text"
+                        path="linkText"  value="${publicpageObject0.linkText}"></td>
+                    <td><div id="linkText_err"></div></td>
+                    <td></td>
+                </tr>
+				<tr>
 					<td style="width: 170px">Order Preference *</td>
 					<td style="width: 1px"><input type="number" id="order1"
-						path="order" class="orderValue" value="${publicpageObject0.order}">
+						path="order" class="orderValue" value="${publicpageObject0.order}"></td>
 					<td><div id="order_err"></div></td>
 					<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
 				</tr>
@@ -120,6 +166,19 @@ $("#submit3").click(function(){performAction(this)});
 					<td><form:errors path="description"
 							class="ui-state-error-text"></form:errors></td>
 				</tr>
+				<tr>
+                    <td style="vertical-align: top">Link to *</td>
+                    <td><form:select path="linkTo" class="linkTo" items="${linkTypes}" /></td>
+                    <td><div id="linkTo_err"></div></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top">Link Text *</td>
+                    <td style="width: 1px"><input class="linkText" type="text"
+                        path="linkText" value="${publicpageObject1.linkText}"></td>
+                    <td><div id="linkText_err"></div></td>
+                    <td></td>
+                </tr>
 				<tr>
 					<td style="width: 170px">Order Preference *</td>
 					<td style="width: 1px"><input type="number" id="order2"
@@ -155,6 +214,19 @@ $("#submit3").click(function(){performAction(this)});
 					<td><form:errors path="description"
 							class="ui-state-error-text"></form:errors></td>
 				</tr>
+				<tr>
+                    <td style="vertical-align: top">Link to *</td>
+                    <td><form:select path="linkTo" class="linkTo" items="${linkTypes}" /></td>
+                    <td><div id="linkTo_err"></div></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top">Link Text *</td>
+                    <td style="width: 1px"><input class="linkText" type="text"
+                        path="linkText" value="${publicpageObject2.linkText}"></td>
+                    <td><div id="linkText_err"></div></td>
+                    <td></td>
+                </tr>
 				<tr>
 					<td style="width: 170px">Order Preference *</td>
 					<td style="width: 1px"><input type="number" id="order3"

@@ -1,9 +1,14 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -11,19 +16,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
-
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.publicwebsite.IPublicPageBlockLinkTargets;
+import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
@@ -53,13 +60,8 @@ public class WebsiteProjectController {
     @Autowired
     private Environment env;
 
-    public IRetrieveProjectManager getProjectManager() {
-        return projectManager;
-    }
-
-    public void setProjectManager(IRetrieveProjectManager projectManager) {
-        this.projectManager = projectManager;
-    }
+    @Autowired
+    private IPublicPageManager publicPageManager;
 
     /**
      * This method displays the public or external Website for the particular
@@ -67,6 +69,8 @@ public class WebsiteProjectController {
      * 
      * If the project has been set to 'accessible', then the public website page
      * is displayed. If the project does not exist then an error page is shown.
+     * 
+     * @param <T>
      * 
      * @param unixName
      *            unix name that is given to the project at the time of its
@@ -77,33 +81,36 @@ public class WebsiteProjectController {
      * @throws QuadrigaStorageException
      *             Database storage exception thrown
      */
+    @CheckPublicAccess(projectIndex = 4)
     @RequestMapping(value = "sites/{ProjectUnixName}", method = RequestMethod.GET)
-    public String showProject(Model model, @PathVariable("ProjectUnixName") String unixName, Principal principal,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
+    public <T> String showProject(
+            Model model,
+            @PathVariable("ProjectUnixName") String unixName,
+            Principal principal,
+            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
+            throws QuadrigaStorageException {
 
-        String user = null;
-        if (principal != null) {
-            user = principal.getName();
-        }
+        model.addAttribute("project_baseurl",
+                env.getProperty("project.cite.baseurl"));
 
-        model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
-        if (user == null) {
-            if (projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
-                model.addAttribute("project", project);
-                return "sites/website";
-            } else {
-                return "forbidden";
+        List<IPublicPage> publicPages = publicPageManager
+                .retrievePublicPageContent(project.getProjectId());
+        Collections.sort(publicPages, new Comparator<IPublicPage>() {
+            @Override
+            public int compare(IPublicPage o1, IPublicPage o2) {
+                return o1.getOrder() - o2.getOrder();
             }
-        }
+        });
 
-        if (projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
-                || projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
-            model.addAttribute("project", project);
-            return "sites/website";
+        Map<String, String> linkToMap = getLinkTargetMap();
+        publicPages.forEach(item -> item.setLinkTo(linkToMap.get(item
+                .getLinkTo())));
 
-        } else {
-            return "forbidden";
-        }
+        model.addAttribute("blocks", publicPages);
+
+        model.addAttribute("project", project);
+        return "sites/website";
+
     }
 
     /**
@@ -125,11 +132,17 @@ public class WebsiteProjectController {
      * @throws QuadrigaStorageException
      *             Database storage exception thrown
      */
+    @CheckPublicAccess(projectIndex = 4)
     @RequestMapping(value = "sites/{ProjectUnixName}/browsenetworks", method = RequestMethod.GET)
-    public String browseNetworks(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
+    public String browseNetworks(
+            @PathVariable("ProjectUnixName") String unixName,
+            Model model,
+            Principal principal,
+            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
+            throws QuadrigaStorageException {
         String projectid = project.getProjectId();
-        List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
+        List<INetwork> Networks = networkmanager
+                .getNetworksInProject(projectid);
 
         // List<String> networkNames = null;
         if (!Networks.isEmpty()) {
@@ -158,9 +171,13 @@ public class WebsiteProjectController {
      * @throws JAXBException
      *             JAXB exception while getting the JSON
      */
+    @CheckPublicAccess(projectIndex = 5)
     @RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
-    public String visualizeNetworks(@PathVariable("projectUnixName") String unixName,
-            @PathVariable("networkId") String networkId, ModelMap model, Principal principal,
+    public String visualizeNetworks(
+            @PathVariable("projectUnixName") String unixName,
+            @PathVariable("networkId") String networkId,
+            ModelMap model,
+            Principal principal,
             @InjectProject(unixNameParameter = "projectUnixName") IProject project)
             throws QuadrigaStorageException, JAXBException {
         INetwork network = networkmanager.getNetwork(networkId);
@@ -169,7 +186,8 @@ public class WebsiteProjectController {
         }
         model.addAttribute("project", project);
 
-        ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+        ITransformedNetwork transformedNetwork = transformationManager
+                .getTransformedNetwork(networkId);
 
         // test the transformed networks
 
@@ -177,7 +195,8 @@ public class WebsiteProjectController {
         model.addAttribute("networkid", nwId);
         String json = null;
         if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+            json = d3Creator.getD3JSON(transformedNetwork.getNodes(),
+                    transformedNetwork.getLinks());
         }
         model.addAttribute("jsonstring", json);
         return "sites/networks/visualize";
@@ -194,8 +213,11 @@ public class WebsiteProjectController {
      * @throws JAXBException
      * @throws QuadrigaStorageException
      */
+    @CheckPublicAccess(projectIndex = 3)
     @RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
-    public String visualizeAllNetworks(@PathVariable("projectUnixName") String projectUnixName, Model model,
+    public String visualizeAllNetworks(
+            @PathVariable("projectUnixName") String projectUnixName,
+            Model model,
             @InjectProject(unixNameParameter = "projectUnixName") IProject project)
             throws JAXBException, QuadrigaStorageException {
 
@@ -204,7 +226,8 @@ public class WebsiteProjectController {
 
         String json = null;
         if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+            json = d3Creator.getD3JSON(transformedNetwork.getNodes(),
+                    transformedNetwork.getLinks());
         }
 
         model.addAttribute("jsonstring", json);
@@ -213,6 +236,21 @@ public class WebsiteProjectController {
 
         return "sites/networks/explore";
 
+    }
+
+    /*
+     * This is kind of ugly and should be replace with a better solution. But
+     * well, it works.
+     */
+    private Map<String, String> getLinkTargetMap() {
+        Map<String, String> linkTypes = new HashMap<String, String>();
+        linkTypes.put(IPublicPageBlockLinkTargets.ABOUT, "about");
+        linkTypes.put(IPublicPageBlockLinkTargets.BLOG, "projectBlog");
+        linkTypes.put(IPublicPageBlockLinkTargets.BROWSE, "browsenetworks");
+        linkTypes.put(IPublicPageBlockLinkTargets.EXPLORE, "networks");
+        linkTypes.put(IPublicPageBlockLinkTargets.SEARCH, "search");
+        linkTypes.put(IPublicPageBlockLinkTargets.STATS, "statistics");
+        return linkTypes;
     }
 
 }

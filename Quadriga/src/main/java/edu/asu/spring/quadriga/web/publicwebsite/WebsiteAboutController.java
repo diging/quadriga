@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -31,6 +32,7 @@ public class WebsiteAboutController {
     @Autowired
     private IAboutTextManager aboutTextManager;
 
+    @CheckPublicAccess(projectIndex = 2)
     @RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
     public String showAbout(@PathVariable("ProjectUnixName") String unixName,
             @InjectProject(unixNameParameter = "ProjectUnixName") IProject project, Model model, Principal principal)

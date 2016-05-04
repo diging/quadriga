@@ -725,11 +725,18 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/exceptions/accessissue.jsp" />
 	</definition>
-	<definition name="404" extends="base.definition.public">
+	<definition name="public/404" extends="base.definition.public">
 		<put-attribute name="title" value="Quadriga - Page Not Found" />
 		<put-attribute name="navigation" value="" />
-		<put-attribute name="content" value="/WEB-INF/views/exceptions/404.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/exceptions/public/404.jsp" />
 	</definition>
+	<definition name="public/forbidden" extends="base.definition.public">
+        <put-attribute name="title" value="Quadriga - Forbidden" />
+        <put-attribute name="navigation" value="" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/exceptions/public/forbidden.jsp" />
+    </definition>
 
 	<!-- Networks -->
 	<definition name="base.definition.networks" extends="base.definition">
@@ -749,7 +756,7 @@
 	<!-- external website -->
 	<definition name="sites/website" extends="base.definition.public">
 		<put-attribute name="currentPage" value="home" />
-		<put-attribute name="content" value="/WEB-INF/views/website.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/public/website.jsp" />
 	</definition>
 
 	<definition name="sites/browseNetworks" extends="base.definition.public">

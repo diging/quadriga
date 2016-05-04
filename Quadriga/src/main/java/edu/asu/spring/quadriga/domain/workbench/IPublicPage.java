@@ -29,4 +29,12 @@ public interface IPublicPage {
 
 	public abstract void setPublicPageId(String publicPageId);
 
+    public abstract void setLinkText(String linkText);
+
+    public abstract String getLinkText();
+
+    public abstract void setLinkTo(String linkTo);
+
+    public abstract String getLinkTo();
+
 }

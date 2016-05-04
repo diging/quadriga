@@ -5,13 +5,12 @@ import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.IConceptStats;
 import edu.asu.spring.quadriga.domain.IContributionStatsManager;
@@ -31,9 +31,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
-
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
-
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IUserStats;
 
@@ -128,7 +126,7 @@ public class ProjectStatsController {
      * @throws QuadrigaStorageException
      * @throws JSONException 
      */
-
+    @CheckPublicAccess(projectIndex = 2)
     @RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
     public String showProjectStatistics(
             @PathVariable("projectUnixName") String projectUnixName, @InjectProject(unixNameParameter = "projectUnixName") IProject project, Model model, Principal principal)
