@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
@@ -38,6 +39,7 @@ public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implemen
 	private DictionaryDTOMapper dictionaryMapper;
 	
 	@Autowired
+	@Qualifier("projectDTOMapper")
 	private ProjectDTOMapper projectMapper;
 	
 	@Autowired

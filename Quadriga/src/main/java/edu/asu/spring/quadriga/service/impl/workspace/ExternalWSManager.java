@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.impl.workspace;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
@@ -37,6 +38,7 @@ public class ExternalWSManager implements IExternalWSManager {
     private IProjectDAO projectDao;
 
     @Autowired
+    @Qualifier("projectDTOMapper")
     private ProjectDTOMapper projectMapper;
 
     @Autowired
@@ -52,10 +54,7 @@ public class ExternalWSManager implements IExternalWSManager {
     public boolean isExternalWorkspaceExists(String externalWorkspaceId)
             throws QuadrigaStorageException, QuadrigaAccessException {
         ExternalWorkspaceDTO externalWorkspaceDTO = externalWorkspaceDAO.getExternalWorkspace(externalWorkspaceId);
-        if (externalWorkspaceDTO != null) {
-            return true;
-        }
-        return false;
+        return externalWorkspaceDTO != null;
     }
 
     /**

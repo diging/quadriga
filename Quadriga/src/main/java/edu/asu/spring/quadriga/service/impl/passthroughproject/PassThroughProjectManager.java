@@ -6,21 +6,17 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
-import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
-import edu.asu.spring.quadriga.domain.factory.passthroughproject.IPassThroughProjectFactory;
-import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProjectInfo;
+import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -50,28 +46,33 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     private IProjectSecurityChecker projectSecurityChecker;
 
     @Autowired
-    private IUserDAO userDAO;
-
-    @Autowired
+    @Qualifier("passThroughProjectDTOMapper")
     private PassThroughProjectDTOMapper projectMapper;
-
-    @Autowired
-    private IPassThroughProjectFactory passthrprojfactory;
 
     @Resource(name = "projectconstants")
     private Properties messages;
 
-    private String addPassThroughProject(IUser user, IPassThroughProject project) throws QuadrigaStorageException {
-        QuadrigaUserDTO owner = userDAO.getDTO(user.getUserName());
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public String addPassThroughProject(IUser user, IPassThroughProject project) throws QuadrigaStorageException {
+        String projectId = projectDao.generateUniqueID();
         PassThroughProjectDTO projectDTO = projectMapper.getPassThroughProjectDTO(project, user);
-        projectDTO.setProjectowner(owner);
 
+        projectDTO.setProjectid(projectId);
         projectDao.saveNewDTO(projectDTO);
 
-        return projectDTO.getProjectid();
+        return projectId;
     }
 
-    private String getInternalProjectId(String externalProjectid, String userid)
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public String getInternalProjectId(String externalProjectid, String userid)
             throws QuadrigaStorageException, NoSuchRoleException {
 
         List<PassThroughProjectDTO> projectDTOs = projectDao.getExternalProjects(externalProjectid);
@@ -95,7 +96,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
      */
     @Transactional
     @Override
-    public String createWorkspaceForExternalProject(PassThroughProjectInfo passThroughProjectInfo, String projectId,
+    public String createWorkspaceForExternalProject(XMLInfo passThroughProjectInfo, String projectId,
             IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
 
         String externalWorkspaceId = passThroughProjectInfo.getExternalWorkspaceId();
@@ -120,41 +121,6 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
         return workspaceId;
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Transactional
-    @Override
-    public String savePassThroughProject(IUser user, IPassThroughProject project)
-            throws QuadrigaStorageException, NoSuchRoleException {
-
-        String internalProjetid = getInternalProjectId(project.getExternalProjectid(), user.getUserName());
-
-        if (StringUtils.isEmpty(internalProjetid)) {
-            return addPassThroughProject(user, project);
-        }
-        return internalProjetid;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Transactional
-    @Override
-    public IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo) {
-        String projectId = projectDao.generateUniqueID();
-        IPassThroughProject project = passthrprojfactory.createPassThroughProjectObject();
-        project.setExternalProjectid(passThroughProjectInfo.getExternalProjectId());
-        project.setExternalUserName(passThroughProjectInfo.getExternalUserName());
-        project.setExternalUserId(passThroughProjectInfo.getExternalUserId());
-        project.setProjectName(passThroughProjectInfo.getName());
-        project.setDescription(passThroughProjectInfo.getDescription());
-        project.setClient(passThroughProjectInfo.getSender());
-        project.setProjectAccess(EProjectAccessibility.PUBLIC);
-        project.setProjectId(projectId);
-        return project;
     }
 
 }

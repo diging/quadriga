@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
@@ -22,6 +23,7 @@ import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieveProjectDAO 
 {
 	@Autowired
+	@Qualifier("projectDTOMapper")
 	private ProjectDTOMapper projectDTOMapper;
 
 	@Autowired

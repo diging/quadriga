@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
-@Service
+@Service("projectDTOMapper")
 public class ProjectDTOMapper extends BaseMapper {
 
 	@Autowired
@@ -49,9 +49,9 @@ public class ProjectDTOMapper extends BaseMapper {
 		projectDTO.setUnixname(project.getUnixName());
 		projectDTO.setProjectid(project.getProjectId());
 		projectDTO.setProjectowner(quadrigaUser);
-		projectDTO.setCreatedby(project.getOwner().getUserName());
+		projectDTO.setCreatedby(userName);
 		projectDTO.setCreateddate(new Date());
-		projectDTO.setUpdatedby(project.getOwner().getUserName());
+		projectDTO.setUpdatedby(userName);
 		projectDTO.setUpdateddate(new Date());
 		if(project.getProjectAccess() != null) {
 			projectDTO.setAccessibility(project.getProjectAccess().name());

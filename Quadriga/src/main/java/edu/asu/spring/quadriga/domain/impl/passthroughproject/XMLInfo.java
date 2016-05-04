@@ -6,7 +6,7 @@ package edu.asu.spring.quadriga.domain.impl.passthroughproject;
  * submitted to Pass through project rest api.
  *
  */
-public class PassThroughProjectInfo {
+public class XMLInfo {
     private String networkName;
     private String externalProjectId;
     private String externalUserName;
