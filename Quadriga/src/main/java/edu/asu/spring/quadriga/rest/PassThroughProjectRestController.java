@@ -83,8 +83,7 @@ public class PassThroughProjectRestController {
             PassThroughProjectInfo passThroughProjectInfo = passThroughProjectDocumentReader
                     .getPassThroughProjectInfo(xml);
 
-            IPassThroughProject project = passThroughProjectManager.getPassThroughProject(passThroughProjectInfo,
-                    userid);
+            IPassThroughProject project = passThroughProjectManager.getPassThroughProject(passThroughProjectInfo);
 
             String projectId = passThroughProjectManager.savePassThroughProject(user, project);
 

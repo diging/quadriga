@@ -90,6 +90,9 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public String createWorkspaceForExternalProject(PassThroughProjectInfo passThroughProjectInfo, String projectId,
@@ -119,6 +122,9 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public String savePassThroughProject(IUser user, IPassThroughProject project)
@@ -132,8 +138,11 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         return internalProjetid;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo, String userid) {
+    public IPassThroughProject getPassThroughProject(PassThroughProjectInfo passThroughProjectInfo) {
         String projectId = projectDao.generateUniqueID();
         IPassThroughProject project = passthrprojfactory.createPassThroughProjectObject();
         project.setExternalProjectid(passThroughProjectInfo.getExternalProjectId());

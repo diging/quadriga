@@ -38,6 +38,9 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
         return doc;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getNetwork(String xml) {
 
@@ -63,6 +66,9 @@ public class PassThroughProjectDocumentReader implements IPassThroughProjectDocu
         return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PassThroughProjectInfo getPassThroughProjectInfo(String xml) throws DocumentParserException {
         Document document = null;

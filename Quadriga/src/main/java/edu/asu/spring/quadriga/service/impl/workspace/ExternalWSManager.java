@@ -45,6 +45,9 @@ public class ExternalWSManager implements IExternalWSManager {
     @Autowired
     private IWorkspaceDAO workspaceDao;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isExternalWorkspaceExists(String externalWorkspaceId)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -55,6 +58,9 @@ public class ExternalWSManager implements IExternalWSManager {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String createExternalWorkspace(String externalWorkspaceId, String externalWorkspaceName, String projectId,
             IUser user) {
