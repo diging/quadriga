@@ -37,6 +37,7 @@ public class TextXMLParserTest {
     private String wellFormedXML;
     private String malformedXML;
     private String invalidXML;
+    private String missingXML;
     private String projid;
     private String wsid;
 
@@ -50,6 +51,8 @@ public class TextXMLParserTest {
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile>This is the actual textfile content</text><handle>thishandle</handle><file_name>newfile</file_name></textfile>");
         invalidXML = new String(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile><text>This is the actual textfile content</text><handle>thishandle</handle><file_name></file_name></textfile>");
+        missingXML = new String(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile><handle>thishandle</handle><file_name>newfile</file_name></textfile>");
 
         String projid = "PROJ_XYZ_WERT";
         String wsid = "WS_123_456";
@@ -82,5 +85,12 @@ public class TextXMLParserTest {
         textFileException.expect(TextFileParseException.class);
         textFileException.expectMessage("Filename cannot be empty");
         textXMLParser.parseTextXML(invalidXML, wsid, projid);
+    }
+    
+    @Test
+    public void testMissingXML() throws Exception {
+        textFileException.expect(TextFileParseException.class);
+        textFileException.expectMessage("File content must be specified in the input XML");
+        textXMLParser.parseTextXML(missingXML, wsid, projid);
     }
 }
