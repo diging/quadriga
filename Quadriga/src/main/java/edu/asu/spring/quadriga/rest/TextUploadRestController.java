@@ -77,7 +77,7 @@ public class TextUploadRestController {
      *         about the stored Textfile
      * @throws RestException
      */
-    @RequestMapping(value = "rest/project/{projectid}/workspace/{workspaceid}/uploadtext", method = RequestMethod.POST, produces = "application/xml")
+    @RequestMapping(value = "rest/project/{projectid}/workspace/{workspaceid}/text", method = RequestMethod.POST, produces = "application/xml")
     public ResponseEntity<String> uploadText(@PathVariable("workspaceid") String wsId,
             @PathVariable("projectid") String projId, HttpServletResponse response, HttpServletRequest request,
             @RequestBody String xml) throws RestException {
