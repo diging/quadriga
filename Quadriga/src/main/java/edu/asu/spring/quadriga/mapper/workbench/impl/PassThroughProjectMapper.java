@@ -34,7 +34,6 @@ public class PassThroughProjectMapper extends ProjectDTOMapper implements IPassT
         projectDTO.setExternalUserName(((IPassThroughProject)project).getExternalUserName());
         projectDTO.setClient(((IPassThroughProject)project).getClient());
         return projectDTO;
-
     }
     
     /**
