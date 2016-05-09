@@ -51,6 +51,7 @@
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation" value="/WEB-INF/views/public/navbar.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="showNetwork" value="True" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
@@ -59,6 +60,7 @@
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation" value="/WEB-INF/views/public/navbar.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="showNetwork" value="True" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
@@ -761,7 +763,7 @@
 
 	<definition name="sites/browseNetworks" extends="base.definition.public">
 		<put-attribute name="currentPage" value="networks" />
-		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/public/networks/browseNetworks.jsp" />
 	</definition>
 
 	<!-- Site search -->
@@ -892,8 +894,9 @@
 	<definition name="sites/project/statistics" extends="base.definition.public">
 		<put-attribute name="title" value="Project statistics" />
 		<put-attribute name="currentPage" value="statistics" />
+		<put-attribute name="showNetwork" value="False" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/projectstatistics.jsp" />
+			value="/WEB-INF/views/public/projectstatistics.jsp" />
 	</definition>
 
 	<definition name="sites/projectblog" extends="base.definition.public">

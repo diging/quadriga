@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workbench.mapper.impl;
+package edu.asu.spring.quadriga.mapper.workbench.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 @Service
 public class ProjectConceptCollectionShallowMapper implements
@@ -39,33 +39,29 @@ IProjectConceptCollectionShallowMapper {
 
 	@Override
 	public List<IProjectConceptCollection> getProjectConceptCollectionList(
-			IProject project, ProjectDTO projectDTO)
+			IProject project, List<ProjectConceptCollectionDTO> projectCCDTOList)
 					throws QuadrigaStorageException {
-		List<IProjectConceptCollection> projectCCList = null;
-		if(project != null && projectDTO != null){
-			projectCCList = new ArrayList<IProjectConceptCollection>();
-			List<ProjectConceptCollectionDTO> projectCCDTOList = projectDTO.getProjectConceptCollectionDTOList();
-			if(projectCCDTOList != null){
-				for(ProjectConceptCollectionDTO projectCCDTO : projectCCDTOList){
-					IConceptCollection ccProxy = new ConceptCollectionProxy(ccManager);
-					ccProxy.setConceptCollectionId(projectCCDTO.getConceptCollection().getConceptCollectionid());
-					ccProxy.setConceptCollectionName(projectCCDTO.getConceptCollection().getCollectionname());
-					ccProxy.setDescription(projectCCDTO.getConceptCollection().getDescription());
-					ccProxy.setCreatedBy(projectCCDTO.getConceptCollection().getCreatedby());
-					ccProxy.setCreatedDate(projectCCDTO.getConceptCollection().getCreateddate());
-					ccProxy.setUpdatedBy(projectCCDTO.getConceptCollection().getUpdatedby());
-					ccProxy.setUpdatedDate(projectCCDTO.getConceptCollection().getUpdateddate());
-					IProjectConceptCollection projectCC = projectCCFactory.createProjectConceptCollectionObject();
-					projectCC.setProject(project);
-					projectCC.setConceptCollection(ccProxy);
-					projectCC.setCreatedBy(projectCCDTO.getCreatedby());
-					projectCC.setCreatedDate(projectCCDTO.getCreateddate());
-					projectCC.setUpdatedBy(projectCCDTO.getUpdatedby());
-					projectCC.setUpdatedDate(projectCCDTO.getUpdateddate());
-					projectCCList.add(projectCC);
-				}
-			}
+		List<IProjectConceptCollection> projectCCList = new ArrayList<IProjectConceptCollection>();
+			
+		for(ProjectConceptCollectionDTO projectCCDTO : projectCCDTOList){
+			IConceptCollection ccProxy = new ConceptCollectionProxy(ccManager);
+			ccProxy.setConceptCollectionId(projectCCDTO.getConceptCollection().getConceptCollectionid());
+			ccProxy.setConceptCollectionName(projectCCDTO.getConceptCollection().getCollectionname());
+			ccProxy.setDescription(projectCCDTO.getConceptCollection().getDescription());
+			ccProxy.setCreatedBy(projectCCDTO.getConceptCollection().getCreatedby());
+			ccProxy.setCreatedDate(projectCCDTO.getConceptCollection().getCreateddate());
+			ccProxy.setUpdatedBy(projectCCDTO.getConceptCollection().getUpdatedby());
+			ccProxy.setUpdatedDate(projectCCDTO.getConceptCollection().getUpdateddate());
+			IProjectConceptCollection projectCC = projectCCFactory.createProjectConceptCollectionObject();
+			projectCC.setProject(project);
+			projectCC.setConceptCollection(ccProxy);
+			projectCC.setCreatedBy(projectCCDTO.getCreatedby());
+			projectCC.setCreatedDate(projectCCDTO.getCreateddate());
+			projectCC.setUpdatedBy(projectCCDTO.getUpdatedby());
+			projectCC.setUpdatedDate(projectCCDTO.getUpdateddate());
+			projectCCList.add(projectCC);
 		}
+		
 		return projectCCList;
 	}
 	

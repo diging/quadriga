@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.mapper;
+package edu.asu.spring.quadriga.mapper.workbench.impl;
 
 import java.util.Date;
 
@@ -22,54 +22,73 @@ import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.BaseMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 import edu.asu.spring.quadriga.service.IUserManager;
 
-@Service("projectDTOMapper")
-public class ProjectDTOMapper extends BaseMapper {
+@Service("ProjectBaseMapper")
+public class ProjectDTOMapper extends BaseMapper implements IProjectBaseMapper {
 
 	@Autowired
     private IUserManager userManager;
 	
-	public IProject getProject(ProjectDTO projectDTO)  throws QuadrigaStorageException {
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.mapper.IProjectBaseMapper#getProject(edu.asu.spring.quadriga.dto.ProjectDTO)
+     */
+	@Override
+    public IProject getProject(ProjectDTO projectDTO)  throws QuadrigaStorageException {
 		IProject project = new Project();
 		fillProject(projectDTO, project);
 		return project;
 	}
 
-    protected void fillProject(ProjectDTO projectDTO, IProject project) throws QuadrigaStorageException {
+    protected void fillProject(ProjectDTO projectDTO, IProject project)
+            throws QuadrigaStorageException {
         project.setProjectName(projectDTO.getProjectname());
 		project.setDescription(projectDTO.getDescription());
 		project.setUnixName(projectDTO.getUnixname());
 		project.setProjectId(projectDTO.getProjectid());
+		project.setCreatedBy(projectDTO.getCreatedby());
+        project.setCreatedDate(projectDTO.getCreateddate());
+        project.setUpdatedBy(projectDTO.getUpdatedby());
+        project.setUpdatedDate(projectDTO.getUpdateddate());
 		project.setOwner(userManager.getUser(projectDTO.getProjectowner().getUsername()));
 		project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
     }
 	
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.mapper.IProjectBaseMapper#getProjectDTO(edu.asu.spring.quadriga.domain.workbench.IProject, java.lang.String)
+     */
+	@Override
 	public ProjectDTO getProjectDTO(IProject project) {
-		ProjectDTO projectDTO = new ProjectDTO();
-		fillProjectDTO(project, projectDTO);
-		return projectDTO;
-	}
-
-    protected void fillProjectDTO(IProject project, ProjectDTO projectDTO) {
-        projectDTO.setProjectname(project.getProjectName());
-		projectDTO.setDescription(project.getDescription());
-		projectDTO.setUnixname(project.getUnixName());
-		projectDTO.setProjectid(project.getProjectId());
-		
-		QuadrigaUserDTO quadrigaUser = getUserDTO(project.getCreatedBy());        
-		projectDTO.setProjectowner(quadrigaUser);
-		projectDTO.setCreatedby(project.getCreatedBy());
-		projectDTO.setCreateddate(new Date());
-		projectDTO.setUpdatedby(project.getUpdatedBy());
-		projectDTO.setUpdateddate(new Date());
-		
-		if(project.getProjectAccess() != null) {
-			projectDTO.setAccessibility(project.getProjectAccess().name());
-		}
+        ProjectDTO projectDTO = new ProjectDTO();
+        fillProjectDTO(project, projectDTO);
+        return projectDTO;
     }
 	
-	public ProjectEditorDTO getProjectEditor(ProjectDTO project,String userName) throws QuadrigaStorageException
+	 protected void fillProjectDTO(IProject project, ProjectDTO projectDTO) {
+	        projectDTO.setProjectname(project.getProjectName());
+	        projectDTO.setDescription(project.getDescription());
+	        projectDTO.setUnixname(project.getUnixName());
+	        projectDTO.setProjectid(project.getProjectId());
+	        
+	        QuadrigaUserDTO quadrigaUser = getUserDTO(project.getCreatedBy());        
+	        projectDTO.setProjectowner(quadrigaUser);
+	        projectDTO.setCreatedby(project.getCreatedBy());
+	        projectDTO.setCreateddate(new Date());
+	        projectDTO.setUpdatedby(project.getUpdatedBy());
+	        projectDTO.setUpdateddate(new Date());
+	        
+	        if(project.getProjectAccess() != null) {
+	            projectDTO.setAccessibility(project.getProjectAccess().name());
+	        }
+	    }
+	
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.mapper.IProjectBaseMapper#getProjectEditor(edu.asu.spring.quadriga.dto.ProjectDTO, java.lang.String)
+     */
+	@Override
+    public ProjectEditorDTO getProjectEditor(ProjectDTO project,String userName) throws QuadrigaStorageException
 	{
 		ProjectEditorDTO projectEditor = null;
 		ProjectEditorDTOPK projectEditorKey = null;
@@ -88,14 +107,11 @@ public class ProjectDTOMapper extends BaseMapper {
 		return projectEditor;
 	}
 	
-	/**
-	 * This method associated the dictionary with the specified project.
-	 * @param project
-	 * @param dictionary
-	 * @param userName
-	 * @return ProjectDictionaryDTO object
-	 */
-	public ProjectDictionaryDTO getProjectDictionary(ProjectDTO project,DictionaryDTO dictionary,String userName)
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.mapper.IProjectBaseMapper#getProjectDictionary(edu.asu.spring.quadriga.dto.ProjectDTO, edu.asu.spring.quadriga.dto.DictionaryDTO, java.lang.String)
+     */
+	@Override
+    public ProjectDictionaryDTO getProjectDictionary(ProjectDTO project,DictionaryDTO dictionary,String userName)
 	{
 		ProjectDictionaryDTO projectDictionary = null;
 		ProjectDictionaryDTOPK projectDictionaryKey = null;
@@ -112,14 +128,11 @@ public class ProjectDTOMapper extends BaseMapper {
 		return projectDictionary;
 	}
 	
-	/**
-	 * This method associates the concept collection to the given project.
-	 * @param project
-	 * @param conceptCollection
-	 * @param userName
-	 * @return ProjectConceptCollectionDTO object
-	 */
-	public ProjectConceptCollectionDTO getProjectConceptCollection(ProjectDTO project,ConceptCollectionDTO conceptCollection,String userName)
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.mapper.IProjectBaseMapper#getProjectConceptCollection(edu.asu.spring.quadriga.dto.ProjectDTO, edu.asu.spring.quadriga.dto.ConceptCollectionDTO, java.lang.String)
+     */
+	@Override
+    public ProjectConceptCollectionDTO getProjectConceptCollection(ProjectDTO project,ConceptCollectionDTO conceptCollection,String userName)
 	{
 		ProjectConceptCollectionDTO projectConceptCollection = null;
 		ProjectConceptCollectionDTOPK projectConceptCollectionKey = null;
@@ -138,13 +151,11 @@ public class ProjectDTOMapper extends BaseMapper {
 		return projectConceptCollection;
 	}
 	
-	/**
-	 * This method associates the workspace with the given project 
-	 * @param project
-	 * @param workspace
-	 * @return ProjectWorkspaceDTO object
-	 */
-	public ProjectWorkspaceDTO getProjectWorkspace(ProjectDTO project, WorkspaceDTO workspace)
+	/* (non-Javadoc)
+     * @see edu.asu.spring.quadriga.mapper.IProjectBaseMapper#getProjectWorkspace(edu.asu.spring.quadriga.dto.ProjectDTO, edu.asu.spring.quadriga.dto.WorkspaceDTO)
+     */
+	@Override
+    public ProjectWorkspaceDTO getProjectWorkspace(ProjectDTO project, WorkspaceDTO workspace)
 	{
 		ProjectWorkspaceDTO projectWorkspace = null;
 		ProjectWorkspaceDTOPK projectWorkspaceKey = null;

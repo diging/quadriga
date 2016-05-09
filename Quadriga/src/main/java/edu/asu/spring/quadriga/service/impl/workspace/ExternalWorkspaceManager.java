@@ -17,7 +17,8 @@ import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
+import edu.asu.spring.quadriga.mapper.workbench.impl.ProjectDTOMapper;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.service.workspace.IExternalWorkspaceManager;
 
@@ -38,8 +39,8 @@ public class ExternalWorkspaceManager implements IExternalWorkspaceManager {
     private IProjectDAO projectDao;
 
     @Autowired
-    @Qualifier("projectDTOMapper")
-    private ProjectDTOMapper projectMapper;
+    @Qualifier("ProjectBaseMapper")
+    private IProjectBaseMapper projectMapper;
 
     @Autowired
     private IUserDAO userDAO;

@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workbench.mapper.impl;
+package edu.asu.spring.quadriga.mapper.workbench.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallowMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 

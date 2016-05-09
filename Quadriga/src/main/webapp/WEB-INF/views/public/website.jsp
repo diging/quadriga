@@ -6,33 +6,31 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
-
-
-
-
 <c:if test="${not empty project}">
-<div class="jumbotron">
-	<h1>${project.projectName}</h1>
-	<p>
-	${project.description}
-	</p>
-	<p  class="smaller">
-	<i class="fa fa-user"></i> ${project.owner.name}
-	</p>
-	<p  class="smaller">
-	<c:if test="${not empty project.projectCollaborators}">
-	   <i class="fa fa-users"></i>
-       <c:forEach var="projectcollaborator"
-                items="${project.projectCollaborators}" varStatus="loop">
-        <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out><c:if test="${!loop.last}">, </c:if>
-        </c:forEach>
-        </ul>
-    </c:if>
-	
-	</p>
-	<p class="smaller">
-	<i class="fa fa-commenting-o"></i> When citing this data set please use the following URL: <i>${project_baseurl}${pageContext.servletContext.contextPath}/sites/${project.unixName}</i>.
-	</p>
+<div class="jumbotron mainpage">
+    <div class="mainpage-jumbo">
+	    <h1>${project.projectName}</h1>
+		<p>
+		${project.description}
+		</p>
+		<p  class="smaller">
+		<i class="fa fa-user"></i> ${project.owner.name}
+		</p>
+		<p  class="smaller">
+		<c:if test="${not empty project.projectCollaborators}">
+		   <i class="fa fa-users"></i>
+	       <c:forEach var="projectcollaborator"
+	                items="${project.projectCollaborators}" varStatus="loop">
+	        <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out><c:if test="${!loop.last}">, </c:if>
+	        </c:forEach>
+	        </ul>
+	    </c:if>
+		
+		</p>
+		<p class="smaller">
+		<i class="fa fa-commenting-o"></i> When citing this data set please use the following URL: <i>${project_baseurl}${pageContext.servletContext.contextPath}/sites/${project.unixName}</i>.
+		</p>
+	</div>
 </div>
 
 <div class="row">
@@ -60,6 +58,7 @@
 </div>
 
 </c:if>
+
 
 
 

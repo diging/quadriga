@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
@@ -24,7 +23,7 @@ import edu.asu.spring.quadriga.dto.ProjectDictionaryDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 
 @Repository
 public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implements IProjectDictionaryDAO 
@@ -39,8 +38,7 @@ public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implemen
 	private DictionaryDTOMapper dictionaryMapper;
 	
 	@Autowired
-	@Qualifier("projectDTOMapper")
-	private ProjectDTOMapper projectMapper;
+	private IProjectDeepMapper projectMapper;
 	
 	@Autowired
 	private ProjectCollaboratorDTOMapper collaboratorDTOMapper;

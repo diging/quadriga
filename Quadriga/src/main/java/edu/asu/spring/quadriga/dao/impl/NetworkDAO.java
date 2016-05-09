@@ -13,7 +13,6 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.IEditorDAO;
@@ -37,8 +36,8 @@ import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -61,8 +60,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
     private NetworkDTOMapper networkMapper;
 
     @Autowired
-    @Qualifier("projectDTOMapper")
-    private ProjectDTOMapper projectMapper;
+    private IProjectDeepMapper projectMapper;
 
     @Autowired
     private WorkspaceDTOMapper workspaceMapper;
