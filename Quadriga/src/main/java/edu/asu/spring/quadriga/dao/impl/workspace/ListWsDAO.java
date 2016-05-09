@@ -19,7 +19,6 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
-import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
@@ -31,7 +30,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Repository
-public class ListWsDAO extends BaseDAO<WorkspaceDTO>implements IListWsDAO {
+public class ListWsDAO extends BaseDAO<WorkspaceDTO> implements IListWsDAO {
 
     @Autowired
     private SessionFactory sessionFactory;

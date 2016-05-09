@@ -7,6 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -14,6 +16,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.dao.impl.textfile.TextFileDAO;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.TextFileParseException;
@@ -31,6 +34,8 @@ public class TextXMLParser implements ITextXMLParser {
     @Autowired
     private ITextFileFactory txtFileFactory;
 
+    private static final Logger logger = LoggerFactory.getLogger(TextXMLParser.class);
+    
     @Override
     public ITextFile parseTextXML(String xml, String wsId, String projId) throws TextFileParseException {
 
@@ -42,8 +47,10 @@ public class TextXMLParser implements ITextXMLParser {
             builder = factory.newDocumentBuilder();
             document = builder.parse(new InputSource(new StringReader(xml)));
         } catch (ParserConfigurationException | IOException e) {
-            throw new TextFileParseException(e);
+            logger.error("Error while parsing the XML", e);
+            throw new TextFileParseException("Error while parsing the XML");
         } catch (SAXException sae) {
+            logger.error("Error while parsing the XML", sae);
             throw new TextFileParseException("This XML file is not well formed");
         }
 
