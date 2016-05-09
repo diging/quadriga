@@ -96,11 +96,11 @@ public class ConceptCollectionManagerTest {
         Mockito.when(cpConnector.search("item", "pos")).thenReturn(rep);
         Mockito.when(cpConnector.getById("id")).thenReturn(rep);
 
-        WorkSpace workspace = new WorkSpace();
+        IWorkSpace workspace = new WorkSpace();
         workspace.setWorkspaceId("w-id");
         workspace.setWorkspaceName("w-name");
 
-        WorkSpace workspace2 = new WorkSpace();
+        IWorkSpace workspace2 = new WorkSpace();
         workspace2.setWorkspaceId("w-id2");
         workspace2.setWorkspaceName("w-name2");
 

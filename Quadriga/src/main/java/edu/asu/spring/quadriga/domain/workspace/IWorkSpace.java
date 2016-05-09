@@ -39,10 +39,6 @@ public interface IWorkSpace
 	
 	public abstract void setProjectWorkspace(IProjectWorkspace projectWorkspace);
 	
-	public abstract List<IWorkspaceBitStream> getWorkspaceBitStreams();
-	
-	public abstract void setWorkspaceBitStreams(List<IWorkspaceBitStream> workspaceBitStreams);
-	
     public abstract List<IWorkspaceConceptCollection> getWorkspaceConceptCollections();
     
     public abstract void setWorkspaceConceptCollections(List<IWorkspaceConceptCollection> workspaceConceptCollections);
@@ -70,5 +66,9 @@ public interface IWorkSpace
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updatedDate);
+
+    public abstract void setExternalWorkspaceId(String externalWorkspaceId);
+
+    public abstract String getExternalWorkspaceId();
 
 }

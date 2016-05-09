@@ -16,7 +16,7 @@ public interface IProjectBaseMapper {
     public abstract IProject getProject(ProjectDTO projectDTO)
             throws QuadrigaStorageException;
 
-    public abstract ProjectDTO getProjectDTO(IProject project, String userName);
+    public abstract ProjectDTO getProjectDTO(IProject project);
 
     public abstract ProjectEditorDTO getProjectEditor(ProjectDTO project,
             String userName) throws QuadrigaStorageException;

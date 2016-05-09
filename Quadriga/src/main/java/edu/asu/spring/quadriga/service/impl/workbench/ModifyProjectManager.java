@@ -76,7 +76,9 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
     @Transactional
     public void addNewProject(IProject project, String userName) {
         project.setProjectId(projectDao.generateUniqueID());
-        ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project, userName);
+        project.setCreatedBy(userName);
+        project.setUpdatedBy(userName);
+        ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project);
         projectDao.saveNewDTO(projectDTO);
     }
 

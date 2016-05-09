@@ -38,7 +38,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
-import edu.asu.spring.quadriga.mapper.workbench.impl.ProjectDTOMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -115,8 +114,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public String addNetworkRequest(String networkName, IUser user,
-            String workspaceid) throws QuadrigaStorageException {
+    public String addNetwork(String networkName, IUser user,
+            String workspaceid, String networkStatus) throws QuadrigaStorageException {
 
         if (networkName == null || user == null || workspaceid == null)
             throw new QuadrigaStorageException("Error in adding a network");
@@ -124,7 +123,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
         String networkid = generateUniqueID();
 
         NetworksDTO networksDTO = new NetworksDTO(networkid, networkName,
-                user.getUserName(), INetworkStatus.PENDING, user.getUserName(),
+                user.getUserName(), networkStatus, user.getUserName(),
                 new Date(), user.getUserName(), new Date());
         String userName = user.getUserName();
         Date date = new Date();

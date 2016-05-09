@@ -25,6 +25,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
@@ -106,29 +107,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 
 		if(workspaceDTO != null){
 			workspace = workspaceFactory.createWorkspaceObject();
-			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
-			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
-			workspace.setDescription(workspaceDTO.getDescription());
-			workspace.setOwner(userDeepMapper.getUser(workspaceDTO.getWorkspaceowner().getUsername()));
-			workspace.setCreatedBy(workspaceDTO.getCreatedby());
-			workspace.setCreatedDate(workspaceDTO.getCreateddate());
-			workspace.setUpdatedBy(workspaceDTO.getUpdatedby());
-			workspace.setUpdatedDate(workspaceDTO.getUpdateddate());
-			// Set Workspace Collaborators
-			workspace.setWorkspaceCollaborators(getWorkspaceCollaboratorList(workspaceDTO, workspace));
-			// Set Workspace Concept Collations
-			workspace.setWorkspaceConceptCollections(workspaceCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO));
-			// Set Workspace Dictionaries
-			workspace.setWorkspaceDictionaries(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO));
-
-			// Set Project Workspace 
-			workspace.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
-
-			workspace.setWorkspaceBitStreams(getWorkspaceBitstream(workspaceDTO, workspace));
-
-			//Set network workspace
-			workspace.setWorkspaceNetworks(workspaceNetworkMapper.getNetworkWorkspaceByWorkSpaceDTO(workspaceDTO, workspace));
-
+			fillWorkspace(workspaceDTO, workspace);		
 		}
 
 		return workspace;
@@ -147,30 +126,42 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 
 		if(workspaceDTO != null){
 			workspace = workspaceFactory.createWorkspaceObject();
-			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
-			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
-			workspace.setDescription(workspaceDTO.getDescription());
-			workspace.setOwner(userDeepMapper.getUser(workspaceDTO.getWorkspaceowner().getUsername()));
-			workspace.setCreatedBy(workspaceDTO.getCreatedby());
-			workspace.setCreatedDate(workspaceDTO.getCreateddate());
-			workspace.setUpdatedBy(workspaceDTO.getUpdatedby());
-			workspace.setUpdatedDate(workspaceDTO.getUpdateddate());
-			// Set Workspace Collaborators
-			workspace.setWorkspaceCollaborators(getWorkspaceCollaboratorList(workspaceDTO, workspace));
-			// Set Workspace Concept Collations
-			workspace.setWorkspaceConceptCollections(workspaceCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO));
-			// Set Workspace Dictionaries
-			workspace.setWorkspaceDictionaries(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO));
-
-			// Set Project Workspace 
-			workspace.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
-
-			workspace.setWorkspaceBitStreams(getWorkspaceBitstream(workspaceDTO, workspace));
+			fillWorkspace(workspaceDTO, workspace);
 		}
 
 		return workspace;
 
 	}
+
+
+    @Override
+    public void fillWorkspace(WorkspaceDTO workspaceDTO, IWorkSpace workspace) throws QuadrigaStorageException {
+        workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
+        workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
+        workspace.setDescription(workspaceDTO.getDescription());
+        workspace.setOwner(userDeepMapper.getUser(workspaceDTO.getWorkspaceowner().getUsername()));
+        workspace.setCreatedBy(workspaceDTO.getCreatedby());
+        workspace.setCreatedDate(workspaceDTO.getCreateddate());
+        workspace.setUpdatedBy(workspaceDTO.getUpdatedby());
+        workspace.setUpdatedDate(workspaceDTO.getUpdateddate());
+        
+        // Set Workspace Collaborators
+        workspace.setWorkspaceCollaborators(getWorkspaceCollaboratorList(workspaceDTO, workspace));
+        // Set Workspace Concept Collations
+        workspace.setWorkspaceConceptCollections(workspaceCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO));
+        // Set Workspace Dictionaries
+        workspace.setWorkspaceDictionaries(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO));
+
+        // Set Project Workspace 
+        workspace.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
+
+        //Set network workspace
+        workspace.setWorkspaceNetworks(workspaceNetworkMapper.getNetworkWorkspaceByWorkSpaceDTO(workspaceDTO, workspace));
+             
+        if (workspaceDTO instanceof ExternalWorkspaceDTO) {
+            workspace.setExternalWorkspaceId(((ExternalWorkspaceDTO) workspaceDTO).getExternalWorkspaceid());
+        }
+    }
 
 	/**
 	 * This class should returns a {@link List} of {@link IWorkspaceCollaborator} object by mapping workspaceDTO details and {@link List} of {@link WorkspaceCollaboratorDTO}
