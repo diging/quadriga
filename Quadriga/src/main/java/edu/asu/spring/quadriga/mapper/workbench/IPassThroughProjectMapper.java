@@ -7,6 +7,4 @@ public interface IPassThroughProjectMapper extends IProjectBaseMapper {
 
     public abstract PassThroughProjectDTO getPassThroughProjectDTO(IPassThroughProject project);
 
-    
-
 }
