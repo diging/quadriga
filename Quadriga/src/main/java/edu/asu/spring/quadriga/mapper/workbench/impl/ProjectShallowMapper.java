@@ -14,30 +14,32 @@ import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Service
-public class ProjectShallowMapper extends ProjectDTOMapper implements IProjectShallowMapper {
+public class ProjectShallowMapper extends ProjectDTOMapper implements
+        IProjectShallowMapper {
 
-	@Autowired
-	private IRetrieveProjectDAO dbConnect;
-	
-	@Autowired
-	private IRetrieveProjectManager projectManager;
-	
-	@Autowired
-	private IUserDeepMapper userDeepMapper;
-	
-	/**
-	 * {@inheritDoc}
-	*/
-	@Override
-	@Transactional
-	public IProject getProjectDetails(ProjectDTO projectDTO) throws QuadrigaStorageException{
-		IProject projectProxy = null;
-		
-		if(projectDTO != null){
-			projectProxy = new ProjectProxy(projectManager);
-			fillProject(projectDTO, projectProxy);
-		}
-		
-		return projectProxy;
-	}
+    @Autowired
+    private IRetrieveProjectDAO dbConnect;
+
+    @Autowired
+    private IRetrieveProjectManager projectManager;
+
+    @Autowired
+    private IUserDeepMapper userDeepMapper;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional
+    public IProject getProjectDetails(ProjectDTO projectDTO)
+            throws QuadrigaStorageException {
+        IProject projectProxy = null;
+
+        if (projectDTO != null) {
+            projectProxy = new ProjectProxy(projectManager);
+            fillProject(projectDTO, projectProxy);
+        }
+
+        return projectProxy;
+    }
 }
