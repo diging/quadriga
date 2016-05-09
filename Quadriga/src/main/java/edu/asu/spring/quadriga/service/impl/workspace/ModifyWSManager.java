@@ -19,9 +19,9 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.IProjectBaseMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 
 /**

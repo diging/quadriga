@@ -29,9 +29,9 @@ import edu.asu.spring.quadriga.dto.ProjectEditorDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 
 /**
  * This class add/update/delete a project

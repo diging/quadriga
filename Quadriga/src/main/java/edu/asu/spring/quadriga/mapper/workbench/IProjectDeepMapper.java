@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workbench.mapper;
+package edu.asu.spring.quadriga.mapper.workbench;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.IProjectBaseMapper;
 
 /**
  * This interface provides methods for mapping between Project DTOs and Service layer as a Deep mapping. 

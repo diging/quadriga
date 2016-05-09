@@ -22,10 +22,10 @@ import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDictionaryShallowMapper;
 
 @Service

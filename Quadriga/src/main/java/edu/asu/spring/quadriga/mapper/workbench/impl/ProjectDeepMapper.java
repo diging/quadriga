@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workbench.mapper.impl;
+package edu.asu.spring.quadriga.mapper.workbench.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,14 +21,13 @@ import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDictionaryShallowMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallowMapper;
 
 @Service
 public class ProjectDeepMapper extends ProjectDTOMapper implements IProjectDeepMapper {

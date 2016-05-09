@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.mapper;
+package edu.asu.spring.quadriga.mapper.workbench.impl;
 
 import java.util.Date;
 
@@ -22,6 +22,8 @@ import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.BaseMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service("ProjectBaseMapper")

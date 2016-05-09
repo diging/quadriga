@@ -13,10 +13,10 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
+import edu.asu.spring.quadriga.mapper.workbench.impl.ProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.impl.ProjectDeepMapper;
 
 @Service
 public class ProjectConceptCollectionManager implements IProjectConceptCollectionManager {

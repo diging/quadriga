@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.dto.ProjectDictionaryDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 
 @Repository
 public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implements IProjectDictionaryDAO 

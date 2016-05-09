@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
-import edu.asu.spring.quadriga.mapper.IProjectBaseMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 
 @Repository
 public class ProjectConceptCollectionDAO extends BaseDAO<ProjectConceptCollectionDTO> implements IProjectConceptCollectionDAO 

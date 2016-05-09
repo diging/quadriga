@@ -1,5 +1,5 @@
 
-package edu.asu.spring.quadriga.service.workbench.mapper;
+package edu.asu.spring.quadriga.mapper.workbench;
 
 import java.util.List;
 

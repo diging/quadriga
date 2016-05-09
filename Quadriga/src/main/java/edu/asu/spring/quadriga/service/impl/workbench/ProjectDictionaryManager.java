@@ -13,9 +13,9 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
 
 /**
  * This class acts a service layer to associate {@link IProject} and {@link IDictionary}.

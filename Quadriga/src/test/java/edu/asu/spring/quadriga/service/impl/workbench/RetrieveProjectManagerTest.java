@@ -2,8 +2,10 @@ package edu.asu.spring.quadriga.service.impl.workbench;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -11,13 +13,14 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 
 public class RetrieveProjectManagerTest {
 

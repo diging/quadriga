@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.mapper;
+package edu.asu.spring.quadriga.mapper.workbench;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;

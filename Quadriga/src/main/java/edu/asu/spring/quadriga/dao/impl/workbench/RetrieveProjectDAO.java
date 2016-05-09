@@ -16,8 +16,8 @@ import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.IProjectBaseMapper;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 
 @Repository
 public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieveProjectDAO 

@@ -1,10 +1,9 @@
-package edu.asu.spring.quadriga.service.workbench.mapper;
+package edu.asu.spring.quadriga.mapper.workbench;
 
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.IProjectBaseMapper;
 
 /**
  * This interface has methods to implement the mapping of DTO object to Domain objects for the service layer for Project.
