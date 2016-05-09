@@ -2,17 +2,14 @@ package edu.asu.spring.quadriga.dao.workbench;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IRetrieveProjectDAO {
+public interface IRetrieveProjectDAO extends IBaseDAO<ProjectDTO> {
 	
 	public List<ProjectDTO> getProjectDTOList(String sUserName) throws QuadrigaStorageException;
 
-	ProjectDTO getProjectDTO(String projectId) throws QuadrigaStorageException;
-	
-	
 	ProjectDTO getProjectDTO(String projectId,String userId) throws QuadrigaStorageException;
 
 	List<ProjectDTO> getCollaboratorProjectDTOListOfUser(String sUserName)

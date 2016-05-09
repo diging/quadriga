@@ -188,7 +188,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public IProject getProjectDetails(String projectId)
             throws QuadrigaStorageException {
-        ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
+        ProjectDTO projectDto = projectDao.getDTO(projectId);
         return projectDeepMapper.getProject(projectDto);
     }
 
@@ -205,7 +205,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProjectCollaborator> getCollaboratingUsers(String projectId)
             throws QuadrigaStorageException {
-        ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
+        ProjectDTO projectDto = projectDao.getDTO(projectId);
         IProject project = projectDeepMapper.getProject(projectDto);
         return project.getProjectCollaborators();
     }
