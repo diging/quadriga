@@ -47,10 +47,10 @@ public class TextXMLParser implements ITextXMLParser {
             builder = factory.newDocumentBuilder();
             document = builder.parse(new InputSource(new StringReader(xml)));
         } catch (ParserConfigurationException | IOException e) {
-            logger.error("Error while parsing the XML", e);
+            logger.error("Error while parsing the XML");
             throw new TextFileParseException(e);
         } catch (SAXException sae) {
-            logger.error("Error while parsing the XML", sae);
+            logger.error("Error while parsing the XML");
             throw new TextFileParseException(sae);
         }
 
