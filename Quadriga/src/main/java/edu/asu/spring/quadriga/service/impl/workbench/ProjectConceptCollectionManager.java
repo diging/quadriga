@@ -15,72 +15,83 @@ import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
-import edu.asu.spring.quadriga.mapper.workbench.impl.ProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
 
 @Service
-public class ProjectConceptCollectionManager implements IProjectConceptCollectionManager {
+public class ProjectConceptCollectionManager implements
+        IProjectConceptCollectionManager {
 
-	@Autowired
-	private IProjectConceptCollectionDAO dbConnect;
-	@Autowired
-	private IProjectConceptCollectionShallowMapper projCCShallowMapper;
-	
-	@Autowired
-	private IProjectDeepMapper projDeepMapper;
-	
-	@Autowired
-	private IRetrieveProjectDAO projManager;
-	
-	@Autowired 
-	private ProjectDAO projectDao;
+    @Autowired
+    private IProjectConceptCollectionDAO dbConnect;
+    
+    @Autowired
+    private IProjectConceptCollectionShallowMapper projCCShallowMapper;
 
-	/**
-	 * This method associates the concept collection with the project.
-	 * @param - projectId - project id
-	 * @param - conceptCollectionId - concept collection id
-	 * @param - userId - logged in user name.
-	 * @throws QuarigaStorageException
-	 */
-	@Override
-	@Transactional
-	public void addProjectConceptCollection(String projectId, String conceptCollectionId,
-			String userId) throws QuadrigaStorageException 
-	{
-		dbConnect.addProjectConceptCollection(projectId, conceptCollectionId, userId);
-	}
-	
+    @Autowired
+    private IProjectDeepMapper projDeepMapper;
+
+    @Autowired
+    private IRetrieveProjectDAO projManager;
+
+    @Autowired
+    private ProjectDAO projectDao;
+
+    /**
+     * This method associates the concept collection with the project.
+     * 
+     * @param - projectId - project id
+     * @param - conceptCollectionId - concept collection id
+     * @param - userId - logged in user name.
+     * @throws QuarigaStorageException
+     */
+    @Override
+    @Transactional
+    public void addProjectConceptCollection(String projectId,
+            String conceptCollectionId, String userId)
+            throws QuadrigaStorageException {
+        dbConnect.addProjectConceptCollection(projectId, conceptCollectionId,
+                userId);
+    }
 
     /**
      * This method retrieves the concept collection associated with the project.
+     * 
      * @param - projectId project id
      * @param - userId - logged in user name.
      * @throws QuadrigaStorageException
-     * @return List<IConceptCollection> - list of concept collection associated with the project.
+     * @return List<IConceptCollection> - list of concept collection associated
+     *         with the project.
      */
-	@Override
-	@Transactional
-	public List<IProjectConceptCollection> listProjectConceptCollection(String projectId,
-			String userId) throws QuadrigaStorageException {
-	    
-	    ProjectDTO projectDTO = projManager.getProjectDTO(projectId, userId);
-        IProject project = projDeepMapper.getProject(projectDTO);
-		List<IProjectConceptCollection> conceptCollectionList  = projCCShallowMapper.getProjectConceptCollectionList(project, projectDTO.getProjectConceptCollectionDTOList());
-		return conceptCollectionList;
-	}
-	
+    @Override
+    @Transactional
+    public List<IProjectConceptCollection> listProjectConceptCollection(
+            String projectId, String userId) throws QuadrigaStorageException {
 
-	/**
-	 * This method removes the association between the project and the concept collection.
-	 * @param projectId - project id
-	 * @param userId - logged in user name.
-	 * @param conceptCollectionId - concept collection id.
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public void deleteProjectConceptCollection(String projectId,String userId,String conceptCollectionId)throws QuadrigaStorageException
-	{
-		dbConnect.deleteProjectConceptCollection(projectId, userId, conceptCollectionId);
-	}
+        ProjectDTO projectDTO = projManager.getProjectDTO(projectId, userId);
+        IProject project = projDeepMapper.getProject(projectDTO);
+        List<IProjectConceptCollection> conceptCollectionList = projCCShallowMapper
+                .getProjectConceptCollectionList(project,
+                        projectDTO.getProjectConceptCollectionDTOList());
+        return conceptCollectionList;
+    }
+
+    /**
+     * This method removes the association between the project and the concept
+     * collection.
+     * 
+     * @param projectId
+     *            - project id
+     * @param userId
+     *            - logged in user name.
+     * @param conceptCollectionId
+     *            - concept collection id.
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    @Transactional
+    public void deleteProjectConceptCollection(String projectId, String userId,
+            String conceptCollectionId) throws QuadrigaStorageException {
+        dbConnect.deleteProjectConceptCollection(projectId, userId,
+                conceptCollectionId);
+    }
 }
