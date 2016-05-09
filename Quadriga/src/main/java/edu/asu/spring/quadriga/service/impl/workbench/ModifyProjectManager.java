@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.dto.ProjectEditorDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 
@@ -47,7 +47,7 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
     private IProjectDAO projectDao;
 
     @Autowired
-    private ProjectDTOMapper projectDTOMapper;
+    private IProjectDeepMapper projectDTOMapper;
 
     @Autowired
     private IProjectWorkspaceDAO projectWorkspaceDao;

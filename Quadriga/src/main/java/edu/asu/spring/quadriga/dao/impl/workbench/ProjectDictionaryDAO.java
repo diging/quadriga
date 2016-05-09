@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.dto.ProjectDictionaryDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 
 @Repository
 public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implements IProjectDictionaryDAO 
@@ -38,7 +38,7 @@ public class ProjectDictionaryDAO extends BaseDAO<ProjectDictionaryDTO> implemen
 	private DictionaryDTOMapper dictionaryMapper;
 	
 	@Autowired
-	private ProjectDTOMapper projectMapper;
+	private IProjectDeepMapper projectMapper;
 	
 	@Autowired
 	private ProjectCollaboratorDTOMapper collaboratorDTOMapper;
