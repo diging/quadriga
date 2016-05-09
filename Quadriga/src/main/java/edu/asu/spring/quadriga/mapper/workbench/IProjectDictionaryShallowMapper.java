@@ -10,10 +10,11 @@ import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IProjectDictionaryShallowMapper {
-	public List<IProjectDictionary> getProjectDictionaryList(IProject project,ProjectDTO projectDTO) throws QuadrigaStorageException;
+    public List<IProjectDictionary> getProjectDictionaryList(IProject project,
+            ProjectDTO projectDTO) throws QuadrigaStorageException;
 
-	public List<IProjectDictionary> getProjectDictionaryList(
-			DictionaryDTO dictionaryDTO, IDictionary dictionary)
-			throws QuadrigaStorageException;
+    public List<IProjectDictionary> getProjectDictionaryList(
+            DictionaryDTO dictionaryDTO, IDictionary dictionary)
+            throws QuadrigaStorageException;
 
 }

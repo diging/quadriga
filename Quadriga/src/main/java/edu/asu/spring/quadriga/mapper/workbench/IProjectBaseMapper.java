@@ -23,6 +23,7 @@ public interface IProjectBaseMapper {
 
     /**
      * This method associated the dictionary with the specified project.
+     * 
      * @param project
      * @param dictionary
      * @param userName
@@ -33,6 +34,7 @@ public interface IProjectBaseMapper {
 
     /**
      * This method associates the concept collection to the given project.
+     * 
      * @param project
      * @param conceptCollection
      * @param userName
@@ -43,7 +45,8 @@ public interface IProjectBaseMapper {
             String userName);
 
     /**
-     * This method associates the workspace with the given project 
+     * This method associates the workspace with the given project
+     * 
      * @param project
      * @param workspace
      * @return ProjectWorkspaceDTO object

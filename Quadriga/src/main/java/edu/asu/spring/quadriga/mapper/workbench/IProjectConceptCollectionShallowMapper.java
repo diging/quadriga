@@ -11,8 +11,12 @@ import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IProjectConceptCollectionShallowMapper {
-	public List<IProjectConceptCollection> getProjectConceptCollectionList(IProject project,List<ProjectConceptCollectionDTO> projectCCDTOList) throws QuadrigaStorageException;
+    public List<IProjectConceptCollection> getProjectConceptCollectionList(
+            IProject project, List<ProjectConceptCollectionDTO> projectCCDTOList)
+            throws QuadrigaStorageException;
 
-	public List<IProjectConceptCollection> getProjectConceptCollectionList(ConceptCollectionDTO ccDTO, IConceptCollection conceptCollection) throws QuadrigaStorageException;
+    public List<IProjectConceptCollection> getProjectConceptCollectionList(
+            ConceptCollectionDTO ccDTO, IConceptCollection conceptCollection)
+            throws QuadrigaStorageException;
 
 }

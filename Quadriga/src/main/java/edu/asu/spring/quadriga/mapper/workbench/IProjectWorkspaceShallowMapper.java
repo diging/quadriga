@@ -1,4 +1,3 @@
-
 package edu.asu.spring.quadriga.mapper.workbench;
 
 import java.util.List;
@@ -9,7 +8,8 @@ import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IProjectWorkspaceShallowMapper {
-	
-	public List<IProjectWorkspace> getProjectWorkspaceList(IProject project,ProjectDTO projectDTO) throws QuadrigaStorageException;
+
+    public List<IProjectWorkspace> getProjectWorkspaceList(IProject project,
+            ProjectDTO projectDTO) throws QuadrigaStorageException;
 
 }
