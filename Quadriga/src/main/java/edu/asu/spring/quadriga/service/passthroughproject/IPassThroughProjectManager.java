@@ -3,10 +3,10 @@ package edu.asu.spring.quadriga.service.passthroughproject;
 import javax.xml.bind.JAXBException;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProject;
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -29,7 +29,7 @@ public interface IPassThroughProjectManager {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    String createWorkspaceForExternalProject(XMLInfo passThroughProjectInfo, String projectId,
+    String retrieveOrCreateWorkspace(XMLInfo passThroughProjectInfo, String projectId,
             IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException;
 
     /**
@@ -43,7 +43,7 @@ public interface IPassThroughProjectManager {
      * @return The project id of the newly added project.
      * @throws QuadrigaStorageException
      */
-    String addPassThroughProject(IUser user, IPassThroughProject project) throws QuadrigaStorageException;
+    String addPassThroughProject(IUser user, IProject project) throws QuadrigaStorageException;
 
     /**
      * This method returns the internal project id for a project using the given
@@ -61,5 +61,8 @@ public interface IPassThroughProjectManager {
             throws QuadrigaStorageException, NoSuchRoleException;
 
     public abstract IPassThroughProject getPassThroughProject(XMLInfo passThroughProjectInfo);
+
+    public abstract IProject retrieveOrCreateProject(XMLInfo projectInfo, IUser user) throws QuadrigaStorageException,
+            NoSuchRoleException;
 
 }

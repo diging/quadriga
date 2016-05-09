@@ -3,8 +3,12 @@ package edu.asu.spring.quadriga.service.impl.workbench;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
+import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IPassThroughProjectMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
@@ -38,6 +46,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
 
     @Autowired
     private IProjectDeepMapper projectDeepMapper;
+    
+    @Autowired
+    private IPassThroughProjectMapper passThroughMapper;
 
     @Autowired
     private IProjectSecurityChecker projectSecurity;
@@ -47,6 +58,15 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
 
     @Autowired
     private Environment env;
+    
+    private Map<Class<?>, IProjectBaseMapper> projectMappers;
+    
+    @PostConstruct
+    public void init() {
+        projectMappers = new HashMap<Class<?>, IProjectBaseMapper>();
+        projectMappers.put(ProjectDTO.class, projectDeepMapper);
+        projectMappers.put(PassThroughProjectDTO.class, passThroughMapper);
+    }
     
     /**
      * This method returns the list of projects associated with the logged in
@@ -188,7 +208,12 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     public IProject getProjectDetails(String projectId)
             throws QuadrigaStorageException {
         ProjectDTO projectDto = projectDao.getDTO(projectId);
-        return projectDeepMapper.getProject(projectDto);
+        if(projectDto != null) {
+            IProjectBaseMapper mapper = projectMappers.get(projectDto.getClass());
+            return mapper.getProject(projectDto);
+        }
+        
+        return null;
     }
 
     /**

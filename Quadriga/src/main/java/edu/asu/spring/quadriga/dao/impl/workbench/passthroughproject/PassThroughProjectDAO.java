@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.dao.impl.workbench.passthroughproject;
 
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
@@ -25,6 +26,7 @@ public class PassThroughProjectDAO extends BaseDAO<PassThroughProjectDTO> implem
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     public PassThroughProjectDTO getExternalProject(String externalProjectid, String client) throws QuadrigaStorageException {
         return (PassThroughProjectDTO) sessionFactory.getCurrentSession()
                 .createCriteria(PassThroughProjectDTO.class)

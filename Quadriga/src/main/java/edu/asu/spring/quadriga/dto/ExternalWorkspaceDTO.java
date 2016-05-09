@@ -1,9 +1,12 @@
 package edu.asu.spring.quadriga.dto;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
+import org.hibernate.annotations.DiscriminatorFormula;
 
 /**
  * This class represents the column mappings for the workspace table.

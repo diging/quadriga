@@ -12,7 +12,6 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,7 +34,6 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
-import edu.asu.spring.quadriga.mapper.PassThroughProjectDTOMapper;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
@@ -100,6 +98,9 @@ public class UploadNetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+        /*
+         * Parse XML
+         */
         XMLInfo xmlInfo;
         try {
             xmlInfo = xmlReader.getXMLInfo(xml);
@@ -107,75 +108,76 @@ public class UploadNetworkRestController {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        String projectId = null;
-        String workspaceId = null;
-
-        try {
-            IProject project1 = projectManager.getProjectDetails(xmlInfo.getProjectId());
-            System.out.println(project1);
-            return new ResponseEntity<String>("done", HttpStatus.ACCEPTED);
-        } catch (QuadrigaStorageException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        
+        String internalOrExternalProjectId = xmlInfo.getProjectId();
+        String workspaceId = xmlInfo.getExternalWorkspaceId();
+        String networkName = xmlInfo.getNetworkName();
+        
+        // check if necessary information is provided
+        if (workspaceId == null || workspaceId.isEmpty()) {
+            String errorMsg = "Please provide a workspace id as a part of the XML.";
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+        }
+        if (internalOrExternalProjectId == null || internalOrExternalProjectId.isEmpty()) {
+            String errorMsg = "Please provide a project id as a part of the XML.";
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+        }
+        if (networkName == null || networkName.isEmpty()) {
+            String errorMsg = "Please provide a network name as a part of the XML.";
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         
-        if (xmlReader.isPassThroughXML(xml)) {
-            IPassThroughProject project = passThroughProjectManager.getPassThroughProject(xmlInfo);
-
-            try {
-                projectId = passThroughProjectManager.getInternalProjectId(project.getExternalProjectid(), project.getClient());
-                if (projectId == null) {
-                    projectId = passThroughProjectManager.addPassThroughProject(user, project);
-                } else {
-                    String roles[] = { RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
-                            RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR };
-                    boolean isAuthorized = authorization.chkAuthorization(userid, projectId, roles);
-                    if (!isAuthorized) {
-                        String errorMsg = errorMessageRest.getErrorMsg("User is not authorized to access the resource");
-                        return new ResponseEntity<String>(errorMsg, HttpStatus.UNAUTHORIZED);
-                    }
-                }
-            } catch (QuadrigaStorageException | QuadrigaAccessException | NoSuchRoleException e) {
-                String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
-                return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            try {
-                workspaceId = passThroughProjectManager.createWorkspaceForExternalProject(xmlInfo, projectId, user);
-            } catch (JAXBException | QuadrigaStorageException | QuadrigaAccessException e) {
-                String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
-                return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        } else {
-            try {
-                workspaceId = xmlInfo.getExternalWorkspaceId();
-                String networkName = xmlInfo.getNetworkName();
-                if (workspaceId == null || workspaceId.isEmpty()) {
-                    String errorMsg = errorMessageRest
-                            .getErrorMsg("Please provide a workspace id as a part of post parameters");
-                    return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-                }
-                String projectid = wsManager.getProjectIdFromWorkspaceId(workspaceId);
-                if (projectid == null || projectid.isEmpty()) {
-                    String errorMsg = errorMessageRest
-                            .getErrorMsg("No project could be found for the given workspace id " + workspaceId);
-                    return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
-                }
-
-                if (networkName == null || networkName.isEmpty()) {
-                    String errorMsg = errorMessageRest
-                            .getErrorMsg("Please provide network name as a part of post parameters");
-                    return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
-                }
-
-            } catch (QuadrigaStorageException e) {
-                String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
-                return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        /*
+         * Create or retrieve project.
+         */
+        IProject project;
+        try {
+            project = passThroughProjectManager.retrieveOrCreateProject(xmlInfo, user);
+        } catch (NoSuchRoleException | QuadrigaStorageException e2) {
+            String errorMsg = e2.getMessage();
+            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
+        
+        /*
+         * check accessibility of project
+         */
+        String roles[] = { RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+                RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR };
+        boolean isAuthorized;
+        try {
+            isAuthorized = authorization.chkAuthorization(userid, project.getProjectId(), roles);
+        } catch (QuadrigaStorageException | QuadrigaAccessException e1) {
+            String errorMsg = "User is not authorized to access the resource";
+            return new ResponseEntity<String>(errorMsg, HttpStatus.UNAUTHORIZED);
+        }
+        if (!isAuthorized) {
+            String errorMsg = "User is not authorized to access the resource";
+            return new ResponseEntity<String>(errorMsg, HttpStatus.UNAUTHORIZED);
+        }
+        
+        /*
+         * Create or retrieve workspace
+         */
+        String projectIdOfWorkspace = null;
+        try {
+            workspaceId = passThroughProjectManager.retrieveOrCreateWorkspace(xmlInfo, project.getProjectId(), user);
+            projectIdOfWorkspace = wsManager.getProjectIdFromWorkspaceId(workspaceId);
+            
+        } catch (JAXBException | QuadrigaStorageException | QuadrigaAccessException e1) {
+            String errorMsg = e1.getMessage();
+            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        if (!projectIdOfWorkspace.equals(project.getProjectId())) {
+            String errorMsg = "The workspace belongs to a differen project than the one you specified.";
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+        }
+        
         String network = xmlReader.getNetwork(xml);
 
+        /*
+         * Store network
+         */
         String networkId = null;
         if (!StringUtils.isEmpty(network)) {
             try {
@@ -188,6 +190,9 @@ public class UploadNetworkRestController {
             }
         }
 
+        /*
+         * Create response.
+         */
         StringWriter writer = new StringWriter();
         try {
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(request);
@@ -195,7 +200,7 @@ public class UploadNetworkRestController {
 
             Template template = engine.getTemplate("velocitytemplates/passthroughproject.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-            context.put("projectId", projectId);
+            context.put("projectId", project.getProjectId());
             context.put("workspaceId", workspaceId);
             context.put("projectName", xmlInfo.getName());
             context.put("workspaceName", xmlInfo.getWorkspaceName());

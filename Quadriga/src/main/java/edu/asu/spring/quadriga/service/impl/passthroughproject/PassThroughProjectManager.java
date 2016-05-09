@@ -7,6 +7,8 @@ import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +20,15 @@ import edu.asu.spring.quadriga.domain.factory.passthroughproject.IPassThroughPro
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProject;
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.PassThroughProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IPassThroughProjectMapper;
 import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IExternalWorkspaceManager;
 
 /**
@@ -49,26 +53,67 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Autowired
     private IPassThroughProjectFactory projectFactory;
 
-
     @Autowired
     @Qualifier("passThroughProjectDTOMapper")
-    private PassThroughProjectDTOMapper projectMapper;
+    private IPassThroughProjectMapper projectMapper;
+    
+    @Autowired
+    private IRetrieveProjectManager projectManager;
 
     @Resource(name = "projectconstants")
     private Properties messages;
+    
+    /**
+     * This method tries to retrieve the project with the given id. If there doesn't exist a 
+     * project with the id, it tries to find a project with the provided id as external id.
+     * If that doesn't return a project either, it will create a new project that has the 
+     * provided id as external id.
+     * 
+     * @param projectInfo
+     * @param user
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws NoSuchRoleException
+     */
+    @Override
+    public IProject retrieveOrCreateProject(XMLInfo projectInfo, IUser user) throws QuadrigaStorageException, NoSuchRoleException {
+        IProject project = projectManager.getProjectDetails(projectInfo.getProjectId());
+        
+        // if the project id is not an internal id there is no project
+        if (project == null) {
+            
+            String projectId = getInternalProjectId(projectInfo.getProjectId(), projectInfo.getSender());
+            if (projectId != null) {
+                /*
+                 * if there exists a  project for the given external project id
+                 * find project
+                 */
+                project = projectManager.getProjectDetails(projectId);  
+            } else {
+                /*
+                 * Otherwise create a new project with the info
+                 */
+                project = getPassThroughProject(projectInfo);
+                addPassThroughProject(user, project);
+            }
+            
+        }
+        
+        return project;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Transactional
     @Override
-    public String addPassThroughProject(IUser user, IPassThroughProject project) throws QuadrigaStorageException {
+    public String addPassThroughProject(IUser user, IProject project) throws QuadrigaStorageException {
         String projectId = projectDao.generateUniqueID();
         project.setCreatedBy(user.getUserName());
         project.setUpdatedBy(user.getUserName());
-        PassThroughProjectDTO projectDTO = projectMapper.getPassThroughProjectDTO(project, user);
+        project.setProjectId(projectId);
+        PassThroughProjectDTO projectDTO = (PassThroughProjectDTO) projectMapper.getProjectDTO(project);
 
-        projectDTO.setProjectid(projectId);
         projectDao.saveNewDTO(projectDTO);
 
         return projectId;
@@ -95,7 +140,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
      */
     @Transactional
     @Override
-    public String createWorkspaceForExternalProject(XMLInfo passThroughProjectInfo, String projectId,
+    public String retrieveOrCreateWorkspace(XMLInfo passThroughProjectInfo, String projectId,
             IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
 
         String externalWorkspaceId = passThroughProjectInfo.getExternalWorkspaceId();

@@ -11,8 +11,12 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -38,7 +42,6 @@ import org.hibernate.annotations.DiscriminatorFormula;
     @NamedQuery(name = "WorkspaceDTO.findByIsarchived", query = "SELECT w FROM WorkspaceDTO w WHERE w.isarchived = :isarchived"),
     @NamedQuery(name = "WorkspaceDTO.findByIsdeactivated", query = "SELECT w FROM WorkspaceDTO w WHERE w.isdeactivated = :isdeactivated"),
     })
-@DiscriminatorFormula("(CASE WHEN dtype > '' THEN dtype ELSE 'WorkspaceDTO' END)")
 public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, WorkspaceCollaboratorDTO> implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
