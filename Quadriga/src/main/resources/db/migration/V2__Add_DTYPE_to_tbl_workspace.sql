@@ -1,0 +1,1 @@
+UPDATE tbl_workspace SET DTYPE='WorkspaceDTO' WHERE DTYPE='';
