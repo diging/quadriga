@@ -63,8 +63,13 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProject> getProjectList(String sUserName)
             throws QuadrigaStorageException {
-        List<IProject> projectList;
-        projectList = projectShallowMapper.getProjectList(sUserName);
+        List<ProjectDTO> projectDTOList = projectDao.getProjectDTOList(sUserName);
+        
+        List<IProject> projectList = new ArrayList<IProject>();
+        for (ProjectDTO projectDto : projectDTOList) {
+            projectList.add(projectShallowMapper.getProject(projectDto));
+        }
+        
         return projectList;
     }
 
@@ -83,9 +88,15 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProject> getCollaboratorProjectList(String sUserName)
             throws QuadrigaStorageException {
-        List<IProject> projectList;
-        projectList = projectShallowMapper
-                .getCollaboratorProjectListOfUser(sUserName);
+        List<ProjectDTO> projectDTOList = projectDao.getCollaboratorProjectDTOListOfUser(sUserName);
+        
+        List<IProject> projectList = new ArrayList<IProject>();
+        if(projectDTOList!=null){
+            for(ProjectDTO projectDTO : projectDTOList) {
+                projectList.add(projectShallowMapper.getProject(projectDTO));
+            }
+        }
+        
         return projectList;
     }
 
@@ -106,9 +117,12 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
             throws QuadrigaStorageException {
-        List<IProject> projectList;
-        projectList = projectShallowMapper
-                .getProjectListAsWorkspaceOwner(sUserName);
+        List<ProjectDTO> projectDTOList = projectDao.getProjectDTOListAsWorkspaceOwner(sUserName);
+        
+        List<IProject> projectList = new ArrayList<IProject>();
+        for (ProjectDTO projectDto : projectDTOList) {
+            projectList.add(projectShallowMapper.getProject(projectDto));
+        }
         return projectList;
     }
 
@@ -127,9 +141,13 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
             throws QuadrigaStorageException {
-        List<IProject> projectList;
-        projectList = projectShallowMapper
-                .getProjectListAsWorkspaceCollaborator(sUserName);
+        List<ProjectDTO> projectDTOList = projectDao.getProjectDTOListAsWorkspaceCollaborator(sUserName);
+        
+        List<IProject> projectList = new ArrayList<IProject>();
+        for(ProjectDTO projectDto : projectDTOList) {
+            projectList.add(projectShallowMapper.getProject(projectDto));
+        }
+
         return projectList;
     }
 
@@ -148,9 +166,13 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProject> getProjectListByCollaboratorRole(String sUserName,
             String role) throws QuadrigaStorageException {
-        List<IProject> projectList;
-        projectList = projectShallowMapper.getProjectListByCollaboratorRole(
-                sUserName, role);
+        List<ProjectDTO> projectDTOList = projectDao.getProjectDTOListByCollaboratorRole(sUserName,role);
+        List<IProject> projectList = new ArrayList<IProject>();
+        
+        for (ProjectDTO projectDto : projectDTOList) {
+            projectList.add(projectShallowMapper.getProject(projectDto));
+        }
+        
         return projectList;
     }
 
@@ -269,16 +291,14 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
         List<String> projectIds = new ArrayList<String>();
 
         List<IProject> projectListAsOwner;
-        projectListAsOwner = projectShallowMapper.getProjectList(sUserName);
+        projectListAsOwner = getProjectList(sUserName);
         if (projectListAsOwner != null) {
             for (IProject p : projectListAsOwner) {
                 projectsList.add(getProjectDetails(p.getProjectId()));
                 projectIds.add(p.getProjectId());
             }
         }
-        List<IProject> projectListAsCollaborator;
-        projectListAsCollaborator = projectShallowMapper
-                .getCollaboratorProjectListOfUser(sUserName);
+        List<IProject> projectListAsCollaborator = getCollaboratorProjectList(sUserName);
         ;
         if (projectListAsCollaborator != null) {
             for (IProject p : projectListAsCollaborator) {

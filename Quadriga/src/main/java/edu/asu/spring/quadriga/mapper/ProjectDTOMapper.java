@@ -36,7 +36,13 @@ public class ProjectDTOMapper extends BaseMapper implements IProjectBaseMapper {
 	@Override
     public IProject getProject(ProjectDTO projectDTO)  throws QuadrigaStorageException {
 		IProject project = new Project();
-		project.setProjectName(projectDTO.getProjectname());
+		fillProject(projectDTO, project);
+		return project;
+	}
+
+    protected void fillProject(ProjectDTO projectDTO, IProject project)
+            throws QuadrigaStorageException {
+        project.setProjectName(projectDTO.getProjectname());
 		project.setDescription(projectDTO.getDescription());
 		project.setUnixName(projectDTO.getUnixname());
 		project.setProjectId(projectDTO.getProjectid());
@@ -46,8 +52,7 @@ public class ProjectDTOMapper extends BaseMapper implements IProjectBaseMapper {
         project.setUpdatedDate(projectDTO.getUpdateddate());
 		project.setOwner(userManager.getUser(projectDTO.getProjectowner().getUsername()));
 		project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
-		return project;
-	}
+    }
 	
 	/* (non-Javadoc)
      * @see edu.asu.spring.quadriga.mapper.IProjectBaseMapper#getProjectDTO(edu.asu.spring.quadriga.domain.workbench.IProject, java.lang.String)

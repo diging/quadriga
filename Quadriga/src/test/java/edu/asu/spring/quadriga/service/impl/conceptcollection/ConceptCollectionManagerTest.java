@@ -96,9 +96,6 @@ public class ConceptCollectionManagerTest {
         Mockito.when(cpConnector.search("item", "pos")).thenReturn(rep);
         Mockito.when(cpConnector.getById("id")).thenReturn(rep);
 
-        Mockito.when(mockedProjectShallowMapper.getProjectList("username")).thenReturn(ccProjectsList2);
-        Mockito.when(mockedProjectShallowMapper.getCollaboratorProjectListOfUser("ccId")).thenReturn(ccProjectsList);
-
         WorkSpace workspace = new WorkSpace();
         workspace.setWorkspaceId("w-id");
         workspace.setWorkspaceName("w-name");

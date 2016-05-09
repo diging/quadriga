@@ -34,15 +34,6 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallow
 public class ProjectDeepMapper extends ProjectDTOMapper implements IProjectDeepMapper {
 
 	@Autowired
-	private IRetrieveProjectDAO projectDao;
-
-	@Autowired
-	private IRetrieveProjectManager projectManager;
-	
-	@Autowired
-	private IProjectFactory projectFactory;
-
-	@Autowired
 	private IUserDeepMapper userDeepMapper;
 	
 	@Autowired

@@ -25,7 +25,6 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -35,9 +34,6 @@ public class RetrieveProjectController {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
-
-    @Autowired
-    private IRetrieveJsonProjectManager jsonProjectManager;
 
     @Autowired
     private IProjectSecurityChecker projectSecurity;
