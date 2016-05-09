@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
-import edu.asu.spring.quadriga.dao.workspace.IExternalWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IExternalWorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
@@ -19,7 +19,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
-import edu.asu.spring.quadriga.service.workspace.IExternalWSManager;
+import edu.asu.spring.quadriga.service.workspace.IExternalWorkspaceManager;
 
 /**
  * 
@@ -29,10 +29,10 @@ import edu.asu.spring.quadriga.service.workspace.IExternalWSManager;
  *
  */
 @Service
-public class ExternalWSManager implements IExternalWSManager {
+public class ExternalWorkspaceManager implements IExternalWorkspaceManager {
 
     @Autowired
-    private IExternalWsDAO externalWorkspaceDAO;
+    private IExternalWorkspaceDAO externalWorkspaceDAO;
 
     @Autowired
     private IProjectDAO projectDao;

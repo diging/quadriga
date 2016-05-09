@@ -8,7 +8,7 @@ package edu.asu.spring.quadriga.domain.impl.passthroughproject;
  */
 public class XMLInfo {
     private String networkName;
-    private String externalProjectId;
+    private String projectId;
     private String externalUserName;
 
     private String externalUserId;
@@ -28,12 +28,12 @@ public class XMLInfo {
         this.networkName = networkName;
     }
 
-    public String getExternalProjectId() {
-        return externalProjectId;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setExternalProjectId(String externalProjectId) {
-        this.externalProjectId = externalProjectId;
+    public void setProjectId(String externalProjectId) {
+        this.projectId = externalProjectId;
     }
 
     public String getExternalUserName() {

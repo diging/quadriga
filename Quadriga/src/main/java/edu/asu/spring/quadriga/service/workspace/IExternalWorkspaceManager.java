@@ -4,7 +4,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IExternalWSManager {
+public interface IExternalWorkspaceManager {
 
     /**
      * Determines if a workspace with the given external workspace id exists or

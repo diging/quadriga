@@ -32,32 +32,42 @@ public class ProjectDTOMapper extends BaseMapper {
 	
 	public IProject getProject(ProjectDTO projectDTO)  throws QuadrigaStorageException {
 		IProject project = new Project();
-		project.setProjectName(projectDTO.getProjectname());
+		fillProject(projectDTO, project);
+		return project;
+	}
+
+    protected void fillProject(ProjectDTO projectDTO, IProject project) throws QuadrigaStorageException {
+        project.setProjectName(projectDTO.getProjectname());
 		project.setDescription(projectDTO.getDescription());
 		project.setUnixName(projectDTO.getUnixname());
 		project.setProjectId(projectDTO.getProjectid());
 		project.setOwner(userManager.getUser(projectDTO.getProjectowner().getUsername()));
 		project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
-		return project;
-	}
+    }
 	
-	public ProjectDTO getProjectDTO(IProject project, String userName) {
-		QuadrigaUserDTO quadrigaUser = getUserDTO(userName);
+	public ProjectDTO getProjectDTO(IProject project) {
 		ProjectDTO projectDTO = new ProjectDTO();
-		projectDTO.setProjectname(project.getProjectName());
+		fillProjectDTO(project, projectDTO);
+		return projectDTO;
+	}
+
+    protected void fillProjectDTO(IProject project, ProjectDTO projectDTO) {
+        projectDTO.setProjectname(project.getProjectName());
 		projectDTO.setDescription(project.getDescription());
 		projectDTO.setUnixname(project.getUnixName());
 		projectDTO.setProjectid(project.getProjectId());
+		
+		QuadrigaUserDTO quadrigaUser = getUserDTO(project.getCreatedBy());        
 		projectDTO.setProjectowner(quadrigaUser);
-		projectDTO.setCreatedby(userName);
+		projectDTO.setCreatedby(project.getCreatedBy());
 		projectDTO.setCreateddate(new Date());
-		projectDTO.setUpdatedby(userName);
+		projectDTO.setUpdatedby(project.getUpdatedBy());
 		projectDTO.setUpdateddate(new Date());
+		
 		if(project.getProjectAccess() != null) {
 			projectDTO.setAccessibility(project.getProjectAccess().name());
 		}
-		return projectDTO;
-	}
+    }
 	
 	public ProjectEditorDTO getProjectEditor(ProjectDTO project,String userName) throws QuadrigaStorageException
 	{

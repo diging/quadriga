@@ -1,8 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl.workbench.passthroughproject;
 
-import java.util.List;
-
-import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
@@ -26,14 +24,12 @@ public class PassThroughProjectDAO extends BaseDAO<PassThroughProjectDTO> implem
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public List<PassThroughProjectDTO> getExternalProjects(String externalProjectid) throws QuadrigaStorageException {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery("PassThroughProjectDTO.findByExternalProjectid");
-        query.setParameter("externalProjectid", externalProjectid);
-
-        List<PassThroughProjectDTO> projectDTOs = query.list();
-        return projectDTOs;
+    public PassThroughProjectDTO getExternalProject(String externalProjectid, String client) throws QuadrigaStorageException {
+        return (PassThroughProjectDTO) sessionFactory.getCurrentSession()
+                .createCriteria(PassThroughProjectDTO.class)
+                .add(Restrictions.eq("externalProjectid", externalProjectid))
+                .add(Restrictions.eq("client", client)).uniqueResult();
     }
 
     @Override

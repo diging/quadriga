@@ -21,8 +21,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.hibernate.annotations.DiscriminatorFormula;
 
 /**
  *This class represents the column mappings for workspace table.
@@ -30,7 +31,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_workspace")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkspaceDTO.findAll", query = "SELECT w FROM WorkspaceDTO w"),
     @NamedQuery(name = "WorkspaceDTO.findByWorkspacename", query = "SELECT w FROM WorkspaceDTO w WHERE w.workspacename = :workspacename"),
@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "WorkspaceDTO.findByIsarchived", query = "SELECT w FROM WorkspaceDTO w WHERE w.isarchived = :isarchived"),
     @NamedQuery(name = "WorkspaceDTO.findByIsdeactivated", query = "SELECT w FROM WorkspaceDTO w WHERE w.isdeactivated = :isdeactivated"),
     })
+@DiscriminatorFormula("(CASE WHEN dtype > '' THEN dtype ELSE 'WorkspaceDTO' END)")
 public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, WorkspaceCollaboratorDTO> implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)

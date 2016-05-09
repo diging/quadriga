@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     private static final Logger logger = LoggerFactory.getLogger(RetrieveProjectManager.class);
     
     @Autowired
-    private IRetrieveProjectDAO dbConnect;
+    private IRetrieveProjectDAO projectDao;
 
     @Autowired
     private IProjectShallowMapper projectShallowMapper;
@@ -48,7 +49,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
 
     @Autowired
     private Environment env;
-
+    
     /**
      * This method returns the list of projects associated with the logged in
      * user. It uses the Project shallow mapper to give a {@link List} of
@@ -166,6 +167,8 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public IProject getProjectDetails(String projectId)
             throws QuadrigaStorageException {
+        projectDao.getProjectDTO(projectId);
+        
         return projectDeepMapper.getProjectDetails(projectId);
     }
 
@@ -331,7 +334,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProject> getProjectListByAccessibility(String accessibility)
             throws QuadrigaStorageException {
-        List<ProjectDTO> projectDTOList = dbConnect
+        List<ProjectDTO> projectDTOList = projectDao
                 .getAllProjectsDTOByAccessibility(accessibility);
         List<IProject> projectList = new ArrayList<IProject>();
         if (projectDTOList != null) {
@@ -363,7 +366,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     public List<IProject> getProjectListBySearchTermAndAccessiblity(
             String searchTerm, String accessibility)
             throws QuadrigaStorageException {
-        List<ProjectDTO> projectDTOList = dbConnect
+        List<ProjectDTO> projectDTOList = projectDao
                 .getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm,
                         accessibility);
         List<IProject> projectList = new ArrayList<IProject>();

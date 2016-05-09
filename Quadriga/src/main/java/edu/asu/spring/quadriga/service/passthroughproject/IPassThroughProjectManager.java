@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.passthroughproject;
 import javax.xml.bind.JAXBException;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProject;
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
@@ -58,5 +59,7 @@ public interface IPassThroughProjectManager {
      */
     String getInternalProjectId(String externalProjectid, String userid)
             throws QuadrigaStorageException, NoSuchRoleException;
+
+    public abstract IPassThroughProject getPassThroughProject(XMLInfo passThroughProjectInfo);
 
 }

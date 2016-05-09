@@ -149,7 +149,7 @@ public class XMLReader implements IXMLReader {
         }
 
         XMLInfo info = new XMLInfo();
-        info.setExternalProjectId(externalProjectId);
+        info.setProjectId(externalProjectId);
         info.setExternalUserId(externalUserId);
         info.setExternalUserName(externalUserName);
         info.setName(name);

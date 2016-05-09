@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents the column mappings for external project table.
@@ -13,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_external_project")
-@XmlRootElement
 @NamedQueries({ @NamedQuery(name = "PassThroughProjectDTO.findAll", query = "SELECT p FROM PassThroughProjectDTO p"),
         @NamedQuery(name = "PassThroughProjectDTO.findByProjectid", query = "SELECT p FROM PassThroughProjectDTO p WHERE p.projectid = :projectid"),
         @NamedQuery(name = "PassThroughProjectDTO.findByExternalProjectid", query = "SELECT p FROM PassThroughProjectDTO p WHERE p.externalProjectid = :externalProjectid"), })

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
-import edu.asu.spring.quadriga.dao.workspace.IExternalWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IExternalWorkspaceDAO;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 
 /**
@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
  *
  */
 @Repository
-public class ExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements IExternalWsDAO {
+public class ExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements IExternalWorkspaceDAO {
 
     @Autowired
     private SessionFactory sessionFactory;

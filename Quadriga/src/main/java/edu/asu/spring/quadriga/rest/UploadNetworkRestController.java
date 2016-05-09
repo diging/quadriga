@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
@@ -40,6 +41,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IXMLReader;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -71,11 +73,10 @@ public class UploadNetworkRestController {
     private IRestVelocityFactory restVelocityFactory;
 
     @Autowired
-    @Qualifier("passThroughProjectDTOMapper")
-    private PassThroughProjectDTOMapper projectMapper;
-
-    @Autowired
     private IWorkspaceManager wsManager;
+    
+    @Autowired 
+    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private ProjectAuthorization authorization;
@@ -109,12 +110,21 @@ public class UploadNetworkRestController {
         String projectId = null;
         String workspaceId = null;
 
+        try {
+            IProject project1 = projectManager.getProjectDetails(xmlInfo.getProjectId());
+            System.out.println(project1);
+            return new ResponseEntity<String>("done", HttpStatus.ACCEPTED);
+        } catch (QuadrigaStorageException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        
         if (xmlReader.isPassThroughXML(xml)) {
-            IPassThroughProject project = projectMapper.getPassThroughProject(xmlInfo);
+            IPassThroughProject project = passThroughProjectManager.getPassThroughProject(xmlInfo);
 
             try {
-                projectId = passThroughProjectManager.getInternalProjectId(project.getExternalProjectid(), userid);
-                if (StringUtils.isEmpty(projectId)) {
+                projectId = passThroughProjectManager.getInternalProjectId(project.getExternalProjectid(), project.getClient());
+                if (projectId == null) {
                     projectId = passThroughProjectManager.addPassThroughProject(user, project);
                 } else {
                     String roles[] = { RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
