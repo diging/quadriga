@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.dao.workspace;
 
+import java.util.List;
+
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 
@@ -12,5 +14,5 @@ public interface IExternalWorkspaceDAO extends IBaseDAO<ExternalWorkspaceDTO> {
      * @param externalWorkspaceid
      * @return
      */
-    public abstract ExternalWorkspaceDTO getExternalWorkspace(String externalWorkspaceid);
+    public abstract List<ExternalWorkspaceDTO> getExternalWorkspace(String externalWorkspaceid);
 }

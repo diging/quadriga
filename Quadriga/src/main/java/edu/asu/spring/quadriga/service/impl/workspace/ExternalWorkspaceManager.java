@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +12,8 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IExternalWorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
@@ -18,9 +21,9 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
-import edu.asu.spring.quadriga.mapper.workbench.impl.ProjectDTOMapper;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.service.workspace.IExternalWorkspaceManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
 /**
  * 
@@ -47,15 +50,25 @@ public class ExternalWorkspaceManager implements IExternalWorkspaceManager {
 
     @Autowired
     private IWorkspaceDAO workspaceDao;
+    
+    @Autowired
+    private IWorkspaceDeepMapper workspaceMapper;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isExternalWorkspaceExists(String externalWorkspaceId)
+    public IWorkSpace getExternalWorkspace(String externalWorkspaceId, String projectId)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        ExternalWorkspaceDTO externalWorkspaceDTO = externalWorkspaceDAO.getExternalWorkspace(externalWorkspaceId);
-        return externalWorkspaceDTO != null;
+        List<ExternalWorkspaceDTO> externalWorkspaceDTOs = externalWorkspaceDAO.getExternalWorkspace(externalWorkspaceId);
+        for (ExternalWorkspaceDTO wsDto : externalWorkspaceDTOs) {
+            IWorkSpace workspace = new WorkSpace();
+            workspaceMapper.fillWorkspace(wsDto, workspace);
+            if (workspace.getProjectWorkspace().getProject().getProjectId().equals(projectId))
+                return workspace;
+        }
+        
+        return null;
     }
 
     /**
@@ -92,19 +105,6 @@ public class ExternalWorkspaceManager implements IExternalWorkspaceManager {
 
         return workspaceId;
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getInternalWorkspaceId(String externalWorkspaceId) {
-        String internalProjectId = null;
-        ExternalWorkspaceDTO externalWorkspace = externalWorkspaceDAO.getExternalWorkspace(externalWorkspaceId);
-        if (externalWorkspace != null) {
-            internalProjectId = externalWorkspace.getWorkspaceid();
-        }
-        return internalProjectId;
     }
 
 }

@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.dao.impl.workspace;
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,11 @@ public class ExternalWsDAO extends BaseDAO<ExternalWorkspaceDTO> implements IExt
      * {@inheritDoc}
      */
     @Override
-    public ExternalWorkspaceDTO getExternalWorkspace(String externalWorkspaceid) {
-        ExternalWorkspaceDTO externalWorkspace = null;
+    public List<ExternalWorkspaceDTO> getExternalWorkspace(String externalWorkspaceid) {
         Query query = sessionFactory.getCurrentSession()
                 .getNamedQuery("ExternalWorkspaceDTO.findByExternalWorkspaceid");
         query.setParameter("externalWorkspaceid", externalWorkspaceid);
-        externalWorkspace = (ExternalWorkspaceDTO) query.uniqueResult();
-        return externalWorkspace;
+        return query.list();
     }
 
     @Override

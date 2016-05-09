@@ -114,8 +114,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public String addNetworkRequest(String networkName, IUser user,
-            String workspaceid) throws QuadrigaStorageException {
+    public String addNetwork(String networkName, IUser user,
+            String workspaceid, String networkStatus) throws QuadrigaStorageException {
 
         if (networkName == null || user == null || workspaceid == null)
             throw new QuadrigaStorageException("Error in adding a network");
@@ -123,7 +123,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
         String networkid = generateUniqueID();
 
         NetworksDTO networksDTO = new NetworksDTO(networkid, networkName,
-                user.getUserName(), INetworkStatus.PENDING, user.getUserName(),
+                user.getUserName(), networkStatus, user.getUserName(),
                 new Date(), user.getUserName(), new Date());
         String userName = user.getUserName();
         Date date = new Date();

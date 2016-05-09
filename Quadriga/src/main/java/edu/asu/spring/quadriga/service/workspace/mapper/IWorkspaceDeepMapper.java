@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.workspace.mapper;
 
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -15,5 +16,7 @@ public interface IWorkspaceDeepMapper {
 
 	IProjectWorkspace getProjectWorkspaceOfWorkspace(IWorkSpace workspace,
 			WorkspaceDTO workspaceDTO) throws QuadrigaStorageException;
+
+    public abstract void fillWorkspace(WorkspaceDTO workspaceDTO, IWorkSpace workspace) throws QuadrigaStorageException;
 
 }

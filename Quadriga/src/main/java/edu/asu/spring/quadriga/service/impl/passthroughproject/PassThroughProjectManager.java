@@ -7,8 +7,6 @@ import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +19,7 @@ import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProject
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -30,6 +29,7 @@ import edu.asu.spring.quadriga.service.impl.BaseManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IExternalWorkspaceManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 
 /**
  * 
@@ -43,6 +43,9 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
 
     @Autowired
     private IExternalWorkspaceManager externalWSManager;
+    
+    @Autowired
+    private IWorkspaceManager workspaceManager;
 
     @Autowired
     private IPassThroughProjectDAO projectDao;
@@ -143,25 +146,36 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     public String retrieveOrCreateWorkspace(XMLInfo passThroughProjectInfo, String projectId,
             IUser user) throws JAXBException, QuadrigaStorageException, QuadrigaAccessException {
 
-        String externalWorkspaceId = passThroughProjectInfo.getExternalWorkspaceId();
+        String workspaceId = passThroughProjectInfo.getExternalWorkspaceId();
         String externalWorkspaceName = passThroughProjectInfo.getWorkspaceName();
+        
+        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceId);
+        // is there a workspace in the project with that id?
+        if (workspace != null && !workspace.getProjectWorkspace().getProject().getProjectId().equals(projectId)) {
+            workspace = null;
+        }
+        
+        if (workspace == null) {
+            workspace = externalWSManager.getExternalWorkspace(workspaceId, projectId);
+        }
+        
+        // is there a workspace with the given id as external ws id?
+        if (workspace != null && !workspace.getProjectWorkspace().getProject().getProjectId().equals(projectId)) {
+            workspace = null;
+        }
 
-        boolean isExternalWorkspaceExists = externalWSManager.isExternalWorkspaceExists(externalWorkspaceId);
-        String workspaceId = null;
-        if (!isExternalWorkspaceExists) {
+        // if not we have to create a new one
+        if (workspace == null) {
             // External workspace does not exists so insert the values into
             // externalWorkspace table
             // Create a new externalWorkspaceId and InternalWorkspaceId and then
             // call storeNetworkDetails
-            workspaceId = externalWSManager.createExternalWorkspace(externalWorkspaceId, externalWorkspaceName,
+            workspaceId = externalWSManager.createExternalWorkspace(workspaceId, externalWorkspaceName,
                     projectId, user);
         } else {
             // Get the workspace Id related to the external workspace Id
-            workspaceId = externalWSManager.getInternalWorkspaceId(externalWorkspaceId);
+            workspaceId = workspace.getWorkspaceId();
         }
-
-        // After creating the values save the values by calling store network
-        // details. If already available. Call network details for updation
 
         return workspaceId;
 

@@ -42,6 +42,7 @@ import edu.asu.spring.quadriga.service.passthroughproject.IXMLReader;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * 
@@ -115,15 +116,15 @@ public class UploadNetworkRestController {
         
         // check if necessary information is provided
         if (workspaceId == null || workspaceId.isEmpty()) {
-            String errorMsg = "Please provide a workspace id as a part of the XML.";
+            String errorMsg = errorMessageRest.getErrorMsg("Please provide a workspace id as a part of the XML.");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         if (internalOrExternalProjectId == null || internalOrExternalProjectId.isEmpty()) {
-            String errorMsg = "Please provide a project id as a part of the XML.";
+            String errorMsg = errorMessageRest.getErrorMsg("Please provide a project id as a part of the XML.");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         if (networkName == null || networkName.isEmpty()) {
-            String errorMsg = "Please provide a network name as a part of the XML.";
+            String errorMsg = errorMessageRest.getErrorMsg("Please provide a network name as a part of the XML.");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         
@@ -147,11 +148,11 @@ public class UploadNetworkRestController {
         try {
             isAuthorized = authorization.chkAuthorization(userid, project.getProjectId(), roles);
         } catch (QuadrigaStorageException | QuadrigaAccessException e1) {
-            String errorMsg = "User is not authorized to access the resource";
+            String errorMsg = errorMessageRest.getErrorMsg("User is not authorized to access the resource");
             return new ResponseEntity<String>(errorMsg, HttpStatus.UNAUTHORIZED);
         }
         if (!isAuthorized) {
-            String errorMsg = "User is not authorized to access the resource";
+            String errorMsg = errorMessageRest.getErrorMsg("User is not authorized to access the resource");
             return new ResponseEntity<String>(errorMsg, HttpStatus.UNAUTHORIZED);
         }
         
@@ -169,7 +170,7 @@ public class UploadNetworkRestController {
         }
         
         if (!projectIdOfWorkspace.equals(project.getProjectId())) {
-            String errorMsg = "The workspace belongs to a differen project than the one you specified.";
+            String errorMsg = errorMessageRest.getErrorMsg("The workspace belongs to a differen project than the one you specified.");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         
@@ -183,7 +184,7 @@ public class UploadNetworkRestController {
             try {
                 String responseFromQStore = networkManager.storeNetworks(network);
                 networkId = networkManager.storeNetworkDetails(responseFromQStore, user, xmlInfo.getNetworkName(),
-                        workspaceId, INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
+                        workspaceId, INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO, INetworkStatus.APPROVED);
             } catch (JAXBException | QStoreStorageException e) {
                 String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
                 return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
