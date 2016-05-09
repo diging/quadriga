@@ -23,7 +23,7 @@ public class TextFileMapper implements ITextFileMapper {
         txtFile.setFileName(tfDTO.getFilename());
         txtFile.setProjectId(tfDTO.getProjectId());
         txtFile.setWorkspaceId(tfDTO.getWorkspaceId());
-
+        txtFile.setAccessibility(tfDTO.getAccessibility());
         return txtFile;
     }
 
@@ -35,7 +35,7 @@ public class TextFileMapper implements ITextFileMapper {
         tfDTO.setProjectId(txtFile.getProjectId());
         tfDTO.setRefId(txtFile.getRefId());
         tfDTO.setWorkspaceId(txtFile.getWorkspaceId());
-
+        tfDTO.setAccessibility(txtFile.getAccessibility());
         return tfDTO;
     }
 
