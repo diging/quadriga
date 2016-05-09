@@ -48,10 +48,10 @@ public class TextXMLParser implements ITextXMLParser {
             document = builder.parse(new InputSource(new StringReader(xml)));
         } catch (ParserConfigurationException | IOException e) {
             logger.error("Error while parsing the XML", e);
-            throw new TextFileParseException("Error while parsing the XML");
+            throw new TextFileParseException(e);
         } catch (SAXException sae) {
             logger.error("Error while parsing the XML", sae);
-            throw new TextFileParseException("This XML file is not well formed");
+            throw new TextFileParseException(sae);
         }
 
         NodeList textNodeList = document.getElementsByTagName("text");

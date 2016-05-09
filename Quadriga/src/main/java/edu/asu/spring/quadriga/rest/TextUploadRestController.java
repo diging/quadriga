@@ -86,18 +86,18 @@ public class TextUploadRestController {
         try {
             txtFile = txtXMLParser.parseTextXML(xml, wsId, projId);
         } catch (TextFileParseException tfe) {
-            logger.error("Error in Text Rest Controller:" + tfe);
+            logger.error("Error in Text Rest Controller:", tfe);
             String errorMsg = errorMessageRest.getErrorMsg(tfe.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         try {
             tfManager.saveTextFile(txtFile);
         } catch (QuadrigaStorageException e) {
-            logger.error("Error in Text Rest Controller:" + e);
+            logger.error("Error in Text Rest Controller:", e);
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (FileStorageException e) {
-            logger.error("Error in Text Rest Controller:" + e);
+            logger.error("Error in Text Rest Controller:", e);
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -120,13 +120,13 @@ public class TextUploadRestController {
             httpHeaders.setContentType(MediaType.APPLICATION_XML);
             return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.CREATED);
         } catch (FileNotFoundException e) {
-            logger.error("Error in Text Rest Controller:" + e);
+            logger.error("Error in Text Rest Controller:", e);
             throw new RestException(500, e);
         } catch (IOException e) {
-            logger.error("Error in Text Rest Controller:" + e);
+            logger.error("Error in Text Rest Controller:", e);
             throw new RestException(500, e);
         } catch (Exception e) {
-            logger.error("Error in Text Rest Controller:" + e);
+            logger.error("Error in Text Rest Controller:", e);
             throw new RestException(500, e);
         }
 

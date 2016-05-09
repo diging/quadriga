@@ -1,4 +1,4 @@
-package edu.asu.quadriga.utilities;
+package edu.asu.spring.quadriga.utilities;
 
 import org.junit.Assert;
 import org.junit.Before;
