@@ -19,26 +19,32 @@ import edu.asu.spring.quadriga.mapper.workbench.IPassThroughProjectMapper;
 @Service("passThroughProjectDTOMapper")
 public class PassThroughProjectMapper extends ProjectDTOMapper implements IPassThroughProjectMapper {
 
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.mapper.IPassThroughProjectMapper#getProjectDTO(edu.asu.spring.quadriga.domain.workbench.IProject)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.mapper.IPassThroughProjectMapper#getProjectDTO
+     * (edu.asu.spring.quadriga.domain.workbench.IProject)
      */
     @Override
     @Transactional
     public ProjectDTO getProjectDTO(IProject project) {
         PassThroughProjectDTO projectDTO = new PassThroughProjectDTO();
         super.fillProjectDTO(project, projectDTO);
-        
+
         // external project details
-        projectDTO.setExternalProjectid(((IPassThroughProject)project).getExternalProjectid());
-        projectDTO.setExternalUserId(((IPassThroughProject)project).getExternalUserId());
-        projectDTO.setExternalUserName(((IPassThroughProject)project).getExternalUserName());
-        projectDTO.setClient(((IPassThroughProject)project).getClient());
+        projectDTO.setExternalProjectid(((IPassThroughProject) project).getExternalProjectid());
+        projectDTO.setExternalUserId(((IPassThroughProject) project).getExternalUserId());
+        projectDTO.setExternalUserName(((IPassThroughProject) project).getExternalUserName());
+        projectDTO.setClient(((IPassThroughProject) project).getClient());
         return projectDTO;
     }
-    
+
     /**
      * Wrapper method for getProjectDTO to minimize casting.
-     * @param project The project to be mapped to a DTO
+     * 
+     * @param project
+     *            The project to be mapped to a DTO
      * @return the corresponding DTO
      */
     @Override
@@ -46,23 +52,26 @@ public class PassThroughProjectMapper extends ProjectDTOMapper implements IPassT
         return (PassThroughProjectDTO) getProjectDTO(project);
     }
 
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.mapper.IPassThroughProjectMapper#getProject(edu.asu.spring.quadriga.dto.ProjectDTO)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.mapper.IPassThroughProjectMapper#getProject(edu
+     * .asu.spring.quadriga.dto.ProjectDTO)
      */
     @Override
     @Transactional
     public IProject getProject(ProjectDTO projectDTO) throws QuadrigaStorageException {
         IPassThroughProject project = new PassThroughProject();
         fillProject(projectDTO, project);
-        
+
         // external project details
-        project.setExternalProjectid(((PassThroughProjectDTO)projectDTO).getExternalProjectid());
-        project.setExternalUserId(((PassThroughProjectDTO)projectDTO).getExternalUserId());
-        project.setExternalUserName(((PassThroughProjectDTO)projectDTO).getExternalUserName());
-        project.setClient(((PassThroughProjectDTO)projectDTO).getClient());
-        
+        project.setExternalProjectid(((PassThroughProjectDTO) projectDTO).getExternalProjectid());
+        project.setExternalUserId(((PassThroughProjectDTO) projectDTO).getExternalUserId());
+        project.setExternalUserName(((PassThroughProjectDTO) projectDTO).getExternalUserName());
+        project.setClient(((PassThroughProjectDTO) projectDTO).getClient());
+
         return project;
     }
 
-    
 }
