@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
@@ -15,14 +16,15 @@ import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.IProjectBaseMapper;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
 public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieveProjectDAO 
 {
 	@Autowired
-	private ProjectDTOMapper projectDTOMapper;
+	@Qualifier("ProjectBaseMapper")
+	private IProjectBaseMapper projectDTOMapper;
 
 	@Autowired
 	private ProjectCollaboratorDTOMapper collaboratorDTOMapper;
@@ -330,30 +332,6 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
 		ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();
 		
 		return projectDTO;
-	}
-
-	/**
-	 * {@inheritDoc}}
-	 */
-	@Override
-	public IProject getProject(String workspaceid) throws QuadrigaStorageException {
-		if(workspaceid == null || workspaceid.equals(""))
-			return null;
-		
-		try {
-			//Find the project id from the workspace
-			Query query = sessionFactory.getCurrentSession().createQuery("Select pw.projectDTO FROM ProjectWorkspaceDTO pw where pw.workspaceDTO.workspaceid =:workspaceid");
-			query.setParameter("workspaceid", workspaceid);
-			ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();
-			if(projectDTO != null)
-				return projectDTOMapper.getProject(projectDTO);
-
-		} catch (Exception e) {
-			logger.error("Error in fetching project id from workspace: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-
-		return null;
 	}
 
     @Override

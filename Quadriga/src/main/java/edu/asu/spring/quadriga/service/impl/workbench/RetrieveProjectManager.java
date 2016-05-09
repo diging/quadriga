@@ -32,7 +32,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     private static final Logger logger = LoggerFactory.getLogger(RetrieveProjectManager.class);
     
     @Autowired
-    private IRetrieveProjectDAO dbConnect;
+    private IRetrieveProjectDAO projectDao;
 
     @Autowired
     private IProjectShallowMapper projectShallowMapper;
@@ -166,7 +166,8 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public IProject getProjectDetails(String projectId)
             throws QuadrigaStorageException {
-        return projectDeepMapper.getProjectDetails(projectId);
+        ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
+        return projectDeepMapper.getProject(projectDto);
     }
 
     /**
@@ -182,9 +183,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProjectCollaborator> getCollaboratingUsers(String projectId)
             throws QuadrigaStorageException {
-        List<IProjectCollaborator> projectCollaboratingUsersList = projectDeepMapper
-                .getCollaboratorsOfProject(projectId);
-        return projectCollaboratingUsersList;
+        ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
+        IProject project = projectDeepMapper.getProject(projectDto);
+        return project.getProjectCollaborators();
     }
 
     /**
@@ -199,7 +200,8 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public IProject getProjectDetailsByUnixName(String unixName)
             throws QuadrigaStorageException {
-        return projectDeepMapper.getProjectDetailsByUnixName(unixName);
+        ProjectDTO projectDTO = projectDao.getProjectDTOByUnixName(unixName);
+        return projectDeepMapper.getProject(projectDTO);
 
     }
 
@@ -207,8 +209,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public boolean getPublicProjectWebsiteAccessibility(String unixName)
             throws QuadrigaStorageException {
-        IProject project = projectDeepMapper
-                .getProjectDetailsByUnixName(unixName);
+        IProject project = getProjectDetailsByUnixName(unixName);
         String access = project.getProjectAccess().toString();
         if (access.equals("PUBLIC")) {
             return true;
@@ -224,8 +225,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public boolean canAccessProjectWebsite(String unixName, String user)
             throws QuadrigaStorageException {
-        IProject project = projectDeepMapper
-                .getProjectDetailsByUnixName(unixName);
+        IProject project = getProjectDetailsByUnixName(unixName);
 
         List<IProjectCollaborator> projectCollaborators = project
                 .getProjectCollaborators();
@@ -331,7 +331,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     @Transactional
     public List<IProject> getProjectListByAccessibility(String accessibility)
             throws QuadrigaStorageException {
-        List<ProjectDTO> projectDTOList = dbConnect
+        List<ProjectDTO> projectDTOList = projectDao
                 .getAllProjectsDTOByAccessibility(accessibility);
         List<IProject> projectList = new ArrayList<IProject>();
         if (projectDTOList != null) {
@@ -363,7 +363,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     public List<IProject> getProjectListBySearchTermAndAccessiblity(
             String searchTerm, String accessibility)
             throws QuadrigaStorageException {
-        List<ProjectDTO> projectDTOList = dbConnect
+        List<ProjectDTO> projectDTOList = projectDao
                 .getAllProjectsDTOBySearchTermAndAccessiblity(searchTerm,
                         accessibility);
         List<IProject> projectList = new ArrayList<IProject>();

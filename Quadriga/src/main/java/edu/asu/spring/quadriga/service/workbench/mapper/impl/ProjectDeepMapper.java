@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectCollaboratorFactory;
@@ -22,6 +21,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -29,11 +29,12 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectio
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallowMapper;
+
 @Service
-public class ProjectDeepMapper implements IProjectDeepMapper {
+public class ProjectDeepMapper extends ProjectDTOMapper implements IProjectDeepMapper {
 
 	@Autowired
-	private IRetrieveProjectDAO dbConnect;
+	private IRetrieveProjectDAO projectDao;
 
 	@Autowired
 	private IRetrieveProjectManager projectManager;
@@ -70,140 +71,19 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 	*/
 	@Override
 	@Transactional
-	public IProject getProjectDetails(String projectId) throws QuadrigaStorageException{
-		ProjectDTO projectDTO = dbConnect.getProjectDTO(projectId);
-		IProject project = null;
-		if(projectDTO != null){
-			if(project == null){
-				project = projectFactory.createProjectObject();
-			}
-			project.setProjectId(projectDTO.getProjectid());
-			project.setProjectName(projectDTO.getProjectname());
-			project.setDescription(projectDTO.getDescription());
-			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
-			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
-			project.setCreatedBy(projectDTO.getCreatedby());
-			project.setCreatedDate(projectDTO.getCreateddate());
-			project.setUpdatedBy(projectDTO.getUpdatedby());
-			project.setUpdatedDate(projectDTO.getUpdateddate());
-			// Set List of IProjectCollaborators to the project
-			project.setProjectCollaborators(getProjectCollaboratorList(projectDTO, project));
-			// Set Project Concept Collections 
-			project.setProjectConceptCollections(projectConceptCollectionShallowMapper.getProjectConceptCollectionList(project, projectDTO));
-			// Set Project Dictionaries
-			project.setProjectDictionaries(projectDictionaryShallowMapper.getProjectDictionaryList(project, projectDTO));
-			// Set Project Workspaces
-			project.setProjectWorkspaces(projectWorkspaceShallowMapper.getProjectWorkspaceList(project, projectDTO)) ;
-			
-			
-		}
-
+	public IProject getProject(ProjectDTO projectDTO) throws QuadrigaStorageException{
+	    IProject project = super.getProject(projectDTO);
+		
+		// Set List of IProjectCollaborators to the project
+		project.setProjectCollaborators(getProjectCollaboratorList(project, projectDTO.getCollaboratorList()));
+		// Set Project Concept Collections 
+		project.setProjectConceptCollections(projectConceptCollectionShallowMapper.getProjectConceptCollectionList(project, projectDTO.getProjectConceptCollectionDTOList()));
+		// Set Project Dictionaries
+		project.setProjectDictionaries(projectDictionaryShallowMapper.getProjectDictionaryList(project, projectDTO));
+		// Set Project Workspaces
+		project.setProjectWorkspaces(projectWorkspaceShallowMapper.getProjectWorkspaceList(project, projectDTO)) ;
+		
 		return project;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	*/
-	@Override
-	@Transactional
-	public IProject getProjectDetails(String projectId,String userId) throws QuadrigaStorageException{
-		ProjectDTO projectDTO = dbConnect.getProjectDTO(projectId,userId);
-		IProject project = null;
-		if(projectDTO != null){
-			if(project == null){
-				project = projectFactory.createProjectObject();
-			}
-			project.setProjectId(projectDTO.getProjectid());
-			project.setProjectName(projectDTO.getProjectname());
-			project.setDescription(projectDTO.getDescription());
-			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
-			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
-			project.setCreatedBy(projectDTO.getCreatedby());
-			project.setCreatedDate(projectDTO.getCreateddate());
-			project.setUpdatedBy(projectDTO.getUpdatedby());
-			project.setUpdatedDate(projectDTO.getUpdateddate());
-			// Set List of IProjectCollaborators to the project
-			project.setProjectCollaborators(getProjectCollaboratorList(projectDTO, project));
-			// Set Project Concept Collections 
-			project.setProjectConceptCollections(projectConceptCollectionShallowMapper.getProjectConceptCollectionList(project, projectDTO));
-			// Set Project Dictionaries
-			project.setProjectDictionaries(projectDictionaryShallowMapper.getProjectDictionaryList(project, projectDTO));
-			// Set Project Workspaces
-			project.setProjectWorkspaces(projectWorkspaceShallowMapper.getProjectWorkspaceList(project, projectDTO)) ;
-			
-			
-		}
-
-		return project;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	*/
-	@Override
-	@Transactional
-	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException{
-		ProjectDTO projectDTO = dbConnect.getProjectDTOByUnixName(unixName);
-		IProject project = null;
-		if(projectDTO != null){
-			if(project == null){
-				project = projectFactory.createProjectObject();
-			}
-			project.setProjectId(projectDTO.getProjectid());
-			project.setProjectName(projectDTO.getProjectname());
-			project.setDescription(projectDTO.getDescription());
-			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
-			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
-			project.setCreatedBy(projectDTO.getCreatedby());
-			project.setCreatedDate(projectDTO.getCreateddate());
-			project.setUpdatedBy(projectDTO.getUpdatedby());
-			project.setUpdatedDate(projectDTO.getUpdateddate());
-			// Set List of IProjectCollaborators to the project
-			project.setProjectCollaborators(getProjectCollaboratorList(projectDTO, project));
-			// Set Project Concept Collections 
-			project.setProjectConceptCollections(projectConceptCollectionShallowMapper.getProjectConceptCollectionList(project, projectDTO));
-			// Set Project Dictionaries
-			project.setProjectDictionaries(projectDictionaryShallowMapper.getProjectDictionaryList(project, projectDTO));
-			// Set Project Workspaces
-			project.setProjectWorkspaces(projectWorkspaceShallowMapper.getProjectWorkspaceList(project, projectDTO)) ;
-			
-			
-		}
-
-		return project;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	*/
-	@Override
-	@Transactional
-	public List<IProjectCollaborator> getCollaboratorsOfProject(String projectId) throws QuadrigaStorageException{
-		ProjectDTO projectDTO = dbConnect.getProjectDTO(projectId);
-		IProject project = null;
-		if(projectDTO != null){
-			if(project == null){
-				project = projectFactory.createProjectObject();
-			}
-			project.setProjectId(projectDTO.getProjectid());
-			project.setProjectName(projectDTO.getProjectname());
-			project.setDescription(projectDTO.getDescription());
-			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
-			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
-			project.setCreatedBy(projectDTO.getCreatedby());
-			project.setCreatedDate(projectDTO.getCreateddate());
-			project.setUpdatedBy(projectDTO.getUpdatedby());
-			project.setUpdatedDate(projectDTO.getUpdateddate());
-			// Set List of IProjectCollaborators to the project
-			project.setProjectCollaborators(getProjectCollaboratorList(projectDTO, project));		
-			
-		}
-
-		return project.getProjectCollaborators();
 	}
 	
 
@@ -214,29 +94,22 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 	 * @return														Returns {@link List} of {@link IProjectCollaborator} object
 	 * @throws QuadrigaStorageException								Throws a storage issue when this method is having issues to access database.
 	 */
-	public List<IProjectCollaborator> getProjectCollaboratorList(ProjectDTO projectDTO,IProject project) throws QuadrigaStorageException
+	public List<IProjectCollaborator> getProjectCollaboratorList(IProject project, List<ProjectCollaboratorDTO> collaboratorDtoList) throws QuadrigaStorageException
 	{
-		List<IProjectCollaborator> projectCollaboratorList = null;
-		if(projectDTO.getProjectCollaboratorDTOList() != null && projectDTO.getProjectCollaboratorDTOList().size() > 0)
-		{
-			HashMap<String,IProjectCollaborator> userProjectCollaboratorMap = mapUserProjectCollaborator(projectDTO,project);
-			for(String userID:userProjectCollaboratorMap.keySet())
-			{
-				if(projectCollaboratorList == null){
-					projectCollaboratorList = new ArrayList<IProjectCollaborator>();
-				}
-				projectCollaboratorList.add(userProjectCollaboratorMap.get(userID));
-			}
+		List<IProjectCollaborator> projectCollaboratorList = new ArrayList<IProjectCollaborator>();
+		if(collaboratorDtoList != null && collaboratorDtoList.size() > 0) {
+			HashMap<String,IProjectCollaborator> userProjectCollaboratorMap = mapUserProjectCollaborator(project, collaboratorDtoList);
+			projectCollaboratorList.addAll(userProjectCollaboratorMap.values());
 		}
 		return projectCollaboratorList;
 	}
 	
-	public HashMap<String,IProjectCollaborator> mapUserProjectCollaborator(ProjectDTO projectDTO,IProject project) throws QuadrigaStorageException
+	private HashMap<String,IProjectCollaborator> mapUserProjectCollaborator(IProject project, List<ProjectCollaboratorDTO> collaboratorDtoList) throws QuadrigaStorageException
 	{		
 		
 		HashMap<String, IProjectCollaborator> userProjectCollaboratorMap = new HashMap<String, IProjectCollaborator>();
 		
-		for(ProjectCollaboratorDTO projectCollaboratorDTO : projectDTO.getProjectCollaboratorDTOList())
+		for(ProjectCollaboratorDTO projectCollaboratorDTO : collaboratorDtoList)
 		{
 			String userName = projectCollaboratorDTO.getQuadrigaUserDTO().getUsername();
 			

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.IProjectBaseMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
@@ -52,7 +53,8 @@ public class ModifyWSManager implements IModifyWSManager {
     private WorkspaceCollaboratorDTOMapper collaboratorMapper;
 
     @Autowired
-    private ProjectDTOMapper projectMapper;
+    @Qualifier("ProjectBaseMapper")
+    private IProjectBaseMapper projectMapper;
 
     /**
      * This inserts a workspace for a project into database.

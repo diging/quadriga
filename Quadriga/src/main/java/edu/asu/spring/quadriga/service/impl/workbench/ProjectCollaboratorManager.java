@@ -53,7 +53,8 @@ public class ProjectCollaboratorManager extends CollaboratorManager<ProjectColla
 		List<IProjectCollaborator> projectCollaboratorList = null;
 		//retrieve the collaborators associated with project
 
-		IProject project =  projectDeepMapper.getProjectDetails(projectId);
+		ProjectDTO projectDto = projectDao.getDTO(projectId);
+		IProject project =  projectDeepMapper.getProject(projectDto);
 		if(project != null){
 			projectCollaboratorList = project.getProjectCollaborators();
 		}

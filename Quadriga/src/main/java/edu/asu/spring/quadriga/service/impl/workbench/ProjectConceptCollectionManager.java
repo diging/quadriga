@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.impl.workbench.ProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -15,6 +16,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
+import edu.asu.spring.quadriga.service.workbench.mapper.impl.ProjectDeepMapper;
 
 @Service
 public class ProjectConceptCollectionManager implements IProjectConceptCollectionManager {
@@ -29,6 +31,9 @@ public class ProjectConceptCollectionManager implements IProjectConceptCollectio
 	
 	@Autowired
 	private IRetrieveProjectDAO projManager;
+	
+	@Autowired 
+	private ProjectDAO projectDao;
 
 	/**
 	 * This method associates the concept collection with the project.
@@ -57,9 +62,10 @@ public class ProjectConceptCollectionManager implements IProjectConceptCollectio
 	@Transactional
 	public List<IProjectConceptCollection> listProjectConceptCollection(String projectId,
 			String userId) throws QuadrigaStorageException {
-		IProject project = projDeepMapper.getProjectDetails(projectId);
-		ProjectDTO projectDTO = projManager.getProjectDTO(projectId, userId);
-		List<IProjectConceptCollection> conceptCollectionList  = projCCShallowMapper.getProjectConceptCollectionList(project, projectDTO);
+	    
+	    ProjectDTO projectDTO = projManager.getProjectDTO(projectId, userId);
+        IProject project = projDeepMapper.getProject(projectDTO);
+		List<IProjectConceptCollection> conceptCollectionList  = projCCShallowMapper.getProjectConceptCollectionList(project, projectDTO.getProjectConceptCollectionDTOList());
 		return conceptCollectionList;
 	}
 	

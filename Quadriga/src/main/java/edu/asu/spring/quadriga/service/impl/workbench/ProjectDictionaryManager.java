@@ -57,9 +57,9 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	@Transactional
 	public List<IProjectDictionary> listProjectDictionary(String projectId,
 			String userId) throws QuadrigaStorageException {
-		IProject project = projDeepMapper.getProjectDetails(projectId);
 		ProjectDTO projectDTO = projManager.getProjectDTO(projectId, userId);
-		List<IProjectDictionary> dictionaryList = projDictShallowMapper.getProjectDictionaryList(project, projectDTO);
+		IProject project = projDeepMapper.getProject(projectDTO);
+        List<IProjectDictionary> dictionaryList = projDictShallowMapper.getProjectDictionaryList(project, projectDTO);
 		return dictionaryList;
 	}
 
