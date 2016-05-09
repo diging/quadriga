@@ -29,5 +29,9 @@ public interface ITextFile {
     public abstract String getFileContent();
 
     public abstract void setFileContent(String fileContent);
+    
+    public abstract String getAccessibility();
+
+    public abstract void setAccessibility(String accessibility);
 
 }

@@ -32,6 +32,8 @@ public class TextFileDTO implements Serializable {
     private String filename;
     @Column(name = "wsid")
     private String workspaceId;
+    @Column(name = "accessibility")
+    private String accessibility;
 
     public String getTextId() {
         return textId;
@@ -71,6 +73,14 @@ public class TextFileDTO implements Serializable {
 
     public void setRefId(String refId) {
         this.refId = refId;
+    }
+
+    public String getAccessibility() {
+        return accessibility;
+    }
+
+    public void setAccessibility(String accessibility) {
+        this.accessibility = accessibility;
     }
 
 }
