@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.dao.impl.workspace;
 
 import java.util.List;
 
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,30 +33,21 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
     private IProjectDAO projectDAO;
 
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAO.class);
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.asu.spring.quadriga.dao.impl.workspace.IWorkspaceDAO#getWorkspaceDTO(
-     * java.lang.String)
-     */
+    
     @Override
-    public WorkspaceDTO getWorkspaceDTO(String workspaceId) {
-        WorkspaceDTO workspaceDTO = null;
-        try {
-            workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-        } catch (HibernateException e) {
-            logger.error("Retrieve workspace details method :", e);
-            return null;
-        }
-        return workspaceDTO;
+    public WorkspaceDTO getDTO(String id) {
+        return getDTO(WorkspaceDTO.class, id);
+    }
+    
+    @Override
+    public String getIdPrefix() {
+        return messages.getProperty("workspace_id.prefix");
     }
 
     @Override
     @Transactional
     public boolean deleteWorkspace(String wsId) {
-        WorkspaceDTO workspace = getWorkspaceDTO(wsId);
+        WorkspaceDTO workspace = getDTO(wsId);
         if (workspace == null) {
             logger.error("Workspace does not exist.");
             return false;
@@ -65,7 +55,7 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
 
         deleteWorkspaceProjectMappings(workspace);
         deleteWorkspaceConceptCollectionMappings(workspace);
-        //deleteWorkspaceDictionaryMappings(workspace);
+        deleteWorkspaceDictionaryMappings(workspace);
         deleteWorkspaceDSpaceMappings(workspace);
         deleteWorkspaceEditorMappings(workspace);
         deleteWorkspaceNetworkMappings(workspace);
@@ -78,8 +68,9 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
     }
 
     /*
-     * ================================================================= Private
-     * Methods =================================================================
+     * ================================================================= 
+     * Private Methods 
+     * =================================================================
      */
 
     /**
@@ -219,15 +210,5 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
         }
         // set the workspace network mapping to null in workspace object
         wsDTO.setWorkspaceNetworkDTOList(null);
-    }
-
-    @Override
-    public WorkspaceDTO getDTO(String id) {
-        return getDTO(WorkspaceDTO.class, id);
-    }
-    
-    @Override
-    public String getIdPrefix() {
-        return messages.getProperty("workspace_id.prefix");
     }
 }

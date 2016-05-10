@@ -193,7 +193,7 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
 
     @Transactional
     public boolean getDeactiveStatus(String workspaceId) throws QuadrigaStorageException {
-        WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(workspaceId.trim());
+        WorkspaceDTO wsDto = workspaceDao.getDTO(workspaceId.trim());
         if (wsDto != null)
             return wsDto.getIsdeactivated();
         return false;
@@ -202,7 +202,7 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
     @Override
     @Transactional
     public boolean isWorkspaceArchived(String workspaceId) throws QuadrigaStorageException {
-        WorkspaceDTO wsDTO = workspaceDao.getWorkspaceDTO(workspaceId.trim());
+        WorkspaceDTO wsDTO = workspaceDao.getDTO(workspaceId.trim());
         return wsDTO != null && wsDTO.getIsarchived();
     }
 }
