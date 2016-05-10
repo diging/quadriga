@@ -22,7 +22,6 @@ import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -59,7 +58,6 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
         deleteWorkspaceProjectMappings(workspace);
         deleteWorkspaceConceptCollectionMappings(workspace);
         deleteWorkspaceDictionaryMappings(workspace);
-        deleteWorkspaceDSpaceMappings(workspace);
         deleteWorkspaceEditorMappings(workspace);
         deleteWorkspaceNetworkMappings(workspace);
 
@@ -312,25 +310,6 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
         // assigning the dictionary workspace mapping for workspace object to
         // null
         wsDTO.setWorkspaceDictionaryDTOList(null);
-    }
-
-    /**
-     * Method to delete workspace-DSpace mapping objects (
-     * {@link WorkspaceDspaceDTO}). First the mapping objects are deleted. Then
-     * the reference to the mapping objects in the workspace object is set to
-     * null.
-     * 
-     * @param wsDTO
-     *            The workspace DTO ({@link WorkspaceDTO}) for which the mapping
-     *            objects should be deleted.
-     */
-    private void deleteWorkspaceDSpaceMappings(WorkspaceDTO wsDTO) {
-        List<WorkspaceDspaceDTO> workspaceDspaceList = wsDTO.getWorkspaceDspaceDTOList();
-        for (WorkspaceDspaceDTO workspaceDspace : workspaceDspaceList) {
-            deleteObject(workspaceDspace);
-        }
-        // set the workspace dspace mapping null in workspace object
-        wsDTO.setWorkspaceDspaceDTOList(null);
     }
 
     /**

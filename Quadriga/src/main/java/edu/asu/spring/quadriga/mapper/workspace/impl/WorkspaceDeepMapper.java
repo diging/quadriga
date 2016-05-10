@@ -11,10 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
-import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceBitstreamFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -29,7 +27,6 @@ import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDictionaryShallowMappe
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.network.mapper.IWorkspaceNetworkMapper;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
  * This class would help in mapping {@link IWorkSpace} object with all the variables in it using {@link WorkspaceDTO}.
@@ -47,12 +44,6 @@ public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspa
 
 	@Autowired
 	private IWorkspaceDictionaryShallowMapper workspaceDictionaryShallowMapper;
-
-	@Autowired
-	private IWorkspaceBitstreamFactory workspaceBitstreamFactory;
-
-	@Autowired
-	private IBitStreamFactory bitStreamFactory;
 
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;

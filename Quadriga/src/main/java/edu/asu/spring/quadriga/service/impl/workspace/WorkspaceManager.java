@@ -14,7 +14,6 @@ import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
-import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -37,9 +36,6 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
     @Autowired
     private IProjectWorkspaceDAO projectWorkspaceDao;
 
-    @Autowired
-    private IDspaceManager dspaceManager;
-    
     @Autowired
     private IWorkspaceDeepMapper workspaceDeepMapper;
     

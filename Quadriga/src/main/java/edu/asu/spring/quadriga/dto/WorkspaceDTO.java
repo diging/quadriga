@@ -79,9 +79,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
     private List<WorkspaceDictionaryDTO> workspaceDictionaryDTOList;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
-    private List<WorkspaceDspaceDTO> workspaceDspaceDTOList;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<WorkspaceEditorDTO> workspaceEditorDTOList;
    
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "workspaceDTO",orphanRemoval=true)
@@ -213,15 +210,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
   			List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionDTOList) {
   		this.workspaceConceptCollectionDTOList = workspaceConceptCollectionDTOList;
   	}
-
-    @XmlTransient
-    public List<WorkspaceDspaceDTO> getWorkspaceDspaceDTOList() {
-        return workspaceDspaceDTOList;
-    }
-
-    public void setWorkspaceDspaceDTOList(List<WorkspaceDspaceDTO> workspaceDspaceDTOList) {
-        this.workspaceDspaceDTOList = workspaceDspaceDTOList;
-    }
 
     @XmlTransient
     public List<WorkspaceCollaboratorDTO> getWorkspaceCollaboratorDTOList() {
