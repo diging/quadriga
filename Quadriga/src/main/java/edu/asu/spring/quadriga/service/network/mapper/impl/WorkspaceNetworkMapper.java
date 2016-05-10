@@ -14,10 +14,10 @@ import edu.asu.spring.quadriga.dto.NetworkWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.network.mapper.IWorkspaceNetworkMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 
 @Service
 public class WorkspaceNetworkMapper implements IWorkspaceNetworkMapper{
@@ -40,7 +40,7 @@ public class WorkspaceNetworkMapper implements IWorkspaceNetworkMapper{
 		
 		NetworkWorkspaceDTO networkworkspaceDTO = networksDTO.getNetworkWorkspace();
 		if(networkworkspaceDTO!=null){
-			IWorkSpace workspace = workspaceshallowmapper.getWorkSpaceDetails(networkworkspaceDTO.getWorkspaceDTO());
+			IWorkSpace workspace = workspaceshallowmapper.mapWorkspaceDTO(networkworkspaceDTO.getWorkspaceDTO());
 			networkworkspace.setWorkspace(workspace);
 			networkworkspace.setNetwork(network);
 			networkworkspace.setCreatedBy(networkworkspaceDTO.getCreatedby());

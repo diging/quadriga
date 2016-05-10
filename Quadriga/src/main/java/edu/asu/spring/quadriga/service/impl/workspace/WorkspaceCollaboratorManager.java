@@ -18,10 +18,10 @@ import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
 @Service
 public class WorkspaceCollaboratorManager extends CollaboratorManager<WorkspaceCollaboratorDTO, WorkspaceCollaboratorDTOPK, WorkspaceDTO, WorkspaceDAO> implements IWorkspaceCollaboratorManager 

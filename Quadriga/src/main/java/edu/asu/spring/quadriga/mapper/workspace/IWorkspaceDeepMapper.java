@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workspace.mapper;
+package edu.asu.spring.quadriga.mapper.workspace;
 
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;

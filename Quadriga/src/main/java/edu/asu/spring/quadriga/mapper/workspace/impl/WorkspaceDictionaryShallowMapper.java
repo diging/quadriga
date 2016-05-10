@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workspace.mapper.impl;
+package edu.asu.spring.quadriga.mapper.workspace.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +15,10 @@ import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDictionaryShallowMapper;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryShallowMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDictionaryShallowMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 
 @Service
 public class WorkspaceDictionaryShallowMapper implements IWorkspaceDictionaryShallowMapper {
@@ -75,7 +75,7 @@ public class WorkspaceDictionaryShallowMapper implements IWorkspaceDictionarySha
 					workspaceDictionaryList = new ArrayList<IWorkspaceDictionary>();
 				}
 
-				IWorkSpace workspace = workspaceShallowMapper.getWorkSpaceDetails(workspaceDictionaryDTO.getWorkspaceDTO());
+				IWorkSpace workspace = workspaceShallowMapper.mapWorkspaceDTO(workspaceDictionaryDTO.getWorkspaceDTO());
 				IWorkspaceDictionary wsDictioanry = wsDictionaryFactory.createWorkspaceDictionaryObject();
 				wsDictioanry.setWorkspace(workspace);
 				wsDictioanry.setDictionary(dictionary);

@@ -23,8 +23,8 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**

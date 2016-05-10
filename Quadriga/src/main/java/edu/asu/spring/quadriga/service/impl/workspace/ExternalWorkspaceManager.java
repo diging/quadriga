@@ -21,9 +21,9 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.passthroughproject.constants.Constants;
 import edu.asu.spring.quadriga.service.workspace.IExternalWorkspaceManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
 /**
  * 

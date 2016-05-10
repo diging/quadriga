@@ -14,9 +14,9 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
+import edu.asu.spring.quadriga.mapper.workspace.impl.WorkspaceDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.impl.WorkspaceDictionaryShallowMapper;
 
 @Service
 public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {

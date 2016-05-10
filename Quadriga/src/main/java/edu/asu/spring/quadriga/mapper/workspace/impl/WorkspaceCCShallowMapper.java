@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workspace.mapper.impl;
+package edu.asu.spring.quadriga.mapper.workspace.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceCCShallowMapper;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 
 @Service
 public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
@@ -79,7 +79,7 @@ public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
 					workspaceConceptCollectionList = new ArrayList<IWorkspaceConceptCollection>();
 				}
 
-				IWorkSpace workspace = workspaceShallowMapper.getWorkSpaceDetails(workspaceConceptCollectionDTO.getWorkspaceDTO());
+				IWorkSpace workspace = workspaceShallowMapper.mapWorkspaceDTO(workspaceConceptCollectionDTO.getWorkspaceDTO());
 				IWorkspaceConceptCollection wsCocneptCollection = wsCCFactory.createWorkspaceConceptCollectionObject();
 				wsCocneptCollection.setWorkspace(workspace);
 				wsCocneptCollection.setConceptCollection(conceptCollection);
