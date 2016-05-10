@@ -1,12 +1,8 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
-import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
-import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -47,6 +42,9 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
     
     @Autowired
     private IWorkspaceDeepMapper workspaceDeepMapper;
+    
+    @Autowired
+    private IWorkspaceDAO wsDao;
 
 
     /**
@@ -62,7 +60,8 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
     @Transactional
     public IWorkSpace getWorkspaceDetails(String workspaceId, String username)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        return workspaceDeepMapper.getWorkSpaceDetails(workspaceId, username);
+        WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
+        return workspaceDeepMapper.mapWorkspaceDTO(wsDto);
     }
 
     /**
@@ -77,7 +76,8 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
     @Override
     @Transactional
     public IWorkSpace getWorkspaceDetails(String workspaceId) throws QuadrigaStorageException, QuadrigaAccessException {
-        return workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
+        WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
+        return workspaceDeepMapper.mapWorkspaceDTO(wsDto);
     }
 
     /**
@@ -92,14 +92,15 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
     @Override
     @Transactional
     public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException {
-        return workspaceDeepMapper.getWorkSpaceDetails(workspaceId).getWorkspaceName();
+        WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
+        return workspaceDeepMapper.mapWorkspaceDTO(wsDto).getWorkspaceName();
     }
 
     @Override
     @Transactional
-    public List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceid) throws QuadrigaStorageException {
-
-        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+    public List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceId) throws QuadrigaStorageException {
+        WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
+        IWorkSpace workspace = workspaceDeepMapper.mapWorkspaceDTO(wsDto);
         List<IWorkspaceNetwork> workspaceNetworkList = null;
         if (workspace != null) {
             workspaceNetworkList = workspace.getWorkspaceNetworks();
@@ -110,9 +111,10 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
 
     @Override
     @Transactional
-    public List<IWorkspaceNetwork> getWorkspaceRejectedNetworkList(String workspaceid) throws QuadrigaStorageException {
-
-        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+    public List<IWorkspaceNetwork> getWorkspaceRejectedNetworkList(String workspaceId) throws QuadrigaStorageException {
+        WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
+        IWorkSpace workspace = workspaceDeepMapper.mapWorkspaceDTO(wsDto);
+        
         if (workspace == null) {
             return null;
         }
@@ -143,8 +145,11 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
      */
     @Override
     @Transactional
-    public List<IWorkspaceNetwork> getWorkspaceApprovedNetworkList(String workspaceid) throws QuadrigaStorageException {
-        IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+    public List<IWorkspaceNetwork> getWorkspaceApprovedNetworkList(String workspaceId) throws QuadrigaStorageException {
+        
+        WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
+        IWorkSpace workspace = workspaceDeepMapper.mapWorkspaceDTO(wsDto);
+        
         List<IWorkspaceNetwork> workspaceNetworkList = null;
         if (workspace != null) {
             workspaceNetworkList = workspace.getWorkspaceNetworks();
@@ -179,48 +184,6 @@ public class WorkspaceManager extends BaseWSManager implements IWorkspaceManager
             }
         }
         return workspaceNetworkList;
-    }
-
-    @Override
-    public String getItemMetadataAsJson(String fileid, String dspaceUsername, String dspacePassword,
-            IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException, JSONException {
-
-        IDspaceMetadataItemEntity metaData = dspaceManager.getItemMetadata(fileid, dspaceUsername, dspacePassword,
-                dspaceKeys);
-
-        logger.info(metaData.getName() + metaData.getLastModifiedDate() + metaData.getSubmitter().getFullname());
-
-        String itemData = "";
-        JSONArray ja = new JSONArray();
-        JSONObject ja1 = new JSONObject();
-        JSONObject j = new JSONObject();
-
-        if (metaData.getName() == null) {
-            j.put("filename", "");
-        } else {
-            j.put("filename", metaData.getName());
-        }
-
-        if (metaData.getSubmitter().getFullname() == null) {
-            j.put("submitter", "");
-        } else {
-            j.put("submitter", metaData.getSubmitter().getFullname());
-        }
-
-        if (metaData.getLastModifiedDate() == null) {
-            j.put("modifieddate", "");
-        } else {
-            j.put("modifieddate", metaData.getLastModifiedDate());
-        }
-
-        ja.put(j);
-
-        ja1.put("text", ja);
-
-        itemData = ja1.toString();
-
-        return itemData;
-
     }
 
     @Override

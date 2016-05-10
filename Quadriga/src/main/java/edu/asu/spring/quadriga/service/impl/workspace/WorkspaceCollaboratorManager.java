@@ -74,7 +74,8 @@ public class WorkspaceCollaboratorManager extends CollaboratorManager<WorkspaceC
 		IQuadrigaRole role;
 		List<IQuadrigaRole> roleList;
 
-		IWorkSpace workspace =workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
+		WorkspaceDTO workspaceDTO  = workspaceDao.getWorkspaceDTO(workspaceId);
+        IWorkSpace workspace = workspaceDeepMapper.mapWorkspaceDTO(workspaceDTO);
 		//retrieve the collaborators associated with project
 		if(workspace != null){
 			workspaceCollaboratorList = workspace.getWorkspaceCollaborators();

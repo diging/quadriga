@@ -12,7 +12,6 @@ import edu.asu.spring.quadriga.domain.proxy.WorkSpaceProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -28,7 +27,7 @@ import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
  *
  */
 @Service
-public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
+public class WorkspaceShallowMapper extends BaseWorkspaceMapper implements IWorkspaceShallowMapper {
 
     @Autowired
     private IWorkspaceManager wsManager;
@@ -110,7 +109,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
         workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
         workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
         workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-        workspaceProxy.setProjectWorkspace(workspaceDeepMapper.getProjectWorkspaceOfWorkspace(workspaceProxy,
+        workspaceProxy.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspaceProxy,
                 workspaceDTO));
         return workspaceProxy;
     }

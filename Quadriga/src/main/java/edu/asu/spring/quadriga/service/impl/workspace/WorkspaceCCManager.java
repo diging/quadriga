@@ -43,7 +43,7 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	@Transactional
 	public List<IWorkspaceConceptCollection> listWorkspaceCC(String workspaceId) throws QuadrigaStorageException {
 		WorkspaceDTO workspaceDTO  = wsDAO.getWorkspaceDTO(workspaceId);
-		IWorkSpace workspace = wsDeepMapper.getWorkSpaceDetails(workspaceId);
+		IWorkSpace workspace = wsDeepMapper.mapWorkspaceDTO(workspaceDTO);
 		List<IWorkspaceConceptCollection> wsCCList = wsCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO);
 		return wsCCList;
 	}

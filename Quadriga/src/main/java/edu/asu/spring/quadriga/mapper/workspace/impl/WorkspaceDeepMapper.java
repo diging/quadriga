@@ -11,28 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceBitstreamFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
-import edu.asu.spring.quadriga.domain.impl.dspace.BitStream;
-import edu.asu.spring.quadriga.domain.impl.workbench.ProjectWorkspace;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
-import edu.asu.spring.quadriga.dto.ProjectDTO;
-import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceCCShallowMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDictionaryShallowMapper;
@@ -47,10 +37,10 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
  *
  */
 @Service
-public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
+public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspaceDeepMapper  {
 
 	@Autowired
-	private IListWsDAO dbConnect;
+	private IListWsDAO wsDao;
 
 	@Autowired
 	private IWorkspaceCCShallowMapper workspaceCCShallowMapper;
@@ -79,9 +69,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	@Autowired
 	private IListWSManager wsManager;
 
-	@Autowired
-	private IProjectShallowMapper projectShallowMapper;
-
+	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
 
@@ -97,33 +85,13 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	 */
 	@Override
 	@Transactional
-	public IWorkSpace getWorkSpaceDetails(String workspaceId) throws QuadrigaStorageException{
+	public IWorkSpace mapWorkspaceDTO(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException{
 
-		WorkspaceDTO workspaceDTO = dbConnect.getDTO(workspaceId);
 		IWorkSpace workspace = null;
 
 		if(workspaceDTO != null){
 			workspace = workspaceFactory.createWorkspaceObject();
 			fillWorkspace(workspaceDTO, workspace);		
-		}
-
-		return workspace;
-
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public IWorkSpace getWorkSpaceDetails(String workspaceId,String userName) throws QuadrigaStorageException{
-
-		WorkspaceDTO workspaceDTO = dbConnect.getDTO(workspaceId);
-		IWorkSpace workspace = null;
-
-		if(workspaceDTO != null){
-			workspace = workspaceFactory.createWorkspaceObject();
-			fillWorkspace(workspaceDTO, workspace);
 		}
 
 		return workspace;
@@ -167,7 +135,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	 * @return													Returns a {@link List} of {@link IWorkspaceCollaborator} objects
 	 * @throws QuadrigaStorageException							Throws a storage exception when method has issue to fetch data from database
 	 */
-	public List<IWorkspaceCollaborator> getWorkspaceCollaboratorList(WorkspaceDTO workspaceDTO,IWorkSpace workspace) throws QuadrigaStorageException
+	private List<IWorkspaceCollaborator> getWorkspaceCollaboratorList(WorkspaceDTO workspaceDTO,IWorkSpace workspace) throws QuadrigaStorageException
 	{
 		List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
 		if(workspaceDTO.getWorkspaceCollaboratorDTOList() != null && workspaceDTO.getWorkspaceCollaboratorDTOList().size() > 0)
@@ -191,7 +159,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	 * @return												Returns {@link HashMap} of {@link String} and {@link IWorkspaceCollaborator}
 	 * @throws QuadrigaStorageException 
 	 */
-	public HashMap<String,IWorkspaceCollaborator> mapUserWorkspaceCollaborator(WorkspaceDTO workspaceDTO,IWorkSpace workspace) throws QuadrigaStorageException
+	private HashMap<String,IWorkspaceCollaborator> mapUserWorkspaceCollaborator(WorkspaceDTO workspaceDTO,IWorkSpace workspace) throws QuadrigaStorageException
 	{		
 
 		HashMap<String, IWorkspaceCollaborator> userWorkspaceCollaboratorMap = new HashMap<String, IWorkspaceCollaborator>();
@@ -251,63 +219,6 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			}
 		}
 		return userWorkspaceCollaboratorMap;
-	}
-
-
-	public List<IWorkspaceBitStream> getWorkspaceBitstream(WorkspaceDTO workspaceDTO , IWorkSpace workspace){
-		List<IWorkspaceBitStream> workspaceBitstreamList = null;
-
-		List<WorkspaceDspaceDTO> workspaceDspaceDTOList =  workspaceDTO.getWorkspaceDspaceDTOList();
-		if(workspaceDspaceDTOList != null)
-		{
-			workspaceBitstreamList = new ArrayList<IWorkspaceBitStream>();
-			for(WorkspaceDspaceDTO workspaceDspaceDTO : workspaceDspaceDTOList){
-				IBitStream bitStream = getBitstream(workspaceDspaceDTO);
-				IWorkspaceBitStream workspaceBitStream =  workspaceBitstreamFactory.createWorkspaceBitstreamObject();
-				workspaceBitStream.setBitStream(bitStream);
-				workspaceBitStream.setWorkspace(workspace);
-				workspaceBitStream.setCreatedBy(workspaceDspaceDTO.getCreatedby());
-				workspaceBitStream.setCreatedDate(workspaceDspaceDTO.getCreateddate());
-				workspaceBitstreamList.add(workspaceBitStream);
-			}
-		}
-
-		return workspaceBitstreamList;
-	}
-
-
-	public IBitStream getBitstream(WorkspaceDspaceDTO workspaceDspaceDTO)
-	{
-		IBitStream bitstream = new BitStream();
-		if(workspaceDspaceDTO != null)
-		{
-			bitstream = bitStreamFactory.createBitStreamObject();					
-			bitstream.setId(workspaceDspaceDTO.getWorkspaceDspaceDTOPK().getBitstreamid());
-			bitstream.setItemHandle(workspaceDspaceDTO.getWorkspaceDspaceDTOPK().getItemHandle());
-		}
-		return bitstream;
-	}
-
-	@Override
-	public IProjectWorkspace getProjectWorkspaceOfWorkspace(IWorkSpace workspace, WorkspaceDTO workspaceDTO) throws QuadrigaStorageException{
-		IProjectWorkspace projectWorkspace = null;
-
-		ProjectWorkspaceDTO projectWorkspaceDTO = workspaceDTO.getProjectWorkspaceDTO();
-
-		projectWorkspace = new ProjectWorkspace();;
-		projectWorkspace.setWorkspace(workspace);
-
-		ProjectDTO projectDTO = projectWorkspaceDTO.getProjectDTO();
-		IProject project = projectShallowMapper.getProjectDetails(projectDTO);
-		projectWorkspace.setProject(project);
-
-		projectWorkspace.setCreatedBy(projectWorkspaceDTO.getCreatedby());
-		projectWorkspace.setCreatedDate(projectWorkspaceDTO.getCreateddate());
-		projectWorkspace.setUpdatedBy(projectWorkspaceDTO.getUpdatedby());
-		projectWorkspace.setUpdatedDate(projectWorkspaceDTO.getUpdateddate());
-
-		return projectWorkspace;
-
 	}
 
 

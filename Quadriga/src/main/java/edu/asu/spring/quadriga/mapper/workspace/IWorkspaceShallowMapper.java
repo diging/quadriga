@@ -21,7 +21,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Lohith Dwaraka, Julia Damerow
  *
  */
-public interface IWorkspaceShallowMapper {
+public interface IWorkspaceShallowMapper extends IBaseWorkspaceMapper {
 
     /**
      * This class should get a {@link IWorkSpace} of domain class type
