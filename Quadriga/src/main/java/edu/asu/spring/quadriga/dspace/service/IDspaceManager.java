@@ -286,17 +286,6 @@ public interface IDspaceManager{
 			throws QuadrigaStorageException, QuadrigaAccessException;
 	
 	/**
-	 * This method retrieves all the list of bitstream ids in a workspace. 
-	 * 
-	 * @param workspaceid					The id of the workspace.
-	 * @param username						The username who is trying to access the workspace.
-	 * @return								List of bitreams with only their bitstream ids. Null if there are no bitstreams in the workspace.
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 */
-	public abstract List<IBitStream> getBitstreamsInWorkspace(String workspaceid, String username) throws QuadrigaStorageException,	QuadrigaAccessException;
-	
-	/**
 	 * Load the bitstream data from dspace. Makes an asynchrounous call to dspace and hence the returned object will take few seconds to be loaded with data.
 	 * Either the dspace username+password (or) dspace keys are required to access dspace data.
 	 * 

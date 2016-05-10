@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
@@ -40,7 +40,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspaceDeepMapper  {
 
 	@Autowired
-	private IListWsDAO wsDao;
+	private IWorkspaceDAO wsDao;
 
 	@Autowired
 	private IWorkspaceCCShallowMapper workspaceCCShallowMapper;
@@ -66,10 +66,6 @@ public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspa
 	@Autowired
 	private IQuadrigaRoleManager roleManager;
 
-	@Autowired
-	private IListWSManager wsManager;
-
-	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
 

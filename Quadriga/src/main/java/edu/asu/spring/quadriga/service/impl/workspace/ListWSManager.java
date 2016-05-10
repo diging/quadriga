@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.proxy.WorkSpaceProxy;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
@@ -29,7 +29,7 @@ public class ListWSManager implements IListWSManager {
     private IWorkspaceShallowMapper workspaceShallowMapper;
     
     @Autowired
-    private IListWsDAO wsDao;
+    private IWorkspaceDAO wsDao;
     
 
     /**
