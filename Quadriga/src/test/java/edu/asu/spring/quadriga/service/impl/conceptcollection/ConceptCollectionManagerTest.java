@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jettison.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -18,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
-import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
@@ -49,7 +48,7 @@ public class ConceptCollectionManagerTest {
     private IProjectShallowMapper mockedProjectShallowMapper = Mockito.mock(IProjectShallowMapper.class);
 
     @Mock
-    private IListWsDAO mockedwsListManger = Mockito.mock(IListWsDAO.class);
+    private IWorkspaceDAO mockedwsListManger = Mockito.mock(IWorkspaceDAO.class);
 
     @Mock
     private IListWSManager mockedwsManager = Mockito.mock(IListWSManager.class);
@@ -110,7 +109,6 @@ public class ConceptCollectionManagerTest {
         List<IWorkSpace> ccWorkspaceList2 = new ArrayList<IWorkSpace>();
         ccWorkspaceList2.add(workspace);
         ccWorkspaceList2.add(workspace2);
-        Mockito.when(mockedwsListManger.getWorkspaceByConceptCollection("ccId")).thenReturn(ccWorkspaceList);
         Mockito.when(mockedwsManager.listActiveWorkspace("id", "username")).thenReturn(ccWorkspaceList2);
 
         concept = new Concept();

@@ -9,24 +9,19 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IProjectAccessDAO;
-import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
-import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
-import edu.asu.spring.quadriga.dao.workspace.IListWsDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IConceptStats;
 import edu.asu.spring.quadriga.domain.IUserStats;
 import edu.asu.spring.quadriga.domain.impl.ConceptStats;
 import edu.asu.spring.quadriga.domain.impl.UserStats;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.publicwebsite.IProjectStats;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -47,7 +42,7 @@ public class ProjectStats implements IProjectStats {
     private INetworkTransformationManager transformationManager;
 
     @Autowired
-    private IListWsDAO listWSDAO;
+    private IWorkspaceDAO wsDAO;
 
     @Autowired
     private INetworkManager networkManager;
@@ -136,7 +131,7 @@ public class ProjectStats implements IProjectStats {
 
     private IUserStats retrieveUserWorkspaceStats(String projectId,
             String username) throws QuadrigaStorageException {
-        List<IWorkSpace> workspaceList = listWSDAO.listWorkspace(projectId,
+        List<WorkspaceDTO> workspaceList = wsDAO.listWorkspaceDTO(projectId,
                 username);
         UserStats userStats;
         if (workspaceList == null) {

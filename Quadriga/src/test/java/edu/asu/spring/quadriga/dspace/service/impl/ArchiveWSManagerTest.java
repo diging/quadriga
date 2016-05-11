@@ -48,8 +48,8 @@ public class ArchiveWSManagerTest {
         wsDto2.setWorkspaceid("ws2");
         wsDto2.setIsdeactivated(false);
         
-        Mockito.when(workspaceDao.getWorkspaceDTO("ws1")).thenReturn(wsDto1);
-        Mockito.when(workspaceDao.getWorkspaceDTO("ws2")).thenReturn(wsDto2);
+        Mockito.when(workspaceDao.getDTO("ws1")).thenReturn(wsDto1);
+        Mockito.when(workspaceDao.getDTO("ws2")).thenReturn(wsDto2);
     }
     
     @Test
