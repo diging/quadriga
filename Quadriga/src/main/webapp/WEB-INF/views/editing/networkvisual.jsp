@@ -35,26 +35,10 @@ $("input[type=button]").button().click(function(event) {
 <body
 	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
 
+<button type="submit" onclick="goFullscreen('chart')"
+	style="float: left">
+	<i class="fa fa-arrows-alt"></i>
 
-
-<!-- <div id="dspace_metadata"></div>  -->
-
-
-
-
-<div id="chart"></div>
-
-<div id="inner-details"></div>
-<div id="allannot_details">
-<table id = annotationsTable></table>
-</div>
-
-
-<div id="log"></div>
-
-<button type="submit" onclick="goFullscreen('chart')" style="float: left">
-    <i class="fa fa-arrows-alt"></i> 
-    
 </button>
 
 
@@ -67,35 +51,25 @@ $("input[type=button]").button().click(function(event) {
 
 <div id="inner-details"></div>
 <div id="allannot_details">
-<table id = annotationsTable></table>
+	<table id=annotationsTable></table>
 </div>
 
 
 <div id="log"></div>
 <script type="text/javascript">
+//# sourceURL=dynamicScript.js 
 
   function goFullscreen(id) {
     var element = document.getElementById(id);
     if (element.mozRequestFullScreen) {
-
-      // This is how to go into fullscren mode in Firefox
-
-      // Note the "moz" prefix, which is short for Mozilla.
-
-      element.mozRequestFullScreen();
-
+        // This is how to go into fullscren mode in Firefox
+        // Note the "moz" prefix, which is short for Mozilla.
+        element.mozRequestFullScreen();
     } else if (element.webkitRequestFullScreen) {
-
       // This is how to go into fullscreen mode in Chrome and Safari
-
       // Both of those browsers are based on the Webkit project, hence the same prefix.
-
       element.webkitRequestFullScreen();
-
-   }
-    
-   // Hooray, now we're in fullscreen mode!
-
+    }
   }
 
 </script>
@@ -135,24 +109,4 @@ function exitHandler()
     }
 }
 </script>
->>>>>>> refs/heads/develop
-=======
 
-
-
-<!-- <div id="dspace_metadata"></div>  -->
-
-
-
-
-<div id="chart"></div>
-
-<div id="inner-details"></div>
-<div id="allannot_details">
-<table id = annotationsTable></table>
-</div>
-
-
-<div id="log"></div>
-
->>>>>>> refs/heads/story/QUAD-153
