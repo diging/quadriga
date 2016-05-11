@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
@@ -144,6 +145,11 @@ public class ModifyCollaboratorFormManager {
 			modifyCollab.setUserName(user.getUserName());
 			modifyCollab.setName(user.getName());
 			modifyCollab.setCollaboratorRoles(wsCollaborator.getCollaborator().getCollaboratorRoles());
+			List<String> roleIds = new ArrayList<String>();
+			for (IQuadrigaRole role : modifyCollab.getCollaboratorRoles()) {
+			    roleIds.add(role.getId());
+			}
+			modifyCollab.setRoleIds(roleIds);
 			modifyCollaborators.add(modifyCollab);
 		}
 

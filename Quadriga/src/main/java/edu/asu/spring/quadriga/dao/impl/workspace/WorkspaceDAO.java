@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
+@Transactional
 public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO {
 
     @Autowired
@@ -46,8 +47,7 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
         return messages.getProperty("workspace_id.prefix");
     }
 
-    @Override
-    @Transactional
+    @Override   
     public boolean deleteWorkspace(String wsId) {
         WorkspaceDTO workspace = getDTO(wsId);
         if (workspace == null) {
