@@ -99,7 +99,7 @@ public class ModifyWSManager implements IModifyWSManager {
     @Override
     @Transactional
     public void updateWorkspace(IWorkSpace workspace) throws QuadrigaStorageException {
-        WorkspaceDTO workspaceDTO = workspaceDao.getWorkspaceDTO(workspace.getWorkspaceId());
+        WorkspaceDTO workspaceDTO = workspaceDao.getDTO(workspace.getWorkspaceId());
         workspaceDTO.setWorkspacename(workspace.getWorkspaceName());
         workspaceDTO.setDescription(workspace.getDescription());
         workspaceDTO.setUpdateddate(new Date());
@@ -119,7 +119,7 @@ public class ModifyWSManager implements IModifyWSManager {
     @Override
     @Transactional
     public void assignEditorRole(String workspaceId, String userName) throws QuadrigaStorageException {
-        WorkspaceDTO workspaceDto = workspaceDao.getWorkspaceDTO(workspaceId);
+        WorkspaceDTO workspaceDto = workspaceDao.getDTO(workspaceId);
         WorkspaceEditorDTO workspaceEditorDTO = workspaceDTOMapper.getWorkspaceEditor(workspaceDto, userName);
         workspaceEditorDao.saveNewDTO(workspaceEditorDTO);
     }
