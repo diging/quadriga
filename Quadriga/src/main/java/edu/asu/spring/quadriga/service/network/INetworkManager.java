@@ -257,7 +257,7 @@ public interface INetworkManager {
      *             JAXB exception for any XML to object unmarshalling.
 	 */
     public abstract String storeNetworkDetails(String xml, IUser user, String networkName, String workspaceId,
-            String uploadStatus, String networkId, int version) throws JAXBException;
+            String uploadStatus, String networkId, int version, String networkStatus) throws JAXBException;
 	
 	/**
 	 * This method should help in getting all the version of a {@link INetwork}

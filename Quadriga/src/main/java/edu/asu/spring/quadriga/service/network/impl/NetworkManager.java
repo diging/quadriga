@@ -52,11 +52,12 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -87,7 +88,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private INetworkMapper networkmapper;
     
     @Autowired
-    private IProjectShallowMapper projectShallowMapper;
+    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private INetworkDAO dbConnect;
@@ -465,7 +466,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         List<IProject> projectList = null;
         JSONObject core = new JSONObject();
         try {
-            projectList = projectShallowMapper.getProjectList(userName);
+            projectList = projectManager.getProjectList(userName);
             JSONArray dataArray = new JSONArray();
             if (projectList != null) {
                 for (IProject project : projectList) {
@@ -532,7 +533,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     @Transactional
     public String storeNetworkDetails(String xml, IUser user, String networkName, String workspaceId,
-            String uploadStatus, String networkId, int version) throws JAXBException {
+            String uploadStatus, String networkId, int version, String networkStatus) throws JAXBException {
         ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
 
         // Get Workspace details.
@@ -545,20 +546,18 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             logger.error("User doesn't have access to workspace", e3);
         }
 
-        // Get DSpace of the workspace
-        List<IWorkspaceBitStream> workspaceBitStreamList = workspace.getWorkspaceBitStreams();
-
+       
         NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
 
         // Below code reads the top level Appellation events
 
-        newNetworkDetailCache = parseNewNetworkStatement(elementEventType, workspaceBitStreamList,
+        newNetworkDetailCache = parseNewNetworkStatement(elementEventType,
                 newNetworkDetailCache);
 
         // Add network into database
         if (uploadStatus == INetworkManager.NEWNETWORK) {
             try {
-                networkId = dbConnect.addNetworkRequest(networkName, user, workspaceId);
+                networkId = dbConnect.addNetwork(networkName, user, workspaceId, networkStatus);
             } catch (QuadrigaStorageException e1) {
                 logger.error("DB action error ", e1);
             }
@@ -592,7 +591,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *         the cache of network details
      */
     private NewNetworkDetailsCache parseNewNetworkStatement(ElementEventsType elementEventType,
-            List<IWorkspaceBitStream> workspaceBitStreamList, NewNetworkDetailsCache newNetworkDetailCache) {
+            NewNetworkDetailsCache newNetworkDetailCache) {
 
         List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
         Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();

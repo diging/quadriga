@@ -173,7 +173,7 @@ public class NetworkRestController {
         }
 
         String networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid,
-                INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
+                INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO, INetworkStatus.PENDING);
 
         ITextFile textFileContent = nwXML.getTextFile();
 
@@ -696,7 +696,7 @@ public class NetworkRestController {
         int latestVersion = networkManager.getLatestVersionOfNetwork(networkId) + 1;
         networkId = networkManager.storeNetworkDetails(res, user, networkName,
                 network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK, networkId,
-                latestVersion);
+                latestVersion, INetworkStatus.PENDING);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.valueOf(accept));

@@ -32,8 +32,8 @@ import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 public class ConceptCollectionManagerTest {
@@ -96,14 +96,11 @@ public class ConceptCollectionManagerTest {
         Mockito.when(cpConnector.search("item", "pos")).thenReturn(rep);
         Mockito.when(cpConnector.getById("id")).thenReturn(rep);
 
-        Mockito.when(mockedProjectShallowMapper.getProjectList("username")).thenReturn(ccProjectsList2);
-        Mockito.when(mockedProjectShallowMapper.getCollaboratorProjectListOfUser("ccId")).thenReturn(ccProjectsList);
-
-        WorkSpace workspace = new WorkSpace();
+        IWorkSpace workspace = new WorkSpace();
         workspace.setWorkspaceId("w-id");
         workspace.setWorkspaceName("w-name");
 
-        WorkSpace workspace2 = new WorkSpace();
+        IWorkSpace workspace2 = new WorkSpace();
         workspace2.setWorkspaceId("w-id2");
         workspace2.setWorkspaceName("w-name2");
 

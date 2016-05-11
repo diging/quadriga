@@ -25,7 +25,6 @@ import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.validator.WorkspaceValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -36,16 +35,16 @@ public class AddWSController {
 	private IWorkspaceFactory workspaceFactory;
 
 	@Autowired 
-	IUserManager userManager;
+	private IUserManager userManager;
 
 	@Autowired
-	IModifyWSManager modifyWSManger;
+	private IModifyWSManager modifyWSManger;
 
 	@Autowired
-	IWSSecurityChecker workspaceSecurity;
+	private IWSSecurityChecker workspaceSecurity;
 	
 	@Autowired
-	WorkspaceValidator validator;
+	private WorkspaceValidator validator;
 	
 	/**
 	 * Attach the custom validator to the Spring context

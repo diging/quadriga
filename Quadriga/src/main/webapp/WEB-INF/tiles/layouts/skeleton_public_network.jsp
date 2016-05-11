@@ -120,7 +120,8 @@ list-style-type: none;}
 	
 	<script
 		  src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkspublic.js"></script> 
-	
+	<script 
+	      src="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 	
 </body>
 </html>

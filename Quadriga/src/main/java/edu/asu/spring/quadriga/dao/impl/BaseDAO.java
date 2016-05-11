@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -103,6 +104,7 @@ public abstract class BaseDAO<T> implements IBaseDAO<T> {
 	}
 
 	@Override
+	@Transactional
 	public void saveNewDTO(T dto) {
 		sessionFactory.getCurrentSession().save(dto);
 	}

@@ -11,8 +11,12 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -21,8 +25,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.hibernate.annotations.DiscriminatorFormula;
 
 /**
  *This class represents the column mappings for workspace table.
@@ -30,7 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_workspace")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkspaceDTO.findAll", query = "SELECT w FROM WorkspaceDTO w"),
     @NamedQuery(name = "WorkspaceDTO.findByWorkspacename", query = "SELECT w FROM WorkspaceDTO w WHERE w.workspacename = :workspacename"),
