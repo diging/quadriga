@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Controller
 public class BrowseNetworkController {
@@ -47,7 +48,7 @@ public class BrowseNetworkController {
     public String browseNetworks(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal,
             @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
         String projectid = project.getProjectId();
-        List<INetwork> networks = networkmanager.getNetworksInProject(projectid);
+        List<INetwork> networks = networkmanager.getNetworksInProject(projectid, INetworkStatus.APPROVED);
         for(INetwork nw: networks)
             System.out.println(nw.getStatus());
         model.addAttribute("networks", networks);

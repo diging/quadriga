@@ -146,7 +146,6 @@ public class NetworkMapper implements INetworkMapper{
         network.setCreatedBy(nwDTO.getCreatedby());
         network.setNetworkName(nwDTO.getNetworkname());
         network.setStatus(nwDTO.getStatus());
-        
         return network;
     }
     

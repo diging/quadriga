@@ -88,7 +88,7 @@ public class TransformProjectsController {
         }
         List<INetwork> networks = new ArrayList<INetwork>();
         for(IProject retrievedProj: retrievedProjects){
-        	networks.addAll(networkManager.getNetworksInProject(retrievedProj.getProjectId()));
+        	networks.addAll(networkManager.getNetworksInProject(retrievedProj.getProjectId(), null));
         }
         
         List<INetwork> allNetworkList = new ArrayList<INetwork>();

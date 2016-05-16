@@ -7,6 +7,7 @@ import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +113,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     private List<INetwork> getNetworkList(String projectId) throws QuadrigaStorageException {
         List<INetwork> networkList;
         try {
-            networkList = networkManager.getNetworksInProject(projectId);
+            networkList = networkManager.getNetworksInProject(projectId, null);
         } catch (QuadrigaStorageException e) {
             throw new QuadrigaStorageException("Database error while getting networks of a project" +
                     " with id: " + projectId, e);

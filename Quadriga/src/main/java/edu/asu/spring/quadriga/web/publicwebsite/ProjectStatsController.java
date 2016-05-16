@@ -132,7 +132,7 @@ public class ProjectStatsController {
         String projectId = project.getProjectId();
         model.addAttribute("project", project);
         
-        List<INetwork> networks = networkmanager.getNetworksInProject(projectId);
+        List<INetwork> networks = networkmanager.getNetworksInProject(projectId, INetworkStatus.APPROVED);
         List<IConceptStats> conceptsWithCount = null;
 
         if (!networks.isEmpty()) {
