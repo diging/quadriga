@@ -140,6 +140,20 @@ public class NetworkMapper implements INetworkMapper{
         return networkList;
     }
     
+    public INetwork getNetworkFromDTO(NetworksDTO nwDTO){
+        INetwork network = new NetworkFactory().createNetworkObject();
+        network.setNetworkId(nwDTO.getNetworkid());
+        network.setCreatedBy(nwDTO.getCreatedby());
+        network.setNetworkName(nwDTO.getNetworkname());
+        network.setStatus(nwDTO.getStatus());
+        
+        return network;
+    }
+    
+    public INetwork getDTOFromNetwork(INetwork network){
+        return null;
+    }
+    
     @Override
     public List<INetwork> getNetworksOfUserWithStatus(IUser user, String networkStatus) throws QuadrigaStorageException{
         List<INetwork> networkList = null;
