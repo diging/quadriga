@@ -45,10 +45,10 @@ import edu.asu.spring.quadriga.utilities.ITextXMLParser;
 public class TextUploadRestController {
 
     @Autowired
-    ITextXMLParser txtXMLParser;
+    private ITextXMLParser txtXMLParser;
 
     @Autowired
-    ITextFileManager tfManager;
+    private ITextFileManager tfManager;
 
     @Autowired
     private IRestVelocityFactory restVelocityFactory;

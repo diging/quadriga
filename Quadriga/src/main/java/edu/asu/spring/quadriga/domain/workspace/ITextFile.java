@@ -32,6 +32,11 @@ public interface ITextFile {
     
     public abstract String getTextFileURI();
 
-    public abstract void setTextFileURI(String URI);
+    /**
+     * @param URIPrefix
+     * 
+     * Sets the URI corresponding to the TextFile. 
+     */
+    public abstract void setTextFileURI(String URIPrefix);
 
 }
