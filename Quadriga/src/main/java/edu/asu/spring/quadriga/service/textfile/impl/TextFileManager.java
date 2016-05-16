@@ -2,6 +2,9 @@ package edu.asu.spring.quadriga.service.textfile.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,10 +38,15 @@ public class TextFileManager implements ITextFileManager {
     @Autowired
     private ITextFileMapper tfSMapper;
 
+    @Resource(name = "projectconstants")
+    private Properties messages;
+
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, QuadrigaStorageException {
+        String textURI = messages.getProperty("textfiles.uri");
         String txtId = txtFileDAO.generateUniqueID();
         txtFile.setTextId(txtId);
+        txtFile.setTextFileURI(textURI);
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
         txtFileDTO.setTextId(txtId);
         boolean status = fileSaveServ.saveFileToLocal(txtFile);

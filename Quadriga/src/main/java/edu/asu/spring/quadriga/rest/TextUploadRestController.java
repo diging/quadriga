@@ -55,9 +55,6 @@ public class TextUploadRestController {
 
     @Autowired
     private IRestMessage errorMessageRest;
-
-    @Resource(name = "projectconstants")
-    private Properties messages;
     
     private static final Logger logger = LoggerFactory.getLogger(TextUploadRestController.class);
 
@@ -81,7 +78,6 @@ public class TextUploadRestController {
     public ResponseEntity<String> uploadText(@PathVariable("workspaceid") String wsId,
             @PathVariable("projectid") String projId, HttpServletResponse response, HttpServletRequest request,
             @RequestBody String xml) throws RestException {
-        String textURI = messages.getProperty("textfiles_location.url");
         ITextFile txtFile = null;
         try {
             txtFile = txtXMLParser.parseTextXML(xml, wsId, projId);
@@ -113,7 +109,7 @@ public class TextUploadRestController {
             context.put("filename", txtFile.getFileName());
             context.put("wsid", txtFile.getWorkspaceId());
             context.put("projid", txtFile.getProjectId());
-            context.put("texturi", textURI + "/" + txtFile.getTextId());
+            context.put("texturi", txtFile.getTextFileURI());
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             HttpHeaders httpHeaders = new HttpHeaders();
