@@ -33,10 +33,12 @@ public interface ITextFile {
     public abstract String getTextFileURI();
 
     /**
-     * @param URIPrefix
+     * @param uriPrefix
+     *      Prefix of the URI specified in the properties file.
+     *      eg: http://quadriga.io/text/textid
      * 
      * Sets the URI corresponding to the TextFile. 
      */
-    public abstract void setTextFileURI(String URIPrefix);
+    public abstract void setTextFileURI(String uriPrefix);
 
 }

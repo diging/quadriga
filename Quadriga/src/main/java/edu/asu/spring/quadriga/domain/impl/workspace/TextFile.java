@@ -77,8 +77,8 @@ public class TextFile implements ITextFile {
         return textFileURI;
     }
 
-    public void setTextFileURI(String URIPrefix) {
-        this.textFileURI = URIPrefix + this.getTextId();
+    public void setTextFileURI(String uriPrefix) {
+        this.textFileURI = uriPrefix + this.getTextId();
     }
 
 }
