@@ -33,11 +33,11 @@ public interface ITextFile {
     public abstract String getTextFileURI();
 
     /**
-     * This method sets the uri of the related TextFile based on the passed to
-     * the method.
+     * This method sets the URI of the TextFile by appending the TextID of the
+     * Textfile to the URI Prefix passed to this method.
      * 
      * @param uriPrefix
-     *            Prefix of the URI specified in the properties file.
+     *            Prefix for TextFile URI.
      * 
      */
     public abstract void setTextFileURI(String uriPrefix);
