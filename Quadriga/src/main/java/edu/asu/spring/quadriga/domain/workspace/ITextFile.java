@@ -29,15 +29,16 @@ public interface ITextFile {
     public abstract String getFileContent();
 
     public abstract void setFileContent(String fileContent);
-    
+
     public abstract String getTextFileURI();
 
     /**
-     * @param uriPrefix
-     *      Prefix of the URI specified in the properties file.
-     *      eg: http://quadriga.io/text/textid
+     * This method sets the uri of the related TextFile based on the passed to
+     * the method.
      * 
-     * Sets the URI corresponding to the TextFile. 
+     * @param uriPrefix
+     *            Prefix of the URI specified in the properties file.
+     * 
      */
     public abstract void setTextFileURI(String uriPrefix);
 
