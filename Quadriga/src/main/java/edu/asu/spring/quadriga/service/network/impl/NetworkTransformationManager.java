@@ -68,10 +68,10 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     }
 
     @Override
-    public ITransformedNetwork getTransformedNetworkOfProject(String projectId)
+    public ITransformedNetwork getTransformedNetworkOfProject(String projectId, String status)
             throws QuadrigaStorageException {
 
-        List<INetwork> networkList = getNetworkList(projectId);
+        List<INetwork> networkList = getNetworkList(projectId, status);
 
         if (networkList == null) {
             return null;
@@ -93,10 +93,10 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @author suraj nilapwar
      */
     @Override
-    public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId)
+    public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId, String status)
         throws QuadrigaStorageException {
         // get the transformed network and search for the concept id
-        List<INetwork> networkList = getNetworkList(projectId);
+        List<INetwork> networkList = getNetworkList(projectId, status);
 
         if (networkList == null) {
             return null;
@@ -110,10 +110,10 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         return finalTransformedNetwork;
     }
 
-    private List<INetwork> getNetworkList(String projectId) throws QuadrigaStorageException {
+    private List<INetwork> getNetworkList(String projectId, String status) throws QuadrigaStorageException {
         List<INetwork> networkList;
         try {
-            networkList = networkManager.getNetworksInProject(projectId, null);
+            networkList = networkManager.getNetworksInProject(projectId, status);
         } catch (QuadrigaStorageException e) {
             throw new QuadrigaStorageException("Database error while getting networks of a project" +
                     " with id: " + projectId, e);
@@ -132,13 +132,13 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 	 * @author suraj nilapwar
 	 */
     @Override
-    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId)
+    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId, String status)
         throws QuadrigaStorageException {
     	// get the transformed network and search for the concept id
         List<INetwork> networkList = new ArrayList<>();
         
         for(String projectId : projectIds){
-        	List<INetwork> networks = getNetworkList(projectId);
+        	List<INetwork> networks = getNetworkList(projectId, status);
         	if(networks != null){
         		networkList.addAll(networks);
         	}
