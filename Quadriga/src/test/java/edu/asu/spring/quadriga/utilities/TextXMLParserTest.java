@@ -76,7 +76,6 @@ public class TextXMLParserTest {
     @Test
     public void testMalformedXML() throws Exception {
         textFileException.expect(TextFileParseException.class);
-        textFileException.expectMessage("This XML file is not well formed");
         textXMLParser.parseTextXML(malformedXML, wsid, projid);
     }
 
