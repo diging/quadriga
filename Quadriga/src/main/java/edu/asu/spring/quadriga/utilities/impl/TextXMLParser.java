@@ -16,7 +16,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.dao.impl.textfile.TextFileDAO;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.TextFileParseException;
@@ -40,7 +39,6 @@ public class TextXMLParser implements ITextXMLParser {
     public ITextFile parseTextXML(String xml, String wsId, String projId) throws TextFileParseException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
         DocumentBuilder builder;
         Document document = null;
         try {

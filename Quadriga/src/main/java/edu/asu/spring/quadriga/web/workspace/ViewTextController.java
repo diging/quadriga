@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.workspace;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,9 @@ public class ViewTextController {
         String respMessage = null;
         try {
             respMessage = tfManager.retrieveTextFileContent(txtId);
-            return new ResponseEntity<String>(respMessage, HttpStatus.OK);
+            String decodedRespMsg = StringEscapeUtils.unescapeXml(respMessage);
+            return new ResponseEntity<String>(decodedRespMsg, HttpStatus.OK);
+            
         } catch (FileStorageException e) {
             logger.error(e.getMessage());
             respMessage = "Error while retrieving the file content";
