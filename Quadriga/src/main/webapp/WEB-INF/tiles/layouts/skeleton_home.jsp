@@ -93,13 +93,8 @@
 		
 		
 	<!--  Main -->
-	<div id="main">
-        <div class="container">
-	       <tiles:insertAttribute name="content" />	
-	    </div>
-	</div>
 	
-	<br>
+	<tiles:insertAttribute name="content" />	
 
 	<!-- /Main -->
 

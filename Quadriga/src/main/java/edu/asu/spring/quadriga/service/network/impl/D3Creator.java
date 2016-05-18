@@ -22,10 +22,10 @@ public class D3Creator implements ID3Creator {
         buffer.append("{\n\"nodes\":[");
         List<Node> nodeList = new ArrayList<Node>(nodes.values());
         for (Node node : nodeList) {
-            buffer.append("{\"name\":\"");
-            buffer.append(node.getLabel());
-            buffer.append("\",");
-            buffer.append("\"id\":\"");
+            //buffer.append("{\"name\":\"");
+            //buffer.append(node.getLabel());
+            //buffer.append("\",");
+            buffer.append("{\"id\":\"");
             buffer.append(node.getId());
             buffer.append("\",");
             buffer.append("\"group\":");

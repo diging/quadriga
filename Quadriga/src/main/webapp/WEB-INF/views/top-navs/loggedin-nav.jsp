@@ -3,17 +3,11 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 
-<nav id="nav" class="skel-ui-fixed">
-	<ul>
+
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li ${currentPage == "home" ? "class=\"current_page_item\"" : ""}><a
 				href="${pageContext.servletContext.contextPath}/auth/home">Home</a></li>
-		</sec:authorize>
-		<sec:authorize
-			access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-			<li ${currentPage == "about" ? "class=\"current_page_item\"" : ""}><a
-				href="${pageContext.servletContext.contextPath}/auth/about">About</a></li>
 		</sec:authorize>
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
@@ -25,11 +19,18 @@
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li
-				${currentPage == "conceptCollections" ? "class=\"current_page_item\"" : ""}>
-				<a
+				class="${currentPage == "conceptCollections" ? "current_page_item" : ""}">
+				<a class="dropdown-main"
 				href="${pageContext.servletContext.contextPath}/auth/conceptcollections">Concept
 					Collections</a>
-				<ul>
+			</li>
+			<li>
+			   <a class="dropdown-caret dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			     <span class="caret"></span>
+			     <span class="sr-only">Toggle Dropdown</span>
+			     </a>
+				<ul class="dropdown-menu">
 					<li><a
 						href="${pageContext.servletContext.contextPath}/auth/conceptcollections/addCollectionsForm">Add
 							Collection</a></li>
@@ -40,31 +41,49 @@
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li
-				${currentPage == "dictionaries" ? "class=\"current_page_item\"" : ""}><a
+				${currentPage == "dictionaries" ? "class=\"current_page_item\"" : ""}>
+				<a class="dropdown-main"
 				href="${pageContext.servletContext.contextPath}/auth/dictionaries">Dictionaries</a>
-				<ul>
+			</li>
+			<li>
+               <a class="dropdown-caret dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <span class="caret"></span>
+                 <span class="sr-only">Toggle Dropdown</span>
+                 </a>
+                <ul class="dropdown-menu">
 					<li><a
 						href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">Add
 							Dictionary</a></li>
-				</ul></li>
+				</ul>
+			</li>
 		</sec:authorize>
 
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-			<li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a
+			<li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}>
+			<a class="dropdown-main"
 				href="${pageContext.servletContext.contextPath}/auth/networks">Networks</a>
-				<ul>
+			</li>
+			<li>
+               <a class="dropdown-caret dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <span class="caret"></span>
+                 <span class="sr-only">Toggle Dropdown</span>
+                 </a>
+                <ul class="dropdown-menu">
 					<li><a
 						href="${pageContext.servletContext.contextPath}/auth/editing">Editing</a></li>
 					<li><a
 						href="${pageContext.servletContext.contextPath}/auth/transformation">Transformations</a></li>
 					<li><a
 						href="${pageContext.servletContext.contextPath}/auth/transformation/selectTransformationFiles">Upload</a></li>
-				</ul></li>
+				</ul>
+			</li>
 		</sec:authorize>
 		<sec:authorize access="permitAll">
 			<li ${currentPage == "sites" ? "class=\"current_page_item\"" : ""}><a
-				href="${pageContext.servletContext.contextPath}/sites">Sites</a></li>
+				href="${pageContext.servletContext.contextPath}/sites">Browse Sites</a></li>
 		</sec:authorize>
 
 		<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
@@ -73,5 +92,3 @@
 					Management</a></li>
 		</sec:authorize>
 		<!-- <li class="page_item_logout"><a href="<c:url value="/j_spring_security_logout" />">Logout</a></li> -->
-	</ul>
-</nav>

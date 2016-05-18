@@ -17,6 +17,15 @@
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
+	
+	<definition name="base.definition.home"
+        template="/WEB-INF/tiles/layouts/skeleton_home.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="navigation"
+            value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
+        <put-attribute name="footer" value="/tiles/credits.jsp" />
+        <put-attribute name="currentPage" value="home" />
+    </definition>
 
 	<definition name="base.definition.leftnav" template="/WEB-INF/tiles/layouts/skeleton_left.jsp">
 		<put-attribute name="title" value="" />
@@ -72,7 +81,7 @@
     
 
 	<!-- Home pages -->
-	<definition name="auth/home" extends="base.definition.nonav">
+	<definition name="auth/home" extends="base.definition.home">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
@@ -137,7 +146,7 @@
 
 	<!-- ConceptCollection pages -->
 	<definition name="base.definition.conceptcollections"
-		extends="base.definition">
+		extends="base.definition.nonav">
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	<definition name="base.definition.conceptcollections.nav"

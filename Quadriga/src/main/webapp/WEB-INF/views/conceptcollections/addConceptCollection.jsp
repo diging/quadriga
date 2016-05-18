@@ -38,12 +38,12 @@
 		<table>
 			<tr>
 				<td>Name:</td>
-				<td><form:input path="conceptCollectionName" size="30" id="conceptCollectionName"/></td>
+				<td><form:input path="conceptCollectionName" size="30" id="conceptCollectionName" class="form-control"/></td>
 			</tr>
 			<tr>
 				<td>Description:</td>
 				<td><form:textarea path="description" cols="23" rows="4"
-						id="description" /></td>
+						id="description" class="form-control" /></td>
 			</tr>
 			
 			<tr>
@@ -51,7 +51,7 @@
 				<td style="color: red;"><c:out value="${Error}"></c:out></td>
 			</tr>
 		</table>
-		<input type="submit" value="Create conceptcollection">
+		<button class="btn btn-primary" type="submit">Create Concept Collection</button>
 	</form:form>
 
 </article>
