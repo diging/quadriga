@@ -43,8 +43,7 @@ public class ViewTextController {
         String respMessage = null;
         try {
             respMessage = tfManager.retrieveTextFileContent(txtId);
-            String decodedRespMsg = StringEscapeUtils.unescapeXml(respMessage);
-            return new ResponseEntity<String>(decodedRespMsg, HttpStatus.OK);
+            return new ResponseEntity<String>(respMessage, HttpStatus.OK);
             
         } catch (FileStorageException e) {
             logger.error(e.getMessage());

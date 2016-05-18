@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class TextXMLParser implements ITextXMLParser {
         } 
         
         ITextFile txtFile = txtFileFactory.createTextFileObject();
-        txtFile.setFileContent(fileContent);
+        txtFile.setFileContent(StringEscapeUtils.unescapeXml(fileContent));
         txtFile.setFileName(fileName);
         txtFile.setRefId(refId);
         txtFile.setWorkspaceId(wsId);
