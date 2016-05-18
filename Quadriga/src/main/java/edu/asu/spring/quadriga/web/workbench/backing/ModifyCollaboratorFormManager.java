@@ -48,7 +48,7 @@ public class ModifyCollaboratorFormManager {
 	 * @return List<ModifyCollaborator> list of modifycollaborator domain
 	 * @throws QuadrigaStorageException
 	 */
-	public List<ModifyCollaborator> modifyProjectCollaboratorManager(String projectId) throws QuadrigaStorageException
+	public List<ModifyCollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
 	{
 
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
