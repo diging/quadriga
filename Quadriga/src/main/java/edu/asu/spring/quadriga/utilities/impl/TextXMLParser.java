@@ -78,7 +78,6 @@ public class TextXMLParser implements ITextXMLParser {
         if(accessibility.isEmpty()){
             throw new TextFileParseException("Specify Accessibiilty Options in the XML");
         } else if(!(accessibility.equalsIgnoreCase("public") || accessibility.equalsIgnoreCase("private"))){
-            System.out.println(accessibility.equalsIgnoreCase("public"));
             throw new TextFileParseException("Please set the proper accessibility option");
         }
             
