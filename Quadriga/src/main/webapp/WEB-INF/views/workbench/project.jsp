@@ -192,19 +192,18 @@
                     <span>Collaborators</span>
                 </h3>
                 <c:if test="${not empty project.projectCollaborators}">
-					<ul class="collaborators">
+					<div style="padding: 5px;">
                         <c:forEach var="projectcollaborator"
                             items="${project.projectCollaborators}">
-							<li><c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
-                            </li>
+							<c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
+                            
                         </c:forEach>
-                    </ul>
+                    </div>
                 </c:if>
                 <div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
-                <ul class="colltools">
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</a></li>
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-minus-circle" aria-hidden="true"></i> Delete</a></li>
-					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil" aria-hidden="true"></i> Update</a></li>
+                    <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-user-plus" aria-hidden="true"></i> Add</a><br>
+				    <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-user-times" aria-hidden="true"></i> Delete</a><br>
+					<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-users" aria-hidden="true"></i> Update</a>
                 </ul>
                 </div>
         </div>

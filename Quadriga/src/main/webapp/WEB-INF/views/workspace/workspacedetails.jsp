@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
@@ -50,17 +49,15 @@
 </script>
 
 
-<table style="width: 100%">
-	<tr>
+<div class="row">
+    <div class="col-md-9">
 		<!-- Display workspace details -->
-		<td>
 			<h2>Workspace: ${workspacedetails.workspaceName}</h2>
 			<div>${workspacedetails.description}</div>
 			<div style="text-align: right">
 				<a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspaceid}">
-					<img style="vertical-align: text-top;"
-					src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png">
+					<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 					Edit Workspace
 				</a>
 			</div>
@@ -273,17 +270,15 @@
 							});
 				}
 			</script> 
-			<hr> <strong>Text files in this workspace:</strong>
+			<hr> 
+			<h4>Text files in this workspace:</h4>
 			<div style="float: right;">
-				<img style="vertical-align: middle; padding-bottom: 4px;"
-					src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png">
-				<a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/addtext">Add
-					Textfile</a>
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/addtext">
+				    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Textfile
+				</a>
 			</div> <c:choose>
 				<c:when test="${not empty textFileList}">
-					<hr>
-					<table style="width: 100%" class="display dataTable">
+					<table style="width: 100%" class="table">
 						<thead>
 							<tr>
 								<th>Text File Name</th>
@@ -294,10 +289,10 @@
 						<tbody>
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
-									<td width="25%" align="center">
+									<td width="25%" align="left">
 									<a data-toggle="modal" data-target="#txtModal" data-txtid="${textfile.textId}" data-txtname="${textfile.fileName}"><c:out
 											value="${textfile.fileName}"></c:out></a></td>
-									<td width="25%" align="center"><c:out
+									<td width="25%" align="left"><c:out
 											value="${textfile.refId}"></c:out></td>
 								</tr>
 							</c:forEach>
@@ -344,45 +339,36 @@
 					<spring:message code="empty.networks" />
 				</c:otherwise>
 			</c:choose>
-		</td>
-
+		</div>
 		
-		<!-- Display collaborators -->
-		<td style="width: 200px">
+		<div class="col-md-3">
 			<h3 class="major">
 				<span>Collaborators</span>
-			</h3> <c:if test="${not empty workspacedetails.workspaceCollaborators}">
-				<ul class="collaborators">
-					<c:forEach var="workspaceCollaborator"
-						items="${workspacedetails.workspaceCollaborators}">
-						<li><c:out
-								value="${workspaceCollaborator.collaborator.userObj.name}"></c:out>
-						</li>
-					</c:forEach>
-				</ul>
-			</c:if> <c:if test="${empty workspacedetails.workspaceCollaborators}">
+			</h3> 
+			<c:if test="${not empty workspacedetails.workspaceCollaborators}">
+				<div style="padding: 5px;">
+                <c:forEach var="workspaceCollaborator"
+					items="${workspacedetails.workspaceCollaborators}">
+					<i class="fa fa-user" aria-hidden="true"></i> <c:out
+							value="${workspaceCollaborator.collaborator.userObj.name}"></c:out>
+					
+				</c:forEach>
+				</div>
+			</c:if> 
+			<c:if test="${empty workspacedetails.workspaceCollaborators}">
 				There are no collaborators.
 			</c:if>
 
 			<div style="border-top: dashed 1px #e7eae8; padding: 5px;">
-				<ul class="colltools">
-					<li><img
-						src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"
-						style="vertical-align: middle; padding-bottom: 2px;"> <a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addcollaborators">Add</a></li>
-					<li><img
-						src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"
-						style="vertical-align: middle; padding-bottom: 2px;"> <a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletecollaborators">Delete</a></li>
-					<li><img
-						src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/pen.png"
-						style="vertical-align: middle; padding-bottom: 2px;"> <a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/updatecollaborators">Update</a></li>
-				</ul>
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addcollaborators">
+				   <i class="fa fa-user-plus" aria-hidden="true"></i> Add</a><br>
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletecollaborators">
+				   <i class="fa fa-user-times" aria-hidden="true"></i> Delete</a><br>
+                <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/updatecollaborators">
+				   <i class="fa fa-users" aria-hidden="true"></i> Update</a>
 			</div>
-		</td>
-	</tr>
-</table>
+		</div>
+	</div>
 <div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog" aria-labelledby="txtModal" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content ">
