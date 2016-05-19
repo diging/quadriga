@@ -25,3 +25,24 @@
 #chart>svg {
 	min-height: 500px;
 }
+
+.project-box {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #777777;
+	padding: 5px;
+}
+
+.project-outside {
+    padding-left: 2px;	
+}
+
+.project-boxes {
+	margin-right: 5px;
+	margin-left: 5px;
+	margin-top: 20px;
+}
+
+.container {
+	padding-bottom: 20px;
+}

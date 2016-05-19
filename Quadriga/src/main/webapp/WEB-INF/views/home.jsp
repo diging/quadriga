@@ -12,36 +12,34 @@
 </script>
 <div id="main">
 	<div class="container">
-		<div class="row">
+		
 
-
-			<header>
 				<h2>
 					&nbsp;Welcome back
 					<sec:authentication property="principal.username" />!
 				</h2>
 				<span class="byline">&nbsp;&nbsp;The following projects have
 					recently been updated</span>
-			</header>
 
 			<!--  if there are projects -->
 			<c:if test="${not empty projects}">
 
 				<c:forEach items="${projects}" var="project" varStatus="status">
 					<c:if test="${status.index % 2 == 0}">
-						<div class="projectContainer">
+						<div class="row project-boxes">
 					</c:if>
-					<div class="recentProjectList">
+					<div class="col-md-6 project-outside">
+					   <div class="project-box">
 						<i class="fa fa-th-list"></i> <a
 							href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}">${project.projectName}</a>
-						<span class="project_owner"> Owned by:
-							${project.owner.name} </span><br> <input type="hidden"
-							value="${project.updatedDate.time}" class="project-date-value">
-						<span class="project_last_updated_date"> Last Updated Date:
+						<div class="project_owner" style="font-size: 14px"> Owned by:
+							${project.owner.name} </div> 
+							<input type="hidden" value="${project.updatedDate.time}" class="project-date-value">
+						<div class="project_last_updated_date pull-right" style="font-size: 12px"> Last Updated Date:
 							<span class="project-date"></span>
-						</span>
+						</div>
 
-						<hr style="clear: right">
+						<hr style="margin-top: 20px;">
 						${project.description}
 
 						<c:if test="${not empty project.projectCollaborators}">
@@ -53,11 +51,12 @@
 								</c:forEach>
 							</ul>
 						</c:if>
-
-						<c:if test="${status.index % 2 == 1}">
+						</div>
 					</div>
-			</c:if>
-		</div>
+
+					<c:if test="${status.index % 2 == 1}">
+					   </div>
+			        </c:if>
 		</c:forEach>
 
 		</c:if>
@@ -87,7 +86,7 @@
 		dt = new Date(dt.getTime() + minutes * 60000);
 		return dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString();
 	}
-	$('.recentProjectList').each(function(key, val) {
+	$('.project-box').each(function(key, val) {
 		var date = $(val).find('.project-date-value').val()
 		var dateString = getLocalDate(parseInt(date))
 		$(val).find('.project-date').html(dateString)

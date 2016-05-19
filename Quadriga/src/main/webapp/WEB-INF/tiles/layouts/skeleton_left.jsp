@@ -17,6 +17,7 @@
 
     <!-- Custom styles for this template -->
     <link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css" rel="stylesheet">
+    <link href="${pageContext.servletContext.contextPath}/resources/css/base.css" rel="stylesheet">
     
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
