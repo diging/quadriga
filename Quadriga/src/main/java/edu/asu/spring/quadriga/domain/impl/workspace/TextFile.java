@@ -16,6 +16,7 @@ public class TextFile implements ITextFile {
     private String textId;
     private String fileContent;
     private String refId;
+    private String textFileURI;
 
     @Override
     public String getFileName() {
@@ -70,6 +71,14 @@ public class TextFile implements ITextFile {
 
     public void setRefId(String refId) {
         this.refId = refId;
+    }
+
+    public String getTextFileURI() {
+        return textFileURI;
+    }
+
+    public void setTextFileURI(String uriPrefix) {
+        this.textFileURI = uriPrefix + this.getTextId();
     }
 
 }

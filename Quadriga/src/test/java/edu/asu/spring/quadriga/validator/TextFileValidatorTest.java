@@ -1,4 +1,4 @@
-package edu.asu.quadriga.validator;
+package edu.asu.spring.quadriga.validator;
 
 import java.util.UUID;
 
