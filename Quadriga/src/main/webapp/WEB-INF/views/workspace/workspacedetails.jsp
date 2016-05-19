@@ -272,12 +272,17 @@
 			</script> 
 			<hr> 
 			<h4>Text files in this workspace:</h4>
-			<div style="float: right;">
+			<div class="pull-right" >
 				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/addtext">
 				    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Textfile
 				</a>
-			</div> <c:choose>
+			</div>
+			 
+			
+			<c:choose>
 				<c:when test="${not empty textFileList}">
+				
+				<div class="panel panel-default" style="clear: both;">
 					<table style="width: 100%" class="table">
 						<thead>
 							<tr>
@@ -298,6 +303,7 @@
 							</c:forEach>
 						</tbody>
 					</table>
+					</div>
 				</c:when>
 				<c:otherwise>
 					<spring:message code="empty.textfiles" />
