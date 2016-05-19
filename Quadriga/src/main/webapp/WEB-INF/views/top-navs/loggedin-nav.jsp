@@ -81,10 +81,10 @@
 				</ul>
 			</li>
 		</sec:authorize>
-		<sec:authorize access="permitAll">
+		<!--<sec:authorize access="permitAll">
 			<li ${currentPage == "sites" ? "class=\"current_page_item\"" : ""}><a
 				href="${pageContext.servletContext.contextPath}/sites">Browse Sites</a></li>
-		</sec:authorize>
+		</sec:authorize>-->
 
 		<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
 			<li ${currentPage == "admin" ? "class=\"current_page_item\"" : ""}><a

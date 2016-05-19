@@ -60,7 +60,7 @@
                      <input type="text" class="form-control" name="username" placeholder="Username">
                  </div>
                  <div class="form-group">
-                     <input type="text" class="form-control" name="password" placeholder="Password">
+                     <input type="password" class="form-control" name="password" placeholder="Password">
                  </div>
                  <button type="submit" class="btn btn-default">Sign In</button>
              </form>
@@ -69,6 +69,21 @@
         
       </div>
     </div>
+    
+    <sec:authorize access="isAuthenticated()">
+        <div class="container">
+         <div class="row" style="padding-top: 15px;">
+             <div class="col-md-10">
+                 Welcome <i class="fa fa-user"></i><span style="margin-left: 5px;"><sec:authentication
+                         property="principal.username" /></span>!
+             </div>
+             <div class="col-md-2">
+                 <a class="pull-right" href="<c:url value='/logout' />">Logout</a>
+             </div>
+         </div>
+         <hr>
+         </div>
+     </sec:authorize>
 
 	<c:choose>
        <c:when test="${show_success_alert}">

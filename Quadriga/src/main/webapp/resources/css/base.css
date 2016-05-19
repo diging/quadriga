@@ -1,0 +1,27 @@
+/*TOOLTIPS*/
+.tip {
+    color: #111;
+    width: 139px;
+    background-color: white;
+    border:1px solid #ccc;
+    -moz-box-shadow:#555 2px 2px 8px;
+    -webkit-box-shadow:#555 2px 2px 8px;
+    -o-box-shadow:#555 2px 2px 8px;
+    box-shadow:#555 2px 2px 8px;
+    opacity:0.9;
+    filter:alpha(opacity=90);
+    font-size:10px;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding:7px;
+}
+
+/* Network full screen*/
+#chart {
+	height: 100%;
+	width: 100%;
+	min-height: 500px;
+}
+
+#chart>svg {
+	min-height: 500px;
+}

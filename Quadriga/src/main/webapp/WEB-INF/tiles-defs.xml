@@ -94,7 +94,7 @@
 	</definition>
 
 	<!-- public pages -->
-	<definition name="login" extends="base.definition.nonav">
+	<definition name="login" extends="base.definition.home">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/login.jsp" />
 	</definition>
