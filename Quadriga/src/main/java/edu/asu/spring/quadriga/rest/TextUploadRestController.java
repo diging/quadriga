@@ -110,6 +110,7 @@ public class TextUploadRestController {
             context.put("wsid", txtFile.getWorkspaceId());
             context.put("projid", txtFile.getProjectId());
             context.put("texturi", txtFile.getTextFileURI());
+            context.put("accessibility",txtFile.getAccessibility());
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             HttpHeaders httpHeaders = new HttpHeaders();

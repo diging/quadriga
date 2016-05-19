@@ -6,4 +6,5 @@
 <Quadriga:refid>$refid</Quadriga:refid>
 <Quadriga:filename>$filename</Quadriga:filename>
 <Quadriga:projid>$projid</Quadriga:projid>
+<Quadriga:accessibility>$accessibility</Quadriga:accessibility>
 </Quadriga:QuadrigaReply>

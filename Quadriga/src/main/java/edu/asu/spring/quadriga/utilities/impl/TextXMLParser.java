@@ -56,7 +56,8 @@ public class TextXMLParser implements ITextXMLParser {
         NodeList textNodeList = document.getElementsByTagName("text");
         NodeList handleNode = document.getElementsByTagName("handle");
         NodeList fileNameNode = document.getElementsByTagName("file_name");
-
+        NodeList accessibilityNode = document.getElementsByTagName("accessibility");
+        
         if (handleNode.getLength() == 0 && fileNameNode.getLength() == 0) {
             throw new TextFileParseException("Handle and file name must be specified in the input XML");
         } else if (handleNode.getLength() == 0) {
@@ -65,12 +66,22 @@ public class TextXMLParser implements ITextXMLParser {
             throw new TextFileParseException("File name must be specified in the input XML");
         } else if (textNodeList.getLength() == 0) {
             throw new TextFileParseException("File content must be specified in the input XML");
+        } else if (accessibilityNode.getLength() == 0) {
+            throw new TextFileParseException("Accessibiilty must be specified in the input XML");
         }
 
         String fileContent = textNodeList.item(0).getTextContent();
         String fileName = fileNameNode.item(0).getTextContent();
         String refId = handleNode.item(0).getTextContent();
+        String accessibility =  accessibilityNode.item(0).getTextContent();
         
+        if(accessibility.isEmpty()){
+            throw new TextFileParseException("Specify Accessibiilty Options in the XML");
+        } else if(!(accessibility.equalsIgnoreCase("public") || accessibility.equalsIgnoreCase("private"))){
+            System.out.println(accessibility.equalsIgnoreCase("public"));
+            throw new TextFileParseException("Please set the proper accessibility option");
+        }
+            
         if (fileContent.isEmpty()) {
             throw new TextFileParseException("Specify File Content in the XML");
         } else if (fileName.isEmpty()) {
@@ -85,6 +96,7 @@ public class TextXMLParser implements ITextXMLParser {
         txtFile.setRefId(refId);
         txtFile.setWorkspaceId(wsId);
         txtFile.setProjectId(projId);
+        txtFile.setAccessibility(accessibility);
 
         return txtFile;
     }

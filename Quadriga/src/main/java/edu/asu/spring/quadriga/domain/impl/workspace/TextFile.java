@@ -79,7 +79,7 @@ public class TextFile implements ITextFile {
     }
 
     public void setAccessibility(String accessibility) {
-        this.accessibility = accessibility;
+        this.accessibility = accessibility.toUpperCase();
     }
 
     public String getTextFileURI() {
