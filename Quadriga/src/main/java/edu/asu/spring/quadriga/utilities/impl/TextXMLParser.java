@@ -35,7 +35,7 @@ public class TextXMLParser implements ITextXMLParser {
     private ITextFileFactory txtFileFactory;
 
     private static final Logger logger = LoggerFactory.getLogger(TextXMLParser.class);
-    
+
     @Override
     public ITextFile parseTextXML(String xml, String wsId, String projId) throws TextFileParseException {
 
@@ -43,6 +43,9 @@ public class TextXMLParser implements ITextXMLParser {
         DocumentBuilder builder;
         Document document = null;
         try {
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
             builder = factory.newDocumentBuilder();
             document = builder.parse(new InputSource(new StringReader(xml)));
         } catch (ParserConfigurationException | IOException e) {
@@ -57,7 +60,7 @@ public class TextXMLParser implements ITextXMLParser {
         NodeList handleNode = document.getElementsByTagName("handle");
         NodeList fileNameNode = document.getElementsByTagName("file_name");
         NodeList accessibilityNode = document.getElementsByTagName("accessibility");
-        
+
         if (handleNode.getLength() == 0 && fileNameNode.getLength() == 0) {
             throw new TextFileParseException("Handle and file name must be specified in the input XML");
         } else if (handleNode.getLength() == 0) {
@@ -73,22 +76,22 @@ public class TextXMLParser implements ITextXMLParser {
         String fileContent = textNodeList.item(0).getTextContent();
         String fileName = fileNameNode.item(0).getTextContent();
         String refId = handleNode.item(0).getTextContent();
-        String accessibility =  accessibilityNode.item(0).getTextContent();
-        
-        if(accessibility.isEmpty()){
+        String accessibility = accessibilityNode.item(0).getTextContent();
+
+        if (accessibility.isEmpty()) {
             throw new TextFileParseException("Specify Accessibiilty Options in the XML");
-        } else if(!(accessibility.equalsIgnoreCase("public") || accessibility.equalsIgnoreCase("private"))){
+        } else if (!(accessibility.equalsIgnoreCase("public") || accessibility.equalsIgnoreCase("private"))) {
             throw new TextFileParseException("Please set the proper accessibility option");
         }
-            
+
         if (fileContent.isEmpty()) {
             throw new TextFileParseException("Specify File Content in the XML");
         } else if (fileName.isEmpty()) {
             throw new TextFileParseException("Filename cannot be empty");
         } else if (refId.isEmpty()) {
             throw new TextFileParseException("Handle cannot be empty");
-        } 
-        
+        }
+
         ITextFile txtFile = txtFileFactory.createTextFileObject();
         txtFile.setFileContent(StringEscapeUtils.unescapeXml(fileContent));
         txtFile.setFileName(fileName);
