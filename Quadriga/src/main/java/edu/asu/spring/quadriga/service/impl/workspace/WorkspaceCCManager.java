@@ -13,9 +13,9 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceCCShallowMapper;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
 @Service
 public class WorkspaceCCManager implements IWorkspaceCCManager {
@@ -42,8 +42,8 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	@Override
 	@Transactional
 	public List<IWorkspaceConceptCollection> listWorkspaceCC(String workspaceId) throws QuadrigaStorageException {
-		WorkspaceDTO workspaceDTO  = wsDAO.getWorkspaceDTO(workspaceId);
-		IWorkSpace workspace = wsDeepMapper.getWorkSpaceDetails(workspaceId);
+		WorkspaceDTO workspaceDTO  = wsDAO.getDTO(workspaceId);
+		IWorkSpace workspace = wsDeepMapper.mapWorkspaceDTO(workspaceDTO);
 		List<IWorkspaceConceptCollection> wsCCList = wsCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO);
 		return wsCCList;
 	}

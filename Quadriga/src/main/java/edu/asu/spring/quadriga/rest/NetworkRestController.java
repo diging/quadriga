@@ -46,6 +46,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.exceptions.TextFileParseException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IRestMessage;
@@ -152,12 +153,15 @@ public class NetworkRestController {
         } catch (NetworkXMLParseException e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
+        } catch (TextFileParseException e) {
+            String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        
+
         String res = null;
-        try{
+        try {
             res = networkManager.storeNetworks(nwXML.getNetworkXMLString());
-        } catch(QStoreStorageException e){
+        } catch (QStoreStorageException e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -169,7 +173,7 @@ public class NetworkRestController {
         }
 
         String networkId = networkManager.storeNetworkDetails(res, user, networkName, workspaceid,
-                INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO);
+                INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO, INetworkStatus.PENDING);
 
         ITextFile textFileContent = nwXML.getTextFile();
 
@@ -207,7 +211,7 @@ public class NetworkRestController {
     public ResponseEntity<String> getNetworkStatus(@PathVariable("NetworkId") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
                     throws RestException {
-        
+
         try {
             INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
@@ -215,7 +219,7 @@ public class NetworkRestController {
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
             String status = networkManager.getNetworkStatusCode(network.getStatus()) + "";
-            
+
             IUser user = userManager.getUser(principal.getName());
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
@@ -246,7 +250,7 @@ public class NetworkRestController {
             throw new RestException(500, e);
         } catch (Exception e) {
             throw new RestException(500, e);
-        } 
+        }
 
     }
 
@@ -275,7 +279,7 @@ public class NetworkRestController {
     public ResponseEntity<String> getNetworkAnnotations(@PathVariable("NetworkId") String networkId,
             HttpServletResponse response, String accept, Principal principal, HttpServletRequest req)
                     throws RestException {
-        
+
         try {
             INetwork network = networkManager.getNetwork(networkId);
             if (network == null) {
@@ -664,15 +668,15 @@ public class NetworkRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        
+
         String res = null;
-        try{
+        try {
             res = networkManager.storeNetworks(xml);
-        } catch(QStoreStorageException e){
+        } catch (QStoreStorageException e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
             return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
+
         if (res == null) {
             String errorMsg = errorMessageRest.getErrorMsg(
                     "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML");
@@ -680,7 +684,7 @@ public class NetworkRestController {
         }
         String networkNameUpdateStatus = "";
         if (!(networkName == null || networkName.equals(network.getNetworkName()) || networkName.equals(""))) {
-                networkNameUpdateStatus = networkManager.updateNetworkName(networkId, networkName);
+            networkNameUpdateStatus = networkManager.updateNetworkName(networkId, networkName);
             if (!(networkNameUpdateStatus.equals("success"))) {
                 String errorMsg = errorMessageRest.getErrorMsg("DB Issue, please try after sometime");
                 return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -692,7 +696,7 @@ public class NetworkRestController {
         int latestVersion = networkManager.getLatestVersionOfNetwork(networkId) + 1;
         networkId = networkManager.storeNetworkDetails(res, user, networkName,
                 network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK, networkId,
-                latestVersion);
+                latestVersion, INetworkStatus.PENDING);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.valueOf(accept));
@@ -700,5 +704,5 @@ public class NetworkRestController {
         return new ResponseEntity<String>(res.toString(), httpHeaders, HttpStatus.OK);
 
     }
-    
- }
+
+}

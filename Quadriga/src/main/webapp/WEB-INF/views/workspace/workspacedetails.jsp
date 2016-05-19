@@ -28,12 +28,13 @@
 			var link = $(event.relatedTarget);
 			
 			var txtid = link.data('txtid');
-			
+			var txtname = link.data('txtname');
 			$.ajax({
 				  type : "GET",
 				  url: "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/viewtext?txtid="+txtid,
 				  contentType: "text/plain",
 				  success:function(details){
+					 $('.modal-title').text(txtname);
 					 $('.modal-body').text(details);
 				  },
 				  
@@ -271,74 +272,7 @@
 								}
 							});
 				}
-			</script> <c:choose>
-				<c:when test="${not empty workspacedetails.workspaceBitStreams}">
-					<form id="bitstream" method="POST"
-						action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
-						<font size="2"><input type="submit"
-							onclick="submitClick();" value="Delete Dspace Files" /> <c:choose>
-								<c:when test="${empty dspaceKeys}"></c:when>
-							</c:choose></font> <br>
-						<table class="display dataTable" style="width: 100%">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Item</th>
-									<th>File</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="workspaceBitstream"
-									items="${workspacedetails.workspaceBitStreams}">
-									<tr bgcolor="#E0F0FF">
-										<td>
-											<div
-												id='checkbox_<c:out value="${workspaceBitstream.bitStream.id}"/>'
-												class='checkbox_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
-												<c:choose>
-													<c:when
-														test="${not((workspaceBitstream.bitStream.name == 'No Access to File') or (workspaceBitstream.bitStream.name == 'Wrong Dspace Authentication') or (workspaceBitstream.bitStream.name == 'Dspace is Down...')) }">
-														<c:choose>
-															<c:when
-																test="${not(workspaceBitstream.bitStream.name == 'Checking BitStream Access...')}">
-																<input type="checkbox" class="checkbox"
-																	name="bitstreamids"
-																	value="${workspaceBitstream.bitStream.id}" />
-															</c:when>
-														</c:choose>
-													</c:when>
-												</c:choose>
-											</div>
-										</td>
-										<td><div
-												class='item_<c:out value="${workspaceBitstream.bitStream.id}"/>'
-												id='item_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
-												<font size="1"><c:out
-														value="${workspaceBitstream.bitStream.itemName}"></c:out></font>
-											</div></td>
-										<td><div
-												class='bitstream_<c:out value="${workspaceBitstream.bitStream.id}"/>'
-												id='bitstream_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
-												<font size="1"><c:out
-														value="${workspaceBitstream.bitStream.name}"></c:out></font>
-											</div></td>
-									</tr>
-								</c:forEach>
-							</tbody>
-							<tfoot>
-								<tr>
-									<th></th>
-									<th>Item</th>
-									<th>File</th>
-								</tr>
-							</tfoot>
-						</table>
-					</form>
-				</c:when>
-				<c:otherwise>
-					<br>Workspace does not contain any files from dspace !
-				</c:otherwise>
-			</c:choose>
+			</script> 
 			<hr> <strong>Text files in this workspace:</strong>
 			<div style="float: right;">
 				<img style="vertical-align: middle; padding-bottom: 4px;"
@@ -361,14 +295,11 @@
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
 									<td width="25%" align="center">
-									<a data-toggle="modal" data-target="#txtModal" data-txtId="${textfile.textId}"><c:out
+									<a data-toggle="modal" data-target="#txtModal" data-txtid="${textfile.textId}" data-txtname="${textfile.fileName}"><c:out
 											value="${textfile.fileName}"></c:out></a></td>
 									<td width="25%" align="center"><c:out
 											value="${textfile.refId}"></c:out></td>
 								</tr>
-								<script>
-								
-								</script>
 							</c:forEach>
 						</tbody>
 					</table>
@@ -377,12 +308,7 @@
 					<spring:message code="empty.textfiles" />
 				</c:otherwise>
 			</c:choose>
-		</td>
-		<hr>
-
-		<hr>
-		<!-- Display Networks -->
-		<c:choose>
+			<hr> <!-- Display Networks --> <c:choose>
 				<c:when test="${not empty networkList}">
 					<span class="byline">Networks belonging to this workspace</span>
 					<hr>
@@ -400,8 +326,7 @@
 							<c:forEach var="network" items="${networkList}">
 								<tr>
 									<td width="25%" align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${network.network.networkName}"></c:out>" />
+										type="hidden" value="<c:out value="${network.network.networkName}"></c:out>" />
 										<c:out value="${network.network.networkName}"></c:out></td>
 									<td width="25%" align="center"><c:out
 											value="${network.network.creator.userName}"></c:out></td>
@@ -421,6 +346,7 @@
 			</c:choose>
 		</td>
 
+		
 		<!-- Display collaborators -->
 		<td style="width: 200px">
 			<h3 class="major">
@@ -457,11 +383,11 @@
 		</td>
 	</tr>
 </table>
-<div class="modal" id="txtModal" tabindex="-1" role="dialog" aria-labelledby="txtModal" aria-hidden="true">
+<div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog" aria-labelledby="txtModal" aria-hidden="true" >
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content ">
             <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Text Content</h4>
+            <h4 class="modal-title" id="myModalLabel"></h4>
             </div>
             <div class="modal-body">
 

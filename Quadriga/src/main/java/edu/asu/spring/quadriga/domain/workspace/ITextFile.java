@@ -34,4 +34,16 @@ public interface ITextFile {
 
     public abstract void setAccessibility(String accessibility);
 
+    public abstract String getTextFileURI();
+
+    /**
+     * This method sets the URI of the TextFile by appending the TextID of the
+     * Textfile to the URI Prefix passed to this method.
+     * 
+     * @param uriPrefix
+     *            Prefix for TextFile URI.
+     * 
+     */
+    public abstract void setTextFileURI(String uriPrefix);
+
 }

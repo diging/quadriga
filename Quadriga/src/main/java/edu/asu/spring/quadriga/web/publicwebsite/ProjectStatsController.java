@@ -2,16 +2,12 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 
 
 import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-
-import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -20,22 +16,21 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.IConceptStats;
 import edu.asu.spring.quadriga.domain.IContributionStatsManager;
+import edu.asu.spring.quadriga.domain.IUserStats;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
-
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
-
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.domain.IUserStats;
 
 
 /**
@@ -128,23 +123,20 @@ public class ProjectStatsController {
      * @throws QuadrigaStorageException
      * @throws JSONException 
      */
-
+    @CheckPublicAccess(projectIndex = 2)
     @RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
     public String showProjectStatistics(
             @PathVariable("projectUnixName") String projectUnixName, @InjectProject(unixNameParameter = "projectUnixName") IProject project, Model model, Principal principal)
                     throws JAXBException, QuadrigaStorageException {
 
         String projectId = project.getProjectId();
-        System.out.println("project name "+project.getProjectName());
-
+        model.addAttribute("project", project);
+        
         List<INetwork> networks = networkmanager.getNetworksInProject(projectId);
         List<IConceptStats> conceptsWithCount = null;
 
-        List<IUserStats> userStats;
-
         if (!networks.isEmpty()) {
             conceptsWithCount = projectStats.getConceptCount(networks);
-            userStats = projectStats.getUserStats(projectId);
             try {
                 int cnt = getCount(conceptsWithCount);
                 JSONArray labelCount = getTopConceptsJson(conceptsWithCount.subList(0, cnt),
@@ -160,7 +152,6 @@ public class ProjectStatsController {
                 model.addAttribute("rejectedNetworksData",rejectedNetworkCount.length() > 0 ? rejectedNetworkCount.toString() : null);
                 model.addAttribute("workspaceData",workspaceCount.length() > 0 ? workspaceCount.toString() : null);
                 model.addAttribute("networks", networks);
-                model.addAttribute("project", project);
                 model.addAttribute("labelCount", labelCount.length() > 0 ? labelCount.toString() : null);
                 model.addAttribute("networkid", "\"\"");
 
@@ -171,9 +162,9 @@ public class ProjectStatsController {
                 errorMsg.append(e.getMessage());
                 errorMsg.append("\n");
                 model.addAttribute("error_alert_msg", errorMsg.toString());
-            }
-            return "sites/project/statistics";
+            }            
         }
-        return "NoNetworks";
+        
+        return "sites/project/statistics";
     }
 }

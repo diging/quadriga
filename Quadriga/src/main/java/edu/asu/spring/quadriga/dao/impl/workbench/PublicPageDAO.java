@@ -19,11 +19,6 @@ public class PublicPageDAO extends BaseDAO<PublicPageDTO> implements IPublicPage
 		return getDTO(PublicPageDTO.class, id);
 	}
 
-	@Override
-	public String getIdPrefix() {
-		return messages.getProperty("publicpage_id.prefix");
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PublicPageDTO> getPublicPageDTOsByProjectId(String projectId) throws QuadrigaStorageException {

@@ -1,12 +1,14 @@
 package edu.asu.spring.quadriga.service.impl.transformation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
-import edu.asu.spring.quadriga.dao.impl.transform.TransformFilesDAO;
-import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
+
+import edu.asu.spring.quadriga.dao.transform.ITransformFilesDAO;
+import edu.asu.spring.quadriga.dto.TransformFilesDTO;
+import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 
 /**
  * This class is a service which takes the transformation files metadata and
@@ -19,7 +21,7 @@ import java.util.List;
 public class TransformationManager implements ITransformationManager {
 
     @Autowired
-    private TransformFilesDAO transformationDAO;
+    private ITransformFilesDAO transformationDAO;
 
     @Transactional
     @Override

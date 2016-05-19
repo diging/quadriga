@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
@@ -71,7 +72,11 @@ public class FileSaveUtility implements IFileSaveUtility {
             }
 
         }
-        return new String(fileBytes);
+        try {
+            return new String(fileBytes,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new FileStorageException(e);
+        }
     }
 
 }

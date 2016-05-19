@@ -59,16 +59,14 @@ function onSubmit(){
 
 <form:form method="POST" name="myForm" commandName="collaborator" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/addcollaborators">
-  <h2>Project Collaborators:</h2>
-<h3>Project: ${projectname}</h3>
-<div>${projectdesc}</div>
+  <h2>Add a new collaborator to your project ${projectname}</h2>
 <c:if test="${not empty notCollaboratingUsers}">
 <hr>
 
 <div class="wrap">
 
-<div class="ex" >
-    <h4>select collaborator</h4>
+<div class="ex">
+    <h4>Select a collaborator:</h4>
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="----- Select -----"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
@@ -78,8 +76,8 @@ function onSubmit(){
 </div> 	 
 <br/>
 
-<div class="ex1">
-    <h4>select access rights</h4>
+<div class="ex1"  style="width: 400px;">
+    <h4>Select their access rights:</h4>
 	<ul><form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="id" itemLabel="displayName" element="li" /> </ul>	
 	<div class="rolesError"><form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors></div>
 </div>
@@ -87,7 +85,7 @@ function onSubmit(){
 </div>
 <br/>
 <input type="submit" value="Add">
-<input type="button" value="Cancel" onClick="onSubmit()">
+<input type="button" value="Done" onClick="onSubmit()">
 </c:if>
 <c:if test="${empty notCollaboratingUsers}">
 <hr>

@@ -11,6 +11,7 @@ import java.util.Map;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +26,6 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -35,9 +35,6 @@ public class RetrieveProjectController {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
-
-    @Autowired
-    private IRetrieveJsonProjectManager jsonProjectManager;
 
     @Autowired
     private IProjectSecurityChecker projectSecurity;
@@ -126,14 +123,6 @@ public class RetrieveProjectController {
         model.getModelMap().put("projects", fullProjects);
         model.getModelMap().put("accessibleProjects", accessibleProjects);
 
-        // model.getModelMap().put("projectlistasowner", projectListAsOwner);
-        // model.getModelMap().put("projectlistascollaborator",
-        // projectListAsCollaborator);
-        // model.getModelMap().put("projectlistaswsowner",
-        // projectListAsWorkspaceOwner);
-        // model.getModelMap().put("projectlistaswscollaborator",
-        // projectListAsWSCollaborator);
-
         return model;
     }
 
@@ -141,10 +130,9 @@ public class RetrieveProjectController {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
             RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }) })
     @RequestMapping(value = "auth/workbench/projects/{projectid}", method = RequestMethod.GET)
-    public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid, Principal principal)
+    public String getProjectDetails(@PathVariable("projectid") String projectid, Principal principal, Model model)
             throws QuadrigaStorageException, NoSuchRoleException, QuadrigaAccessException {
-        ModelAndView model = new ModelAndView("auth/workbench/project");
-
+      
         String userName = principal.getName();
         IProject project = projectManager.getProjectDetails(projectid);
 
@@ -161,28 +149,28 @@ public class RetrieveProjectController {
 
         int archivedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
 
-        model.getModelMap().put("project", project);
-        model.getModelMap().put("workspaceList", workspaceList);
-        model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
-        model.getModelMap().put("deactivatedWSSize", deactivatedWSSize);
-        model.getModelMap().put("archivedWSSize", archivedWSSize);
+        model.addAttribute("project", project);
+        model.addAttribute("workspaceList", workspaceList);
+        model.addAttribute("collabworkspacelist", collaboratorWorkspaceList);
+        model.addAttribute("deactivatedWSSize", deactivatedWSSize);
+        model.addAttribute("archivedWSSize", archivedWSSize);
 
         if (projectSecurity.isProjectOwner(userName, projectid)) {
-            model.getModelMap().put("owner", 1);
+            model.addAttribute("owner", 1);
         } else {
-            model.getModelMap().put("owner", 0);
+            model.addAttribute("owner", 0);
         }
         if (projectSecurity.isEditor(userName, projectid)) {
-            model.getModelMap().put("editoraccess", 1);
+            model.addAttribute("editoraccess", 1);
         } else {
-            model.getModelMap().put("editoraccess", 0);
+            model.addAttribute("editoraccess", 0);
         }
         if (projectSecurity.isCollaborator(userName, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, project.getProjectId())) {
-            model.getModelMap().put("isProjectAdmin", true);
+            model.addAttribute("isProjectAdmin", true);
         } else {
-            model.getModelMap().put("isProjectAdmin", false);
+            model.addAttribute("isProjectAdmin", false);
         }
-        return model;
+        return "auth/workbench/project";
     }
 
     /*

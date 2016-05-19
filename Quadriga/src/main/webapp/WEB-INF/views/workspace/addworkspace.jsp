@@ -16,10 +16,8 @@ function submitClick(id){
 </script>
 <article class="is-page-content">
 	<form:form commandName="workspace" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/addworkspace">
-		<c:choose>
-		  <c:when test="${success == '0'}">
-				<header>
+		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/workspace/add">
+		  	<header>
 					<h2>Create new Workspace</h2>
 					<span class="byline">Please fill in the following
 						information:</span>
@@ -34,7 +32,7 @@ function submitClick(id){
 						<td style="vertical-align: top">Description:</td>
 						<td><form:textarea path="description" cols="44" rows="6"
 								id="description" /></td>
-						<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
+						<td style="vertical-align:top;"><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
 						<td><input type="submit" value="Create Workspace"></td>
@@ -44,16 +42,7 @@ function submitClick(id){
 							value=<c:out value="${wsprojectid}"></c:out> /></td>
 					</tr>
 				</table>
-			</c:when>
-		  <c:when test="${success == '1'}">
-		  <span class="byline">Workspace created successfully.</span>
-		<ul>
-					<li><input type="button" onClick="submitClick(this.id);"
-						value='Okay'></li>
-				</ul>
-		  </c:when>
-		</c:choose>
-	</form:form>
+		  </form:form>
 </article>
 
 <!-- /Content -->

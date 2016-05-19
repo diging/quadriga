@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
@@ -45,7 +44,6 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
@@ -56,7 +54,7 @@ import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -87,7 +85,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private INetworkMapper networkmapper;
     
     @Autowired
-    private IProjectShallowMapper projectShallowMapper;
+    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private INetworkDAO dbConnect;
@@ -198,37 +196,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return null;
     }
     
-    /**
-     * Check if we have bit streams in the network XML
-     * 
-     * @param uri
-     *            URI is for DSpace based URI of type {@link String}
-     * @param bitStreamList
-     *            {@link List} of {@link IBitStream} objects
-     * @return Returns boolean values true or false
-     * @author Lohith Dwaraka
-     */
-    public boolean hasBitStream(String uri, List<IWorkspaceBitStream> workspaceBitStreamList) {
-        if (uri.isEmpty()) {
-            logger.debug("true");
-            return true;
-        }
-        String fileId = uri = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
-        if (workspaceBitStreamList != null) {
-            for (IWorkspaceBitStream workspaceBitStream : workspaceBitStreamList) {
-
-                if (fileId.equals(workspaceBitStream.getBitStream().getId())) {
-                    logger.debug("true");
-                    return true;
-                }
-            }
-        }
-
-        logger.debug("false");
-        return false;
-    }
-
-
     /**
      * 
      * {@inheritDoc}
@@ -465,7 +432,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         List<IProject> projectList = null;
         JSONObject core = new JSONObject();
         try {
-            projectList = projectShallowMapper.getProjectList(userName);
+            projectList = projectManager.getProjectList(userName);
             JSONArray dataArray = new JSONArray();
             if (projectList != null) {
                 for (IProject project : projectList) {
@@ -532,7 +499,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     @Transactional
     public String storeNetworkDetails(String xml, IUser user, String networkName, String workspaceId,
-            String uploadStatus, String networkId, int version) throws JAXBException {
+            String uploadStatus, String networkId, int version, String networkStatus) throws JAXBException {
         ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
 
         // Get Workspace details.
@@ -545,20 +512,18 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             logger.error("User doesn't have access to workspace", e3);
         }
 
-        // Get DSpace of the workspace
-        List<IWorkspaceBitStream> workspaceBitStreamList = workspace.getWorkspaceBitStreams();
-
+       
         NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
 
         // Below code reads the top level Appellation events
 
-        newNetworkDetailCache = parseNewNetworkStatement(elementEventType, workspaceBitStreamList,
+        newNetworkDetailCache = parseNewNetworkStatement(elementEventType,
                 newNetworkDetailCache);
 
         // Add network into database
         if (uploadStatus == INetworkManager.NEWNETWORK) {
             try {
-                networkId = dbConnect.addNetworkRequest(networkName, user, workspaceId);
+                networkId = dbConnect.addNetwork(networkName, user, workspaceId, networkStatus);
             } catch (QuadrigaStorageException e1) {
                 logger.error("DB action error ", e1);
             }
@@ -592,7 +557,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *         the cache of network details
      */
     private NewNetworkDetailsCache parseNewNetworkStatement(ElementEventsType elementEventType,
-            List<IWorkspaceBitStream> workspaceBitStreamList, NewNetworkDetailsCache newNetworkDetailCache) {
+            NewNetworkDetailsCache newNetworkDetailCache) {
 
         List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
         Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();

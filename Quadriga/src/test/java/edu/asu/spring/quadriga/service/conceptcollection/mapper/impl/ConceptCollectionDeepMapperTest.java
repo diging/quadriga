@@ -40,10 +40,10 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceCCShallowMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
 
 public class ConceptCollectionDeepMapperTest {
 

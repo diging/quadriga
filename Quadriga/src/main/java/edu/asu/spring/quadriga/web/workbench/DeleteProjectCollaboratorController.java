@@ -78,7 +78,7 @@ public class DeleteProjectCollaboratorController {
 		
 		collaboratorForm = collaboratorFormFactory.createCollaboratorFormObject();
 		
-		List<ModifyCollaborator> modifyCollaborator = collaboratorFormManager.modifyProjectCollaboratorManager(projectId);
+		List<ModifyCollaborator> modifyCollaborator = collaboratorFormManager.getProjectCollaborators(projectId);
 		
 		collaboratorForm.setCollaborators(modifyCollaborator);
 		
@@ -105,7 +105,7 @@ public class DeleteProjectCollaboratorController {
 
 		if(result.hasErrors())
 		{
-			collaborators = collaboratorFormManager.modifyProjectCollaboratorManager(projectId);
+			collaborators = collaboratorFormManager.getProjectCollaborators(projectId);
 			collaboratorForm.setCollaborators(collaborators);
 			
 			//retrieve project details

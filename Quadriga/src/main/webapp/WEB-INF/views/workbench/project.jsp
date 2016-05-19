@@ -62,14 +62,7 @@
                     <img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses.png"> You are an Editor on this Project
                     (<a href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.projectId}">Remove me as Editor</a>)
                     </c:if>
-            
-			<hr>
-			<strong>Text files in this project:</strong>
-	
-			<div style="float:right;">
-				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addtextfiles">Add Textfile</a>
-			</div>
-			
+
 			
             <hr> <!--  Display associated workspace -->
             
@@ -96,7 +89,7 @@
             
 				
             <div style="float:right;">
-				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add Workspace</a>
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/workspace/add">Add Workspace</a>
             </div>
             
             <div style="clear:right;">
@@ -189,8 +182,9 @@
                                     });
                 }
             </script>
-			<div id="dialog-delete-project-confirm" title="Confirm Delete?">
-                You are about to delete a project, this is not reversible.</br> Do you want to proceed?</div>
+			<div id="dialog-delete-project-confirm" title="Confirm Delete?" style="display: none;">
+                You are about to delete a project, this is not reversible.</br> Do you want to proceed?
+            </div>
         </td>
         
         <!-- Display collaborators -->

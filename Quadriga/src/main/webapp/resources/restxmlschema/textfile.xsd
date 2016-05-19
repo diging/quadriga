@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.digitalhps.org/Quadriga" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="QuadrigaReply">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="textfile">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="textfileid"/>
+              <xs:element type="xs:string" name="textfileuri"/>
+              <xs:element type="xs:string" name="wsid"/>
+              <xs:element type="xs:string" name="refid"/>
+              <xs:element type="xs:string" name="filename"/>
+              <xs:element type="xs:string" name="projid"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+ </xs:schema>

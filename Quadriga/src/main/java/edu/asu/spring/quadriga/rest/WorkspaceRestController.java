@@ -186,13 +186,12 @@ public class WorkspaceRestController {
      * @throws QuadrigaAccessException
      * @throws Exception
      */
-    @RequestMapping(value = "rest/projects/{project_id}/createworkspace", method = RequestMethod.POST)
+    @RequestMapping(value = "rest/projects/{project_id}/workspace/add", method = RequestMethod.POST)
     public ResponseEntity<String> addWorkspaceToProject(@PathVariable("project_id") String projectId,
             HttpServletRequest request, HttpServletResponse response, @RequestBody String xml,
             @RequestHeader("Accept") String accept, ModelMap model, Principal principal)
                     throws RestException, QuadrigaStorageException, QuadrigaAccessException {
-        IUser user = userManager.getUser(principal.getName());
-
+        
         logger.debug("XML : " + xml);
         JAXBElement<QuadrigaWorkspaceDetailsReply> response1 = null;
         try {
@@ -218,8 +217,7 @@ public class WorkspaceRestController {
         for (Workspace workspace : workspaceList) {
             workspaceNew.setDescription(workspace.getDescription().trim());
             workspaceNew.setWorkspaceName(workspace.getName().trim());
-            workspaceNew.setOwner(user);
-            modifyWSManager.addWorkspaceToProject(workspaceNew, projectId);
+            modifyWSManager.addWorkspaceToProject(workspaceNew, projectId, principal.getName());
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();

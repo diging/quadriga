@@ -51,6 +51,7 @@
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation" value="/WEB-INF/views/public/navbar.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="showNetwork" value="True" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
@@ -59,6 +60,7 @@
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation" value="/WEB-INF/views/public/navbar.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="showNetwork" value="True" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
@@ -265,7 +267,7 @@
 	</definition>
 
 	<!-- Add/Update/Delete Project Collaborator START -->
-	<definition name="auth/workbench/addcollaborators" extends="base.definition.workbench">
+	<definition name="auth/workbench/addcollaborators" extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Project - Add Collaborators" />
 		<put-attribute name="content"
@@ -279,7 +281,7 @@
 			value="/WEB-INF/views/workbench/deletecollaborators.jsp" />
 	</definition>
 	<definition name="auth/workbench/updatecollaborators"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Update Collaborators" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/updatecollaborators.jsp" />
@@ -298,45 +300,12 @@
 			value="/WEB-INF/views/workbench/transferprojectowner.jsp" />
 	</definition>
 
-	<definition name="/auth/workbench/keys" extends="base.definition.workbench">
-		<put-attribute name="title"
-			value="Quadriga Workbench - Manage Dspace Login" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/workbench/dspacelogin/keys.jsp" />
-	</definition>
-
 	<!--  add/ textfile pages -START -->
 	<definition name="auth/workbench/workspace/addtext"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Add Text" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/addtext.jsp" />
-	</definition>
-
-	<!-- Workspace pages -->
-	<definition name="auth/workbench/workspace/communities"
-		extends="base.definition.workbench.nonav">
-		<put-attribute name="title" value="Quadriga - Communities" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/workspace/communities.jsp" />
-	</definition>
-	<definition name="auth/workbench/workspace/community"
-		extends="base.definition.workbench.nonav">
-		<put-attribute name="title"
-			value="Quadriga - Collections in Community" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/workspace/collections.jsp" />
-	</definition>
-	<definition name="auth/workbench/workspace/community/collection"
-		extends="base.definition.workbench.nonav">
-		<put-attribute name="title" value="Quadriga - Items in Collection" />
-		<put-attribute name="content" value="/WEB-INF/views/workspace/items.jsp" />
-	</definition>
-	<definition name="auth/workbench/workspace/community/collection/item"
-		extends="base.definition.workbench.nonav">
-		<put-attribute name="title" value="Quadriga - ByteStreams in Item" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/workspace/bitstreams.jsp" />
 	</definition>
 
 	<!-- add/update/delete workspace pages -START -->
@@ -725,11 +694,18 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/exceptions/accessissue.jsp" />
 	</definition>
-	<definition name="404" extends="base.definition.public">
+	<definition name="public/404" extends="base.definition.public">
 		<put-attribute name="title" value="Quadriga - Page Not Found" />
 		<put-attribute name="navigation" value="" />
-		<put-attribute name="content" value="/WEB-INF/views/exceptions/404.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/exceptions/public/404.jsp" />
 	</definition>
+	<definition name="public/forbidden" extends="base.definition.public">
+        <put-attribute name="title" value="Quadriga - Forbidden" />
+        <put-attribute name="navigation" value="" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/exceptions/public/forbidden.jsp" />
+    </definition>
 
 	<!-- Networks -->
 	<definition name="base.definition.networks" extends="base.definition">
@@ -749,12 +725,12 @@
 	<!-- external website -->
 	<definition name="sites/website" extends="base.definition.public">
 		<put-attribute name="currentPage" value="home" />
-		<put-attribute name="content" value="/WEB-INF/views/website.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/public/website.jsp" />
 	</definition>
 
 	<definition name="sites/browseNetworks" extends="base.definition.public">
 		<put-attribute name="currentPage" value="networks" />
-		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/public/networks/browseNetworks.jsp" />
 	</definition>
 
 	<!-- Site search -->
@@ -885,8 +861,9 @@
 	<definition name="sites/project/statistics" extends="base.definition.public">
 		<put-attribute name="title" value="Project statistics" />
 		<put-attribute name="currentPage" value="statistics" />
+		<put-attribute name="showNetwork" value="False" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/projectstatistics.jsp" />
+			value="/WEB-INF/views/public/projectstatistics.jsp" />
 	</definition>
 
 	<definition name="sites/projectblog" extends="base.definition.public">
