@@ -86,26 +86,28 @@
          </div>
      </sec:authorize>
 
-	<c:choose>
-       <c:when test="${show_success_alert}">
-       <div class="alert alert-success">
-           <button type="button" class="close" data-dismiss="alert">&times;</button>
-            ${success_alert_msg}
-       </div>
-       </c:when>
-       <c:when test="${show_error_alert}">
-       <div class="alert alert-danger">
-       <button type="button" class="close" data-dismiss="alert">&times;</button>
-            ${error_alert_msg}
-       </div>
-       </c:when>
-       <c:when test="${show_info_alert}">
-       <div class="alert alert-info">
-       <button type="button" class="close" data-dismiss="alert">&times;</button>
-            ${info_alert_msg}
-       </div>
-      </c:when>
-    </c:choose>
+    <div class="container">
+		<c:choose>
+	       <c:when test="${show_success_alert}">
+	       <div class="alert alert-success">
+	           <button type="button" class="close" data-dismiss="alert">&times;</button>
+	            ${success_alert_msg}
+	       </div>
+	       </c:when>
+	       <c:when test="${show_error_alert}">
+	       <div class="alert alert-danger">
+	       <button type="button" class="close" data-dismiss="alert">&times;</button>
+	            ${error_alert_msg}
+	       </div>
+	       </c:when>
+	       <c:when test="${show_info_alert}">
+	       <div class="alert alert-info">
+	       <button type="button" class="close" data-dismiss="alert">&times;</button>
+	            ${info_alert_msg}
+	       </div>
+	      </c:when>
+	    </c:choose>
+    </div>
 		
 		
 	<!--  Main -->

@@ -89,6 +89,7 @@
          </div>
      </sec:authorize>
 
+    <div class="container">
     <c:choose>
        <c:when test="${show_success_alert}">
        <div class="alert alert-success">
@@ -109,6 +110,7 @@
        </div>
       </c:when>
     </c:choose>
+    </div>
         
         
     <!--  Main -->

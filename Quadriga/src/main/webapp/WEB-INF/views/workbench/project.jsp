@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
@@ -32,19 +31,20 @@
    }
 </style>
 
-<table style="width: 100%">
-    <tr>
+<div class="row">
+
+   
         <!-- Display project details -->
-        <td>
+        <div class="col-md-9">
             <h2>Project: ${project.projectName}</h2>
             <div>${project.description}</div>
             <div style="text-align:right">
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Project
             </a>
             </div>
             
             <div style="text-align:right">
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project URL
+			<a href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Project URL
             </a>
             </div>
             
@@ -66,41 +66,42 @@
 			
             <hr> <!--  Display associated workspace -->
             
-            <strong>Workspaces in this project:</strong>
-            <ul>
+            <h4>Workspaces in this project:</h4>
+            
             <c:forEach var="workspace" items="${workspaceList}">
-				<li class="ws with-icon">
-                    <a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
-                            value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
-                        
-                    <c:out
-                    value="${workspace.description}"></c:out>
-                </li>
+				<div class="panel panel-default">
+                    <div class="panel-body">
+	                    <a
+						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
+	                            value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
+	                        
+	                    <c:out value="${workspace.description}"></c:out>
+                    </div>
+                </div>
             </c:forEach>
             
             <c:forEach var="workspace" items="${collabworkspacelist}">
-			<li  class="ws with-icon"><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
-                    value="${workspace.workspaceName}"></c:out></a> (Collaborator)<br> <c:out
-                    value="${workspace.description}"></c:out></li>
+			     <div class="panel panel-default">
+                    <div class="panel-body">
+				     <a
+						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
+	                    value="${workspace.workspaceName}"></c:out></a> (Collaborator)<br> <c:out
+	                    value="${workspace.description}"></c:out>
+	                </div>
+	              </div>
             </c:forEach>
-            </ul>
             
 				
             <div style="float:right;">
-				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/workspace/add">Add Workspace</a>
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/workspace/add"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Workspace</a>
             </div>
             
             <div style="clear:right;">
-            <c:if test="${empty workspaceList}">
-            There are no workspaces yet. You should create one!
-            </c:if>
-            <c:if test="${empty collabworkspacelist}">
-                You are not collaborating on any workspace.
+            <c:if test="${empty workspaceList and empty collabworkspacelist}">
+                There are no workspaces yet. You should create one!
             </c:if>
             </div>
-            </div>
+            
             <c:choose>
                 <c:when test="${AssignEditorSuccess=='1'}">
                     <font color="blue"> <spring:message
@@ -134,8 +135,6 @@
             </c:choose>
             <div align="left">
                 <hr>
-                To go to the public site, click this link <a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">http://quadriga.asu.edu/sites/${project.unixName}</a>
-                <hr>
                 <c:choose>
                     <c:when test="${owner=='1'}">
                             <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
@@ -151,8 +150,8 @@
                 <c:if test="${owner=='1'}">
                     
 
-					<span class="glyphicon glyphicon-ban-circle"></span>
-                    <a href="#" onclick="return confirmProjectDeletion()">Delete
+					
+                    <a href="#" onclick="return confirmProjectDeletion()"><i class="fa fa-trash" aria-hidden="true"></i> Delete
                         Project</a>
                 </c:if>
             </div>
@@ -185,11 +184,10 @@
 			<div id="dialog-delete-project-confirm" title="Confirm Delete?" style="display: none;">
                 You are about to delete a project, this is not reversible.</br> Do you want to proceed?
             </div>
-        </td>
+        </div>
         
         <!-- Display collaborators -->
-        <td style="width: 200px">
-            <section>
+        <div class="col-md-3">
                 <h3 class="major">
                     <span>Collaborators</span>
                 </h3>
@@ -204,15 +202,10 @@
                 </c:if>
                 <div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
                 <ul class="colltools">
-					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">Add</a></li>
-					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators">Delete</a></li>
-					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/pen.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators">Update</a></li>
+					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</a></li>
+					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-minus-circle" aria-hidden="true"></i> Delete</a></li>
+					<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-pencil" aria-hidden="true"></i> Update</a></li>
                 </ul>
                 </div>
-            </section>
-        </td>
-    </tr>
-    <tr>
-    <td></td>
-    </tr>
-</table>
+        </div>
+   </div>
