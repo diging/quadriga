@@ -66,7 +66,31 @@ a:after {
     padding: 0;
 }
 
+/*
+    Buttons
+*/
 
+.btn-primary {
+  background-color: #3BC492;
+  border-color: #99C7B6;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  background-color: #c0392b;
+  border-color: #b03e3e;
+}
+
+a.list-group-item {
+  color: #3BC492;
+}
+
+.label-default {
+    background-color: #B7B7B7;
+}
 
 /* ==========================================================================
    Wrap Sections

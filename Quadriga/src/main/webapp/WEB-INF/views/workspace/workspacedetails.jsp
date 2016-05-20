@@ -53,6 +53,7 @@
     <div class="col-md-9">
 		<!-- Display workspace details -->
 			<h2>Workspace: ${workspacedetails.workspaceName}</h2>
+			<c:if test="${isDeactivated == true }"><div style="margin-bottom: 15px;"><span class="label label-default" title="This workspace is deactivated."><i class="fa fa-toggle-off"></i> Deactivated</span></div></c:if>
 			<div>${workspacedetails.description}</div>
 			<div style="text-align: right">
 				<a
@@ -110,166 +111,10 @@
 							code="workspace.delete.owner.editor.assigned" /></font>
 				</c:when>
 
-			</c:choose> <br /> <script>
-						$(document)
-								.ready(
-										function() {
+			</c:choose> 
+			<br /> 
 
-											$('a.login-window')
-													.click(
-															function() {
-																location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";
-															});
-
-										});
-			</script> <script>
-							function funConfirmDeletion() {
-								var pos = [ $(window).width() / 4, 50 ];
-								// Define the Dialog and its properties.
-								
-								$("#dialog-confirm")
-									.html(
-											"Are you sure you want to delete the workspace?")
-										.dialog(
-												{
-													resizable : false,
-													modal : true,
-													title : "Delete Workspace",
-													height : 180,
-													width : 650,
-													position : pos,
-													buttons : {
-														"Yes" : function() {
-														$(this).dialog('close');
-															location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteSingleWorkspace/${workspaceid}?projectId=${myprojectid}';
-															return false;
-														},
-														"No" : function() {
-														$(this).dialog('close');
-															return false;
-														}
-													}
-												});
-							}
-						</script>
-
-			<div id="dialog-confirm" title="Confirm ?"></div> <c:if
-				test="${isDeactivated == true}">
-				<a href="#" onclick="return confirmWorkspaceActivation();">
-                                Activate Workspace</a>&nbsp;&nbsp; 
-                        </c:if> <c:if test="${isDeactivated == false }">
-				<font color="#CCCCCC" title="The workspace is already activated.">
-					Activate Workspace&nbsp;&nbsp; </font>
-			</c:if> <c:if test="${isDeactivated == false}">
-				<a href="#" onclick="return confirmWorkspaceDeactivation();">
-                                Deactivate Workspace</a>&nbsp;&nbsp; 
-                        </c:if> <c:if test="${isDeactivated == true }">
-				<font color="#CCCCCC" title="The workspace is already deactivated.">
-					Deactivate Workspace&nbsp;&nbsp; </font>
-			</c:if> <c:if test="${!isDeactivated && isArchived}">
-				<a href="#" onclick="return confirmArchive(false);">Unarchive
-					Workspace</a>&nbsp;&nbsp;
-						</c:if> <c:if test="${!isDeactivated && !isArchived}">
-				<a href="#" onclick="return confirmArchive(true);">Archive
-					Workspace</a>&nbsp;&nbsp;
-						</c:if> <c:if test="${isDeactivated == true}">
-				<a href="#" onclick="return funConfirmDeletion();">Delete
-                                Workspace</a>
-			</c:if> <c:if test="${isDeactivated == false }">
-                            <font color="#CCCCCC"
-                                title="Only deactivated workspaces can be deleted.">Delete
-                                Workspace</font>
-			</c:if> <script>
-				function confirmWorkspaceDeactivation() {
-					// Define the Dialog and its properties.
-					var pos = [ $(window).width() / 4, 50 ];
-					$("#dialog-confirm")
-							.html(
-									"Are you sure you want to deactivate the workspace?")
-							.dialog(
-									{
-										resizable : false,
-										modal : true,
-										title : "Deactivate Workspace",
-										height : 180,
-										width : 650,
-										position : pos,
-										buttons : {
-											"Yes" : function() {
-												$(this).dialog('close');
-												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
-												return false;
-											},
-											"No" : function() {
-												$(this).dialog('close');
-												return false;
-											}
-										}
-									});
-				}
-			</script> <script>
-				function confirmWorkspaceActivation() {
-					// Define the Dialog and its properties.
-					var pos = [ $(window).width() / 4, 50 ];
-					$("#dialog-confirm")
-							.html(
-									"Are you sure you want to activate the workspace?")
-							.dialog(
-									{
-										resizable : false,
-										modal : true,
-										title : "Activate Workspace",
-										height : 180,
-										width : 650,
-										position : pos,
-										buttons : {
-											"Yes" : function() {
-												$(this).dialog('close');
-												location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/activateWorkspace?projectid=${myprojectid}';
-												return false;
-											},
-											"No" : function() {
-												$(this).dialog('close');
-												return false;
-											}
-										}
-									});
-				}
-
-				function confirmArchive(isArchive) {
-					isArchive = !!isArchive;
-					var txt = isArchive ? 'Archive' : 'Unarchive';
-					var pos = [$(window).width() / 4, 50];
-					var url = '${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}';
-					var path = isArchive ? '/archiveworkspace'
-							: '/unarchiveworkspace';
-					var title = isArchive ? 'Archive Workspace'
-							: 'Unarchive Workspace';
-					path += '/${workspaceid}';
-					console.log(url + path)
-					$('#dialog-confirm').html(
-							'Are you sure you want to ' + txt
-									+ ' this workspace?').dialog({
-								resizable: false,
-								modal: true,
-								title: title,
-								height: 180,
-								width: 650,
-								position: pos,
-								buttons: {
-									"Yes": function () {
-										$(this).dialog('close');
-										location.href = url + path;
-										return false;
-									},
-									"No": function () {
-										$(this).dialog('close');
-										return false;
-									}
-								}
-							});
-				}
-			</script> 
+			  
 			<hr> 
 			<h4>Text files in this workspace:</h4>
 			<div class="pull-right" >
@@ -311,35 +156,34 @@
 			</c:choose>
 			<hr> <!-- Display Networks --> <c:choose>
 				<c:when test="${not empty networkList}">
-					<span class="byline">Networks belonging to this workspace</span>
-					<hr>
-					<table style="width: 100%" class="display dataTable">
+					<h4>Networks belonging to this workspace:</h4>
+					
+					<div class="panel panel-default">
+					<table style="width: 100%" class="table">
 						<thead>
 							<tr>
 								<th>Name</th>
-								<th>Network Owner</th>
+								<th>Created by</th>
 								<th>Status</th>
-								<th>Action</th>
 							</tr>
 						</thead>
 
 						<tbody>
 							<c:forEach var="network" items="${networkList}">
 								<tr>
-									<td width="25%" align="center"><input name="items"
-										type="hidden" value="<c:out value="${network.network.networkName}"></c:out>" />
-										<c:out value="${network.network.networkName}"></c:out></td>
-									<td width="25%" align="center"><c:out
+									<td width="25%">
+										<a href="${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.network.networkId}"><i class="fa fa-star"></i> <c:out value="${network.network.networkName}"></c:out></a>
+									</td>
+									<td width="25%"><c:out
 											value="${network.network.creator.userName}"></c:out></td>
-									<td width="25%" align="center"><c:out
+									<td width="25%"><c:out
 											value="${network.network.status}"></c:out></td>
-									<td width="25%" align="center"><input type=button
-										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.network.networkId}'"
-										value='View'></td>
+									
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
+					</div>
 				</c:when>
 				<c:otherwise>
 					<spring:message code="empty.networks" />
@@ -356,7 +200,7 @@
                 <c:forEach var="workspaceCollaborator"
 					items="${workspacedetails.workspaceCollaborators}">
 					<i class="fa fa-user" aria-hidden="true"></i> <c:out
-							value="${workspaceCollaborator.collaborator.userObj.name}"></c:out>
+							value="${workspaceCollaborator.collaborator.userObj.name}"></c:out><br>
 					
 				</c:forEach>
 				</div>
@@ -375,6 +219,9 @@
 			</div>
 		</div>
 	</div>
+	
+<!--  Modals -->
+<!--  add texts modal -->
 <div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog" aria-labelledby="txtModal" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content ">
@@ -390,3 +237,75 @@
     </div>
   </div>
 </div>
+
+<!-- Deactivate workspace modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="deactivate-ws">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Deactivate Workspace</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to deactivate the workspace?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="deactivate-btn">Yes, deactivate!</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Activate Workspace Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="activate-ws">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Activate Workspace</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to activate the workspace?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="activate-btn">Yes, activate!</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Delete Workspace Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="delete-ws">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Delete Workspace</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete the workspace? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="delete-btn">Yes, delete!</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+$(document).ready(function() {
+	$('#deactivate-btn').click(function(event) {
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/deactivateworkspace?projectid=${myprojectid}';
+	});
+	$('#activate-btn').click(function(event) {
+        location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${workspaceid}/activateWorkspace?projectid=${myprojectid}';
+    });
+	$('#delete-btn').click(function(event) {
+        location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteSingleWorkspace/${workspaceid}?projectId=${myprojectid}';
+    });
+	
+});
+</script>

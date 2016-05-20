@@ -41,15 +41,15 @@
 
 						<hr style="margin-top: 20px;">
 						${project.description}
-
+                        
 						<c:if test="${not empty project.projectCollaborators}">
-							<div>Collaborators:</div>
-							<ul>
-								<c:forEach items="${project.projectCollaborators}"
+						    <hr style="margin-bottom: 5px;">
+							<div style="font-size: 14px">Collaborators:<br>
+							     <c:forEach items="${project.projectCollaborators}"
 									var="collaborators">
-									<li>${collaborators.collaborator.userObj.name}</li>
+									<i class="fa fa-user" aria-hidden="true"></i> ${collaborators.collaborator.userObj.name} &nbsp;
 								</c:forEach>
-							</ul>
+							</div>
 						</c:if>
 						</div>
 					</div>

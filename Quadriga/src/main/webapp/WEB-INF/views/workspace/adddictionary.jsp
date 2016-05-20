@@ -77,26 +77,27 @@
 		});
 	});
 </script>
-<h2>Workspace: ${workspacedetails.workspaceName}</h2>
+<h2>Add Dictionaries to Workspace: ${workspacedetails.workspaceName}</h2>
 <hr />
 
-
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
 
 <c:choose>
 	<c:when test="${not empty dictinarylist}">
 
 		<form method="POST">
-
-			<input type=button
-				onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}'"
-				value='Okay'><br /> <input type="submit"
-				value="Add Dictionary"
-				onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/adddictionaries'" />
-
-			<br /> <br />
+            <div class="panel panel-default" style="margin-top: 20px;">
+			<div class="panel-heading">Available Dictionaries</div>
+		    <div class="panel-body">
+		       <p>Select dictionaries to add and then click "Add Dictionaries".</p>
+		       <p>
+		       <input type="submit" class="btn btn-primary" 
+                value="Add Dictionaries"
+                onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/adddictionaries'" />
+		       </p>
+		    </div>
 			<table cellpadding="0" cellspacing="0" border="0"
-				class="display dataTable" width="100%">
-				<!-- <table  class="dataTable" id="pagination1"> -->
+				class="table" width="100%">
 				<thead>
 					<tr>
 						<th align="left"><input type="checkbox" id="selectall">
@@ -109,18 +110,19 @@
 				<tbody>
 					<c:forEach var="dictionary" items="${dictinarylist}">
 						<tr>
-							<td width="15%"><input type="checkbox" class="selected"
+							<td width="60px"><input type="checkbox" class="selected"
 								name="selected" value='<c:out value="${dictionary.dictionaryId}"></c:out>' /></td>
-							<td width="30%" align="center"><input name="items"
+							<td><input name="items"
 								type="hidden" value="<c:out value="${dictionary.dictionaryName}"></c:out>" />
 								<c:out value="${dictionary.dictionaryName}"></c:out></td>
-							<td width="45%" align="justify"><c:out
+							<td><c:out
 									value="${dictionary.description}"></c:out></td>
 						</tr>
 					</c:forEach>
 				</tbody>
 
 			</table>
+			</div>
 		</form>
 	</c:when>
 
