@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <script type="text/javascript">
@@ -21,24 +20,25 @@ $(document).ready(function() {
 </style>
 <header>
 	<h2>Concept Collections</h2>
-	<span class="byline">Manage your concept collections here.</span>
+	<p>Manage your concept collections here.</p>
 </header>
 
 <div>
 <c:if test="${not empty conceptlist}">
-You own these concept collections:
-<ul>
+<h4>You own these concept collections:</h4>
+
    <c:forEach var="concept" items="${conceptlist}">
    
-   <li class="cc">
-   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}">
+   <div class="panel panel-default">
+    <div class="panel-body">
+        <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}">
         <i class="fa fa-list-alt"></i>     
         <c:out value="${concept.conceptCollectionName}"></c:out>
-   </a> <br> 
+        </a> <br> 
         <c:out value="${concept.description}"></c:out>
-   </li>
+   </div>
+   </div>
    </c:forEach>
-</ul>
 </c:if>
 <c:if test="${empty conceptlist}">
 You don't own any concept collections.
@@ -55,15 +55,17 @@ You don't own any concept collections.
     You collaborate on these concept collections:
     <ul>
     <c:forEach var="concept" items="${collaborationlist}">
-    <li class="cc">
+    <div class="panel panel-default">
+    <div class="panel-body">
        <i class="fa fa-list-alt"></i>  
        <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}">
               <c:out value="${concept.conceptCollectionName}"></c:out>
        </a> <br> 
        <c:out value="${concept.description}"></c:out>
-    </li>
+    </div>
+    </div>
     </c:forEach>
-    </ul>
+    
         </c:if>
             <c:if test="${empty collaborationlist}">
           You don't collaborate on any concept collections.

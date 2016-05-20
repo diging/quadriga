@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <style>
@@ -44,11 +43,9 @@
 				<td><input type="submit" value="Assign"></td>
 			</c:if>
 			<c:if test="${empty collaboratinguser}">
-          You don't have any collaborators assigned to concept collection.
-          <ul>
-				<li><input type="button" onClick="submitClick(this.id);"
-					value='Okay'></li>
-			</ul>	   
+          <p>You don't have any collaborators assigned to concept collection.</p>
+          <input class="btn btn-primary" type="button" onClick="submitClick(this.id);"
+					value='Okay'>
 		</c:if>
 		</c:when>
 		<c:otherwise>

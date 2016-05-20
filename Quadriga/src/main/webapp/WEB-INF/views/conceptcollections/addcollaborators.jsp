@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
     
@@ -56,15 +55,14 @@ function onSubmit(){
 </script>
 <form:form  method="POST" name="myForm" commandName="ccCollaborator"
 action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
-<h2>Associate collaborators to collection:</h2>
-<h3>Concept Collection: ${collectionname}</h3>
-<div>${collectiondesc}</div>
+<h2>Add Collaborators to Concept Collection: ${collectionname}</h2>
+
 <c:if test="${not empty nonCollaboratorList}">
 <hr>
 <div class="wrap">
-<div class="ex">
-    <h4>select collaborator</h4>
-	<form:select path="userObj" id="userName">
+<div class="ex" style="margin-right: 20px;">
+    <h4>Select collaborator</h4>
+	<form:select path="userObj" id="userName" class="form-control">
 	    <form:option value="NONE" label="----- Select -----"/>
 	   	<form:options items="${nonCollaboratorList}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
@@ -73,28 +71,29 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 </div> 
 	<br>
 	<div class="ex1">
-	<h4>select access rights</h4>	
-	<ul><form:checkboxes element="li" path="collaboratorRoles" items="${collaboratorRoles}" itemValue="id" itemLabel="displayName"/> </ul>	
+	<h4>Select access rights:</h4>	
+	<form:checkboxes element="div" path="collaboratorRoles" items="${collaboratorRoles}" itemValue="id" itemLabel="displayName"/>	
 	<div class="rolesError"><form:errors path="collaboratorRoles" cssClass="ui-state-error-text"></form:errors></div>
     </div>	
 </div>
 <br/>
-<input type="submit" value="Add">
-<input type="button" value="Okay" onClick="onSubmit()">
+<input class="btn btn-primary" type="submit" value="Add">
+<input class="btn btn-primary" type="button" value="Done" onClick="onSubmit()">
 </c:if>
 <c:if test="${empty nonCollaboratorList}">
 <hr>
  <span class="byline">All collaborators are associated to concept collection</span>
- <input type="button" value="Okay" onClick="onSubmit()">
+ <input type="button" value="Done" onClick="onSubmit()">
 </c:if>
 <c:if test="${not empty ccCollaboratingUsers}">
 <hr>
-<span class="byline">Associated concept collection collaborators :</span>
-<table style="width:100%" class="display dataTable">					
+<h4>Current collaborators:</h4>
+<div class="panel panel-default">
+<table style="width:100%" class="table">					
 	<thead>
 		<tr>	
-			<th align="left">collaborator</th>
-			<th align="left">roles</th>	
+			<th align="left">Collaborator</th>
+			<th align="left">Roles</th>	
 		</tr>
 	</thead>
 	
@@ -111,6 +110,7 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 	</c:forEach>
 	</tbody>
 </table>
+</div>
 </c:if>
 </form:form>
 

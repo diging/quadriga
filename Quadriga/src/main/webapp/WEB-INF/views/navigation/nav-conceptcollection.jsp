@@ -19,7 +19,7 @@ $(function () {
 </script>
 
 <div>
-<a href="${pageContext.servletContext.contextPath}/auth/conceptcollections"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Concept Collections</a>
+<a href="${pageContext.servletContext.contextPath}/auth/conceptcollections"><span class="fa fa-arrow-circle-left"></span> All Concept Collections</a>
 </div>
 
 

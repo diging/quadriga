@@ -106,8 +106,10 @@ public class TransferCCOwnerController {
         collaboratingUser = conceptCollectionManager
                 .showCollaboratingUsers(collectionId);
 
-        for (IConceptCollectionCollaborator collabuser : collaboratingUser) {
-            userList.add(collabuser.getCollaborator().getUserObj());
+        if (collaboratingUser  != null) {
+            for (IConceptCollectionCollaborator collabuser : collaboratingUser) {
+                userList.add(collabuser.getCollaborator().getUserObj());
+            }
         }
 
         model.getModelMap().put("collaboratinguser", userList);

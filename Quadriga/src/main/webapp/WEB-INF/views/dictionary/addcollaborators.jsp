@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
@@ -59,7 +58,7 @@ function onSubmit(){
 
 <form:form method="POST" name="myForm" commandName="collaborator"
  action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators">
-<h2>Associate collaborators to dictionary:</h2>
+<h2>Add collaborators to dictionary:</h2>
 <h3>Dictionary: ${dictionaryname}</h3>
 <div>${dictionarydesc}</div>
 	<c:if test="${not empty nonCollaboratingUsers}">

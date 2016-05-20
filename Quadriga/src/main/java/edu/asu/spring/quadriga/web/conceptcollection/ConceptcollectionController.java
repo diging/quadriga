@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.conceptcollection;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -203,8 +204,17 @@ public class ConceptcollectionController {
 
         ConceptpowerReply conReply = conceptControllerManager.search(
                 req.getParameter("name"), req.getParameter("pos"));
-        if (conReply != null)
+        if (conReply != null) {
+            List<ConceptEntry> lists = conReply.getConceptEntry();
+            lists.sort(new Comparator<ConceptEntry>() {
+
+                @Override
+                public int compare(ConceptEntry o1, ConceptEntry o2) {
+                    return o1.getLemma().toLowerCase().compareTo(o2.getLemma().toLowerCase());
+                }
+            });
             model.addAttribute("result", conReply.getConceptEntry());
+        }
         model.addAttribute("collectionid", collection_id);
         return "auth/searchitems";
     }
