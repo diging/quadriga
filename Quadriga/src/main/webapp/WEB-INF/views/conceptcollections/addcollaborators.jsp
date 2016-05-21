@@ -57,8 +57,16 @@ function onSubmit(){
 action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
 <h2>Add Collaborators to Concept Collection: ${collectionname}</h2>
 
-<c:if test="${not empty nonCollaboratorList}">
+<div class="back-nav">
 <hr>
+<p>
+   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}"><i class="fa fa-arrow-circle-left"></i> Back to Concept Collection</a>
+</p>
+<hr>
+</div>
+
+<c:if test="${not empty nonCollaboratorList}">
+
 <div class="wrap">
 <div class="ex" style="margin-right: 20px;">
     <h4>Select collaborator</h4>
@@ -78,12 +86,10 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 </div>
 <br/>
 <input class="btn btn-primary" type="submit" value="Add">
-<input class="btn btn-primary" type="button" value="Done" onClick="onSubmit()">
 </c:if>
 <c:if test="${empty nonCollaboratorList}">
 <hr>
  <span class="byline">All collaborators are associated to concept collection</span>
- <input type="button" value="Done" onClick="onSubmit()">
 </c:if>
 <c:if test="${not empty ccCollaboratingUsers}">
 <hr>
