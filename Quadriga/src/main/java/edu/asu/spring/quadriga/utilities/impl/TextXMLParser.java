@@ -81,7 +81,7 @@ public class TextXMLParser implements ITextXMLParser {
 
         if (accessibility.isEmpty()) {
             throw new TextFileParseException("Specify accessibility options in the XML.");
-        } else if (!(accessibility.equalsIgnoreCase(ETextAccessibility.valueOf("PUBLIC").toString()) || accessibility.equalsIgnoreCase(ETextAccessibility.valueOf("PRIVATE").toString()))) {
+        } else if (!(accessibility.equalsIgnoreCase(ETextAccessibility.PUBLIC.name()) || accessibility.equalsIgnoreCase(ETextAccessibility.PRIVATE.name()))) {
             throw new TextFileParseException("Please set the proper accessibility option.");
         }
 
@@ -99,7 +99,7 @@ public class TextXMLParser implements ITextXMLParser {
         txtFile.setRefId(refId);
         txtFile.setWorkspaceId(wsId);
         txtFile.setProjectId(projId);
-        txtFile.setAccessibility(accessibility);
+        txtFile.setAccessibility(ETextAccessibility.valueOf(accessibility.toUpperCase()));
 
         return txtFile;
     }

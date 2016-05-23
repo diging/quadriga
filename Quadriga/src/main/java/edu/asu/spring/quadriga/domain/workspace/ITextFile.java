@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
+
 /**
  * @author Nischal Samji Backing bean for Text File Operations.
  *
@@ -30,9 +32,9 @@ public interface ITextFile {
 
     public abstract void setFileContent(String fileContent);
     
-    public abstract String getAccessibility();
+    public abstract ETextAccessibility getAccessibility();
 
-    public abstract void setAccessibility(String accessibility);
+    public abstract void setAccessibility(ETextAccessibility accessibility);
 
     public abstract String getTextFileURI();
 

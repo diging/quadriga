@@ -53,7 +53,6 @@ public class AddTextController {
         binder.setValidator(txtValidator);
     }
 
-    private List<String> accList = new ArrayList<>(Arrays.asList("Select", "Private", "Public"));
     /**
      * Method to generate a view to generate a view to add new text file.
      * 
@@ -81,7 +80,6 @@ public class AddTextController {
         model.getModelMap().put("workspaceId", workspaceid);
         model.getModelMap().put("myProjectId", projid);
         model.getModelMap().put("success", "0");
-        model.getModelMap().put("accessibilityList",accList);
         return model;
     }
 
@@ -120,7 +118,6 @@ public class AddTextController {
         if (result.hasErrors()) {
             model.setViewName("auth/workbench/workspace/addtext");
             model.getModelMap().put("textfile", txtFile);
-            model.getModelMap().put("accessibilityList", accList);
         } else {
             model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/" + workspaceid);
             txtFile.setWorkspaceId(workspaceid);

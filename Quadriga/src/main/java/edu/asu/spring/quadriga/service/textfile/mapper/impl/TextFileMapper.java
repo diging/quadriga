@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.textfile.mapper.impl;
 
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
@@ -23,7 +24,7 @@ public class TextFileMapper implements ITextFileMapper {
         txtFile.setFileName(tfDTO.getFilename());
         txtFile.setProjectId(tfDTO.getProjectId());
         txtFile.setWorkspaceId(tfDTO.getWorkspaceId());
-        txtFile.setAccessibility(tfDTO.getAccessibility());
+        txtFile.setAccessibility(ETextAccessibility.valueOf(tfDTO.getAccessibility()));
         return txtFile;
     }
 
@@ -35,7 +36,7 @@ public class TextFileMapper implements ITextFileMapper {
         tfDTO.setProjectId(txtFile.getProjectId());
         tfDTO.setRefId(txtFile.getRefId());
         tfDTO.setWorkspaceId(txtFile.getWorkspaceId());
-        tfDTO.setAccessibility(txtFile.getAccessibility());
+        tfDTO.setAccessibility(txtFile.getAccessibility().name());
         return tfDTO;
     }
 
