@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
@@ -71,7 +72,7 @@ public class TextXMLParserTest {
         Assert.assertEquals("thishandle", txtFile.getRefId());
         Assert.assertEquals("This is the actual textfile content", txtFile.getFileContent());
         Assert.assertEquals("newfile", txtFile.getFileName());
-        Assert.assertEquals("PUBLIC", txtFile.getAccessibility());
+        Assert.assertEquals(ETextAccessibility.PUBLIC, txtFile.getAccessibility());
     }
 
     @Test
