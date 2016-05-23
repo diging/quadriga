@@ -3,9 +3,6 @@ package edu.asu.spring.quadriga.web.conceptcollection;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -76,7 +73,6 @@ public class DeleteCCCollaboratorController {
         ModelAndView model;
         ModifyCollaboratorForm collaboratorForm;
 
-        String userName = principal.getName();
         model = new ModelAndView("auth/conceptcollection/deletecollaborators");
 
         // fetch the concept collection details
@@ -86,10 +82,24 @@ public class DeleteCCCollaboratorController {
         collaboratorForm = collaboratorFormFactory
                 .createCollaboratorFormObject();
 
-        List<ModifyCollaborator> modifyCollaborator = collaboratorFormManager
-                .modifyCCCollaboratorManager(collectionid);
+        List<ModifyCollaborator> modifyCollaborators = collaboratorFormManager
+                .getConceptCollectionCollaborators(collectionid);
+        
+        // if current user is collaborator, remove from list
+        // collaborators shouldn't be able to remove themselves 
+        // should be done through a different workflow
+        ModifyCollaborator currentUser = null;
+        for (ModifyCollaborator collaborator : modifyCollaborators) {
+            if (collaborator.getUserName().equals(principal.getName())) {
+                currentUser = collaborator;
+                break;
+            }
+        }
+        if (currentUser != null) {
+            modifyCollaborators.remove(currentUser);
+        }
 
-        collaboratorForm.setCollaborators(modifyCollaborator);
+        collaboratorForm.setCollaborators(modifyCollaborators);
 
         model.getModelMap().put("collectionid", collectionid);
         model.getModelMap().put("collectionname",
@@ -135,7 +145,7 @@ public class DeleteCCCollaboratorController {
                     conceptCollection.getDescription());
 
             collaborators = collaboratorFormManager
-                    .modifyCCCollaboratorManager(collectionid);
+                    .getConceptCollectionCollaborators(collectionid);
             collaboratorForm.setCollaborators(collaborators);
             model.addAttribute("success", 0);
             model.addAttribute("error", 1);

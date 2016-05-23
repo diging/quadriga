@@ -137,20 +137,14 @@ public class AddCCCollaboratorController {
             @PathVariable("collectionid") String collectionid,
             Principal principal) throws QuadrigaAccessException,
             QuadrigaStorageException {
-        ICollaborator collaborator;
-        ModelAndView model;
-        List<IUser> nonCollaboratorList;
-        List<IQuadrigaRole> collaboratorRoleList;
-        List<IConceptCollectionCollaborator> ccCollaboratingUsers;
-
-        String userName = principal.getName();
-        model = new ModelAndView("auth/conceptcollection/addcollaborators");
+        
+        ModelAndView model = new ModelAndView("auth/conceptcollection/addcollaborators");
 
         // fetch the concept collection details
         IConceptCollection conceptCollection = conceptControllerManager.getConceptCollection(collectionid);
 
         // fetch the non collaborators and add it to the model
-        nonCollaboratorList = collaboratorManager.getUsersNotCollaborating(collectionid);
+        List<IUser> nonCollaboratorList = collaboratorManager.getUsersNotCollaborating(collectionid);
 
         // remove the restricted user
         Iterator<IUser> userIterator = nonCollaboratorList.iterator();
@@ -175,28 +169,16 @@ public class AddCCCollaboratorController {
         model.getModelMap().put("collectiondesc",
                 conceptCollection.getDescription());
 
-        collaborator = collaboratorFactory.createCollaborator();
+        ICollaborator collaborator = collaboratorFactory.createCollaborator();
         collaborator.setUserObj(userFactory.createUserObject());
-        // ccCollaborator =
-        // ccCollaboratorFactory.createConceptCollectionCollaboratorObject();
-        // ccCollaborator.setCollaborator(collaboratorFactory.createCollaborator());
-        // ccCollaborator.getCollaborator().setUserObj(userFactory.createUserObject());
         model.getModelMap().put("ccCollaborator", collaborator);
 
-        collaboratorRoleList = collaboratorRoleManager
+        List<IQuadrigaRole> collaboratorRoleList = collaboratorRoleManager
                 .getQuadrigaRoles(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES);
-        Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoleList
-                .iterator();
-        while (collabRoleIterator.hasNext()) {
-            IQuadrigaRole collabRole = collabRoleIterator.next();
-            if (collabRole.getId().equals(RoleNames.ROLE_CC_COLLABORATOR_ADMIN)) {
-                collabRoleIterator.remove();
-            }
-        }
         model.getModelMap().put("collaboratorRoles", collaboratorRoleList);
 
         // TODO: showCollaboratingUsers() should be changed with mapper
-        ccCollaboratingUsers = conceptControllerManager
+        List<IConceptCollectionCollaborator> ccCollaboratingUsers = conceptControllerManager
                 .showCollaboratingUsers(collectionid);
         model.getModelMap().put("ccCollaboratingUsers", ccCollaboratingUsers);
         return model;
@@ -223,8 +205,6 @@ public class AddCCCollaboratorController {
             @Validated @ModelAttribute("ccCollaborator") Collaborator collaborator,
             BindingResult result) throws QuadrigaStorageException,
             QuadrigaAccessException {
-        List<IUser> nonCollaboratorList;
-        List<IQuadrigaRole> collaboratorRoleList;
         ModelAndView model = new ModelAndView(
                 "auth/conceptcollection/addcollaborators");
 
@@ -234,10 +214,9 @@ public class AddCCCollaboratorController {
 
         model.getModelMap().put("collectionname",
                 conceptCollection.getConceptCollectionName());
-        model.getModelMap().put("collectiondesc",
-                conceptCollection.getDescription());
-
+        
         model.getModelMap().put("collectionid", collectionid);
+        
         if (result.hasErrors()) {
             model.getModelMap().put("collaborator", collaborator);
         } else {
@@ -247,7 +226,7 @@ public class AddCCCollaboratorController {
                     collaboratorFactory.createCollaborator());
         }
 
-        nonCollaboratorList = collaboratorManager.getUsersNotCollaborating(collectionid);
+        List<IUser> nonCollaboratorList = collaboratorManager.getUsersNotCollaborating(collectionid);
         // remove the restricted user
         Iterator<IUser> userIterator = nonCollaboratorList.iterator();
         while (userIterator.hasNext()) {
@@ -263,16 +242,9 @@ public class AddCCCollaboratorController {
         }
         model.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
 
-        collaboratorRoleList = collaboratorRoleManager
+        List<IQuadrigaRole> collaboratorRoleList = collaboratorRoleManager
                 .getQuadrigaRoles(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES);
-        Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoleList
-                .iterator();
-        while (collabRoleIterator.hasNext()) {
-            IQuadrigaRole collabRole = collabRoleIterator.next();
-            if (collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN)) {
-                collabRoleIterator.remove();
-            }
-        }
+        
         model.getModelMap().put("collaboratorRoles", collaboratorRoleList);
 
         // TODO: showCollaboratingUsers() should be changed with mapper
