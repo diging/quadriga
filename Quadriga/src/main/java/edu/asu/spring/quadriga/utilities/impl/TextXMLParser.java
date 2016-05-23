@@ -17,6 +17,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.TextFileParseException;
@@ -80,7 +81,7 @@ public class TextXMLParser implements ITextXMLParser {
 
         if (accessibility.isEmpty()) {
             throw new TextFileParseException("Specify accessibility options in the XML.");
-        } else if (!(accessibility.equalsIgnoreCase("public") || accessibility.equalsIgnoreCase("private"))) {
+        } else if (!(accessibility.equalsIgnoreCase(ETextAccessibility.valueOf("PUBLIC").toString()) || accessibility.equalsIgnoreCase(ETextAccessibility.valueOf("PRIVATE").toString()))) {
             throw new TextFileParseException("Please set the proper accessibility option.");
         }
 
