@@ -6,25 +6,19 @@
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
-<script type="text/javascript">
-$(function () {
- $('#dictionarymenu').jstree().on("select_node.jstree", function (e, data) {
-	   var i, j = [];
-	   for(i = 0, j = data.selected.length; i < j; i++) {
-		   $('#dictionarymenu').jstree().toggle_node(data.instance.get_node(data.selected[i]));
-		}
-     document.location = data.instance.get_node(data.node, true).children('a').attr('href');
- });
-});
-</script>
-<h2 class="major">
-	<span>Menu</span>
-</h2>
-<div id = "dictionarymenu">
-<ul>
-	<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'>
-	<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionary">
-			Delete Dictionary</a>
-	</li>
-</ul>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Tools</h3>
+	</div>
+	<div class="list-group">
+		<a class="list-group-item"
+			href="${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionary">
+			<i class="fa fa-ban"></i> Delete Dictionaries
+		</a>
+		<a class="list-group-item"
+        href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary"><i class="fa fa-plus-circle"></i> Add
+        Dictionary</a>
+        </div>
+	
 </div>

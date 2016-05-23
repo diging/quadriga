@@ -234,6 +234,7 @@
 	<definition name="base.definition.workbench.nonav" extends="base.definition.nonav">
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>
+	
 	<!-- changing the skeleton to have left navigation -->
 	<definition name="auth/workbench" extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Workbench" />
@@ -409,7 +410,7 @@
 	</definition>
 
 	<definition name="auth/workbench/project/adddictionaries"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
@@ -528,6 +529,9 @@
 	<definition name="base.definition.dictionaries.nav" extends="base.definition.leftnav">
 		<put-attribute name="currentPage" value="dictionaries" />
 	</definition>
+	<definition name="base.definition.dictionaries.nonav" extends="base.definition.nonav">
+        <put-attribute name="currentPage" value="dictionaries" />
+    </definition>
 
 	<definition name="auth/dictionaries" extends="base.definition.dictionaries.nav">
 		<put-attribute name="title" value="Quadriga Dictionary" />
@@ -546,7 +550,7 @@
 			value="/WEB-INF/views/dictionary/dictionaryChildCollab.jsp" />
 	</definition>
 
-	<definition name="auth/dictionaries/addDictionary" extends="base.definition.dictionaries">
+	<definition name="auth/dictionaries/addDictionary" extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Add Dictionary" />
 		<put-attribute name="content"
@@ -560,7 +564,7 @@
 			value="/WEB-INF/views/dictionary/updatedictionarydetails.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/deleteDictionary"
-		extends="base.definition.dictionaries">
+		extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Delete Dictionary" />
 		<put-attribute name="content"

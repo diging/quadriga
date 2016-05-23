@@ -6,25 +6,25 @@
 
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-			<li ${currentPage == "home" ? "class=\"current_page_item\"" : ""}><a
+			<li ${currentPage == "home" ? "class=\"active\"" : ""}><a
 				href="${pageContext.servletContext.contextPath}/auth/home">Home</a></li>
 		</sec:authorize>
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li
-				${currentPage == "workbench" ? "class=\"current_page_item\"" : ""}><a
+				${currentPage == "workbench" ? "class=\"active\"" : ""}><a
 				href="${pageContext.servletContext.contextPath}/auth/workbench">Workbench</a></li>
 		</sec:authorize>
 
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li
-				class="${currentPage == "conceptCollections" ? "current_page_item" : ""}">
+				class="${currentPage == "conceptCollections" ? "active" : ""}">
 				<a class="dropdown-main"
 				href="${pageContext.servletContext.contextPath}/auth/conceptcollections">Concept
 					Collections</a>
 			</li>
-			<li>
+			<li class="${currentPage == "conceptCollections" ? "active" : ""}">
 			   <a class="dropdown-caret dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			     <span class="caret"></span>
@@ -41,11 +41,11 @@
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li
-				${currentPage == "dictionaries" ? "class=\"current_page_item\"" : ""}>
+				${currentPage == "dictionaries" ? "class=\"active\"" : ""}>
 				<a class="dropdown-main"
 				href="${pageContext.servletContext.contextPath}/auth/dictionaries">Dictionaries</a>
 			</li>
-			<li>
+			<li ${currentPage == "dictionaries" ? "class=\"active\"" : ""}>
                <a class="dropdown-caret dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <span class="caret"></span>
@@ -61,11 +61,11 @@
 
 		<sec:authorize
 			access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-			<li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}>
+			<li ${currentPage == "networks" ? "class=\"active\"" : ""}>
 			<a class="dropdown-main"
 				href="${pageContext.servletContext.contextPath}/auth/networks">Networks</a>
 			</li>
-			<li>
+			<li ${currentPage == "networks" ? "class=\"active\"" : ""}>
                <a class="dropdown-caret dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <span class="caret"></span>
@@ -87,7 +87,7 @@
 		</sec:authorize>-->
 
 		<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
-			<li ${currentPage == "admin" ? "class=\"current_page_item\"" : ""}><a
+			<li ${currentPage == "admin" ? "class=\"active\"" : ""}><a
 				href="${pageContext.servletContext.contextPath}/auth/users/manage">User
 					Management</a></li>
 		</sec:authorize>

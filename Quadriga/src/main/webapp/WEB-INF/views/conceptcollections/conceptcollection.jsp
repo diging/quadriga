@@ -1,25 +1,10 @@
 <%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("ul.pagination1").quickPagination({
-			pageSize : "5"
-		});
-	});
-	$(function() {
-		$("#tabs").tabs();
-	});
-</script>
-<style>
-.tabs {
-	font-size: 80%;
-}
-</style>
-<header>
-	<h2>Concept Collections</h2>
-	<p>Manage your concept collections here.</p>
-</header>
+
+<h2>Concept Collections</h2>
+<p>Manage your concept collections here.</p>
+
 
 <div>
 	<c:if test="${not empty conceptlist}">

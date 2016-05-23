@@ -80,49 +80,7 @@ public class ConceptcollectionController {
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-
         binder.setValidator(validator);
-    }
-
-    public IConceptCollectionManager getConceptControllerManager() {
-        return conceptControllerManager;
-    }
-
-    public void setConceptControllerManager(
-            IConceptCollectionManager conceptControllerManager) {
-        this.conceptControllerManager = conceptControllerManager;
-    }
-
-    public CollectionsValidator getValidator() {
-        return validator;
-    }
-
-    public void setValidator(CollectionsValidator validator) {
-        this.validator = validator;
-    }
-
-    public IConceptCollectionFactory getCollectionFactory() {
-        return collectionFactory;
-    }
-
-    public void setCollectionFactory(IConceptCollectionFactory collectionFactory) {
-        this.collectionFactory = collectionFactory;
-    }
-
-    public IConceptFactory getConceptFactory() {
-        return conceptFactory;
-    }
-
-    public void setConceptFactory(IConceptFactory conceptFactory) {
-        this.conceptFactory = conceptFactory;
-    }
-
-    public IUserManager getUsermanager() {
-        return usermanager;
-    }
-
-    public void setUsermanager(IUserManager usermanager) {
-        this.usermanager = usermanager;
     }
 
     /**
@@ -142,27 +100,7 @@ public class ConceptcollectionController {
         return "auth/conceptcollections";
     }
 
-    /**
-     * This is used to fetch the details of a concept from database and display
-     * 
-     * @param collection_id
-     * @param model
-     * @param principal
-     * @return Returns the list of concept collections of user to the view
-     * @throws QuadrigaStorageException
-     * @throws QuadrigaAccessException
-     * @throws JSONException
-     */
-    @RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
-    public String conceptDetailsHandler(
-            @PathVariable("collection_id") String collection_id,
-            ModelMap model, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException,
-            JSONException {
-
-        fillModel(collection_id, model, principal.getName());
-        return "auth/conceptcollections/details";
-    }
+    
 
     private void fillModel(String collectionId, ModelMap model, String username)
             throws QuadrigaStorageException, QuadrigaAccessException,
