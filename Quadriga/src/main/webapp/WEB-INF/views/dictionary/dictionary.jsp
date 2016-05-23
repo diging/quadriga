@@ -234,150 +234,159 @@
 }
 </style>
 
-<table style="width: 100%">
-	<tr>
-		<td style="width: 90%">
-			<div>
-				<h2>Dictionary: ${dictionary.dictionaryName}</h2>
-				<div>${dictionary.description}</div>
-				<br />
-				<div class="user">
-					Owned by: ${dictionary.owner.name}
-					<c:if test="${owner}">(<a
-							href="${pageContext.servletContext.contextPath}/auth/dictionaries/transfer/${dictionary.dictionaryId}">Change</a>)</c:if>
-				</div>
-				<br />
-				<div id="html"></div>
-				<input type="button"
-					onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
-					value='Okay'> <input type="button"
-					onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.dictionaryId}'"
-					value="Edit"> <input type="hidden" id="hidden"
-					value="${dictionary.dictionaryId}" />
+<div class="row">
+	<div class="col-md-9">
+		<div>
+			<h2>Dictionary: ${dictionary.dictionaryName}</h2>
+			<div>${dictionary.description}</div>
+			<div style="text-align:right">
+                    <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.dictionaryId}"> 
+                      <i class="fa fa-pencil-square-o"></i> Edit Dictionary
+                    </a>
+                </div>
+			<br />
+			<div class="user">
+				Owned by: ${dictionary.owner.name}
+				<c:if test="${owner}">(<a
+						href="${pageContext.servletContext.contextPath}/auth/dictionaries/transfer/${dictionary.dictionaryId}">Change</a>)</c:if>
 			</div>
-			<hr> <c:choose>
-				<c:when test="${additemsuccess=='1'}">
-					<font color="blue"> <spring:message code="add.items.success" /></font>
+			<br />
+			<div id="html"></div>
+			<input type="hidden" id="hidden"
+				value="${dictionary.dictionaryId}" />
+		</div>
+		<hr>
+		<c:choose>
+			<c:when test="${additemsuccess=='1'}">
+				<font color="blue"> <spring:message code="add.items.success" /></font>
 
+			</c:when>
+			<c:when test="${additemsuccess=='2'}">
+				<font color="red"><spring:message code="add.noitems.fail" /></font>
+
+			</c:when>
+			<c:when test="${additemsuccess=='0'}">
+				<font color="red"><c:out value="${errormsg}"></c:out></font>
+
+			</c:when>
+
+			<c:otherwise>
+
+			</c:otherwise>
+		</c:choose>
+		<c:choose>
+			<c:when test="${delsuccess=='1'}">
+				<font color="blue"> <spring:message
+						code="delete.items.success" /></font>
+
+			</c:when>
+
+			<c:when test="${delsuccess=='0'}">
+				<font color="red"><spring:message code="delete.items.fail" /></font>
+
+			</c:when>
+			<c:otherwise>
+
+
+			</c:otherwise>
+		</c:choose>
+		<c:choose>
+			<c:when test="${updatesuccess=='1'}">
+				<font color="blue"> <spring:message
+						code="update.items.success" /></font>
+
+			</c:when>
+
+			<c:when test="${updatesuccess=='0'}">
+				<font color="red"><spring:message code="update.items.fail" /></font>
+
+			</c:when>
+			<c:otherwise>
+			</c:otherwise>
+		</c:choose>
+		<div>
+			<c:choose>
+				<c:when test="${not empty dictionaryItemList}">
+
+					<form method="POST">
+
+						<a class="btn btn-primary btn-sm"
+							href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}"
+						 ><i class="fa fa-plus"></i> Add Words</a> 
+						<button class="btn btn-primary btn-sm" class="btn btn-primary"
+							onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}'" ><i class="fa fa-minus"></i> Delete Words</button>
+
+						<br /> <br />
+						<table class="table" style="font-size: 13px;">
+							<!-- <table  class="dataTable" id="pagination1"> -->
+							<thead>
+								<tr>
+									<th width="50px" align="left"><input type="checkbox" title="Select/Deselect All" id="selectall"></th>
+									<th>Items</th>
+									<th>ID</th>
+									<th>Pos</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<c:forEach var="dictionaryItem" items="${dictionaryItemList}">
+									<tr>
+										<td><input type="checkbox" class="selected"
+											name="selected"
+											value='<c:out value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out>' /></td>
+										<td width="25%" ><input name="items"
+											type="hidden"
+											value="<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out>" />
+											<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out></td>
+										<td width="25%"><c:out
+												value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out></td>
+										<td width="25%"><c:out
+												value="${dictionaryItem.dictionaryItem.pos}"></c:out></td>
+
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</form>
 				</c:when>
-				<c:when test="${additemsuccess=='2'}">
-					<font color="red"><spring:message code="add.noitems.fail" /></font>
-
-				</c:when>
-				<c:when test="${additemsuccess=='0'}">
-					<font color="red"><c:out value="${errormsg}"></c:out></font>
-
-				</c:when>
-
 				<c:otherwise>
-
-				</c:otherwise>
-			</c:choose> <c:choose>
-				<c:when test="${delsuccess=='1'}">
-					<font color="blue"> <spring:message
-							code="delete.items.success" /></font>
-
-				</c:when>
-
-				<c:when test="${delsuccess=='0'}">
-					<font color="red"><spring:message code="delete.items.fail" /></font>
-
-				</c:when>
-				<c:otherwise>
-
-
-				</c:otherwise>
-			</c:choose> <c:choose>
-				<c:when test="${updatesuccess=='1'}">
-					<font color="blue"> <spring:message
-							code="update.items.success" /></font>
-
-				</c:when>
-
-				<c:when test="${updatesuccess=='0'}">
-					<font color="red"><spring:message code="update.items.fail" /></font>
-
-				</c:when>
-				<c:otherwise>
+				    <p><spring:message code="empty.dictionary.items" /></p>
+				    
+					<input type=button class="btn btn-primary"
+						onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"
+						value='Add Items' />
+					<br>
+					
 				</c:otherwise>
 			</c:choose>
-			<div>
-				<c:choose>
-					<c:when test="${not empty dictionaryItemList}">
+		</div>
+	</div>
+	<div class="col-md-3">
+		<h3 class="major">
+			<span>Collaborators</span>
+		</h3>
+		<ul>
+			<c:forEach var="collab" items="${collaboratingUsers}">
+				<li><i class="fa fa-user"></i> <c:out
+						value="${collab.collaborator.userObj.name}" /></li>
+			</c:forEach>
+		</ul>
+		<div style="border-top: dashed 1px #e7eae8; padding: 5px;">
+			<ul class="colltools">
+				<li><a
+					href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showAddCollaborators"><i
+						class="fa fa-plus-circle"></i> Add</a></li>
+				<li><a
+					href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showDeleteCollaborators"><i
+						class="fa fa-minus-circle"></i> Delete</a></li>
+				<li><a
+					href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/updatecollaborators"><i
+						class="fa fa-pencil"></i> Update</a></li>
+			</ul>
+		</div>
+	</div>
 
-						<form method="POST">
-
-							<input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"
-								value='Add Items' /> <input type="submit" value="Delete Items"
-								onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}'" />
-
-							<input type="submit" value="Update Items"
-								onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/updateDictionaryItems/${dictionaryid}'" />
-							<br /> <br />
-							<table class="display dataTable">
-								<!-- <table  class="dataTable" id="pagination1"> -->
-								<thead>
-									<tr>
-										<th align="left"><input type="checkbox" id="selectall"></th>
-										<th>Items</th>
-										<th>ID</th>
-										<th>Pos</th>
-									</tr>
-								</thead>
-
-								<tbody>
-									<c:forEach var="dictionaryItem" items="${dictionaryItemList}">
-										<tr>
-											<td><input type="checkbox" class="selected"
-												name="selected"
-												value='<c:out value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out>' /></td>
-											<td width="25%" align="center"><input name="items"
-												type="hidden"
-												value="<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out>" />
-												<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out></td>
-											<td width="25%" align="justify"><c:out
-													value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out></td>
-											<td width="25%" align="center"><c:out
-													value="${dictionaryItem.dictionaryItem.pos}"></c:out></td>
-
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</form>
-					</c:when>
-					<c:otherwise>
-						<input type=button
-							onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"
-							value='Add Items' />
-						<br>
-						<spring:message code="empty.dictionary.items" />
-					</c:otherwise>
-				</c:choose>
-			</div>
-		</td>
-		<td style="width: 10%">
-			<section>
-				<h3 class="major">
-					<span>Collaborators</span>
-				</h3>
-				<ul>
-					<c:forEach var="collab" items="${collaboratingUsers}">
-						<li><i class="fa fa-user"></i> <c:out value="${collab.collaborator.userObj.name}" /></li>
-					</c:forEach>
-				</ul>
-				<div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
-                <ul class="colltools">
-                    <li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showAddCollaborators"><i class="fa fa-plus-circle"></i> Add</a></li>
-                    <li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showDeleteCollaborators"><i class="fa fa-minus-circle"></i> Delete</a></li>
-                    <li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/updatecollaborators"><i class="fa fa-pencil"></i> Update</a></li>
-                </ul>
-                </div>
-			</section>
-		</td>
-	</tr>
-</table>
+</div>
 
 <div id="dlgConfirm" title="Confirmation" style="display: none">
 	<p>Do you wanna add concept collection to this project?</p>

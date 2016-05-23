@@ -43,27 +43,9 @@ public class DictionaryItemSearchAddController {
 			.getLogger(DictionaryItemSearchAddController.class);
 
 	@Autowired
-	IUserManager usermanager;
-
-	public IUserManager getUsermanager() {
-		return usermanager;
-	}
-
-	public void setUsermanager(IUserManager usermanager) {
-		this.usermanager = usermanager;
-	}
-
-	public IDictionaryManager getDictonaryManager() {
-		return dictionaryManager;
-	}
-
-	public void setDictonaryManager(IDictionaryManager dictonaryManager) {
-		this.dictionaryManager = dictonaryManager;
-	}
+	private IUserManager usermanager;
 
 	
-	List<DictionaryEntry> dictionaryEntryList = null;
-
 	/**
 	 * Handles the add dictionary item page
 	 * 

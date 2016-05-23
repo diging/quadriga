@@ -587,7 +587,7 @@
 			value="/WEB-INF/views/dictionary/adddictionarystatus.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/addDictionaryItems"
-		extends="base.definition.dictionaries">
+		extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Add Dictionary Item" />
 		<put-attribute name="content"
@@ -649,10 +649,11 @@
 	<!-- changing dictionary collaborators menu to the left side -->
 
 	<definition name="auth/dictionary/dictionary" extends="base.definition.leftnav">
+	    <put-attribute name="currentPage" value="dictionaries" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-dictionary.jsp" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/dictionary/dictionaryChild.jsp" />
+			value="/WEB-INF/views/dictionary/dictionary.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/showAddCollaborators"
 		extends="base.definition.dictionaries">
