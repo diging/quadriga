@@ -1,6 +1,9 @@
 package edu.asu.spring.quadriga.web.workspace;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -71,6 +74,7 @@ public class AddTextController {
     public ModelAndView addTextFileForm(@PathVariable("workspaceid") String workspaceid,
             @PathVariable("projectid") String projid) throws QuadrigaStorageException, QuadrigaAccessException {
 
+        
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
         model.getModelMap().put("textfile", textFileFactory.createTextFileObject());
         model.getModelMap().put("workspaceId", workspaceid);
@@ -107,6 +111,7 @@ public class AddTextController {
             RedirectAttributes redirectAttributes)
                     throws QuadrigaAccessException, QuadrigaStorageException {
 
+        
         ModelAndView model = new ModelAndView();
         model.getModelMap().put("workspaceId", workspaceid);
         model.getModelMap().put("myProjectId", projid);

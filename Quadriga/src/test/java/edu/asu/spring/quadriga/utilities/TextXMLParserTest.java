@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
@@ -46,17 +47,17 @@ public class TextXMLParserTest {
         MockitoAnnotations.initMocks(this);
 
         wellFormedXML = new String(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile><text>This is the actual textfile content</text><handle>thishandle</handle><file_name>newfile</file_name></textfile>");
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile><text>This is the actual textfile content</text><handle>thishandle</handle><file_name>newfile</file_name><accessibility>public</accessibility></textfile>");
         malformedXML = new String(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile>This is the actual textfile content</text><handle>thishandle</handle><file_name>newfile</file_name></textfile>");
         invalidXML = new String(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile><text>This is the actual textfile content</text><handle>thishandle</handle><file_name></file_name></textfile>");
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile><text>This is the actual textfile content</text><handle>thishandle</handle><file_name></file_name><accessibility>public</accessibility></textfile>");
         missingXML = new String(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?><textfile><handle>thishandle</handle><file_name>newfile</file_name></textfile>");
 
         String projid = "PROJ_XYZ_WERT";
         String wsid = "WS_123_456";
-
+        
         ITextFile properText = new TextFile();
 
         Mockito.when(txtFileFactory.createTextFileObject()).thenReturn(properText);
@@ -71,6 +72,7 @@ public class TextXMLParserTest {
         Assert.assertEquals("thishandle", txtFile.getRefId());
         Assert.assertEquals("This is the actual textfile content", txtFile.getFileContent());
         Assert.assertEquals("newfile", txtFile.getFileName());
+        Assert.assertEquals(ETextAccessibility.PUBLIC, txtFile.getAccessibility());
     }
 
     @Test
