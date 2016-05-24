@@ -77,7 +77,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private IQStoreConnector qStoreConnector;
-    
+
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
 
@@ -86,16 +86,16 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private INetworkMapper networkmapper;
-    
+
     @Autowired
     private IRetrieveProjectManager projectManager;
 
     @Autowired
     private INetworkDAO dbConnect;
-    
+
     @Autowired
     private IMarshallingService marshallingService;
-    
+
     @Autowired
     private IWorkspaceManager workspaceManager;
 
@@ -198,7 +198,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         return null;
     }
-    
+
     /**
      * Check if we have bit streams in the network XML
      * 
@@ -229,7 +229,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return false;
     }
 
-
     /**
      * 
      * {@inheritDoc}
@@ -241,7 +240,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return Long.toString(l, Character.MAX_RADIX);
     }
 
-    
     @Override
     @Transactional
     public String getNetworkXML(String networkId) throws Exception {
@@ -275,7 +273,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         networkXML = networkXML.substring(networkXML.indexOf("element_events") - 1, networkXML.length());
         return networkXML;
     }
-    
+
     @Override
     public String storeNetworks(String xml) throws QStoreStorageException {
         return qStoreConnector.store(xml);
@@ -354,9 +352,17 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         List<NetworksDTO> networksDTO = dbConnect.getNetworkDTOList(projectid);
 
         List<INetwork> networksList = new ArrayList<>();
-        for(NetworksDTO nwDTO: networksDTO){
-            if(nwDTO.getStatus().equals(status)){
-            networksList.add(networkmapper.getNetworkFromDTO(nwDTO));
+        if (status == null) {
+            for (NetworksDTO nwDTO : networksDTO) {                
+                networksList.add(networkmapper.getNetworkFromDTO(nwDTO));
+            }
+
+            return networksList;
+        }
+
+        for (NetworksDTO nwDTO : networksDTO) {
+            if (nwDTO.getStatus().equals(status)) {
+                networksList.add(networkmapper.getNetworkFromDTO(nwDTO));
             }
         }
 
@@ -552,13 +558,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             logger.error("User doesn't have access to workspace", e3);
         }
 
-       
         NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
 
         // Below code reads the top level Appellation events
 
-        newNetworkDetailCache = parseNewNetworkStatement(elementEventType,
-                newNetworkDetailCache);
+        newNetworkDetailCache = parseNewNetworkStatement(elementEventType, newNetworkDetailCache);
 
         // Add network into database
         if (uploadStatus == INetworkManager.NEWNETWORK) {
@@ -574,7 +578,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         for (NetworkEntry entry : networkDetailsCache) {
             try {
                 String rowid = generateUniqueID();
-                dbConnect.addNetworkStatement(rowid, networkId, entry.getId(), entry.getType(), entry.isTop() ? 1 : 0, user, version);
+                dbConnect.addNetworkStatement(rowid, networkId, entry.getId(), entry.getType(), entry.isTop() ? 1 : 0,
+                        user, version);
             } catch (QuadrigaStorageException e1) {
                 logger.error("DB error while adding network statment", e1);
             }
@@ -601,7 +606,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
         Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-        
+
         while (creationEventIterator.hasNext()) {
             CreationEvent creationEvent = creationEventIterator.next();
             // Cache Appellation Events
@@ -613,7 +618,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                 parseNewRelationEvent(newNetworkDetailCache, creationEvent);
             }
         }
-        
+
         return newNetworkDetailCache;
     }
 
@@ -636,7 +641,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             CreationEvent creationEvent) {
 
         NetworkEntry entry = new NetworkEntry();
-        
+
         if (creationEvent.getId() != null && !creationEvent.getId().isEmpty()) {
             String id = creationEvent.getId();
             if (newNetworkDetailCache.getAddedIds().contains(id)) {
@@ -672,7 +677,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             CreationEvent creationEvent) {
 
         NetworkEntry entry = new NetworkEntry();
-        
+
         // get relation event id
         if (creationEvent.getId() != null && !creationEvent.getId().isEmpty()) {
             String id = creationEvent.getId();
@@ -684,8 +689,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                 entry.setTop(true);
                 newNetworkDetailCache.addEntry(entry);
             }
-        }        
-        
+        }
+
         RelationEventType relationEventType = (RelationEventType) (creationEvent);
         try {
             // Go Recursively and check for Relation event within a relation
@@ -718,8 +723,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *             Throws Database storage exception
      */
     private NetworkEntry parseIntoRelationEventElement(RelationEventType relationEventType,
-            NewNetworkDetailsCache newNetworkDetailCache)
-                    throws QuadrigaStorageException {
+            NewNetworkDetailsCache newNetworkDetailCache) throws QuadrigaStorageException {
 
         List<?> creatorOrRelationList = relationEventType.getRelationCreatorOrRelation();
         Iterator<?> creatorOrRelationIterator = creatorOrRelationList.iterator();
@@ -789,19 +793,17 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *             Throws Database storage exception
      */
     private NetworkEntry parseNewSubjectObjectType(NewNetworkDetailsCache newNetworkDetailCache,
-            SubjectObjectType subjectOrObject)
-                    throws QuadrigaStorageException {
+            SubjectObjectType subjectOrObject) throws QuadrigaStorageException {
 
         // Check for relation event inside subject
         RelationEventType relationEventType = subjectOrObject.getRelationEvent();
         if (relationEventType == null) {
             // Check for Appellation event inside subject and add if any
             AppellationEventType appellationEventType = subjectOrObject.getAppellationEvent();
-            return parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache,
-                    appellationEventType);
+            return parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache, appellationEventType);
         } else {
             NetworkEntry entry = new NetworkEntry();
-            
+
             if (relationEventType.getId() != null && !relationEventType.getId().isEmpty()) {
                 String id = relationEventType.getId();
                 if (newNetworkDetailCache.getAddedIds().contains(id)) {
@@ -817,12 +819,12 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             if (relationEventType.getRefId() != null && !relationEventType.getRefId().isEmpty()) {
                 entry.setRefId(relationEventType.getRefId());
             }
-            
+
             NetworkEntry nestedEntry = parseIntoRelationEventElement(relationEventType, newNetworkDetailCache);
             if (nestedEntry != null) {
                 nestedEntry.setTop(false);
             }
-            
+
             return entry;
         }
     }
@@ -841,8 +843,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      * @return Returns updated {@link NewNetworkDetailsCache} object which holds
      *         the cache of network details
      */
-    private NetworkEntry parseNewAppellationEventFoundInRelationEvent(
-            NewNetworkDetailsCache newNetworkDetailCache, AppellationEventType appellationEventType) {
+    private NetworkEntry parseNewAppellationEventFoundInRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,
+            AppellationEventType appellationEventType) {
 
         // Check for Appellation event inside predicate
         if (appellationEventType == null) {
@@ -851,7 +853,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         } else {
             logger.debug("AE1 found object");
             NetworkEntry entry = new NetworkEntry();
-            
+
             if (appellationEventType.getId() != null && !appellationEventType.getId().isEmpty()) {
                 String id = appellationEventType.getId();
                 if (newNetworkDetailCache.getAddedIds().contains(id)) {
@@ -867,12 +869,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             if (appellationEventType.getRefId() != null && !appellationEventType.getRefId().isEmpty()) {
                 entry.setRefId(appellationEventType.getRefId());
             }
-            
+
             return entry;
         }
 
     }
-
 
     /**
      * 
@@ -1015,7 +1016,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     public NetworksDTO getDTO(String id) {
         return getDTO(NetworksDTO.class, id);
     }
-    
+
     /**
      * This inner class would be used to cache the network details of newly
      * uploaded network. We use hold the cache until all the data in the
@@ -1025,11 +1026,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *
      */
     class NewNetworkDetailsCache {
-        
+
         private boolean fileExists;
         private List<NetworkEntry> entries;
         private Map<String, NetworkEntry> addedIds;
-        
+
         public NewNetworkDetailsCache() {
             this.fileExists = true;
             entries = new ArrayList<NetworkManager.NetworkEntry>();
@@ -1043,32 +1044,32 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         public void setFileExists(boolean fileExists) {
             this.fileExists = fileExists;
         }
-        
+
         public void addEntry(NetworkEntry entry) {
             entries.add(entry);
             addedIds.put(entry.getId(), entry);
         }
-        
+
         public List<NetworkEntry> getEntries() {
             return entries;
         }
-        
+
         public Set<String> getAddedIds() {
             return addedIds.keySet();
         }
-        
+
         public NetworkEntry getById(String id) {
             return addedIds.get(id);
         }
 
     }
-    
+
     class NetworkEntry {
         private String refId;
         private String id;
         private String type;
         private boolean isTop;
-        
+
         public String getId() {
             return id;
         }
