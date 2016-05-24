@@ -50,7 +50,6 @@ public class BrowseNetworkController {
         String projectid = project.getProjectId();
         List<INetwork> networks = networkmanager.getNetworksInProject(projectid, INetworkStatus.APPROVED);
         for(INetwork nw: networks)
-            System.out.println(nw.getStatus());
         model.addAttribute("networks", networks);
         model.addAttribute("project", project);
         return "sites/browseNetworks";

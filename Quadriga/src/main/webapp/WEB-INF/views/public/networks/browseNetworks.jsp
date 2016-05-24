@@ -26,13 +26,11 @@
 
 						<tbody>
 							<c:forEach var="network" items="${networks}">
-								<c:if test="${network.status eq 'APPROVED'}">
 								<tr>
 									<td>${network.networkName}</td>
 									<td><a
 										href='${pageContext.servletContext.contextPath}/sites/${project.unixName}/networks/${network.networkId}'>Visualize</a></td>
-								</tr>
-								</c:if>
+								</tr>								
 							</c:forEach>
 						</tbody>
 					</table>
