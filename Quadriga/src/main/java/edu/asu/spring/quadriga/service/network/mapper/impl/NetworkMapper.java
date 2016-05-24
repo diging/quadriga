@@ -147,6 +147,8 @@ public class NetworkMapper implements INetworkMapper{
         network.setCreatedDate(nwDTO.getCreateddate());
         network.setNetworkName(nwDTO.getNetworkname());
         network.setStatus(nwDTO.getStatus());
+        network.setUpdatedBy(nwDTO.getUpdatedby());
+        network.setUpdatedDate(nwDTO.getUpdateddate());
         return network;
     }
     

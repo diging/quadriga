@@ -49,7 +49,6 @@ public class BrowseNetworkController {
             @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
         String projectid = project.getProjectId();
         List<INetwork> networks = networkmanager.getNetworksInProject(projectid, INetworkStatus.APPROVED);
-        for(INetwork nw: networks)
         model.addAttribute("networks", networks);
         model.addAttribute("project", project);
         return "sites/browseNetworks";

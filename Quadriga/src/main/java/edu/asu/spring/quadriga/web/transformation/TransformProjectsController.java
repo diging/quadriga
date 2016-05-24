@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * This class will list all the networks approved by the user and display
@@ -88,7 +89,7 @@ public class TransformProjectsController {
         }
         List<INetwork> networks = new ArrayList<INetwork>();
         for(IProject retrievedProj: retrievedProjects){
-        	networks.addAll(networkManager.getNetworksInProject(retrievedProj.getProjectId(), null));
+        	networks.addAll(networkManager.getNetworksInProject(retrievedProj.getProjectId(), INetworkStatus.APPROVED));
         }
         
         List<INetwork> allNetworkList = new ArrayList<INetwork>();
