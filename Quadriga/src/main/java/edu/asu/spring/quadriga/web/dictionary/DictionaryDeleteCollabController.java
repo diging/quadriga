@@ -86,7 +86,7 @@ public class DictionaryDeleteCollabController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/deleteCollaborators", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/collaborators/delete", method = RequestMethod.POST)
     public String deleteCollaborators(@PathVariable("dictionaryid") String dictionaryId,
             @Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm,
             BindingResult result, ModelMap model, Principal principal, Locale locale, RedirectAttributes redirectAttrs) throws QuadrigaStorageException,
@@ -133,7 +133,7 @@ public class DictionaryDeleteCollabController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/showDeleteCollaborators", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/collaborators/delete", method = RequestMethod.GET)
     public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
 

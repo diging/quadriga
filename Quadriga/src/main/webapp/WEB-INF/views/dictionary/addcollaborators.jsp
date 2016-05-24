@@ -53,7 +53,7 @@ div.rolesError {
 </script>
 
 <form:form method="POST" name="myForm" commandName="collaborator"
-	action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators">
+	action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/add">
 	<h2>Add collaborators to dictionary: ${dictionaryname}</h2>
 	<div class="back-nav">
 		<hr>

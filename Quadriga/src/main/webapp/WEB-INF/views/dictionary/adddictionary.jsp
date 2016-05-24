@@ -7,7 +7,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <form:form modelAttribute="dictionary" method="POST"
-	action="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">
+	action="${pageContext.servletContext.contextPath}/auth/dictionaries/add">
 	<h2>Add Dictionary</h2>
 
 	<div class="back-nav">

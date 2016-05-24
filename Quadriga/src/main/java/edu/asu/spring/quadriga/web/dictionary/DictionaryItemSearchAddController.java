@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
@@ -28,6 +31,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * This class will handle add and search dictionaries items controller for the
@@ -54,8 +58,10 @@ public class DictionaryItemSearchAddController {
      * 
      * @return Return to the adddictionaryitems JSP
      */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = {
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
-    public String addDictionaryItemPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model) {
+    public String addDictionaryItemPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model) throws QuadrigaAccessException {
 
         model.addAttribute("dictionaryid", dictionaryid);
         return "auth/dictionaries/addDictionaryItems";
@@ -67,13 +73,12 @@ public class DictionaryItemSearchAddController {
      * @return Return to list dictionary item page
      * @throws QuadrigaUIAccessException
      */
-
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 2, userRole = {
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
     public String addDictionaryItem(HttpServletRequest req, @PathVariable("dictionaryid") String dictionaryId,
             @ModelAttribute("SpringWeb") Item dictionaryItems, ModelMap model, Principal principal, Locale locale)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        
-        dictionaryManager.userDictionaryPerm(principal.getName(), dictionaryId);
         
         String[] values = req.getParameterValues("selected");
         String pos = req.getParameter("pos");
@@ -103,8 +108,7 @@ public class DictionaryItemSearchAddController {
         model.addAttribute("show_success_alert", true);
         model.addAttribute("success_alert_msg", messageSource.getMessage("dictionary.items.add.success", new Object[] {}, locale));
         
-        List<IDictionaryItems> dictionaryItemList = dictionaryManager.getDictionariesItems(dictionaryId,
-                principal.getName());
+        List<IDictionaryItems> dictionaryItemList = dictionaryManager.getDictionaryItems(dictionaryId);
         String dictionaryName = dictionaryManager.getDictionaryName(dictionaryId);
         model.addAttribute("dictionaryItemList", dictionaryItemList);
         model.addAttribute("dictName", dictionaryName);
@@ -123,14 +127,13 @@ public class DictionaryItemSearchAddController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaUIAccessException
      */
-
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = {
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/dictionaries/dictionary/wordSearch/{dictionaryid}", method = RequestMethod.POST)
     public String searchDictionaryItemRestHandle(@PathVariable("dictionaryid") String dictionaryid,
             @RequestParam("itemName") String item, @RequestParam("posdropdown") String pos, Principal principal,
             ModelMap model, Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
-        IUser user = usermanager.getUser(principal.getName());
-        dictionaryManager.userDictionaryPerm(user.getUserName(), dictionaryid);
-
+        
         List<DictionaryEntry> dictionaryEntryList = null;
         if (!item.equals("")) {
             dictionaryEntryList = dictionaryManager.searchWordPower(item, pos);

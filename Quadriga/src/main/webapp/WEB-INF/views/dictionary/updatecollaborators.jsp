@@ -24,7 +24,7 @@
 </div>
 
 <form:form commandName="collaboratorform" method="POST"
-	action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/updatecollaborators"
+	action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/update"
 	id="updateprojcollabform">
 
 	<c:if test="${not empty collaboratorform.collaborators}">

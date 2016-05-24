@@ -136,7 +136,7 @@ public class DictionaryCollaboratorController {
      * @throws QuadrigaStorageException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/showAddCollaborators", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/collaborators/add", method = RequestMethod.GET)
     public ModelAndView displayCollaborators(
             @PathVariable("dictionaryid") String dictionaryId,
             Principal principal) throws QuadrigaStorageException,
@@ -213,7 +213,7 @@ public class DictionaryCollaboratorController {
      * @throws QuadrigaStorageException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/addCollaborators", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/collaborators/add", method = RequestMethod.POST)
     public ModelAndView addCollaborators(
             @PathVariable("dictionaryid") String dictionaryId,
             @Validated @ModelAttribute("collaborator") Collaborator collaborator,

@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.web.dictionary;
 import java.security.Principal;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -12,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -58,8 +55,7 @@ public class AddDictionaryController {
      * @return Used to handle the data from the form:form tag and map it to
      *         Dicitonary object
      */
-
-    @RequestMapping(value = "auth/dictionaries/addDictionary", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/dictionaries/add", method = RequestMethod.GET)
     public String addDictionaryForm(Model m) {
         m.addAttribute("dictionary", dictionaryFactory.createDictionaryObject());
         return "auth/dictionaries/addDictionary";
@@ -71,8 +67,7 @@ public class AddDictionaryController {
      * @return Return to the add dictionary status page
      * @throws QuadrigaStorageException
      */
-
-    @RequestMapping(value = "auth/dictionaries/addDictionary", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/dictionaries/add", method = RequestMethod.POST)
     public String addDictionaryHandle(@Validated @ModelAttribute("dictionary") Dictionary dictionary, BindingResult results, ModelMap model,
             Principal principal, RedirectAttributes redirectAttrs, Locale locale)
             throws QuadrigaStorageException {

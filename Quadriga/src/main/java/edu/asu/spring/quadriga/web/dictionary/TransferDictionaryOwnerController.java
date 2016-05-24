@@ -145,7 +145,7 @@ public class TransferDictionaryOwnerController
         model.put("dictionaryid",dictionaryid);
         
         List<IDictionaryItems> dictionaryItemList = dictionaryManager
-                .getDictionariesItems(dictionaryid,userName);
+                .getDictionaryItems(dictionaryid);
         
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
         model.addAttribute("dictionary", dictionary);

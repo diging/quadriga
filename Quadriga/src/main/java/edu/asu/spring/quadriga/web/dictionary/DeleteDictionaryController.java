@@ -44,7 +44,7 @@ public class DeleteDictionaryController {
      * @return
      * @throws QuadrigaStorageException
      */
-    @RequestMapping(value = "auth/dictionaries/deleteDictionary", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/dictionaries/delete", method = RequestMethod.GET)
     public String deleteDictionaryGet(Model model) throws QuadrigaStorageException {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userId = user.getUsername();
@@ -65,7 +65,7 @@ public class DeleteDictionaryController {
      * @return
      * @throws QuadrigaStorageException
      */
-    @RequestMapping(value = "auth/dictionaries/deleteDictionary", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/dictionaries/delete", method = RequestMethod.POST)
     public String deleteDictionary(HttpServletRequest req, ModelMap model, Principal principal, Locale locale, RedirectAttributes redirectAttrs)
             throws QuadrigaStorageException {
         IUser user = usermanager.getUser(principal.getName());

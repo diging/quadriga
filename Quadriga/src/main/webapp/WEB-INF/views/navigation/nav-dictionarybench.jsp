@@ -1,6 +1,8 @@
 
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
@@ -13,12 +15,14 @@
 	</div>
 	<div class="list-group">
 		<a class="list-group-item"
-			href="${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionary">
+			href="${pageContext.servletContext.contextPath}/auth/dictionaries/delete">
 			<i class="fa fa-ban"></i> Delete Dictionaries
 		</a>
-		<a class="list-group-item"
-        href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary"><i class="fa fa-plus-circle"></i> Add
-        Dictionary</a>
-        </div>
-	
+		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD')">
+			<a class="list-group-item"
+				href="${pageContext.servletContext.contextPath}/auth/dictionaries/add"><i
+				class="fa fa-plus-circle"></i> Add Dictionary</a>
+		</sec:authorize>
+	</div>
+
 </div>

@@ -254,10 +254,10 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
     }
 
     /**
-     * this method retrieves list of DictionaryDTOs for the given user
+     * This method retrieves a list of DictionaryDTOs of which the provided user is the owner.
      * 
      * @param userName
-     *            logged in user name
+     *            Username of owner
      * @throws QuadrigaStorageException
      */
     @SuppressWarnings("unchecked")

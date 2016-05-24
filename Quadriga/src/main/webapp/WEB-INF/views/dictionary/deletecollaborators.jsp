@@ -48,7 +48,7 @@
 </div>
 
 <form:form method="POST" commandName="collaboratorForm"
-	action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/deleteCollaborators">
+	action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/delete">
 
 	<c:if test="${not empty collaboratorForm.collaborators}">
 

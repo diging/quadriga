@@ -175,7 +175,7 @@ public interface IDictionaryManager {
     public abstract List<IDictionary> getNonAssociatedProjectDictionaries(String projectId)
             throws QuadrigaStorageException;
 
-    public abstract List<IDictionaryItems> getDictionariesItems(String dictionaryid, String ownerName)
+    public abstract List<IDictionaryItems> getDictionaryItems(String dictionaryid)
             throws QuadrigaStorageException;
 
 }

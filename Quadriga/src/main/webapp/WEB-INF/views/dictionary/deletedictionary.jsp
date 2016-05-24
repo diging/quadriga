@@ -176,7 +176,7 @@
 	
 				<p>
 					<input class="btn btn-primary" type="submit" value="Delete"
-						onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionary'" />
+						onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/delete'" />
 				    <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/auth/dictionaries">Cancel</a>
 				</p>
 

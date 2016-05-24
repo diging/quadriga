@@ -213,12 +213,14 @@
 		<div>
 			<h2>Dictionary: ${dictionary.dictionaryName}</h2>
 			<div>${dictionary.description}</div>
+			<c:if test="${isAdmin}">
 			<div style="text-align: right">
 				<a
 					href="${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.dictionaryId}">
 					<i class="fa fa-pencil-square-o"></i> Edit Dictionary
 				</a>
 			</div>
+			</c:if>
 			<br />
 			<div class="user">
 				Owned by: ${dictionary.owner.name}
@@ -235,7 +237,7 @@
 				<c:when test="${not empty dictionaryItemList}">
 
 					<form method="POST">
-
+                        <c:if test="${hasWrite}">
 						<a class="btn btn-primary btn-sm"
 							href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}"><i
 							class="fa fa-plus"></i> Add Words</a>
@@ -243,14 +245,16 @@
 							onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}'">
 							<i class="fa fa-minus"></i> Delete Words
 						</button>
-
+            
 						<br /> <br />
+						</c:if>
+						
 						<table class="table" style="font-size: 13px;">
 							<!-- <table  class="dataTable" id="pagination1"> -->
 							<thead>
 								<tr>
-									<th width="50px" align="left"><input type="checkbox"
-										title="Select/Deselect All" id="selectall"></th>
+									 <c:if test="${hasWrite}"><th width="50px" align="left"><input type="checkbox"
+										title="Select/Deselect All" id="selectall"></th></c:if>
 									<th>Items</th>
 									<th>ID</th>
 									<th>Pos</th>
@@ -260,9 +264,9 @@
 							<tbody>
 								<c:forEach var="dictionaryItem" items="${dictionaryItemList}">
 									<tr>
-										<td><input type="checkbox" class="selected"
+										 <c:if test="${hasWrite}"><td><input type="checkbox" class="selected"
 											name="selected"
-											value='<c:out value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out>' /></td>
+											value='<c:out value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out>' /></td></c:if>
 										<td width="25%"><input name="items" type="hidden"
 											value="<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out>" />
 											<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out></td>
@@ -279,13 +283,14 @@
 				</c:when>
 				<c:otherwise>
 					<p>
-						<spring:message code="empty.dictionary.items" />
+						<spring:message code="empty.dictionary.items" /> <c:if test="${hasWrite}"><spring:message code="empty.dictionary.items.click_add" /></c:if>
 					</p>
-
+                    <c:if test="${hasWrite}">
 					<input type=button class="btn btn-primary"
 						onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"
 						value='Add Items' />
 					<br>
+					</c:if>
 
 				</c:otherwise>
 			</c:choose>
@@ -302,11 +307,11 @@
 		</c:forEach>
 		<div style="border-top: dashed 1px #e7eae8; padding: 5px;">
 			<a
-				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showAddCollaborators"><i
+				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/add"><i
 				class="fa fa-plus-circle"></i> Add</a><br> <a
-				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showDeleteCollaborators"><i
+				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/delete"><i
 				class="fa fa-minus-circle"></i> Delete</a><br> <a
-				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/updatecollaborators"><i
+				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/update"><i
 				class="fa fa-pencil"></i> Update</a>
 		</div>
 	</div>

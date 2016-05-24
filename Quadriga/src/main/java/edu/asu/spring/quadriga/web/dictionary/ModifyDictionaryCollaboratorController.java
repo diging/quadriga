@@ -97,7 +97,7 @@ public class ModifyDictionaryCollaboratorController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/updatecollaborators", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/collaborators/update", method = RequestMethod.GET)
     public ModelAndView updateCollaboratorForm(@PathVariable("dictionaryid") String dictionaryid)
             throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model = new ModelAndView("auth/dictionaries/updatecollaborators");
@@ -137,7 +137,7 @@ public class ModifyDictionaryCollaboratorController {
      * @throws QuadrigaStorageException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 3, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/updatecollaborators", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/collaborators/update", method = RequestMethod.POST)
     public String updateCollaboratorForm(
             @Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
             BindingResult result, @PathVariable("dictionaryid") String dictionaryid, Principal principal, Model model,

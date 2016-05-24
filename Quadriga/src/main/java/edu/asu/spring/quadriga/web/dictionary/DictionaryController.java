@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
@@ -42,11 +43,9 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * 
  */
 @Controller
-public class DictionaryItemController {
+public class DictionaryController {
     @Autowired
-    IDictionaryManager dictonaryManager;
-
-    private static final Logger logger = LoggerFactory.getLogger(DictionaryItemController.class);
+    private IDictionaryManager dictonaryManager;
 
     @Autowired
     private IUserManager usermanager;
@@ -62,6 +61,9 @@ public class DictionaryItemController {
 
     @Autowired
     private MessageSource messageSource;
+    
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
+
 
     /**
      * Admin can use this page to check the list of dictionary items in a
@@ -72,7 +74,7 @@ public class DictionaryItemController {
      * @throws QuadrigaAccessException
      * @throws JSONException
      */
-
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
     public String getDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
@@ -83,24 +85,54 @@ public class DictionaryItemController {
         String userName = principal.getName();
 
         // TODO: getDictionariesItems() should return IDictionaryItems
-        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid, userName);
+        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItems(dictionaryid);
 
         model.addAttribute("dictionaryItemList", dictionaryItemList);
         model.addAttribute("dictionary", dictionary);
 
         List<IDictionaryCollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
-        model.addAttribute("collaboratingUsers", existingCollaborators);
-
+        model.addAttribute("collaboratingUsers", existingCollaborators); 
+        
         IDictionary dictionaryObj = dictionaryFactory.createDictionaryObject();
         dictionaryObj.setDictionaryId(dictionaryid);
         dictionaryObj = dictionaryManager.getDictionaryDetails(dictionaryid);
 
         model.addAttribute("owner", dictionaryObj.getOwner().getUserName().equals(userName));
+        setPermissions(model, userName, existingCollaborators);
 
         String jsonTreeData = dictonaryManager.getProjectsTree(userName, dictionaryid);
         model.addAttribute("core", jsonTreeData);
 
         return "auth/dictionary/dictionary";
+    }
+
+    private void setPermissions(ModelMap model, String userName, List<IDictionaryCollaborator> existingCollaborators) {
+        for (IDictionaryCollaborator collab : existingCollaborators) {
+            // if current user is a collaborator, lets get their role
+            if(collab.getCollaborator().getUserObj().getUserName().equals(userName)) {
+                List<IQuadrigaRole> roles = collab.getCollaborator().getCollaboratorRoles();
+                for (IQuadrigaRole role : roles) {
+                    if (role.getId().equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN)) {
+                        model.addAttribute("isAdmin", true);
+                        model.addAttribute("hasWrite", true);
+                        model.addAttribute("hasRead", true);
+                    }
+                    if (role.getId().equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)) {
+                        model.addAttribute("hasWrite", true);
+                        model.addAttribute("hasRead", true);
+                    }
+                    if (role.getId().equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ)) {
+                        model.addAttribute("hasRead", true);
+                    }
+                }
+            }
+        }
+        // set owner permissions
+        if (model.get("owner").equals(true)) {
+            model.addAttribute("isAdmin", true);
+            model.addAttribute("hasWrite", true);
+            model.addAttribute("hasRead", true);
+        }
     }
 
     /**
@@ -120,8 +152,7 @@ public class DictionaryItemController {
         String[] values = req.getParameterValues("selected");
         
         if (values == null) {
-            List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId,
-                    user.getUserName());
+            List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItems(dictionaryId);
             String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
 
             model.addAttribute("show_error_alert", true);
@@ -149,8 +180,7 @@ public class DictionaryItemController {
                 messageSource.getMessage("dictionary.items.remove.success", new Object[] {}, locale));
 
         
-        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId,
-                user.getUserName());
+        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItems(dictionaryId);
         String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
         model.addAttribute("dictionaryItemList", dictionaryItemList);
         model.addAttribute("dictName", dictionaryName);
@@ -181,8 +211,7 @@ public class DictionaryItemController {
         if (values == null) {
             model.addAttribute("updatesuccess", 0);
             // model.addAttribute("updateerrormsg", "Items were not selected");
-            List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId,
-                    user.getUserName());
+            List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItems(dictionaryId);
             String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
             model.addAttribute("dictionaryItemList", dictionaryItemList);
             model.addAttribute("dictName", dictionaryName);
@@ -230,8 +259,7 @@ public class DictionaryItemController {
             }
         }
         logger.debug("Item Returned ");
-        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId,
-                user.getUserName());
+        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItems(dictionaryId);
         String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
         model.addAttribute("dictionaryItemList", dictionaryItemList);
         model.addAttribute("dictName", dictionaryName);
