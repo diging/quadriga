@@ -27,7 +27,6 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -138,8 +137,6 @@ public class TransferDictionaryOwnerController {
 
             if (collaboratingUsers != null) {
                 for (IDictionaryCollaborator collabuser : collaboratingUsers) {
-                    // userList.add(collabuser);
-
                     userList.add(collabuser.getCollaborator().getUserObj());
                 }
             }

@@ -26,96 +26,66 @@
 </script>
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
-		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false
-		});
-	});
-	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
 		});
 	});
 
-	$(function() {
-		$('#html1').jstree();
-		$('#html2').jstree();
-		var data = ${core};
-		$('#html3').jstree(data);
-	});
-	
-	function clicknetwork(id,name){
-		window.location.href  = "${pageContext.servletContext.contextPath}/auth/networks/visualize/"+id;
+	function clicknetwork(id, name) {
+		window.location.href = "${pageContext.servletContext.contextPath}/auth/networks/visualize/"
+				+ id;
 	}
 </script>
 
 
-<header>
-	<h2>Networks</h2>
-	<span class="byline">View your Networks here.</span>
-</header>
 
-<input type="button"
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks'"
-	value='Tree View'>
+<h2>Networks</h2>
+<p>You have access to the following networks.</p>
 
-<input type="button"
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/table'"
-	value='Table View'>
-<br />
-<br />
-<div id="html3"></div>
+<p>Are you an editor on a project? You might want to head over to the <a href="${pageContext.servletContext.contextPath}/auth/editing"><span class="glyphicon glyphicon-sunglasses"></span>editing workbench</a>.</p>
 
-<c:choose>
-	<c:when test="${tableview=='1'}">
-		<div class="container">
-			<c:choose>
-				<c:when test="${not empty networkList}">
-					<table style="width: 100%" cellpadding="0" cellspacing="0"
-						border="0" class="display dataTable">
-						<thead>
+<div class="container">
+	<c:choose>
+		<c:when test="${not empty networkList}">
+			<div class="panel panel-default">
+				<table style="width: 100%" cellpadding="0" cellspacing="0"
+					border="0" class="table">
+					<thead>
+						<tr>
+							<th align="left">Name</th>
+							<th>Project</th>
+							<th>Workspace</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<c:forEach var="network" items="${networkList}">
 							<tr>
-								<th align="left">Name</th>
-								<th>Project</th>
-								<th>Workspace</th>
-								<th>Status</th>
-								<th>Action</th>
+								<td width="25%" align="left"><a
+									href="${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.networkId}">
+								<i class="fa fa-star"></i> <input name="items" type="hidden"
+									value="<c:out value="${network.networkName}"></c:out>" /> <c:out
+										value="${network.networkName}"></c:out> </a></td>
+								<td width="25%"><c:out
+										value="${network.networkWorkspace.workspace.projectWorkspace.project.projectName}"></c:out>
+								</td>
+								<td width="25%"><c:out
+										value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
+								<td width="25%"><c:out value="${network.status}"></c:out></td>
+								
 							</tr>
-						</thead>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<spring:message code="empty.networks" />
+		</c:otherwise>
+	</c:choose>
+</div>
 
-						<tbody>
-							<c:forEach var="network" items="${networkList}">
-								<tr>
-									<td width="25%" align="left"><img
-										style="vertical-align: middle;"
-										src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png">
-										<input name="items" type="hidden"
-										value="<c:out value="${network.networkName}"></c:out>" /> <c:out
-											value="${network.networkName}"></c:out></td>
-									<td width="25%" align="center">
-									<c:out
-											value ="${network.networkWorkspace.workspace.projectWorkspace.project.projectName}"></c:out>
-											</td>
-									<td width="25%" align="center"><c:out
-											value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
-									<td width="25%" align="center"><c:out
-											value="${network.status}"></c:out></td>
-									<td width="25%" align="center"><input type=button
-										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.networkId}'"
-										value='View Networks'></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</c:when>
-				<c:otherwise>
-					<spring:message code="empty.networks" />
-				</c:otherwise>
-			</c:choose>
-		</div>
-	</c:when>
-</c:choose>
 
 
 

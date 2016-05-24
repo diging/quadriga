@@ -61,42 +61,11 @@ public class NetworkListController {
 	 * @throws JSONException 
 	 */
 	@RequestMapping(value = "auth/networks", method = RequestMethod.GET)
-	public String listNetworksTreeView(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
+    public String listNetworks(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUser(principal.getName());
-		String jsTreeData = null;
-		jsTreeData = networkManager.getNetworkJSTreeJson(user.getUserName());
-		model.addAttribute("tableview",0);
-		model.addAttribute("core", jsTreeData);
+		List<INetwork> networkList=networkManager.getNetworkList(user);
 		model.addAttribute("userId", user.getUserName());
-
-		return "auth/networks";
-	}
-
-	/**
-	 * Get the list of network belonging to the user
-	 * @author Lohith Dwaraka
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws JSONException 
-	 */
-	@RequestMapping(value = "auth/networks/table", method = RequestMethod.GET)
-	public String listNetworksTableView(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUser(principal.getName());
-		List<INetwork> networkList = null;
-		try{
-
-			networkList=networkManager.getNetworkList(user);
-
-		}catch(QuadrigaStorageException e){
-			logger.error("Something wrong on DB Side",e);
-		}
-		model.addAttribute("core", "{\"core\": {\"data\": []}}");
-		model.addAttribute("tableview",1);
 		model.addAttribute("networkList", networkList);
-		model.addAttribute("userId", user.getUserName());
-
 		return "auth/networks";
 	}
 
