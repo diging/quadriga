@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
+
 /**
  * @author Nischal Samji Backing bean for Text File Operations.
  *
@@ -29,5 +31,21 @@ public interface ITextFile {
     public abstract String getFileContent();
 
     public abstract void setFileContent(String fileContent);
+    
+    public abstract ETextAccessibility getAccessibility();
+
+    public abstract void setAccessibility(ETextAccessibility accessibility);
+
+    public abstract String getTextFileURI();
+
+    /**
+     * This method sets the URI of the TextFile by appending the TextID of the
+     * Textfile to the URI Prefix passed to this method.
+     * 
+     * @param uriPrefix
+     *            Prefix for TextFile URI.
+     * 
+     */
+    public abstract void setTextFileURI(String uriPrefix);
 
 }

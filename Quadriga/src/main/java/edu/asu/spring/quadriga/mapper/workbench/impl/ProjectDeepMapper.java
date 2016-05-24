@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDictionaryShallowMapper;
-import edu.asu.spring.quadriga.mapper.workbench.IProjectWorkspaceShallowMapper;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 
@@ -46,7 +46,7 @@ public class ProjectDeepMapper extends ProjectDTOMapper implements
     private IProjectDictionaryShallowMapper projectDictionaryShallowMapper;
 
     @Autowired
-    private IProjectWorkspaceShallowMapper projectWorkspaceShallowMapper;
+    private IWorkspaceShallowMapper wsShallowMapper;
 
     @Autowired
     private ICollaboratorFactory collaboratorFactory;
@@ -74,8 +74,8 @@ public class ProjectDeepMapper extends ProjectDTOMapper implements
         project.setProjectDictionaries(projectDictionaryShallowMapper
                 .getProjectDictionaryList(project, projectDTO));
         // Set Project Workspaces
-        project.setProjectWorkspaces(projectWorkspaceShallowMapper
-                .getProjectWorkspaceList(project, projectDTO));
+        project.setProjectWorkspaces(wsShallowMapper
+                .getProjectWorkspaceList(project, projectDTO.getProjectWorkspaceDTOList()));
 
         return project;
     }

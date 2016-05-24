@@ -8,21 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
+import edu.asu.spring.quadriga.mapper.workspace.impl.WorkspaceDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.impl.WorkspaceDictionaryShallowMapper;
 
 @Service
 public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 
 	@Autowired
 	private IWorkspaceDictionaryDAO dbConnect;
+	
+	@Autowired
+	private IWorkspaceDAO wsDao;
 	
 	@Autowired
 	private WorkspaceDictionaryShallowMapper wsDictShallowMapper;
@@ -88,7 +92,11 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 			String userId) throws QuadrigaStorageException {
 		
 		List<IWorkspaceDictionary> wsDictionaryList = null;
-		IWorkSpace workspace = wsDeepMapper.getWorkSpaceDetails(workspaceId);
+		
+		// FIXME: what's up with all of this?:
+		WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
+		IWorkSpace workspace = wsDeepMapper.mapWorkspaceDTO(wsDto);
+		
 		WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspaceId, userId);
 		
 		wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);

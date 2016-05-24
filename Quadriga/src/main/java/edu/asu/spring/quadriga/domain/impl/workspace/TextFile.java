@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.domain.impl.workspace;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
 /**
@@ -16,7 +17,9 @@ public class TextFile implements ITextFile {
     private String textId;
     private String fileContent;
     private String refId;
-
+    private ETextAccessibility accessibility;
+    private String textFileURI;
+    
     @Override
     public String getFileName() {
         return fileName;
@@ -70,6 +73,22 @@ public class TextFile implements ITextFile {
 
     public void setRefId(String refId) {
         this.refId = refId;
+    }
+
+    public ETextAccessibility getAccessibility() {
+        return accessibility;
+    }
+
+    public void setAccessibility(ETextAccessibility accessibility) {
+        this.accessibility = accessibility;
+    }
+
+    public String getTextFileURI() {
+        return textFileURI;
+    }
+
+    public void setTextFileURI(String uriPrefix) {
+        this.textFileURI = uriPrefix + this.getTextId();
     }
 
 }

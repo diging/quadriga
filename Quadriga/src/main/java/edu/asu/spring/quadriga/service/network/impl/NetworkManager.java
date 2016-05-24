@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
@@ -45,14 +44,12 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
-import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
@@ -199,36 +196,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return null;
     }
 
-    /**
-     * Check if we have bit streams in the network XML
-     * 
-     * @param uri
-     *            URI is for DSpace based URI of type {@link String}
-     * @param bitStreamList
-     *            {@link List} of {@link IBitStream} objects
-     * @return Returns boolean values true or false
-     * @author Lohith Dwaraka
-     */
-    public boolean hasBitStream(String uri, List<IWorkspaceBitStream> workspaceBitStreamList) {
-        if (uri.isEmpty()) {
-            logger.debug("true");
-            return true;
-        }
-        String fileId = uri = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
-        if (workspaceBitStreamList != null) {
-            for (IWorkspaceBitStream workspaceBitStream : workspaceBitStreamList) {
-
-                if (fileId.equals(workspaceBitStream.getBitStream().getId())) {
-                    logger.debug("true");
-                    return true;
-                }
-            }
-        }
-
-        logger.debug("false");
-        return false;
-    }
-
+    
     /**
      * 
      * {@inheritDoc}

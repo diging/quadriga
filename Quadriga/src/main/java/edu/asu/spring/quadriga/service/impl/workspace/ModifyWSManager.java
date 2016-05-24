@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceEditorDAO;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
@@ -20,6 +21,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
+import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 
 /**
@@ -49,6 +51,9 @@ public class ModifyWSManager implements IModifyWSManager {
 
     @Autowired
     private WorkspaceCollaboratorDTOMapper collaboratorMapper;
+    
+    @Autowired
+    private IUserManager userManager;
 
     @Autowired
     @Qualifier("ProjectBaseMapper")
@@ -64,7 +69,10 @@ public class ModifyWSManager implements IModifyWSManager {
      * @author Julia Damerow, kiranbatna
      */
     @Override
-    public void addWorkspaceToProject(IWorkSpace workspace, String projectId) {
+    public void addWorkspaceToProject(IWorkSpace workspace, String projectId, String username) throws QuadrigaStorageException {
+        IUser user = userManager.getUser(username);
+        workspace.setOwner(user);
+        
         ProjectDTO projectDto = projectDao.getProjectDTO(projectId);
         WorkspaceDTO workspaceDTO = workspaceDTOMapper.getWorkspaceDTO(workspace);
         workspaceDTO.setWorkspaceid(workspaceDao.generateUniqueID());
@@ -99,7 +107,7 @@ public class ModifyWSManager implements IModifyWSManager {
     @Override
     @Transactional
     public void updateWorkspace(IWorkSpace workspace) throws QuadrigaStorageException {
-        WorkspaceDTO workspaceDTO = workspaceDao.getWorkspaceDTO(workspace.getWorkspaceId());
+        WorkspaceDTO workspaceDTO = workspaceDao.getDTO(workspace.getWorkspaceId());
         workspaceDTO.setWorkspacename(workspace.getWorkspaceName());
         workspaceDTO.setDescription(workspace.getDescription());
         workspaceDTO.setUpdateddate(new Date());
@@ -119,7 +127,7 @@ public class ModifyWSManager implements IModifyWSManager {
     @Override
     @Transactional
     public void assignEditorRole(String workspaceId, String userName) throws QuadrigaStorageException {
-        WorkspaceDTO workspaceDto = workspaceDao.getWorkspaceDTO(workspaceId);
+        WorkspaceDTO workspaceDto = workspaceDao.getDTO(workspaceId);
         WorkspaceEditorDTO workspaceEditorDTO = workspaceDTOMapper.getWorkspaceEditor(workspaceDto, userName);
         workspaceEditorDao.saveNewDTO(workspaceEditorDTO);
     }

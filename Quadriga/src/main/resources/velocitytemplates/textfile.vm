@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/textfile.xsd">
+<Quadriga:textfileid>$textid</Quadriga:textfileid>
+<Quadriga:textfileuri>$texturi</Quadriga:textfileuri>
+<Quadriga:wsid>$wsid</Quadriga:wsid>
+<Quadriga:refid>$refid</Quadriga:refid>
+<Quadriga:filename>$filename</Quadriga:filename>
+<Quadriga:projid>$projid</Quadriga:projid>
+<Quadriga:accessibility>$accessibility</Quadriga:accessibility>
+</Quadriga:QuadrigaReply>

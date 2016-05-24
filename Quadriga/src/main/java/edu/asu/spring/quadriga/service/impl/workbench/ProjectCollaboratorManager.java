@@ -23,9 +23,9 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 
-//show collaborators for a project
-//show non collaborators for a project
+
 @Service
+@Transactional
 public class ProjectCollaboratorManager extends CollaboratorManager<ProjectCollaboratorDTO, ProjectCollaboratorDTOPK, ProjectDTO, ProjectDAO> implements IProjectCollaboratorManager 
 {
 
