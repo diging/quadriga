@@ -38,7 +38,7 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @Aspect
 @Order(value = 10)
 @Component
-public class InjectProjectAspect {
+public abstract class InjectProjectAspect {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
