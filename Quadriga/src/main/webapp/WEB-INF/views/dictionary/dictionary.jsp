@@ -305,6 +305,7 @@
 			<c:out value="${collab.collaborator.userObj.name}" />
 			<br>
 		</c:forEach>
+		<c:if test="${isAdmin}">
 		<div style="border-top: dashed 1px #e7eae8; padding: 5px;">
 			<a
 				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/add"><i
@@ -314,6 +315,7 @@
 				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/update"><i
 				class="fa fa-pencil"></i> Update</a>
 		</div>
+		</c:if>
 	</div>
 
 </div>

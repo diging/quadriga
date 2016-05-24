@@ -8,9 +8,7 @@
 }
 </style>
 <script>
-	function submitCollabClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionaryid}';
-	}
+	
 
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
@@ -35,8 +33,7 @@
 
 <form:form commandName="user" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/dictionaries/changedictionaryowner/${dictionaryid}">
-	<c:choose>
-		<c:when test="${success=='0'}">
+	
 			<c:if test="${not empty collaboratinguser}">
 			
 			 <div class="alert alert-info" role="alert">Dictionary is
@@ -68,15 +65,5 @@
 				    
 				</p>
 			</c:if>
-		</c:when>
-		<c:otherwise>
-			<span class="byline">Dictionary Ownership transferred
-				successfully.</span>
-			<br />
-			<ul>
-				<li><input type="button" onClick="submitCollabClick(this.id);"
-					value='Okay'></li>
-			</ul>
-		</c:otherwise>
-	</c:choose>
+		
 </form:form>

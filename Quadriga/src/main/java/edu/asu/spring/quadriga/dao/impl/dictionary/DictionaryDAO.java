@@ -193,7 +193,7 @@ public class DictionaryDAO extends BaseDAO<DictionaryDTO> implements IDictionary
     public List<DictionaryDTO> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException {
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(
-                    "Select dictCollab.dictionaryDTO from DictionaryCollaboratorDTO dictCollab where dictCollab.quadrigaUserDTO.username =:username");
+                    "Select distinct dictCollab.dictionaryDTO from DictionaryCollaboratorDTO dictCollab where dictCollab.quadrigaUserDTO.username =:username");
             query.setParameter("username", userId);
             return query.list();
         } catch (HibernateException e) {
