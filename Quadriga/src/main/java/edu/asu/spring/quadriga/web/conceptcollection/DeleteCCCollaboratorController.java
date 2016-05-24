@@ -55,7 +55,7 @@ public class DeleteCCCollaboratorController {
 
     @Autowired
     private IConceptCollectionManager conceptControllerManager;
-    
+
     @Autowired
     private MessageSource messageSource;
 
@@ -66,28 +66,37 @@ public class DeleteCCCollaboratorController {
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = { RoleNames.ROLE_CC_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/conceptcollections/{collectionid}/deletecollaborators", method = RequestMethod.GET)
-    public ModelAndView deleteCollaborators(
-            @PathVariable("collectionid") String collectionid,
-            Principal principal) throws QuadrigaAccessException,
-            QuadrigaStorageException {
+    public ModelAndView deleteCollaborators(@PathVariable("collectionid") String collectionid, Principal principal)
+            throws QuadrigaAccessException, QuadrigaStorageException {
         ModelAndView model;
         ModifyCollaboratorForm collaboratorForm;
 
         model = new ModelAndView("auth/conceptcollection/deletecollaborators");
 
         // fetch the concept collection details
-        IConceptCollection conceptCollection = conceptControllerManager
-                .getConceptCollection(collectionid);
+        IConceptCollection conceptCollection = conceptControllerManager.getConceptCollection(collectionid);
 
-        collaboratorForm = collaboratorFormFactory
-                .createCollaboratorFormObject();
+        collaboratorForm = collaboratorFormFactory.createCollaboratorFormObject();
 
         List<ModifyCollaborator> modifyCollaborators = collaboratorFormManager
                 .getConceptCollectionCollaborators(collectionid);
-        
+
         // if current user is collaborator, remove from list
-        // collaborators shouldn't be able to remove themselves 
+        // collaborators shouldn't be able to remove themselves
         // should be done through a different workflow
+        removeCurrentUser(principal, modifyCollaborators);
+
+        collaboratorForm.setCollaborators(modifyCollaborators);
+
+        model.getModelMap().put("collectionid", collectionid);
+        model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
+        model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
+        model.getModelMap().put("collaboratorForm", collaboratorForm);
+        model.getModelMap().put("success", 0);
+        return model;
+    }
+
+    private void removeCurrentUser(Principal principal, List<ModifyCollaborator> modifyCollaborators) {
         ModifyCollaborator currentUser = null;
         for (ModifyCollaborator collaborator : modifyCollaborators) {
             if (collaborator.getUserName().equals(principal.getName())) {
@@ -98,17 +107,6 @@ public class DeleteCCCollaboratorController {
         if (currentUser != null) {
             modifyCollaborators.remove(currentUser);
         }
-
-        collaboratorForm.setCollaborators(modifyCollaborators);
-
-        model.getModelMap().put("collectionid", collectionid);
-        model.getModelMap().put("collectionname",
-                conceptCollection.getConceptCollectionName());
-        model.getModelMap().put("collectiondesc",
-                conceptCollection.getDescription());
-        model.getModelMap().put("collaboratorForm", collaboratorForm);
-        model.getModelMap().put("success", 0);
-        return model;
     }
 
     /**
@@ -124,8 +122,7 @@ public class DeleteCCCollaboratorController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = { RoleNames.ROLE_CC_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/conceptcollections/{collectionid}/deleteCollaborator", method = RequestMethod.POST)
-    public String deleteCollaborators(
-            @PathVariable("collectionid") String collectionid,
+    public String deleteCollaborators(@PathVariable("collectionid") String collectionid,
             @Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm,
             BindingResult result, Principal principal, Locale locale, RedirectAttributes redirectAttrs, Model model)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -136,40 +133,37 @@ public class DeleteCCCollaboratorController {
         if (result.hasErrors()) {
             // fetch the concept collection details
             // fetch the concept collection details
-            IConceptCollection conceptCollection = conceptControllerManager
-                    .getConceptCollection(collectionid);
+            IConceptCollection conceptCollection = conceptControllerManager.getConceptCollection(collectionid);
 
-            model.addAttribute("collectionname",
-                    conceptCollection.getConceptCollectionName());
-            model.addAttribute("collectiondesc",
-                    conceptCollection.getDescription());
+            model.addAttribute("collectionname", conceptCollection.getConceptCollectionName());
+            model.addAttribute("collectiondesc", conceptCollection.getDescription());
 
-            collaborators = collaboratorFormManager
-                    .getConceptCollectionCollaborators(collectionid);
+            collaborators = collaboratorFormManager.getConceptCollectionCollaborators(collectionid);
             collaboratorForm.setCollaborators(collaborators);
             model.addAttribute("success", 0);
             model.addAttribute("error", 1);
             model.addAttribute("collaboratorForm", collaboratorForm);
             model.addAttribute("show_error_alert", true);
-            model.addAttribute("error_alert_msg", messageSource.getMessage("collaborator_user_selection.required", new Object[] {}, locale) );
+            model.addAttribute("error_alert_msg",
+                    messageSource.getMessage("collaborator_user_selection.required", new Object[] {}, locale));
             return "auth/conceptcollection/deletecollaborators";
-        } 
-            collaborators = collaboratorForm.getCollaborators();
-            StringBuilder collabUser = new StringBuilder();
+        }
+        collaborators = collaboratorForm.getCollaborators();
+        StringBuilder collabUser = new StringBuilder();
 
-            for (ModifyCollaborator collaborator : collaborators) {
-                String user = collaborator.getUserName();
-                if (user != null) {
-                    collabUser.append(",");
-                    collabUser.append(user);
-                }
+        for (ModifyCollaborator collaborator : collaborators) {
+            String user = collaborator.getUserName();
+            if (user != null) {
+                collabUser.append(",");
+                collabUser.append(user);
             }
-            collaboratorManager.deleteCollaborators(collabUser.toString()
-                    .substring(1), collectionid);
+        }
+        collaboratorManager.deleteCollaborators(collabUser.toString().substring(1), collectionid);
 
-            redirectAttrs.addFlashAttribute("show_success_alert", true);
-            redirectAttrs.addFlashAttribute("success_alert_msg", messageSource.getMessage("collaborator_deleted.success", new Object[] {}, locale) );
-       
+        redirectAttrs.addFlashAttribute("show_success_alert", true);
+        redirectAttrs.addFlashAttribute("success_alert_msg",
+                messageSource.getMessage("collaborator_deleted.success", new Object[] {}, locale));
+
         return "redirect:/auth/conceptcollections/" + collectionid;
     }
 

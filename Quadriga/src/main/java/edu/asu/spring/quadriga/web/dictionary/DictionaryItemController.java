@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.dictionary;
 import java.security.Principal;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +12,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,255 +43,204 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  */
 @Controller
 public class DictionaryItemController {
-	@Autowired
-	IDictionaryManager dictonaryManager;
+    @Autowired
+    IDictionaryManager dictonaryManager;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DictionaryItemController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryItemController.class);
 
-	@Autowired
-	private IUserManager usermanager;
-	
-	@Autowired
-	private IQuadrigaRoleManager collaboratorRoleManager;
-	
-	@Autowired
-	private IDictionaryFactory dictionaryFactory;
-	
-	@Autowired
-	private IDictionaryManager dictionaryManager;
+    @Autowired
+    private IUserManager usermanager;
 
-	public IUserManager getUsermanager() {
-		return usermanager;
-	}
+    @Autowired
+    private IQuadrigaRoleManager collaboratorRoleManager;
 
-	public void setUsermanager(IUserManager usermanager) {
-		this.usermanager = usermanager;
-	}
-	
-	public IQuadrigaRoleManager getCollaboratorRoleManager() {
-		return collaboratorRoleManager;
-	}
+    @Autowired
+    private IDictionaryFactory dictionaryFactory;
 
-	public void setCollaboratorRoleManager(IQuadrigaRoleManager collaboratorRoleManager) {
-		this.collaboratorRoleManager = collaboratorRoleManager;
-	}
-	
-	public IDictionaryManager getDictonaryManager() {
-		return dictonaryManager;
-	}
+    @Autowired
+    private IDictionaryManager dictionaryManager;
 
-	public void setDictonaryManager(IDictionaryManager dictonaryManager) {
-		this.dictonaryManager = dictonaryManager;
-	}
+    @Autowired
+    private MessageSource messageSource;
 
-	/**
-	 * Admin can use this page to check the list of dictionary items in a
-	 * dictionary and to search and add items from the word power
-	 * 
-	 * @return Return to the list dictionary items page of the Quadriga
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException 
-	 * @throws JSONException 
-	 */
+    /**
+     * Admin can use this page to check the list of dictionary items in a
+     * dictionary and to search and add items from the word power
+     * 
+     * @return Return to the list dictionary items page of the Quadriga
+     * @throws QuadrigaStorageException
+     * @throws QuadrigaAccessException
+     * @throws JSONException
+     */
 
-	@RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
-	public String getDictionaryPage(
-			@PathVariable("dictionaryid") String dictionaryid, ModelMap model, Principal principal)
-					throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
-		
-		//fetch the dictionary details
-		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
-		
-		String userName = principal.getName();
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
+    public String getDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model,
+            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 
-		//TODO: getDictionariesItems() should return IDictionaryItems
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryid,userName);
+        // fetch the dictionary details
+        IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryid);
 
-		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		model.addAttribute("dictionary", dictionary);
+        String userName = principal.getName();
 
-		List<IDictionaryCollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
-		model.addAttribute("collaboratingUsers", existingCollaborators);
+        // TODO: getDictionariesItems() should return IDictionaryItems
+        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid, userName);
 
-		
-	    IDictionary dictionaryObj = dictionaryFactory.createDictionaryObject();
-	    dictionaryObj.setDictionaryId(dictionaryid);
-	    dictionaryObj = dictionaryManager.getDictionaryDetails(dictionaryid);
-	    
-	    model.addAttribute("owner", dictionaryObj.getOwner().getUserName().equals(userName));
-	   
-	    String jsonTreeData = dictonaryManager.getProjectsTree(userName, dictionaryid);
-	    model.addAttribute("core", jsonTreeData);
+        model.addAttribute("dictionaryItemList", dictionaryItemList);
+        model.addAttribute("dictionary", dictionary);
 
-	  
-	   return "auth/dictionary/dictionary";
-	}
+        List<IDictionaryCollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
+        model.addAttribute("collaboratingUsers", existingCollaborators);
 
-	
+        IDictionary dictionaryObj = dictionaryFactory.createDictionaryObject();
+        dictionaryObj.setDictionaryId(dictionaryid);
+        dictionaryObj = dictionaryManager.getDictionaryDetails(dictionaryid);
 
-	/**
-	 * Admin can use this to delete a dictionary item to dictionary
-	 * 
-	 * @return Return to list dictionary item page
-	 * @throws QuadrigaStorageException
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 2, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN,
-			                                                                                                RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE} )})
-	@RequestMapping(value = "auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
-	public String deleteDictionaryItem(HttpServletRequest req,
-			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
-			Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
+        model.addAttribute("owner", dictionaryObj.getOwner().getUserName().equals(userName));
 
-		IUser user = usermanager.getUser(principal.getName());
-		String[] values = req.getParameterValues("selected");
-		String msg = "";
-		String errormsg = "";
-		int flag = 0;
+        String jsonTreeData = dictonaryManager.getProjectsTree(userName, dictionaryid);
+        model.addAttribute("core", jsonTreeData);
 
-		if(values == null){
-			model.addAttribute("delsuccess", 0);
-			//			model.addAttribute("delerrormsg", "Items were not selected");
-			
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId,user.getUserName());
-			String dictionaryName = dictonaryManager
-					.getDictionaryName(dictionaryId);
-			logger.info(" value null");
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
-			model.addAttribute("dictName", dictionaryName);
-			model.addAttribute("dictID", dictionaryId);
-			IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
-			model.addAttribute("dictionary", dictionary);
-			JSONObject core = new JSONObject();
-			model.addAttribute("core", core.toString());
-			return "auth/dictionary/dictionary";
-		}else {
-			for (int i = 0; i < values.length; i++) {
-				dictonaryManager.deleteDictionariesItems(dictionaryId,
-						values[i],user.getUserName());
-				if (!msg.equals("")) {
-					flag = 1;
-					errormsg = msg;
-					logger.info(" message : "+errormsg);
-				}
-			}
-		} 
-		if (flag == 0) {
-			model.addAttribute("delsuccess", 1);
-		} else if (flag == 1) {
-			if (errormsg.equals("Item doesnot exists in this dictionary")) {
-				model.addAttribute("delsuccess", 0);
-				model.addAttribute("delerrormsg",
-						"Items doesn't exist for dictionary id :"
-								+ dictionaryId);
-			} else {
-				model.addAttribute("delsuccess", 0);
-				model.addAttribute("delerrormsg", errormsg);
-			}
-		}
-		logger.info("Item Returned ");
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId,user.getUserName());
-		String dictionaryName = dictonaryManager
-				.getDictionaryName(dictionaryId);
-		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		model.addAttribute("dictName", dictionaryName);
-		model.addAttribute("dictID", dictionaryId);
-		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
-		model.addAttribute("dictionary", dictionary);
-		JSONObject core = new JSONObject();
-		model.addAttribute("core", core.toString());
-		return "auth/dictionary/dictionary";
-	}
+        return "auth/dictionary/dictionary";
+    }
 
-	/**
-	 * Admin can use this to update a dictionary item's item to dictionary
-	 * 
-	 * @return Return to list dictionary item page
-	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 2, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN,
-			                                                                                                RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE} )})
-	@RequestMapping(value = "auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
-	public String updateDictionaryItem(HttpServletRequest req,
-			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
-			Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
+    /**
+     * Admin can use this to delete a dictionary item to dictionary
+     * 
+     * @return Return to list dictionary item page
+     * @throws QuadrigaStorageException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 2, userRole = {
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
+    @RequestMapping(value = "auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
+    public String deleteDictionaryItem(HttpServletRequest req, @PathVariable("dictionaryid") String dictionaryId,
+            ModelMap model, Principal principal, Locale locale) throws QuadrigaStorageException,
+            QuadrigaAccessException {
 
-		IUser user = usermanager.getUser(principal.getName());
-		String[] values = req.getParameterValues("selected");
-		String msg = "";
-		String errormsg = "";
-		int flag = 0;
-		if(values == null){
-			model.addAttribute("updatesuccess", 0);
-			//			model.addAttribute("updateerrormsg", "Items were not selected");
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId,user.getUserName());
-			String dictionaryName = dictonaryManager
-					.getDictionaryName(dictionaryId);
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
-			model.addAttribute("dictName", dictionaryName);
-			model.addAttribute("dictID", dictionaryId);
-			JSONObject core = new JSONObject();
-			model.addAttribute("core", core.toString());
-			IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
-			model.addAttribute("dictionary", dictionary);
-			return "auth/dictionary/dictionary";
-		}else{
-			for (int i = 0; i < values.length; i++) {
+        IUser user = usermanager.getUser(principal.getName());
+        String[] values = req.getParameterValues("selected");
+        
+        if (values == null) {
+            List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId,
+                    user.getUserName());
+            String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
 
-				List<DictionaryEntry> dictionaryEntryList = dictonaryManager
-						.getUpdateFromWordPower(dictionaryId, values[i]);
-				Iterator<DictionaryEntry> I = dictionaryEntryList.iterator();
-				if (I.hasNext()) {
-					DictionaryEntry dictionaryEntry = I.next();
-				dictonaryManager.updateDictionariesItems(
-							dictionaryId, values[i],
-							dictionaryEntry.getLemma(),
-							dictionaryEntry.getPos());
-				} else {
-					msg = "Error getting data from Word Power";
-					flag = 1;
-					errormsg = msg;
-				}
-				if (!msg.equals("")) {
-					flag = 1;
-					errormsg = msg;
-				}
-			}
-		} 
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg",
+                    messageSource.getMessage("dictionary.items.remove.no_selection", new Object[] {}, locale));
 
-		if (flag == 0) {
-			// these things don't need to be logged.
-			logger.debug("Successfully updated");
-			model.addAttribute("updatesuccess", 1);
-			model.addAttribute("updatesuccessmsg", "Items updated successfully");
-		} else if (flag == 1) {
-			logger.info("Please check errormsg : "+ errormsg);
-			if (errormsg.equals("Item doesnot exists in this dictionary")) {
-				model.addAttribute("updatesuccess", 0);
-				model.addAttribute("updateerrormsg",
-						"Items doesn't exist for dictionary id :"
-								+ dictionaryId);
-			} else {
-				model.addAttribute("updatesuccess", 0);
-				model.addAttribute("updateerrormsg", errormsg);
-			}
-		}
-		logger.debug("Item Returned ");
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId,user.getUserName());
-		String dictionaryName = dictonaryManager
-				.getDictionaryName(dictionaryId);
-		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		model.addAttribute("dictName", dictionaryName);
-		IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);	
-		model.addAttribute("dictionary", dictionary);
-		model.addAttribute("dictID", dictionaryId);
-		JSONObject core = new JSONObject();
-		model.addAttribute("core", core.toString());
-		return "auth/dictionary/dictionary";
-	}
+            model.addAttribute("dictionaryItemList", dictionaryItemList);
+            model.addAttribute("dictName", dictionaryName);
+            model.addAttribute("dictID", dictionaryId);
+            IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);
+            model.addAttribute("dictionary", dictionary);
+            JSONObject core = new JSONObject();
+            model.addAttribute("core", core.toString());
+
+            return "auth/dictionary/dictionary";
+        }
+        
+        // Remove entries
+        for (int i = 0; i < values.length; i++) {
+            dictonaryManager.deleteDictionariesItems(dictionaryId, values[i], user.getUserName());
+        }
+
+        model.addAttribute("show_success_alert", true);
+        model.addAttribute("success_alert_msg",
+                messageSource.getMessage("dictionary.items.remove.success", new Object[] {}, locale));
+
+        
+        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId,
+                user.getUserName());
+        String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
+        model.addAttribute("dictionaryItemList", dictionaryItemList);
+        model.addAttribute("dictName", dictionaryName);
+        model.addAttribute("dictID", dictionaryId);
+        IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);
+        model.addAttribute("dictionary", dictionary);
+        JSONObject core = new JSONObject();
+        model.addAttribute("core", core.toString());
+        return "auth/dictionary/dictionary";
+    }
+
+    /**
+     * Admin can use this to update a dictionary item's item to dictionary
+     * 
+     * @return Return to list dictionary item page
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 2, userRole = {
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
+    @RequestMapping(value = "auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
+    public String updateDictionaryItem(HttpServletRequest req, @PathVariable("dictionaryid") String dictionaryId,
+            ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
+
+        IUser user = usermanager.getUser(principal.getName());
+        String[] values = req.getParameterValues("selected");
+        String msg = "";
+        String errormsg = "";
+        int flag = 0;
+        if (values == null) {
+            model.addAttribute("updatesuccess", 0);
+            // model.addAttribute("updateerrormsg", "Items were not selected");
+            List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId,
+                    user.getUserName());
+            String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
+            model.addAttribute("dictionaryItemList", dictionaryItemList);
+            model.addAttribute("dictName", dictionaryName);
+            model.addAttribute("dictID", dictionaryId);
+            JSONObject core = new JSONObject();
+            model.addAttribute("core", core.toString());
+            IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);
+            model.addAttribute("dictionary", dictionary);
+            return "auth/dictionary/dictionary";
+        } else {
+            for (int i = 0; i < values.length; i++) {
+
+                List<DictionaryEntry> dictionaryEntryList = dictonaryManager.getUpdateFromWordPower(dictionaryId,
+                        values[i]);
+                Iterator<DictionaryEntry> I = dictionaryEntryList.iterator();
+                if (I.hasNext()) {
+                    DictionaryEntry dictionaryEntry = I.next();
+                    dictonaryManager.updateDictionariesItems(dictionaryId, values[i], dictionaryEntry.getLemma(),
+                            dictionaryEntry.getPos());
+                } else {
+                    msg = "Error getting data from Word Power";
+                    flag = 1;
+                    errormsg = msg;
+                }
+                if (!msg.equals("")) {
+                    flag = 1;
+                    errormsg = msg;
+                }
+            }
+        }
+
+        if (flag == 0) {
+            // these things don't need to be logged.
+            logger.debug("Successfully updated");
+            model.addAttribute("updatesuccess", 1);
+            model.addAttribute("updatesuccessmsg", "Items updated successfully");
+        } else if (flag == 1) {
+            logger.info("Please check errormsg : " + errormsg);
+            if (errormsg.equals("Item doesnot exists in this dictionary")) {
+                model.addAttribute("updatesuccess", 0);
+                model.addAttribute("updateerrormsg", "Items doesn't exist for dictionary id :" + dictionaryId);
+            } else {
+                model.addAttribute("updatesuccess", 0);
+                model.addAttribute("updateerrormsg", errormsg);
+            }
+        }
+        logger.debug("Item Returned ");
+        List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId,
+                user.getUserName());
+        String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
+        model.addAttribute("dictionaryItemList", dictionaryItemList);
+        model.addAttribute("dictName", dictionaryName);
+        IDictionary dictionary = dictionaryManager.getDictionaryDetails(dictionaryId);
+        model.addAttribute("dictionary", dictionary);
+        model.addAttribute("dictID", dictionaryId);
+        JSONObject core = new JSONObject();
+        model.addAttribute("core", core.toString());
+        return "auth/dictionary/dictionary";
+    }
 
 }

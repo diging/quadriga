@@ -18,7 +18,7 @@
 	});
 </script>
 
-<h2>Modify collaborator roles for concept collection:
+<h2>Modify Collaborator Roles for Concept Collection:
 	${collectionname}</h2>
 <div class="back-nav">
 	<hr>
@@ -39,9 +39,9 @@
 		<p>Select roles for collaborators and click "Update".</p>
 		<p>
 			<input type="submit" class="btn btn-primary" value='Update'
-				name="updateprojcollab"> <input type="button"
-				class="btn btn-primary" onClick="submitClick(this.id);"
-				value='Cancel'>
+				name="updateprojcollab"> 
+			<a class="btn btn-default"
+                href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}">Cancel</a>
 		</p>
 		<div class="panel panel-default">
 			<table style="width: 100%" class="table" id="cccollablist">
@@ -64,12 +64,12 @@
 								<form:input path="collaborators[${status.index}].name"
 									id="collaborators[${status.index}].name" type="hidden" /></td>
 
-							<td align="left"><font size="3"> <form:checkboxes
+							<td align="left"><form:checkboxes
 										path="collaborators[${status.index}].collaboratorRoles"
 										class="roles" items="${cccollabroles}" itemValue="id"
-										itemLabel="displayName" /></font> <form:errors
+										itemLabel="displayName" /> <form:errors
 									path="collaborators[${status.index}].collaboratorRoles"
-									cssClass="ui-state-error-text"></form:errors></td>
+									cssClass="error"></form:errors></td>
 						</tr>
 					</c:forEach>
 				</tbody>

@@ -544,7 +544,7 @@
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" /> 
 		<put-attribute name="content" value="/WEB-INF/views/dictionary/dictionaryChild.jsp" 
 		/> </definition> -->
-	<definition name="auth/dictionary/dictionarycollab" extends="base.definition.dictionaries">
+	<definition name="auth/dictionary/dictionarycollab" extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/dictionaryChildCollab.jsp" />
@@ -556,8 +556,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/adddictionary.jsp" />
 	</definition>
-	<definition name="auth/dictionaries/updatedictionary"
-		extends="base.definition.dictionaries">
+	<definition name="auth/dictionaries/updatedictionary" extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Update Dictionary" />
 		<put-attribute name="content"
@@ -570,8 +569,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/deletedictionary.jsp" />
 	</definition>
-	<definition name="auth/dictionaries/changedictionaryowner"
-		extends="base.definition.dictionaries">
+	<definition name="auth/dictionaries/changedictionaryowner" extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Change Dictionary owner" />
 		<put-attribute name="content"
@@ -656,7 +654,7 @@
 			value="/WEB-INF/views/dictionary/dictionary.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/showAddCollaborators"
-		extends="base.definition.dictionaries">
+		extends="base.definition.dictionaries.nonav">
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/addcollaborators.jsp" />
 	</definition>
@@ -666,7 +664,7 @@
 			value="/WEB-INF/views/dictionary/deletecollaborators.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/updatecollaborators"
-		extends="base.definition.dictionaries">
+		extends="base.definition.dictionaries.nonav">
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/updatecollaborators.jsp" />
 	</definition>

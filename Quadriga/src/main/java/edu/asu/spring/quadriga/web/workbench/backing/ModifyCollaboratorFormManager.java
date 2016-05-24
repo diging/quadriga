@@ -77,7 +77,7 @@ public class ModifyCollaboratorFormManager {
 	 * @return List<ModifyCollaborator> list of modifycollaborator domain
 	 * @throws QuadrigaStorageException
 	 */
-	public List<ModifyCollaborator> modifyDictCollaboratorManager(String dictionaryId) throws QuadrigaStorageException
+	public List<ModifyCollaborator> getDictionaryCollaborators(String dictionaryId) throws QuadrigaStorageException
 	{
 
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();

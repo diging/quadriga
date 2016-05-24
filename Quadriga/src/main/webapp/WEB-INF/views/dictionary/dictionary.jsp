@@ -52,26 +52,10 @@
 			event.preventDefault();
 		});
 	});
-	$(document).ready(function() {
-		$("input[type=a]").button().click(function(event) {
-			event.preventDefault();
-		});
-	});
 
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
-	});
-
-	$(function() {
-
-		var data = $
-		{
-			core
-		}
-		;
-		console.log(data);
-		$('#html').jstree(data);
 	});
 
 	function addDictToProjects(id, name) {
@@ -223,87 +207,29 @@
 
 <div id="dialog-message" title="Confirm ?"></div>
 
-<style type="text/css">
-#myGrid {
-	height: 5%;
-	width: 40%;
-	background: white;
-	display: -ms-grid;
-	-ms-grid-columns: 4;
-	-ms-grid-rows: 4;
-}
-</style>
 
 <div class="row">
 	<div class="col-md-9">
 		<div>
 			<h2>Dictionary: ${dictionary.dictionaryName}</h2>
 			<div>${dictionary.description}</div>
-			<div style="text-align:right">
-                    <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.dictionaryId}"> 
-                      <i class="fa fa-pencil-square-o"></i> Edit Dictionary
-                    </a>
-                </div>
+			<div style="text-align: right">
+				<a
+					href="${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.dictionaryId}">
+					<i class="fa fa-pencil-square-o"></i> Edit Dictionary
+				</a>
+			</div>
 			<br />
 			<div class="user">
 				Owned by: ${dictionary.owner.name}
 				<c:if test="${owner}">(<a
 						href="${pageContext.servletContext.contextPath}/auth/dictionaries/transfer/${dictionary.dictionaryId}">Change</a>)</c:if>
 			</div>
-			<br />
 			<div id="html"></div>
-			<input type="hidden" id="hidden"
-				value="${dictionary.dictionaryId}" />
+			<input type="hidden" id="hidden" value="${dictionary.dictionaryId}" />
 		</div>
 		<hr>
-		<c:choose>
-			<c:when test="${additemsuccess=='1'}">
-				<font color="blue"> <spring:message code="add.items.success" /></font>
 
-			</c:when>
-			<c:when test="${additemsuccess=='2'}">
-				<font color="red"><spring:message code="add.noitems.fail" /></font>
-
-			</c:when>
-			<c:when test="${additemsuccess=='0'}">
-				<font color="red"><c:out value="${errormsg}"></c:out></font>
-
-			</c:when>
-
-			<c:otherwise>
-
-			</c:otherwise>
-		</c:choose>
-		<c:choose>
-			<c:when test="${delsuccess=='1'}">
-				<font color="blue"> <spring:message
-						code="delete.items.success" /></font>
-
-			</c:when>
-
-			<c:when test="${delsuccess=='0'}">
-				<font color="red"><spring:message code="delete.items.fail" /></font>
-
-			</c:when>
-			<c:otherwise>
-
-
-			</c:otherwise>
-		</c:choose>
-		<c:choose>
-			<c:when test="${updatesuccess=='1'}">
-				<font color="blue"> <spring:message
-						code="update.items.success" /></font>
-
-			</c:when>
-
-			<c:when test="${updatesuccess=='0'}">
-				<font color="red"><spring:message code="update.items.fail" /></font>
-
-			</c:when>
-			<c:otherwise>
-			</c:otherwise>
-		</c:choose>
 		<div>
 			<c:choose>
 				<c:when test="${not empty dictionaryItemList}">
@@ -311,17 +237,20 @@
 					<form method="POST">
 
 						<a class="btn btn-primary btn-sm"
-							href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}"
-						 ><i class="fa fa-plus"></i> Add Words</a> 
+							href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}"><i
+							class="fa fa-plus"></i> Add Words</a>
 						<button class="btn btn-primary btn-sm" class="btn btn-primary"
-							onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}'" ><i class="fa fa-minus"></i> Delete Words</button>
+							onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}'">
+							<i class="fa fa-minus"></i> Delete Words
+						</button>
 
 						<br /> <br />
 						<table class="table" style="font-size: 13px;">
 							<!-- <table  class="dataTable" id="pagination1"> -->
 							<thead>
 								<tr>
-									<th width="50px" align="left"><input type="checkbox" title="Select/Deselect All" id="selectall"></th>
+									<th width="50px" align="left"><input type="checkbox"
+										title="Select/Deselect All" id="selectall"></th>
 									<th>Items</th>
 									<th>ID</th>
 									<th>Pos</th>
@@ -334,8 +263,7 @@
 										<td><input type="checkbox" class="selected"
 											name="selected"
 											value='<c:out value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out>' /></td>
-										<td width="25%" ><input name="items"
-											type="hidden"
+										<td width="25%"><input name="items" type="hidden"
 											value="<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out>" />
 											<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out></td>
 										<td width="25%"><c:out
@@ -350,13 +278,15 @@
 					</form>
 				</c:when>
 				<c:otherwise>
-				    <p><spring:message code="empty.dictionary.items" /></p>
-				    
+					<p>
+						<spring:message code="empty.dictionary.items" />
+					</p>
+
 					<input type=button class="btn btn-primary"
 						onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"
 						value='Add Items' />
 					<br>
-					
+
 				</c:otherwise>
 			</c:choose>
 		</div>
@@ -365,24 +295,19 @@
 		<h3 class="major">
 			<span>Collaborators</span>
 		</h3>
-		<ul>
-			<c:forEach var="collab" items="${collaboratingUsers}">
-				<li><i class="fa fa-user"></i> <c:out
-						value="${collab.collaborator.userObj.name}" /></li>
-			</c:forEach>
-		</ul>
+		<c:forEach var="collab" items="${collaboratingUsers}">
+			<i class="fa fa-user"></i>
+			<c:out value="${collab.collaborator.userObj.name}" />
+			<br>
+		</c:forEach>
 		<div style="border-top: dashed 1px #e7eae8; padding: 5px;">
-			<ul class="colltools">
-				<li><a
-					href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showAddCollaborators"><i
-						class="fa fa-plus-circle"></i> Add</a></li>
-				<li><a
-					href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showDeleteCollaborators"><i
-						class="fa fa-minus-circle"></i> Delete</a></li>
-				<li><a
-					href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/updatecollaborators"><i
-						class="fa fa-pencil"></i> Update</a></li>
-			</ul>
+			<a
+				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showAddCollaborators"><i
+				class="fa fa-plus-circle"></i> Add</a><br> <a
+				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showDeleteCollaborators"><i
+				class="fa fa-minus-circle"></i> Delete</a><br> <a
+				href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/updatecollaborators"><i
+				class="fa fa-pencil"></i> Update</a>
 		</div>
 	</div>
 

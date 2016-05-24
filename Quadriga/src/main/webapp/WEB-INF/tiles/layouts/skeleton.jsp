@@ -115,7 +115,7 @@
     <div id="main">
         <div class="container">
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-9">
                 <tiles:insertAttribute name="content" />
             </div>
             <div class="col-md-3">

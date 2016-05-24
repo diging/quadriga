@@ -13,16 +13,7 @@
 
 	});
 
-	function submitClick(conceptCollectionId) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/conceptcollections/${collection.conceptCollectionId}';
-	}
 </script>
-<style>
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-</style>
 <h2>Modify Concept Collection</h2>
 <div class="back-nav">
 	<hr>
@@ -55,7 +46,10 @@
 			<td><form:input path="conceptCollectionId" type="hidden" /></td>
 		</tr>
 		<tr>
-			<td><input class="btn btn-primary" type="submit" value="Update"></td>
+			<td><input class="btn btn-primary" type="submit" value="Update">
+			<a class="btn btn-default"
+            href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}">Cancel</a>
+            </td>
 		</tr>
 	</table>
 
