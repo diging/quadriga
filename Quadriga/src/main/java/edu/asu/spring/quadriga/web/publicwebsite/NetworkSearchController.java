@@ -32,6 +32,7 @@ import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * This controller searches for concept terms
@@ -125,7 +126,7 @@ public class NetworkSearchController {
         throws QuadrigaStorageException {
 
         ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetwork(
-                project.getProjectId(), conceptId);
+                project.getProjectId(), conceptId, INetworkStatus.APPROVED);
 
         String json = null;
         if (transformedNetwork != null) {
