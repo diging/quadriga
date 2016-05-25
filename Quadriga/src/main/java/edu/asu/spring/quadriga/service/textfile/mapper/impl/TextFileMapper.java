@@ -15,7 +15,8 @@ import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
 @Service
 public class TextFileMapper implements ITextFileMapper {
 
-  
+    private static final Logger logger = LoggerFactory.getLogger(TextFileMapper.class);
+    
     @Override
     public ITextFile getTextFile(TextFileDTO tfDTO) {
         ITextFile txtFile = new TextFile();
