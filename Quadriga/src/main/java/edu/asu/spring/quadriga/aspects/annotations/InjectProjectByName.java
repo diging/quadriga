@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface InjectProject {
+@Target(ElementType.METHOD)
+public @interface InjectProjectByName {
 
-    String unixNameParameter() default "unixName";
-    String projId() default "projId";
+    int projectIndex();
+
 }

@@ -35,15 +35,11 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  * @author Julia Damerow
  *
  */
-@Aspect
-@Order(value = 10)
-@Component
 public abstract class InjectProjectAspect {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
 
-    @Around("within(edu.asu.spring.quadriga.web..*)")
     public Object injectProject(ProceedingJoinPoint joinPoint) throws Throwable {
         // get all the values we need
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
@@ -64,7 +60,7 @@ public abstract class InjectProjectAspect {
             for (int i = 0; i < paras.length; i++) {
                 Parameter p = paras[i];
 
-                // this tests if the paramters is annotated with InjectProject
+                // this tests if the parameters is annotated with InjectProject
                 if (p.getAnnotation(InjectProject.class) != null) {
                     injectAnnotation = p.getAnnotation(InjectProject.class);
                     projectParamIdx = i;
@@ -81,6 +77,7 @@ public abstract class InjectProjectAspect {
                 // get the index of the parameter that holds the unix name from
                 // the path
                 Integer idxOfProjectId = pathParamMap.get(injectAnnotation.unixNameParameter());
+                System.out.println("Id:" + idxOfProjectId);
                 if (idxOfProjectId != null) {
 
                     // get project by its unix name
@@ -110,4 +107,6 @@ public abstract class InjectProjectAspect {
         // continue with controller method
         return joinPoint.proceed(arguments);
     }
+
+    public abstract String getErrorPage();
 }

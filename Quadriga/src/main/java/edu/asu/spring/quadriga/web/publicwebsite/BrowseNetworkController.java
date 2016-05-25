@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -44,6 +45,7 @@ public class BrowseNetworkController {
      *             Database storage exception thrown
      */
     @CheckPublicAccess(projectIndex = 4)
+    @InjectProjectByName(projectIndex = 4)
     @RequestMapping(value = "sites/{ProjectUnixName}/browsenetworks", method = RequestMethod.GET)
     public String browseNetworks(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal,
             @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
