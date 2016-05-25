@@ -30,7 +30,7 @@
 									<td>${network.networkName}</td>
 									<td><a
 										href='${pageContext.servletContext.contextPath}/sites/${project.unixName}/networks/${network.networkId}'>Visualize</a></td>
-								</tr>
+								</tr>								
 							</c:forEach>
 						</tbody>
 					</table>

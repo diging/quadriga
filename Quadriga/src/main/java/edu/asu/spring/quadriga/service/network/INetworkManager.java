@@ -150,7 +150,7 @@ public interface INetworkManager {
      * @throws QuadrigaStorageException
      *             Database storage exception thrown
 	 */
-    public abstract List<INetwork> getNetworksInProject(String projectid) throws QuadrigaStorageException;
+    public abstract List<INetwork> getNetworksInProject(String projectid, String status) throws QuadrigaStorageException;
 
 	/**
      * This method should help in renaming the {@link INetwork}. We could use

@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Controller
 public class ExploreNetworksController {
@@ -47,7 +48,7 @@ public class ExploreNetworksController {
             throws JAXBException, QuadrigaStorageException {
 
         ITransformedNetwork transformedNetwork = transformationManager
-                .getTransformedNetworkOfProject(project.getProjectId());
+                .getTransformedNetworkOfProject(project.getProjectId(), INetworkStatus.APPROVED);
 
         String json = null;
         if (transformedNetwork != null) {

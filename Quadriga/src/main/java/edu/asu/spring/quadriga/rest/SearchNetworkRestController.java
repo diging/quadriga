@@ -39,6 +39,7 @@ import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * Controller for concept related rest api's exposed to other clients Client
@@ -69,8 +70,11 @@ public class SearchNetworkRestController {
      * http://localhost:8080/quadriga/rest/networks/search?conceptId=http://www.
      * digitalhps.org/concepts/CON516ec8c2-20bc-4f35-ae1e-ad908db9d662&
      * projectIds=PROJfFnfnn,PROJFgGPpk
-     * @param conceptId: ConceptId for searching node
-     * @param projectIds: List of comma separated projectId
+     * 
+     * @param conceptId:
+     *            ConceptId for searching node
+     * @param projectIds:
+     *            List of comma separated projectId
      * @param response
      * @param accept
      * @param principal
@@ -106,12 +110,12 @@ public class SearchNetworkRestController {
         ITransformedNetwork transformedNetwork;
         try {
             transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds,
-                    conceptId);
+                    conceptId, INetworkStatus.APPROVED);
         } catch (QuadrigaStorageException e) {
             throw new RestException(403, e);
         }
-        
-        if(transformedNetwork==null){
+
+        if (transformedNetwork == null) {
             throw new RestException(404);
         }
 
@@ -120,7 +124,7 @@ public class SearchNetworkRestController {
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/transformationdetails.vm");
             VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-            if(transformedNetwork.getNodes()!=null && transformedNetwork.getNodes().size()!=0){
+            if (transformedNetwork.getNodes() != null && transformedNetwork.getNodes().size() != 0) {
                 context.put("nodeList", new ArrayList<Node>(transformedNetwork.getNodes().values()));
                 context.put("linkList", transformedNetwork.getLinks());
             }
