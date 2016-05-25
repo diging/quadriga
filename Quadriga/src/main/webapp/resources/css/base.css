@@ -60,3 +60,12 @@
 .error {
 	color: #A21111;
 }
+
+.icons {
+	font-size:140%;
+	vertical-align: sub;
+}
+
+.table-white {
+	background: white;
+}

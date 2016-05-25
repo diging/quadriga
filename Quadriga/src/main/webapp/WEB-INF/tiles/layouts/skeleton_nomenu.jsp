@@ -24,16 +24,20 @@
     
     <link rel="stylesheet"
     	href="${pageContext.servletContext.contextPath}/resources/css/jquery-ui.css" />
-    <link rel="stylesheet"
-    	href="${pageContext.servletContext.contextPath}/resources/css/jquery.dataTables_themeroller.css" />
-	
+    
 	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
 	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-ui.js"></script>
 	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-alert.js"></script>
-	<script src="${pageContext.servletContext.contextPath}/resources/js/jquery.dataTables.js"></script>
 	<script
 		src="${pageContext.servletContext.contextPath}/resources/js/jquery.quick.pagination.min.js"></script>
     <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/font-awesome-4.5.0/css/font-awesome.min.css">
+    
+    <!-- Datatables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/dt-1.10.12/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs/dt-1.10.12/datatables.min.js"></script>
+    
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/ionicons/css/ionicons.min.css">
 </head>
 <body data-spy="scroll" data-offset="0" data-target="#navigation">
 	<tiles:importAttribute name="currentPage" scope="request" />
