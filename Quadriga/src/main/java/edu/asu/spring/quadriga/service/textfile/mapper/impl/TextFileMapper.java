@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.service.textfile.mapper.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
@@ -16,7 +18,7 @@ import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
 public class TextFileMapper implements ITextFileMapper {
 
     private static final Logger logger = LoggerFactory.getLogger(TextFileMapper.class);
-    
+
     @Override
     public ITextFile getTextFile(TextFileDTO tfDTO) {
         ITextFile txtFile = new TextFile();
