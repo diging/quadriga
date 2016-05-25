@@ -24,7 +24,12 @@ public class TextFileMapper implements ITextFileMapper {
         txtFile.setFileName(tfDTO.getFilename());
         txtFile.setProjectId(tfDTO.getProjectId());
         txtFile.setWorkspaceId(tfDTO.getWorkspaceId());
-        txtFile.setAccessibility(ETextAccessibility.valueOf(tfDTO.getAccessibility()));
+        try {
+            txtFile.setAccessibility(ETextAccessibility.valueOf(tfDTO.getAccessibility()));
+        } catch (NullPointerException npe) {
+            logger.error("error:", npe);
+            txtFile.setAccessibility(ETextAccessibility.PRIVATE);
+        }
         return txtFile;
     }
 
