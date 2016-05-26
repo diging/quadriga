@@ -5,6 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 
 @Service
@@ -32,11 +33,12 @@ public class AddTextValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "fileName", "filename.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "fileContent", "filecontent.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "refId", "reference.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(err, "accessibility", "accessibility.required");
+
         if (!filename.isEmpty() && !(filename.matches("[a-zA-Z0-9_-]{3,30}$")
                 || (filename.matches("[a-zA-Z0-9_-]{3,30}[.][a-zA-Z]{2,4}$")))) {
             err.rejectValue("fileName", "filename.proper");
         }
-
     }
 
 }

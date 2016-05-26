@@ -3,8 +3,10 @@ package edu.asu.spring.quadriga.service.network;
 import java.io.IOException;
 
 import edu.asu.spring.quadriga.domain.network.INetworkXML;
+import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.TextFileParseException;
 
 public interface INetworkXMLParser {
 
@@ -20,10 +22,11 @@ public interface INetworkXMLParser {
      * @return
      *        Returns a NetworkXML Object that contains Textfile and Network XML.
      * @throws NetworkXMLParseException
+     * @throws TextFileParseException 
      * @throws QuadrigaStorageException
      * @throws IOException
      */
     INetworkXML parseXML(String xml, String projectid, String workspaceid)
-            throws NetworkXMLParseException;
+            throws NetworkXMLParseException, TextFileParseException;
 
 }

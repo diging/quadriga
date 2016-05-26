@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Controller
 public class BrowseNetworkController {
@@ -23,7 +24,6 @@ public class BrowseNetworkController {
     @Autowired
     private INetworkManager networkmanager;
 
-    
     /**
      * This method retrieves all the networks associated with the project based
      * on the project unix name
@@ -45,19 +45,13 @@ public class BrowseNetworkController {
      */
     @CheckPublicAccess(projectIndex = 4)
     @RequestMapping(value = "sites/{ProjectUnixName}/browsenetworks", method = RequestMethod.GET)
-    public String browseNetworks(
-            @PathVariable("ProjectUnixName") String unixName,
-            Model model,
-            Principal principal,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
-            throws QuadrigaStorageException {
+    public String browseNetworks(@PathVariable("ProjectUnixName") String unixName, Model model, Principal principal,
+            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
         String projectid = project.getProjectId();
-        List<INetwork> Networks = networkmanager
-                .getNetworksInProject(projectid);
-
-        model.addAttribute("networks", Networks);
+        List<INetwork> networks = networkmanager.getNetworksInProject(projectid, INetworkStatus.APPROVED);
+        model.addAttribute("networks", networks);
         model.addAttribute("project", project);
         return "sites/browseNetworks";
-        
+
     }
 }

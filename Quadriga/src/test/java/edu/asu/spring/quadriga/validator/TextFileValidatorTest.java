@@ -1,4 +1,4 @@
-package edu.asu.quadriga.validator;
+package edu.asu.spring.quadriga.validator;
 
 import java.util.UUID;
 
@@ -12,6 +12,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
@@ -45,6 +46,7 @@ public class TextFileValidatorTest {
         properTxtFile.setProjectId(UUID.randomUUID().toString());
         properTxtFile.setRefId(UUID.randomUUID().toString());
         properTxtFile.setWorkspaceId(UUID.randomUUID().toString());
+        properTxtFile.setAccessibility(ETextAccessibility.PUBLIC);
 
         improperTxtFile = new TextFile();
         improperTxtFile.setFileContent("");
