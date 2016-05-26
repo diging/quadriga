@@ -71,6 +71,10 @@
 }
 
 .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
-	background-color: #3bc492;
-    border-color: #3bc492;
+	background-color: #C0392B;
+    border-color: #C0392B;
+}
+
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited {
+	color: #D3D0CB;
 }

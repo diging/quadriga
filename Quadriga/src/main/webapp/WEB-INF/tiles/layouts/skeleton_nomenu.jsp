@@ -15,9 +15,6 @@
     <!-- Bootstrap core CSS -->
     <link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/bootstrap.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css" rel="stylesheet">
-    <link href="${pageContext.servletContext.contextPath}/resources/css/base.css" rel="stylesheet">
     
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
@@ -38,6 +35,11 @@
     
     <!-- Ionicons -->
     <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/ionicons/css/ionicons.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css" rel="stylesheet">
+    <link href="${pageContext.servletContext.contextPath}/resources/css/base.css" rel="stylesheet">
+    
 </head>
 <body data-spy="scroll" data-offset="0" data-target="#navigation">
 	<tiles:importAttribute name="currentPage" scope="request" />
@@ -62,12 +64,19 @@
         <sec:authorize access="not isAuthenticated()">
             <form name='f' action="<c:url value='/login' />" method='POST' class="navbar-form navbar-right">
                  <div class="form-group">
-                     <input type="text" class="form-control" name="username" placeholder="Username">
-                 </div>
-                 <div class="form-group">
-                     <input type="text" class="form-control" name="password" placeholder="Password">
-                 </div>
-                 <button type="submit" class="btn btn-default">Sign In</button>
+                            <input type="text" class="form-control input-sm" name="username"
+                                placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control input-sm"
+                                name="password" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                           <button type="submit" class="btn btn-primary btn-sm">Sign In</button>
+                        </div>
+                        <div class="form-group">
+                           <a class="btn btn-info btn-sm" href="register">Sign up</a>
+                        </div>
              </form>
         </sec:authorize>
         </div>
@@ -83,7 +92,7 @@
                          property="principal.username" /></span>!
              </div>
              <div class="col-md-2">
-                 <a class="pull-right" href="<c:url value='/logout' />">Logout</a>
+                 <a class="pull-right" href="<c:url value='/logout' />"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
              </div>
          </div>
          <hr>
