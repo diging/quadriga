@@ -17,35 +17,6 @@
 		$('#deactivated-users').DataTable();
 		$('#delete-users').DataTable();
 	});
-
-	function submitClick(id) {
-		var temp_id = id.replace(/\./g, "\\.");
-		//Check if Allow or Deny is selected
-		var selectedAccess = $(
-				"input[type='radio'][name='" + temp_id + "']:checked").map(
-				function() {
-					return this.value;
-				}).get();
-		if (selectedAccess.length == 0) {
-			$.alert("Please Approve/Deny the request", "Oops !!!");
-			return;
-		}
-
-		//If Allow is selected, atleast one role should be selected
-		var checkedVals = $('.' + temp_id + ':checkbox:checked').map(
-				function() {
-					return this.value;
-				}).get();
-		if (checkedVals.length == 0 && selectedAccess == 'approve') {
-			$.alert("Please select atleast one role for the user", "Oops !!!");
-			return;
-		}
-
-		//Create a path for the user to be passed to the Controller
-		var path = id + "-" + selectedAccess + "-" + checkedVals.join("-");
-		location.href = '${pageContext.servletContext.contextPath}/auth/users/access/'
-				+ path;
-	}
 </script>
 
 
@@ -53,18 +24,17 @@
 	<c:if test="${not empty userRequestsList}">
 		<h3>User Account Requests</h3>
 		<p>The following users requested accounts:</p>
-		<c:forEach var="user" items="${userRequestsList}">
+		<c:forEach var="userreq" items="${userRequestsList}">
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					User Name:
-					<c:out value="${user.userName}"></c:out>
+					${userreq.name} (${userreq.userName})
 				</div>
 
 				<div class="panel-body">
 					<form:form commandName="approveAccount" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/users/access/handleRequest">
-						<form:input type="hidden" path="username" value="${user.userName}" />
+						<form:input type="hidden" path="username" value="${userreq.userName}" />
 
 						<div>
 							<label class="radio-inline"><form:radiobutton
