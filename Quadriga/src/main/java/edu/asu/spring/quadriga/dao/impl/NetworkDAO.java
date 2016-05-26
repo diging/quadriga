@@ -21,6 +21,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkspaceNetwork;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
@@ -922,8 +923,15 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
 
             @SuppressWarnings("unchecked")
             List<NetworksDTO> listNetworksDTO = query.list();
-            networkList = networkMapper.getListOfNetworks(listNetworksDTO);
-
+            for (NetworksDTO networkDto : listNetworksDTO) {
+                INetwork network = networkMapper.getNetwork(networkDto);
+                NetworkWorkspaceDTO nwDto = networkDto.getNetworkWorkspace();
+                WorkspaceDTO wsDto = nwDto.getWorkspaceDTO();
+                IWorkSpace workspace = workspaceMapper.getWorkSpace(wsDto);
+                networkMapper.mapWorkspaceNetworkDTO(nwDto, network, workspace);
+                networkList.add(network);
+            }
+            
             // Update project name and workspace name of the network
             for (INetwork network : networkList) {
                 // Get the assigned user name for the network

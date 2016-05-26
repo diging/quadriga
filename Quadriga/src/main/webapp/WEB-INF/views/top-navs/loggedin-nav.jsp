@@ -71,11 +71,11 @@
 	</a>
 		<ul class="dropdown-menu">
 			<li><a
-				href="${pageContext.servletContext.contextPath}/auth/editing">Editing</a></li>
+				href="${pageContext.servletContext.contextPath}/auth/editing">Editing Workbench</a></li>
 			<li><a
 				href="${pageContext.servletContext.contextPath}/auth/transformation">Transformations</a></li>
 			<li><a
-				href="${pageContext.servletContext.contextPath}/auth/transformation/selectTransformationFiles">Upload</a></li>
+				href="${pageContext.servletContext.contextPath}/auth/transformation/selectTransformationFiles">Upload Transformation</a></li>
 		</ul></li>
 </sec:authorize>
 <!--<sec:authorize access="permitAll">

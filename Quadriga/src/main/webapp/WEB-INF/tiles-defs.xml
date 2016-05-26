@@ -779,7 +779,7 @@
 	</definition>
 
 	<!-- editing -->
-	<definition name="base.definition.editing" extends="base.definition">
+	<definition name="base.definition.editing" extends="base.definition.nonav">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation"
 			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
@@ -787,7 +787,7 @@
 	 	<put-attribute name="currentPage" value="editing" />
 	</definition>
 
-	<definition name="auth/editing" extends="base.definition">
+	<definition name="auth/editing" extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Editing" />
 		<put-attribute name="content" value="/WEB-INF/views/editing/editing.jsp" />
 	</definition>
@@ -844,7 +844,13 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/networks/networkvisual.jsp" />
 	</definition>
-
+	
+    <definition name="auth/editing/history" extends="base.definition.editing">
+        <put-attribute name="title" value="Quadriga Networks Edit" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/editing/networkshistory.jsp" />
+    </definition>
+    
 
 	<definition name="auth/editing/visualize" extends="base.definition.rightnav">
 		<put-attribute name="currentPage" value="networks" />
@@ -903,11 +909,6 @@
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
 
-	<definition name="auth/editing/history" extends="base.definition">
-		<put-attribute name="title" value="Quadriga Networks Edit" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/editing/networkshistory.jsp" />
-	</definition>
 	<definition name="base.definition.public.sites"
 		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp">
 		<put-attribute name="title" value="" />

@@ -12,6 +12,7 @@ import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
@@ -20,6 +21,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
@@ -27,6 +29,9 @@ public class WorkspaceDTOMapper extends BaseMapper {
 
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;
+	
+	@Autowired
+	private IProjectShallowMapper projectMapper;
 	
 	@Autowired
     private IUserManager userManager;
@@ -52,6 +57,8 @@ public class WorkspaceDTOMapper extends BaseMapper {
 		workSpace.setDescription(workspaceDTO.getDescription());
 		workSpace.setWorkspaceId(workspaceDTO.getWorkspaceid());
 		workSpace.setOwner(userManager.getUser(workspaceDTO.getWorkspaceowner().getUsername()));
+		ProjectDTO projectDto = workspaceDTO.getProjectWorkspaceDTO().getProjectDTO();
+		workSpace.setProject(projectMapper.getProject(projectDto));
 		return workSpace;
 	}
 	

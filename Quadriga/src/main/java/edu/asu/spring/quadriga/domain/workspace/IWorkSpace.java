@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 
 /**
@@ -70,5 +71,9 @@ public interface IWorkSpace
     public abstract void setExternalWorkspaceId(String externalWorkspaceId);
 
     public abstract String getExternalWorkspaceId();
+
+    public abstract void setProject(IProject project);
+
+    public abstract IProject getProject();
 
 }

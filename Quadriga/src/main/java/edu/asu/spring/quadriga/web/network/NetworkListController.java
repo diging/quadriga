@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.web.network;
 import java.security.Principal;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
 import org.codehaus.jettison.json.JSONException;
@@ -15,7 +14,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -122,7 +120,6 @@ public class NetworkListController {
 		}
 		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 
-		logger.info("Source reference ID " + networkManager.getSourceReferenceURL(networkId, networkManager.getLatestVersionOfNetwork(networkId)));
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
@@ -131,27 +128,6 @@ public class NetworkListController {
 		}
 		model.addAttribute("jsonstring",json);
 		return "auth/editing/editnetworks";
-	}
-
-	/**
-	 * Method for ajax call to generate the JSON for JStree to show the networks under project and workspace hiearchy  
-	 * @param model							Use to fetch the {@link ModelMap} object
-	 * @param principal						Used to fetch {@link IUser} details
-	 * @param res							Set the status of response			
-	 * @return								Returns the JStree JSON to the client
-	 * @throws QuadrigaStorageException
-	 * @throws JSONException
-	 */
-	@RequestMapping(value = "auth/networks/jstree", method = RequestMethod.GET)
-	public @ResponseBody String listNetworksJson(ModelMap model, Principal principal, HttpServletResponse res) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUser(principal.getName());
-		String jsTreeData = null;
-		jsTreeData = networkManager.getNetworkJSTreeJson(user.getUserName());
-		logger.info("JSon : "+ jsTreeData);
-		res.setStatus(200);
-		return jsTreeData;
-	}
-
-	
+	}	
 	
 }

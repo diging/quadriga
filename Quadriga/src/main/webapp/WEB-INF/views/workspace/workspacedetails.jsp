@@ -15,13 +15,6 @@
 		
 	});
 
-	$(document).ready(function() {
-		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false
-		});
-	});
 	$(document).ready(function(){
 		$('#txtModal').on('show.bs.modal', function(event){
 			var link = $(event.relatedTarget);
