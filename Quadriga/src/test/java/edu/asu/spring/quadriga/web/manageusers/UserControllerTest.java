@@ -165,26 +165,4 @@ public class UserControllerTest {
 		assertEquals(1,inactiveList.size());
 	}
 
-	/**
-	 * This method tests if a user is deactivated and returns the appropriate path.
-	 * @throws QuadrigaStorageException 
-	 */
-	@Test
-	@DirtiesContext
-	public void testDeactivateUser() throws QuadrigaStorageException {
-		//Check the return value
-		assertEquals(userContoller.deactivateUser("jdoe",model, principal),"redirect:/auth/users/manage");
-	}
-
-	/**
-	 * This method tests if a user is activated and returns the appropriate path. 
-	 * @throws QuadrigaStorageException 
-	 */
-	@Test
-	@DirtiesContext
-	public void testActivateUser() throws QuadrigaStorageException {
-		//Check the return value
-		assertEquals(userContoller.activateUser("jdoe",model, principal),"redirect:/auth/users/manage");
-	}
-
 }

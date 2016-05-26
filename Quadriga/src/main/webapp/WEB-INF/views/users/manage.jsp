@@ -70,10 +70,10 @@
 							<label class="radio-inline"><form:radiobutton
 									path="action" value="approve" /> Approve</label> <br> <span
 								style="margin-left: 40px;"></span>
-							<c:forEach var="checkbox" items="${userRoles}">
+							<c:forEach var="role" items="${userRoles}">
 								<label class="checkbox-inline"><form:checkbox
-										path="roles" label="${checkbox.displayName}"
-										value="${checkbox.DBid}" /></label>
+										path="roles" label="${role.displayName}"
+										value="${role.DBid}" /></label>
 							</c:forEach>
 						</div>
 
