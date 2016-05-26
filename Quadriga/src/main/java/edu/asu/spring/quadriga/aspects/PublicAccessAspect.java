@@ -37,9 +37,9 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @Aspect
 @Order(value = 100)
 @Component
-public class PubicAccessAspect {
+public class PublicAccessAspect {
     
-    private static final Logger logger = LoggerFactory.getLogger(PubicAccessAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(PublicAccessAspect.class);
 
 
     @Autowired
