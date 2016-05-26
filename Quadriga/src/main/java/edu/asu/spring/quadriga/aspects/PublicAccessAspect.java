@@ -19,17 +19,19 @@ import edu.asu.spring.quadriga.rest.ConceptCollectionRestController;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
- * This aspect checks if the requested page can be accessed by the user.
- * The aspect should be used only for controllers serving public pages. It requires
- * that the project backing a page is already injected into the method. It will then
- * check if the project is either public (then everybody can see the a page) or
- * if the current user is authenticated with Quadriga and is either the owner of
- * or a collaborator on the project.
+ * This aspect checks if the requested page can be accessed by the user. The
+ * aspect should be used only for controllers serving public pages. It requires
+ * that the project backing a page is already injected into the method. It will
+ * then check if the project is either public (then everybody can see the a
+ * page) or if the current user is authenticated with Quadriga and is either the
+ * owner of or a collaborator on the project.
  * 
- * This aspect only applies to methods in the package 'edu.asu.spring.quadriga.web' that
- * are annotated with {@link CheckPublicAccess}.
+ * This aspect only applies to methods in the package
+ * 'edu.asu.spring.quadriga.web' that are annotated with
+ * {@link CheckPublicAccess}.
  * 
- * The aspect has to be executed after the {@link InjectProjectAspect}. Its order is 100.
+ * The aspect has to be executed after the {@link InjectProjectAspect}. Its
+ * order is 100.
  * 
  * @author Julia Damerow
  *
@@ -38,44 +40,39 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @Order(value = 100)
 @Component
 public class PublicAccessAspect {
-    
-    private static final Logger logger = LoggerFactory.getLogger(PublicAccessAspect.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(PublicAccessAspect.class);
 
     @Autowired
     private IRetrieveProjectManager projectManager;
 
     @Around("within(edu.asu.spring.quadriga.web..*) && @annotation(check)")
-    public Object checkAccess(ProceedingJoinPoint joinPoint,
-            CheckPublicAccess check) throws Throwable {
+    public Object checkAccess(ProceedingJoinPoint joinPoint, CheckPublicAccess check) throws Throwable {
         Object[] args = joinPoint.getArgs();
         int idxOfProject = check.projectIndex();
 
         if (idxOfProject < 1 || idxOfProject > args.length) {
-            throw new AnnotationMisconfigurationException("There are "
-                    + args.length + " paramters, and you are trying to get "
-                    + idxOfProject + ".");
+            throw new AnnotationMisconfigurationException(
+                    "There are " + args.length + " paramters, and you are trying to get " + idxOfProject + ".");
         }
 
-        Object projectObj = args[idxOfProject-1];
+        Object projectObj = args[idxOfProject - 1];
 
         if (!(projectObj instanceof IProject)) {
-            throw new AnnotationMisconfigurationException(
-                    "The parameter you are accessing is not a project.");
+            throw new AnnotationMisconfigurationException("The parameter you are accessing is not a project.");
         }
 
         IProject project = (IProject) projectObj;
 
-        Authentication auth = SecurityContextHolder.getContext()
-                .getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName().toLowerCase();
 
         // if project is public or user can access the website because they are
-        // the project owner or a collaborator on the project, proceed. Otherwise
+        // the project owner or a collaborator on the project, proceed.
+        // Otherwise
         // show forbidden page.
         if (project.getProjectAccess() == EProjectAccessibility.PUBLIC
-                || (userName != null && projectManager.canAccessProjectWebsite(
-                        project.getUnixName(), userName))) {
+                || (userName != null && projectManager.canAccessProjectWebsite(project.getUnixName(), userName))) {
             return joinPoint.proceed();
         } else {
             logger.debug("Access denied to: " + userName);

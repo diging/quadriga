@@ -12,11 +12,19 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
+/**
+ * This class intercepts the methods annotated by {@link InjectProjectById}
+ * and retrieves the Project Id from the variable annotated by {@link GetProject}
+ * Inject the Project into the variable annotated by {@link InjectProject}
+ * 
+ * @author Nischal Samji
+ *
+ */
 @Aspect
 @Order(value = 10)
 @Component
 public class InjectProjectByIdAspect extends InjectProjectAspect {
-    
+
     @Autowired
     private IRetrieveProjectManager projectManager;
 
@@ -24,7 +32,7 @@ public class InjectProjectByIdAspect extends InjectProjectAspect {
     public Object injectProject(ProceedingJoinPoint joinPoint, InjectProjectById ipId) throws Throwable {
         return super.injectProject(joinPoint);
     }
-    
+
     @Override
     public String getErrorPage() {
         return null;

@@ -48,8 +48,8 @@ public class BrowseNetworkController {
     @CheckPublicAccess(projectIndex = 4)
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/browsenetworks", method = RequestMethod.GET)
-    public String browseNetworks(@GetProject @PathVariable("ProjectUnixName") String unixName, Model model, Principal principal,
-            @InjectProject IProject project) throws QuadrigaStorageException {
+    public String browseNetworks(@GetProject @PathVariable("ProjectUnixName") String unixName, Model model,
+            Principal principal, @InjectProject IProject project) throws QuadrigaStorageException {
         String projectid = project.getProjectId();
         List<INetwork> networks = networkmanager.getNetworksInProject(projectid, INetworkStatus.APPROVED);
         model.addAttribute("networks", networks);

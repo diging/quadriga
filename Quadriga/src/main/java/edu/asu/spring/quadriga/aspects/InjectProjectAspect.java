@@ -5,7 +5,6 @@ import java.lang.reflect.Parameter;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.asu.spring.quadriga.aspects.annotations.GetProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
@@ -15,24 +14,24 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 /**
  * This class intercepts all controller methods. If one of the parameters of a
  * method is annotated with {@link InjectProject}, it will find the parameter
- * annotated with {@link PathVariable} that has refers to the same variable in
- * the path. It will then try to find the project with the unix name provided in
+ * annotated with {@link GetProject} that has refers to the same variable in the
+ * path. It will then try to find the project with the unix name/ Id provided in
  * the path variable. For example, the following method annotations:
  * 
  * <code>
- * public String showProject(@PathVariable("ProjectUnixName") String unixName, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
+ * public String showProject( @GetProject @PathVariable("ProjectUnixName") String unixName, @InjectProject IProject project)
  * </code>
  * 
  * will result in a project object filled with the information of the project
  * with the unix name "unixName".
  * 
- * @author Julia Damerow
+ * @author Julia Damerow, Nischal Samji
  *
  */
 public abstract class InjectProjectAspect {
 
     public Object injectProject(ProceedingJoinPoint joinPoint) throws Throwable {
-        // get all the values we need
+
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         Parameter[] paras = method.getParameters();
@@ -73,7 +72,20 @@ public abstract class InjectProjectAspect {
         return joinPoint.proceed(arguments);
     }
 
+    /**
+     * This method returns the error page when there is no project associated
+     * for the given project variable.
+     * 
+     * @return Returns the error page's model as a string
+     */
     public abstract String getErrorPage();
 
+    /**
+     * @param proj
+     *            Project Id/ Unix name to retrieve the associated project.
+     * @return Returns a project object associated with the project id/ unix
+     *         name.
+     * @throws QuadrigaStorageException
+     */
     public abstract IProject getProject(String proj) throws QuadrigaStorageException;
 }
