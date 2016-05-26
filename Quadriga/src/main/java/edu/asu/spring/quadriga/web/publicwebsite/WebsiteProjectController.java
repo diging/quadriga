@@ -7,32 +7,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
+import edu.asu.spring.quadriga.aspects.annotations.GetProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
-import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.network.ID3Creator;
-import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.publicwebsite.IPublicPageBlockLinkTargets;
 import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * This controller has all the mappings required to view the external website of
@@ -45,9 +37,6 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @PropertySource(value = "classpath:/user.properties")
 @Controller
 public class WebsiteProjectController {
-
-    @Autowired
-    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private Environment env;
@@ -74,20 +63,14 @@ public class WebsiteProjectController {
      *             Database storage exception thrown
      */
     @CheckPublicAccess(projectIndex = 4)
-    @InjectProjectByName(projectIndex = 4)
+    @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}", method = RequestMethod.GET)
-    public <T> String showProject(
-            Model model,
-            @PathVariable("ProjectUnixName") String unixName,
-            Principal principal,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
-            throws QuadrigaStorageException {
+    public <T> String showProject(Model model, @GetProject @PathVariable("ProjectUnixName") String unixName,
+            Principal principal, @InjectProject IProject project) throws QuadrigaStorageException {
 
-        model.addAttribute("project_baseurl",
-                env.getProperty("project.cite.baseurl"));
+        model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 
-        List<IPublicPage> publicPages = publicPageManager
-                .retrievePublicPageContent(project.getProjectId());
+        List<IPublicPage> publicPages = publicPageManager.retrievePublicPageContent(project.getProjectId());
         Collections.sort(publicPages, new Comparator<IPublicPage>() {
             @Override
             public int compare(IPublicPage o1, IPublicPage o2) {
@@ -96,8 +79,7 @@ public class WebsiteProjectController {
         });
 
         Map<String, String> linkToMap = getLinkTargetMap();
-        publicPages.forEach(item -> item.setLinkTo(linkToMap.get(item
-                .getLinkTo())));
+        publicPages.forEach(item -> item.setLinkTo(linkToMap.get(item.getLinkTo())));
 
         model.addAttribute("blocks", publicPages);
 
@@ -105,7 +87,6 @@ public class WebsiteProjectController {
         return "sites/website";
 
     }
-
 
     /*
      * This is kind of ugly and should be replace with a better solution. But

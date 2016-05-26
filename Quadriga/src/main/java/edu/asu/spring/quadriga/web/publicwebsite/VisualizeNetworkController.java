@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
+import edu.asu.spring.quadriga.aspects.annotations.GetProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -23,7 +24,7 @@ import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 
 @Controller
 public class VisualizeNetworkController {
-    
+
     @Autowired
     private INetworkTransformationManager transformationManager;
 
@@ -32,7 +33,6 @@ public class VisualizeNetworkController {
 
     @Autowired
     private INetworkManager networkmanager;
-
 
     /**
      * This method gives the visualization of the network with the given network
@@ -53,21 +53,16 @@ public class VisualizeNetworkController {
      */
     @CheckPublicAccess(projectIndex = 5)
     @RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
-    public String visualizeNetworks(
-            @PathVariable("projectUnixName") String unixName,
-            @PathVariable("networkId") String networkId,
-            ModelMap model,
-            Principal principal,
-            @InjectProject(unixNameParameter = "projectUnixName") IProject project)
-            throws QuadrigaStorageException, JAXBException {
+    public String visualizeNetworks(@GetProject @PathVariable("projectUnixName") String unixName,
+            @PathVariable("networkId") String networkId, ModelMap model, Principal principal,
+            @InjectProject IProject project) throws QuadrigaStorageException, JAXBException {
         INetwork network = networkmanager.getNetwork(networkId);
         if (network == null) {
             return "auth/accessissue";
         }
         model.addAttribute("project", project);
 
-        ITransformedNetwork transformedNetwork = transformationManager
-                .getTransformedNetwork(networkId);
+        ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 
         // test the transformed networks
 
@@ -75,8 +70,7 @@ public class VisualizeNetworkController {
         model.addAttribute("networkid", nwId);
         String json = null;
         if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(),
-                    transformedNetwork.getLinks());
+            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
         model.addAttribute("jsonstring", json);
         return "sites/networks/visualize";

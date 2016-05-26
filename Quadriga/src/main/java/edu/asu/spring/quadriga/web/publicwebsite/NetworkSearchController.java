@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
+import edu.asu.spring.quadriga.aspects.annotations.GetProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -35,8 +37,8 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
- * This controller searches for concept terms
- * and returns json as response and also a combined network of searched terms
+ * This controller searches for concept terms and returns json as response and
+ * also a combined network of searched terms
  *
  * @author Vikranth Doosa
  */
@@ -59,8 +61,8 @@ public class NetworkSearchController {
     @Autowired
     private IConceptpowerConnector conceptpowerConnector;
 
-    private static String defaultJsonErrorMsg = "{\"status\" : 500," +
-            " \"message\": \"Unable to get the search terms\"}";
+    private static String defaultJsonErrorMsg = "{\"status\" : 500,"
+            + " \"message\": \"Unable to get the search terms\"}";
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkSearchController.class);
 
@@ -71,10 +73,10 @@ public class NetworkSearchController {
      * @throws QuadrigaStorageException
      */
     @CheckPublicAccess(projectIndex = 3)
+    @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
-    public String getSearch(@PathVariable("projectUnixName") String projectUnixName, Model model,
-            @InjectProject(unixNameParameter = "projectUnixName") IProject project)
-            throws QuadrigaStorageException {
+    public String getSearch(@GetProject @PathVariable("projectUnixName") String projectUnixName, Model model,
+            @InjectProject IProject project) throws QuadrigaStorageException {
 
         model.addAttribute("project", project);
         return "sites/search";
@@ -86,12 +88,11 @@ public class NetworkSearchController {
      * @return json
      */
     @CheckPublicAccess(projectIndex = 3)
-    @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @InjectProjectByName
     public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm,
-            @PathVariable("projectUnixName") String projectUnixName, 
-            @InjectProject(unixNameParameter = "projectUnixName") IProject project) {
+            @GetProject @PathVariable("projectUnixName") String projectUnixName, @InjectProject IProject project) {
         List<ISearchResult> searchResults = service.search(searchTerm);
         List<JSONObject> jsonResults = new ArrayList<JSONObject>();
 
@@ -118,15 +119,14 @@ public class NetworkSearchController {
     }
 
     @CheckPublicAccess(projectIndex = 3)
+    @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
-    public String getSearchTransformedNetwork(@PathVariable("projectUnixName") String projectUnixName,
-                                              @RequestParam("conceptId") String conceptId,
-                                              @InjectProject(unixNameParameter = "projectUnixName") IProject project,
-                                              Model model)
-        throws QuadrigaStorageException {
+    public String getSearchTransformedNetwork(@GetProject @PathVariable("projectUnixName") String projectUnixName,
+            @RequestParam("conceptId") String conceptId, @InjectProject IProject project, Model model)
+                    throws QuadrigaStorageException {
 
-        ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetwork(
-                project.getProjectId(), conceptId, INetworkStatus.APPROVED);
+        ITransformedNetwork transformedNetwork = transformationManager
+                .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
 
         String json = null;
         if (transformedNetwork != null) {

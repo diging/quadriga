@@ -9,6 +9,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 public @interface InjectProject {
 
-    String unixNameParameter() default "unixName";
-    String projId() default "projId";
 }
