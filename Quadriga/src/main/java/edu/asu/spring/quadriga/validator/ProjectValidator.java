@@ -5,6 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProject;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 
 @Service
@@ -12,7 +13,7 @@ public class ProjectValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
-        return arg0.isAssignableFrom(Project.class);
+        return arg0.isAssignableFrom(Project.class) || arg0.isAssignableFrom(PassThroughProject.class);
     }
 
     /**
