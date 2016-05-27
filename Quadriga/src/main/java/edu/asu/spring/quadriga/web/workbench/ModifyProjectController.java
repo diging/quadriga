@@ -25,6 +25,9 @@ import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.workbench.IModifyProjectFormFactory;
@@ -71,11 +74,9 @@ public class ModifyProjectController {
 
     @Resource(name = "projectconstants")
     private Properties messages;
-    
+
     @Autowired
     private MessageSource messageSource;
-
-
 
     /**
      * Attach the custom validator to the Spring context
@@ -84,7 +85,6 @@ public class ModifyProjectController {
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
     }
-
 
     /**
      * This method is called during editing a project.
@@ -97,12 +97,14 @@ public class ModifyProjectController {
      * @author Kiran Kumar Batna
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
-    public ModelAndView updateProjectRequestForm(@PathVariable("projectid") String projectid, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+    @InjectProjectById
+    public ModelAndView updateProjectRequestForm(@ProjectIdentifier @PathVariable("projectid") String projectid,
+            @InjectProject IProject project, Principal principal) throws QuadrigaStorageException,
+            QuadrigaAccessException {
         ModelAndView model = new ModelAndView("auth/workbench/modifyproject");
-        IProject project = retrieveProjectManager.getProjectDetails(projectid);
         model.getModelMap().put("project", project);
         model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
         return model;
@@ -123,7 +125,7 @@ public class ModifyProjectController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-            RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
     public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project") Project project,
             BindingResult result, @PathVariable("projectid") String projectid, Principal principal,
@@ -153,17 +155,20 @@ public class ModifyProjectController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/assignownereditor/{projectid}", method = RequestMethod.GET)
-    public String assignOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,
-            Principal principal, RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
+    @InjectProjectById
+    public String assignOwnerEditorRole(@ProjectIdentifier @PathVariable("projectid") String projectId,
+            @InjectProject IProject project, ModelMap model, Principal principal, RedirectAttributes redirectAttrs,
+            Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
         IUser user = userManager.getUser(principal.getName());
         String userName = user.getUserName();
         projectManager.assignEditorRole(projectId, userName);
-         
+
         redirectAttrs.addFlashAttribute("show_success_alert", true);
-        redirectAttrs.addFlashAttribute("success_alert_msg", messageSource.getMessage("project.owner_is_editor.success", new String[] {}, locale));
-         
+        redirectAttrs.addFlashAttribute("success_alert_msg",
+                messageSource.getMessage("project.owner_is_editor.success", new String[] {}, locale));
+
         return "redirect:/auth/workbench/projects/" + projectId;
     }
 
@@ -177,18 +182,20 @@ public class ModifyProjectController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/deleteownereditor/{projectid}", method = RequestMethod.GET)
-    public String deleteOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,
-            Principal principal, RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
+    @InjectProjectById
+    public String deleteOwnerEditorRole(@ProjectIdentifier @PathVariable("projectid") String projectId,
+            @InjectProject IProject project, ModelMap model, Principal principal, RedirectAttributes redirectAttrs,
+            Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
         String userName = principal.getName();
         projectManager.removeEditorRole(projectId, userName);
-        
+
         redirectAttrs.addFlashAttribute("show_success_alert", true);
-        redirectAttrs.addFlashAttribute("success_alert_msg", messageSource.getMessage("project.owner_is_not_editor.success", new String[] {}, locale));
-        
-        
+        redirectAttrs.addFlashAttribute("success_alert_msg",
+                messageSource.getMessage("project.owner_is_not_editor.success", new String[] {}, locale));
+
         return "redirect:/auth/workbench/projects/" + projectId;
     }
-    
+
 }

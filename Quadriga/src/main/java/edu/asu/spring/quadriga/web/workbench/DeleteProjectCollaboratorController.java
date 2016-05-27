@@ -22,6 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -74,14 +77,13 @@ public class DeleteProjectCollaboratorController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/collaborators/delete", method = RequestMethod.GET)
-    public ModelAndView displayDeleteCollaborator(@PathVariable("projectid") String projectId)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+    @InjectProjectById
+    public ModelAndView displayDeleteCollaborator(@ProjectIdentifier @PathVariable("projectid") String projectId,
+            @InjectProject IProject project) throws QuadrigaStorageException, QuadrigaAccessException {
 
         ModelAndView modelAndView = new ModelAndView("auth/workbench/deletecollaborators");
 
         // retrieve project details
-        IProject project = retrieveprojectManager.getProjectDetails(projectId);
-
         ModifyCollaboratorForm collaboratorForm = collaboratorFormFactory.createCollaboratorFormObject();
 
         List<ModifyCollaborator> modifyCollaborator = collaboratorFormManager.getProjectCollaborators(projectId);
@@ -99,7 +101,9 @@ public class DeleteProjectCollaboratorController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/collaborators/delete", method = RequestMethod.POST)
-    public String deleteCollaborators(@PathVariable("projectid") String projectId,
+    @InjectProjectById
+    public String deleteCollaborators(@ProjectIdentifier @PathVariable("projectid") String projectId,
+            @InjectProject IProject project,
             @Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm,
             BindingResult result, Principal principal, Model model, Locale locale, RedirectAttributes redirectAttrs)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -108,8 +112,6 @@ public class DeleteProjectCollaboratorController {
             List<ModifyCollaborator> collaborators = collaboratorFormManager.getProjectCollaborators(projectId);
             collaboratorForm.setCollaborators(collaborators);
 
-            // retrieve project details
-            IProject project = retrieveprojectManager.getProjectDetails(projectId);
             model.addAttribute("collaboratorForm", collaboratorForm);
 
             model.addAttribute("myprojectId", projectId);

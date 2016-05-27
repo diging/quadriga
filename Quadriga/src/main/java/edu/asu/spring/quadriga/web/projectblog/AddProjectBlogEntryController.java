@@ -77,7 +77,7 @@ public class AddProjectBlogEntryController {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.GET)
     public String addProjectBlogEntryForm(@PathVariable("ProjectUnixName") String projectUnixName,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project,
+            @InjectProject IProject project,
             @RequestParam("projectId") String projectId, Model model)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
@@ -119,7 +119,7 @@ public class AddProjectBlogEntryController {
     public ModelAndView addProjectBlogEntryRequest(
             @Validated @ModelAttribute("projectBlogEntry") ProjectBlogEntry projectBlogEntry, BindingResult result,
             @PathVariable("ProjectUnixName") String projectUnixName,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project,
+            @InjectProject IProject project,
             @RequestParam("projectId") String projectId, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
 

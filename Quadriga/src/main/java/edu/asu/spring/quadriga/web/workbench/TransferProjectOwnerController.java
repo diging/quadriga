@@ -23,6 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.User;
@@ -78,13 +81,12 @@ public class TransferProjectOwnerController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {}) })
     @RequestMapping(value = "auth/workbench/projects/{projectid}/transfer", method = RequestMethod.GET)
-    public ModelAndView transferProjectOwnerRequestForm(@PathVariable("projectid") String projectid)
+    @InjectProjectById
+    public ModelAndView transferProjectOwnerRequestForm(@ProjectIdentifier @PathVariable("projectid") String projectid,@InjectProject IProject project)
             throws QuadrigaStorageException, QuadrigaAccessException {
         // create a view
         ModelAndView model = new ModelAndView("auth/workbench/transferprojectowner");
 
-        // retrieve the project details
-        IProject project = retrieveProjectManager.getProjectDetails(projectid);
 
         // create a model
         model.getModelMap().put("user", userFactory.createUserObject());
@@ -124,12 +126,12 @@ public class TransferProjectOwnerController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {}) })
     @RequestMapping(value = "auth/workbench/projects/{projectid}/transfer", method = RequestMethod.POST)
-    public String transferProjectOwnerRequest(@PathVariable("projectid") String projectid, Principal principal,
-            @Validated @ModelAttribute("user") User collaboratorUser, BindingResult result, Model model, RedirectAttributes redirectAttrs, Locale locale)
-            throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
-       
-        // retrieve the project details
-        IProject project = retrieveProjectManager.getProjectDetails(projectid);
+    @InjectProjectById
+    public String transferProjectOwnerRequest(@ProjectIdentifier @PathVariable("projectid") String projectid,
+            Principal principal, @InjectProject IProject project,
+            @Validated @ModelAttribute("user") User collaboratorUser, BindingResult result, Model model,
+            RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException, QuadrigaAccessException,
+            QuadrigaException {
 
         model.addAttribute("myprojectId", projectid);
 
@@ -150,11 +152,12 @@ public class TransferProjectOwnerController {
 
             model.addAttribute("collaboratinguser", userList);
             model.addAttribute("show_error_alert", true);
-            model.addAttribute("error_alert_msg", messageSource.getMessage("project.transfer_ownership.failure", new String[] {}, locale));
-            
+            model.addAttribute("error_alert_msg",
+                    messageSource.getMessage("project.transfer_ownership.failure", new String[] {}, locale));
+
             return "auth/workbench/transferprojectowner";
         }
-        
+
         // fetch the new owner
         String newOwner = collaboratorUser.getUserName();
 

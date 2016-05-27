@@ -15,6 +15,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IStatisticsSettings;
 import edu.asu.spring.quadriga.domain.impl.workbench.StatisticsSettingsBean;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -42,24 +45,20 @@ public class StatisticsSettingsController {
      */
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_OWNER,
-            RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/statistics", method = RequestMethod.GET)
-    public ModelAndView publicPageStatisticsSettingsForm(
-            @PathVariable("projectid") String projectid)
+    @InjectProjectById
+    public ModelAndView publicPageStatisticsSettingsForm(@ProjectIdentifier @PathVariable("projectid") String projectid, @InjectProject IProject project)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         ModelAndView model = new ModelAndView("auth/workbench/publicstatistics");
-        IProject project = projectManager.getProjectDetails(projectid);
         model.getModelMap().put("project", project);
 
-        List<IStatisticsSettings> statisticsSettingsList = statsSettingsService
-                .getStatisticsSettingsList(projectid);
+        List<IStatisticsSettings> statisticsSettingsList = statsSettingsService.getStatisticsSettingsList(projectid);
         model.getModelMap().put("statistics", statisticsSettingsList);
 
         StatisticsSettingsBean statisticsSettingsBean = new StatisticsSettingsBean();
-        model.getModelMap().put("statisticsSettingsBean",
-                statisticsSettingsBean);
+        model.getModelMap().put("statisticsSettingsBean", statisticsSettingsBean);
 
         return model;
     }
@@ -74,20 +73,16 @@ public class StatisticsSettingsController {
 
     @RequestMapping(method = RequestMethod.POST, value = "auth/workbench/{projectid}/submitstatistics")
     public ModelAndView submitStatisticsSettings(
-            @ModelAttribute("statistics") StatisticsSettingsBean statisticsSettingsBean,
-            BindingResult result, @PathVariable("projectid") String projectid,
-            RedirectAttributes attr) throws QuadrigaStorageException,
+            @ModelAttribute("statistics") StatisticsSettingsBean statisticsSettingsBean, BindingResult result,
+            @PathVariable("projectid") String projectid, RedirectAttributes attr) throws QuadrigaStorageException,
             QuadrigaAccessException {
-        ModelAndView model = new ModelAndView("redirect:/auth/workbench/"
-                + projectid + "/statistics");
+        ModelAndView model = new ModelAndView("redirect:/auth/workbench/" + projectid + "/statistics");
 
         try {
             String[] names = statisticsSettingsBean.getNames();
-            statsSettingsService
-                    .addOrUpdateStatisticsSettings(projectid, names);
+            statsSettingsService.addOrUpdateStatisticsSettings(projectid, names);
             attr.addFlashAttribute("show_success_alert", true);
-            attr.addFlashAttribute("success_alert_msg",
-                    "Settings has been updated successfully.");
+            attr.addFlashAttribute("success_alert_msg", "Settings has been updated successfully.");
             model.getModelMap().put("projectid", projectid);
         } catch (QuadrigaStorageException e) {
             StringBuffer errorMsg = new StringBuffer();
