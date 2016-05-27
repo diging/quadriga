@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
-import edu.asu.spring.quadriga.aspects.annotations.GetProject;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
@@ -75,7 +75,7 @@ public class NetworkSearchController {
     @CheckPublicAccess(projectIndex = 3)
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
-    public String getSearch(@GetProject @PathVariable("projectUnixName") String projectUnixName, Model model,
+    public String getSearch(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, Model model,
             @InjectProject IProject project) throws QuadrigaStorageException {
 
         model.addAttribute("project", project);
@@ -92,7 +92,7 @@ public class NetworkSearchController {
     @ResponseBody
     @InjectProjectByName
     public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm,
-            @GetProject @PathVariable("projectUnixName") String projectUnixName, @InjectProject IProject project) {
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, @InjectProject IProject project) {
         List<ISearchResult> searchResults = service.search(searchTerm);
         List<JSONObject> jsonResults = new ArrayList<JSONObject>();
 
@@ -121,7 +121,7 @@ public class NetworkSearchController {
     @CheckPublicAccess(projectIndex = 3)
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
-    public String getSearchTransformedNetwork(@GetProject @PathVariable("projectUnixName") String projectUnixName,
+    public String getSearchTransformedNetwork(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
             @RequestParam("conceptId") String conceptId, @InjectProject IProject project, Model model)
                     throws QuadrigaStorageException {
 

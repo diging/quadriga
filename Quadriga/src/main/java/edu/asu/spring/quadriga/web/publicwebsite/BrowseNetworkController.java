@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
-import edu.asu.spring.quadriga.aspects.annotations.GetProject;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -48,7 +48,7 @@ public class BrowseNetworkController {
     @CheckPublicAccess(projectIndex = 4)
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/browsenetworks", method = RequestMethod.GET)
-    public String browseNetworks(@GetProject @PathVariable("ProjectUnixName") String unixName, Model model,
+    public String browseNetworks(@ProjectIdentifier @PathVariable("ProjectUnixName") String unixName, Model model,
             Principal principal, @InjectProject IProject project) throws QuadrigaStorageException {
         String projectid = project.getProjectId();
         List<INetwork> networks = networkmanager.getNetworksInProject(projectid, INetworkStatus.APPROVED);

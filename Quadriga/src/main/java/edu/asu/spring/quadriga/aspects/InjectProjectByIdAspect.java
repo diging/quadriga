@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * This class intercepts the methods annotated by {@link InjectProjectById}
- * and retrieves the Project Id from the variable annotated by {@link GetProject}
+ * and retrieves the Project Id from the variable annotated by {@link ProjectIdentifier}
  * Inject the Project into the variable annotated by {@link InjectProject}
  * 
  * @author Nischal Samji

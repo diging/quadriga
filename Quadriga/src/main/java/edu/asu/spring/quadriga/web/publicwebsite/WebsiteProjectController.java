@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
-import edu.asu.spring.quadriga.aspects.annotations.GetProject;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -65,7 +65,7 @@ public class WebsiteProjectController {
     @CheckPublicAccess(projectIndex = 4)
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}", method = RequestMethod.GET)
-    public <T> String showProject(Model model, @GetProject @PathVariable("ProjectUnixName") String unixName,
+    public <T> String showProject(Model model, @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,
             Principal principal, @InjectProject IProject project) throws QuadrigaStorageException {
 
         model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));

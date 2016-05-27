@@ -6,24 +6,26 @@ import java.lang.reflect.Parameter;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import edu.asu.spring.quadriga.aspects.annotations.GetProject;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
- * This class intercepts all controller methods. If one of the parameters of a
- * method is annotated with {@link InjectProject}, it will find the parameter
- * annotated with {@link GetProject} that has refers to the same variable in the
- * path. It will then try to find the project with the unix name/ Id provided in
- * the path variable. For example, the following method annotations:
+ * This class intercepts all controller methods. If one of the methods is
+ * annotated with {@link InjectProjectById} or {@link InjectProjectByName}, it
+ * will find the parameter annotated with {@link ProjectIdentifier}. Retrieves
+ * the Project Name/ Project Id in the variable and injects the projects into
+ * the variable annotated with {@link InjectProject} For example, the following
+ * method annotations:
  * 
  * <code>
- * public String showProject( @GetProject @PathVariable("ProjectUnixName") String unixName, @InjectProject IProject project)
+ * @InjectProjectByName
+ * public String showProject( @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName, @InjectProject IProject project)
  * </code>
  * 
  * will result in a project object filled with the information of the project
- * with the unix name "unixName".
+ * with the unix name specified inthe unixName variable.
  * 
  * @author Julia Damerow, Nischal Samji
  *
@@ -51,7 +53,7 @@ public abstract class InjectProjectAspect {
                     projectParamIdx = i;
                 }
 
-                if (p.getAnnotation(GetProject.class) != null) {
+                if (p.getAnnotation(ProjectIdentifier.class) != null) {
                     projVarIndex = i;
                 }
             }

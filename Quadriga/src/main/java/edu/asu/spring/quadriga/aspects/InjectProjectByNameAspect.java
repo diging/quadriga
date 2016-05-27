@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import edu.asu.spring.quadriga.aspects.annotations.GetProject;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -16,7 +16,7 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * This class intercepts the methods annotated by {@link InjectProjectByName}
- * and retrieves the Project Id from the variable annotated by {@link GetProject}
+ * and retrieves the Project Id from the variable annotated by {@link ProjectIdentifier}
  * Inject the Project into the variable annotated by {@link InjectProject}
  * 
  * @author Nischal Samji

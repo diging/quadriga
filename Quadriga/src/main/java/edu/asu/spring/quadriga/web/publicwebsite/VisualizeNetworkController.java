@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
-import edu.asu.spring.quadriga.aspects.annotations.GetProject;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -53,7 +53,7 @@ public class VisualizeNetworkController {
      */
     @CheckPublicAccess(projectIndex = 5)
     @RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
-    public String visualizeNetworks(@GetProject @PathVariable("projectUnixName") String unixName,
+    public String visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, ModelMap model, Principal principal,
             @InjectProject IProject project) throws QuadrigaStorageException, JAXBException {
         INetwork network = networkmanager.getNetwork(networkId);
