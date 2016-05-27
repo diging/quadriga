@@ -82,7 +82,7 @@
 <h2>Remove Concept Collections from Workspace: ${workspacedetails.workspaceName}</h2>
 <hr/>
 
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
 
 
 	<c:choose>

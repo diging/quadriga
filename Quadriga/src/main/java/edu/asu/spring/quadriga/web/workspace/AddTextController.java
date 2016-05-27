@@ -119,7 +119,7 @@ public class AddTextController {
             model.setViewName("auth/workbench/workspace/addtext");
             model.getModelMap().put("textfile", txtFile);
         } else {
-            model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/" + workspaceid);
+            model = new ModelAndView("redirect:/auth/workbench/workspace/" + workspaceid);
             txtFile.setWorkspaceId(workspaceid);
             txtFile.setProjectId(projid);
             try {

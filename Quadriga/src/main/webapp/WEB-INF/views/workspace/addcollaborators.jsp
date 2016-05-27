@@ -43,7 +43,7 @@ $(document).ready(function() {
 });
 function onSubmit(){
 	
-	location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}';
+	location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}';
 }
 </script>
 	<form:form commandName="collaborator" method="POST"

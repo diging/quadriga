@@ -67,7 +67,7 @@
 				<div class="panel panel-default">
                     <div class="panel-body">
 	                    <a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><i class="ion-filing icons"></i> <c:out
+						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.workspaceId}"><i class="ion-filing icons"></i> <c:out
 	                            value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
 	                        
 	                    <c:out value="${workspace.description}"></c:out>
@@ -79,7 +79,7 @@
 			     <div class="panel panel-default">
                     <div class="panel-body">
 				     <a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><i class="ion-filing icons"></i> <c:out
+						href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.workspaceId}"><i class="ion-filing icons"></i> <c:out
 	                    value="${workspace.workspaceName}"></c:out></a> (Collaborator)<br> <c:out
 	                    value="${workspace.description}"></c:out>
 	                </div>

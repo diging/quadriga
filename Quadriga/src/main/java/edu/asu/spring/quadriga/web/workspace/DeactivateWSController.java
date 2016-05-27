@@ -51,7 +51,7 @@ public class DeactivateWSController {
             Principal principal, RedirectAttributes redirectAttributes)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        ModelAndView model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/"
+        ModelAndView model = new ModelAndView("redirect:/auth/workbench/workspace/"
                 + workspaceid);
         
         archiveWSManager.deactivateWorkspace(workspaceid, principal.getName());

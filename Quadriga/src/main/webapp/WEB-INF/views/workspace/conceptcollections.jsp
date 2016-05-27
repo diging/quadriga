@@ -22,7 +22,7 @@
 <h2>Workspace: ${workspacedetails.workspaceName}</h2>
 <hr />
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}'"
 	value='Okay'>
 <br>
 <br>

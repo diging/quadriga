@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web.workbench;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -32,7 +31,6 @@ import edu.asu.spring.quadriga.domain.factory.workbench.IModifyProjectFormFactor
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectFactory;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;

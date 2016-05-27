@@ -182,7 +182,7 @@ public class ArchiveWSController
 		redirectAttributes.addFlashAttribute("success_alert_msg",
 				"The workspace has been successfully archived.");
 
-		return "redirect:/auth/workbench/workspace/workspacedetails/"
+		return "redirect:/auth/workbench/workspace/"
 				+ workspaceId;
 	}
 	
@@ -317,7 +317,7 @@ public class ArchiveWSController
 		redirectAttributes.addFlashAttribute("show_success_alert", true);
 		redirectAttributes.addFlashAttribute("success_alert_msg", "The workspace has been successfully unarchived.");
 
-		return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
+		return "redirect:/auth/workbench/workspace/" + workspaceId;
 	}
 
 }

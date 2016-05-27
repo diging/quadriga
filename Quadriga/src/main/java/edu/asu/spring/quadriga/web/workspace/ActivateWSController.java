@@ -84,7 +84,7 @@ public class ActivateWSController {
         // fetch the user name
         String userName = principal.getName();
 
-        ModelAndView model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/"
+        ModelAndView model = new ModelAndView("redirect:/auth/workbench/workspace/"
                 + workspaceid);
 
         archiveWSManager.activateWorkspace(workspaceid, userName);

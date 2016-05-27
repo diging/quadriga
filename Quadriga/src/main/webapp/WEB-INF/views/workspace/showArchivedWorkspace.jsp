@@ -31,7 +31,7 @@ $(document).ready(function() {
 <br>
 <c:forEach var="workspace" items="${archivedWSList}">
     <li class="ws with-icon"><a
-        href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}">
+        href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.id}">
             <c:out value="${workspace.name}"></c:out>
     </a> (Owner) <br> <c:out value="${workspace.description}"></c:out>
     </li>

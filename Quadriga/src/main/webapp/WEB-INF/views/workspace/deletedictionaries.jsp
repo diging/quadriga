@@ -80,7 +80,7 @@
 <h2>Delete Dictionaries from Workspace: ${workspacedetails.workspaceName}</h2>
 <hr />
 
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
 
 
 <c:choose>
