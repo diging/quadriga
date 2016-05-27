@@ -42,7 +42,7 @@ import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 
 @Controller
 @Scope(value="session")
-public class ListWSController 
+public class WorkspaceController 
 {
     public final static int SUCCESS = 1;
     public final static int FAILURE = 0;
@@ -63,7 +63,7 @@ public class ListWSController
     private INetworkManager networkManager;
     
     private static final Logger logger = LoggerFactory
-            .getLogger(ListWSController.class);
+            .getLogger(WorkspaceController.class);
 
     /**
      * This will list the details of workspaces 
@@ -76,7 +76,7 @@ public class ListWSController
      * @throws QuadrigaException 
      * @author Kiran Kumar Batna
      */
-    @RequestMapping(value="auth/workbench/workspace/workspacedetails/{workspaceid}", method = RequestMethod.GET)
+    @RequestMapping(value="auth/workbench/workspace/{workspaceid}", method = RequestMethod.GET)
     public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
     {
         String userName = principal.getName();

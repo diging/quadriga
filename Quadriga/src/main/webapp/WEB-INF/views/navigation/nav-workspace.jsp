@@ -26,27 +26,37 @@
   });
 </script>
 <!--  Issue fixed by QUAD-55 Bharat Srikantan and Ajay Modi -->
-<div>
-	<ul>
-		<li>
-			<a href="${pageContext.servletContext.contextPath}/auth/workbench"><span class="glyphicon glyphicon-circle-arrow-left"></span> All Projects </a>
-		</li>
-	</ul>
+<div style="margin-bottom: 20px;">
+    <a href="${pageContext.servletContext.contextPath}/auth/workbench"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> All Projects </a>
 </div>
-<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
-	<span>Dictionaries</span>
-</h5>
-<div id="projectDictionaries">
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a>
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Dictionaries</h3>
+  </div>
+  <div class="panel-body">
+	  <div id="projectDictionaries" style="margin-bottom: 10px;"></div>
+	  
+	  <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
+	  <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
+  </div>
 </div>
-<h5 class="major" style="margin-top: 0.5em;margin-bottom: 0em;">
-	<span>Concept Collections</span>
-</h5>
-<div id="projectConceptCollections">		
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a>
-	<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Concept Collections</h3>
+  </div>
+  <div class="panel-body">
+    <div id="projectConceptCollections"></div>
+    <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
+    <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+  </div>
 </div>
+
+<hr>
+To go to the public site, click this link <a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">http://quadriga.asu.edu/sites/${project.unixName}</a>
+                
+
 <hr>
 
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Public Page Settings</a>

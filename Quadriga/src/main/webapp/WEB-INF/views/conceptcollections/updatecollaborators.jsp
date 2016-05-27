@@ -3,44 +3,48 @@
 
 <!-- Content -->
 <script>
-function submitClick(id){
-	location.href = '${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}';
-}
+	function submitClick(id) {
+		location.href = '${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}';
+	}
 
 	$(document).ready(function() {
-		
-		activeTable = $('.dataTable').dataTable({
-				"bJQueryUI" : true,
-				"sPaginationType" : "full_numbers",
-				"bAutoWidth" : false
-			});
-			
+
 		$("input[type=submit]").button().click(function(event) {
 		});
-		
+
 		$("input[type=button]").button().click(function(event) {
 		});
-		
-		
+
 	});
 </script>
-<article class="is-page-content">
-	<form:form commandName="collaboratorform" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/updatecollaborators"
-		id="updateprojcollabform">
 
-<c:choose> 
-    <c:when test="${success == '0'}">
-		<c:if test="${not empty collaboratorform.collaborators}">
-			<h2>Modify concept collection collaborator roles</h2>
-		   <h3>Concept Collection: ${collectionname}</h3>
-           <div>${collectiondesc}</div>
-            <hr>
-			<span class="byline">Select roles for the collaborator:</span>
-			<input type="submit" value='Update' name="updateprojcollab">
-			<input type="button" onClick="submitClick(this.id);" value='Cancel'>
-			<table style="width: 100%" class="display dataTable"
-				id="cccollablist">
+<h2>Modify Collaborator Roles for Concept Collection:
+	${collectionname}</h2>
+<div class="back-nav">
+	<hr>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Concept Collection</a>
+	</p>
+	<hr>
+</div>
+
+<form:form commandName="collaboratorform" method="POST"
+	action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/updatecollaborators"
+	id="updateprojcollabform">
+
+	<c:if test="${not empty collaboratorform.collaborators}">
+
+		<p>Select roles for collaborators and click "Update".</p>
+		<p>
+			<input type="submit" class="btn btn-primary" value='Update'
+				name="updateprojcollab"> 
+			<a class="btn btn-default"
+                href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}">Cancel</a>
+		</p>
+		<div class="panel panel-default">
+			<table style="width: 100%" class="table" id="cccollablist">
 				<thead>
 					<tr>
 						<th width="25%">Collaborator</th>
@@ -51,44 +55,28 @@ function submitClick(id){
 					<c:forEach var="collabuser"
 						items="${collaboratorform.collaborators}" varStatus="status">
 						<tr>
-							<td><font size="3">
-							<form:label path="collaborators[${status.index}].name">
-							<c:out value="${collabuser.name}"></c:out>
-							</form:label>
-							</font>
-							<form:input path="collaborators[${status.index}].userName" id="collaborators[${status.index}].userName" type="hidden"/>
-							<form:input path="collaborators[${status.index}].name" id="collaborators[${status.index}].name" type="hidden"/>
-							</td>
-										
-							<td align="left"><font size="3"> <form:checkboxes
+							<td><font size="3"> <form:label
+										path="collaborators[${status.index}].name">
+										<c:out value="${collabuser.name}"></c:out>
+									</form:label>
+							</font> <form:input path="collaborators[${status.index}].userName"
+									id="collaborators[${status.index}].userName" type="hidden" />
+								<form:input path="collaborators[${status.index}].name"
+									id="collaborators[${status.index}].name" type="hidden" /></td>
+
+							<td align="left"><form:checkboxes
 										path="collaborators[${status.index}].collaboratorRoles"
 										class="roles" items="${cccollabroles}" itemValue="id"
-										itemLabel="displayName" /></font>
-							<form:errors path="collaborators[${status.index}].collaboratorRoles" cssClass="ui-state-error-text"></form:errors>
-							</td>			
+										itemLabel="displayName" /> <form:errors
+									path="collaborators[${status.index}].collaboratorRoles"
+									cssClass="error"></form:errors></td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
-		</c:if>
-		<c:if test="${empty collaboratorform.collaborators}">
-		  <span class="byline">No collaborators associated to concept collection</span>
-		   <ul>
-		  		<li><input type="button"
-			onClick="submitClick(this.id);"
-			value='Okay'></li>
-	</ul>
-		</c:if>
-		 </c:when>
-		     <c:otherwise> 
-		     <span class="byline">Successfully updated collaborators</span> 
-		     <ul>
-		<li><input type="button"
-			onClick="submitClick(this.id);"
-			value='Okay'></li>
-	</ul>
-		     </c:otherwise>
-		     	
-</c:choose>
-	</form:form>
-</article>
+		</div>
+	</c:if>
+	<c:if test="${empty collaboratorform.collaborators}">
+		<div>There are no collaborators for this concept collection.</div>
+	</c:if>
+</form:form>

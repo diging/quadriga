@@ -41,10 +41,10 @@ public class DeleteWSController {
      */
     @AccessPolicies({
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-                    RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+                    RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }),
             @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {
-                    RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+                    RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "auth/workbench/deleteSingleWorkspace/{workspaceid}", method = RequestMethod.GET)
     public ModelAndView deleteSingleWorkspaceRequest(@RequestParam("projectId") String myprojectid,

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -24,6 +25,7 @@ public class WorkSpace implements IWorkSpace {
     private String description;
     private IUser owner;
     private IProjectWorkspace workspaceProject;
+    private IProject project;
     private List<IWorkspaceCollaborator> workspaceCollaborators;
     private List<IWorkspaceConceptCollection> workspaceConceptCollections;
     private List<IWorkspaceDictionary> workspaceDictionaries;
@@ -269,6 +271,16 @@ public class WorkSpace implements IWorkSpace {
         } else if (!workspaceProject.equals(other.workspaceProject))
             return false;
         return true;
+    }
+
+    @Override
+    public IProject getProject() {
+        return project;
+    }
+
+    @Override
+    public void setProject(IProject project) {
+        this.project = project;
     }
 
 }

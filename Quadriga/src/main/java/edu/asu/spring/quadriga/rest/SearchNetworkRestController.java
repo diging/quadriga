@@ -82,7 +82,7 @@ public class SearchNetworkRestController {
      * @throws RestException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "rest/network/search", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> getSearchTransformedNetwork(@RequestParam("conceptId") String conceptId,
             @RequestParam("projectIds") List<String> projectIds, HttpServletResponse response, String accept,
