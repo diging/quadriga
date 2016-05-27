@@ -51,7 +51,7 @@
 				</p>
 				<div class="alert alert-warning" role="alert">Note: The current
             owner of this dictionary will become a dictionary
-            admin and will not be able to undo ownership transfer.</div>
+            admin and will not be able to undo the ownership transfer.</div>
             
 				<p><input class="btn btn-primary" type="submit" value="Assign">
 				<a class="btn btn-default" href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}">Cancel</a></p>

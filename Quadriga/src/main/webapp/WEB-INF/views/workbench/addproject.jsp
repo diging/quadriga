@@ -3,14 +3,6 @@
 
 <!-- Content -->
 <script>
-	$(document).ready(function() {
-
-		$("#unixName").keyup(function(event) {
-			var keyedInput = $("#unixName").val();
-			$("#UnixURL").text('${unixnameurl}' + $.trim(keyedInput));
-		});
-	});
-
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
@@ -19,49 +11,54 @@
 		});
 	});
 </script>
-<article class="is-page-content">
-	<form:form commandName="project" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/addproject">
-		<header>
-			<h2>Create new Project</h2>
-			<span class="byline">Please fill in the following information:</span>
-		</header>
-		<table style="width: 100%">
-			<tr>
-				<td style="width: 170px">Name:</td>
-				<td style="width: 400px"><form:input path="projectName"
-						size="60" id="projectName" /></td>
-				<td><form:errors path="projectName" class="ui-state-error-text"></form:errors></td>
-			</tr>
-			<tr>
-				<td style="vertical-align: top">Description:</td>
-				<td><form:textarea path="description" cols="44" rows="6"
-						id="description" /></td>
-				<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
-			</tr>
-			<tr>
-				<td>Project Public Access:</td>
-				<td><form:select path="projectAccess">
-						<form:option value="" label="--- Select ---" />
-						<form:options />
-					</form:select>
-				<td><form:errors path="projectAccess"
-						class="ui-state-error-text"></form:errors></td>
-			</tr>
-			<tr>
-				<td>Custom URL:</td>
-				<td><form:input path="unixName" size="60" id="unixName" /></td>
-				<td><form:errors path="unixName" class="ui-state-error-text"></form:errors></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><div id="UnixURL"></div></td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="Create"></td>
-			</tr>
-		</table>
-	</form:form>
-</article>
+
+<form:form commandName="project" method="POST"
+	action="${pageContext.servletContext.contextPath}/auth/workbench/addproject">
+	<h2>Create new Project</h2>
+	<p>Please fill in the following information:</p>
+	<table style="width: 100%">
+		<tr>
+			<td style="width: 170px; vertical-align: top;">Name:</td>
+			<td><form:input class="form-control"
+					path="projectName" size="60" id="projectName" />
+			<form:errors path="projectName" class="error"></form:errors>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align: top">Description:</td>
+			<td><form:textarea class="form-control" path="description"
+					cols="44" rows="6" id="description" />
+            <form:errors path="description" class="error"></form:errors></td>
+		</tr>
+		<tr>
+			<td style="vertical-align: top">Project Public Access:</td>
+			<td><form:select class="form-control" path="projectAccess">
+					<form:option value="" label="--- Select ---" />
+					<form:options />
+				</form:select>
+			<form:errors path="projectAccess"
+					class="error"></form:errors></td>
+		</tr>
+		<tr>
+			<td style="vertical-align: top">Custom URL:</td>
+			<td>
+				<div class="input-group">
+					<div class="input-group-addon">${unixnameurl}</div>
+					<input type="hidden" name="projectId" value="${project.projectId}">
+					<input type="text" class="form-control" id="unixName"
+						name="unixName" placeholder="Custom project URL">
+				
+                </div>
+                <form:errors path="unixName" class="error"></form:errors>
+                </td>
+		</tr>
+
+		<tr>
+			<td><input class="btn btn-primary" type="submit" value="Create">
+			<a class="btn btn-default" href="${pageContext.servletContext.contextPath}/auth/workbench">Cancel</a>
+			</td>
+		</tr>
+	</table>
+</form:form>
 
 <!-- /Content -->

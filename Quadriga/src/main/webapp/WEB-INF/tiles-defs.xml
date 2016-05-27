@@ -250,7 +250,7 @@
 	</definition>
 
 	<!-- Add/Update/Delete Project details -->
-	<definition name="auth/workbench/addproject" extends="base.definition.workbench">
+	<definition name="auth/workbench/addproject" extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Workbench - Add Project" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addproject.jsp" />
@@ -304,7 +304,7 @@
 			value="/WEB-INF/views/workbench/showCollaborators.jsp" />
 	</definition>
 	<definition name="auth/workbench/transferprojectowner"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Transfer Ownership" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/transferprojectowner.jsp" />
