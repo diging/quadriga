@@ -71,7 +71,7 @@ public class ActivateWSController {
                     RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR }),
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-                    RoleNames.ROLE_COLLABORATOR_ADMIN,
+                    RoleNames.ROLE_COLLABORATOR_OWNER,
                     RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "auth/workbench/{workspaceid}/activateWorkspace", method = RequestMethod.GET)
@@ -99,7 +99,7 @@ public class ActivateWSController {
 
     @AccessPolicies({
         @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-                RoleNames.ROLE_COLLABORATOR_ADMIN,
+                RoleNames.ROLE_COLLABORATOR_OWNER,
                 RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                 RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "auth/workbench/{projectid}/showinactiveworkspace", method = RequestMethod.GET)

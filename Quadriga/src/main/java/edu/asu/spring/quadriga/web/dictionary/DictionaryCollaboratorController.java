@@ -260,7 +260,7 @@ public class DictionaryCollaboratorController {
         Iterator<IQuadrigaRole> iterator = collaboratorRoles.iterator();
         while (iterator.hasNext()) {
             if (iterator.next().getId()
-                    .equals(RoleNames.ROLE_COLLABORATOR_ADMIN)) {
+                    .equals(RoleNames.ROLE_COLLABORATOR_OWNER)) {
                 iterator.remove();
             }
         }

@@ -72,7 +72,7 @@ public class DeleteProjectCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/collaborators/delete", method = RequestMethod.GET)
     public ModelAndView displayDeleteCollaborator(@PathVariable("projectid") String projectId)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -97,7 +97,7 @@ public class DeleteProjectCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/collaborators/delete", method = RequestMethod.POST)
     public String deleteCollaborators(@PathVariable("projectid") String projectId,
             @Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm,

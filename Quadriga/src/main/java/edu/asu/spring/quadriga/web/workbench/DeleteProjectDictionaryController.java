@@ -34,7 +34,7 @@ public class DeleteProjectDictionaryController {
     private IProjectDictionaryManager projectDictionaryManager;
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
     public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -48,7 +48,7 @@ public class DeleteProjectDictionaryController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/deletedictionaries", method = RequestMethod.POST)
     public String deleteProjectDictionary(HttpServletRequest req, @PathVariable("projectid") String projectid,
             Model model, Principal principal, RedirectAttributes attr)

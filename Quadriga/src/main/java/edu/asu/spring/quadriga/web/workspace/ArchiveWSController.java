@@ -56,7 +56,7 @@ public class ArchiveWSController
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 			,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value="auth/workbench/{projectid}/archiveworkspace", method=RequestMethod.GET)
 	public ModelAndView archiveWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -92,7 +92,7 @@ public class ArchiveWSController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/workbench/{projectid}/archiveworkspace", method = RequestMethod.POST)
 	public ModelAndView archiveWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
@@ -164,7 +164,7 @@ public class ArchiveWSController
 	 */
 	@AccessPolicies({
 			@ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {
-					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_COLLABORATOR_OWNER,
 					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
 					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR
 			})
@@ -194,7 +194,7 @@ public class ArchiveWSController
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value="auth/workbench/{projectid}/unarchiveworkspace", method=RequestMethod.GET)
 	public ModelAndView unarchiveWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -232,7 +232,7 @@ public class ArchiveWSController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/workbench/{projectid}/unarchiveworkspace", method = RequestMethod.POST)
 	public ModelAndView unarchiveWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
@@ -301,7 +301,7 @@ public class ArchiveWSController
 	 */
 	@AccessPolicies({
 			@ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {
-					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_COLLABORATOR_OWNER,
 					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
 					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR
 			})

@@ -74,7 +74,7 @@ public class AddProjectBlogEntryController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.GET)
     public String addProjectBlogEntryForm(@PathVariable("ProjectUnixName") String projectUnixName,
             @InjectProject(unixNameParameter = "ProjectUnixName") IProject project,
@@ -114,7 +114,7 @@ public class AddProjectBlogEntryController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.POST)
     public ModelAndView addProjectBlogEntryRequest(
             @Validated @ModelAttribute("projectBlogEntry") ProjectBlogEntry projectBlogEntry, BindingResult result,

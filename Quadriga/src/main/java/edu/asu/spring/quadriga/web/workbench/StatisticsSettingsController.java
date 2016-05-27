@@ -42,7 +42,7 @@ public class StatisticsSettingsController {
      */
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_COLLABORATOR_OWNER,
             RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/statistics", method = RequestMethod.GET)
     public ModelAndView publicPageStatisticsSettingsForm(
