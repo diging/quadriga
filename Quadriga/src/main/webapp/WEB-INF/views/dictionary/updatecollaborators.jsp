@@ -12,7 +12,7 @@
 		});
 	});
 </script>
-<h2>Update Collaborator Roles for Dictionary: ${dictionaryname}</h2>
+<h2>Update Collaborator Permissions for Dictionary: ${dictionaryname}</h2>
 <div class="back-nav">
 	<hr>
 	<p>
@@ -29,7 +29,7 @@
 
 	<c:if test="${not empty collaboratorform.collaborators}">
 
-		<p>Select roles for collaborators and click "Update".</p>
+		<p>Select permissions for collaborators and click "Update".</p>
 		<p>
 			<input class="btn btn-primary" type="submit" value='Update'
 				name="updateprojcollab"> 

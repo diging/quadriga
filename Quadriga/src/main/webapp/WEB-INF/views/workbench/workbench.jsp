@@ -37,14 +37,14 @@
 <c:forEach items="${projects}" var="project">
 <div class="panel panel-default">
 <div class="panel-body">
-<i class="fa fa-th-list" ></i>
+
 
 <c:choose>
 <c:when test="${accessibleProjects[project.projectId]}">
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}">${project.projectName}</a> 
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><i class="ion-planet" ></i> ${project.projectName}</a> 
 </c:when>
 <c:otherwise>
-${project.projectName} <span style="font-size: 12px"><span title="No access" class="glyphicon glyphicon-eye-close"></span></span>
+<i class="ion-planet" ></i> ${project.projectName} <span style="font-size: 12px"><span title="No access" class="glyphicon glyphicon-eye-close"></span></span>
 </c:otherwise>
 </c:choose>
 

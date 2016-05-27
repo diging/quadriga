@@ -30,8 +30,8 @@
 					</c:if>
 					<div class="col-md-6 project-outside">
 					   <div class="project-box">
-						<i class="fa fa-th-list"></i> <a
-							href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}">${project.projectName}</a>
+						 <a
+							href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><i class="ion-planet"></i> ${project.projectName}</a>
 						<div class="project_owner" style="font-size: 14px"> Owned by:
 							${project.owner.name} </div> 
 							<input type="hidden" value="${project.updatedDate.time}" class="project-date-value">

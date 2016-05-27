@@ -29,14 +29,6 @@ div.rolesError {
 
 <script>
 	$(document).ready(function() {
-		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false
-		});
-	});
-
-	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
 
 		});

@@ -16,11 +16,6 @@
 			{
 				    $( "#tabs" ).tabs();
 			});
-        
-	/* inactiveWS()
-	{
-		location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showInactiveWorkspace';
-	} */
     
 </script>
 
@@ -36,7 +31,7 @@
    
         <!-- Display project details -->
         <div class="col-md-9">
-            <h2>Project: ${project.projectName}</h2>
+            <h2><i class="ion-planet"></i> Project: ${project.projectName}</h2>
             <div>${project.description}</div>
             <div style="text-align:right">
 			<a href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Project
@@ -101,44 +96,13 @@
                 There are no workspaces yet. You should create one!
             </c:if>
             </div>
-            
-            <c:choose>
-                <c:when test="${AssignEditorSuccess=='1'}">
-                    <font color="blue"> <spring:message
-                            code="project.assign.owner.editor.success" /></font>
-
-                </c:when>
-                <c:when test="${AssignEditorSuccess=='0'}">
-                    <font color="red"> <spring:message
-                            code="project.assign.owner.editor.failure" /></font>
-                </c:when>
-                <c:when test="${AssignEditorSuccess=='2'}">
-                    <font color="red"> <spring:message
-                            code="project.assign.owner.editor.assigned" /></font>
-                </c:when>
-            </c:choose>
-            
-            <c:choose>
-                <c:when test="${DeleteEditorSuccess=='1'}">
-                    <font color="blue"> <spring:message
-                            code="project.delete.owner.editor.success" /></font>
-
-                </c:when>
-                <c:when test="${DeleteEditorSuccess=='0'}">
-                    <font color="red"> <spring:message
-                            code="project.delete.owner.editor.failure" /></font>
-                </c:when>
-                <c:when test="${DeleteEditorSuccess=='2'}">
-                    <font color="red"> <spring:message
-                            code="project.delete.owner.editor.assigned" /></font>
-                </c:when>
-            </c:choose>
+           
             <div align="left">
                 <hr>
                 <c:choose>
                     <c:when test="${owner=='1'}">
                             <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
-						<img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/archive.png"> Show Inactive Workspace
+						<i class="ion-ios-box-outline icons"></i> Show Inactive Workspaces
                             </a> 
 													
                     </c:when>
@@ -195,14 +159,14 @@
 					<div style="padding: 5px;">
                         <c:forEach var="projectcollaborator"
                             items="${project.projectCollaborators}">
-							<c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
-                            
+							<i class="fa fa-user" aria-hidden="true"></i> <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
+                            <br>
                         </c:forEach>
                     </div>
                 </c:if>
                 <div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
                     <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i class="fa fa-user-plus" aria-hidden="true"></i> Add</a><br>
-				    <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators"><i class="fa fa-user-times" aria-hidden="true"></i> Delete</a><br>
+				    <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/collaborators/delete"><i class="fa fa-user-times" aria-hidden="true"></i> Remove</a><br>
 					<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators"><i class="fa fa-users" aria-hidden="true"></i> Update</a>
                 </ul>
                 </div>

@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
@@ -98,7 +98,7 @@ public class AddWSController {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
             RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "auth/workbench/{projectid}/workspace/add", method = RequestMethod.POST)
-    public String addWorkSpaceRequest(@Validated @ModelAttribute("workspace") IWorkSpace workspace,
+    public String addWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
             BindingResult result, @PathVariable("projectid") String projectid, Model model, Principal principal,
             RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
 

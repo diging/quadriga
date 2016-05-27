@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.workbench;
 
 import java.security.Principal;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.annotation.Resource;
@@ -8,6 +9,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -46,6 +48,9 @@ public class EditProjectUrlController {
 
     @Resource(name = "projectconstants")
     private Properties messages;
+    
+    @Autowired
+    private MessageSource messageSource;
 
     private static final Logger logger = LoggerFactory.getLogger(EditProjectUrlController.class);
 
@@ -73,15 +78,16 @@ public class EditProjectUrlController {
     @RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.POST)
     public String editProjectPageURL(@Validated @ModelAttribute("project") Project project, BindingResult result,
             @PathVariable("projectid") String projectid, Principal principal, ModelMap model,
-            RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
+            RedirectAttributes redirectAttributes, Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
         if (result.hasErrors()) {
-            logger.error("Update project details error:", result);
             model.addAttribute("project", project);
             model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg", messageSource.getMessage("project.update.url.errors", new String[] {}, locale));
             return "auth/workbench/editProjectPageURL";
         }
         String userName = principal.getName();
-        projectManager.updateProjectURL(project.getProjectId(), project.getUnixName(), userName);
+        projectManager.updateProjectURL(projectid, project.getUnixName(), userName);
         redirectAttributes.addFlashAttribute("show_success_alert", true);
         redirectAttributes.addFlashAttribute("success_alert_msg", "Project URL has been updated successfully");
         return "redirect:/auth/workbench/projects/" + projectid;

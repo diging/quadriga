@@ -29,14 +29,9 @@
 			return;
 		});
 	});
-
-	function submitClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}';
-
-	}
 </script>
 
-<h2>Remove collaborator from Dictionary: ${dictionaryname}</h2>
+<h2>Remove Collaborator from Dictionary: ${dictionaryname}</h2>
 <div class="back-nav">
 	<hr>
 	<p>
@@ -52,16 +47,16 @@
 
 	<c:if test="${not empty collaboratorForm.collaborators}">
 
-
+    <p>Select dictionary collaborators to be remove and click "Remove".</p>
+        
 		<p>
-			<input class="btn btn-primary" class="command" type="submit"
+			<input class="btn btn-primary btn-sm" class="command" type="submit"
 				value='Remove' name="deletedict"> <input
-				class="btn btn-primary" type="button" value="Select All"
-				name="selectall"> <input class="btn btn-primary"
+				class="btn btn-primary btn-sm" type="button" value="Select All"
+				name="selectall"> <input class="btn btn-primary btn-sm"
 				type="button" value="Deselect All" name="deselectall">
 
 		</p>
-		<p>Select dictionary collaborators to be remove:</p>
 		<div class="panel panel-default">
 			<table style="width: 100%" class="table">
 				<thead>
@@ -96,10 +91,10 @@
 			</table>
 		</div>
 		<p>
-			<input class="btn btn-primary" class="command" type="submit"
+			<input class="btn btn-primary btn-sm" class="command" type="submit"
 				value='Remove' name="deletedict"> <input
-				class="btn btn-primary" type="button" value="Select All"
-				name="selectall"> <input class="btn btn-primary"
+				class="btn btn-primary btn-sm" type="button" value="Select All"
+				name="selectall"> <input class="btn btn-primary btn-sm"
 				type="button" value="Deselect All" name="deselectall">
 		</p>
 	</c:if>

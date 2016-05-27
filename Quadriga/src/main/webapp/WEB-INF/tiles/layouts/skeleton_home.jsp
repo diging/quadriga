@@ -44,7 +44,11 @@
 
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/font-awesome-4.5.0/css/font-awesome.min.css">
-
+	
+<!-- Ionicons -->
+    <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/ionicons/css/ionicons.min.css">
+    
+    
 <!-- Custom styles for this template -->
 <link
     href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css"

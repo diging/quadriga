@@ -255,7 +255,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addproject.jsp" />
 	</definition>
-	<definition name="auth/workbench/modifyproject" extends="base.definition.workbench">
+	<definition name="auth/workbench/modifyproject" extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Modify Project" />
 		<put-attribute name="content"
@@ -269,7 +269,7 @@
 	</definition>
 
 	<definition name="auth/workbench/editProjectPageURL"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Edit Project Page URL" />
 		<put-attribute name="content"
