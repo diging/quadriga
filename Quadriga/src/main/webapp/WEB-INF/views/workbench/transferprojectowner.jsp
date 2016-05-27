@@ -2,10 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <script>
-	function submitClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/projects/${projectid}';
-	}
-
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
@@ -32,7 +28,7 @@
 	currently owned by: ${projectowner}</div>
 
 <form:form commandName="user" method="POST"
-	action="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${myprojectId}">
+	action="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}/transfer">
 
 	<c:if test="${not empty collaboratinguser}">
 		
@@ -56,8 +52,11 @@
             href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}"> Cancel</a>
 	</c:if>
 	<c:if test="${empty collaboratinguser}">
-          You don't have any collaborators assigned to the project.
-          <input class="btn btn-primary type="button" onClick="submitClick(this.id);"
-				value='Okay'>
+          <p>You don't have any collaborators assigned to this project.
+                    To transfer ownership of this project, first add another user as
+                    collaborator to the project.</p>
+          <p>
+           <a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}">Back</a>
+          </p>
 	</c:if>
 </form:form>

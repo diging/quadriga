@@ -77,7 +77,7 @@ public class TransferProjectOwnerController {
      * @author kiranbatna
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {}) })
-    @RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/workbench/projects/{projectid}/transfer", method = RequestMethod.GET)
     public ModelAndView transferProjectOwnerRequestForm(@PathVariable("projectid") String projectid)
             throws QuadrigaStorageException, QuadrigaAccessException {
         // create a view
@@ -123,7 +123,7 @@ public class TransferProjectOwnerController {
      * @throws QuadrigaException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {}) })
-    @RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/workbench/projects/{projectid}/transfer", method = RequestMethod.POST)
     public String transferProjectOwnerRequest(@PathVariable("projectid") String projectid, Principal principal,
             @Validated @ModelAttribute("user") User collaboratorUser, BindingResult result, Model model, RedirectAttributes redirectAttrs, Locale locale)
             throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
