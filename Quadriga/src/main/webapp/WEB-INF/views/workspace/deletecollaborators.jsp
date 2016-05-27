@@ -13,7 +13,7 @@
 	});
 
 	function submitClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}';
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}';
 	}
 
 	$(function() {

@@ -489,6 +489,11 @@
 								<include>**/*</include>
 								<!-- include any other file types you want to filter -->
 							</includes>
+							<excludes>
+								<exclude>**/*.woff</exclude>
+								<exclude>**/*.woff2</exclude>
+								<exclude>**/*.ttf</exclude>
+							</excludes>
 						</resource>
 					</webResources>
 				</configuration>

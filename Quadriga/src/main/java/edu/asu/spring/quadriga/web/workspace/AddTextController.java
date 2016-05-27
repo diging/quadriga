@@ -68,7 +68,7 @@ public class AddTextController {
             @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
                     RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }),
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-                    RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+                    RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/addtext", method = RequestMethod.GET)
     public ModelAndView addTextFileForm(@PathVariable("workspaceid") String workspaceid,
@@ -102,7 +102,7 @@ public class AddTextController {
             @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 4, userRole = {
                     RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }),
             @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
-                    RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+                    RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/addtext", method = RequestMethod.POST)
     public ModelAndView saveTextFileForm(HttpServletResponse resp,
@@ -119,7 +119,7 @@ public class AddTextController {
             model.setViewName("auth/workbench/workspace/addtext");
             model.getModelMap().put("textfile", txtFile);
         } else {
-            model = new ModelAndView("redirect:/auth/workbench/workspace/workspacedetails/" + workspaceid);
+            model = new ModelAndView("redirect:/auth/workbench/workspace/" + workspaceid);
             txtFile.setWorkspaceId(workspaceid);
             txtFile.setProjectId(projid);
             try {

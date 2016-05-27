@@ -17,6 +17,15 @@
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
+	
+	<definition name="base.definition.home"
+        template="/WEB-INF/tiles/layouts/skeleton_home.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="navigation"
+            value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
+        <put-attribute name="footer" value="/tiles/credits.jsp" />
+        <put-attribute name="currentPage" value="home" />
+    </definition>
 
 	<definition name="base.definition.leftnav" template="/WEB-INF/tiles/layouts/skeleton_left.jsp">
 		<put-attribute name="title" value="" />
@@ -72,7 +81,7 @@
     
 
 	<!-- Home pages -->
-	<definition name="auth/home" extends="base.definition.nonav">
+	<definition name="auth/home" extends="base.definition.home">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
@@ -85,7 +94,7 @@
 	</definition>
 
 	<!-- public pages -->
-	<definition name="login" extends="base.definition.nonav">
+	<definition name="login" extends="base.definition.home">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/login.jsp" />
 	</definition>
@@ -137,7 +146,7 @@
 
 	<!-- ConceptCollection pages -->
 	<definition name="base.definition.conceptcollections"
-		extends="base.definition">
+		extends="base.definition.nonav">
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	<definition name="base.definition.conceptcollections.nav"
@@ -225,6 +234,7 @@
 	<definition name="base.definition.workbench.nonav" extends="base.definition.nonav">
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>
+	
 	<!-- changing the skeleton to have left navigation -->
 	<definition name="auth/workbench" extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Workbench" />
@@ -240,12 +250,12 @@
 	</definition>
 
 	<!-- Add/Update/Delete Project details -->
-	<definition name="auth/workbench/addproject" extends="base.definition.workbench">
+	<definition name="auth/workbench/addproject" extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Workbench - Add Project" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addproject.jsp" />
 	</definition>
-	<definition name="auth/workbench/modifyproject" extends="base.definition.workbench">
+	<definition name="auth/workbench/modifyproject" extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Modify Project" />
 		<put-attribute name="content"
@@ -259,7 +269,7 @@
 	</definition>
 
 	<definition name="auth/workbench/editProjectPageURL"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Edit Project Page URL" />
 		<put-attribute name="content"
@@ -294,7 +304,7 @@
 			value="/WEB-INF/views/workbench/showCollaborators.jsp" />
 	</definition>
 	<definition name="auth/workbench/transferprojectowner"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Transfer Ownership" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/transferprojectowner.jsp" />
@@ -400,7 +410,7 @@
 	</definition>
 
 	<definition name="auth/workbench/project/adddictionaries"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
@@ -454,16 +464,14 @@
 	</definition>
 
 	<definition name="auth/workbench/workspace/adddictionaries"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workspace - Add Dictionary" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/adddictionary.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/deletedictionaries"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workspace - Delete Dictionary" />
 		<put-attribute name="left-navigation"
@@ -491,20 +499,16 @@
 			value="/WEB-INF/views/workspace/conceptcollections.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/addconceptcollections"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workspace - Add Concept Collection" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/addconceptcollection.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/deleteconceptcollections"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workspace - Delete Concept Collection" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deleteconceptcollection.jsp" />
 	</definition>
@@ -525,6 +529,9 @@
 	<definition name="base.definition.dictionaries.nav" extends="base.definition.leftnav">
 		<put-attribute name="currentPage" value="dictionaries" />
 	</definition>
+	<definition name="base.definition.dictionaries.nonav" extends="base.definition.nonav">
+        <put-attribute name="currentPage" value="dictionaries" />
+    </definition>
 
 	<definition name="auth/dictionaries" extends="base.definition.dictionaries.nav">
 		<put-attribute name="title" value="Quadriga Dictionary" />
@@ -537,34 +544,32 @@
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" /> 
 		<put-attribute name="content" value="/WEB-INF/views/dictionary/dictionaryChild.jsp" 
 		/> </definition> -->
-	<definition name="auth/dictionary/dictionarycollab" extends="base.definition.dictionaries">
+	<definition name="auth/dictionary/dictionarycollab" extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/dictionaryChildCollab.jsp" />
 	</definition>
 
-	<definition name="auth/dictionaries/addDictionary" extends="base.definition.dictionaries">
+	<definition name="auth/dictionaries/addDictionary" extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Add Dictionary" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/adddictionary.jsp" />
 	</definition>
-	<definition name="auth/dictionaries/updatedictionary"
-		extends="base.definition.dictionaries">
+	<definition name="auth/dictionaries/updatedictionary" extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Update Dictionary" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/updatedictionarydetails.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/deleteDictionary"
-		extends="base.definition.dictionaries">
+		extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Delete Dictionary" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/deletedictionary.jsp" />
 	</definition>
-	<definition name="auth/dictionaries/changedictionaryowner"
-		extends="base.definition.dictionaries">
+	<definition name="auth/dictionaries/changedictionaryowner" extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Change Dictionary owner" />
 		<put-attribute name="content"
@@ -580,7 +585,7 @@
 			value="/WEB-INF/views/dictionary/adddictionarystatus.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/addDictionaryItems"
-		extends="base.definition.dictionaries">
+		extends="base.definition.dictionaries.nonav">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Add Dictionary Item" />
 		<put-attribute name="content"
@@ -642,13 +647,14 @@
 	<!-- changing dictionary collaborators menu to the left side -->
 
 	<definition name="auth/dictionary/dictionary" extends="base.definition.leftnav">
+	    <put-attribute name="currentPage" value="dictionaries" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-dictionary.jsp" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/dictionary/dictionaryChild.jsp" />
+			value="/WEB-INF/views/dictionary/dictionary.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/showAddCollaborators"
-		extends="base.definition.dictionaries">
+		extends="base.definition.dictionaries.nonav">
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/addcollaborators.jsp" />
 	</definition>
@@ -658,7 +664,7 @@
 			value="/WEB-INF/views/dictionary/deletecollaborators.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/updatecollaborators"
-		extends="base.definition.dictionaries">
+		extends="base.definition.dictionaries.nonav">
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/updatecollaborators.jsp" />
 	</definition>
@@ -773,7 +779,7 @@
 	</definition>
 
 	<!-- editing -->
-	<definition name="base.definition.editing" extends="base.definition">
+	<definition name="base.definition.editing" extends="base.definition.nonav">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation"
 			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
@@ -781,7 +787,7 @@
 	 	<put-attribute name="currentPage" value="editing" />
 	</definition>
 
-	<definition name="auth/editing" extends="base.definition">
+	<definition name="auth/editing" extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Editing" />
 		<put-attribute name="content" value="/WEB-INF/views/editing/editing.jsp" />
 	</definition>
@@ -838,7 +844,13 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/networks/networkvisual.jsp" />
 	</definition>
-
+	
+    <definition name="auth/editing/history" extends="base.definition.editing">
+        <put-attribute name="title" value="Quadriga Networks Edit" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/editing/networkshistory.jsp" />
+    </definition>
+    
 
 	<definition name="auth/editing/visualize" extends="base.definition.rightnav">
 		<put-attribute name="currentPage" value="networks" />
@@ -897,11 +909,6 @@
 			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
 
-	<definition name="auth/editing/history" extends="base.definition">
-		<put-attribute name="title" value="Quadriga Networks Edit" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/editing/networkshistory.jsp" />
-	</definition>
 	<definition name="base.definition.public.sites"
 		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp">
 		<put-attribute name="title" value="" />

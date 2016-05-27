@@ -269,7 +269,7 @@ public class DictionaryRestController {
             VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
             engine.init();
             logger.debug("Getting dictionary items list for dictionary id : " + dictionaryId);
-            List<IDictionaryItems> dictionaryItemsList = dictionaryManager.getDictionariesItems(dictionaryId, user.getUsername());
+            List<IDictionaryItems> dictionaryItemsList = dictionaryManager.getDictionaryItems(dictionaryId);
             if (dictionaryItemsList == null) {
                 throw new RestException(404);
             }

@@ -16,6 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -38,22 +41,23 @@ public class AddProjectDictionaryController {
     private IProjectDictionaryManager projectDictionaryManager;
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/adddictionary", method = RequestMethod.GET)
-    public String addProjectDictionary(@PathVariable("projectid") String projectid, Model model)
-            throws QuadrigaAccessException, QuadrigaStorageException {
+    @InjectProjectById
+    public String addProjectDictionary(@ProjectIdentifier @PathVariable("projectid") String projectid,
+            @InjectProject IProject project, Model model) throws QuadrigaAccessException, QuadrigaStorageException {
         List<IDictionary> dictionaryList = dictonaryManager.getNonAssociatedProjectDictionaries(projectid);
         model.addAttribute("dictinarylist", dictionaryList);
-        IProject project = projectManager.getProjectDetails(projectid);
         model.addAttribute("project", project);
         return "auth/workbench/project/adddictionaries";
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/adddictionaries", method = RequestMethod.POST)
-    public String addProjectDictionary(HttpServletRequest req, @PathVariable("projectid") String projectid, Model model,
-            RedirectAttributes attr, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
+    public String addProjectDictionary(HttpServletRequest req, @PathVariable("projectid") String projectid,
+            Model model, RedirectAttributes attr, Principal principal) throws QuadrigaStorageException,
+            QuadrigaAccessException {
         String userId = principal.getName();
 
         String[] values = req.getParameterValues("selected");
