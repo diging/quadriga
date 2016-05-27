@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -83,18 +84,14 @@ public class ModifyWSController {
      * @throws QuadrigaAccessException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/update", method = RequestMethod.GET)
     public ModelAndView updateWorkSpaceRequestForm(@PathVariable("workspaceid") String workspaceid, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        ModelAndView model;
-        IWorkSpace workspace;
-        String userName;
         // fetch the workspace details
-        userName = principal.getName();
-        workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
-        model = new ModelAndView("auth/workbench/workspace/updateworkspace");
+        String userName = principal.getName();
+        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
+        ModelAndView model = new ModelAndView("auth/workbench/workspace/updateworkspace");
         model.getModelMap().put("workspace", workspace);
-        model.getModelMap().put("success", 0);
         return model;
     }
 
@@ -107,16 +104,14 @@ public class ModifyWSController {
      * @author Kiran Kumar Batna
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 3, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.POST)
-    public ModelAndView updateWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
-            BindingResult result, @PathVariable("workspaceid") String workspaceid, Principal principal)
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 4, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/update", method = RequestMethod.POST)
+    public String updateWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
+            BindingResult result, Model model, @PathVariable("workspaceid") String workspaceid, Principal principal, Locale locale, RedirectAttributes redirectAttrs)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        ModelAndView model;
-        IUser wsOwner = null;
+        
         String userName = principal.getName();
-        model = new ModelAndView("auth/workbench/workspace/updateworkspace");
-        wsOwner = userManager.getUser(userName);
+        IUser wsOwner = userManager.getUser(userName);
 
         // set the workspace owner
         workspace.setOwner(wsOwner);
@@ -125,14 +120,17 @@ public class ModifyWSController {
         workspace.setWorkspaceId(workspaceid);
 
         if (result.hasErrors()) {
-            model.getModelMap().put("workspace", workspace);
-            model.getModelMap().put("success", 0);
-            return model;
-        } else {
-            modifyWSManager.updateWorkspace(workspace);
-            model.getModelMap().put("success", 1);
-            return model;
+            model.addAttribute("workspace", workspace);
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg", messageSource.getMessage("workspace.update.failure", new String[] {}, locale));
+            return "auth/workbench/workspace/updateworkspace";
         }
+        
+        modifyWSManager.updateWorkspace(workspace);
+        redirectAttrs.addFlashAttribute("show_success_alert", true);
+        redirectAttrs.addFlashAttribute("success_alert_msg", messageSource.getMessage("workspace.update.success", new String[] {}, locale));
+        return "redirect:/auth/workbench/workspace/" + workspaceid;
+
     }
 
     /**
@@ -147,6 +145,7 @@ public class ModifyWSController {
      * @throws QuadrigaAccessException
      * @throws RestException
      */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/assignEditorRoleToOwner/{workspaceid}", method = RequestMethod.GET)
     public String assignEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,
             Principal principal, RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException,
@@ -176,8 +175,8 @@ public class ModifyWSController {
      */
     @RequestMapping(value = "auth/workbench/workspace/deleteEditorRoleToOwner/{workspaceid}", method = RequestMethod.GET)
     public String deleteEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,
-            Principal principal, RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException,
-            RestException {
+            Principal principal, RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException,
+            QuadrigaException, QuadrigaAccessException, RestException {
         IUser user = userManager.getUser(principal.getName());
         String userName = user.getUserName();
         boolean success = modifyWSManager.deleteEditorRole(workspaceId, userName);

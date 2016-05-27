@@ -50,7 +50,7 @@
 			<div>${workspacedetails.description}</div>
 			<div style="text-align: right">
 				<a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspaceid}">
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/update">
 					<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 					Edit Workspace
 				</a>

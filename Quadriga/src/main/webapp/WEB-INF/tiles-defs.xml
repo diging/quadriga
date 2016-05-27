@@ -326,7 +326,7 @@
 			value="/WEB-INF/views/workspace/addworkspace.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/updateworkspace"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Update Workspace" />
 		<put-attribute name="content"

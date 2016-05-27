@@ -24,8 +24,6 @@ input {
 </style>
 
 <h2>Modify Project</h2>
-<p>Please update the following information:</p>
-
 <div class="back-nav">
     <hr>
     <p>
@@ -35,6 +33,7 @@ input {
     </p>
     <hr>
 </div>
+<p>Please update the following information:</p>
 
 <form:form commandName="project" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}">
