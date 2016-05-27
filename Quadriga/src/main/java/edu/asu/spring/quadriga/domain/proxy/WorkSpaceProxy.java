@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -442,4 +443,15 @@ public class WorkSpaceProxy implements IWorkSpace {
         return null;
     }
 
+
+    @Override
+    public void setProject(IProject project) {
+        // TODO implement proxy
+    }
+
+
+    @Override
+    public IProject getProject() {
+        return null;
+    }
 }

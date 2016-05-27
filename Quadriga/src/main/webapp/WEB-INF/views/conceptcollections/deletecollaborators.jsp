@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
@@ -47,29 +46,27 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 		<c:choose>
 			<c:when test="${success == '0'}">
 					<c:if test="${not empty collaboratorForm.collaborators}">
-					<h2>Delete concept collection collaborator</h2>
-					<h3>Concept Collection: ${collectionname}</h3>
-					<div>${collectiondesc}</div>
+					<h2>Remove Collaborator from Concept Collection: ${collectionname}</h2>
+					
+					<div class="back-nav">
 					<hr>
-					<span class="byline">Select concept collection collaborator to be deleted:</span>
-					<c:choose>
-						<c:when test="${error == '1'}">
-							<span class="ui-state-error-text"> <spring:message
-									code="collaborator_user_selection.required" />
-							</span>
-							<br>
-						</c:when>
-					</c:choose>
-			<input class="command" type="submit" value='Delete' name="deletecc">
-			<input type="button" value="Select All" name="selectall">
-			<input type="button" value="DeSelect All" name="deselectall">
-			<input type="button"
-			onClick="submitClick(this.id);"
-			value='Cancel' name="Back">
-			<table style="width: 100%" class="display dataTable" id="cccollaboratorlist">
+					<p>
+					   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}"><i class="fa fa-arrow-circle-left"></i> Back to Concept Collection</a>
+					</p>
+					<hr>
+					</div>
+			<p>
+				<input class="btn btn-primary" type="submit" value='Remove' name="deletecc">
+				<input type="button" class="btn btn-primary" value="Select All" name="selectall">
+				<input type="button" class="btn btn-primary" value="Deselect All" name="deselectall">
+			</p>
+			<p style="margin-bottom: 5px;">Select concept collection collaborator to be removed:</p>
+                    
+            <div class="panel panel-default">
+			<table style="width: 100%" class="table" id="cccollaboratorlist">
 				<thead>
 					<tr>
-						<th width="4%" align="center">Action</th>
+						<th width="4%" ></th>
 						<th width="21%">Collaborator</th>
 						<th width="75%">Collaborator Roles</th>
 					</tr>
@@ -89,7 +86,7 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 							<td><font size="3">
 								<form:label path="collaborators[${status.index}].collaboratorRoles">
 								 <c:forEach var="roles" items="${collabUser.collaboratorRoles}" varStatus="loop" >
-								 <c:out value="${roles.displayName}" />||
+								 <c:out value="${roles.displayName}" /> ||
 								 </c:forEach>
 							</form:label>  
 							</font>
@@ -99,23 +96,23 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 							</c:forEach>
 						</tbody>
 					</table>
-			<input class="command" type="submit" value='Delete' name="deletecc">
-			<input type="button" value="Select All" name="selectall">
-			<input type="button" value="DeSelect All" name="deselectall">
-			<input type="button"
-			onClick="submitClick(this.id);"
-			value='Cancel' name="Back">
+				</div>
+				<p>
+	                <input class="btn btn-primary" type="submit" value='Remove' name="deletecc">
+	                <input type="button" class="btn btn-primary" value="Select All" name="selectall">
+	                <input type="button" class="btn btn-primary" value="Deselect All" name="deselectall">
+	            </p>
 				</c:if>
 				<c:if test="${empty collaboratorForm.collaborators}">
-			You don't have associated collaborators to delete.
-								<ul>
-				<li><input type=button onClick="submitClick(this.id);"
+			<p>There are no collaborators for this concept collection..</p>
+								
+				<input type=button class="btn btn-primary" onClick="submitClick(this.id);"
 					value='Okay' name="Back"></li>
-			</ul>
+			
 				</c:if>
 			</c:when>
 				     <c:when test="${success == '1'}"> 
-		     <span class="byline">Successfully deleted selected collaborators</span> 
+		     <span class="byline">Successfully removed selected collaborators</span> 
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"

@@ -5,24 +5,18 @@
 <script>
 	$(document).ready(function() {
 		var oldUnixName = $("#unixName").val();
-		$("#editProject").prop("disabled",true);
-		
+		$("#editProject").prop("disabled", true);
+
 		$("#unixName").keyup(function(event) {
 			var keyedInput = $("#unixName").val();
 			$("#UnixURL").text('${unixnameurl}' + keyedInput);
-			
-			if(keyedInput != oldUnixName) {
-				$("#editProject").prop("disabled",false);
-			}
-			else {
-				$("#editProject").prop("disabled",true);
-			}
-		});
-		$("#dialog-confirm").dialog({
-			autoOpen : false,
-		});
 
-		$('#editProject').click(funConfirmChanges);
+			if (keyedInput != oldUnixName) {
+				$("#editProject").prop("disabled", false);
+			} else {
+				$("#editProject").prop("disabled", true);
+			}
+		});
 	});
 
 	$(function() {
@@ -39,86 +33,70 @@
 	});
 </script>
 
-<style>
-div.projectDiv {
-	position: relative;
-	width: 300px;
-	height: 30px;
-	border: 1px solid;
-	text-align: center;
-}
 
-input {
-	position: relative;
-	width: 125px;
-}
-</style>
+<h2>Edit Project URL of Project: ${project.projectName}</h2>
 
-<article class="is-page-content">
-	<div id="projectDiv">
-		<form:form id="target" commandName="project" method="POST"
-			action="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}">
+<div class="back-nav">
+	<hr>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Project</a>
+	</p>
+	<hr>
+</div>
 
-			<script>
-				function funConfirmChanges() {
-					// Define the Dialog and its properties.
-					$("#dialog-confirm").dialog({
-						resizable : false,
-						height : 210,
-						width : 400,
-						buttons : {
-							"Yes" : function() {
-								$("#dialog-confirm").dialog('close');
-								$("#target").submit();
-							},
-							"No" : function() {
-								$("#dialog-confirm").dialog('close');
-							}
-						}
-					});
-
-					$("#dialog-confirm").dialog('open');
-
-				}
-			</script>
+<form:form id="target" commandName="project" method="POST"
+	action="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}">
 
 
-			<div id="dialog-confirm" title="Warning">Old URL will not work
-				anymore. Do you wish to continue?</div>
-
-			<header>
-				<h2>Edit Project URL</h2>
-				<span class="byline">Please fill in the following
-					information:</span>
-			</header>
-			<table style="width: 100%">
-				<tr>
-					<td style="width: 170px">Name:</td>
-					<td style="width: 400px"><c:out
-							value="${project.projectName }" /> <form:hidden
-							path="projectName" /></td>
-				</tr>
-				<tr>
-					<td>Custom URL:</td>
-					<td><form:input path="unixName" size="60" id="unixName" /></td>
-					<td><form:errors path="unixName" class="ui-state-error-text"></form:errors></td>
-				</tr>
-				<tr>
-					<td>Public URL: <!--<form:input path="unixName" type="hidden" />-->
-						<form:input path="projectId" type="hidden" />
-					</td>
-					<td><div id="UnixURL"></div></td>
-				</tr>
-				<tr>
-					<td><input id="editProject" class="command" type="button"
-						value="Edit Project URL"></td>
-					<td><input type="button" value="Cancel"
-						onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"></td>
-				</tr>
-			</table>
-		</form:form>
+<p>Please enter a custom project URL. This defines the URL of your public project website. Please use only letters, numbers and the following characters: -_.+!*()$ </p>
+	<div class="form-group">
+		<label class="sr-only" for="exampleInputAmount">Custom Project URL</label>
+		<div class="input-group">
+			<div class="input-group-addon">${unixnameurl}</div>
+			<input type="hidden" name="projectId" value="${project.projectId}" >
+			<input type="text" class="form-control" id="unixName" name="unixName"
+				placeholder="Custom project URL" value="${project.unixName}">
+		</div>
+		<div><form:errors path="unixName" class="error"></form:errors></div>
 	</div>
-</article>
 
+	
+	<input data-toggle="modal" data-target="#edit-url" class="btn btn-primary" id="editProject" class="command" type="button" value="Update Project URL">
+	<a class="btn btn-default"
+                href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}">Cancel</a>
+
+</form:form>
+
+<!-- Delete Workspace Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-url">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Update Custom Project URL</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to update the custom project URL? The old URL will not work anymore and links to the old URL will break.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="update-btn">Yes, update!</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+//# sourceURL=filename.js
+$(document).ready(function() {
+    $('#update-btn').click(function(event) {
+    	$('#target').submit();
+    });
+
+    
+});
+</script>
 
 <!-- /Content -->

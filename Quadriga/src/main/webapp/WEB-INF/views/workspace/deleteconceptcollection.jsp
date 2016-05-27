@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; "%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -80,42 +79,27 @@
 		});
 	});
 </script>
-<h2>Workspace: ${workspacedetails.workspaceName}</h2>
+<h2>Remove Concept Collections from Workspace: ${workspacedetails.workspaceName}</h2>
 <hr/>
-<c:choose>
-	<c:when test="${success=='1'}">
-		<font color="blue"><spring:message
-				code="workspace.CC.add.success" /></font>
-	</c:when>
-	<c:when test="${success=='0'}">
-		<span class="ui-state-error-text"><spring:message
-				code="workspace.CC.add.fail" /></span>
-	</c:when>
-	<c:when test="${deletesuccess=='1'}">
-		<font color="blue"><spring:message
-				code="workspace.CC.delete.success" /></font>
-	</c:when>
-	<c:when test="${deletesuccess=='0'}">
-		<span class="ui-state-error-text"><spring:message
-				code="workspace.CC.delete.fail" /></span>
-	</c:when>
-</c:choose>
+
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
 
 
 	<c:choose>
 		<c:when test="${not empty conceptCollectionList}">
 			<form method="POST">
 
-				<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-	value='Okay'><br />
-				<input type="submit" value="Delete Concept Collections"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deleteconceptcollections'" />
-
-				<br /> <br />
-				<table cellpadding="0" cellspacing="0" border="0"
-			class="display dataTable" width="100%">
-					<!-- <table  class="dataTable" id="pagination1"> -->
+				<div class="panel panel-default" style="margin-top: 20px;">
+                <div class="panel-heading">Available Dictionaries</div>
+                <div class="panel-body">
+                   <p>Select concept collection to remove from the workspace and then click "Remove Concept Collections".</p>
+                   <p>
+                   <input type="submit" class="btn btn-primary" 
+                    value="Remove Concept Collections"
+                    onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deleteconceptcollections'" />
+                   </p>
+                </div>
+				<table cellpadding="0" cellspacing="0" border="0" class="table" width="100%">
 					<thead>
 						<tr>
 							<th align="left"><input type="checkbox" id="selectall">
@@ -131,10 +115,10 @@
 								<td width="15%"><input type="checkbox" class="selected"
 									name="selected"
 									value='<c:out value="${workspaceConceptCollection.conceptCollection.conceptCollectionId}"></c:out>' /></td>
-								<td width="30%" align="center"><input name="items" type="hidden"
+								<td width="30%"><input name="items" type="hidden"
 									value="<c:out value="${workspaceConceptCollection.conceptCollection.conceptCollectionName}"></c:out>" /> <c:out
 										value="${workspaceConceptCollection.conceptCollection.conceptCollectionName}"></c:out></td>
-								<td width="45%" align="justify"><c:out
+								<td width="45%"><c:out
 										value="${workspaceConceptCollection.conceptCollection.description}"></c:out></td>
 							</tr>
 						</c:forEach>

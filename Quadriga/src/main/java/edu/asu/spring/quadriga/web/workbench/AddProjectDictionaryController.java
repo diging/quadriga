@@ -38,7 +38,7 @@ public class AddProjectDictionaryController {
     private IProjectDictionaryManager projectDictionaryManager;
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/adddictionary", method = RequestMethod.GET)
     public String addProjectDictionary(@PathVariable("projectid") String projectid, Model model)
             throws QuadrigaAccessException, QuadrigaStorageException {
@@ -50,7 +50,7 @@ public class AddProjectDictionaryController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/adddictionaries", method = RequestMethod.POST)
     public String addProjectDictionary(HttpServletRequest req, @PathVariable("projectid") String projectid, Model model,
             RedirectAttributes attr, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {

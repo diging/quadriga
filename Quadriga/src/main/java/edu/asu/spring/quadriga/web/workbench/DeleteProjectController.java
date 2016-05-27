@@ -31,7 +31,7 @@ public class DeleteProjectController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = { RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = { RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/deleteproject/{projectId}", method = RequestMethod.GET)
     public ModelAndView deleteProjectRequest(
             @PathVariable("projectId") String projectId,

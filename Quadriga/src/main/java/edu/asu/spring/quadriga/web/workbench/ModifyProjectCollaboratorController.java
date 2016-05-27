@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -82,7 +81,7 @@ public class ModifyProjectCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/updatecollaborators", method = RequestMethod.GET)
     public ModelAndView updateCollaboratorRequestForm(@PathVariable("projectid") String projectid)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -111,7 +110,7 @@ public class ModifyProjectCollaboratorController {
         model.getModelMap().put("projcollabroles", collaboratorRoles);
         model.getModelMap().put("collaboratorform", collaboratorForm);
         model.getModelMap().put("myprojectid", projectid);
-        model.getModel().put("projectname", project.getProjectName());
+        model.getModel().put("myprojectname", project.getProjectName());
         model.getModelMap().put("projectdesc", project.getDescription());
         model.getModelMap().put("success", 0);
 
@@ -119,7 +118,7 @@ public class ModifyProjectCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/updatecollaborators", method = RequestMethod.POST)
     public ModelAndView updateCollaboratorRequest(
             @Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,

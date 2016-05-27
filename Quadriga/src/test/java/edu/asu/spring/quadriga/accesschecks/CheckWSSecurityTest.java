@@ -37,7 +37,7 @@ public class CheckWSSecurityTest {
         
         Mockito.when(projectSecurity.isProjectOwner("user1", "project1")).thenReturn(
                 true);
-        Mockito.when(projectSecurity.isUserCollaboratorOnProject("user1", "project2", RoleNames.ROLE_COLLABORATOR_ADMIN)).thenReturn(
+        Mockito.when(projectSecurity.isUserCollaboratorOnProject("user1", "project2", RoleNames.ROLE_COLLABORATOR_OWNER)).thenReturn(
                 true);
         Mockito.when(projectSecurity.isUserCollaboratorOnProject("user2", "project1", RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)).thenReturn(
                 true);

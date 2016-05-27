@@ -12,7 +12,7 @@ $(function() {
 });
 
 function submitClick(id){
-	location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}";
+	location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.workspaceId}";
 }
 </script>
 <article class="is-page-content">
@@ -39,7 +39,7 @@ function submitClick(id){
 						<tr>
 							<td><input type="submit" value="Update Workspace"></td>
 							<td><input type="button" value="Cancel" 
-			                onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}'">
+			                onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.workspaceId}'">
 			                </td>
 						</tr>
 					</table>

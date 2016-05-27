@@ -126,7 +126,7 @@ public class AddCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.GET)
     public ModelAndView displayAddCollaborator(@PathVariable("projectid") String projectid, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -180,7 +180,7 @@ public class AddCollaboratorController {
         Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoles.iterator();
         while (collabRoleIterator.hasNext()) {
             IQuadrigaRole collabRole = collabRoleIterator.next();
-            if (collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN)) {
+            if (collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_OWNER)) {
                 collabRoleIterator.remove();
             }
         }
@@ -191,7 +191,7 @@ public class AddCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.POST)
     public ModelAndView addCollaborator(@PathVariable("projectid") String projectid,
             @Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
@@ -237,7 +237,7 @@ public class AddCollaboratorController {
         Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoles.iterator();
         while (collabRoleIterator.hasNext()) {
             IQuadrigaRole collabRole = collabRoleIterator.next();
-            if (collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN)) {
+            if (collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_OWNER)) {
                 collabRoleIterator.remove();
             }
         }

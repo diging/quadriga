@@ -34,7 +34,7 @@ public class DeleteProjectConceptCollectionController {
     private IProjectConceptCollectionManager projectConceptCollectionManager;
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.GET)
     public String deleteProjectConceptCollection(@PathVariable("projectid") String projectid, Model model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
@@ -50,7 +50,7 @@ public class DeleteProjectConceptCollectionController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.POST)
     public String deleteProjectConceptCollection(HttpServletRequest req, @PathVariable("projectid") String projectid,
             Model model, Principal principal, RedirectAttributes attr)

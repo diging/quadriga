@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.aspectj.weaver.bcel.TypeAnnotationAccessVar;
+
 
 /**
  * <p>Java class for anonymous complex type.
@@ -302,6 +304,9 @@ public class ConceptpowerReply {
         }
         
         public void setType(String type) {
+            if (this.type == null) {
+                this.type = new ConceptpowerType();
+            }
             this.type.setType(type);
         }
 
