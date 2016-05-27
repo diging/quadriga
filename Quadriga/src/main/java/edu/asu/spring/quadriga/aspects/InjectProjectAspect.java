@@ -20,12 +20,13 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * method annotations:
  * 
  * <code>
- * @InjectProjectByName
+ * &#64;InjectProjectByName
  * public String showProject( @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName, @InjectProject IProject project)
  * </code>
  * 
- * will result in a project object filled with the information of the project
- * with the unix name specified inthe unixName variable.
+ *                      will result in a project object filled with the
+ *                      information of the project with the unix name specified
+ *                      inthe unixName variable.
  * 
  * @author Julia Damerow, Nischal Samji
  *
@@ -34,6 +35,7 @@ public abstract class InjectProjectAspect {
 
     public Object injectProject(ProceedingJoinPoint joinPoint) throws Throwable {
 
+        // Get the Method signature and the arguments passed to the method.
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         Parameter[] paras = method.getParameters();
@@ -42,8 +44,12 @@ public abstract class InjectProjectAspect {
         int projVarIndex = -1;
 
         IProject project = null;
+
+        // Get all arguments that are passed to the calling method.
         Object[] arguments = joinPoint.getArgs();
 
+        // Loop through all the parameters and get the indices of the parameters
+        // with annotations InjectProject and ProjectIdentifier.
         if (paras != null) {
 
             for (int i = 0; i < paras.length; i++) {
@@ -60,17 +66,21 @@ public abstract class InjectProjectAspect {
 
             if (projectParamIdx != -1) {
 
+                //Get the project based on the project identifier.
                 String projectVar = (String) arguments[projVarIndex];
                 project = getProject(projectVar);
 
+                //If there is no project, associated return an error page.
                 if (project == null)
                     return getErrorPage();
 
+                //Inject the project at the index
                 arguments[projectParamIdx] = project;
             }
 
         }
 
+        //Continue with the controller method.
         return joinPoint.proceed(arguments);
     }
 
