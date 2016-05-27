@@ -24,9 +24,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * public String showProject( @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName, @InjectProject IProject project)
  * </code>
  * 
- *                      will result in a project object filled with the
- *                      information of the project with the unix name specified
- *                      inthe unixName variable.
+ * will result in a project object filled with the information of the project
+ * with the unix name specified inthe unixName variable.
  * 
  * @author Julia Damerow, Nischal Samji
  *
@@ -66,21 +65,21 @@ public abstract class InjectProjectAspect {
 
             if (projectParamIdx != -1) {
 
-                //Get the project based on the project identifier.
+                // Get the project based on the project identifier.
                 String projectVar = (String) arguments[projVarIndex];
                 project = getProject(projectVar);
 
-                //If there is no project, associated return an error page.
+                // If there is no project, associated return an error page.
                 if (project == null)
                     return getErrorPage();
 
-                //Inject the project at the index
+                // Inject the project at the index
                 arguments[projectParamIdx] = project;
             }
 
         }
 
-        //Continue with the controller method.
+        // Continue with the controller method.
         return joinPoint.proceed(arguments);
     }
 

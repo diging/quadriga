@@ -23,12 +23,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.ProjectURLValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -37,9 +39,6 @@ public class EditProjectUrlController {
 
     @Autowired
     private IModifyProjectManager projectManager;
-
-    @Autowired
-    private IRetrieveProjectManager retrieveProjectManager;
 
     @Autowired
     private ProjectURLValidator validator;
@@ -60,9 +59,9 @@ public class EditProjectUrlController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.GET)
-    public String editProjectPageURL(@PathVariable("projectid") String projectid, Principal principal, ModelMap model)
+    @InjectProjectById
+    public String editProjectPageURL(@ProjectIdentifier @PathVariable("projectid") String projectid,@InjectProject IProject project, Principal principal, ModelMap model)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        IProject project = retrieveProjectManager.getProjectDetails(projectid);
         model.addAttribute("project", project);
         model.addAttribute("unixnameurl", messages.getProperty("project_unix_name.url"));
         return "auth/workbench/editProjectPageURL";
