@@ -35,7 +35,7 @@ public class InjectProjectByIdAspect extends InjectProjectAspect {
 
     @Override
     public String getErrorPage() {
-        return null;
+        return "public/404";
     }
 
     @Override
