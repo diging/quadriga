@@ -45,7 +45,7 @@
 <div class="row">
     <div class="col-md-9">
 		<!-- Display workspace details -->
-			<h2>Workspace: ${workspacedetails.workspaceName}</h2>
+			<h2><i class="ion-filing icons"></i> Workspace: ${workspacedetails.workspaceName}</h2>
 			<c:if test="${isDeactivated == true }"><div style="margin-bottom: 15px;"><span class="label label-default" title="This workspace is deactivated."><i class="fa fa-toggle-off"></i> Deactivated</span></div></c:if>
 			<div>${workspacedetails.description}</div>
 			<div style="text-align: right">

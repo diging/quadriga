@@ -17,12 +17,22 @@
 	});
 </script>
 
+<h2>Transfer Ownership of Project: ${projectname}</h2>
+               <div class="back-nav">
+    <hr>
+    <p>
+        <a
+            href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}"><i
+            class="fa fa-arrow-circle-left"></i> Back to Project</a>
+    </p>
+    <hr>
+</div>
+
 <form:form commandName="user" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${projectid}">
 	<c:choose>
 		<c:when test="${success=='0'}">
 			<c:if test="${not empty collaboratinguser}">
-			   <h2>Project: ${projectname}</h2>
 			   <hr>
 			   <div class="user">Owned by: ${projectowner}</div>
 			   <hr>

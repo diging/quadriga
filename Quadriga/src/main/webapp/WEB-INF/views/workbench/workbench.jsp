@@ -60,7 +60,7 @@
 	<div style="display: none" class="toggled">
 	<ul class="workspaceToggleList">
 	<c:forEach items="${project.projectWorkspaces}" var="ws">
-		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${ws.workspace.workspaceId}"><i class="fa fa-folder-open"></i> ${ws.workspace.workspaceName}</a>
+		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${ws.workspace.workspaceId}"><i class="ion-filing icons"></i> ${ws.workspace.workspaceName}</a>
 			<br>${ws.workspace.description}
 		</li>
 	</c:forEach>
