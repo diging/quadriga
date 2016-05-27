@@ -24,6 +24,9 @@ import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.workbench.IModifyProjectFormFactory;
@@ -94,10 +97,10 @@ public class ModifyProjectController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
-    public ModelAndView updateProjectRequestForm(@PathVariable("projectid") String projectid, Principal principal)
+    @InjectProjectById
+    public ModelAndView updateProjectRequestForm(@ProjectIdentifier @PathVariable("projectid") String projectid, @InjectProject IProject project, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model = new ModelAndView("auth/workbench/modifyproject");
-        IProject project = retrieveProjectManager.getProjectDetails(projectid);
         model.getModelMap().put("project", project);
         model.getModelMap().put("unixnameurl", messages.getProperty("project_unix_name.url"));
         return model;
@@ -148,12 +151,12 @@ public class ModifyProjectController {
      * @throws QuadrigaAccessException
      */
     @RequestMapping(value = "auth/workbench/assignownereditor/{projectid}", method = RequestMethod.GET)
-    public String assignOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,
+    @InjectProjectById
+    public String assignOwnerEditorRole(@ProjectIdentifier @PathVariable("projectid") String projectId,@InjectProject IProject project, ModelMap model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         IUser user = userManager.getUser(principal.getName());
         String userName = user.getUserName();
         projectManager.assignEditorRole(projectId, userName);
-        IProject project = retrieveProjectManager.getProjectDetails(projectId);
 
         // retrieve all the workspaces associated with the project
         List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId, userName);
@@ -182,11 +185,12 @@ public class ModifyProjectController {
      * @throws QuadrigaAccessException
      */
     @RequestMapping(value = "auth/workbench/deleteownereditor/{projectid}", method = RequestMethod.GET)
-    public String deleteOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,
+    @InjectProjectById
+    public String deleteOwnerEditorRole(@ProjectIdentifier @PathVariable("projectid") String projectId,@InjectProject IProject project, ModelMap model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userName = principal.getName();
         projectManager.removeEditorRole(projectId, userName);
-        IProject project = retrieveProjectManager.getProjectDetails(projectId);
+        
 
         // retrieve all the workspaces associated with the project
         List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId, userName);
