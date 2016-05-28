@@ -2,59 +2,65 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
-<article class="is-page-content">
-	<form:form commandName="textfile" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myProjectId}/${workspaceId}/addtext">
-		<header>
-			<h2>Add Text to Workspace</h2>
-			<span class="byline">Please fill in the following information:</span>
-		</header>
+<h2>Add Text to Workspace: ${workspace.workspaceName}</h2>
+<div class="back-nav">
+	<hr>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Workspace</a>
+	</p>
+	<hr>
+</div>
 
-		<table style="width: 100%">
-			<tr>
-				<td style="width: 170px">File Name:</td>
-				<td><form:input path="fileName" size="60" id="fileName" /></td>
-				<td><form:errors path="fileName" class="ui-state-error-text"></form:errors></td>
-			</tr>
-			<tr>
-				<td style="width: 170px">Reference:</td>
-				<td><form:input path="refId" size="60" id="refID" /></td>
-				<td><form:errors path="refId" class="ui-state-error-text"></form:errors></td>
-			</tr>
-			<tr>
-				<td style="vertical-align: top">Add File Content:</td>
-				<td><form:textarea path="fileContent" cols="44" rows="6"
-						id="fileContent" /></td>
-				<td><form:errors path="fileContent" class="ui-state-error-text"></form:errors></td>
-			</tr>
-			<tr>
-				<td style="width: 170px">Accessibility</td>
-				<td><form:select path="accessibility">
-						<form:option value="" label="--- Select ---" />
-						<form:options/>
-						</form:select>
-				</td>
-				<td><form:errors path="accessibility"
-						class="ui-state-error-text"></form:errors></td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="Save Textfile"></td>
-			</tr>
-			<tr>
-				<td><input type="hidden" id="workspaceId"
-					value=<c:out value="${workspaceId}"></c:out> /></td>
-			</tr>
-			<tr>
-				<td><input type="hidden" id="success"
-					value=<c:out value="${success}"></c:out> /></td>
-			</tr>
-		</table>
+<p>Please fill in the following information:</p>
 
-		<c:if test="${success == '1'}">
-			<span class="byline">Textfile saved successfully.</span>
-		</c:if>
+<form:form commandName="textfile" method="POST"
+	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myProjectId}/${workspaceId}/addtext">
 
-	</form:form>
-</article>
+	<table style="width: 100%">
+		<tr>
+			<td style="width: 170px; vertical-align:top;">File Name:</td>
+			<td><form:input class="form-control" path="fileName" size="60" id="fileName" />
+                <form:errors path="fileName" class="error"></form:errors></td>
+		</tr>
+		<tr>
+			<td style="width: 170px; vertical-align:top;">Reference:</td>
+			<td><form:input class="form-control" path="refId" size="60" id="refID" />
+        <form:errors path="refId" class="error"></form:errors></td>
+		</tr>
+		<tr>
+			<td style="vertical-align: top">Add File Content:</td>
+			<td><form:textarea class="form-control" path="fileContent" cols="44" rows="6"
+					id="fileContent" />
+			<form:errors path="fileContent" class="error"></form:errors></td>
+		</tr>
+		<tr>
+			<td style="width: 170px; vertical-align:top;">Accessibility</td>
+			<td><form:select class="form-control" path="accessibility">
+					<form:option value="" label="--- Select ---" />
+					<form:options />
+				</form:select><form:errors path="accessibility"
+					class="error"></form:errors></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input class="btn btn-primary" type="submit" value="Save Textfile">
+			<a class="btn btn-default"
+            href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}">Cancel</a>
+            </td>
+		</tr>
+		<tr>
+			<td><input type="hidden" id="workspaceId"
+				value=<c:out value="${workspaceId}"></c:out> />
+			 	
+			</td>
+		</tr>
+		<tr>
+			<td><input type="hidden" id="success"
+				value=<c:out value="${success}"></c:out> /></td>
+		</tr>
+	</table>
+
+</form:form>
 
 <!-- /Content -->
