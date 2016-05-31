@@ -96,7 +96,7 @@
 
 		<c:choose>
 			<c:when test="${not empty communityList}">
-				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
 				Communities
 				<span class="byline">Select a community to browse its
 					collections.</span>

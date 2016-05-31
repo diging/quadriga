@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
-
 
 /**
  * This controller is to map project/about page for public website. A formatted
@@ -28,15 +29,14 @@ import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 @Controller
 public class WebsiteAboutController {
 
-   
     @Autowired
     private IAboutTextManager aboutTextManager;
 
     @CheckPublicAccess(projectIndex = 2)
+    @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
-    public String showAbout(@PathVariable("ProjectUnixName") String unixName,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project, Model model, Principal principal)
-            throws QuadrigaStorageException {
+    public String showAbout(@ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,
+            @InjectProject IProject project, Model model, Principal principal) throws QuadrigaStorageException {
         String projectId = project.getProjectId();
         model.addAttribute("project", project);
         model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));

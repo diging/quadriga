@@ -88,7 +88,7 @@ public class AddWorkspaceConceptCollectionController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Concept Collection added to workspace successfully.");
-        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
+        return "redirect:/auth/workbench/workspace/" + workspaceId;
     }
 
 }

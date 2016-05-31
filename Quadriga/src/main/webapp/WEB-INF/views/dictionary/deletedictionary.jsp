@@ -4,11 +4,10 @@
 	Used to list and delete the dictionaries	
 -->
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
@@ -119,87 +118,75 @@
 
 <div id="dialog-message" title="Confirm ?"></div>
 
-	<header>
-			<h2> Delete dictionary </h2>
-	</header>
-	
 
-	<input type=button
-		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
-		value='Okay'>
-
-
-<br/>
-<br/>
-<span class="byline">Select the dictionary you want to delete</span>
-
-<c:choose>
-	<c:when test="${delsuccess=='1'}">
-		<font color="blue"> <spring:message code="delete.items.success" /></font>
-
-	</c:when>
-
-	<c:when test="${delsuccess=='0'}">
-		<font color="red"><spring:message code="delete.items.fail" /></font>
-
-	</c:when>
-	<c:otherwise>
-		
-
-	</c:otherwise>
-</c:choose>
-
+<h2>Delete dictionary</h2>
+<div class="back-nav">
+	<hr>
+	<p>
+		<a href="${pageContext.servletContext.contextPath}/auth/dictionaries"><i
+			class="fa fa-arrow-circle-left"></i> Back to Dictionary List</a>
+	</p>
+	<hr>
+</div>
+<h4>Select the dictionaries you want to delete:</h4>
 
 <c:choose>
 	<c:when test="${selection=='0'}">
-		<font color="blue"> <spring:message code="delete.dictionary.noselection" /></font>
+		<font color="blue"> <spring:message
+				code="delete.dictionary.noselection" /></font>
 
 	</c:when>
 </c:choose>
-<div class="container">
 	<c:choose>
 		<c:when test="${not empty dictinarylist}">
 
 			<form method="POST">
-
-
-				 <input type="submit" value="Delete Items"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionary'" />
-
-				<br /> <br />
-				<table style="width: 100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">
-					<!-- <table  class="dataTable" id="pagination1"> -->
-					<thead>
-						<tr>
-							<th align="left"><input type="checkbox" id="selectall">Select
-								All</th>
-							<th>Dictionary Name</th>
-							<th>Dictionary Description</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<c:forEach var="dictionary" items="${dictinarylist}">
+				<div class="panel panel-default">
+					<table style="width: 100%" cellpadding="0" cellspacing="0"
+						border="0" class="table">
+						<!-- <table  class="dataTable" id="pagination1"> -->
+						<thead>
 							<tr>
-								<td width="10%"><input type="checkbox" class="selected" name="selected"
-									value='<c:out value="${dictionary.dictionaryId}"></c:out>' /></td>
-								<td align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${dictionary.dictionaryName}"></c:out>" /> <c:out
-										value="${dictionary.dictionaryName}"></c:out></td>
-								<td  align="justify"><c:out
-										value="${dictionary.description}"></c:out></td>
+								<th width="50px" align="left"><input title="Select All"
+									type="checkbox" id="selectall"> <i class="fa fa-check"
+									aria-hidden="true"></i></th>
+								<th>Dictionary Name</th>
+								<th>Dictionary Description</th>
 							</tr>
-						</c:forEach>
-					</tbody>
+						</thead>
 
-				</table>
+						<tbody>
+							<c:forEach var="dictionary" items="${dictinarylist}">
+								<tr>
+									<td><input type="checkbox" class="selected"
+										name="selected"
+										value=' <c:out value="${dictionary.dictionaryId}"></c:out>' /></td>
+									<td><input name="items" type="hidden"
+										value="<c:out value="${dictionary.dictionaryName}"></c:out>" />
+										<c:out value="${dictionary.dictionaryName}"></c:out></td>
+									<td><c:out value="${dictionary.description}"></c:out></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+
+					</table>
+				</div>
+				
+				<div class="alert alert-warning" role="alert">Make sure this is really what you want to do. This action cannot be undone!</div>
+	
+				<p>
+					<input class="btn btn-primary" type="submit" value="Delete"
+						onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/delete'" />
+				    <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/auth/dictionaries">Cancel</a>
+				</p>
+
+
+
 			</form>
 		</c:when>
 
 		<c:otherwise>
-			<br><spring:message code="empty.dictionary" />
-	</c:otherwise>
+			<br>
+			<spring:message code="empty.dictionary" />
+		</c:otherwise>
 	</c:choose>
-</div>

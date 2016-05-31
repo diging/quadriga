@@ -52,7 +52,7 @@ public class PublicPageSettingsController {
 	 * @return model - model object
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-			RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+			RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
 	@RequestMapping(value = "auth/workbench/projects/{projectid}/settings", method = RequestMethod.GET)
 	public ModelAndView publicPageSettingsForm(@PathVariable("projectid") String projectid)
 			throws QuadrigaStorageException, QuadrigaAccessException {

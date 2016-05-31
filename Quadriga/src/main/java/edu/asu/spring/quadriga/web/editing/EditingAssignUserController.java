@@ -29,130 +29,110 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 @Controller
 public class EditingAssignUserController {
 
-	@Autowired
-	INetworkManager networkManager;
+    @Autowired
+    private INetworkManager networkManager;
 
-	@Autowired
-	IEditorManager editorManager;
+    @Autowired
+    private IEditorManager editorManager;
 
-	@Autowired
-	IUserManager userManager;
+    @Autowired
+    private IUserManager userManager;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(EditingAssignUserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EditingAssignUserController.class);
 
-	/**
-	 * Assign a network to User
-	 * @param networkId
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "auth/editing/assignuser/{networkId}", method = RequestMethod.GET)
-	public String assignNetworkToUser(@PathVariable("networkId") String networkId,ModelMap model, Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUser(principal.getName());
-		try{
-			editorManager.assignNetworkToUser(networkId, user);
-			editorManager.updateNetworkStatus(networkId, INetworkStatus.ASSIGNED);
-			//editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.ASSIGNED);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		return "redirect:/auth/editing";
-	}
+    /**
+     * Assign a network to User
+     * 
+     * @param networkId
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @RequestMapping(value = "auth/editing/assignuser/{networkId}", method = RequestMethod.GET)
+    public String assignNetworkToUser(@PathVariable("networkId") String networkId, ModelMap model, Principal principal)
+            throws QuadrigaStorageException {
+        IUser user = userManager.getUser(principal.getName());
+        editorManager.assignNetworkToUser(networkId, user);
+        editorManager.updateNetworkStatus(networkId, INetworkStatus.ASSIGNED);
 
-	/**
-	 * List networks assigned to a User
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "auth/editing/approvedandrejectednetworksofuser", method = RequestMethod.GET)
-	public String listNetworksAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUser(principal.getName());
-		
-		
-		List<INetwork> approvedNetworkList=null;
-		try{
-			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		
-		List<INetwork> rejectedNetworkList=null;
-		try{
-			rejectedNetworkList = editorManager.getRejectedNetworkOfUser(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
+        return "redirect:/auth/editing";
+    }
 
-		model.addAttribute("ApprovedNetworkList", approvedNetworkList);
-		model.addAttribute("RejectedNetworkList", rejectedNetworkList);
-		model.addAttribute("userId", user.getUserName());
-		return "auth/editing/approvedrejectednetworks";
-	}
+    /**
+     * List networks assigned to a User
+     * 
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @RequestMapping(value = "auth/editing/completed", method = RequestMethod.GET)
+    public String listNetworksAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
+        IUser user = userManager.getUser(principal.getName());
 
-	/**
-	 * List networks assigned to other Users
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "auth/editing/networksAssginedToOtherUsers", method = RequestMethod.GET)
-	public String listNetworksAssignedToOtherUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUser(principal.getName());
-		
-		List<INetwork> networkList=null;
-		try{
-			networkList = editorManager.getAssignedNetworkListOfOtherEditors(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		
-		model.addAttribute("networkList", networkList);
-		model.addAttribute("userId", user.getUserName());
-		return "auth/editing/networksAssginedToOtherUsers";
-	}
-	/**
-	 * Approve a network
-	 * @param networkId
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "auth/editing/approvenetwork/{networkid}", method = RequestMethod.GET)
-	public String approveNetwork(@PathVariable ( "networkid") String networkId  ,ModelMap model, Principal principal) throws QuadrigaStorageException {
-		try{
-			editorManager.updateNetworkStatus(networkId, INetworkStatus.APPROVED);
-			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.APPROVED);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		return "redirect:/auth/editing";
-	}
+        List<INetwork> approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
+        List<INetwork> rejectedNetworkList = editorManager.getRejectedNetworkOfUser(user);
 
-	/**
-	 * Reject a submitted network
-	 * @param networkId
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@RequestMapping(value = "auth/editing/rejectnetwork/{networkid}", method = RequestMethod.GET)
-	public String rejectNetwork(@PathVariable ( "networkid") String networkId  ,ModelMap model, Principal principal) throws QuadrigaStorageException {
-		try{
-			editorManager.updateNetworkStatus(networkId, INetworkStatus.REJECTED);
-			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.REJECTED);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
+        model.addAttribute("ApprovedNetworkList", approvedNetworkList);
+        model.addAttribute("RejectedNetworkList", rejectedNetworkList);
+        model.addAttribute("userId", user.getUserName());
+        return "auth/editing/approvedrejectednetworks";
+    }
 
-		
-		return "redirect:/auth/editing";
-	}
+    /**
+     * List networks assigned to other Users
+     * 
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @RequestMapping(value = "auth/editing/assigned/others", method = RequestMethod.GET)
+    public String listNetworksAssignedToOtherUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
+        IUser user = userManager.getUser(principal.getName());
+
+        List<INetwork> networkList = editorManager.getAssignedNetworkListOfOtherEditors(user);
+
+        model.addAttribute("networkList", networkList);
+        model.addAttribute("userId", user.getUserName());
+        return "auth/editing/networksAssginedToOtherUsers";
+    }
+
+    /**
+     * Approve a network
+     * 
+     * @param networkId
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @RequestMapping(value = "auth/editing/approvenetwork/{networkid}", method = RequestMethod.GET)
+    public String approveNetwork(@PathVariable("networkid") String networkId, ModelMap model, Principal principal)
+            throws QuadrigaStorageException {
+        editorManager.updateNetworkStatus(networkId, INetworkStatus.APPROVED);
+        editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.APPROVED);
+
+        return "redirect:/auth/editing";
+    }
+
+    /**
+     * Reject a submitted network
+     * 
+     * @param networkId
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @RequestMapping(value = "auth/editing/rejectnetwork/{networkid}", method = RequestMethod.GET)
+    public String rejectNetwork(@PathVariable("networkid") String networkId, ModelMap model, Principal principal)
+            throws QuadrigaStorageException {
+
+        editorManager.updateNetworkStatus(networkId, INetworkStatus.REJECTED);
+        editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.REJECTED);
+
+        return "redirect:/auth/editing";
+    }
 }

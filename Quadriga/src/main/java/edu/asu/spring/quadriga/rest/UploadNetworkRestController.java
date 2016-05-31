@@ -147,7 +147,7 @@ public class UploadNetworkRestController {
         /*
          * check accessibility of project
          */
-        String roles[] = { RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+        String roles[] = { RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                 RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR };
         boolean isAuthorized;
         try {

@@ -13,8 +13,11 @@ import edu.asu.spring.quadriga.domain.factory.impl.networks.NetworkFactory;
 import edu.asu.spring.quadriga.domain.factory.networks.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.impl.networks.NetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.impl.workspace.WorkspaceNetwork;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
@@ -22,6 +25,7 @@ import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
+import edu.asu.spring.quadriga.dto.NetworkWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -103,35 +107,18 @@ public class NetworkDTOMapper extends BaseMapper {
 		return network;
 	}
 	
-	/**
-	 * This method will convert the list of {@link NetworksDTO} objects to a list of {@link Network} objects.
-	 * For each object it will copy the network id, network name, workspaceid, status and owner object from the input.
-	 * 
-	 * @param networksDTO				The input list of networksDTO objects
-	 * @return							The corresponding list of network objects. The input list order will be maintained
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
-	 */
-	public List<INetwork> getListOfNetworks(List<NetworksDTO> networksDTO) throws QuadrigaStorageException
-	{
-		List<INetwork> networkList = null;
-		if(networksDTO != null)
-		{
-			networkList = new ArrayList<INetwork>();
-			INetwork network = null;
-			for(NetworksDTO networkDTO: networksDTO)
-			{
-				network = networkFactory.createNetworkObject();
-				network.setNetworkId(networkDTO.getNetworkid());
-				network.setNetworkName(networkDTO.getNetworkname());
-				network.setStatus(networkDTO.getStatus());
-				if(networkDTO.getNetworkowner() != null)
-					network.setCreator(userManager.getUser(networkDTO.getNetworkowner()));
-				networkList.add(network);
-			}
-		}		
-		return networkList;
+	public IWorkspaceNetwork mapWorkspaceNetworkDTO(NetworkWorkspaceDTO nwDto, INetwork network, IWorkSpace workspace) {
+	    IWorkspaceNetwork networkWorkspace = new WorkspaceNetwork();
+	    networkWorkspace.setCreatedBy(nwDto.getCreatedby());
+	    networkWorkspace.setCreatedDate(nwDto.getCreateddate());
+	    networkWorkspace.setNetwork(network);
+	    networkWorkspace.setUpdatedBy(nwDto.getUpdatedby());
+	    networkWorkspace.setUpdatedDate(nwDto.getUpdateddate());
+	    networkWorkspace.setWorkspace(workspace);
+	    network.setNetworkWorkspace(networkWorkspace);
+	    
+	    return networkWorkspace;
 	}
-	
 	
 	public List<INetwork> getListOfNetworks(List<NetworksDTO> networksDTO,String assignedUser) throws QuadrigaStorageException
 	{

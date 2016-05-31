@@ -86,6 +86,6 @@ public class DeleteWorkspaceDictionaryController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Dictionaries deleted from workspace successfully.");
-        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
+        return "redirect:/auth/workbench/workspace/" + workspaceId;
     }
 }

@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,6 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -82,19 +84,17 @@ public class ModifyProjectCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/updatecollaborators", method = RequestMethod.GET)
-    public ModelAndView updateCollaboratorRequestForm(@PathVariable("projectid") String projectid)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+    @InjectProjectById
+    public ModelAndView updateCollaboratorRequestForm(@ProjectIdentifier @PathVariable("projectid") String projectid,
+            @InjectProject IProject project) throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model;
         ModifyCollaboratorForm collaboratorForm;
         List<ModifyCollaborator> collaboratorList = new ArrayList<ModifyCollaborator>();
 
         // create model view
         model = new ModelAndView("auth/workbench/updatecollaborators");
-
-        // retrieve the project details
-        IProject project = projectDetailsManager.getProjectDetails(projectid);
 
         // retrieve the list of Collaborators and their roles.
         collaboratorList = collaboratorManager.getProjectCollaborators(projectid);
@@ -111,7 +111,7 @@ public class ModifyProjectCollaboratorController {
         model.getModelMap().put("projcollabroles", collaboratorRoles);
         model.getModelMap().put("collaboratorform", collaboratorForm);
         model.getModelMap().put("myprojectid", projectid);
-        model.getModel().put("projectname", project.getProjectName());
+        model.getModel().put("myprojectname", project.getProjectName());
         model.getModelMap().put("projectdesc", project.getDescription());
         model.getModelMap().put("success", 0);
 
@@ -119,23 +119,24 @@ public class ModifyProjectCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/updatecollaborators", method = RequestMethod.POST)
+    @InjectProjectById
     public ModelAndView updateCollaboratorRequest(
             @Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
-            BindingResult result, @PathVariable("projectid") String projectid, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException {
-        
+            BindingResult result, @ProjectIdentifier @PathVariable("projectid") String projectid,
+            @InjectProject IProject project, Principal principal) throws QuadrigaStorageException,
+            QuadrigaAccessException {
+
         // create model view
         ModelAndView model = new ModelAndView("auth/workbench/updatecollaborators");
-        IProject project = projectDetailsManager.getProjectDetails(projectid);
         model.getModelMap().addAttribute("project", project);
-        
+
         model.getModelMap().put("collaboratorform", collaboratorForm);
         model.getModel().put("projectname", project.getProjectName());
         model.getModelMap().put("projectdesc", project.getDescription());
         model.getModelMap().put("myprojectid", projectid);
-        
+
         // retrieve the collaborator roles and assign it to a map
         // fetch the roles that can be associated to the workspace
         // collaborator
@@ -144,12 +145,11 @@ public class ModifyProjectCollaboratorController {
 
         if (result.hasErrors()) {
             // retrieve the project details
-            
+
             model.getModelMap().addAttribute("show_error_alert", true);
             model.getModelMap().addAttribute("error_alert_msg", "Could not add collaborator.");
             // add the model map
-            
-            
+
         } else {
             // fetch the user and his collaborator roles
             for (ModifyCollaborator collab : collaboratorForm.getCollaborators()) {
@@ -166,15 +166,15 @@ public class ModifyProjectCollaboratorController {
                 projectCollaboratorManager.updateCollaborators(projectid, collabUser,
                         collabRoles.toString().substring(1), principal.getName());
                 model.getModelMap().put("myprojectid", projectid);
-                
+
                 model.getModelMap().addAttribute("show_success_alert", true);
                 model.getModelMap().addAttribute("success_alert_msg", "Collaborator successfully added.");
             }
         }
-        
+
         List<ModifyCollaborator> projCollaborators = collaboratorManager.getProjectCollaborators(projectid);
         collaboratorForm.setCollaborators(projCollaborators);
-        
+
         return model;
     }
 

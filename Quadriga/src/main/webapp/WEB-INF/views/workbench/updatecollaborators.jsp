@@ -9,12 +9,6 @@
 
 	$(document).ready(function() {
 
-		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false
-		});
-
 		$("input[type=submit]").button().click(function(event) {
 		});
 
@@ -23,18 +17,33 @@
 	});
 </script>
 
-<article class="is-page-content">
-	<h2>Modify collaborator roles for project ${project.projectName}</h2>
+<h2>Update Collaborator Permissions for Project: ${myprojectname}</h2>
+<div class="back-nav">
 	<hr>
-	<form:form commandName="collaboratorform" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/updatecollaborators"
-		id="updateprojcollabform">
-		<c:if test="${not empty collaboratorform.collaborators}">
-			<input type="submit" value='Update' name="updateprojcollab">
-			<input type="button" onClick="submitClick(this.id);" value='Done'>
-			<p>
-			<table style="width: 100%" class="display dataTable"
-				id="projcollablist">
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Project</a>
+	</p>
+	<hr>
+</div>
+
+
+<form:form commandName="collaboratorform" method="POST"
+	action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/updatecollaborators"
+	id="updateprojcollabform">
+	<c:if test="${not empty collaboratorform.collaborators}">
+
+		<p>Select permissions for collaborators and click "Update".</p>
+		<p>
+			<input class="btn btn-primary" type="submit" value='Update'
+				name="updateprojcollab"> 
+			<a class="btn btn-default"
+				href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}">Cancel</a>
+		</p>
+
+		<div class="panel panel-default">
+			<table style="width: 100%" class="table" id="projcollablist">
 				<thead>
 					<tr>
 						<th width="25%">Collaborator</th>
@@ -62,15 +71,14 @@
 					</c:forEach>
 				</tbody>
 			</table>
-		</c:if>
-		<c:if test="${empty collaboratorform.collaborators}">
-			<span class="byline">There are no collaborators associated
-				with this project.</span>
-			<ul>
-				<li><input type="button" onClick="submitClick(this.id);"
-					value='Okay'></li>
-			</ul>
-		</c:if>
+		</div>
+	</c:if>
+	<c:if test="${empty collaboratorform.collaborators}">
+		<p>There are no collaborators for this project.</p>
+		<a class="btn btn-primary"
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}">Cancel</a>
 
-	</form:form>
-</article>
+	</c:if>
+
+</form:form>
+

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <script>
@@ -11,46 +10,57 @@
 		$("input[type=submit]").button().click(function(event) {
 		});
 	});
-	
+
 	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 		});
 	});
 </script>
+
+<h2>Transfer Ownership of Workspace: ${wsname}</h2>
+<div class="back-nav">
+	<hr>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Workspace</a>
+	</p>
+	<hr>
+</div>
+
+
+
 <form:form commandName="user" method="POST"
-	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/transferworkspaceowner">
-		<c:choose>
-		<c:when test="${success=='0'}">
-			<c:if test="${not empty collaboratinguser}">
-			   <h2>Workspace: ${wsname}</h2>
-			   <hr>
-			   <div class="user">Owned by: ${wsowner}</div>
-			   <hr>
-			   <div>Assign new owner to the workspace</div>
-				<form:select path="userName">
-					<form:option value="" label="--- Select ---" />
-					<form:options items="${collaboratinguser}"
-						itemValue="userName" itemLabel="userName" />
-				</form:select>
-				<form:errors path="userName" class="ui-state-error-text"></form:errors>
-				<div>Note:Current owner will become workspace admin</div>
-				<td><input type="submit" value="Assign"></td>
-			</c:if>
-			<c:if test="${empty collaboratinguser}">
-          You don't have any collaborators assigned to the project.
-          <ul>
-				<li><input type="button" onClick="submitClick(this.id);"
-					value='Okay'></li>
-			</ul>	   
-		</c:if>
-		</c:when>
-		<c:otherwise>
-			<span class="byline">Workspace Ownership transferred successfully.</span>
-			<br />
-			<ul>
-				<li><input type="button" onClick="submitClick(this.id);"
-					value='Okay'></li>
-			</ul>
-		</c:otherwise>
-	</c:choose>
+	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/transfer">
+
+	<c:if test="${not empty collaboratinguser}">
+		<div class="alert alert-info" role="alert">This workspace is
+			currently owned by: ${wsowner}</div>
+			
+		<p>
+		<form:select path="userName" class="form-control">
+			<form:option value="" label="--- Select ---" />
+			<form:options items="${collaboratinguser}" itemValue="userName"
+				itemLabel="userName" />
+		</form:select>
+		<form:errors path="userName" class="error"></form:errors>
+		</p>
+
+		<div class="alert alert-warning" role="alert">Note: The current
+			owner of this workspace will become a workspace admin and will not be
+			able to undo the ownership transfer.</div>
+
+		<td><input class="btn btn-primary" type="submit" value="Transfer"></td>
+	</c:if>
+	<c:if test="${empty collaboratinguser}">
+		<p>You don't have any collaborators assigned to this workspace. To
+			transfer ownership of this workspace, first add another user as
+			collaborator to the workspace.</p>
+		<p>
+			<a class="btn btn-primary"
+				href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}">Back</a>
+		</p>
+	</c:if>
+
+
 </form:form>
