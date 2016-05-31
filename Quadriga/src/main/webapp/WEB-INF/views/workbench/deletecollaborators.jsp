@@ -33,10 +33,6 @@
 			return;
 		});
 	});
-
-	function submitClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}';
-	}
 </script>
 
 <h3>Remove Collaborators from Project: ${projectname}</h3>
@@ -53,28 +49,20 @@
 <form:form method="POST" commandName="collaboratorForm"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectId}/collaborators/delete">
 	<c:if test="${not empty collaboratorForm.collaborators}">
-		<c:choose>
-			<c:when test="${error == '1'}">
-				<span class="ui-state-error-text"> <spring:message
-						code="collaborator_user_selection.required" />
-				</span>
-				<br>
-			</c:when>
-		</c:choose>
 		<p>Select project collaborators to be remove and click "Remove".</p>
 
 		<p>
-			<input class="btn btn-primary btn-sm" class="command" type="submit"
+			<input class="btn btn-primary" class="command" type="submit"
 				value='Remove' name="deletecc"> <input
-				class="btn btn-primary btn-sm" type="button" value="Select All"
-				name="selectall"> <input class="btn btn-primary btn-sm"
-				type="button" value="DeSelect All" name="deselectall">
+				class="btn btn-primary" type="button" value="Select All"
+				name="selectall"> <input class="btn btn-primary"
+				type="button" value="Deselect All" name="deselectall">
 		</p>
 		<div class="panel panel-default">
-			<table style="width: 100%" class="table">
+			<table class="table">
 				<thead>
 					<tr>
-						<th width="4%" align="center">Action</th>
+						<th width="4%"></th>
 						<th width="21%">Collaborator</th>
 						<th width="75%">Collaborator Roles</th>
 					</tr>
@@ -105,13 +93,6 @@
 				</tbody>
 			</table>
 		</div>
-		<p>
-			<input class="btn btn-primary btn-sm" class="command" type="submit"
-				value='Remove' name="deletecc"> <input
-				class="btn btn-primary btn-sm" type="button" value="Select All"
-				name="selectall"> <input class="btn btn-primary btn-sm"
-				type="button" value="DeSelect All" name="deselectall">
-		</p>
 	</c:if>
 	<c:if test="${empty collaboratorForm.collaborators}">
 			<p>There are no collaborators for this project.</p>

@@ -4,11 +4,14 @@ import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -57,6 +61,10 @@ public class UpdateWSCollabController {
     @Autowired
     private IWorkspaceManager wsManager;
 
+    @Autowired
+    private MessageSource messageSource;
+
+    
     /**
      * Custom validator to validate the input selection form the user
      * 
@@ -127,7 +135,6 @@ public class UpdateWSCollabController {
         model.getModelMap().put("workspaceid", workspaceid);
         model.getModelMap().put("workspacename", workspace.getWorkspaceName());
         model.getModelMap().put("workspacedesc", workspace.getDescription());
-        model.getModelMap().put("success", 0);
 
         return model;
     }
@@ -146,35 +153,33 @@ public class UpdateWSCollabController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 3, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.POST)
-    public ModelAndView updateWorkspaceCollaborator(
+    public String updateWorkspaceCollaborator(
             @Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
-            BindingResult result, @PathVariable("workspaceid") String workspaceid, Principal principal)
+            BindingResult result, @PathVariable("workspaceid") String workspaceid, Principal principal, Model model, Locale locale, RedirectAttributes redirectAttrs)
             throws QuadrigaStorageException, QuadrigaAccessException {
         // create model view
-        ModelAndView model = new ModelAndView("auth/workbench/workspace/updatecollaborators");
-
         if (result.hasErrors()) {
-            // add a variable to display the entire page
-            model.getModelMap().put("success", 0);
-
             // add the workspace details
             IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, principal.getName());
-            model.getModelMap().put("workspacename", workspace.getWorkspaceName());
-            model.getModelMap().put("workspacedesc", workspace.getDescription());
+            model.addAttribute("workspacename", workspace.getWorkspaceName());
+            model.addAttribute("workspacedesc", workspace.getDescription());
 
             // add the model map
             List<ModifyCollaborator> wsCollaborators = collaboratorFormManager
                     .modifyWorkspaceCollaboratorManager(workspaceid);
             collaboratorForm.setCollaborators(wsCollaborators);
-            model.getModelMap().put("collaboratorform", collaboratorForm);
-            model.getModelMap().put("workspaceid", workspaceid);
+            model.addAttribute("collaboratorform", collaboratorForm);
+            model.addAttribute("workspaceid", workspaceid);
 
             // retrieve the collaborator roles and assign it to a map
             // fetch the roles that can be associated to the workspace
             // collaborator
             List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
-            model.getModelMap().put("wscollabroles", collaboratorRoles);
-            return model;
+            model.addAttribute("wscollabroles", collaboratorRoles);
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg", messageSource.getMessage("workspace.collaborators.update.failure", new String[] {}, locale));
+            
+            return "auth/workbench/workspace/updatecollaborators";
         }
 
         List<ModifyCollaborator> wsCollaborators = collaboratorForm.getCollaborators();
@@ -194,11 +199,12 @@ public class UpdateWSCollabController {
 
             // call the database to modify the record
             wsModifyCollabManager.updateCollaborators(workspaceid, collabUser, collabRoles, principal.getName());
-
-            model.getModelMap().put("success", 1);
         }
+        
+        redirectAttrs.addFlashAttribute("show_success_alert", true);
+        redirectAttrs.addFlashAttribute("success_alert_msg", messageSource.getMessage("workspace.collaborators.update.success", new String[] {}, locale));
 
-        return model;
+        return "redirect:/auth/workbench/workspace/" + workspaceid;
     }
 
 }
