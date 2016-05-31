@@ -5,6 +5,8 @@
 	<Quadriga:projectName>$projectName</Quadriga:projectName>
 	<Quadriga:workspaceId>$workspaceId</Quadriga:workspaceId>
 	<Quadriga:workspaceName>$workspaceName</Quadriga:workspaceName>
+	#if($networkId)
 	<Quadriga:networkId>$networkId</Quadriga:networkId>
+	#end
 </Quadriga:passthroughproject>
 </Quadriga:QuadrigaReply>

@@ -7,12 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,36 +28,19 @@ import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.DocumentParserException;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.passthroughproject.IXMLReader;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
-import edu.asu.spring.quadriga.web.network.INetworkStatus;
-import edu.asu.spring.quadriga.web.workbench.AddCollaboratorController;
 
-/**
- * 
- * Controller for pass through projects rest APIs exposed to other clients and
- * saving the networks in QSTORE.
- *
- */
 @Controller
-public class UploadNetworkRestController {
-
-    @Autowired
-    private IPassThroughProjectManager passThroughProjectManager;
-
-    @Autowired
-    private IUserManager userManager;
-
+public class ProjectAndWorkspaceRestController {
+    
     @Autowired
     private IRestMessage errorMessageRest;
 
@@ -68,27 +48,24 @@ public class UploadNetworkRestController {
     private IXMLReader xmlReader;
 
     @Autowired
-    private INetworkManager networkManager;
-
+    private IUserManager userManager;
+    
     @Autowired
-    private IRestVelocityFactory restVelocityFactory;
+    private IPassThroughProjectManager passThroughProjectManager;
+    
+    @Autowired
+    private ProjectAuthorization authorization;
 
     @Autowired
     private IWorkspaceManager wsManager;
     
-    @Autowired 
-    private IRetrieveProjectManager projectManager;
-
     @Autowired
-    private ProjectAuthorization authorization;
-    
-    private static final Logger logger = LoggerFactory.getLogger(UploadNetworkRestController.class);
+    private IRestVelocityFactory restVelocityFactory;
 
 
-    @RequestMapping(value = "rest/network", method = RequestMethod.POST)
-    public ResponseEntity<String> submitNetwork(HttpServletRequest request, @RequestHeader("Accept") String accept,
+    @RequestMapping(value = "rest/projects", method = RequestMethod.POST, produces = "application/xml")
+    public ResponseEntity<String> createIfNotExistsProjectAndWorkspace(HttpServletRequest request, @RequestHeader("Accept") String accept,
             HttpServletResponse response, @RequestBody String xml, Principal principal) throws RestException {
-
         xml = xml.trim();
         if (xml.isEmpty()) {
             String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
@@ -147,7 +124,7 @@ public class UploadNetworkRestController {
         /*
          * check accessibility of project
          */
-        String roles[] = { RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
+        String roles[] = { RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                 RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR };
         boolean isAuthorized;
         try {
@@ -179,24 +156,6 @@ public class UploadNetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         
-        String network = xmlReader.getNetwork(xml);
-
-        /*
-         * Store network
-         */
-        String networkId = null;
-        if (!StringUtils.isEmpty(network)) {
-            try {
-                String responseFromQStore = networkManager.storeNetworks(network);
-                networkId = networkManager.storeNetworkDetails(responseFromQStore, user, xmlInfo.getNetworkName(),
-                        workspaceId, INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO, INetworkStatus.APPROVED);
-            } catch (JAXBException | QStoreStorageException e) {
-                String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
-                logger.error("Exception while storing netwokr in QStore.", e);
-                return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
         /*
          * Create response.
          */
@@ -211,7 +170,6 @@ public class UploadNetworkRestController {
             context.put("workspaceId", workspaceId);
             context.put("projectName", xmlInfo.getName());
             context.put("workspaceName", xmlInfo.getWorkspaceName());
-            context.put("networkId", networkId);
             template.merge(context, writer);
         } catch (Exception e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
@@ -224,5 +182,4 @@ public class UploadNetworkRestController {
         return new ResponseEntity<String>(writer.toString(), httpHeaders, HttpStatus.OK);
 
     }
-
 }

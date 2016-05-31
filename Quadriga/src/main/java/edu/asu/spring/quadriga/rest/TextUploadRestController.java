@@ -3,9 +3,7 @@ package edu.asu.spring.quadriga.rest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Properties;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
