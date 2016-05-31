@@ -52,7 +52,7 @@ public class QuadrigaRestExceptionHandler {
             context.put("message", errorProperties.getProperty("error_message_" + errorcode));
             context.put("exception", ex.getMessage());
             template.merge(context, sw);
-            return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+            return new ResponseEntity<String>(sw.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (ResourceNotFoundException e) {
             logger.error("Exception:", e);
         } catch (ParseErrorException e) {
@@ -62,7 +62,7 @@ public class QuadrigaRestExceptionHandler {
         } catch (Exception e) {
             logger.error("Exception:", e);
         }
-        return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+        return new ResponseEntity<String>(sw.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
