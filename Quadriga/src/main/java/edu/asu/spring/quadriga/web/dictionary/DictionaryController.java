@@ -61,9 +61,8 @@ public class DictionaryController {
 
     @Autowired
     private MessageSource messageSource;
-    
-    private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
 
     /**
      * Admin can use this page to check the list of dictionary items in a
@@ -74,7 +73,9 @@ public class DictionaryController {
      * @throws QuadrigaAccessException
      * @throws JSONException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = {
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ,
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
     public String getDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
@@ -91,8 +92,8 @@ public class DictionaryController {
         model.addAttribute("dictionary", dictionary);
 
         List<IDictionaryCollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
-        model.addAttribute("collaboratingUsers", existingCollaborators); 
-        
+        model.addAttribute("collaboratingUsers", existingCollaborators);
+
         IDictionary dictionaryObj = dictionaryFactory.createDictionaryObject();
         dictionaryObj.setDictionaryId(dictionaryid);
         dictionaryObj = dictionaryManager.getDictionaryDetails(dictionaryid);
@@ -109,7 +110,7 @@ public class DictionaryController {
     private void setPermissions(ModelMap model, String userName, List<IDictionaryCollaborator> existingCollaborators) {
         for (IDictionaryCollaborator collab : existingCollaborators) {
             // if current user is a collaborator, lets get their role
-            if(collab.getCollaborator().getUserObj().getUserName().equals(userName)) {
+            if (collab.getCollaborator().getUserObj().getUserName().equals(userName)) {
                 List<IQuadrigaRole> roles = collab.getCollaborator().getCollaboratorRoles();
                 for (IQuadrigaRole role : roles) {
                     if (role.getId().equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN)) {
@@ -150,7 +151,7 @@ public class DictionaryController {
 
         IUser user = usermanager.getUser(principal.getName());
         String[] values = req.getParameterValues("selected");
-        
+
         if (values == null) {
             List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItems(dictionaryId);
             String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
@@ -169,7 +170,7 @@ public class DictionaryController {
 
             return "auth/dictionary/dictionary";
         }
-        
+
         // Remove entries
         for (int i = 0; i < values.length; i++) {
             dictonaryManager.deleteDictionariesItems(dictionaryId, values[i], user.getUserName());
@@ -179,7 +180,6 @@ public class DictionaryController {
         model.addAttribute("success_alert_msg",
                 messageSource.getMessage("dictionary.items.remove.success", new Object[] {}, locale));
 
-        
         List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItems(dictionaryId);
         String dictionaryName = dictonaryManager.getDictionaryName(dictionaryId);
         model.addAttribute("dictionaryItemList", dictionaryItemList);

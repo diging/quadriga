@@ -24,6 +24,7 @@
 
 	<context:component-scan
 		base-package="edu.asu.spring.quadriga.web, edu.asu.spring.quadriga.rest, edu.asu.spring.quadriga.exceptions" />
+ <beans:bean id="webSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
 
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
