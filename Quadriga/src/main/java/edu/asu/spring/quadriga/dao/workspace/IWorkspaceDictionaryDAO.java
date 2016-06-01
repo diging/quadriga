@@ -37,7 +37,7 @@ public interface IWorkspaceDictionaryDAO {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract  void deleteWorkspaceDictionary(String workspaceId, String userId,
+	public abstract  void deleteWorkspaceDictionary(String workspaceId,
 			String dictioanaryId) throws QuadrigaStorageException;
 
 	/**
@@ -48,8 +48,7 @@ public interface IWorkspaceDictionaryDAO {
 	 * @return List<IDictionary>
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId,
-			String userId) throws QuadrigaStorageException;
+	public abstract List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId) throws QuadrigaStorageException;
 	
 	public abstract List<IWorkSpace> getWorkspaceByDictId(String dictionaryId) throws QuadrigaStorageException;
 

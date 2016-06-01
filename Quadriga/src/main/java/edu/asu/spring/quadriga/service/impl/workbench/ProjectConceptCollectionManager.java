@@ -18,12 +18,11 @@ import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
 
 @Service
-public class ProjectConceptCollectionManager implements
-        IProjectConceptCollectionManager {
+public class ProjectConceptCollectionManager implements IProjectConceptCollectionManager {
 
     @Autowired
     private IProjectConceptCollectionDAO dbConnect;
-    
+
     @Autowired
     private IProjectConceptCollectionShallowMapper projCCShallowMapper;
 
@@ -46,11 +45,9 @@ public class ProjectConceptCollectionManager implements
      */
     @Override
     @Transactional
-    public void addProjectConceptCollection(String projectId,
-            String conceptCollectionId, String userId)
+    public void addProjectConceptCollection(String projectId, String conceptCollectionId, String userId)
             throws QuadrigaStorageException {
-        dbConnect.addProjectConceptCollection(projectId, conceptCollectionId,
-                userId);
+        dbConnect.addProjectConceptCollection(projectId, conceptCollectionId, userId);
     }
 
     /**
@@ -64,15 +61,13 @@ public class ProjectConceptCollectionManager implements
      */
     @Override
     @Transactional
-    public List<IProjectConceptCollection> listProjectConceptCollection(
-            String projectId, String userId) throws QuadrigaStorageException {
+    public List<IProjectConceptCollection> listProjectConceptCollection(String projectId)
+            throws QuadrigaStorageException {
 
-        ProjectDTO projectDTO = projManager.getProjectDTO(projectId, userId);
+        ProjectDTO projectDTO = projManager.getDTO(projectId);
         IProject project = projDeepMapper.getProject(projectDTO);
-        List<IProjectConceptCollection> conceptCollectionList = projCCShallowMapper
-                .getProjectConceptCollectionList(project,
-                        projectDTO.getProjectConceptCollectionDTOList());
-        return conceptCollectionList;
+        return projCCShallowMapper.getProjectConceptCollectionList(project,
+                projectDTO.getProjectConceptCollectionDTOList());
     }
 
     /**
@@ -89,9 +84,8 @@ public class ProjectConceptCollectionManager implements
      */
     @Override
     @Transactional
-    public void deleteProjectConceptCollection(String projectId, String userId,
-            String conceptCollectionId) throws QuadrigaStorageException {
-        dbConnect.deleteProjectConceptCollection(projectId, userId,
-                conceptCollectionId);
+    public void deleteProjectConceptCollection(String projectId, String userId, String conceptCollectionId)
+            throws QuadrigaStorageException {
+        dbConnect.deleteProjectConceptCollection(projectId, userId, conceptCollectionId);
     }
 }

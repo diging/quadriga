@@ -40,12 +40,6 @@ $(document).ready(function() {
 
 	});
 });
-
-function onSubmit(){
-	
-	location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}';
-}
-
 </script>
 
 <h2>Add Collaborator to Project: ${projectname}</h2>
@@ -71,14 +65,14 @@ function onSubmit(){
 	    <form:option value="NONE" label="----- Select -----"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select>
-	<br> 
- 	<div class="userError"><form:errors path="userObj" class="ui-state-error-text"></form:errors></div>
+	 
+ 	<div class="userError"><form:errors path="userObj" class="error"></form:errors></div>
 </div> 	 
 
 <div class="col-md-8">
     <h4>Select access rights:</h4>
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="id" itemLabel="displayName" element="div" /> 	
-	<div class="rolesError"><form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors></div>
+	<div class="error"><form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors></div>
 </div>
 
 </div>
@@ -103,8 +97,8 @@ function onSubmit(){
         <table class="table">					
 	<thead>
 		<tr>	
-			<th align="left">collaborator</th>
-			<th align="left">roles</th>	
+			<th align="left">Collaborator</th>
+			<th align="left">Roles</th>	
 		</tr>
 	</thead>
 	

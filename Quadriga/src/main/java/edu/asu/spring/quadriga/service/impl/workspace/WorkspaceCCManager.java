@@ -50,10 +50,9 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	
 	@Override
 	@Transactional
-	public List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId,String userId) throws QuadrigaStorageException
+	public List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId) throws QuadrigaStorageException
 	{
-		List<IConceptCollection> conceptCollectionList = dbConnect.getNonAssociatedWorkspaceConcepts(workspaceId,userId);
-		return conceptCollectionList;
+		return dbConnect.getNonAssociatedWorkspaceConcepts(workspaceId);
 	}
 
 	@Override

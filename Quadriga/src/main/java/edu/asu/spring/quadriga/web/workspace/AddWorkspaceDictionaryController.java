@@ -49,8 +49,7 @@ public class AddWorkspaceDictionaryController {
     public String addWorkspaceDictionary(@PathVariable("workspaceid") String workspaceId, Model model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
-        List<IDictionary> dictionaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(workspaceId,
-                userId);
+        List<IDictionary> dictionaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(workspaceId);
         model.addAttribute("dictinarylist", dictionaryList);
         model.addAttribute("workspaceId", workspaceId);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);

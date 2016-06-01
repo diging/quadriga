@@ -42,9 +42,8 @@ public class DeleteProjectConceptCollectionController {
     @InjectProjectById
     public String deleteProjectConceptCollection(@ProjectIdentifier @PathVariable("projectid") String projectid, Model model,@InjectProject IProject project,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
-        String userId = principal.getName();
         List<IProjectConceptCollection> projectConceptCollectionList = projectConceptCollectionManager
-                .listProjectConceptCollection(projectid, userId);
+                .listProjectConceptCollection(projectid);
 
         model.addAttribute("projectConceptCollectionList", projectConceptCollectionList);
         model.addAttribute("project", project);

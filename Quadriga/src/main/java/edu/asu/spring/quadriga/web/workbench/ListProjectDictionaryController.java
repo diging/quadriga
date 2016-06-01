@@ -42,8 +42,7 @@ public class ListProjectDictionaryController {
     public String listProjectDictionary(HttpServletRequest req,
             @ProjectIdentifier @PathVariable("projectid") String projectid, @InjectProject IProject project,
             Model model, Principal principal) throws QuadrigaStorageException {
-        String userId = principal.getName();
-        List<IProjectDictionary> dicitonaryList = projectDictionaryManager.listProjectDictionary(projectid, userId);
+        List<IProjectDictionary> dicitonaryList = projectDictionaryManager.listProjectDictionary(projectid);
         model.addAttribute("dicitonaryList", dicitonaryList);
         model.addAttribute("project", project);
         return "auth/workbench/project/dictionaries";

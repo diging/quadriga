@@ -32,9 +32,8 @@ public class ListProjectConceptCollectionController {
     @InjectProjectById
     public String listProjectConceptCollection(@ProjectIdentifier @PathVariable("projectid") String projectid,
             @InjectProject IProject project, Model model, Principal principal) throws QuadrigaStorageException {
-        String userId = principal.getName();
         List<IProjectConceptCollection> projectConceptCollectionList = projectConceptCollectionManager
-                .listProjectConceptCollection(projectid, userId);
+                .listProjectConceptCollection(projectid);
         model.addAttribute("projectConceptCollectionList", projectConceptCollectionList);
         model.addAttribute("project", project);
         model.addAttribute("projectid", projectid);

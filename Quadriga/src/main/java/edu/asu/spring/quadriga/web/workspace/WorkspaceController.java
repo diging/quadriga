@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.exceptions.Quadriga404Exception;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -75,13 +76,17 @@ public class WorkspaceController
      * @throws QuadrigaAccessException 
      * @throws QuadrigaException 
      * @author Kiran Kumar Batna
+     * @throws Quadriga404Exception 
      */
     @RequestMapping(value="auth/workbench/workspace/{workspaceid}", method = RequestMethod.GET)
-    public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
+    public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, Quadriga404Exception
     {
         String userName = principal.getName();
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid,userName);
 
+        if (workspace == null) {
+            throw new Quadriga404Exception("Workspace with ID " + workspaceid + " does not exist.");
+        }
 
         //retrieve the collaborators associated with the workspace
         List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();

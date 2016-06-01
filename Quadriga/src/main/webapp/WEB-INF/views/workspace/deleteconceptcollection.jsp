@@ -5,8 +5,6 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
-	
-
 	$(document).ready(function() {
 		$('#selectall').click(function() {
 			$('.selected').prop('checked', isChecked('selectall'));
@@ -79,27 +77,35 @@
 		});
 	});
 </script>
-<h2>Remove Concept Collections from Workspace: ${workspacedetails.workspaceName}</h2>
-<hr/>
+<h2>Remove Concept Collections from Workspace:
+	${workspacedetails.workspaceName}</h2>
+<div class="back-nav">
+	<hr>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Workspace</a>
+	</p>
+	<hr>
+</div>
 
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
+<c:choose>
+	<c:when test="${not empty conceptCollectionList}">
+		<form method="POST">
 
-
-	<c:choose>
-		<c:when test="${not empty conceptCollectionList}">
-			<form method="POST">
-
-				<div class="panel panel-default" style="margin-top: 20px;">
-                <div class="panel-heading">Available Dictionaries</div>
-                <div class="panel-body">
-                   <p>Select concept collection to remove from the workspace and then click "Remove Concept Collections".</p>
-                   <p>
-                   <input type="submit" class="btn btn-primary" 
-                    value="Remove Concept Collections"
-                    onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deleteconceptcollections'" />
-                   </p>
-                </div>
-				<table cellpadding="0" cellspacing="0" border="0" class="table" width="100%">
+			<div class="panel panel-default" style="margin-top: 20px;">
+				<div class="panel-heading">Available Concept Collections</div>
+				<div class="panel-body">
+					<p>Select concept collection to remove from the workspace and
+						then click "Remove Concept Collections".</p>
+					<p>
+						<input type="submit" class="btn btn-primary"
+							value="Remove Concept Collections"
+							onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deleteconceptcollections'" />
+					</p>
+				</div>
+				<table cellpadding="0" cellspacing="0" border="0" class="table"
+					width="100%">
 					<thead>
 						<tr>
 							<th align="left"><input type="checkbox" id="selectall">
@@ -110,13 +116,15 @@
 					</thead>
 
 					<tbody>
-						<c:forEach var="workspaceConceptCollection" items="${conceptCollectionList}">
+						<c:forEach var="workspaceConceptCollection"
+							items="${conceptCollectionList}">
 							<tr>
 								<td width="15%"><input type="checkbox" class="selected"
 									name="selected"
 									value='<c:out value="${workspaceConceptCollection.conceptCollection.conceptCollectionId}"></c:out>' /></td>
 								<td width="30%"><input name="items" type="hidden"
-									value="<c:out value="${workspaceConceptCollection.conceptCollection.conceptCollectionName}"></c:out>" /> <c:out
+									value="<c:out value="${workspaceConceptCollection.conceptCollection.conceptCollectionName}"></c:out>" />
+									<c:out
 										value="${workspaceConceptCollection.conceptCollection.conceptCollectionName}"></c:out></td>
 								<td width="45%"><c:out
 										value="${workspaceConceptCollection.conceptCollection.description}"></c:out></td>
@@ -125,12 +133,12 @@
 					</tbody>
 
 				</table>
-			</form>
-		</c:when>
+		</form>
+	</c:when>
 
-		<c:otherwise>
+	<c:otherwise>
 
-			<br>
-			<spring:message code="empty.CC" />
-		</c:otherwise>
-	</c:choose>
+		<br>
+		<spring:message code="empty.CC" />
+	</c:otherwise>
+</c:choose>
