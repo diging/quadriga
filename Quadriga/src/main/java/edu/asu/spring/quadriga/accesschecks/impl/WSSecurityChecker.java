@@ -135,6 +135,7 @@ public class WSSecurityChecker implements IWSSecurityChecker
 							//check if the collaborator is the supplied collaborator role
 							for(IQuadrigaRole role : collaboratorRoles)
 							{
+							    System.out.println(role);
 								if(role.getId() == collaboratorRole)
 								{
 									chkAccess = true;
@@ -175,6 +176,7 @@ public class WSSecurityChecker implements IWSSecurityChecker
 		{
 			//check if the user has collaborator role SINGLE WORKSPACE ADMIN
 			chkAccess = this.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN);
+			System.out.println(chkAccess);
 		}
 
 		return chkAccess;

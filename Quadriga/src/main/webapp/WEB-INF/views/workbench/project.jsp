@@ -32,6 +32,7 @@
 			<i class="ion-planet"></i> Project: ${project.projectName}
 		</h2>
 		<div>${project.description}</div>
+		<c:if test="${owner=='1' || isProjectAdmin==true}">
 		<div style="text-align: right">
 			<a
 				href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}">
@@ -39,7 +40,8 @@
 				Project
 			</a>
 		</div>
-
+		</c:if>
+		<c:if test="${owner=='1' || isProjectAdmin==true}">
 		<div style="text-align: right">
 			<a
 				href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}">
@@ -47,7 +49,7 @@
 				Project URL
 			</a>
 		</div>
-
+		</c:if>
 		<hr>
 		<div class="user">
 			Owned by: ${project.owner.name}

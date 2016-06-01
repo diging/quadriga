@@ -61,5 +61,6 @@ To go to the public site, click this link <a href="${pageContext.servletContext.
                 
 
 <hr>
-
+<c:if test="${owner=='1' || isProjectAdmin==true}">
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Public Page Settings</a>
+</c:if>
