@@ -11,16 +11,12 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -37,7 +33,6 @@ import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManag
 import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
-import edu.asu.spring.quadriga.service.network.INetworkTransformer;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -144,41 +139,7 @@ public class EditingListController {
         return "auth/editing";
     }
 
-    /**
-     * Get the network displayed on to JSP by passing JSON string on editing
-     * page
-     * 
-     * @author Lohith Dwaraka
-     * @param networkId
-     * @param model
-     * @param principal
-     * @return
-     * @throws QuadrigaStorageException
-     * @throws JAXBException
-     */
-    @AccessPolicies({
-            @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 0, userRole = { RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR }),
-            @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {
-                    RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR }),
-            @ElementAccessPolicy(type = CheckedElementType.NETWORK, paramIndex = 1, userRole = {}) })
-    @RequestMapping(value = "auth/editing/visualize/{networkId}", method = RequestMethod.GET)
-    public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal)
-            throws QuadrigaStorageException, JAXBException, QuadrigaAccessException {
-        INetwork network = networkManager.getNetwork(networkId);
-        if (network == null) {
-            return "auth/accessissue";
-        }
-        ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
-        String nwId = "\"" + networkId + "\"";
-        model.addAttribute("networkid", nwId);
-        String json = "";
-        if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-        }
-        model.addAttribute("jsonstring", json);
-
-        return "auth/editing/visualize";
-    }
+    
 
     /**
      * Visualize old version of network based on the version number Get the

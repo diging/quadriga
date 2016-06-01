@@ -1,0 +1,78 @@
+div.node {
+      border-radius: 6px;
+      width: 16px;
+      height: 16px;
+      margin: -6px 0 0 -6px;
+      position: absolute;
+    }
+    
+    div.link {
+      position: absolute;
+      border-bottom: solid #999 1px;
+      height: 0;
+      -webkit-transform-origin: 0 0;
+      -moz-transform-origin: 0 0;
+      -ms-transform-origin: 0 0;
+      -o-transform-origin: 0 0;
+      transform-origin: 0 0;
+    }
+    
+   .node {
+  fill: #000;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  size : 10 px;
+  r:10
+}
+
+.link {
+  stroke: #aaa;
+  stroke-width: 1.5px;
+}
+link {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+path.link {
+ /* fill: none;*/
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #aaa;
+  stroke-width: 1.5px;
+}
+
+text {
+  fill: #000 !important;
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+linktext {
+  fill: #000 !important;
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+node text {
+	fill: #000 !important;
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
+#licensing {
+  fill: green;
+}
+
+.link.licensing {
+  stroke: green;
+}
+
+.link.resolved {
+  stroke-dasharray: 0,2 1;
+}
+marker#arrow {
+      fill: red;
+	}
+ 

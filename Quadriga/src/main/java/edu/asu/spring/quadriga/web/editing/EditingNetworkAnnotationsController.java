@@ -74,6 +74,7 @@ public class EditingNetworkAnnotationsController {
 
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
+			return "{ success: false; }";
 		}
 
 		return "{ success: true; }";
@@ -179,28 +180,7 @@ public class EditingNetworkAnnotationsController {
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUser(principal.getName());
 		String annotation = "";
-//		List<NetworkAnnotationsDTO> resultList = new ArrayList<NetworkAnnotationsDTO>();
-//		try {
-//			resultList = editingNetworkAnnotationManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
-//			JSONArray ja = new JSONArray();
-//			JSONObject j1 = new JSONObject();
-//			if(resultList != null){
-//
-//				for (int i = 0; i < resultList.size(); i++) {
-//					JSONObject j = new JSONObject();
-//				//	j.put("name", resultList.get(i).getNetworkNodeAnnotationList().get(index));
-//					j.put("text", resultList.get(i).getAnnotationText());
-//					ja.put(j);
-//				}
-//				j1.put("text", ja);
-//				annotation = j1.toString();
-//			}else{
-//				annotation = j1.toString();
-//			}
-//
-//		} catch (QuadrigaStorageException e) {
-//			logger.error("Some issue in the DB", e);
-//		}
+
 		annotation = editingNetworkAnnotationManager.getAllAnnotationOfNetworkAsJson(user.getUserName(), networkId);
 		return annotation;
 	}

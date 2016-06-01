@@ -719,12 +719,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/networks/networks.jsp" />
 	</definition>
-	<!-- <definition name="auth/networks/visualize" extends="base.definition.networks"> 
-		<put-attribute name="title" value="Quadriga Networks visualize" /> <put-attribute 
-		name="content" value="/WEB-INF/views/networks/networkvisual.jsp" /> </definition> -->
-	<!-- <definition name="auth/networks/networkerror" extends="base.definition.networks"> 
-		<put-attribute name="title" value="Quadriga Networks" /> <put-attribute name="content" 
-		value="/WEB-INF/views/networks/networkerror.jsp" /> </definition> -->
 	<!-- external website -->
 	<definition name="sites/website" extends="base.definition.public">
 		<put-attribute name="currentPage" value="home" />
