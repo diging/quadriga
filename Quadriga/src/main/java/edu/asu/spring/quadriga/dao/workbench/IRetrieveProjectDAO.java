@@ -8,9 +8,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IRetrieveProjectDAO extends IBaseDAO<ProjectDTO> {
     
-    public List<ProjectDTO> getProjectDTOList(String sUserName) throws QuadrigaStorageException;
-
-    ProjectDTO getProjectDTO(String projectId,String userId) throws QuadrigaStorageException;
+    List<ProjectDTO> getProjectDTOList(String sUserName) throws QuadrigaStorageException;
 
     List<ProjectDTO> getCollaboratorProjectDTOListOfUser(String sUserName)
             throws QuadrigaStorageException;

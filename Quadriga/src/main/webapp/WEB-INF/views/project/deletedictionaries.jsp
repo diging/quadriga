@@ -91,7 +91,7 @@
 				<div class="panel-body">
                     <p>Select dictionaries to remove from project and then click "Remove Dictionaries".</p>
                <p>
-					<input type="submit" value="Delete Dictionary"
+					<input type="submit" value="Remove Dictionaries"
 						class="btn btn-primary"
 						onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionaries'" />
 
