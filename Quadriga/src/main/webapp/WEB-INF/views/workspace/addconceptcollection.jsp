@@ -31,13 +31,6 @@
 	}
 
 	$(document).ready(function() {
-		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false
-		});
-	});
-	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
 		});
@@ -78,10 +71,15 @@
 	});
 </script>
 <h2>Add Concept Collections to Workspace: ${workspacedetails.workspaceName}</h2>
-<hr />
-
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
-
+<div class="back-nav">
+    <hr>
+    <p>
+        <a
+            href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}"><i
+            class="fa fa-arrow-circle-left"></i> Back to Workspace</a>
+    </p>
+    <hr>
+</div>
 	<c:choose>
 		<c:when test="${not empty conceptCollectionList}">
 

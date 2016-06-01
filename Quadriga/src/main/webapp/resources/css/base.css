@@ -79,3 +79,10 @@
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited {
 	color: #D3D0CB;
 }
+
+.page-404 {
+    font-size: 120px;
+    font-weight: bold;
+    color: #7C91A7;
+    float: right;
+}

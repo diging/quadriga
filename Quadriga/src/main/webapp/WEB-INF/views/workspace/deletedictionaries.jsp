@@ -31,13 +31,6 @@
 	}
 
 	$(document).ready(function() {
-		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false
-		});
-	});
-	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
 		});
@@ -78,29 +71,15 @@
 	});
 </script>
 <h2>Delete Dictionaries from Workspace: ${workspacedetails.workspaceName}</h2>
-<hr />
-
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
-
-
-<c:choose>
-	<c:when test="${success=='1'}">
-		<font color="blue"><spring:message
-				code="workspace.dictionary.add.success" /></font>
-	</c:when>
-	<c:when test="${success=='0'}">
-		<span class="ui-state-error-text"><spring:message
-				code="workspace.dictionary.add.fail" /></span>
-	</c:when>
-	<c:when test="${deletesuccess=='1'}">
-		<font color="blue"><spring:message
-				code="workspace.dictionary.delete.success" /></font>
-	</c:when>
-	<c:when test="${deletesuccess=='0'}">
-		<span class="ui-state-error-text"><spring:message
-				code="workspace.dictionary.delete.fail" /></span>
-	</c:when>
-</c:choose>
+<div class="back-nav">
+    <hr>
+    <p>
+        <a
+            href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}"><i
+            class="fa fa-arrow-circle-left"></i> Back to Workspace</a>
+    </p>
+    <hr>
+</div>
 
 <c:choose>
 	<c:when test="${not empty dicitonaryList}">
@@ -116,8 +95,7 @@
                 onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deletedictionaries'" />
                </p>
             </div>
-			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
-				class="table">
+			<table class="table">
 				<!-- <table  class="dataTable" id="pagination1"> -->
 				<thead>
 					<tr>
@@ -131,12 +109,12 @@
 				<tbody>
 					<c:forEach var="workspaceDictionary" items="${dicitonaryList}">
 						<tr>
-							<td width="15%"><input type="checkbox" class="selected"
+							<td width="10%"><input type="checkbox" class="selected"
 								name="selected" value='<c:out value="${workspaceDictionary.dictionary.dictionaryId}"></c:out>' /></td>
 							<td width="30%"><input name="items"
 								type="hidden" value="<c:out value="${workspaceDictionary.dictionary.dictionaryName}"></c:out>" />
 								<c:out value="${workspaceDictionary.dictionary.dictionaryName}"></c:out></td>
-							<td width="45%"><c:out
+							<td><c:out
 									value="${workspaceDictionary.dictionary.description}"></c:out></td>
 						</tr>
 					</c:forEach>
