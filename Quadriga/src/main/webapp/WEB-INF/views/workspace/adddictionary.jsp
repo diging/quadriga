@@ -78,9 +78,15 @@
 	});
 </script>
 <h2>Add Dictionaries to Workspace: ${workspacedetails.workspaceName}</h2>
-<hr />
-
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back to workspace</a>
+<div class="back-nav">
+    <hr>
+    <p>
+        <a
+            href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}"><i
+            class="fa fa-arrow-circle-left"></i> Back to Workspace</a>
+    </p>
+    <hr>
+</div>
 
 <c:choose>
 	<c:when test="${not empty dictinarylist}">
