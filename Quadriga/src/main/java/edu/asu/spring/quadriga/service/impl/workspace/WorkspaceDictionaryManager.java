@@ -22,112 +22,116 @@ import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 @Service
 public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 
-	@Autowired
-	private IWorkspaceDictionaryDAO dbConnect;
-	
-	@Autowired
-	private IWorkspaceDAO wsDao;
-	
-	@Autowired
-	private WorkspaceDictionaryShallowMapper wsDictShallowMapper;
-	
-	@Autowired
-	private IWorkspaceDeepMapper wsDeepMapper;
-	
-	@Autowired
-	private DataSource dataSource;
-	/**
-	 * Assigns the data source
-	 *  
-	 *  @param : dataSource
-	 */
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
-	
-	/**
-	 * Add dictionary to the workspace  
-	 * @param workspaceId
-	 * @param dictionaryId
-	 * @param userId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public void addWorkspaceDictionary(String workspaceId,
-			String dictionaryId, String userId) throws QuadrigaStorageException {
-		dbConnect.addWorkspaceDictionary(workspaceId, dictionaryId, userId);
-	}
+    @Autowired
+    private IWorkspaceDictionaryDAO dbConnect;
 
-	/**
-	 * List the dictionary in a project for a user - userId
-	 * @param workspaceId
-	 * @param userId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public List<IWorkspaceDictionary> listWorkspaceDictionary(IWorkSpace workspace,
-			String userId) throws QuadrigaStorageException {
-		
-		List<IWorkspaceDictionary> wsDictionaryList = null;
-		WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspace.getWorkspaceId(), userId);
-		wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);
-		return wsDictionaryList;
-	}
-	
-	/**
-	 * List the dictionary in a project for a user - userId
-	 * @param workspaceId
-	 * @param userId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public List<IWorkspaceDictionary> listWorkspaceDictionary(String workspaceId,
-			String userId) throws QuadrigaStorageException {
-		
-		List<IWorkspaceDictionary> wsDictionaryList = null;
-		
-		// FIXME: what's up with all of this?:
-		WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
-		IWorkSpace workspace = wsDeepMapper.mapWorkspaceDTO(wsDto);
-		
-		WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspaceId, userId);
-		
-		wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);
-		return wsDictionaryList;
-	}
-	
-	/**
-	 * List the dictionaries which are not associated to a workspace for a user -UserId
-	 * @throws QuadrigaStorageException 
-	 * 
-	 */
-	@Override
-	@Transactional
-	public List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId,String userId) throws QuadrigaStorageException
-	{
-		List<IDictionary> dictionaryList = dbConnect.getNonAssociatedWorkspaceDictionaries(workspaceId,userId);
-		return dictionaryList;
-	}
+    @Autowired
+    private IWorkspaceDAO wsDao;
 
-	/**
-	 * Delete the dictionary in a project for a user - userId
-	 * @param workspaceId
-	 * @param userId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public void deleteWorkspaceDictionary(String workspaceId, String userId,
-			String dictioanaryId) throws QuadrigaStorageException {
-	     dbConnect.deleteWorkspaceDictionary(workspaceId, userId, dictioanaryId);
-	}
+    @Autowired
+    private WorkspaceDictionaryShallowMapper wsDictShallowMapper;
+
+    @Autowired
+    private IWorkspaceDeepMapper wsDeepMapper;
+
+    @Autowired
+    private DataSource dataSource;
+
+    /**
+     * Assigns the data source
+     * 
+     * @param : dataSource
+     */
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    /**
+     * Add dictionary to the workspace
+     * 
+     * @param workspaceId
+     * @param dictionaryId
+     * @param userId
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    @Transactional
+    public void addWorkspaceDictionary(String workspaceId, String dictionaryId, String userId)
+            throws QuadrigaStorageException {
+        dbConnect.addWorkspaceDictionary(workspaceId, dictionaryId, userId);
+    }
+
+    /**
+     * List the dictionary in a project for a user - userId
+     * 
+     * @param workspaceId
+     * @param userId
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    @Transactional
+    public List<IWorkspaceDictionary> listWorkspaceDictionary(IWorkSpace workspace, String userId)
+            throws QuadrigaStorageException {
+
+        List<IWorkspaceDictionary> wsDictionaryList = null;
+        WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspace.getWorkspaceId(), userId);
+        wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);
+        return wsDictionaryList;
+    }
+
+    /**
+     * List the dictionary in a project for a user - userId
+     * 
+     * @param workspaceId
+     * @param userId
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    @Transactional
+    public List<IWorkspaceDictionary> listWorkspaceDictionary(String workspaceId, String userId)
+            throws QuadrigaStorageException {
+
+        List<IWorkspaceDictionary> wsDictionaryList = null;
+
+        // FIXME: what's up with all of this?:
+        WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
+        IWorkSpace workspace = wsDeepMapper.mapWorkspaceDTO(wsDto);
+
+        WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspaceId, userId);
+
+        wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);
+        return wsDictionaryList;
+    }
+
+    /**
+     * List the dictionaries which are not associated to a workspace for a user
+     * -UserId
+     * 
+     * @throws QuadrigaStorageException
+     * 
+     */
+    @Override
+    @Transactional
+    public List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId) throws QuadrigaStorageException {
+        return dbConnect.getNonAssociatedWorkspaceDictionaries(workspaceId);
+    }
+
+    /**
+     * Delete the dictionary in a project for a user - userId
+     * 
+     * @param workspaceId
+     * @param userId
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    @Transactional
+    public void deleteWorkspaceDictionary(String workspaceId, String dictioanaryId)
+            throws QuadrigaStorageException {
+        dbConnect.deleteWorkspaceDictionary(workspaceId, dictioanaryId);
+    }
 
 }
