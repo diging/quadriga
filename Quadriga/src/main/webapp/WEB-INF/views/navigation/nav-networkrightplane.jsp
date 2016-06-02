@@ -1,15 +1,5 @@
 <%@ page language="java" contentType="text/html;"%>
 
-<script>
-	$(document).ready(
-			function() {
-				$('#conceptdesctextarea').scrollTop(
-						$('#conceptdesctextarea').scrollHeight);
-				$('#annotationtextarea').scrollTop(
-						$('#annotationtextarea').scrollHeight);
-
-			});
-</script>
 
 <style>
 textarea {

@@ -5,14 +5,15 @@
 
 <!-- CSS Files -->
 <link type="text/css"
-	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css"
+	href="${pageContext.servletContext.contextPath}/resources/css/d3.css"
 	rel="stylesheet" /> 
-
+	
+<script src="${pageContext.servletContext.contextPath}/resources/js/d3/common_functions.js"></script> 
 <script
-	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
+	src="${pageContext.servletContext.contextPath}/resources/js/d3networkspublic.js"></script>
 	
 	<script
-	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
+	src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
 <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
 
 
@@ -24,12 +25,6 @@ function changeLayout(json,networkid,path,type)
 }
 
 </script>
-<!-- <script>
-$("input[type=button]").button().click(function(event) {
-	event.preventDefault();
-});</script>
-
- -->
 
 <body
 	onload="d3visualizepublic(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />

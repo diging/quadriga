@@ -64,7 +64,8 @@ public class VisualizeNetworkController {
             return "public/404";
         }
         model.addAttribute("project", project);
-
+        model.addAttribute("network", network);
+        
         ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 
         // test the transformed networks
