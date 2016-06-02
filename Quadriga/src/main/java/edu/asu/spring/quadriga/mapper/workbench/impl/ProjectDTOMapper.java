@@ -71,6 +71,9 @@ public class ProjectDTOMapper extends BaseMapper implements IProjectBaseMapper {
     @Override
     @Transactional
     public IProject getProject(ProjectDTO projectDTO) throws QuadrigaStorageException {
+        if (projectDTO == null) {
+            return null;
+        }
         IProject project = createProjectObject();
         fillProject(projectDTO, project);
         

@@ -33,6 +33,9 @@ public class ProjectShallowMapper extends ProjectDTOMapper implements
     @Transactional
     public IProject getProjectDetails(ProjectDTO projectDTO)
             throws QuadrigaStorageException {
+        if (projectDTO == null) {
+            return null;
+        }
         IProject projectProxy = null;
 
         if (projectDTO != null) {
