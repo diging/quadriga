@@ -27,6 +27,7 @@
     <script src="${pageContext.servletContext.contextPath}/resources/js/jquery-alert.js"></script>
     <script
         src="${pageContext.servletContext.contextPath}/resources/js/jquery.quick.pagination.min.js"></script>
+    <script src="${pageContext.servletContext.contextPath}/resources/js/d3/common_functions.js"></script>
     <script src="${pageContext.servletContext.contextPath}/resources/js/d3networkvisualize.js"></script>
 	<script src="${pageContext.servletContext.contextPath}/resources/js/d3networkspublic.js"></script>
 	<script src="${pageContext.servletContext.contextPath}/resources/js/d3networks.js"></script>
@@ -131,7 +132,7 @@
     <div id="main">
         <div class="container">
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-9">
                 <tiles:insertAttribute name="content" />
             </div>
             <div class="col-md-3">

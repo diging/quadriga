@@ -89,7 +89,7 @@ public class XMLReader implements IXMLReader {
      */
     private String getTagValue(Document document, String tagName) {
         Node tagNode = document.getElementsByTagName(tagName).item(0);
-        return tagNode != null ? tagNode.getFirstChild().getNodeValue() : null;
+        return tagNode != null && tagNode.getFirstChild() != null ? tagNode.getFirstChild().getNodeValue() : null;
     }
 
     /**

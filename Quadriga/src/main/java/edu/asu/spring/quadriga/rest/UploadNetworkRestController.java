@@ -44,7 +44,6 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
-import edu.asu.spring.quadriga.web.workbench.AddCollaboratorController;
 
 /**
  * 

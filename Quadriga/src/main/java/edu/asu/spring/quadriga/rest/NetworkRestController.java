@@ -32,7 +32,6 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.factory.networks.INetworkXMLFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetworkXML;

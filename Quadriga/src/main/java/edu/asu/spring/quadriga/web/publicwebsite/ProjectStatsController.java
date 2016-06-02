@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
@@ -119,11 +120,11 @@ public class ProjectStatsController {
      * @throws QuadrigaStorageException
      * @throws JSONException
      */
-    @CheckPublicAccess(projectIndex = 2)
+    @CheckPublicAccess
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
     public String showProjectStatistics(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
-            @InjectProject IProject project, Model model, Principal principal)
+            @CheckAccess @InjectProject IProject project, Model model, Principal principal)
                     throws JAXBException, QuadrigaStorageException {
 
         String projectId = project.getProjectId();
