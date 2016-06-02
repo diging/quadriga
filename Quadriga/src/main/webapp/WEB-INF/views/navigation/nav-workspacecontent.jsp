@@ -52,7 +52,7 @@
   </div>
   <div class="panel-body">
       <div id="workspaceDictionaries" style="margin-bottom: 10px;"></div>
-      <c:if test="${owner=='1' || wsadmin=='1'}">
+       <c:if test="${owner=='1' || wsadmin=='1'}">
       <div>
         <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
 	    <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>

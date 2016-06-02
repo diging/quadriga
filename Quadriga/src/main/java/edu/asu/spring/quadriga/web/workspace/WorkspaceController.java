@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
+import edu.asu.spring.quadriga.aspects.IAuthorization;
+import edu.asu.spring.quadriga.aspects.WorkspaceAuthorization;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -26,6 +29,7 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * Controller to handle all the workspace requests for Quadriga.
@@ -61,6 +65,9 @@ public class WorkspaceController {
 
     @Autowired
     private INetworkManager networkManager;
+    
+    @Autowired @Qualifier("workspaceAuthorization")
+    private IAuthorization authorization;
 
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceController.class);
 
@@ -97,6 +104,10 @@ public class WorkspaceController {
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("textFileList", tfList);
 
+        String adminRoles[] = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_COLLABORATOR_OWNER}; 
+        
+        boolean isAdmin = authorization.chkAuthorization(userName, workspaceid, adminRoles);
+        
         if (workspaceSecurity.checkWorkspaceOwner(userName, workspaceid)) {
             model.addAttribute("owner", 1);
         } else {
@@ -112,8 +123,7 @@ public class WorkspaceController {
         } else {
             model.addAttribute("projectinherit", 0);
         }
-        if (workspaceSecurity.chkModifyWorkspaceAccess(userName, workspaceid)) {
-            System.out.println(workspaceSecurity.chkModifyWorkspaceAccess(userName, workspaceid));
+        if (isAdmin) {
             model.addAttribute("wsadmin", 1);
         } else {
             model.addAttribute("wsadmin", 0);

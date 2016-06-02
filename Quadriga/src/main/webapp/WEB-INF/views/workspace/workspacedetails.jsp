@@ -141,13 +141,14 @@
 
 		<hr>
 		<h4>Text files in this workspace:</h4>
-		<div class="pull-right">
+		<c:if test="${owner=='1' || wsadmin=='1'}">
+		<div class="pull-right">		
 			<a
 				href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myprojectid}/${workspaceid}/addtext">
 				<i class="fa fa-plus-circle" aria-hidden="true"></i> Add Textfile
 			</a>
 		</div>
-
+		</c:if>
 
 		<c:choose>
 			<c:when test="${not empty textFileList}">
@@ -238,7 +239,6 @@
 				There are no collaborators.
 			</c:if>
 		<c:if test="${owner=='1' || wsadmin=='1'}">
-
 			<div style="border-top: dashed 1px #e7eae8; padding: 5px;">
 				<a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addcollaborators">
