@@ -45,7 +45,8 @@ function conceptDescription(d,path) {
 	// this allow variables to be assigned inside the ajax and
 	// accessed outside
 	$.ajax({
-		url : path + "/public/concept/" + encodeURIComponent(d.conceptId),
+		//url : path + "/public/concept/lemma/" + d.name,
+		url : path + "/public/concept?id=" + encodeURIComponent(d.conceptId),
 		// url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
 		type : "GET",
 		success : function(data) {
