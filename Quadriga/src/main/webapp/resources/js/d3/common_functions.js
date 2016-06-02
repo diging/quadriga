@@ -22,31 +22,8 @@ function display_annotations(d, path, networkId) {
 					+ annotationContent + "</ol></div>";
 			$('#annot_details').append(annotationContent);
 		},
-		error : function() {
-			alert("error in display_annotations");
-		}
-
-	});
-	$.ajax({
-		url : getAnnotationUrl,
-		type : "GET",
-		data : "nodeid=" + d.id + "&objecttype=relation",
-		dataType : 'json',
-		success : function(data) {
-			var cnt = 0;
-			$.each(data.text, function(key, value) {
-				annotationContent += '<li>' + value.name;
-				annotationContent += "</li>";
-			});
-			if (annotationContent == "") {
-				annotationContent = "No annotations found."
-			}
-			annotationContent = "<div id=" + '"annotationtextarea"' + "><ol>"
-					+ annotationContent + "</ol></div>";
-			$('#annot_details').append(annotationContent);
-		},
-		error : function() {
-			alert("error in display_annotations");
+		error : function(event) {
+			console.log(event);
 		}
 
 	});
