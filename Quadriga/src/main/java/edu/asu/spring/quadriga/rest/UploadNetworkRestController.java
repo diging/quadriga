@@ -188,7 +188,7 @@ public class UploadNetworkRestController {
             try {
                 String responseFromQStore = networkManager.storeNetworks(network);
                 networkId = networkManager.storeNetworkDetails(responseFromQStore, user, xmlInfo.getNetworkName(),
-                        workspaceId, INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO, INetworkStatus.APPROVED);
+                        workspaceId, INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO, INetworkStatus.APPROVED, xmlInfo.getExternalUserId());
             } catch (JAXBException | QStoreStorageException e) {
                 String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
                 logger.error("Exception while storing netwokr in QStore.", e);

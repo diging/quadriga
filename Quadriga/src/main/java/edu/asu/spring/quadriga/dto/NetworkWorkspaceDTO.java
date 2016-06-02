@@ -142,4 +142,5 @@ public class NetworkWorkspaceDTO implements Serializable{
         }
         return true;
     }
+
 }

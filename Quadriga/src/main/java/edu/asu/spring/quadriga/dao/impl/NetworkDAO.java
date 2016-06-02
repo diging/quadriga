@@ -39,7 +39,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
-import edu.asu.spring.quadriga.service.IAnnotationObjectTypes;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -112,7 +111,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
      *             connection troubles.
      */
     @Override
-    public String addNetwork(String networkName, IUser user, String workspaceid, String networkStatus)
+    public String addNetwork(String networkName, IUser user, String workspaceid, String networkStatus, String externalUserId)
             throws QuadrigaStorageException {
 
         if (networkName == null || user == null || workspaceid == null)
@@ -122,6 +121,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
 
         NetworksDTO networksDTO = new NetworksDTO(networkid, networkName, user.getUserName(), networkStatus,
                 user.getUserName(), new Date(), user.getUserName(), new Date());
+        networksDTO.setExternalUserId(externalUserId);
         String userName = user.getUserName();
         Date date = new Date();
 
@@ -133,6 +133,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         networkWorkspaceDTO.setUpdateddate(date);
         networkWorkspaceDTO.setCreatedby(userName);
         networkWorkspaceDTO.setUpdatedby(userName);
+        
 
         WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,
                 workspaceid);

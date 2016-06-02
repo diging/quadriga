@@ -513,7 +513,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     @Transactional
     public String storeNetworkDetails(String xml, IUser user, String networkName, String workspaceId,
-            String uploadStatus, String networkId, int version, String networkStatus) throws JAXBException {
+            String uploadStatus, String networkId, int version, String networkStatus, String externalUserId) throws JAXBException {
         ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
 
         // Get Workspace details.
@@ -535,7 +535,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         // Add network into database
         if (uploadStatus == INetworkManager.NEWNETWORK) {
             try {
-                networkId = dbConnect.addNetwork(networkName, user, workspaceId, networkStatus);
+                networkId = dbConnect.addNetwork(networkName, user, workspaceId, networkStatus, externalUserId);
             } catch (QuadrigaStorageException e1) {
                 logger.error("DB action error ", e1);
             }
