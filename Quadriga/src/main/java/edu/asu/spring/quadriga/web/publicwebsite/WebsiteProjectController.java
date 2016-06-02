@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
-import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -61,6 +62,7 @@ public class WebsiteProjectController {
      * @throws QuadrigaStorageException
      *             Database storage exception thrown
      */
+    @CheckPublicAccess(projectIndex = 4)
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}", method = RequestMethod.GET)
     public <T> String showProject(Model model, @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,

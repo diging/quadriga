@@ -20,9 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
-import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -45,11 +46,11 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 public class NetworkSearchController {
 
     @Autowired
-    private IRetrieveProjectManager projectManager;
+    IRetrieveProjectManager projectManager;
 
     @Qualifier("conceptPowerService")
     @Autowired
-    private IService service;
+    IService service;
 
     @Autowired
     private ID3Creator d3Creator;
@@ -71,6 +72,7 @@ public class NetworkSearchController {
      * @return view
      * @throws QuadrigaStorageException
      */
+    @CheckPublicAccess(projectIndex = 3)
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
     public String getSearch(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, Model model,
@@ -85,6 +87,7 @@ public class NetworkSearchController {
      *
      * @return json
      */
+    @CheckPublicAccess(projectIndex = 3)
     @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @InjectProjectByName
@@ -115,6 +118,7 @@ public class NetworkSearchController {
         return new ResponseEntity<String>(defaultJsonErrorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @CheckPublicAccess(projectIndex = 3)
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
     public String getSearchTransformedNetwork(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
