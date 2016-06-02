@@ -247,6 +247,8 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     public IProject getProjectDetailsByUnixName(String unixName)
             throws QuadrigaStorageException {
         ProjectDTO projectDTO = projectDao.getProjectDTOByUnixName(unixName);
+        if (projectDTO == null)
+            return null;
         return projectDeepMapper.getProject(projectDTO);
 
     }

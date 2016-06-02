@@ -5,11 +5,13 @@ import java.lang.reflect.Parameter;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 
 /**
  * This class intercepts all controller methods. If one of the methods is
@@ -31,6 +33,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  *
  */
 public abstract class InjectProjectAspect {
+    
+    @Autowired
+    private IPassThroughProjectManager passThroughManager;
 
     public Object injectProject(ProceedingJoinPoint joinPoint) throws Throwable {
 
@@ -69,9 +74,15 @@ public abstract class InjectProjectAspect {
                 String projectVar = (String) arguments[projVarIndex];
                 project = getProject(projectVar);
 
+                // let's see if there is a project with an external id
+                if (project == null) {
+                    project = getProjectByExternalId(projectVar);
+                }
+                
                 // If there is no project, associated return an error page.
-                if (project == null)
+                if (project == null) {
                     return getErrorPage();
+                }
 
                 // Inject the project at the index
                 arguments[projectParamIdx] = project;
@@ -81,6 +92,15 @@ public abstract class InjectProjectAspect {
 
         // Continue with the controller method.
         return joinPoint.proceed(arguments);
+    }
+    
+    protected IProject getProjectByExternalId(String proj) throws QuadrigaStorageException {
+        String[] parts = proj.split("\\+");
+        // if not following convention, no projet is found
+        if (parts.length != 2) {
+            return null;
+        }
+        return passThroughManager.getPassthroughProject(parts[0], parts[1]);
     }
 
     /**

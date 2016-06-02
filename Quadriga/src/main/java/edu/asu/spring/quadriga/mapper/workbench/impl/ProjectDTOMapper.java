@@ -95,6 +95,7 @@ public class ProjectDTOMapper extends BaseMapper implements IProjectBaseMapper {
      *             Throws a storage issue when this method is having issues to
      *             access database.
      */
+    @Transactional
     protected List<IProjectCollaborator> getProjectCollaboratorList(
             IProject project, List<ProjectCollaboratorDTO> collaboratorDtoList)
             throws QuadrigaStorageException {
