@@ -52,10 +52,12 @@
   </div>
   <div class="panel-body">
       <div id="workspaceDictionaries" style="margin-bottom: 10px;"></div>
+       <c:if test="${owner=='1' || wsadmin=='1'}">
       <div>
         <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
 	    <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
 	  </div>
+	  </c:if>
   </div>
 </div>
 
@@ -65,8 +67,12 @@
   </div>
   <div class="panel-body">
     <div id="workspaceConceptCollections" style="margin-bottom: 10px;"></div>
-    <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
-    <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+    <c:if test="${owner=='1' || wsadmin=='1'}">
+    <div>
+    	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
+    	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+    </div>
+    </c:if>
   </div>
 </div>
 
