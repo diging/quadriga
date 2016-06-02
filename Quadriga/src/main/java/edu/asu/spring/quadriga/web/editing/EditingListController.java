@@ -1,11 +1,8 @@
 package edu.asu.spring.quadriga.web.editing;
 
 import java.security.Principal;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
@@ -16,20 +13,16 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
@@ -59,9 +52,6 @@ public class EditingListController {
 
     @Autowired
     private IUserManager userManager;
-
-    @Autowired
-    private IConceptCollectionManager conceptCollectionManager;
 
     private static final Logger logger = LoggerFactory.getLogger(EditingListController.class);
 
@@ -204,92 +194,6 @@ public class EditingListController {
         }
 
         return null;
-    }
-
-    /**
-     * This controller method would get description of the lemma to javascript
-     * when called through a Ajax call
-     * 
-     * @author Lohith Dwaraka
-     * @param lemma
-     * @param request
-     * @param response
-     * @param model
-     * @param principal
-     * @return
-     * @throws QuadrigaStorageException
-     * @throws JAXBException
-     */
-    @RequestMapping(value = "/sites/network/getconcept/{lemma}", method = RequestMethod.GET)
-    @ResponseBody
-    public String getConceptCollectionObject(@PathVariable("lemma") String lemma, HttpServletRequest request,
-            HttpServletResponse response, ModelMap model, Principal principal) throws QuadrigaStorageException,
-            JAXBException {
-
-        // This is done as string with a dot (.) in between in the path variable
-        // is not read as expected so we could replace it by $ in the javascript
-        // and revert back in our controller
-        lemma = lemma.replace('$', '.');
-        ConceptpowerReply conceptPowerReply = conceptCollectionManager.search(lemma, "NOUN");
-        List<ConceptEntry> conceptList = conceptPowerReply.getConceptEntry();
-        Iterator<ConceptEntry> conceptListIterator = conceptList.iterator();
-        while (conceptListIterator.hasNext()) {
-
-            ConceptEntry ce = conceptListIterator.next();
-            if (ce.getLemma().equalsIgnoreCase(lemma)) {
-                response.setStatus(200);
-                return ce.getDescription();
-            }
-        }
-        conceptPowerReply = conceptCollectionManager.search(lemma, "VERB");
-        conceptList = conceptPowerReply.getConceptEntry();
-        conceptListIterator = conceptList.iterator();
-        while (conceptListIterator.hasNext()) {
-
-            ConceptEntry ce = conceptListIterator.next();
-            if (ce.getLemma().equalsIgnoreCase(lemma)) {
-                response.setStatus(200);
-                return ce.getDescription();
-            }
-        }
-
-        conceptPowerReply = conceptCollectionManager.search(lemma, "adverb");
-        conceptList = conceptPowerReply.getConceptEntry();
-        conceptListIterator = conceptList.iterator();
-        while (conceptListIterator.hasNext()) {
-
-            ConceptEntry ce = conceptListIterator.next();
-            if (ce.getLemma().equalsIgnoreCase(lemma)) {
-                response.setStatus(200);
-                return ce.getDescription();
-            }
-        }
-
-        conceptPowerReply = conceptCollectionManager.search(lemma, "adjective");
-        conceptList = conceptPowerReply.getConceptEntry();
-        conceptListIterator = conceptList.iterator();
-        while (conceptListIterator.hasNext()) {
-
-            ConceptEntry ce = conceptListIterator.next();
-            if (ce.getLemma().equalsIgnoreCase(lemma)) {
-                response.setStatus(200);
-                return ce.getDescription();
-            }
-        }
-
-        conceptPowerReply = conceptCollectionManager.search(lemma, "others");
-        conceptList = conceptPowerReply.getConceptEntry();
-        conceptListIterator = conceptList.iterator();
-        while (conceptListIterator.hasNext()) {
-
-            ConceptEntry ce = conceptListIterator.next();
-            if (ce.getLemma().equalsIgnoreCase(lemma)) {
-                response.setStatus(200);
-                return ce.getDescription();
-            }
-        }
-
-        return "";
     }
 
 }

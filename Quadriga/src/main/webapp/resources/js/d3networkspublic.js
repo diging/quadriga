@@ -210,7 +210,6 @@ function d3visualizepublic(graph, networkId, path,type) {
 	};
 
 	function  redraw() {
-		console.log("here", d3.event.translate, d3.event.scale);
 		vis.attr("transform",
 				" scale(" + d3.event.scale + ")");
 	};
