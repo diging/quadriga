@@ -9,13 +9,13 @@
 	rel="stylesheet" />
 	
 <link type="text/css"
-	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ForceDirected.css"
+	href="${pageContext.servletContext.contextPath}/resources/css/ForceDirected.css"
 	rel="stylesheet" />
 <link type="text/css"
-	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css"
+	href="${pageContext.servletContext.contextPath}/resources/css/d3.css"
 	rel="stylesheet" />
 <script
-	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
+	src="${pageContext.servletContext.contextPath}/resources/js/d3networkvisualize.js"></script>
 <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
 
 </head>
@@ -35,7 +35,7 @@ $("input[type=button]").button().click(function(event) {
 <body
 	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
 
-<button type="submit" onclick="goFullscreen('chart')" style="float: left">
+<button class="btn btn-default" type="submit" onclick="goFullscreen('chart')" style="float: left">
     <i class="fa fa-arrows-alt"></i> 
     
 </button>
@@ -50,7 +50,7 @@ $("input[type=button]").button().click(function(event) {
 
 <div id="inner-details"></div>
 <div id="allannot_details">
-<table id = annotationsTable></table>
+<table class="table table-striped table-bordered table-white" id ="annotationsTable"></table>
 </div>
 
 

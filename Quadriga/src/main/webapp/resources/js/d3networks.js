@@ -162,8 +162,8 @@ function d3visualize(graph, networkId, path,type) {
 	// Works on left click
 	.on("click", function(d){
 
-		display_annotations(d);
-		conceptDescription(d);
+		display_annotations(d, path);
+		conceptDescription(d, path, networkId);
 	})
 	
 	.call(node_drag)
@@ -204,7 +204,6 @@ function d3visualize(graph, networkId, path,type) {
 	};
 
 	function  redraw() {
-		console.log("here", d3.event.translate, d3.event.scale);
 		vis.attr("transform", 
 				" scale(" + d3.event.scale + ")");
 	};
@@ -268,37 +267,7 @@ function d3visualize(graph, networkId, path,type) {
 
 			//alert(source);
 			statementId = source.statementid;
-			/*var snodes = vis.selectAll(".node").each(function(d){
-
-						for(var i in statementId){
-							for(var j in d.statementid){
-								if(statementId[i] == d.statementid[j]){
-									nodearray.push(d);
-									//alert(nodearray.length);
-								}
-							}
-						}
-
-						/*found = $.intersection(statementId, d.statementid);
-						if(found.size()>0){
-							nodearray.push(d);
-						}*/
-
-			/*var found = $.inArray(statementId, d.statementid);
-						if(found > -1){
-							nodearray.push(d);
-							alert(nodearray.size());
-							}*/
-
-			/*if((d.statementid.indexOf(statementId))>0)
-							{array.push(d);
-							console.log(d.name);
-							}
-					});*/
-
-
-			//var filtered = snodes.filter(function(d) { return d.statementid[0]==statementId;});
-			//alert(filtered.size());
+			
 
 			var filtered = snodes.filter(function(d) { return d.statementid[0]==statementId;}).each(function(d) {
 				//d3.select(this).style("opacity", 1);
@@ -318,32 +287,7 @@ function d3visualize(graph, networkId, path,type) {
 	}
 
 
-	/*function highlightStmt(opacity) {
-					return function(d, i) {
-						fade all elements
-						d3.select(d.source).style("opacity", opacity);
-						d3.select(d.target).style("opacity", opacity);
-						//fade all elements
-						vis.selectAll("circle, line").style("opacity", opacity);
-
-						var associated_links = vis.selectAll("line").filter(function(d) {
-							return  d.source.index == i;
-							// return d.source.index == i || d.target.index == i;
-						}).each(function(d) {
-							//unfade links and nodes connected to the current node
-							d3.select(this).style("opacity", 1);
-							//THE FOLLOWING CAUSES: Uncaught TypeError: Cannot call method 'setProperty' of undefined
-							//  d3.select(d.source).style("opacity", 1);
-							//  d3.select(d.target).style("opacity", 1);
-							node.style("opacity", function(o) {
-								d3.select(o.source).style("opacity", 1);
-							});
-						});
-
-					};
-
-				}*/
-
+	
 	function fadeLinks(opacity) {
 		return function(d, i) {
 			//fade all elements
@@ -462,7 +406,7 @@ function d3visualize(graph, networkId, path,type) {
 	
 	function defineAnnotationsTable(){
 		$('#annotationsTable')
-		.dataTable(
+		.DataTable(
 				{
 					"bJQueryUI" : true,
 					"sPaginationType" : "full_numbers",
@@ -523,77 +467,6 @@ function d3visualize(graph, networkId, path,type) {
 						"mDataProp" :"modifieddate",
 					}],
 				});
-	}
-	
-
-	
-
-
-	function display_annotations(d){
-		console.log("came her");
-		var objecttype = "node";
-		var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
-		var annotationDesc = "<h5>Annotations</h5>";
-		var annotationContent = "<textarea id="+'"annotationtextarea"'+" cols=40 rows=5 readonly>";
-		// ajax Call to get annotation for a node.id
-		// Used to add the old annotation in to the popup view
-		$.ajax({
-			url : getAnnotationUrl,
-			type : "GET",
-			data: "nodeid="+d.id+"&objecttype="+objecttype,
-			dataType: 'json',
-			success : function(data) {
-				var cnt = 0;
-				$.each(data.text, function(key,value){
-					annotationContent += ++cnt +'. '+value.name;
-					annotationContent += "\n";
-				});
-				annotationContent += "</textarea>";
-				$('#annot_desc').html(annotationDesc);
-				$('#annot_details').html(annotationContent);
-			},
-			error: function() {
-				alert("error in display_annotations");
-			}
-
-		});
-
-
-
-
-	}
-
-	function conceptDescription(d){
-		lemma = d.name;
-
-		var descHeading = "<h5>Description of Node</h5>";
-
-		var lemmaName="<h5> Node name : "+lemma+"</h5>";
-		var conceptDesc = "<textarea id="+'"conceptdescTextArea"'+" cols=40 rows=5 readonly>";
-
-		// This is done to replace all dot (.) with dollar ($)
-		// Since our spring controller would ignore any data after dot (.)
-		lemma = lemma.replace(".","$");
-
-		// Ajax call for getting description of the node
-		// Note: this ajax call has async = false
-		// this allow variables to be assigned inside the ajax and 
-		// accessed outside
-		$.ajax({
-			url : path+"/sites/network/getconcept/"+lemma,
-			//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
-			type : "GET",
-			success : function(data) {
-				conceptDesc+=data + "</textarea>";
-				$('#lemma_name').html(lemmaName);
-				$('#desc_heading').html(descHeading);
-				$('#concept_desc').html(conceptDesc);
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-
 	}
 	
 
