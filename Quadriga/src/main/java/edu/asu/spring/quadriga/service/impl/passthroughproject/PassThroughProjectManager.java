@@ -137,6 +137,13 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         
         return null;
     }
+    
+    @Override
+    @Transactional
+    public IProject getPassthroughProject(String externalProjectId, String client) throws QuadrigaStorageException {
+        PassThroughProjectDTO projectDTO = projectDao.getExternalProject(externalProjectId, client);
+        return projectMapper.getProject(projectDTO);
+    }
 
     /**
      * {@inheritDoc}

@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -35,6 +36,9 @@ public class RetrieveProjectController {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
+    
+    @Autowired
+    private IPassThroughProjectManager passThroughManager;
 
     @Autowired
     private IProjectSecurityChecker projectSecurity;
@@ -125,11 +129,20 @@ public class RetrieveProjectController {
 
         return model;
     }
+    
+    @RequestMapping(value = "auth/workbench/projects/{extId:[0-9a-zA-Z-_]+}+{client:[0-9a-zA-Z-]+}", method = RequestMethod.GET)
+    public String getProjectByExternalId(@PathVariable String extId, @PathVariable String client) throws QuadrigaStorageException {
+        IProject project = passThroughManager.getPassthroughProject(extId, client);
+        if (project == null) { 
+            return "auth/404";
+        }
+        return "redirect:/auth/workbench/projects/" + project.getProjectId();
+    }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
             RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR }) })
-    @RequestMapping(value = "auth/workbench/projects/{projectid}", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/workbench/projects/{projectid:[0-9a-zA-Z-_]+}", method = RequestMethod.GET)
     public String getProjectDetails(@PathVariable("projectid") String projectid, Principal principal, Model model)
             throws QuadrigaStorageException, NoSuchRoleException, QuadrigaAccessException {
       
