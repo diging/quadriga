@@ -27,7 +27,7 @@
 		
 		</p>
 		<p class="smaller">
-		<i class="fa fa-commenting-o"></i> When citing this data set please use the following URL: <i>${project_baseurl}${pageContext.servletContext.contextPath}/sites/${project.unixName}</i>.
+		<i class="fa fa-commenting-o"></i> When citing this data set please use the following URL: <i>${project_baseurl}/sites/${project.unixName}</i>.
 		</p>
 	</div>
 </div>
