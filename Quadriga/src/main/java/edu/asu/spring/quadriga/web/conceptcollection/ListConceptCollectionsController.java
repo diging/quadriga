@@ -52,13 +52,31 @@ public class ListConceptCollectionsController {
             QuadrigaAccessException, JSONException {
         IConceptCollection collection = conceptControllerManager.getConceptCollection(collectionId);
         String[] userRoles = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN};
+        String readRole[] = { RoleNames.ROLE_CC_COLLABORATOR_READ };
+        String readWriteRole[] = { RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE };
+        
         boolean isAdmin = authorization.chkAuthorization(userName, collectionId, userRoles);
-        if(isAdmin){
+        boolean hasRead = authorization.chkAuthorization(userName, collectionId, readRole);
+        boolean hasReadWrite = authorization.chkAuthorization(userName, collectionId, readWriteRole);
+
+        System.out.println(hasReadWrite);
+        if (isAdmin) {
             model.addAttribute("isAdmin", true);
-        }else{
+        } else {
             model.addAttribute("isAdmin", false);
         }
-        
+
+        if (hasRead) {
+            model.addAttribute("hasRead", true);
+        } else {
+            model.addAttribute("hasRead", false);
+        }
+
+        if (hasReadWrite) {
+            model.addAttribute("hasReadWrite", true);
+        } else {
+            model.addAttribute("hasReadWrite", false);
+        }
         model.addAttribute("concept", collection);
         conceptControllerManager.getCollaborators(collection);
         model.addAttribute("collectionid", collectionId);

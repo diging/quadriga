@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.IAuthorization;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
@@ -75,6 +77,10 @@ public class ConceptcollectionController {
     @Autowired
     private IUserManager usermanager;
 
+    @Autowired
+    @Qualifier("conceptCollectionAuthorization")
+    private IAuthorization authorization;
+
     /**
      * Attach the custom validator to the Spring context
      */
@@ -100,6 +106,32 @@ public class ConceptcollectionController {
     private void fillModel(String collectionId, ModelMap model, String username) throws QuadrigaStorageException,
             QuadrigaAccessException, JSONException {
         IConceptCollection collection = conceptControllerManager.getConceptCollection(collectionId);
+        String adminRoles[] = { RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_COLLABORATOR_OWNER };
+        String readRole[] = { RoleNames.ROLE_CC_COLLABORATOR_READ };
+        String readWriteRole[] = { RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE };
+
+        boolean isAdmin = authorization.chkAuthorization(username, collectionId, adminRoles);
+        boolean hasRead = authorization.chkAuthorization(username, collectionId, readRole);
+        boolean hasReadWrite = authorization.chkAuthorization(username, collectionId, readWriteRole);
+
+        if (isAdmin) {
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
+
+        if (hasRead) {
+            model.addAttribute("hasRead", true);
+        } else {
+            model.addAttribute("hasRead", false);
+        }
+
+        if (hasReadWrite) {
+            model.addAttribute("hasReadWrite", true);
+        } else {
+            model.addAttribute("hasReadWrite", false);
+        }
+
         model.addAttribute("concept", collection);
         conceptControllerManager.getCollaborators(collection);
         model.addAttribute("collectionid", collectionId);
@@ -275,6 +307,8 @@ public class ConceptcollectionController {
      * @throws JSONException
      * 
      * */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = {
+            RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/conceptcollections/{collection_id}/deleteitems", method = RequestMethod.POST)
     public String deleteItems(@PathVariable("collection_id") String collectionId, HttpServletRequest req,
             ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException,

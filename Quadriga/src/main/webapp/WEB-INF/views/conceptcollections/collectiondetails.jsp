@@ -166,6 +166,7 @@
 				<p>These are all the concepts in this collection.</p>
 				<form method="post"
 					action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/deleteitems">
+					<c:if test="${isAdmin || hasReadWrite}">
 					<button type="button" class="btn btn-primary btn-sm"
 						onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'">
 						<span class="fa fa-plus"></span> Add Entry
@@ -174,6 +175,7 @@
 					<button type="submit" class="btn btn-primary btn-sm">
 						<span class="fa fa-minus"></span> Delete Selected Entries
 					</button>
+					</c:if>
 					<br /> <br />
 					<table class="table" id="conceptSearch">
 						<thead>
@@ -206,11 +208,18 @@
 				</form>
 			</c:when>
 			<c:otherwise>
+			<c:if test="${isAdmin || hasReadWrite}">
 				<p>You don't have any entries in this concept collection. Click
 					the button to add some.</p>
+					</c:if>
+					<c:if test="${hasRead}">
+					<p>There are no entries in this concept collection.</p>
+					</c:if>
+				<c:if test="${isAdmin || hasReadWrite}">
 				<input type=button class="btn btn-primary"
 					onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'"
 					value='Add Items' />
+				</c:if>
 			</c:otherwise>
 		</c:choose>
 
