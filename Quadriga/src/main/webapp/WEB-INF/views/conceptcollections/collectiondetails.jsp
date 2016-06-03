@@ -180,7 +180,9 @@
 					<table class="table" id="conceptSearch">
 						<thead>
 							<tr>
+								<c:if test="${isAdmin || hasReadWrite}">
 								<th><input type="checkbox" id="selectall"></input></th>
+								</c:if>
 								<th>Lemma</th>
 								<th>ID</th>
 								<th>POS</th>
@@ -191,8 +193,10 @@
 							<c:forEach var="conceptItem"
 								items="${concept.conceptCollectionConcepts}">
 								<tr>
+								<c:if test="${isAdmin || hasReadWrite}">
 									<td><input type="checkbox" class="selected"
 										name="selected" value="${conceptItem.concept.conceptId}" /></td>
+								</c:if>
 									<td><font size="2"><c:out
 												value="${conceptItem.concept.lemma}"></c:out></font></td>
 									<td width="25%"><font size="2"><c:out

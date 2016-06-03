@@ -59,7 +59,7 @@ public class ListConceptCollectionsController {
         boolean hasRead = authorization.chkAuthorization(userName, collectionId, readRole);
         boolean hasReadWrite = authorization.chkAuthorization(userName, collectionId, readWriteRole);
 
-        System.out.println(hasReadWrite);
+
         if (isAdmin) {
             model.addAttribute("isAdmin", true);
         } else {
