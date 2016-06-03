@@ -91,27 +91,20 @@ public class ConceptcollectionController {
      * @throws QuadrigaStorageException
      */
     @RequestMapping(value = "auth/conceptcollections", method = RequestMethod.GET)
-    public String conceptCollectionHandler(ModelMap model, Principal principal)
-            throws QuadrigaStorageException {
-        model.addAttribute("conceptlist", conceptControllerManager
-                .getCollectionsOwnedbyUser(principal.getName()));
-        model.addAttribute("collaborationlist", conceptControllerManager
-                .getUserCollaborations(principal.getName()));
+    public String conceptCollectionHandler(ModelMap model, Principal principal) throws QuadrigaStorageException {
+        model.addAttribute("conceptlist", conceptControllerManager.getCollectionsOwnedbyUser(principal.getName()));
+        model.addAttribute("collaborationlist", conceptControllerManager.getUserCollaborations(principal.getName()));
         return "auth/conceptcollections";
     }
 
-    
-
-    private void fillModel(String collectionId, ModelMap model, String username)
-            throws QuadrigaStorageException, QuadrigaAccessException,
-            JSONException {
+    private void fillModel(String collectionId, ModelMap model, String username) throws QuadrigaStorageException,
+            QuadrigaAccessException, JSONException {
         IConceptCollection collection = conceptControllerManager.getConceptCollection(collectionId);
         model.addAttribute("concept", collection);
         conceptControllerManager.getCollaborators(collection);
         model.addAttribute("collectionid", collectionId);
 
-        model.addAttribute("owner",
-                collection.getOwner().getUserName().equals(username));
+        model.addAttribute("owner", collection.getOwner().getUserName().equals(username));
 
         // TODO: showCollaboratingUsers() should be changed with mapper
         List<IConceptCollectionCollaborator> collaboratingUsers = conceptControllerManager
@@ -132,16 +125,12 @@ public class ConceptcollectionController {
      * @throws QuadrigaStorageException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = {
-            RoleNames.ROLE_CC_COLLABORATOR_ADMIN,
-            RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
+            RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
-    public String conceptSearchHandler(
-            @PathVariable("collection_id") String collection_id,
-            HttpServletRequest req, ModelMap model)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+    public String conceptSearchHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req,
+            ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException {
 
-        ConceptpowerReply conReply = conceptControllerManager.search(
-                req.getParameter("name"), req.getParameter("pos"));
+        ConceptpowerReply conReply = conceptControllerManager.search(req.getParameter("name"), req.getParameter("pos"));
         if (conReply != null) {
             List<ConceptEntry> lists = conReply.getConceptEntry();
             lists.sort(new Comparator<ConceptEntry>() {
@@ -172,32 +161,24 @@ public class ConceptcollectionController {
      * @throws JSONException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = {
-            RoleNames.ROLE_CC_COLLABORATOR_ADMIN,
-            RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
+            RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
-    public String saveItemsHandler(
-            @PathVariable("collection_id") String collection_id,
-            HttpServletRequest req, ModelMap model, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException,
+    public String saveItemsHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req,
+            ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException,
             JSONException {
 
         String[] selectedIds = req.getParameterValues("selected");
 
-        Map<String, ConceptEntry> allEntries = buildConceptEntries(
-                req.getParameterValues("id"), req.getParameterValues("lemma"),
-                req.getParameterValues("pos"),
-                req.getParameterValues("description"),
-                req.getParameterValues("type"),
-                req.getParameterValues("conceptList"));
+        Map<String, ConceptEntry> allEntries = buildConceptEntries(req.getParameterValues("id"),
+                req.getParameterValues("lemma"), req.getParameterValues("pos"), req.getParameterValues("description"),
+                req.getParameterValues("type"), req.getParameterValues("conceptList"));
 
-        IConceptCollection conceptCollection = conceptCollectionDeepMapper
-                .getConceptCollectionDetails(collection_id);
+        IConceptCollection conceptCollection = conceptCollectionDeepMapper.getConceptCollectionDetails(collection_id);
         int addedConcepts = 0;
 
         if (conceptCollection != null) {
             Set<String> existingConceptIds = new HashSet<String>();
-            for (IConceptCollectionConcepts concept : conceptCollection
-                    .getConceptCollectionConcepts()) {
+            for (IConceptCollectionConcepts concept : conceptCollection.getConceptCollectionConcepts()) {
                 existingConceptIds.add(concept.getConcept().getConceptId());
             }
 
@@ -206,8 +187,7 @@ public class ConceptcollectionController {
                     ConceptEntry entry = allEntries.get(id);
 
                     if (!existingConceptIds.contains(id)) {
-                        conceptControllerManager.addItems(entry.getLemma(), id,
-                                entry.getPos(), entry.getDescription(),
+                        conceptControllerManager.addItems(entry.getLemma(), id, entry.getPos(), entry.getDescription(),
                                 collection_id, principal.getName());
                         addedConcepts++;
                     }
@@ -218,14 +198,12 @@ public class ConceptcollectionController {
         fillModel(collection_id, model, principal.getName());
 
         model.addAttribute("show_success_alert", true);
-        model.addAttribute("success_alert_msg", addedConcepts
-                + " Concepts successfully added.");
+        model.addAttribute("success_alert_msg", addedConcepts + " Concepts successfully added.");
         return "auth/conceptcollections/details";
     }
 
-    private Map<String, ConceptEntry> buildConceptEntries(String[] ids,
-            String[] lemmas, String[] pos, String[] description,
-            String[] types, String[] lists) {
+    private Map<String, ConceptEntry> buildConceptEntries(String[] ids, String[] lemmas, String[] pos,
+            String[] description, String[] types, String[] lists) {
         Map<String, ConceptEntry> entries = new HashMap<String, ConceptpowerReply.ConceptEntry>();
 
         for (int i = 0; i < ids.length; i++) {
@@ -250,8 +228,7 @@ public class ConceptcollectionController {
      */
     @RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.GET)
     public ModelAndView addCollectionsForm() {
-        return new ModelAndView("auth/conceptcollections/addCollectionsForm",
-                "command",
+        return new ModelAndView("auth/conceptcollections/addCollectionsForm", "command",
                 new ConceptCollectionFactory().createConceptCollectionObject());
     }
 
@@ -268,18 +245,12 @@ public class ConceptcollectionController {
      * 
      * */
     @RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.POST)
-    public ModelAndView addConceptCollection(
-            @Validated @ModelAttribute("collection") ConceptCollection collection,
-            BindingResult result, Model model, Principal principal)
-            throws QuadrigaStorageException {
+    public ModelAndView addConceptCollection(@Validated @ModelAttribute("collection") ConceptCollection collection,
+            BindingResult result, Model model, Principal principal) throws QuadrigaStorageException {
         if (result.hasErrors()) {
-            model.addAttribute("Error",
-                    "Error: " + collection.getConceptCollectionName()
-                            + "already exists.");
-            return new ModelAndView(
-                    "auth/conceptcollections/addCollectionsForm", "command",
-                    new ConceptCollectionFactory()
-                            .createConceptCollectionObject());
+            model.addAttribute("Error", "Error: " + collection.getConceptCollectionName() + "already exists.");
+            return new ModelAndView("auth/conceptcollections/addCollectionsForm", "command",
+                    new ConceptCollectionFactory().createConceptCollectionObject());
         }
 
         IUser user = usermanager.getUser(principal.getName());
@@ -301,37 +272,33 @@ public class ConceptcollectionController {
      * @return
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
-     * @throws JSONException 
+     * @throws JSONException
      * 
      * */
     @RequestMapping(value = "auth/conceptcollections/{collection_id}/deleteitems", method = RequestMethod.POST)
-    public String deleteItems(
-            @PathVariable("collection_id") String collectionId,
-            HttpServletRequest req, ModelMap model, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
+    public String deleteItems(@PathVariable("collection_id") String collectionId, HttpServletRequest req,
+            ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException,
+            JSONException {
 
         String[] selectedIds = req.getParameterValues("selected");
-        IConceptCollection conceptCollection = conceptCollectionDeepMapper
-                .getConceptCollectionDetails(collectionId);
+        IConceptCollection conceptCollection = conceptCollectionDeepMapper.getConceptCollectionDetails(collectionId);
 
         int deletedConceptNr = 0;
         if (selectedIds != null && conceptCollection != null) {
             for (String id : selectedIds) {
 
-                conceptControllerManager.deleteItem(id, collectionId,
-                        principal.getName());
+                conceptControllerManager.deleteItem(id, collectionId, principal.getName());
                 IConcept concept = conceptFactory.createConceptObject();
                 concept.setConceptId(id);
-                if (conceptCollection.getConceptCollectionConcepts().contains(
-                        concept)) {
-                    conceptCollection.getConceptCollectionConcepts().remove(
-                            concept);
+                if (conceptCollection.getConceptCollectionConcepts().contains(concept)) {
+                    conceptCollection.getConceptCollectionConcepts().remove(concept);
                 }
             }
             deletedConceptNr = selectedIds.length;
         }
 
-        conceptControllerManager.fillConceptCollection(conceptCollection);;
+        conceptControllerManager.fillConceptCollection(conceptCollection);
+        ;
 
         fillModel(collectionId, model, principal.getName());
         if (deletedConceptNr > 0) {
