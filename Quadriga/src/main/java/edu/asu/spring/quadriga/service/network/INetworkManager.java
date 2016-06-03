@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.network;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -15,14 +14,12 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventO
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.network.INetworkXML;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
-import edu.asu.spring.quadriga.exceptions.FileStorageException;
-import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -333,5 +330,7 @@ public interface INetworkManager {
     String getSourceReferenceFromElementEventsType(ElementEventsType elementEventsType);
 
     public String storeNetworks(String xml) throws QStoreStorageException;
+
+    List<TextOccurance> getTextsForConceptId(String conceptId) throws Exception;
 	
 }

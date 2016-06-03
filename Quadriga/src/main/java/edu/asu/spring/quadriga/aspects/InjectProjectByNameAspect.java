@@ -7,12 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**

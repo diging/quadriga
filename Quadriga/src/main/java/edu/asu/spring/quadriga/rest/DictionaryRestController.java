@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
@@ -134,12 +135,14 @@ public class DictionaryRestController {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             List<IDictionary> dictionaryList = dictionaryManager.getDictionariesList(user.getUsername());
             Template template = engine.getTemplate("velocitytemplates/dictionarylist.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             context.put("list", dictionaryList);
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+            
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
@@ -173,12 +176,14 @@ public class DictionaryRestController {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             List<IWorkspaceDictionary> dictionaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId,
                     user.getUsername());
             Template template = engine.getTemplate("velocitytemplates/workspacedictionarylist.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+            
             context.put("list", dictionaryList);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
@@ -265,7 +270,7 @@ public class DictionaryRestController {
         // TODO details not getting retrieved
 
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             logger.debug("Getting dictionary items list for dictionary id : " + dictionaryId);
             List<IDictionaryItems> dictionaryItemsList = dictionaryManager.getDictionaryItems(dictionaryId);
@@ -273,7 +278,9 @@ public class DictionaryRestController {
                 throw new RestException(404);
             }
             Template template = engine.getTemplate("velocitytemplates/dictionaryitemslist.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+            
             String updateFromWordPowerURL = wordPowerURL;
             context.put("list", dictionaryItemsList);
             context.put("wordPowerURL", updateFromWordPowerURL);

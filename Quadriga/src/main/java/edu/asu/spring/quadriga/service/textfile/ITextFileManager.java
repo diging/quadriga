@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.textfile;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;

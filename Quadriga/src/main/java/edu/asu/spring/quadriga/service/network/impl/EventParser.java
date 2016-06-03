@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.xml.bind.JAXBException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,6 @@ import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;

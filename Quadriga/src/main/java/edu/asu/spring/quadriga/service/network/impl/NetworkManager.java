@@ -36,9 +36,12 @@ import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
+import edu.asu.spring.quadriga.domain.impl.networks.PrintedRepresentationType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
+import edu.asu.spring.quadriga.domain.impl.networks.TermPartType;
+import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
@@ -53,6 +56,7 @@ import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -218,7 +222,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         try {
             engine.init();
             template = engine.getTemplate("velocitytemplates/getnetworksfromqstore.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             List<INetworkNodeInfo> networkTopNodes = getNetworkTopNodes(networkId);
             context.put("statmentList", networkTopNodes);
             writer = new StringWriter();
@@ -240,6 +244,41 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         }
         networkXML = networkXML.substring(networkXML.indexOf("element_events") - 1, networkXML.length());
         return networkXML;
+    }
+    
+    @Override
+    public List<TextOccurance> getTextsForConceptId(String conceptId) throws Exception {
+        String results = qStoreConnector.searchNodesByConcept(conceptId);
+        ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
+        
+        List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
+        
+        List<TextOccurance> occurances = new ArrayList<TextOccurance>();
+        for (CreationEvent event : eventList) {
+            if (!(event instanceof AppellationEventType)) {
+                // we're only interested in appellation events here
+                continue;
+            }
+            
+            TextOccurance occur = new TextOccurance();
+            occur.setTextUri(event.getSourceReference());
+            occurances.add(occur);
+            
+            // there should only be one
+            List<TermType> terms = ((AppellationEventType)event).getTerms();
+            
+            if (terms != null && terms.size() > 0) {
+                TermType term = terms.get(0);
+                PrintedRepresentationType printed = term.getPrintedRepresentation();
+                if (printed == null) {
+                    continue;
+                }
+                List<TermPartType> termparts = printed.getTermPart();
+                
+            }
+        }
+        
+        return null;
     }
 
     @Override

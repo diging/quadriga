@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
@@ -220,11 +221,13 @@ public class NetworkRestController {
             String status = networkManager.getNetworkStatusCode(network.getStatus()) + "";
 
             IUser user = userManager.getUser(principal.getName());
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
 
             Template template = engine.getTemplate("velocitytemplates/networkstatus.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+            
             if (network.getStatus() == null)
                 context.put("status", INetworkStatus.UNKNOWN_CODE + "");
             else
@@ -286,12 +289,13 @@ public class NetworkRestController {
                 return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
             }
             IUser user = userManager.getUser(principal.getName());
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
 
             Template template = engine.getTemplate("velocitytemplates/networkannotations.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-            context.put("networkId", networkId);
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+           context.put("networkId", networkId);
             List<INetworkAnnotation> networkAnnoList = editingNetworkAnnoManager
                     .getAllAnnotationOfNetwork(user.getUserName(), networkId);
             context.put("networkAnnoList", networkAnnoList);
@@ -341,10 +345,11 @@ public class NetworkRestController {
 
             List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceId);
             workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/approvednetworks.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("workspaceNetworkList", workspaceNetworkList);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
@@ -395,10 +400,11 @@ public class NetworkRestController {
 
             List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
             workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/rejectednetworks.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("workspaceNetworkList", workspaceNetworkList);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
@@ -448,10 +454,11 @@ public class NetworkRestController {
 
             List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceApprovedNetworkList(workspaceId);
             workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/approvednetworks.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("workspaceNetworkList", workspaceNetworkList);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
@@ -501,10 +508,11 @@ public class NetworkRestController {
             if (networkXML.isEmpty() || networkXML == null) {
                 throw new RestException(404);
             }
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/networkinfo.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("status", status);
             context.put("networkxml", networkXML);
             StringWriter writer = new StringWriter();
@@ -534,10 +542,11 @@ public class NetworkRestController {
 
             List<INetwork> networkList = networkManager.getNetworksOfOwner(user);
             networkList = networkManager.editNetworkStatusCode(networkList);
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/mynetworks.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("networkList", networkList);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
@@ -587,10 +596,11 @@ public class NetworkRestController {
             if (networkXML.isEmpty() || networkXML == null) {
                 throw new RestException(404);
             }
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/networkdetails.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("status", status);
             context.put("networkxml", networkXML);
             context.put("networkAnnoList",

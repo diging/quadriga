@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
@@ -146,12 +147,13 @@ public class ConceptCollectionRestController {
     public ResponseEntity<String> listConceptCollections(ModelMap model, Principal principal, HttpServletRequest req)
             throws RestException {
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             String userId = principal.getName();
             List<IConceptCollection> collectionsList = conceptControllerManager.getCollectionsOwnedbyUser(userId);
             Template template = engine.getTemplate("velocitytemplates/conceptcollections.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("list", collectionsList);
 
             StringWriter writer = new StringWriter();
@@ -331,14 +333,15 @@ public class ConceptCollectionRestController {
             ModelMap model, Principal principal, HttpServletRequest req) throws RestException {
 
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             String userId = principal.getName();
             List<IWorkspaceConceptCollection> collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId);
             Template template = engine.getTemplate("velocitytemplates/workspaceconceptcollections.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             context.put("list", collectionsList);
-
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+            
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
@@ -493,13 +496,15 @@ public class ConceptCollectionRestController {
         }
         collection.setConceptCollectionId(collectionID);
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/conceptdetails.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             context.put("list", collection.getConceptCollectionConcepts());
             context.put("conceptPowerURL", conceptPowerURL);
             context.put("path", updateConceptPowerURLPath);
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+            
             template.merge(context, sw);
             return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
 
