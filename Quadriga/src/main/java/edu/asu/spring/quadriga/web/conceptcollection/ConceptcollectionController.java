@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -179,8 +180,8 @@ public class ConceptcollectionController {
                 });
                 model.addAttribute("result", conReply.getConceptEntry());
             }
-        } catch (Exception ex) {
-            logger.error("error:", ex);
+        } catch (HttpMessageNotReadableException hex) {
+            logger.error("error:", hex);
             return "auth/storageissue";
         }
         model.addAttribute("collectionid", collection_id);
