@@ -46,7 +46,7 @@ public class WSSecurityChecker implements IWSSecurityChecker
 		}
 
 		//check if the user is a project collaborator and has a ADMIN role
-		if(projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_COLLABORATOR_ADMIN)) {
+		if(projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_COLLABORATOR_OWNER)) {
 			return true;
 		}
 
@@ -127,7 +127,7 @@ public class WSSecurityChecker implements IWSSecurityChecker
 			{
 				//check if the user is one of the collaborators
 				if(workspaceCollaborator.getCollaborator() != null){
-					if(workspaceCollaborator.getCollaborator().getUserObj().getUserName() == userName)
+					if(workspaceCollaborator.getCollaborator().getUserObj().getUserName().equals(userName))
 					{
 						collaboratorRoles = workspaceCollaborator.getCollaborator().getCollaboratorRoles();
 

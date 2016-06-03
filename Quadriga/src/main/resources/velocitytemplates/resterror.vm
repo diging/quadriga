@@ -4,5 +4,6 @@
 	<Quadriga:status>$status</Quadriga:status>
 	<Quadriga:errorcode>$ErrorCode</Quadriga:errorcode>
 	<Quadriga:message>$message</Quadriga:message>
+	<Quadriga:exception>$exception</Quadriga:exception>
 </Quadriga:Error> 	
 </Quadriga:QuadrigaReply>

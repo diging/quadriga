@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -30,21 +29,14 @@ $(document).ready(function() {
 
 <h2>List of Inactive Workspaces</h2>
 <br>
-<input type="button" value="Go Back" onclick="
-location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"/>
-<table style="width: 100%" class="display dataTable" id="workspacelist">
-	<thead>
-		<tr>
-			<th width="21%"><h1>Workspace Name</h1></th>
-			<th width="75%"><h1>Description</h1></th>
-		</tr>
-	</thead>
-	<tbody>
-	<c:forEach var="workspace" items="${deactivatedWSList}">
-	<tr>
-		<td width="30%"><c:out value="${workspace.name}" /></td>
-		<td width="70%"><c:out value="${workspace.description}" /></td>
-	</tr>
-	</c:forEach>
-	</tbody>
-</table>
+<c:forEach var="workspace" items="${deactivatedWSList}">
+    <li class="ws with-icon"><a
+        href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.id}">
+            <c:out value="${workspace.name}"></c:out>
+    </a> (Owner) <br> <c:out value="${workspace.description}"></c:out>
+    </li>
+</c:forEach>
+<br>
+<input type="button" value="Go Back"
+    onclick="
+location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}'" />

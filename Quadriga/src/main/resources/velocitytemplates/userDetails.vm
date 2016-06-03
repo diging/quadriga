@@ -5,6 +5,10 @@
 	<Quadriga:userid>$userdetails.userName</Quadriga:userid>
 	<Quadriga:email>$userdetails.email</Quadriga:email>
 	<Quadriga:uri>$url/rest/userDetails/$userdetails.userName</Quadriga:uri>
+	<Quadriga:createdBy>$userDetails.createdBy</Quadriga:createdBy>
+	<Quadriga:createdDate>$userDetails.createdDate</Quadriga:createdDate>
+	<Quadriga:updatedBy>$userDetails.updatedBy</Quadriga:updatedBy>
+	<Quadriga:updatedDate>$userDetails.updatedDate</Quadriga:updatedDate>
 	<Quadriga:authorityFileEntryList>
 		#foreach ($authFileList in $list)
 		<Quadriga:authorityFileEntry type="$authFileList.serviceId">

@@ -3,9 +3,12 @@ package edu.asu.spring.quadriga.web.conceptcollection;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -46,10 +50,10 @@ public class TransferCCOwnerController {
 
     @Autowired
     private IConceptCollectionManager conceptCollectionManager;
-    
+
     @Autowired
     private IModifyConceptCollectionManager modifyCCManager;
-    
+
     @Autowired
     private ICCCollaboratorManager collabManager;
 
@@ -58,6 +62,9 @@ public class TransferCCOwnerController {
 
     @Autowired
     private IQuadrigaRoleManager roleManager;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @InitBinder
     protected void initBinder(WebDataBinder validateBinder) {
@@ -76,47 +83,38 @@ public class TransferCCOwnerController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 1, userRole = {}) })
     @RequestMapping(value = "auth/conceptcollections/transfer/{collectionid}", method = RequestMethod.GET)
-    public ModelAndView transferConceptCollectionOwner(
-            @PathVariable("collectionid") String collectionId,
-            Principal principal) throws QuadrigaStorageException,
-            QuadrigaAccessException {
+    public ModelAndView transferConceptCollectionOwner(@PathVariable("collectionid") String collectionId,
+            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userName;
         ModelAndView model;
         IConceptCollection conceptCollection;
         List<IConceptCollectionCollaborator> collaboratingUser = new ArrayList<IConceptCollectionCollaborator>();
         List<IUser> userList = new ArrayList<IUser>();
 
-        model = new ModelAndView(
-                "auth/conceptcollections/transferconceptcollectionowner");
+        model = new ModelAndView("auth/conceptcollections/transferconceptcollectionowner");
         userName = principal.getName();
 
         // retrieve the concept collection details
-        conceptCollection = collectionFactory.createConceptCollectionObject();
-        conceptCollection.setConceptCollectionId(collectionId);
-        conceptCollectionManager.fillCollectionDetails(conceptCollection,
-                userName);
+        conceptCollection = conceptCollectionManager.getConceptCollection(collectionId);
 
         // create a model
         model.getModelMap().put("user", userFactory.createUserObject());
-        model.getModelMap().put("collectionname",
-                conceptCollection.getConceptCollectionName());
-        model.getModelMap().put("collectionowner",
-                conceptCollection.getOwner().getName());
+        model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
+        model.getModelMap().put("collectionowner", conceptCollection.getOwner().getName());
         model.getModelMap().put("collectionid", collectionId);
 
         // fetch the collaborators
         // TODO: showCollaboratingUsers() needs to be changed to mapper.
-        collaboratingUser = conceptCollectionManager
-                .showCollaboratingUsers(collectionId);
+        collaboratingUser = conceptCollectionManager.showCollaboratingUsers(collectionId);
 
-        for (IConceptCollectionCollaborator collabuser : collaboratingUser) {
-            userList.add(collabuser.getCollaborator().getUserObj());
+        if (collaboratingUser != null) {
+            for (IConceptCollectionCollaborator collabuser : collaboratingUser) {
+                userList.add(collabuser.getCollaborator().getUserObj());
+            }
         }
 
         model.getModelMap().put("collaboratinguser", userList);
 
-        // create model attribute
-        model.getModelMap().put("success", 0);
         return model;
     }
 
@@ -132,75 +130,65 @@ public class TransferCCOwnerController {
      * @return
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
-     * @throws QuadrigaException 
+     * @throws QuadrigaException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 3, userRole = {}) })
     @RequestMapping(value = "auth/conceptcollections/transferconceptcollectionowner/{collectionid}", method = RequestMethod.POST)
-    public ModelAndView transferConceptCollectionOwner(
-            @Validated @ModelAttribute("user") User collaboratorUser,
-            BindingResult result,
-            @PathVariable("collectionid") String collectionId,
-            Principal principal) throws QuadrigaStorageException,
-            QuadrigaAccessException, QuadrigaException {
-        ModelAndView model;
-        String userName;
-        String newOwner;
-        String collaboratorRole;
-        IConceptCollection conceptCollection;
-        List<IConceptCollectionCollaborator> collaboratingUser = new ArrayList<IConceptCollectionCollaborator>();
-        List<IUser> userList = new ArrayList<IUser>();
+    public String transferConceptCollectionOwner(@Validated @ModelAttribute("user") User collaboratorUser,
+            BindingResult result, @PathVariable("collectionid") String collectionId, Principal principal, Model model,
+            RedirectAttributes redirectAttrs, Locale locale)
+            throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
 
-        // create a view
-        model = new ModelAndView(
-                "auth/conceptcollections/transferconceptcollectionowner");
-        userName = principal.getName();
+        String userName = principal.getName();
 
         // retrieve the concept collection details
-        conceptCollection = collectionFactory.createConceptCollectionObject();
-        conceptCollection.setConceptCollectionId(collectionId);
-        conceptCollectionManager.fillCollectionDetails(conceptCollection,
-                userName);
+        IConceptCollection conceptCollection = conceptCollectionManager.getConceptCollection(collectionId);
 
-        model.getModelMap().put("collectionid", collectionId);
+        model.addAttribute("collectionid", collectionId);
 
         if (result.hasErrors()) {
-            model.getModelMap().put("user", collaboratorUser);
+            model.addAttribute("user", collaboratorUser);
 
             // create a model
-            model.getModelMap().put("collectionname",
-                    conceptCollection.getConceptCollectionName());
-            model.getModelMap().put("collectionowner",
-                    conceptCollection.getOwner().getName());
+            model.addAttribute("collectionname", conceptCollection.getConceptCollectionName());
+            model.addAttribute("collectionowner", conceptCollection.getOwner().getName());
 
             // fetch the collaborators
-            collaboratingUser = conceptCollectionManager
+            List<IConceptCollectionCollaborator> collaboratingUser = conceptCollectionManager
                     .showCollaboratingUsers(collectionId);
 
+            List<IUser> userList = new ArrayList<IUser>();
             for (IConceptCollectionCollaborator collabuser : collaboratingUser) {
                 userList.add(collabuser.getCollaborator().getUserObj());
             }
 
-            model.getModelMap().put("collaboratinguser", userList);
-
-            model.getModelMap().put("success", 0);
-        } else {
-            // fetch the new owner
-            newOwner = collaboratorUser.getUserName();
-
-            collaboratorRole = roleManager.getQuadrigaRoleById(
-                    IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES,
-                    RoleNames.ROLE_CC_COLLABORATOR_ADMIN).getDBid();
-
-            // call the method to transfer the ownership
-            collabManager.transferOwnership(collectionId,
-                    userName, newOwner, collaboratorRole);
+            model.addAttribute("collaboratinguser", userList);
             
-            conceptCollectionManager.fillCollectionDetails(conceptCollection, userName);
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg",
+                    messageSource.getMessage("concept_collection.transfer_ownership.failure", new Object[] {}, locale));
 
-            model.getModelMap().put("success", 1);
-            model.getModelMap().put("user", userFactory.createUserObject());
+            return "auth/conceptcollections/transferconceptcollectionowner";
+
         }
-        return model;
+        
+        // fetch the new owner
+        String newOwner = collaboratorUser.getUserName();
+
+        String collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES,
+                RoleNames.ROLE_CC_COLLABORATOR_ADMIN).getDBid();
+
+        // call the method to transfer the ownership
+        collabManager.transferOwnership(collectionId, userName, newOwner, collaboratorRole);
+
+        conceptCollectionManager.fillConceptCollection(conceptCollection);
+        
+        redirectAttrs.addFlashAttribute("show_success_alert", true);
+        redirectAttrs.addFlashAttribute("success_alert_msg",
+                messageSource.getMessage("concept_collection.transfer_ownership.success", new Object[] {}, locale));
+
+
+        return "redirect:/auth/conceptcollections/" + collectionId;
     }
 
 }

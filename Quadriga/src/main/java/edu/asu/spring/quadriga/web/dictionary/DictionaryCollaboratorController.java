@@ -5,12 +5,14 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -32,7 +34,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -43,7 +44,6 @@ import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
-import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
 /**
  * this class is used for deleting the collaborators and displaying them on the
@@ -62,26 +62,22 @@ public class DictionaryCollaboratorController {
     private IDictionaryCollaboratorManager dictCollaboratorManager;
 
     @Autowired
-    IUserManager userManager;
+    private IUserManager userManager;
 
     @Autowired
-    ICollaboratorFactory collaboratorFactory;
-
+    private ICollaboratorFactory collaboratorFactory;
    
     @Autowired
-    IUserFactory userFactory;
+    private IUserFactory userFactory;
 
     @Autowired
-    IQuadrigaRoleManager collaboratorRoleManager;
+    private IQuadrigaRoleManager collaboratorRoleManager;
 
     @Autowired
-    CollaboratorValidator collaboratorValidator;
-
+    private CollaboratorValidator collaboratorValidator;
+    
     @Autowired
-    ModifyCollaboratorFormManager collaboratorFormManager;
-
-    @Autowired
-    IModifyCollaboratorFormFactory collaboratorFormFactory;
+    private MessageSource messageSource;
 
     private static final Logger logger = LoggerFactory
             .getLogger(DictionaryCollaboratorController.class);
@@ -140,7 +136,7 @@ public class DictionaryCollaboratorController {
      * @throws QuadrigaStorageException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/showAddCollaborators", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/collaborators/add", method = RequestMethod.GET)
     public ModelAndView displayCollaborators(
             @PathVariable("dictionaryid") String dictionaryId,
             Principal principal) throws QuadrigaStorageException,
@@ -193,14 +189,6 @@ public class DictionaryCollaboratorController {
         collaboratorRoles = collaboratorRoleManager
                 .getQuadrigaRoles(IQuadrigaRoleManager.DICT_ROLES);
 
-        Iterator<IQuadrigaRole> iterator = collaboratorRoles.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getId()
-                    .equals(RoleNames.ROLE_COLLABORATOR_ADMIN)) {
-                iterator.remove();
-            }
-        }
-
         modelAndView.getModelMap().put("possibleCollaboratorRoles",
                 collaboratorRoles);
 
@@ -225,11 +213,11 @@ public class DictionaryCollaboratorController {
      * @throws QuadrigaStorageException
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY, paramIndex = 1, userRole = { RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN }) })
-    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/addCollaborators", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/dictionaries/{dictionaryid}/collaborators/add", method = RequestMethod.POST)
     public ModelAndView addCollaborators(
             @PathVariable("dictionaryid") String dictionaryId,
             @Validated @ModelAttribute("collaborator") Collaborator collaborator,
-            BindingResult result, Principal principal)
+            BindingResult result, Principal principal, Locale locale)
             throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model = new ModelAndView(
                 "auth/dictionaries/showAddCollaborators");
@@ -241,17 +229,17 @@ public class DictionaryCollaboratorController {
                 dictionary.getDictionaryName());
         model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 
-        String collaboratorUser = collaborator.getUserObj().getUserName();
-        logger.info("collaboratorUser " + collaboratorUser);
-        // List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
-
         if (result.hasErrors()) {
             model.getModelMap().put("collaborator", collaborator);
+            model.getModelMap().addAttribute("show_error_alert", true);
+            model.getModelMap().addAttribute("error_alert_msg", messageSource.getMessage("dictionary.collaborators.add.failure", new Object[] {}, locale));
         } else {
             dictCollaboratorManager.addCollaborator(collaborator, dictionaryId,
                     principal.getName());
             model.getModelMap().put("collaborator",
                     collaboratorFactory.createCollaborator());
+            model.getModelMap().addAttribute("show_success_alert", true);
+            model.getModelMap().addAttribute("success_alert_msg", messageSource.getMessage("dictionary.collaborators.add.success", new Object[] {}, locale));
         }
 
         // mapping collaborators absent in the dictionary
@@ -272,7 +260,7 @@ public class DictionaryCollaboratorController {
         Iterator<IQuadrigaRole> iterator = collaboratorRoles.iterator();
         while (iterator.hasNext()) {
             if (iterator.next().getId()
-                    .equals(RoleNames.ROLE_COLLABORATOR_ADMIN)) {
+                    .equals(RoleNames.ROLE_COLLABORATOR_OWNER)) {
                 iterator.remove();
             }
         }

@@ -7,6 +7,10 @@
 	<Quadriga:description>$project.description</Quadriga:description>
 	<Quadriga:id>$project.projectId</Quadriga:id>
 	<Quadriga:uri>$url/rest/projects/$project.projectId/workspaces</Quadriga:uri>
+	<Quadriga:createdBy>$project.createdBy</Quadriga:createdBy>
+	<Quadriga:createdDate>$project.createdDate</Quadriga:createdDate>
+	<Quadriga:updatedBy>$project.updatedBy</Quadriga:updatedBy>
+	<Quadriga:updatedDate>$project.updatedDate</Quadriga:updatedDate>
 </Quadriga:project> 	
 #end
 </Quadriga:projectList>

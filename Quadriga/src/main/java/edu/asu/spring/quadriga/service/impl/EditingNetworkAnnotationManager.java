@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
+import edu.asu.spring.quadriga.service.IAnnotationObjectTypes;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.network.factory.INetworkEdgeAnnotationFactory;
 import edu.asu.spring.quadriga.service.network.factory.INetworkNodeAnnotationFactory;
@@ -150,7 +151,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 		List<NetworkAnnotationsDTO> networkAnnoDTOList = dbConnectionEditManager.getAllAnnotationOfNetwork(username,networkId);
 		List<INetworkAnnotation> networkAnnotationsList = new ArrayList<INetworkAnnotation>();
 		for(NetworkAnnotationsDTO networkAnnotation : networkAnnoDTOList){
-			if(networkAnnotation.getObjectType().equals("node")){
+			if(networkAnnotation.getObjectType().equals(IAnnotationObjectTypes.NODE)){
 				INetworkNodeAnnotation networkNodeAnnotation =  (NetworkNodeAnnotation) networkNodeAnnotationFactory.createNetworkNodeAnnotationObject();
 				
 				networkNodeAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
@@ -163,7 +164,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 				
 			    networkAnnotationsList.add(networkNodeAnnotation);
 			}
-			if(networkAnnotation.getObjectType().equals("edge")){
+			if(networkAnnotation.getObjectType().equals(IAnnotationObjectTypes.EDGE)){
 				INetworkEdgeAnnotation networkEdgeAnnotation = (NetworkEdgeAnnotation) networkEdgeAnnotationFactory.createNetworkEdgeAnnotationObject();
 				networkEdgeAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
 				networkEdgeAnnotation.setAnnotationText(networkAnnotation.getAnnotationText());
@@ -178,18 +179,24 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 				
 				networkAnnotationsList.add(networkEdgeAnnotation);
 			}
-			if(networkAnnotation.getObjectType().equals("relation")){
+			if(networkAnnotation.getObjectType().equals(IAnnotationObjectTypes.RELATION)){
 				INetworkRelationAnnotation networkRelationAnnotation = (NetworkRelationAnnotation) networkRelationAnnotationFactory.createNetworkRelationAnnotationObject();
 				networkRelationAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
 				networkRelationAnnotation.setAnnotationText(networkAnnotation.getAnnotationText());
 				networkRelationAnnotation.setNetworkId(networkAnnotation.getNetworkId());
 				networkRelationAnnotation.setUserName(networkAnnotation.getUserName());
-				networkRelationAnnotation.setPredicateId(networkAnnotation.getNetworkRelationAnnotation().getPredicateId());
-				networkRelationAnnotation.setPredicateName(networkAnnotation.getNetworkRelationAnnotation().getPredicateName());
-				networkRelationAnnotation.setSubjectId(networkAnnotation.getNetworkRelationAnnotation().getSubjectId());
-				networkRelationAnnotation.setSubjectName(networkAnnotation.getNetworkRelationAnnotation().getSubjectName());
-				networkRelationAnnotation.setObjectId(networkAnnotation.getNetworkRelationAnnotation().getObjectId());
-				networkRelationAnnotation.setObjectName(networkAnnotation.getNetworkRelationAnnotation().getObjectName());
+				if (networkAnnotation.getNetworkRelationAnnotation() != null) {
+    				networkRelationAnnotation.setPredicateId(networkAnnotation.getNetworkRelationAnnotation().getPredicateId());
+    				networkRelationAnnotation.setPredicateName(networkAnnotation.getNetworkRelationAnnotation().getPredicateName());
+    				networkRelationAnnotation.setSubjectId(networkAnnotation.getNetworkRelationAnnotation().getSubjectId());
+    				networkRelationAnnotation.setSubjectName(networkAnnotation.getNetworkRelationAnnotation().getSubjectName());
+    				networkRelationAnnotation.setObjectId(networkAnnotation.getNetworkRelationAnnotation().getObjectId());
+    				networkRelationAnnotation.setObjectName(networkAnnotation.getNetworkRelationAnnotation().getObjectName());
+				} else {
+				    networkRelationAnnotation.setPredicateName(networkAnnotation.getNetworkNodeAnnotation().getNodeName());
+				    networkRelationAnnotation.setPredicateId(networkAnnotation.getNetworkNodeAnnotation().getNodeId());
+	                
+				}
 				networkRelationAnnotation.setObjectType(networkAnnotation.getObjectType());
 				
 				networkAnnotationsList.add(networkRelationAnnotation);
@@ -319,7 +326,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 				ja.put(j);
 			}
 			if(networkAnnotation instanceof NetworkRelationAnnotation) {
-				String name = ((NetworkRelationAnnotation) networkAnnotation).getSubjectName() + "-" + ((NetworkRelationAnnotation) networkAnnotation).getPredicateName() + "_" + ((NetworkRelationAnnotation) networkAnnotation).getObjectName();
+				String name = ((NetworkRelationAnnotation) networkAnnotation).getPredicateName();
 				j.put("name", name);
 				j.put("text", ((NetworkRelationAnnotation) networkAnnotation).getAnnotationText());
 				j.put("objecttype", ((NetworkRelationAnnotation) networkAnnotation).getObjectType());

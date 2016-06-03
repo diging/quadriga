@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.aspectj.weaver.bcel.TypeAnnotationAccessVar;
+
 
 /**
  * <p>Java class for anonymous complex type.
@@ -123,14 +125,7 @@ public class ConceptpowerReply {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "id",
-        "lemma",
-        "pos",
-        "description",
-        "conceptList",
-        "type"
-    })
+    @XmlType(name = "")
     public static class ConceptEntry {
 
         @Override
@@ -168,8 +163,9 @@ public class ConceptpowerReply {
         protected String description;
         @XmlElement(required = true, namespace="http://www.digitalhps.org/")
         protected String conceptList;
-        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
-        protected String type;
+        
+        @XmlElement(namespace="http://www.digitalhps.org/", type=ConceptpowerType.class)
+        protected ConceptpowerType type;
 
         /**
          * Gets the value of the id property.
@@ -300,19 +296,18 @@ public class ConceptpowerReply {
          *     
          */
         public String getType() {
-            return type;
+            return type.getType();
         }
 
-        /**
-         * Sets the value of the type property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Object }
-         *     
-         */
-        public void setType(String value) {
-            this.type = value;
+        public String getTypeUri() {
+            return type.getType_uri();
+        }
+        
+        public void setType(String type) {
+            if (this.type == null) {
+                this.type = new ConceptpowerType();
+            }
+            this.type.setType(type);
         }
 
     }

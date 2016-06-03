@@ -16,7 +16,7 @@ $(document).ready(function() {
 });
 
 function submitClick(id){
-	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}';
+	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/projects/${wsprojectid}';
 }
 $(function() {
 	

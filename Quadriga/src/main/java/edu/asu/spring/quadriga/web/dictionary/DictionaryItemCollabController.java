@@ -42,41 +42,16 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class DictionaryItemCollabController {
 
     @Autowired
-    IDictionaryManager dictonaryManager;
+    private IDictionaryManager dictonaryManager;
 
     private static final Logger logger = LoggerFactory
-            .getLogger(DictionaryItemController.class);
+            .getLogger(DictionaryController.class);
 
     @Autowired
-    IUserManager usermanager;
+    private IUserManager usermanager;
 
     @Autowired
-    IQuadrigaRoleManager collaboratorRoleManager;
-
-    public IUserManager getUsermanager() {
-        return usermanager;
-    }
-
-    public void setUsermanager(IUserManager usermanager) {
-        this.usermanager = usermanager;
-    }
-
-    public IDictionaryManager getDictonaryManager() {
-        return dictonaryManager;
-    }
-
-    public void setDictonaryManager(IDictionaryManager dictonaryManager) {
-        this.dictonaryManager = dictonaryManager;
-    }
-
-    public IQuadrigaRoleManager getCollaboratorRoleManager() {
-        return collaboratorRoleManager;
-    }
-
-    public void setCollaboratorRoleManager(
-            IQuadrigaRoleManager collaboratorRoleManager) {
-        this.collaboratorRoleManager = collaboratorRoleManager;
-    }
+    private IQuadrigaRoleManager collaboratorRoleManager;
 
     /**
      * Retrieve the dictionary items associated with the logged in user
@@ -128,7 +103,7 @@ public class DictionaryItemCollabController {
     @RequestMapping(value = "auth/dictionaries/deleteDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
     public String deleteDictionaryItem(HttpServletRequest req,
             @PathVariable("dictionaryid") String dictionaryId, ModelMap model,
-            Principal principal) throws QuadrigaStorageException {
+            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
 
         IUser user = usermanager.getUser(principal.getName());
         String[] values = req.getParameterValues("selected");
@@ -223,7 +198,7 @@ public class DictionaryItemCollabController {
     @RequestMapping(value = "auth/dictionaries/updateDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
     public String updateDictionaryItem(HttpServletRequest req,
             @PathVariable("dictionaryid") String dictionaryId, ModelMap model,
-            Principal principal) throws QuadrigaStorageException {
+            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
 
         IUser user = usermanager.getUser(principal.getName());
         String[] values = req.getParameterValues("selected");
@@ -449,7 +424,7 @@ public class DictionaryItemCollabController {
             model.addAttribute("dictionaryEntryList", dictionaryEntryList);
 
             List<IDictionaryItems> dictionaryItemList = dictonaryManager
-                    .getDictionariesItems(dictionaryid, user.getUserName());
+                    .getDictionaryItems(dictionaryid);
             String dictionaryName = dictonaryManager
                     .getDictionaryName(dictionaryid);
             model.addAttribute("dictionaryItemList", dictionaryItemList);

@@ -1,94 +1,74 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 
-<script>
-$(document).ready(function(){
-    $('#conceptdesctextarea').scrollTop($('#conceptdesctextarea').scrollHeight);
-    $('#annotationtextarea').scrollTop($('#annotationtextarea').scrollHeight);   
-    
-});
-</script>
 
 <style>
-	textarea {
-		border-style: none;
-		border-color: Transparent;
-		background: #CEE7F5;
-		color: #000000;
-		overflow: auto;
-		left: 0;
-	}
-	
-	div.div_main {
-		width: 330px;
-		padding: 10px;
-		margin: 0px;
-		opacity: 0.7;
-	}
-		
-	table,th,td{
-		border:1px solid black;
-	}
+textarea {
+	border-style: none;
+	border-color: Transparent;
+	background: #CEE7F5;
+	color: #000000;
+	overflow: auto;
+	left: 0;
+}
 
-		
-	}
-	
-	caption,th,td {
-		font-family: 'Open Sans Condensed', sans-serif;
-		padding: 0em 0em;
-		border: 0px solid #B0BCB0;
-	}
-	
-	caption {
-		
-		font-weight: 900;
-		text-transform: uppercase;
-	}
-	#textfilestyle
-	{
-		display: inline-block;
-		background: #DDEFF8;
-		padding: 0.75em 0.75em 0.75em 0.75em;
-		border-radius: 8px;
-		font-size: 0.85em;
-		color: #000000;
-		margin-left: -4.3em;
-		left: 0;
-	}
+div.div_main {
+	width: 330px;
+	padding: 10px;
+	margin: 0px;
+	opacity: 0.7;
+}
 
+table, th, td {
+	border: 1px solid black;
+}
+
+}
+caption, th, td {
+	font-family: 'Open Sans Condensed', sans-serif;
+	padding: 0em 0em;
+	border: 0px solid #B0BCB0;
+}
+
+caption {
+	font-weight: 900;
+	text-transform: uppercase;
+}
+
+#textfilestyle {
+	display: inline-block;
+	background: #DDEFF8;
+	padding: 0.75em 0.75em 0.75em 0.75em;
+	border-radius: 8px;
+	font-size: 0.85em;
+	color: #000000;
+	margin-left: -4.3em;
+	left: 0;
+}
 </style>
 
 
 <section>
-	<h2 class="major"><span>Network details</span></h2>
-		
-		<ul class="style3">
-		<li>
-			<article class="is-post-summary">
-				<div align="left" id="item_metadata">
-				<table id = metadataTable border="1" style="width:300px">
-					<tr>
-        				<th>Filename</th>
-        				<th>Author</th>
-        				<th>Last Modified Date</th>
-   				 	</tr>
-				</table>
-				</div>
-				
-			</article>
-		</li>
-		
-		<li>
-			<article class="is-post-summary">
-				<div align="left" id="lemma_name"></div>
-				<div id="concept_desc"></div>
-			</article>
-		</li>
-		<li>
-			<article class="is-post-summary">
-				<div align="left" id="annot_desc"></div>
-				<div id="annot_details"></div>
-			</article>
-		</li>
-	</ul>
+	<div class="panel panel-default">
+		<div class="panel-heading">Network Details</div>
+		<div class="panel-body">
+			Network name:<br> <strong>${network.networkName}</strong><br>
+			Submitted by:<br> <strong>${network.creator.name}</strong><br>
+			Submitted on: <br> <strong>${network.createdDate}</strong><br>
+			Annotated text: <br> <strong>${network.textUrl}</strong>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading" id="lemma_name">Select a node</div>
+		<div class="panel-body">
+			<div id="concept_desc">...to display node information</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading" id="lemma_name">Annotations</div>
+		<div class="panel-body">
+			<div id="annot_details">Select a node.</div>
+		</div>
+	</div>
+
 </section>

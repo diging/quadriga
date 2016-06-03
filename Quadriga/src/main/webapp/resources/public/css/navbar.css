@@ -1,0 +1,91 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.navbar-default .navbar-nav>li>a {
+	color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default a.navbar-brand:focus {
+	color: white;
+}
+
+.navbar-default a.navbar-brand:hover {
+ color: #E1EAF3;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: white;
+}
+
+.navbar-default .navbar-toggle {
+	color: white;
+}
+
+.navbar-colored {
+	background-color: #487FB7;
+	z-index: 100;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+	/*color: #F1DFC4;*/
+	color: white;
+	font-weight: bold;
+	background-color: #5993CE;
+}
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    /*color: #F1DFC4;*/
+    color: #E1EAF3;
+}
+
+.navbar-header a {
+	font-weight: bold;
+}
+
+.jumbotron {
+	background-color: rgba(42, 75, 103, 0.15);
+	color: #3D4350;
+	position: relative;
+	border-radius: 6px;
+    border-color: rgb(72, 127, 183);
+    border-width: 1px;
+    border-style: solid;
+}
+.jumbotron .smaller {
+    font-size: 16px;
+}
+
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+
+btn btn-primary {
+	background-color: #487FB7;
+}
+
+table.networks {
+	width: 96%;
+}
+
+li.two-row-li {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: center;
+}
+
+div.navbar-two-rows, div.navbar-two-rows a {
+	padding: 2px 0px 2px 0px;
+	margin: 2px 0px 2px 0px;
+	font-size: 11px;
+	color: white;
+}
+
+.main-container {
+	z-index: 100;
+	position: relative;
+}

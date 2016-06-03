@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.accesschecks;
 
+import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IProjectSecurityChecker {
@@ -20,7 +21,7 @@ public interface IProjectSecurityChecker {
 			throws QuadrigaStorageException;
 
 	public abstract boolean isCollaborator(String userName, String collaboratorRole,String projectId)
-			throws QuadrigaStorageException;
+			throws QuadrigaStorageException, NoSuchRoleException;
 
 	public abstract boolean ownsAtLeastOneProject(String userName) throws QuadrigaStorageException;
 

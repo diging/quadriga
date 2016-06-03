@@ -16,6 +16,7 @@ public class QuadrigaRole implements IQuadrigaRole
 	private String name;
 	private String displayName;
 	private String description;
+	private boolean selectable;
 
 	@Override
 	public String getDBid() {
@@ -115,6 +116,16 @@ public class QuadrigaRole implements IQuadrigaRole
 			return false;
 		return true;
 	}
+
+    @Override
+    public boolean isSelectable() {
+        return selectable;
+    }
+
+    @Override
+    public void setSelectable(boolean selectable) {
+        this.selectable = selectable;
+    }
 
 
 }

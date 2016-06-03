@@ -7,14 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCCDAO;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceCCShallowMapper;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
 @Service
 public class WorkspaceCCManager implements IWorkspaceCCManager {
@@ -28,39 +29,30 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	@Autowired
 	private IWorkspaceDeepMapper wsDeepMapper;
 	
+	@Autowired
+	private IWorkspaceDAO wsDAO;
+	
 	@Override
 	@Transactional
-	public String addWorkspaceCC(String workspaceId, String CCId, String userId)
+	public void addWorkspaceCC(String workspaceId, String CCId, String userId)
 			throws QuadrigaStorageException {
-		String msg=dbConnect.addWorkspaceCC(workspaceId, CCId, userId);
-		return msg;
+		dbConnect.addWorkspaceCC(workspaceId, CCId, userId);
 	}
-
+	
 	@Override
 	@Transactional
-	public List<IWorkspaceConceptCollection> listWorkspaceCC(IWorkSpace workspace,
-			String userId) throws QuadrigaStorageException {
-		WorkspaceDTO workspaceDTO  = dbConnect.listWorkspaceCC(workspace.getWorkspaceId(), userId);
+	public List<IWorkspaceConceptCollection> listWorkspaceCC(String workspaceId) throws QuadrigaStorageException {
+		WorkspaceDTO workspaceDTO  = wsDAO.getDTO(workspaceId);
+		IWorkSpace workspace = wsDeepMapper.mapWorkspaceDTO(workspaceDTO);
 		List<IWorkspaceConceptCollection> wsCCList = wsCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO);
 		return wsCCList;
 	}
 	
 	@Override
 	@Transactional
-	public List<IWorkspaceConceptCollection> listWorkspaceCC(String workspaceId,
-			String userId) throws QuadrigaStorageException {
-		WorkspaceDTO workspaceDTO  = dbConnect.listWorkspaceCC(workspaceId, userId);
-		IWorkSpace workspace = wsDeepMapper.getWorkSpaceDetails(workspaceId);
-		List<IWorkspaceConceptCollection> wsCCList = wsCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO);
-		return wsCCList;
-	}
-	
-	@Override
-	@Transactional
-	public List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId,String userId) throws QuadrigaStorageException
+	public List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId) throws QuadrigaStorageException
 	{
-		List<IConceptCollection> conceptCollectionList = dbConnect.getNonAssociatedWorkspaceConcepts(workspaceId,userId);
-		return conceptCollectionList;
+		return dbConnect.getNonAssociatedWorkspaceConcepts(workspaceId);
 	}
 
 	@Override

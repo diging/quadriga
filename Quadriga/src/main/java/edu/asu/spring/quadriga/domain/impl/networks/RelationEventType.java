@@ -90,9 +90,9 @@ extends CreationEvent
 	 * @param re			{@link RelationEventType} target object for this method 
 	 * @return				{@link RelationType} object
 	 */
-	public RelationType  getRelation(RelationEventType re){
+	public RelationType  getRelation(){
 		RelationType relationType = null;
-		List <?> ee = re.getRelationCreatorOrRelation();
+		List <?> ee = getRelationCreatorOrRelation();
 		Iterator <?> Iee=ee.iterator();
 		while(Iee.hasNext()){
 			Object o = Iee.next();
@@ -101,36 +101,6 @@ extends CreationEvent
 			}
 		}
 		return relationType;
-	}
-
-	/**
-	 * Helper class to get relation event ID
-	 * @param re
-	 * @return
-	 */
-	public String getRelationEventId(RelationEventType relationEventType){
-		List<JAXBElement<?>> relationEventElementList = relationEventType.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> relationEventElementIterator = relationEventElementList.iterator();
-		while(relationEventElementIterator.hasNext()){
-			JAXBElement<?> relationEventElement = (JAXBElement<?>) relationEventElementIterator.next();
-			if(relationEventElement.getName().toString().contains("id")){
-				return relationEventElement.getValue().toString();
-			}
-		}
-		return "";
-	}
-
-	
-	public String getRelationEventSourceReference(){
-		List<JAXBElement<?>> relationEventElementList = this.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> relationEventElementIterator = relationEventElementList.iterator();
-		while(relationEventElementIterator.hasNext()){
-			JAXBElement<?> relationEventElement = (JAXBElement<?>) relationEventElementIterator.next();
-			if(relationEventElement.getName().toString().contains("source_reference")){
-				return relationEventElement.getValue().toString();
-			}
-		}
-		return null;
 	}
 	
 }

@@ -24,16 +24,18 @@ function d3visualizepublic(graph, networkId, path,type) {
 		alert("no network");
 	}
 	// Layout size
-	var width = 500,
-	height = 500;
+	var width = $('#chart').parent().width();
+	var height = $('#chart').parent().height();
 	var layout;
 	var color = d3.scale.category20();
+	var svg_id ="svg_id";
 	// Preparing the force directed graph
 	if(type=="force"){
 		layout = d3.layout.force()
 		.charge(-150)
 		.linkDistance(200)
 		.size([width, height]);
+		
 		layout
 		.nodes(graph.nodes)
 		.links(graph.links)
@@ -49,8 +51,8 @@ function d3visualizepublic(graph, networkId, path,type) {
 
 
 	var vis = d3.select("#chart").append("svg:svg")
-			.attr("width", width)
-			.attr("height", height)
+			.attr("width", "100%")
+			.attr("height", "100%")
 			.append('svg:g')
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
@@ -210,8 +212,7 @@ function d3visualizepublic(graph, networkId, path,type) {
 	function  redraw() {
 		console.log("here", d3.event.translate, d3.event.scale);
 		vis.attr("transform",
-				"translate(" + d3.event.translate + ")"
-				+ " scale(" + d3.event.scale + ")");
+				" scale(" + d3.event.scale + ")");
 	};
 //	Works on loading the network and placing the nodes randomly for view
 
@@ -229,23 +230,27 @@ function d3visualizepublic(graph, networkId, path,type) {
 
 	function fade(opacity) {
 		return function(d, i) {
-			//fade all elements
-//			d3.select(d.source).style("opacity", opacity);
-//			d3.select(d.target).style("opacity", opacity);
-			//fade all elements
 			vis.selectAll("circle, line").style("opacity", opacity);
-
-			var associated_links = vis.selectAll("line").filter(function(d) {
-				return  d.source.index == i;
-				// return d.source.index == i || d.target.index == i;
-			}).each(function(d) {
-				//unfade links and nodes connected to the current node
+			
+			var stId = d.statementid;
+			var associated_nodes = vis.selectAll('circle').filter(function(node) {
+				for (var i = 0; i < stId.length; i++) {
+				    if (($.inArray(stId[i], node.statementid)) > -1)
+				    	return true;
+				}
+				return false;
+			});
+			associated_nodes.each(function(a) {
 				d3.select(this).style("opacity", 1);
-				//THE FOLLOWING CAUSES: Uncaught TypeError: Cannot call method 'setProperty' of undefined
-				//  d3.select(d.source).style("opacity", 1);
-				//  d3.select(d.target).style("opacity", 1);
-				node.style("opacity", function(o) {
-					d3.select(o.source).style("opacity", 1);
+				
+				var aIndex = a.index;
+				
+				var associated_links = vis.selectAll("line").filter(function(d) {
+					return d.source.index == aIndex;
+				});
+				associated_links.each(function(d) {
+					//unfade links and nodes connected to the current node
+					d3.select(this).style("opacity", 1);
 				});
 			});
 
@@ -421,27 +426,27 @@ function d3visualizepublic(graph, networkId, path,type) {
 	}
 
 	function displayItemData(){
-		$.ajax({
-			url : path+"auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				if (data.length > 0) {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-					$('#metadataTable')
-							.dataTable().fnAddData(data);
-				} else {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-				}
-			},
-			error: function() {
-				alert("error");
-			}
-		});
+//		$.ajax({
+//			url : path+"auth/editing/getitemmetadata/"+networkId,
+//			type : "GET",
+//			dataType: 'json',
+//			success : function(data) {
+//				if (data.length > 0) {
+//					$('#metadataTable')
+//							.dataTable()
+//							.fnClearTable();
+//					$('#metadataTable')
+//							.dataTable().fnAddData(data);
+//				} else {
+//					$('#metadataTable')
+//							.dataTable()
+//							.fnClearTable();
+//				}
+//			},
+//			error: function() {
+//				alert("error");
+//			}
+//		});
 	}
 	
 	function defineMetadataTable(){

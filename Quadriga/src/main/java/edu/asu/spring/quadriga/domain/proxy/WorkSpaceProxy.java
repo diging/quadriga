@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 
 /**
  * This class acts a proxy to {@link WorkSpace} while fetching {@link List} of {@link IWorkSpace}. 
@@ -44,7 +45,8 @@ public class WorkSpaceProxy implements IWorkSpace {
 	/**
 	 *  Access to {@link IListWSManager} to call manager methods to update actual {@link WorkSpace} object.
 	 */
-	private IListWSManager wsManager;
+	private IWorkspaceManager wsManager;
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(WorkSpaceProxy.class);
 
@@ -53,7 +55,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 * Constructor to create {@link WorkSpaceProxy} with {@link IListWSManager} manager object.
 	 * @param wsManager							{@link IListWSManager} object
 	 */
-	public WorkSpaceProxy(IListWSManager wsManager) {
+	public WorkSpaceProxy(IWorkspaceManager wsManager) {
 		this.wsManager = wsManager;
 	}
 
@@ -191,49 +193,6 @@ public class WorkSpaceProxy implements IWorkSpace {
 		if(this.workspace != null){
 			this.workspace.setProjectWorkspace(workspaceProject);
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * This method checks if local {@link IWorkSpace} object is null. 
-	 * If its null it would use workspace manager object to fetch full workspace object and then return {@link List} of {@link IWorkspaceBitStream}
-	 * else if local {@link IWorkSpace} is not null, just returns {@link List} of {@link IWorkspaceBitStream} from local {@link IWorkSpace}
-	 */
-	@Override
-	public List<IWorkspaceBitStream> getWorkspaceBitStreams() {
-		if(this.workspace != null){
-			return this.workspace.getWorkspaceBitStreams();
-		}else{
-			setWorkSpaceDetails();
-			//We need to do this in case of Quadriga storage exception in setWorkSpaceDetails(); , this.workspace would be null
-			if(this.workspace != null){
-			return this.workspace.getWorkspaceBitStreams();
-			}else{
-				return null;
-			}
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * This method also checks if local {@link IWorkSpace} object is null. 
-	 * If its null it would use workspace manager object to fetch full workspace object and then set {@link List} of {@link IWorkspaceBitStream}
-	 * else if local {@link IWorkSpace} is not null, just set {@link List} of {@link IWorkspaceBitStream}
-	 */
-	@Override
-	public void setWorkspaceBitStreams(
-			List<IWorkspaceBitStream> workspaceBitStreams) {
-		if(this.workspace != null){
-			this.workspace.setWorkspaceBitStreams(workspaceBitStreams);
-		}else{
-			setWorkSpaceDetails();
-			if(this.workspace!=null){
-				this.workspace.setWorkspaceBitStreams(workspaceBitStreams);
-			}else{
-				//Doing nothing this would be in case of Quadriga storage exception in setWorkSpaceDetails()
-			}
-		}
-
 	}
 
 	/**
@@ -475,4 +434,24 @@ public class WorkSpaceProxy implements IWorkSpace {
 
 	}
 
+
+    public void setExternalWorkspaceId(String externalWorkspaceId) {
+    }
+
+
+    public String getExternalWorkspaceId() {
+        return null;
+    }
+
+
+    @Override
+    public void setProject(IProject project) {
+        // TODO implement proxy
+    }
+
+
+    @Override
+    public IProject getProject() {
+        return null;
+    }
 }

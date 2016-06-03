@@ -19,55 +19,74 @@
 							.children('a').attr('href');
 				});
 	});
+	
+	$(document).ready(function(){
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/workspace/"+ "${workspacedetails.workspaceId}"+ "/dictionaries.json",
+			  type : "GET",
+	          success: function(data){
+	              $.each(data, function( index, value ) {
+	            	  $( "#workspaceDictionaries" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/dictionaries/"+value['id']+"'><i class='fa fa-book'></i> "+value['name']+"</a><br>");
+	              });
+	          }
+		  });
+		  
+		  $.ajax({ url: "${pageContext.servletContext.contextPath}/auth/rest/workspace/"+ "${workspacedetails.workspaceId}"+ "/conceptcollections.json",
+			  type : "GET",
+	          success: function(data){
+	              $.each(data, function( index, value ) {
+	            	 $( "#workspaceConceptCollections" ).prepend( "<a href='${pageContext.servletContext.contextPath}/auth/conceptcollections/"+value['id']+"'><i class='fa fa-list-alt'></i> "+value['name']+"</a><br>");
+	              });
+	          }
+		  });
+	});
 </script>
-<h2 class="major">
-	<span>Menu</span>
-</h2>
-<div id="workspacemenu">
-	<ul>
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Dictionary
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/dictionaries">List</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary">Delete</a></li>
-			</ul>
-		</li>
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collections
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/conceptcollections">List</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections">Delete</a></li>
-			</ul>
-		</li>
-		<!-- 
-		<li
-			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
-			<ul>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addcollaborators">Add</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletecollaborators">Delete</a></li>
-				<li
-					data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/pen.png"}'><a
-					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/updatecollaborators">Update</a></li>
-			</ul>
-		</li>
-		-->
-	</ul>
+<div style="margin-bottom: 20px;">
+    <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}">
+        <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> All Workspaces
+	</a>
 </div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Dictionaries</h3>
+  </div>
+  <div class="panel-body">
+      <div id="workspaceDictionaries" style="margin-bottom: 10px;"></div>
+       <c:if test="${owner=='1' || wsadmin=='1'}">
+      <div>
+        <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
+	    <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
+	  </div>
+	  </c:if>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Concept Collections</h3>
+  </div>
+  <div class="panel-body">
+    <div id="workspaceConceptCollections" style="margin-bottom: 10px;"></div>
+    <c:if test="${owner=='1' || wsadmin=='1'}">
+    <div>
+    	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
+    	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+    </div>
+    </c:if>
+  </div>
+</div>
+
+<div class="list-group">
+  <a data-toggle="modal" data-target="#deactivate-ws" class="list-group-item<c:if test="${isDeactivated == true }"> disabled</c:if>" <c:if test="${isDeactivated == true }">title="Workspace is already deactivated."</c:if>>
+    <i class="fa fa-toggle-off"></i> Deactivate Workspace
+  </a>
+  <a data-toggle="modal" data-target="#activate-ws" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Workspace is currently active."</c:if>>
+    <i class="fa fa-toggle-on"></i> Activate Workspace
+  </a>
+  <a data-toggle="modal" data-target="#delete-ws" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Only deactivated workspaces can be deleted."</c:if>>
+    <i class="fa fa-ban"></i> Delete Workspace
+  </a>
+</div>
+
+
+

@@ -1,10 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
-<script
-	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.dataTable').dataTable({
@@ -50,16 +48,6 @@
 		}
 	}
 
-	$(function() {
-
-		var data = $
-		{
-			core
-		}
-		;
-		console.log(data);
-		$('#html').jstree(data);
-	});
 
 	function addCCtoProjects(id, name) {
 
@@ -153,14 +141,13 @@
 	}
 </script>
 
-<table style="width: 100%">
-	<tr>
-		<td style="width: 90%">
-			<div>
+<div class="row">
+			<div class="col-md-9">
 				<h2>Concept Collection: ${concept.conceptCollectionName}</h2>
 				<div>${concept.description}</div>
 				<div style="text-align:right">
-		            <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${concept.conceptCollectionId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Concept Collection
+		            <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${concept.conceptCollectionId}"> 
+		              <i class="fa fa-pencil-square-o"></i> Edit Concept Collection
 		            </a>
 		        </div>
 				<br>
@@ -170,25 +157,25 @@
 							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/transfer/${concept.conceptCollectionId}">Change</a>)</c:if>
 				</div>
 				
-			</div>
+			
 			<hr> <c:choose>
 				<c:when test="${not empty concept.conceptCollectionConcepts}">
-					<span class="byline">These are all the concepts in this
-						collection.</span>
+					<p>These are all the concepts in this
+						collection.</p>
 					<form method="post" action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/deleteitems">
-						<button type="button" class="btn btn-default btn-sm"
+						<button type="button" class="btn btn-primary btn-sm"
 							onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'"
 							> 
-							<span class="glyphicon glyphicon-plus"></span> Add Entry
+							<span class="fa fa-plus"></span> Add Entry
 					   </button>
 					   
-						<button type="submit" class="btn btn-default btn-sm"> 
-							<span class="glyphicon glyphicon-minus"></span>
+						<button type="submit" class="btn btn-primary btn-sm"> 
+							<span class="fa fa-minus"></span>
 							Delete Selected Entries
 						</button>
 						<br/>
 						<br/>
-						<table class="display dataTable" id="conceptSearch">
+						<table class="table" id="conceptSearch">
 							<thead>
 								<tr>
 									<th><input type="checkbox" id="selectall"></input></th>
@@ -204,13 +191,13 @@
 									<tr>
 										<td><input type="checkbox" class="selected"
 											name="selected" value="${conceptItem.concept.conceptId}" /></td>
-										<td align="justify"><font size="2"><c:out
+										<td ><font size="2"><c:out
 													value="${conceptItem.concept.lemma}"></c:out></font></td>
-										<td width="25%" align="justify"><font size="2"><c:out
+										<td width="25%"><font size="2"><c:out
 													value="${conceptItem.concept.conceptId}"></c:out></font></td>
-										<td class="center" align="justify"><font size="2"><c:out
+										<td class="center"><font size="2"><c:out
 													value="${conceptItem.concept.pos}"></c:out></font></td>
-										<td width="30%" align="justify"><font size="2"><c:out
+										<td width="30%"><font size="2"><c:out
 													value="${conceptItem.concept.description}"></c:out></font></td>
 									</tr>
 								</c:forEach>
@@ -219,46 +206,40 @@
 					</form>
 				</c:when>
 				<c:otherwise>
-			You don't have any items. Click on button to add items.
-			<br />
-					<input type=button
+			<p>
+			 You don't have any entries in this concept collection. Click the button to add some.
+			</p>
+					<input type=button class="btn btn-primary"
 						onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'"
 						value='Add Items' />
 				</c:otherwise>
 			</c:choose>
 
-		</td>
-		<td style="width: 10%"><c:if
-				test="${not empty collaboratingUsers}">
-				<section>
+		</div>
+		<div class="col-md-3">
 					<h3 class="major">
 						<span>Collaborators</span>
 					</h3>
-					<ul class="collaborators">
+					<c:if test="${not empty collaboratingUsers}">
 						<c:forEach var="collab" items="${collaboratingUsers}">
-							<li><c:out value="${collab.collaborator.userObj.name}"></c:out></li>
+							<i class="fa fa-user"></i> 
+							<c:out value="${collab.collaborator.userObj.name}"></c:out>
+							<br>
 						</c:forEach>
-						<div style="border-top: dashed 1px #e7eae8; padding: 5px; margin-top: 15px;">
-							<ul class="colltools">
-								<li><img
-									src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"
-									style="vertical-align: middle; padding-bottom: 2px;"> <a
-									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators">Add</a></li>
-								<li><img
-									src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"
-									style="vertical-align: middle; padding-bottom: 2px;"> <a
-									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deletecollaborators">Delete</a></li>
-								<li><img
-									src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/pen.png"
-									style="vertical-align: middle; padding-bottom: 2px;"> <a
-									href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/updatecollaborators">Update</a></li>
-							</ul>
-						</div>
-					</ul>
-				</section>
-			</c:if></td>
-	</tr>
-</table>
+					</c:if>
+					<div style="border-top: dashed 1px #e7eae8; padding: 5px; margin-top: 15px;">
+						<a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators">
+						   <i class="fa fa-plus-circle"></i> Add</a>
+						   <br>
+						<a
+							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deletecollaborators">
+						   <i class="fa fa-minus-circle"></i> Delete</a>
+						<br>
+						<a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/updatecollaborators">
+							<i class="fa fa-pencil"></i> Update</a>
+					</div>
+					
+</div>
 <div id="dlgConfirm" title="Confirmation" style="display: none">
 	<p>Do you wanna add concept collection to this project?</p>
 </div>

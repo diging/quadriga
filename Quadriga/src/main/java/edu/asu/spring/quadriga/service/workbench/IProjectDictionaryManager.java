@@ -26,7 +26,7 @@ public interface IProjectDictionaryManager {
 	 * @return										Returns the of {@link List} of {@link IDictionary} 
 	 * @throws QuadrigaStorageException				Throws Storage exception when there is a issue with access to DB
 	 */
-	public List<IProjectDictionary> listProjectDictionary(String projectId,String userId)throws QuadrigaStorageException;
+	public List<IProjectDictionary> listProjectDictionary(String projectId)throws QuadrigaStorageException;
 
 	/**
 	 * This class helps in deleting the {@link IDictionary} of a {@link IProject} using {@link IProject} ID, {@link IDictionary} ID and {@link IUser} Id
