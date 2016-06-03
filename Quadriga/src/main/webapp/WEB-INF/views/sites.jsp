@@ -41,7 +41,7 @@
 								value="${sitesList.description}"></c:out></span></td>
 					<td style="width: 20%"><c:out value="${sitesList.owner.name}"></c:out></td>
 					<td style="width: 35%"><a
-						href="${pageContext.servletContext.contextPath}/sites/${sitesList.unixName}">http://quadriga.asu.edu/sites/${sitesList.unixName}</a></td>
+						href="${pageContext.servletContext.contextPath}/sites/${sitesList.unixName}">${project_baseurl}/sites/${sitesList.unixName}</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
