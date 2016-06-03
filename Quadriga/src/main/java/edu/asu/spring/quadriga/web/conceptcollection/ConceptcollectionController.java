@@ -46,6 +46,7 @@ import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -164,7 +165,7 @@ public class ConceptcollectionController {
             RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
     public String conceptSearchHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req,
-            ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException {
+            ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
         try {
             ConceptpowerReply conReply = conceptControllerManager.search(req.getParameter("name"),
                     req.getParameter("pos"));
@@ -181,8 +182,7 @@ public class ConceptcollectionController {
                 model.addAttribute("result", conReply.getConceptEntry());
             }
         } catch (HttpMessageNotReadableException hex) {
-            logger.error("error:", hex);
-            return "auth/storageissue";
+            throw new QuadrigaException(hex);
         }
         model.addAttribute("collectionid", collection_id);
         return "auth/searchitems";
