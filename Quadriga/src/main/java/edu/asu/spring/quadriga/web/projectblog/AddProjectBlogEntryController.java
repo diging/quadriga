@@ -20,6 +20,8 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -75,8 +77,9 @@ public class AddProjectBlogEntryController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.GET)
-    public String addProjectBlogEntryForm(@PathVariable("ProjectUnixName") String projectUnixName,
+    public String addProjectBlogEntryForm(@ProjectIdentifier @PathVariable("ProjectUnixName") String projectUnixName,
             @InjectProject IProject project,
             @RequestParam("projectId") String projectId, Model model)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -115,10 +118,11 @@ public class AddProjectBlogEntryController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.POST)
     public ModelAndView addProjectBlogEntryRequest(
             @Validated @ModelAttribute("projectBlogEntry") ProjectBlogEntry projectBlogEntry, BindingResult result,
-            @PathVariable("ProjectUnixName") String projectUnixName,
+            @ProjectIdentifier @PathVariable("ProjectUnixName") String projectUnixName,
             @InjectProject IProject project,
             @RequestParam("projectId") String projectId, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
