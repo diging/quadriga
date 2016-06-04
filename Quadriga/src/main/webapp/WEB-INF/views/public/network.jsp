@@ -21,13 +21,13 @@
 <script type="text/javascript">
 function changeLayout(json,networkid,path,type)
 {
-	d3visualizepublic(json,networkid,path,type);
+	d3visualizepublic(json,networkid,path,type, '${unixName}');
 }
 
 </script>
 
 <body
-	onload="d3visualizepublic(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
+	onload="d3visualizepublic(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force', '${unixName}');" />
 
 
 

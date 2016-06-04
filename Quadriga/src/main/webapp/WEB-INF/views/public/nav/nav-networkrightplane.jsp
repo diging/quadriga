@@ -20,4 +20,11 @@
 			<div id="concept_desc">...to display node information</div>
 		</div>
 	</div>
+	
+	<div class="panel panel-default">
+        <div class="panel-heading" id="lemma_name">Select a node</div>
+        <div class="panel-body">
+            <div id="texts">...to display text.</div>
+        </div>
+    </div>
 </section>

@@ -23,6 +23,11 @@
 			<value>/add</value>
 		</constructor-arg>
 	</bean>
+	<bean id="qStoreURL_Search" class="java.lang.String">
+        <constructor-arg>
+            <value>/search</value>
+        </constructor-arg>
+    </bean>
 	<bean id="qStoreURL_Get" class="java.lang.String">
 		<constructor-arg>
 			<value>/get?id=</value>

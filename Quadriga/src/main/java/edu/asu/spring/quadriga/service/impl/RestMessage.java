@@ -10,6 +10,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.exceptions.RestException;
@@ -35,7 +36,7 @@ public class RestMessage implements IRestMessage {
             VelocityEngine engine = restVelocityFactory.getVelocityRestEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/error.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             context.put("errMsg", errorMsg);
             template.merge(context, sw);
             return sw.toString();
@@ -51,10 +52,11 @@ public class RestMessage implements IRestMessage {
         StringWriter sw = new StringWriter();
 
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/error.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("errMsg", errorMsg);
             template.merge(context, sw);
             return sw.toString();
@@ -70,10 +72,11 @@ public class RestMessage implements IRestMessage {
         StringWriter sw = new StringWriter();
 
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/success.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("successMsg", successMessage);
             template.merge(context, sw);
             return sw.toString();

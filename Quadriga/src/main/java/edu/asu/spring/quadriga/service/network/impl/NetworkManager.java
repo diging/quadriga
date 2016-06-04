@@ -13,6 +13,7 @@ import java.util.UUID;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -31,18 +32,23 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
+import edu.asu.spring.quadriga.domain.impl.networks.PrintedRepresentationType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
+import edu.asu.spring.quadriga.domain.impl.networks.TermPartType;
+import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
@@ -53,7 +59,10 @@ import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
+import edu.asu.spring.quadriga.service.network.domain.impl.TextPhrase;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
+import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
@@ -95,6 +104,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private IWorkspaceManager workspaceManager;
+    
+    @Autowired
+    private ITextFileManager txtManager;
 
     /**
      * 
@@ -218,7 +230,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         try {
             engine.init();
             template = engine.getTemplate("velocitytemplates/getnetworksfromqstore.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             List<INetworkNodeInfo> networkTopNodes = getNetworkTopNodes(networkId);
             context.put("statmentList", networkTopNodes);
             writer = new StringWriter();
@@ -240,6 +252,78 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         }
         networkXML = networkXML.substring(networkXML.indexOf("element_events") - 1, networkXML.length());
         return networkXML;
+    }
+    
+    @Override
+    public List<TextOccurance> getTextsForConceptId(String conceptId, ETextAccessibility access) throws Exception {
+        String results = qStoreConnector.searchNodesByConcept(conceptId);
+        ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
+        
+        List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
+        
+        List<TextOccurance> occurances = new ArrayList<TextOccurance>();
+        
+        Map<String, TextOccurance> textOccurances = new HashMap<String, TextOccurance>();
+        
+        for (CreationEvent event : eventList) {
+            if (!(event instanceof AppellationEventType)) {
+                // we're only interested in appellation events here
+                continue;
+            }
+            
+            TextOccurance occur = textOccurances.get(event.getSourceReference());
+            
+            if (occur == null) {
+                occur = new TextOccurance();
+                occur.setTextUri(event.getSourceReference());
+                textOccurances.put(event.getSourceReference(), occur);
+                ITextFile txtFile = txtManager.getTextFileByUri(occur.getTextUri());
+                
+                if (txtFile != null && txtFile.getAccessibility() == access) {
+                    occur.setContents(txtManager.retrieveTextFileContent(txtFile.getTextId()));
+                    occur.setTextId(txtFile.getTextId());
+                    occurances.add(occur);
+                } else {
+                    continue;
+                }
+                
+                occur.setProject(projectManager.getProjectDetails(txtFile.getProjectId()));
+                
+            }
+            
+            
+            
+            
+            // there should only be one
+            List<TermType> terms = ((AppellationEventType)event).getTerms();
+            
+            if (terms != null && terms.size() > 0) {
+                TermType term = terms.get(0);
+                PrintedRepresentationType printed = term.getPrintedRepresentation();
+                if (printed == null) {
+                    continue;
+                }
+                List<TermPartType> termparts = printed.getTermPart();
+                occur.setTextPhrases(new ArrayList<TextPhrase>());
+                for (TermPartType tp : termparts) {
+                    TextPhrase phrase = new TextPhrase();
+                    phrase.setExpression(tp.getExpression());
+                    phrase.setFormat(tp.getFormat());
+                    phrase.setFormattedPointer(tp.getFormattedPointer());
+                    if (StringUtils.isNumeric(tp.getPosition())) {
+                        phrase.setPosition(Integer.parseInt(tp.getPosition()));
+                    }
+                    if (!occur.getTextPhrases().contains(phrase)) {
+                        occur.getTextPhrases().add(phrase);
+                    }
+                }
+            }
+            
+            
+        }
+        
+        
+        return occurances;
     }
 
     @Override

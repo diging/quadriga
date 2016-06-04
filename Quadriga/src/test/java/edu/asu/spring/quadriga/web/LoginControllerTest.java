@@ -74,14 +74,6 @@ public class LoginControllerTest {
 	}
 
 	/**
-	 * This method checks if the {@link LoginController} returns the login path correctly.
-	 */
-	@Test
-	public void testLogin() {
-		assertEquals(loginController.login(model),"login");
-	}
-
-	/**
 	 * This method checks if the {@link LoginController} returns the login path for a failed login.
 	 */
 	@Test

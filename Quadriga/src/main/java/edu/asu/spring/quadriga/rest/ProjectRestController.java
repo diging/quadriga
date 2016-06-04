@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -62,12 +63,13 @@ public class ProjectRestController {
 	public ResponseEntity<String> listProjects(ModelMap model, Principal principal, HttpServletRequest req)
 			throws RestException {
 		try {
-		    VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		    VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 			engine.init();
 			String userId = principal.getName();
 			List<IProject> projectList = projectManager.getProjectList(userId);
 			Template template = engine.getTemplate("velocitytemplates/projectlist.vm");
-			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			VelocityContext context = new VelocityContext();
+			context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
 			context.put("list", projectList);
 			
 			StringWriter writer = new StringWriter();

@@ -77,13 +77,13 @@
 </div>
 
 <div class="list-group">
-  <a data-toggle="modal" data-target="#deactivate-ws" class="list-group-item<c:if test="${isDeactivated == true }"> disabled</c:if>" <c:if test="${isDeactivated == true }">title="Workspace is already deactivated."</c:if>>
+  <a data-toggle="modal" data-target="<c:choose><c:when test="${isDeactivated == true }">#</c:when><c:otherwise>#deactivate-ws</c:otherwise></c:choose>" class="list-group-item<c:if test="${isDeactivated == true }"> disabled</c:if>" <c:if test="${isDeactivated == true }">title="Workspace is already deactivated."</c:if>>
     <i class="fa fa-toggle-off"></i> Deactivate Workspace
   </a>
-  <a data-toggle="modal" data-target="#activate-ws" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Workspace is currently active."</c:if>>
+  <a data-toggle="modal" data-target="<c:choose><c:when test="${isDeactivated == false }">#</c:when><c:otherwise>#activate-ws</c:otherwise></c:choose>" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Workspace is currently active."</c:if>>
     <i class="fa fa-toggle-on"></i> Activate Workspace
   </a>
-  <a data-toggle="modal" data-target="#delete-ws" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Only deactivated workspaces can be deleted."</c:if>>
+  <a data-toggle="modal" data-target="<c:choose><c:when test="${isDeactivated == false }">#</c:when><c:otherwise>#delete-ws</c:otherwise></c:choose>" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Only deactivated workspaces can be deleted."</c:if>>
     <i class="fa fa-ban"></i> Delete Workspace
   </a>
 </div>

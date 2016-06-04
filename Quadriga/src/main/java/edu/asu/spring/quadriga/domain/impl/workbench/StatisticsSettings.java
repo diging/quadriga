@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.domain.impl.workbench;
 
 import org.springframework.stereotype.Service;
+
 import edu.asu.spring.quadriga.domain.IStatisticsSettings;
 
 /**

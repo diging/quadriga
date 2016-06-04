@@ -23,12 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.impl.Profile;
-import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.IService;
@@ -77,8 +74,7 @@ public class HomeController {
     private Properties messages;
 
     private String serviceId;
-    private String term;
-
+    
     @Autowired 
     private IRetrieveProjectManager projectManager;
     
@@ -111,7 +107,6 @@ public class HomeController {
 
         String formattedDate = dateFormat.format(date);
 
-        // Get the LDAP-authenticated userid
         String sUserId = principal.getName();
 
         // inserting a record for admin in the database
