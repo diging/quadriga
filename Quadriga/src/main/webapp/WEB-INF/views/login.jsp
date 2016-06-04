@@ -94,20 +94,16 @@
 			<div class="col-lg-6 centered">
 				<!-- ACCORDION -->
 				<div class="accordion ac" id="accordion2">
-					<div class="accordion-group">
+					<c:if test="${not empty latestProjects[0]}" >
+                    <div class="accordion-group">
 						<div class="accordion-heading">
 							<a class="accordion-toggle" data-toggle="collapse"
-								data-parent="#accordion2" href="#collapseThree"> Awesome
-								Support </a>
+								data-parent="#accordion2" href="#collapseOne"> ${latestProjects[0].projectName} </a>
 						</div>
-						<div id="collapseThree" class="accordion-body collapse">
+						<div id="collapseOne" class="accordion-body collapse">
 							<div class="accordion-inner">
-								<p>It has survived not only five centuries, but also the
-									leap into electronic typesetting, remaining essentially
-									unchanged. It was popularised in the 1960s with the release of
-									Letraset sheets containing Lorem Ipsum passages, and more
-									recently with desktop publishing software like Aldus PageMaker
-									including versions of Lorem Ipsum.</p>
+								<p>${latestProjects[0].description}
+								<br><a style="font-size: 16px;" href="${pageContext.servletContext.contextPath}/sites/${latestProjects[0].unixName}">Explore project...</a></p>
 							</div>
 							<!-- /accordion-inner -->
 						</div>
@@ -115,21 +111,17 @@
 					</div>
 					<!-- /accordion-group -->
 					<br>
-
+                    </c:if>
+                    <c:if test="${not empty latestProjects[1]}" >
 					<div class="accordion-group">
 						<div class="accordion-heading">
 							<a class="accordion-toggle" data-toggle="collapse"
-								data-parent="#accordion2" href="#collapseFour"> Responsive
-								Design </a>
+								data-parent="#accordion2" href="#collapseTwo"> ${latestProjects[1].projectName} </a>
 						</div>
-						<div id="collapseFour" class="accordion-body collapse">
+						<div id="collapseTwo" class="accordion-body collapse">
 							<div class="accordion-inner">
-								<p>It has survived not only five centuries, but also the
-									leap into electronic typesetting, remaining essentially
-									unchanged. It was popularised in the 1960s with the release of
-									Letraset sheets containing Lorem Ipsum passages, and more
-									recently with desktop publishing software like Aldus PageMaker
-									including versions of Lorem Ipsum.</p>
+								<p>${latestProjects[1].description} <br><a style="font-size: 16px;" href="${pageContext.servletContext.contextPath}/sites/${latestProjects[1].unixName}">Explore project...</a>
+							     </p>
 							</div>
 							<!-- /accordion-inner -->
 						</div>
@@ -137,27 +129,25 @@
 					</div>
 					<!-- /accordion-group -->
 					<br>
+					</c:if>
 				</div>
 				<!-- Accordion -->
 			</div>
 
-			<div class="col-lg-6">
-
-				<!-- ACCORDION -->
+			<div class="col-lg-6 centered">
+                <div class="accordion ac" id="accordion3">
+                
+				<c:if test="${not empty latestProjects[2]}" >
+                    <!-- ACCORDION -->
 				<div class="accordion-group">
 					<div class="accordion-heading">
 						<a class="accordion-toggle" data-toggle="collapse"
-							data-parent="#accordion2" href="#collapseThree"> Awesome
-							Support </a>
+							data-parent="#accordion2" href="#collapseThree"> ${latestProjects[2].projectName} </a>
 					</div>
 					<div id="collapseThree" class="accordion-body collapse">
 						<div class="accordion-inner">
-							<p>It has survived not only five centuries, but also the leap
-								into electronic typesetting, remaining essentially unchanged. It
-								was popularised in the 1960s with the release of Letraset sheets
-								containing Lorem Ipsum passages, and more recently with desktop
-								publishing software like Aldus PageMaker including versions of
-								Lorem Ipsum.</p>
+							<p>${latestProjects[2].description}
+							<br><a style="font-size: 16px;" href="${pageContext.servletContext.contextPath}/sites/${latestProjects[2].unixName}">Explore project...</a></p>
 						</div>
 						<!-- /accordion-inner -->
 					</div>
@@ -165,31 +155,34 @@
 				</div>
 				<!-- /accordion-group -->
 				<br>
-
+                </c:if>
 				<div class="accordion-group">
 					<div class="accordion-heading">
 						<a class="accordion-toggle" data-toggle="collapse"
-							data-parent="#accordion2" href="#collapseFour"> Responsive
-							Design </a>
+							data-parent="#accordion2" href="#collapseFour"> ${latestProjects[3].projectName} </a>
 					</div>
 					<div id="collapseFour" class="accordion-body collapse">
 						<div class="accordion-inner">
-							<p>It has survived not only five centuries, but also the leap
-								into electronic typesetting, remaining essentially unchanged. It
-								was popularised in the 1960s with the release of Letraset sheets
-								containing Lorem Ipsum passages, and more recently with desktop
-								publishing software like Aldus PageMaker including versions of
-								Lorem Ipsum.</p>
+							<p>
+							${latestProjects[3].description}
+                            <br><a style="font-size: 16px;" href="${pageContext.servletContext.contextPath}/sites/${latestProjects[3].unixName}">Explore project...</a> 
+                            </p>
 						</div>
 						<!-- /accordion-inner -->
 					</div>
 					<!-- /collapse -->
+				</div>
+				
 				</div>
 				<!-- /accordion-group -->
 				<br>
 			</div>
+			    
 			<!-- Accordion -->
 		</div>
+		<div class="centered">
+		<a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/">See all Project</a>
+        </div>
 	</div>
 </div>
 <!--/ .container -->
