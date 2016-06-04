@@ -86,3 +86,7 @@
     color: #7C91A7;
     float: right;
 }
+
+span.highlight {
+	font-weight: bold;
+}

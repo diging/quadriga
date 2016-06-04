@@ -53,11 +53,12 @@ public class NodeInfoController {
                         return o1.getPosition() - o2.getPosition();
                     }
                 });
+                Integer offset = new Integer(env.getProperty("network.display.text.offset"));
+                
                 if (phrases.size() > 0) {
                     int start = phrases.get(0).getPosition();
                     int end = phrases.get(phrases.size() -1).getPosition();
                     
-                    Integer offset = new Integer(env.getProperty("network.display.text.offset"));
                     if (start < offset) {
                         start = 0;
                     } else {
@@ -77,7 +78,11 @@ public class NodeInfoController {
                 for (TextPhrase phrase : phrases) {
                     if (phrase.getFormattedPointer() == null || phrase.getFormattedPointer().trim().isEmpty()) {
                         JSONObject jsonPhrase = new JSONObject();
-                        jsonPhrase.put("position", phrase.getPosition());
+                        int position = phrase.getPosition();
+                        if (position > offset) {
+                            position -= offset;
+                        }
+                        jsonPhrase.put("position", position);
                         jsonPhrase.put("expression", phrase.getExpression());
                         phraseArray.put(jsonPhrase);
                     }

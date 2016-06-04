@@ -49,3 +49,7 @@
     -webkit-background-size: cover;
     background-size: cover;
 }
+
+span.highlight {
+    background-color: rgb(206, 167, 24);
+}
