@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
-import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
@@ -58,7 +58,8 @@ public class ExploreNetworksController {
         model.addAttribute("jsonstring", json);
         model.addAttribute("networkid", "\"\"");
         model.addAttribute("project", project);
-
+        model.addAttribute("unixName", projectUnixName);
+        
         return "sites/networks/explore";
 
     }

@@ -7,7 +7,6 @@ import java.util.Properties;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
-import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
 
 /**
  * @author Nischal Samji
@@ -65,6 +63,20 @@ public class TextFileManager implements ITextFileManager {
         }
         return tfList;
 
+    }
+    
+    @Override
+    public ITextFile getTextFileByUri(String uri) throws QuadrigaStorageException {
+        int idxLastSegment = uri.lastIndexOf("/");
+        String id = uri.substring(idxLastSegment + 1);
+        TextFileDTO txtDto = txtFileDAO.getDTO(id);
+        if (txtDto == null) {
+            txtDto = txtFileDAO.getTextFileByUri(uri);
+        }
+        if (txtDto != null) {
+            return tfSMapper.getTextFile(txtDto);
+        }
+        return null;
     }
 
     @Override

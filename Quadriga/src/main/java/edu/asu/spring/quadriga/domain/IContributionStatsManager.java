@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.domain;
 import java.util.HashMap;
 import java.util.List;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
 import edu.asu.spring.quadriga.domain.network.INetwork;

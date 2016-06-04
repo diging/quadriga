@@ -172,11 +172,17 @@
 		</div>
 	</div>
 	<div id="c">
-		<div class="container">
+	    <div class="container">
+	        <div class="col-md-6" style="text-align: left;">
+            <c:set var="PR" value="${pullrequest}" />
+            Version: ${buildNumber}<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if> 
+            </div>
+		    <div class="col-md-6">
 			<p>
 				Design by <a href="http://www.blacktie.co">BLACKTIE.CO</a>
 			</p>
-
+			</div>
+			
 		</div>
 	</div>
 

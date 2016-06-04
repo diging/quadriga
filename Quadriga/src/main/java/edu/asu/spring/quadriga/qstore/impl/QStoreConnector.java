@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.qstore.impl;
 
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,9 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 
@@ -45,6 +51,10 @@ public class QStoreConnector implements IQStoreConnector {
     @Autowired
     @Qualifier("qStoreURL_Add")
     private String qStoreURL_Add;
+    
+    @Autowired
+    @Qualifier("qStoreURL_Search")
+    private String qStoreUrl_search;
 
     @Autowired
     @Qualifier("restTemplate")
@@ -61,6 +71,9 @@ public class QStoreConnector implements IQStoreConnector {
     @Autowired
     @Qualifier("jaxbMarshaller")
     private Jaxb2Marshaller jaxbMarshaller;
+    
+    @Autowired
+    private IRestVelocityFactory restVelocityFactory;
 
     @Autowired
     private Environment env;
@@ -87,6 +100,10 @@ public class QStoreConnector implements IQStoreConnector {
     @Override
     public String getQStoreGetPOSTURL() {
         return qStoreURL + qStoreURL_Get_POST;
+    }
+    
+    protected String getQStoreSearchUrl() {
+        return qStoreURL + qStoreUrl_search;
     }
     
     @PostConstruct
@@ -190,6 +207,45 @@ public class QStoreConnector implements IQStoreConnector {
         try {
             // Get complete network xml from QStore
             res = restTemplate.postForObject(getQStoreGetPOSTURL(), request, String.class);
+        } catch (Exception e) {
+            logger.error("QStore not accepting the xml, please check with the server logs.", e);
+            // res = e.getMessage();
+            return res;
+        }
+        return res;
+    }
+    
+    @Override
+    public String searchNodesByConcept(String conceptId) throws Exception {
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+        RestTemplate restTemplate = new RestTemplate();
+        List<MediaType> mediaTypes = new ArrayList<MediaType>();
+        mediaTypes.add(MediaType.APPLICATION_XML);
+        messageConverters.add(new FormHttpMessageConverter());
+        messageConverters.add(new StringHttpMessageConverter());
+        restTemplate.setMessageConverters(messageConverters);
+        // Add http header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_XML);
+        headers.setAccept(mediaTypes);
+        String authHeader = getAuthHeader();
+        headers.set("Authorization", authHeader);
+        
+        VelocityEngine engine = restVelocityFactory.getVelocityEngine();
+        engine.init();
+        Template template = engine.getTemplate("velocitytemplates/requestNodes.vm");
+        VelocityContext context = new VelocityContext();
+        context.put("conceptId", conceptId);
+        
+        StringWriter writer = new StringWriter();
+        template.merge(context, writer);
+
+        HttpEntity<String> request = new HttpEntity<String>(writer.toString(), headers);
+
+        String res = "";
+        try {
+            // Get complete network xml from QStore
+            res = restTemplate.postForObject(getQStoreSearchUrl(), request, String.class);
         } catch (Exception e) {
             logger.error("QStore not accepting the xml, please check with the server logs.", e);
             // res = e.getMessage();

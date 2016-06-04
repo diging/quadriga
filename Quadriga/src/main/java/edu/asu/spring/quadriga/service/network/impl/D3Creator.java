@@ -31,6 +31,9 @@ public class D3Creator implements ID3Creator {
             buffer.append("\"conceptId\":\"");
             buffer.append(node.getConceptId());
             buffer.append("\",");
+            buffer.append("\"conceptCpId\":\"");
+            buffer.append(node.getConceptIdShort());
+            buffer.append("\",");
             buffer.append("\"group\":");
             if (node instanceof PredicateNode) {
                 buffer.append("0");

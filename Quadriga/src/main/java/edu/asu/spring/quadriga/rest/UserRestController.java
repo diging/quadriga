@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -64,11 +65,12 @@ public class UserRestController {
 
         try {
             IUser userDetails = userManager.getUser(principal.getName());
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             List<IProfile> authFiles = profileManager.getUserProfiles(userDetails.getUserName());
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/userDetails.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("userdetails", userDetails);
             context.put("list", authFiles);
             StringWriter writer = new StringWriter();

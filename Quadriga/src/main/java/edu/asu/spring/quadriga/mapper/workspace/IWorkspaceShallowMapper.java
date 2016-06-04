@@ -8,7 +8,6 @@ import edu.asu.spring.quadriga.domain.proxy.WorkSpaceProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
