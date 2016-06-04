@@ -68,8 +68,8 @@ public class LoginController {
                 return o1.getUpdatedDate().compareTo(o2.getUpdatedDate());
             }
         });
-        
-        model.addAttribute("latestProjects", projectList.subList(0, 4));
+        int size = projectList.size() > 4 ? 4 : projectList.size();
+        model.addAttribute("latestProjects", projectList.subList(0, size));
 		return "login";
 
 	}
