@@ -13,6 +13,7 @@ import java.util.UUID;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -277,9 +278,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                 occur.setTextUri(event.getSourceReference());
                 textOccurances.put(event.getSourceReference(), occur);
                 ITextFile txtFile = txtManager.getTextFileByUri(occur.getTextUri());
-                occur.setContents(txtManager.retrieveTextFileContent(txtFile.getTextId()));
                 
                 if (txtFile != null && txtFile.getAccessibility() == access) {
+                    occur.setContents(txtManager.retrieveTextFileContent(txtFile.getTextId()));
                     occur.setTextId(txtFile.getTextId());
                     occurances.add(occur);
                 } else {
@@ -309,7 +310,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                     phrase.setExpression(tp.getExpression());
                     phrase.setFormat(tp.getFormat());
                     phrase.setFormattedPointer(tp.getFormattedPointer());
-                    phrase.setPosition(Integer.parseInt(tp.getPosition()));
+                    if (StringUtils.isNumeric(tp.getPosition())) {
+                        phrase.setPosition(Integer.parseInt(tp.getPosition()));
+                    }
                     if (!occur.getTextPhrases().contains(phrase)) {
                         occur.getTextPhrases().add(phrase);
                     }

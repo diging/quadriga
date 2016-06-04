@@ -58,7 +58,8 @@ public class ExploreNetworksController {
         model.addAttribute("jsonstring", json);
         model.addAttribute("networkid", "\"\"");
         model.addAttribute("project", project);
-
+        model.addAttribute("unixName", projectUnixName);
+        
         return "sites/networks/explore";
 
     }

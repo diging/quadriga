@@ -85,7 +85,7 @@ public class EventParser {
         if (event instanceof AppellationEventType) {
             List<TermType> terms = ((AppellationEventType) event).getTerms();
             if (terms.size() > 0) {
-                String conceptId = terms.get(0).getTermID();
+                String conceptId = terms.get(0).getTermInterpertation();
                 if (leafNodes.containsKey(conceptId)) {
                     leafNodes.get(conceptId).getStatementIds().add(statementId);
                 } else {
