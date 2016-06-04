@@ -11,8 +11,11 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jettison.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -43,6 +46,7 @@ import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -89,6 +93,8 @@ public class ConceptcollectionController {
         binder.setValidator(validator);
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(ConceptcollectionController.class);
+
     /**
      * This is used to fetch the user related concept collections from database.
      * 
@@ -131,7 +137,6 @@ public class ConceptcollectionController {
         } else {
             model.addAttribute("hasReadWrite", false);
         }
-
         model.addAttribute("concept", collection);
         conceptControllerManager.getCollaborators(collection);
         model.addAttribute("collectionid", collectionId);
@@ -160,19 +165,24 @@ public class ConceptcollectionController {
             RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
     public String conceptSearchHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req,
-            ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException {
+            ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
+        try {
+            ConceptpowerReply conReply = conceptControllerManager.search(req.getParameter("name"),
+                    req.getParameter("pos"));
 
-        ConceptpowerReply conReply = conceptControllerManager.search(req.getParameter("name"), req.getParameter("pos"));
-        if (conReply != null) {
-            List<ConceptEntry> lists = conReply.getConceptEntry();
-            lists.sort(new Comparator<ConceptEntry>() {
+            if (conReply != null) {
+                List<ConceptEntry> lists = conReply.getConceptEntry();
+                lists.sort(new Comparator<ConceptEntry>() {
 
-                @Override
-                public int compare(ConceptEntry o1, ConceptEntry o2) {
-                    return o1.getLemma().toLowerCase().compareTo(o2.getLemma().toLowerCase());
-                }
-            });
-            model.addAttribute("result", conReply.getConceptEntry());
+                    @Override
+                    public int compare(ConceptEntry o1, ConceptEntry o2) {
+                        return o1.getLemma().toLowerCase().compareTo(o2.getLemma().toLowerCase());
+                    }
+                });
+                model.addAttribute("result", conReply.getConceptEntry());
+            }
+        } catch (HttpMessageNotReadableException hex) {
+            throw new QuadrigaException(hex);
         }
         model.addAttribute("collectionid", collection_id);
         return "auth/searchitems";
