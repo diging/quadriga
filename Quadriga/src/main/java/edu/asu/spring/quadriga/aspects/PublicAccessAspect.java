@@ -17,12 +17,9 @@ import org.springframework.stereotype.Component;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
-import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
-import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.AnnotationMisconfigurationException;
-import edu.asu.spring.quadriga.rest.ConceptCollectionRestController;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**

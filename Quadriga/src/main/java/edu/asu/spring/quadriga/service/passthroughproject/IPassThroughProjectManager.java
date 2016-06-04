@@ -7,7 +7,6 @@ import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProject
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

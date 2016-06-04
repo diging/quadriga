@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.asu.spring.quadriga.aspects.ProjectAuthorization;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -201,11 +202,12 @@ public class UploadNetworkRestController {
          */
         StringWriter writer = new StringWriter();
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(request);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
 
             Template template = engine.getTemplate("velocitytemplates/passthroughproject.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(request).toUriString());
             context.put("projectId", project.getProjectId());
             context.put("workspaceId", workspaceId);
             context.put("projectName", xmlInfo.getName());

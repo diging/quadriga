@@ -65,6 +65,51 @@ function conceptDescription(d,path) {
 
 }
 
+function getTexts(d, path, unixName) {
+	var conceptDesc = "";
+	$.ajax({
+		//url : path + "/public/concept/lemma/" + d.name,
+		url : path + "/public/concept/texts?conceptId=" + encodeURIComponent(d.conceptCpId) + "&projectUnix=" + unixName,
+		// url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
+		type : "GET",
+		success : function(data) {
+			if (data == '') {
+				data = "No texts available."
+			} else {
+				parsedData = JSON.parse(data);
+				var projects = parsedData['projects'];
+				projects.forEach(function(element, index, array) {
+					conceptDesc += "<h5>" + element["text"] + "</h5>";
+					conceptDesc += "... " + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
+				});
+			}
+			conceptDesc = "<div>" + conceptDesc + "</div>";
+			$('#texts').html(conceptDesc);
+		},
+		error : function() {
+			// do nothing
+		}
+	});
+}
+
+function hightlight(text, phrases) {
+	var highlightedText = "";
+	var lastIdx = 0;
+	var idx = 0;
+	for (var i = 1; i < phrases.length; i++ ) {
+		var element = phrases[i];
+		idx = element["position"];
+		var length = element["expression"].length;
+		highlightedText += text.substring(lastIdx, idx);
+		highlightedText += '<span class="highlight">';
+		highlightedText += text.substring(idx, idx+length);
+		highlightedText += "</span>";
+		lastIdx = idx + length;		
+	}
+	highlightedText += text.substring(lastIdx);
+	return highlightedText;
+}
+
 function displayAllAnnotationsNew(networkId, path){
 	$.ajax({
 		url : path+"/auth/editing/getAllAnnotations/"+networkId,
