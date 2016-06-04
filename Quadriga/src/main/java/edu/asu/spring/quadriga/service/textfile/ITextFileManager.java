@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
+import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -41,5 +42,7 @@ public interface ITextFileManager {
      * @throws FileStorageException 
      */
     String retrieveTextFileContent(String txtId) throws FileStorageException;
+
+    public abstract ITextFile getTextFileByUri(String uri) throws QuadrigaStorageException;
 
 }

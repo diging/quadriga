@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 import org.codehaus.jettison.json.JSONException;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
@@ -331,6 +332,6 @@ public interface INetworkManager {
 
     public String storeNetworks(String xml) throws QStoreStorageException;
 
-    List<TextOccurance> getTextsForConceptId(String conceptId) throws Exception;
+    List<TextOccurance> getTextsForConceptId(String conceptId, ETextAccessibility access) throws Exception;
 	
 }

@@ -173,6 +173,14 @@ public class EventParser {
         }
         node.setId(event.getId());
         node.setConceptId(label.toString().trim());
+        String conceptId = node.getConceptId();
+        if (conceptId != null) {
+            int lastSlash = conceptId.lastIndexOf("/");
+            if (lastSlash > -1) {
+                node.setConceptIdShort(conceptId.substring(lastSlash + 1));
+            }
+        }
+        
         // set the source reference
         node.setSourceReference(event.getSourceReference());
 

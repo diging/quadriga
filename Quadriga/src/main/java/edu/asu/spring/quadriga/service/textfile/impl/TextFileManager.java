@@ -64,6 +64,20 @@ public class TextFileManager implements ITextFileManager {
         return tfList;
 
     }
+    
+    @Override
+    public ITextFile getTextFileByUri(String uri) throws QuadrigaStorageException {
+        int idxLastSegment = uri.lastIndexOf("/");
+        String id = uri.substring(idxLastSegment + 1);
+        TextFileDTO txtDto = txtFileDAO.getDTO(id);
+        if (txtDto == null) {
+            txtDto = txtFileDAO.getTextFileByUri(uri);
+        }
+        if (txtDto != null) {
+            return tfSMapper.getTextFile(txtDto);
+        }
+        return null;
+    }
 
     @Override
     public String retrieveTextFileContent(String txtId) throws FileStorageException {

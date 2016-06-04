@@ -65,6 +65,33 @@ function conceptDescription(d,path) {
 
 }
 
+function getTexts(d, path, unixName) {
+	var conceptDesc = "";
+	$.ajax({
+		//url : path + "/public/concept/lemma/" + d.name,
+		url : path + "/public/concept/texts?conceptId=" + encodeURIComponent(d.conceptCpId) + "&projectUnix=" + unixName,
+		// url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
+		type : "GET",
+		success : function(data) {
+			if (data == '') {
+				data = "No texts available."
+			} else {
+				parsedData = JSON.parse(data);
+				var projects = parsedData['projects'];
+				projects.forEach(function(element, index, array) {
+					conceptDesc += "<h5>" + element["text"] + "</h5>";
+					conceptDesc += "... " + element["textContent"] + "..." + "<br>";
+				});
+			}
+			conceptDesc = "<div>" + conceptDesc + "</div>";
+			$('#texts').html(conceptDesc);
+		},
+		error : function() {
+			// do nothing
+		}
+	});
+}
+
 function displayAllAnnotationsNew(networkId, path){
 	$.ajax({
 		url : path+"/auth/editing/getAllAnnotations/"+networkId,

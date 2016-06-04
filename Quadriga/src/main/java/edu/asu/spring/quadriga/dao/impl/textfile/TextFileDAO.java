@@ -42,8 +42,8 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
 
         List<TextFileDTO> tfDTO = null;
         try {
-            Query query = sessionFactory.getCurrentSession()
-                    .createQuery("from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "from TextFileDTO txtFiles where txtFiles.workspaceId =:wsId");
             query.setParameter("wsId", wsId);
             tfDTO = (List<TextFileDTO>) query.list();
         } catch (HibernateException e) {
@@ -52,6 +52,18 @@ public class TextFileDAO extends BaseDAO<TextFileDTO> implements ITextFileDAO {
         }
         return tfDTO;
 
+    }
+
+    @Override
+    public TextFileDTO getTextFileByUri(String uri) throws QuadrigaStorageException {
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "from TextFileDTO txtFiles where txtFiles.refId =:refId");
+            query.setParameter("refId", uri);
+            return (TextFileDTO) query.uniqueResult();
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
+        }
     }
 
     @Override

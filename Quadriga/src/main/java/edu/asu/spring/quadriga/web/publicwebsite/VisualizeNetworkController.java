@@ -65,6 +65,7 @@ public class VisualizeNetworkController {
         }
         model.addAttribute("project", project);
         model.addAttribute("network", network);
+        model.addAttribute("unixName", unixName);
         
         ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 

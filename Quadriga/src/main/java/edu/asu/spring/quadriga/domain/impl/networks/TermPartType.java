@@ -56,10 +56,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class TermPartType {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "formatted_pointer", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "normalization", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_date", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "format", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_place", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "internal_refId", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
@@ -73,6 +71,28 @@ public class TermPartType {
     
     @XmlElement(name = "position", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
     private String position;
+    
+    @XmlElement(name = "formatted_pointer", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String formattedPointer;
+    
+    public String getFormattedPointer() {
+        return formattedPointer;
+    }
+
+    public void setFormattedPointer(String formattedPointer) {
+        this.formattedPointer = formattedPointer;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    @XmlElement(name = "format", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String format;
 
     /**
      * Gets the value of the idOrCreatorOrCreationDate property.
