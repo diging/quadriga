@@ -13,7 +13,7 @@
 <meta name="keywords" content="" />
 
 <link
-	href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"
 	rel="stylesheet" />
 
 <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/jquery-ui.css" />
