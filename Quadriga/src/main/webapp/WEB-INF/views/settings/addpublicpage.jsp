@@ -102,9 +102,9 @@
 			<table style="width: 100%">
 
 				<tr>
-					<td style="width: 170px">Title *</td>
+					<td >Title *</td>
 					
-					<td style="width: 600px"><input path="title" size="60" 
+					<td ><input path="title" size="60" 
 						class="form-control" id="title1" value="${publicpageObject0.title}" />
 					<div id="title_err"></div></td>
 					
@@ -124,13 +124,13 @@
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td style="width: 1px"><input type="text" class="form-control" id="linkText1"
+                    <td ><input type="text" class="form-control" id="linkText1"
                         path="linkText"  value="${publicpageObject0.linkText}"><div id="linkText_err"></div></td>
                     
                 </tr>
 				<tr>
-					<td style="width: 170px">Order Preference *</td>
-					<td style="width: 1px"><input type="number" id="orderValue1"
+					<td >Order Preference *</td>
+					<td ><input type="number" id="orderValue1"
 						path="order" class="form-control" value="${publicpageObject0.order}">
 					<div id="order_err"></div></td>
 					
@@ -151,8 +151,8 @@
 			<table style="width: 100%">
 
 				<tr>
-					<td style="width: 170px">Title *</td>
-					<td style="width: 600px"><form:input path="title" size="60"
+					<td>Title *</td>
+					<td ><form:input path="title" size="60"
 							id="title2" class="form-control" value="${publicpageObject1.title}" />
 					<div id="title_err"></div></td>
 					
@@ -170,13 +170,13 @@
                  </tr>
                 <tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td style="width: 1px"><input id="linkText2" type="text" class="form-control"
+                    <td ><input id="linkText2" type="text" class="form-control"
                         path="linkText" value="${publicpageObject1.linkText}"/>
                     <div id="linkText_err"></div></td>
                 </tr>
 				<tr>
-					<td style="width: 170px">Order Preference *</td>
-					<td style="width: 1px"><input type="number" id="orderValue2"
+					<td >Order Preference *</td>
+					<td ><input type="number" id="orderValue2"
 						path="order" class="form-control" value="${publicpageObject1.order}" />
 					<div id="order_err"></div></td>
 					
@@ -195,8 +195,8 @@
 		<div class="publicpageform">
 			<table style="width: 100%">
 				<tr>
-					<td style="width: 170px">Title *</td>
-					<td style="width: 600px"><form:input path="title" size="60"
+					<td>Title *</td>
+					<td ><form:input path="title" size="60"
 							id="title3" class="form-control" value="${publicpageObject2.title}" />
 					<div id="title_err"></div>
 					</td>
@@ -215,14 +215,14 @@
                 </tr>
                 <tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td style="width: 1px"><input class="form-control" type="text" id="linkText3"
+                    <td ><input class="form-control" type="text" id="linkText3"
                         path="linkText" value="${publicpageObject2.linkText}">
                     <div id="linkText_err"></div></td>
                     
                 </tr>
 				<tr>
-					<td style="width: 170px">Order Preference *</td>
-					<td style="width: 1px"><input type="number" id="orderValue3"
+					<td>Order Preference *</td>
+					<td><input type="number" id="orderValue3"
 						path="order" class="form-control" value="${publicpageObject2.order}">
 					<div id="order_err"></div></td>
 					
