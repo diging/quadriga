@@ -96,7 +96,7 @@ function hightlight(text, phrases) {
 	var highlightedText = "";
 	var lastIdx = 0;
 	var idx = 0;
-	for (var i = 1; i < phrases.length; i++ ) {
+	for (var i = 0; i < phrases.length; i++ ) {
 		var element = phrases[i];
 		idx = element["position"];
 		var length = element["expression"].length;
