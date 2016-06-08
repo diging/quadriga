@@ -22,13 +22,11 @@
     </div>
     
     <div class="list-group">
-    <a class="list-group-item"
+    <a id = "mainPageTab" class = 'list-group-item'
 			  href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Main Page Settings</a>
    
-    <a class="list-group-item"
-    href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout"><i
-
-class="fa fa-info-circle"></i> About Page</a>
+    <a id = "aboutTab" class = 'list-group-item'
+    href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout"><i class="fa fa-info-circle"></i> About Page</a>
 </div>
   
 </div>

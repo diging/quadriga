@@ -6,6 +6,12 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script>
 //@ sourceURL=filename.js
+	
+	$(document).ready(function(){
+	$("#mainPageTab").attr('class','list-group-item');
+	$("#aboutTab").attr('class','list-group-item disabled');
+    });
+
 	$(function() {
 		$("#submit1").click(function(){performAction(this,1)});
 		$("#submit2").click(function(){performAction(this,2)});
