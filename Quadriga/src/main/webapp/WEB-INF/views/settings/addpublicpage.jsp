@@ -118,7 +118,12 @@
 				</tr>
 				<tr>
 				    <td style="vertical-align: top">Link to *</td>
-				    <td><form:select path="linkTo" class="linkTo" items="${linkTypes}" /></td>
+				    <td><select class="linkTo" path="linkTo" >
+						<c:forEach var="item" items="${linkTypes}">
+						<option value="${item.key}"  ${item.key == publicpageObject0.linkTo ? 'selected' : ''}>${item.value}</option>
+						</c:forEach> 
+					</select>
+					</td>
 				    <td><div id="linkTo_err"></div></td>
 				    <td></td>
 				</tr>
@@ -168,7 +173,12 @@
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link to *</td>
-                    <td><form:select path="linkTo" class="linkTo" items="${linkTypes}" /></td>
+                    <td><select class="linkTo" path="linkTo" >
+						<c:forEach var="item" items="${linkTypes}">
+						<option value="${item.key}"  ${item.key == publicpageObject1.linkTo ? 'selected' : ''}>${item.value}</option>
+						</c:forEach> 
+					</select> 
+				    </td>
                     <td><div id="linkTo_err"></div></td>
                     <td></td>
                 </tr>
@@ -216,7 +226,13 @@
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link to *</td>
-                    <td><form:select path="linkTo" class="linkTo" items="${linkTypes}" /></td>
+                    <td>
+                    <select class="linkTo" path="linkTo" >
+						<c:forEach var="item" items="${linkTypes}">
+						<option value="${item.key}"  ${item.key == publicpageObject2.linkTo ? 'selected' : ''}>${item.value}</option>
+						</c:forEach> 
+					</select> 
+				    </td>
                     <td><div id="linkTo_err"></div></td>
                     <td></td>
                 </tr>
