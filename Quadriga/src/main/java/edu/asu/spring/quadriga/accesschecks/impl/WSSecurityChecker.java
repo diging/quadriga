@@ -127,7 +127,7 @@ public class WSSecurityChecker implements IWSSecurityChecker
 			{
 				//check if the user is one of the collaborators
 				if(workspaceCollaborator.getCollaborator() != null){
-					if(workspaceCollaborator.getCollaborator().getUserObj().getUserName() == userName)
+					if(workspaceCollaborator.getCollaborator().getUserObj().getUserName().equals(userName))
 					{
 						collaboratorRoles = workspaceCollaborator.getCollaborator().getCollaboratorRoles();
 

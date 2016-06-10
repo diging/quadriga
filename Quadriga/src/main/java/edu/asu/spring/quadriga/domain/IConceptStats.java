@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.domain;
 
-import java.util.List;
 
 /**
  * Interface to implement stats of concept.

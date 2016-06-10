@@ -36,9 +36,10 @@
   </div>
   <div class="panel-body">
 	  <div id="projectDictionaries" style="margin-bottom: 10px;"></div>
-	  
+	  <c:if test="${owner=='1' || isProjectAdmin==true}">	  
 	  <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
 	  <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
+	  </c:if>
   </div>
 </div>
 
@@ -48,8 +49,10 @@
   </div>
   <div class="panel-body">
     <div id="projectConceptCollections"></div>
+    <c:if test="${owner=='1' || isProjectAdmin==true}">    		
     <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
     <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+    </c:if>
   </div>
 </div>
 
@@ -58,6 +61,6 @@ To go to the public site, click this link <a href="${pageContext.servletContext.
                 
 
 <hr>
-
+<c:if test="${owner=='1' || isProjectAdmin==true}">
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Public Page Settings</a>
-
+</c:if>

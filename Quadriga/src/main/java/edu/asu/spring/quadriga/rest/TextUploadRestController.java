@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
@@ -98,10 +99,11 @@ public class TextUploadRestController {
 
         VelocityEngine engine = null;
         try {
-            engine = restVelocityFactory.getVelocityEngine(request);
+            engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             Template template = engine.getTemplate("velocitytemplates/textfile.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(request).toUriString());
             context.put("textid", txtFile.getTextId());
             context.put("refid", txtFile.getRefId());
             context.put("filename", txtFile.getFileName());

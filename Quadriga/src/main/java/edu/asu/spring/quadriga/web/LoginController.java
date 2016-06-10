@@ -1,14 +1,20 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import edu.asu.spring.quadriga.aspects.annotations.NoAuthorizationCheck;
-import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -22,9 +28,11 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 public class LoginController {
 
 	@Autowired
-	IUserManager userManager;
-	IUser user;
-    
+	private IUserManager userManager;
+	
+	@Autowired
+	private IRetrieveProjectManager retrieveProjectManager;
+	
 	/**
 	 * A valid authenticated user is redirected to the home page.
 	 * 
@@ -47,11 +55,21 @@ public class LoginController {
 	 * User requests a login page
 	 * 
 	 * @return		Redirected to the login page
+	 * @throws QuadrigaStorageException 
 	 */
 	@NoAuthorizationCheck
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(ModelMap model) {
+	public String login(ModelMap model) throws QuadrigaStorageException {
+	    List<IProject> projectList = retrieveProjectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC.name());
+        Collections.sort(projectList, new Comparator<IProject>() {
 
+            @Override
+            public int compare(IProject o1, IProject o2) {
+                return o1.getUpdatedDate().compareTo(o2.getUpdatedDate());
+            }
+        });
+        int size = projectList.size() > 4 ? 4 : projectList.size();
+        model.addAttribute("latestProjects", projectList.subList(0, size));
 		return "login";
 
 	}

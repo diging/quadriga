@@ -1,8 +1,12 @@
 package edu.asu.spring.quadriga.aspects;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +15,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.AnnotationMisconfigurationException;
-import edu.asu.spring.quadriga.rest.ConceptCollectionRestController;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
@@ -27,7 +31,8 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  * or a collaborator on the project.
  * 
  * This aspect only applies to methods in the package 'edu.asu.spring.quadriga.web' that
- * are annotated with {@link CheckPublicAccess}.
+ * are annotated with {@link CheckPublicAccess}. The project parameter that should be checked for
+ * public access has to be annotated with {@link CheckAccess}.
  * 
  * The aspect has to be executed after the {@link InjectProjectAspect}. Its order is 100.
  * 
@@ -48,18 +53,37 @@ public class PublicAccessAspect {
     @Around("within(edu.asu.spring.quadriga.web..*) && @annotation(check)")
     public Object checkAccess(ProceedingJoinPoint joinPoint,
             CheckPublicAccess check) throws Throwable {
+        
+        // Get the Method signature and the arguments passed to the method.
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        Parameter[] paras = method.getParameters();
         Object[] args = joinPoint.getArgs();
-        int idxOfProject = check.projectIndex();
+        
+        int projectIdx = -1;
+        Object projectObj = null;
+        // Loop through all the parameters and get the indices of the parameters
+        // with annotations CheckAccess.
+        if (paras != null) {
 
-        if (idxOfProject < 1 || idxOfProject > args.length) {
-            throw new AnnotationMisconfigurationException("There are "
-                    + args.length + " paramters, and you are trying to get "
-                    + idxOfProject + ".");
+            for (int i = 0; i < paras.length; i++) {
+                Parameter p = paras[i];
+
+                if (p.getAnnotation(CheckAccess.class) != null) {
+                    projectIdx = i;
+                }
+            }
+
+            if (projectIdx == -1) {
+                throw new AnnotationMisconfigurationException("There is no parameter with a CheckAccess annotation.");
+            }
+            
+            projectObj = args[projectIdx];
         }
 
-        Object projectObj = args[idxOfProject-1];
 
-        if (!(projectObj instanceof IProject)) {
+
+        if (!(IProject.class.isAssignableFrom(projectObj.getClass()))) {
             throw new AnnotationMisconfigurationException(
                     "The parameter you are accessing is not a project.");
         }

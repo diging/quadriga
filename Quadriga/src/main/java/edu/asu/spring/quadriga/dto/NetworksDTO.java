@@ -68,6 +68,9 @@ public class NetworksDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    
+    private String externalUserId;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "networksDTO")
     private List<NetworkAssignedDTO> networksAssignedDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "networksDTO")
@@ -222,5 +225,13 @@ public class NetworksDTO implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public String getExternalUserId() {
+        return externalUserId;
+    }
+
+    public void setExternalUserId(String externalUserId) {
+        this.externalUserId = externalUserId;
     }
 }

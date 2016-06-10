@@ -62,6 +62,9 @@ public class PassThroughProjectMapper extends ProjectDTOMapper implements IPassT
     @Override
     @Transactional
     public IProject getProject(ProjectDTO projectDTO) throws QuadrigaStorageException {
+        if (projectDTO == null) {
+            return null;
+        }
         IPassThroughProject project = (IPassThroughProject) super.getProject(projectDTO);
         
         // external project details

@@ -65,4 +65,6 @@ public interface IPassThroughProjectManager {
     public abstract IProject retrieveOrCreateProject(XMLInfo projectInfo, IUser user) throws QuadrigaStorageException,
             NoSuchRoleException;
 
+    public abstract IProject getPassthroughProject(String externalProjectId, String client) throws QuadrigaStorageException;
+
 }

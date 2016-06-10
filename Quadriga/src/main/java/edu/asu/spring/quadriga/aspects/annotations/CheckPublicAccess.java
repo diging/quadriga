@@ -9,12 +9,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface CheckPublicAccess {
 
-    /**
-     * The projectIndex should point to the parameter that holds the 
-     * project that needs to be checked. To keep it consistent with
-     * {@link ElementAccessPolicy}, we'll start counting at 1.
-     * 
-     * @return
-     */
-    int projectIndex();
 }

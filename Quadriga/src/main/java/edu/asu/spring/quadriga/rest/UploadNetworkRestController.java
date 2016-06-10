@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.asu.spring.quadriga.aspects.ProjectAuthorization;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -44,7 +45,6 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
-import edu.asu.spring.quadriga.web.workbench.AddCollaboratorController;
 
 /**
  * 
@@ -189,7 +189,7 @@ public class UploadNetworkRestController {
             try {
                 String responseFromQStore = networkManager.storeNetworks(network);
                 networkId = networkManager.storeNetworkDetails(responseFromQStore, user, xmlInfo.getNetworkName(),
-                        workspaceId, INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO, INetworkStatus.APPROVED);
+                        workspaceId, INetworkManager.NEWNETWORK, "", INetworkManager.VERSION_ZERO, INetworkStatus.APPROVED, xmlInfo.getExternalUserId());
             } catch (JAXBException | QStoreStorageException e) {
                 String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
                 logger.error("Exception while storing netwokr in QStore.", e);
@@ -202,11 +202,12 @@ public class UploadNetworkRestController {
          */
         StringWriter writer = new StringWriter();
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(request);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
 
             Template template = engine.getTemplate("velocitytemplates/passthroughproject.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(request).toUriString());
             context.put("projectId", project.getProjectId());
             context.put("workspaceId", workspaceId);
             context.put("projectName", xmlInfo.getName());

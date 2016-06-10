@@ -52,10 +52,12 @@
   </div>
   <div class="panel-body">
       <div id="workspaceDictionaries" style="margin-bottom: 10px;"></div>
+       <c:if test="${owner=='1' || wsadmin=='1'}">
       <div>
         <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
 	    <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
 	  </div>
+	  </c:if>
   </div>
 </div>
 
@@ -65,19 +67,23 @@
   </div>
   <div class="panel-body">
     <div id="workspaceConceptCollections" style="margin-bottom: 10px;"></div>
-    <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
-    <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+    <c:if test="${owner=='1' || wsadmin=='1'}">
+    <div>
+    	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
+    	<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
+    </div>
+    </c:if>
   </div>
 </div>
 
 <div class="list-group">
-  <a data-toggle="modal" data-target="#deactivate-ws" class="list-group-item<c:if test="${isDeactivated == true }"> disabled</c:if>" <c:if test="${isDeactivated == true }">title="Workspace is already deactivated."</c:if>>
+  <a data-toggle="modal" data-target="<c:choose><c:when test="${isDeactivated == true }">#</c:when><c:otherwise>#deactivate-ws</c:otherwise></c:choose>" class="list-group-item<c:if test="${isDeactivated == true }"> disabled</c:if>" <c:if test="${isDeactivated == true }">title="Workspace is already deactivated."</c:if>>
     <i class="fa fa-toggle-off"></i> Deactivate Workspace
   </a>
-  <a data-toggle="modal" data-target="#activate-ws" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Workspace is currently active."</c:if>>
+  <a data-toggle="modal" data-target="<c:choose><c:when test="${isDeactivated == false }">#</c:when><c:otherwise>#activate-ws</c:otherwise></c:choose>" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Workspace is currently active."</c:if>>
     <i class="fa fa-toggle-on"></i> Activate Workspace
   </a>
-  <a data-toggle="modal" data-target="#delete-ws" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Only deactivated workspaces can be deleted."</c:if>>
+  <a data-toggle="modal" data-target="<c:choose><c:when test="${isDeactivated == false }">#</c:when><c:otherwise>#delete-ws</c:otherwise></c:choose>" class="list-group-item<c:if test="${isDeactivated == false }"> disabled</c:if>" <c:if test="${isDeactivated == false }">title="Only deactivated workspaces can be deleted."</c:if>>
     <i class="fa fa-ban"></i> Delete Workspace
   </a>
 </div>

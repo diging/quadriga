@@ -13,6 +13,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
@@ -26,6 +27,9 @@ public class ProjectAuthorization implements IAuthorization
 {	
 	@Autowired
 	private IRetrieveProjectManager projectManager;
+	
+	@Autowired
+	private IPassThroughProjectManager passThroughManager;
 	
 	@Autowired
 	private IProjectSecurityChecker projectSecurityManager;
@@ -55,6 +59,7 @@ public class ProjectAuthorization implements IAuthorization
 		
 		//fetch the details of the project
 		IProject project = projectManager.getProjectDetails(projectId);
+		
 		
 		projectOwner = project.getOwner().getUserName();
 		if(userName.equals(projectOwner))
@@ -94,8 +99,7 @@ public class ProjectAuthorization implements IAuthorization
 		return haveAccess;
 	}
 	
-	
-	   /**
+	/**
      * This checks the access permissions for the logged in user for the 
      * given list of project ids
      * @param : userName - logged in user

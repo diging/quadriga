@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.publicwebsite;
+ package edu.asu.spring.quadriga.web.publicwebsite;
 
 import java.security.Principal;
 
@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
-import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -51,17 +53,20 @@ public class VisualizeNetworkController {
      * @throws JAXBException
      *             JAXB exception while getting the JSON
      */
-    @CheckPublicAccess(projectIndex = 5)
+    @CheckPublicAccess
+    @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks/{networkId}", method = RequestMethod.GET)
     public String visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, ModelMap model, Principal principal,
-            @InjectProject IProject project) throws QuadrigaStorageException, JAXBException {
+            @CheckAccess @InjectProject IProject project) throws QuadrigaStorageException, JAXBException {
         INetwork network = networkmanager.getNetwork(networkId);
         if (network == null) {
-            return "auth/accessissue";
+            return "public/404";
         }
         model.addAttribute("project", project);
-
+        model.addAttribute("network", network);
+        model.addAttribute("unixName", unixName);
+        
         ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
 
         // test the transformed networks

@@ -385,13 +385,13 @@
 
 	<!-- archive/activate workspace pages -END -->
 	<definition name="auth/workbench/workspace/addcollaborators"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Add Collaborators" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/addcollaborators.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/deletecollaborators"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Delete Collaborators" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deletecollaborators.jsp" />
@@ -403,7 +403,7 @@
 			value="/WEB-INF/views/workspace/transferworkspaceowner.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/updatecollaborators"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Update Collaborators" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/updatecollaborators.jsp" />
@@ -412,16 +412,12 @@
 	<definition name="auth/workbench/project/adddictionaries"
 		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/adddictionary.jsp" />
 	</definition>
 	<definition name="auth/workbench/project/deletedictionaries"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/deletedictionaries.jsp" />
 	</definition>
@@ -445,20 +441,16 @@
 			value="/WEB-INF/views/project/conceptcollections.jsp" />
 	</definition>
 	<definition name="auth/workbench/project/addconceptcollections"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Project - Add Concept Collection" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/addconceptcollection.jsp" />
 	</definition>
 	<definition name="auth/workbench/project/deleteconceptcollections"
-		extends="base.definition.workbench.nav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Project - Add Concept Collection" />
-		<put-attribute name="left-navigation"
-			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/deleteconceptcollection.jsp" />
 	</definition>
@@ -700,6 +692,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/exceptions/accessissue.jsp" />
 	</definition>
+	<definition name="auth/404" extends="base.definition.nonav">
+        <put-attribute name="title" value="Quadriga - Not Found" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/exceptions/404.jsp" />
+    </definition>
 	<definition name="public/404" extends="base.definition.public">
 		<put-attribute name="title" value="Quadriga - Page Not Found" />
 		<put-attribute name="navigation" value="" />
@@ -722,12 +719,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/networks/networks.jsp" />
 	</definition>
-	<!-- <definition name="auth/networks/visualize" extends="base.definition.networks"> 
-		<put-attribute name="title" value="Quadriga Networks visualize" /> <put-attribute 
-		name="content" value="/WEB-INF/views/networks/networkvisual.jsp" /> </definition> -->
-	<!-- <definition name="auth/networks/networkerror" extends="base.definition.networks"> 
-		<put-attribute name="title" value="Quadriga Networks" /> <put-attribute name="content" 
-		value="/WEB-INF/views/networks/networkerror.jsp" /> </definition> -->
 	<!-- external website -->
 	<definition name="sites/website" extends="base.definition.public">
 		<put-attribute name="currentPage" value="home" />
@@ -750,12 +741,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/public/publicwebsiteabout.jsp" />
 	</definition>
-
-	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks"> 
-		<put-attribute name="title" value="Quadriga Networks visualize" /> <definition 
-		name="sites/networks/visualize" extends="base.definition.networks"> <put-attribute 
-		name="title" value="Quadriga Networks visualize" /> <put-attribute name="content" 
-		value="/WEB-INF/views/editing/networks.jsp" /> </definition> -->
 
 	<!-- transformation -->
 	<definition name="base.definition.transformation"  extends="base.definition">
@@ -798,10 +783,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/approvedrejectednetworks.jsp" />
 	</definition>
-	<!-- <definition name="auth/editing/visualize" extends="base.definition.editing"> 
-		<put-attribute name="title" value="Quadriga Networks visualize" /> <put-attribute 
-		name="content" value="/WEB-INF/views/editing/networkvisual.jsp" /> </definition> -->
-
+	
 	<definition name="auth/editing/networksAssginedToOtherUsers"
 		extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Assigned User" />
@@ -865,9 +847,9 @@
 		<put-attribute name="currentPage" value="networks" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
 		<put-attribute name="right-navigation"
-			value="/WEB-INF/views/navigation/nav-networkrightplane.jsp" />
+			value="/WEB-INF/views/public/nav/nav-networkrightplane.jsp" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/publicnetworkvisual.jsp" />
+			value="/WEB-INF/views/public/network.jsp" />
 	</definition>
 
 	<definition name="sites/project/statistics" extends="base.definition.public">
@@ -895,9 +877,9 @@
 		<put-attribute name="currentPage" value="exploregraph" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
 		<put-attribute name="right-navigation"
-			value="/WEB-INF/views/navigation/nav-networkrightplane.jsp" />
+			value="/WEB-INF/views/public/nav/nav-networkrightplane.jsp" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/publicnetworkvisual.jsp" />
+			value="/WEB-INF/views/public/network.jsp" />
 	</definition>
 
 	<definition name="sites/networks/searchednetwork" extends="base.definition.public.network">
@@ -906,7 +888,7 @@
 		<put-attribute name="right-navigation"
 			value="/WEB-INF/views/navigation/nav-networkrightsearchplane.jsp" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/publicnetworkvisual.jsp" />
+			value="/WEB-INF/views/public/network.jsp" />
 	</definition>
 
 	<definition name="base.definition.public.sites"

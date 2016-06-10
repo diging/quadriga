@@ -1,18 +1,18 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
-import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
-import edu.asu.spring.quadriga.qstore.IMarshallingService;
-import edu.asu.spring.quadriga.qstore.IQStoreConnector;
+import java.util.concurrent.Future;
+
+import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.JAXBException;
-
-import java.util.concurrent.Future;
+import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.qstore.IMarshallingService;
+import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 
 /**
  * Created by Vikranth on 4/12/2016.

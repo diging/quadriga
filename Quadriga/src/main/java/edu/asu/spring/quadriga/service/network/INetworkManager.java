@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.network;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -8,6 +7,7 @@ import javax.xml.bind.JAXBException;
 import org.codehaus.jettison.json.JSONException;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
@@ -15,14 +15,12 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventO
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.network.INetworkXML;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
-import edu.asu.spring.quadriga.exceptions.FileStorageException;
-import edu.asu.spring.quadriga.exceptions.NetworkXMLParseException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -257,7 +255,7 @@ public interface INetworkManager {
      *             JAXB exception for any XML to object unmarshalling.
 	 */
     public abstract String storeNetworkDetails(String xml, IUser user, String networkName, String workspaceId,
-            String uploadStatus, String networkId, int version, String networkStatus) throws JAXBException;
+            String uploadStatus, String networkId, int version, String networkStatus, String externalUserId) throws JAXBException;
 	
 	/**
 	 * This method should help in getting all the version of a {@link INetwork}
@@ -333,5 +331,7 @@ public interface INetworkManager {
     String getSourceReferenceFromElementEventsType(ElementEventsType elementEventsType);
 
     public String storeNetworks(String xml) throws QStoreStorageException;
+
+    List<TextOccurance> getTextsForConceptId(String conceptId, ETextAccessibility access) throws Exception;
 	
 }

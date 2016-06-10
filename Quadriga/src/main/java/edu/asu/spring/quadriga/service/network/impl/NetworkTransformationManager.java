@@ -1,24 +1,27 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
-import java.util.*;
-
-import edu.asu.spring.quadriga.domain.network.INetwork;
-import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
-import edu.asu.spring.quadriga.transform.Link;
-import edu.asu.spring.quadriga.transform.Node;
-import edu.asu.spring.quadriga.transform.PredicateNode;
-import edu.asu.spring.quadriga.web.network.INetworkStatus;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
+import edu.asu.spring.quadriga.transform.Link;
+import edu.asu.spring.quadriga.transform.Node;
+import edu.asu.spring.quadriga.transform.PredicateNode;
 
 @Service
 public class NetworkTransformationManager implements INetworkTransformationManager {

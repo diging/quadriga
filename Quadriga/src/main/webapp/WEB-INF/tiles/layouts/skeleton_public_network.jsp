@@ -82,7 +82,7 @@ list-style-type: none;}
 
 
 
-			<div  class="col-md-8" style="text-align:center">				
+			<div  class="col-md-9" style="text-align:center">				
 					<div class="content content=left">
 					<!-- Content -->
 					
@@ -91,7 +91,7 @@ list-style-type: none;}
 					<!-- /Content -->				
 			</div>
 			</div>
-			<div  class="col-md-4" style="text-align:center">
+			<div  class="col-md-3" style="text-align:center">
 					<!-- Sidebar -->
 					<!-- Recent Posts -->
 					<tiles:insertAttribute name="right-navigation" />
@@ -118,8 +118,6 @@ list-style-type: none;}
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	<!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
 	
-	<script
-		  src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkspublic.js"></script> 
 	<script 
 	      src="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 	

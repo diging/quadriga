@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
@@ -82,12 +81,14 @@ public class NetworkListController {
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
-			return "auth/accessissue";
+			return "auth/404";
 		}
 		ITransformedNetwork transformedNetwork= transformationManager.getTransformedNetwork(networkId);
 		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
+		model.addAttribute("network", network);
+		
 		String json = null;
 		if(transformedNetwork!=null){
 			json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
@@ -97,37 +98,4 @@ public class NetworkListController {
 		return "auth/networks/visualize";
 	}
 
-
-
-
-	/**
-	 * Get the network displayed on to JSP by passing JSON string and allow to add annotations 
-	 * @author Lohith Dwaraka
-	 * @param networkId
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws JAXBException
-	 * @throws JSONException 
-	 * @throws QStoreStorageException 
-	 */
-	@RequestMapping(value = "auth/editing/editnetworks/{networkId}", method = RequestMethod.GET)
-	public String visualizeAndEditNetworksByD3(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException, QStoreStorageException {
-		INetwork network = networkManager.getNetwork(networkId);
-		if(network==null){
-			return "auth/accessissue";
-		}
-		ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
-
-		String nwId = "\""+networkId+"\"";
-		model.addAttribute("networkid",nwId);
-		String json = null;
-		if(transformedNetwork!=null){
-		    json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-		}
-		model.addAttribute("jsonstring",json);
-		return "auth/editing/editnetworks";
-	}	
-	
 }

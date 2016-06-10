@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.exceptions;
 
-public class UserOwnsOrCollaboratesDeletionException extends Exception {
+public class UserOwnsOrCollaboratesDeletionException extends QuadrigaException {
 
     /**
      * 
@@ -9,12 +9,6 @@ public class UserOwnsOrCollaboratesDeletionException extends Exception {
 
     public UserOwnsOrCollaboratesDeletionException() {
         super();
-        // TODO Auto-generated constructor stub
-    }
-
-    public UserOwnsOrCollaboratesDeletionException(String message, Throwable cause, boolean enableSuppression,
-            boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
         // TODO Auto-generated constructor stub
     }
 

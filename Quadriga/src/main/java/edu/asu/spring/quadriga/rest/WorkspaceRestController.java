@@ -37,8 +37,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.QuadrigaWorkspaceDetailsReply;
@@ -97,14 +97,15 @@ public class WorkspaceRestController {
             Principal principal, HttpServletRequest req) throws RestException {
 
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             // will use in future list workspaces need to be modified
             String userId = principal.getName();
             List<IWorkSpace> workspaceList = wsManager.listWorkspace(project_id, userId);
 
             Template template = engine.getTemplate("velocitytemplates/workspaces.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("list", workspaceList);
 
             StringWriter writer = new StringWriter();
@@ -148,12 +149,13 @@ public class WorkspaceRestController {
             // List<IConceptCollection> ccList =
             // workspaceCCManager.listWorkspaceCC(workspaces_id, userId);
             // workspace = wsManager.getWorkspaceDetails(workspaces_id,userId);
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
 
             Template template = engine.getTemplate("velocitytemplates/workspacesdetails.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+           
             context.put("workspaceid", workspaces_id);
             // context.put("cclist", ccList);
             StringWriter writer = new StringWriter();

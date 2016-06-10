@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
-import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
@@ -40,11 +41,11 @@ public class ExploreNetworksController {
      * @throws JAXBException
      * @throws QuadrigaStorageException
      */
-    @CheckPublicAccess(projectIndex = 3)
+    @CheckPublicAccess
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks", method = RequestMethod.GET)
     public String visualizeAllNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, Model model,
-            @InjectProject IProject project) throws JAXBException, QuadrigaStorageException {
+            @CheckAccess @InjectProject IProject project) throws JAXBException, QuadrigaStorageException {
 
         ITransformedNetwork transformedNetwork = transformationManager
                 .getTransformedNetworkOfProject(project.getProjectId(), INetworkStatus.APPROVED);
@@ -57,7 +58,8 @@ public class ExploreNetworksController {
         model.addAttribute("jsonstring", json);
         model.addAttribute("networkid", "\"\"");
         model.addAttribute("project", project);
-
+        model.addAttribute("unixName", projectUnixName);
+        
         return "sites/networks/explore";
 
     }

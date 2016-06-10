@@ -137,6 +137,13 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         
         return null;
     }
+    
+    @Override
+    @Transactional
+    public IProject getPassthroughProject(String externalProjectId, String client) throws QuadrigaStorageException {
+        PassThroughProjectDTO projectDTO = projectDao.getExternalProject(externalProjectId, client);
+        return projectMapper.getProject(projectDTO);
+    }
 
     /**
      * {@inheritDoc}
@@ -200,8 +207,8 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         project.setClient(passThroughProjectInfo.getSender());
         project.setProjectAccess(EProjectAccessibility.PUBLIC);
         // Since we are not passing unix name in REST request, we are creating
-        // the unix name out of the project name
-        project.setUnixName(passThroughProjectInfo.getName().replace(" ", "-"));
+        // the unix name out of the external id
+        project.setUnixName(passThroughProjectInfo.getProjectId().replace(" ", "-"));
         return project;
     }
 

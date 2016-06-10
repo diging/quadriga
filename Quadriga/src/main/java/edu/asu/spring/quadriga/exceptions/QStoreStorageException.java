@@ -4,7 +4,7 @@ package edu.asu.spring.quadriga.exceptions;
  * This is an exception thrown when there is any QStore related retrieve issue.
  * @author Lohith Dwaraka
  */
-public class QStoreStorageException extends Exception {
+public class QStoreStorageException extends QuadrigaException {
 
 	
 	/**

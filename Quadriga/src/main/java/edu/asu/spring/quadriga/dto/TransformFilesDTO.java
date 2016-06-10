@@ -1,12 +1,11 @@
 package edu.asu.spring.quadriga.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * DTO for holding the metadata of transformation files
