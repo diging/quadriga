@@ -124,9 +124,15 @@
 				</tr>
 				<tr>
 				    <td style="vertical-align: top">Link to *</td>
-					<td><form:select path="linkTo" class="form-control" id="linkTo1" items="${linkTypes}" />
-				   <div id="linkTo_err"></div></td>
-				    
+				    <td><select class="linkTo" path="linkTo" id="linkTo1" >
+						<c:forEach var="item" items="${linkTypes}">
+						<option value="${item.key}"  ${item.key == publicpageObject0.linkTo ? 'selected' : ''}>${item.value}</option>
+						</c:forEach> 
+					</select>
+					</td>
+				    <td><div id="linkTo_err"></div></td>
+				    <td></td>
+
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link Text *</td>
@@ -171,9 +177,15 @@
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link to *</td>
-                    <td><form:select path="linkTo" id="linkTo2" class="form-control" items="${linkTypes}" />
-                    <div id="linkTo_err"></div></td>
-                 </tr>
+                    <td><select class="linkTo" path="linkTo" id="linkTo2" >
+						<c:forEach var="item" items="${linkTypes}">
+						<option value="${item.key}"  ${item.key == publicpageObject1.linkTo ? 'selected' : ''}>${item.value}</option>
+						</c:forEach> 
+					</select> 
+				    </td>
+                    <td><div id="linkTo_err"></div></td>
+                    <td></td>
+                </tr>
                 <tr>
                     <td style="vertical-align: top">Link Text *</td>
                     <td ><input id="linkText2" type="text" class="form-control"
@@ -215,9 +227,15 @@
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link to *</td>
-                    <td><form:select path="linkTo" class="form-control" id="linkTo3" items="${linkTypes}" />
-                    <div id="linkTo_err"></div></td>
-                    
+                    <td>
+                    <select class="linkTo" path="linkTo" id="linkTo3" >
+						<c:forEach var="item" items="${linkTypes}">
+						<option value="${item.key}"  ${item.key == publicpageObject2.linkTo ? 'selected' : ''}>${item.value}</option>
+						</c:forEach> 
+					</select> 
+				    </td>
+                    <td><div id="linkTo_err"></div></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td style="vertical-align: top">Link Text *</td>

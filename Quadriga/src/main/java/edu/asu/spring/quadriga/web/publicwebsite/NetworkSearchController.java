@@ -151,6 +151,7 @@ public class NetworkSearchController {
         model.addAttribute("project", project);
         model.addAttribute("searchNodeLabel", searchNodeLabel);
         model.addAttribute("description", lemma);
+        model.addAttribute("unixName", projectUnixName);
 
         return "sites/networks/searchednetwork";
     }
