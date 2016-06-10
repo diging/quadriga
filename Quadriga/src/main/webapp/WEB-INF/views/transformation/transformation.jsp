@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="java.lang.*"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
@@ -20,6 +21,7 @@
 
 	$(document).ready(function() {
 
+		
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
 		});
@@ -37,11 +39,19 @@
 
 			});
 		});
+		
+		$("#selectAllProjects").change(function(){
+			$("#selectAllTransformations").prop('checked', $(this).prop('checked'));
+			$("#selectAllTransformations").trigger("change");
+		});
 
-		$("#selectAllTransformations").click(function() {
+		
+		$("#selectAllTransformations").change(function() {
 			$(".transformationList").prop('checked', $(this).prop('checked'));
 		});
-	});
+	    
+		});
+	
 </script>
 
 <script type="text/javascript">

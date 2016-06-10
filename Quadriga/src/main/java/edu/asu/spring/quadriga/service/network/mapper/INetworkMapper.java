@@ -19,7 +19,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public interface INetworkMapper {
 
-    public INetwork getNetwork(String networkId) throws QuadrigaStorageException;
+    public INetwork getNetwork(NetworksDTO networksDTO) throws QuadrigaStorageException;
 
     public INetwork getNetworkShallowDetails(NetworksDTO networksDTO) throws QuadrigaStorageException;
 
@@ -33,7 +33,4 @@ public interface INetworkMapper {
 
     public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException;
 
-    public INetwork getNetworkFromDTO(NetworksDTO nwDTO);
-
-    public INetwork getDTOFromNetwork(INetwork network);
 }

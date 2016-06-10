@@ -44,10 +44,9 @@ public class NetworkMapper implements INetworkMapper{
     
     
     @Override
-    public INetwork getNetwork(String networkId) throws QuadrigaStorageException
+    public INetwork getNetwork(NetworksDTO networksDTO) throws QuadrigaStorageException
     {
         INetwork network = null;
-        NetworksDTO networksDTO = dbconnect.getNetworksDTO(networkId);
         if(networksDTO != null)
         {
             network = networkFactory.createNetworkObject();
@@ -65,7 +64,7 @@ public class NetworkMapper implements INetworkMapper{
             network.setUpdatedBy(networksDTO.getUpdatedby());
             network.setUpdatedDate(networksDTO.getUpdateddate());
             
-            List<Integer> version = dbconnect.getLatestVersionOfNetwork(networkId);
+            List<Integer> version = dbconnect.getLatestVersionOfNetwork(networksDTO.getNetworkid());
             if(version!=null && !version.isEmpty()){
                 network.setVersionNumber(version.get(0));
             }
@@ -139,22 +138,7 @@ public class NetworkMapper implements INetworkMapper{
         }
         return networkList;
     }
-    
-    public INetwork getNetworkFromDTO(NetworksDTO nwDTO){
-        INetwork network = new NetworkFactory().createNetworkObject();
-        network.setNetworkId(nwDTO.getNetworkid());
-        network.setCreatedBy(nwDTO.getCreatedby());
-        network.setCreatedDate(nwDTO.getCreateddate());
-        network.setNetworkName(nwDTO.getNetworkname());
-        network.setStatus(nwDTO.getStatus());
-        network.setUpdatedBy(nwDTO.getUpdatedby());
-        network.setUpdatedDate(nwDTO.getUpdateddate());
-        return network;
-    }
-    
-    public INetwork getDTOFromNetwork(INetwork network){
-        return null;
-    }
+   
     
     @Override
     public List<INetwork> getNetworksOfUserWithStatus(IUser user, String networkStatus) throws QuadrigaStorageException{
