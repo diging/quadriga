@@ -5,12 +5,6 @@
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script>
 
-$(document).ready(function(){
-	$("#mainPageTab").attr('class','list-group-item disabled');
-	$("#aboutTab").attr('class','list-group-item');
-});
-
-
 	tinymce
 			.init({
 				selector : '.editable',
