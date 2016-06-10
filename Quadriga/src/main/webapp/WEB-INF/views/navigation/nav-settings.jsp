@@ -8,27 +8,29 @@
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 
-
 <div>
-    <ul>
-        <li><a
-            href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><span
-                class="glyphicon glyphicon-circle-arrow-left"></span> Back to Project
-        </a></li>
-    </ul>
+    <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><span
+                class="glyphicon glyphicon-circle-arrow-left"></span> Back to Project</a>
 </div>
 
-<h2 class="major" href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/settings">
-	<span>Settings</span>
-</h2>
-<a
-    href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Main Page Settings</a>
+<br/>
+
+<div class="panel panel-default">
+  
+    <div class="panel-heading">
+    <h3 class="panel-title">Settings</h3>
+    </div>
+    
+    <div class="list-group">
+    <a id = "mainPageTab" class = 'list-group-item ${currentPage != "settings" ? "disabled" : ""}'
+			  href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Main Page Settings</a>
    
-<br>
-<a
-	href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout"><i
-	class="fa fa-info-circle"></i> About Page</a>
-<br>
-<a
+    <a id = "aboutTab" class = 'list-group-item ${currentPage != "editabout" ? "disabled" : ""}'
+    href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout"><i class="fa fa-info-circle"></i> About Page</a>
+</div>
+  
+</div>
+<%-- <a
     href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/statistics"><i
     class="fa fa-bar-chart"></i> Statistics Page</a>
+--%>

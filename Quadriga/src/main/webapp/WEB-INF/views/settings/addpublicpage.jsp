@@ -6,24 +6,26 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script>
 //@ sourceURL=filename.js
+	
+	
 	$(function() {
-		$("#submit1").click(function(){performAction(this)});
-		$("#submit2").click(function(){performAction(this)});
-		$("#submit3").click(function(){performAction(this)});
+		$("#submit1").click(function(){performAction(this,1)});
+		$("#submit2").click(function(){performAction(this,2)});
+		$("#submit3").click(function(){performAction(this,3)});
 	});
-    
+	
 	function setErrorMsg(obj, field, msg) {
 		$(obj).closest('div.publicpageform').find('#' + field + '_err').html(msg);
 	}
 
-	function performAction(obj) {
+	function performAction(obj,value) {
 		var data = {};
 		var publicpageid = $(obj).closest('div.publicpageform').find('.publicpageid').val();
-		var title = $(obj).closest('div.publicpageform').find('.titleValue').val();
-		var desc = $(obj).closest('div.publicpageform').find('.descValue').val();
-		var order = $(obj).closest('div.publicpageform').find('.orderValue').val();
-		var linkTo = $(obj).closest('div.publicpageform').find('.linkTo').val();
-		var linkText = $(obj).closest('div.publicpageform').find('.linkText').val();
+		var title = $(obj).closest('div.publicpageform').find('#title' + value).val();
+		var desc = $(obj).closest('div.publicpageform').find('#description' + value).val();
+		var order = $(obj).closest('div.publicpageform').find('#orderValue' + value).val();
+		var linkTo = $(obj).closest('div.publicpageform').find('#linkTo' + value).val();
+		var linkText = $(obj).closest('div.publicpageform').find('#linkText' + value).val();
 		
 		var mandatory = 0;
 		if (title.length < 1) {
@@ -78,7 +80,7 @@
 						data : JSON.stringify(data)
 					},
 					success : function(e) {
-						$(obj).closest('div.publicpageform').find('#success_message').html('Successfully Updated');
+						$(obj).closest('div.publicpageform').find('#success_message').html('<i class="fa fa-floppy-o" aria-hidden="true"></i>');
 					},
 					error : function(e) {
 						response = JSON.parse(e.responseText)
@@ -92,7 +94,7 @@
 	}
 </script>
 <article class="is-page-content">
-	<form:form commandName="publicpage" method="POST"
+	<form:form commandName="publicpage" method="POST" 
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
 		<header>
 			<h2>Editing Text Contents to be shown</h2>
@@ -102,23 +104,23 @@
 			<table style="width: 100%">
 
 				<tr>
-					<td style="width: 170px">Title *</td>
-					<td style="width: 400px"><input path="title" size="60"
-						class="titleValue" id="title1" value="${publicpageObject0.title}" /></td>
-					<td><div id="title_err"></div></td>
-					<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
+					<td >Title *</td>
+					
+					<td ><input path="title" size="60" 
+						class="form-control" id="title1" value="${publicpageObject0.title}" />
+					<div id="title_err"></div></td>
+					
 				</tr>
 				<tr>
 					<td style="vertical-align: top">Description *</td>
 					<td><textarea path="description" cols="60" rows="6"
-							id="description1" class="descValue">${publicpageObject0.description}</textarea></td>
-					<td><div id="desc_err"></div></td>
-					<td><form:errors path="description"
-							class="ui-state-error-text"></form:errors></td>
+							id="description1" class="form-control">${publicpageObject0.description}</textarea>
+					<div id="desc_err"></div></td>
+					
 				</tr>
 				<tr>
 				    <td style="vertical-align: top">Link to *</td>
-				    <td><select class="linkTo" path="linkTo" >
+				    <td><select class="linkTo" path="linkTo" id="linkTo1" >
 						<c:forEach var="item" items="${linkTypes}">
 						<option value="${item.key}"  ${item.key == publicpageObject0.linkTo ? 'selected' : ''}>${item.value}</option>
 						</c:forEach> 
@@ -126,25 +128,25 @@
 					</td>
 				    <td><div id="linkTo_err"></div></td>
 				    <td></td>
+
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td style="width: 1px"><input class="linkText" type="text"
-                        path="linkText"  value="${publicpageObject0.linkText}"></td>
-                    <td><div id="linkText_err"></div></td>
-                    <td></td>
+                    <td ><input type="text" class="form-control" id="linkText1"
+                        path="linkText"  value="${publicpageObject0.linkText}"><div id="linkText_err"></div></td>
+                    
                 </tr>
 				<tr>
-					<td style="width: 170px">Order Preference *</td>
-					<td style="width: 1px"><input type="number" id="order1"
-						path="order" class="orderValue" value="${publicpageObject0.order}"></td>
-					<td><div id="order_err"></div></td>
-					<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
+					<td >Order Preference *</td>
+					<td ><input type="number" id="orderValue1"
+						path="order" class="form-control" value="${publicpageObject0.order}">
+					<div id="order_err"></div></td>
+					
 				</tr>
 				<tr>
 					<td><input type="hidden" class="publicpageid"
 						value="${publicpageObject0.publicPageId}"><input
-						type="button" id="submit1" value="SAVE"></td>
+						type="button" id="submit1" class="btn btn-primary" value="Save"></td>
 					<td><div id="success_message"></div></td>
 				</tr>
 
@@ -157,23 +159,21 @@
 			<table style="width: 100%">
 
 				<tr>
-					<td style="width: 170px">Title *</td>
-					<td style="width: 400px"><form:input path="title" size="60"
-							id="title2" class="titleValue" value="${publicpageObject1.title}" /></td>
-					<td><div id="title_err"></div></td>
-					<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
+					<td>Title *</td>
+					<td ><form:input path="title" size="60"
+							id="title2" class="form-control" value="${publicpageObject1.title}" />
+					<div id="title_err"></div></td>
+					
 				</tr>
 				<tr>
 					<td style="vertical-align: top">Description *</td>
 					<td><textarea path="description" cols="60" rows="6"
-							id="description2" class="descValue">${publicpageObject1.description}</textarea></td>
-					<td><div id="desc_err"></div></td>
-					<td><form:errors path="description"
-							class="ui-state-error-text"></form:errors></td>
+							id="description2" class="form-control" >${publicpageObject1.description}</textarea>
+					<div id="desc_err"></div></td>
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link to *</td>
-                    <td><select class="linkTo" path="linkTo" >
+                    <td><select class="linkTo" path="linkTo" id="linkTo2" >
 						<c:forEach var="item" items="${linkTypes}">
 						<option value="${item.key}"  ${item.key == publicpageObject1.linkTo ? 'selected' : ''}>${item.value}</option>
 						</c:forEach> 
@@ -184,22 +184,21 @@
                 </tr>
                 <tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td style="width: 1px"><input class="linkText" type="text"
-                        path="linkText" value="${publicpageObject1.linkText}"></td>
-                    <td><div id="linkText_err"></div></td>
-                    <td></td>
+                    <td ><input id="linkText2" type="text" class="form-control"
+                        path="linkText" value="${publicpageObject1.linkText}"/>
+                    <div id="linkText_err"></div></td>
                 </tr>
 				<tr>
-					<td style="width: 170px">Order Preference *</td>
-					<td style="width: 1px"><input type="number" id="order2"
-						path="order" class="orderValue" value="${publicpageObject1.order}">
-					<td><div id="order_err"></div></td>
-					<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
+					<td >Order Preference *</td>
+					<td ><input type="number" id="orderValue2"
+						path="order" class="form-control" value="${publicpageObject1.order}" />
+					<div id="order_err"></div></td>
+					
 				</tr>
 				<tr>
 					<td><input type="hidden" class="publicpageid"
 						value="${publicpageObject1.publicPageId}"><input
-						type="button" value="SAVE" id="submit2"></td>
+						type="button" class="btn btn-primary" value="Save" id="submit2"></td>
 					<td><div id="success_message"></div></td>
 				</tr>
 			</table>
@@ -210,24 +209,22 @@
 		<div class="publicpageform">
 			<table style="width: 100%">
 				<tr>
-					<td style="width: 170px">Title *</td>
-					<td style="width: 400px"><form:input path="title" size="60"
-							id="title3" class="titleValue" value="${publicpageObject2.title}" /></td>
-					<td><div id="title_err"></div></td>
-					<td><form:errors path="title" class="ui-state-error-text"></form:errors></td>
+					<td>Title *</td>
+					<td ><form:input path="title" size="60"
+							id="title3" class="form-control" value="${publicpageObject2.title}" />
+					<div id="title_err"></div>
+					</td>
 				</tr>
 				<tr>
 					<td style="vertical-align: top">Description *</td>
 					<td><textarea path="description" cols="60" rows="6"
-							id="description3" class="descValue">${publicpageObject2.description}</textarea></td>
-					<td><div id="desc_err"></div></td>
-					<td><form:errors path="description"
-							class="ui-state-error-text"></form:errors></td>
+							id="description3" class="form-control">${publicpageObject2.description}</textarea>
+					<div id="desc_err"></div></td>
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link to *</td>
                     <td>
-                    <select class="linkTo" path="linkTo" >
+                    <select class="linkTo" path="linkTo" id="linkTo3" >
 						<c:forEach var="item" items="${linkTypes}">
 						<option value="${item.key}"  ${item.key == publicpageObject2.linkTo ? 'selected' : ''}>${item.value}</option>
 						</c:forEach> 
@@ -238,22 +235,22 @@
                 </tr>
                 <tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td style="width: 1px"><input class="linkText" type="text"
-                        path="linkText" value="${publicpageObject2.linkText}"></td>
-                    <td><div id="linkText_err"></div></td>
-                    <td></td>
+                    <td ><input class="form-control" type="text" id="linkText3"
+                        path="linkText" value="${publicpageObject2.linkText}">
+                    <div id="linkText_err"></div></td>
+                    
                 </tr>
 				<tr>
-					<td style="width: 170px">Order Preference *</td>
-					<td style="width: 1px"><input type="number" id="order3"
-						path="order" class="orderValue" value="${publicpageObject2.order}">
-					<td><div id="order_err"></div></td>
-					<td><form:errors path="order" class="ui-state-error-text"></form:errors></td>
+					<td>Order Preference *</td>
+					<td><input type="number" id="orderValue3"
+						path="order" class="form-control" value="${publicpageObject2.order}">
+					<div id="order_err"></div></td>
+					
 				</tr>
 				<tr>
 					<td><input type="hidden" class="publicpageid"
 						value="${publicpageObject2.publicPageId}"><input
-						type="button" value="SAVE" id="submit3"></td>
+						type="button" class="btn btn-primary" value="Save" id="submit3"></td>
 					<td><div id="success_message"></div></td>
 				</tr>
 			</table>
