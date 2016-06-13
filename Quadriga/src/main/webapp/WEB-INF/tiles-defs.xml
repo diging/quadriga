@@ -611,7 +611,6 @@
 	<definition name="auth/workbench/addpublicpage" extends="base.definition.workbench.nav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Add Public Page Settings" />
-		<put-attribute name="currentPage" value="settings" />	
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-settings.jsp" />
 		<put-attribute name="content"
