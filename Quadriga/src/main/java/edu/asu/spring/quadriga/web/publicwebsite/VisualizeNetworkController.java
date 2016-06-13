@@ -19,10 +19,10 @@ import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.network.impl.JsonCreator;
 
 @Controller
 public class VisualizeNetworkController {
@@ -31,7 +31,7 @@ public class VisualizeNetworkController {
     private INetworkTransformationManager transformationManager;
 
     @Autowired
-    private ID3Creator d3Creator;
+    private JsonCreator jsonCreator;
 
     @Autowired
     private INetworkManager networkmanager;
@@ -75,7 +75,7 @@ public class VisualizeNetworkController {
         model.addAttribute("networkid", nwId);
         String json = null;
         if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
         model.addAttribute("jsonstring", json);
         return "sites/networks/visualize";

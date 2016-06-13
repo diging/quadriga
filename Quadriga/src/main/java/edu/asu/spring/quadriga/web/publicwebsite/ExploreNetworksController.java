@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.network.impl.JsonCreator;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Controller
@@ -28,7 +29,8 @@ public class ExploreNetworksController {
     private INetworkTransformationManager transformationManager;
 
     @Autowired
-    private ID3Creator d3Creator;
+    private JsonCreator jsonCreator;
+
 
     /**
      * This method gives the visualization of all the networks in a project
@@ -52,7 +54,7 @@ public class ExploreNetworksController {
 
         String json = null;
         if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
 
         model.addAttribute("jsonstring", json);
