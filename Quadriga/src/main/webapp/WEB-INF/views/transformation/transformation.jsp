@@ -26,7 +26,7 @@
 			event.preventDefault();
 		});
 
-		$(".checkbox1 input[type='checkbox']").click(function() {
+		$(".checkbox1 input[type='checkbox']").change(function() {
 			status = $(this).is(':checked');
 			parent = $(this).parents('.panel');
 			ckBoxes = parent.find(':checkbox');
@@ -41,11 +41,10 @@
 		});
 		
 		$("#selectAllProjects").change(function(){
-			$("#selectAllTransformations").prop('checked', $(this).prop('checked'));
-			$("#selectAllTransformations").trigger("change");
+			$(".checkbox1 input[type='checkbox']").prop('checked', $(this).prop('checked'));
+			$(".checkbox1 input[type='checkbox']").trigger("change");
 		});
-
-		
+				
 		$("#selectAllTransformations").change(function() {
 			$(".transformationList").prop('checked', $(this).prop('checked'));
 		});
