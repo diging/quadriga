@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="java.lang.*"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
@@ -20,11 +21,12 @@
 
 	$(document).ready(function() {
 
+		
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
 		});
 
-		$(".checkbox1 input[type='checkbox']").click(function() {
+		$(".checkbox1 input[type='checkbox']").change(function() {
 			status = $(this).is(':checked');
 			parent = $(this).parents('.panel');
 			ckBoxes = parent.find(':checkbox');
@@ -37,11 +39,18 @@
 
 			});
 		});
-
-		$("#selectAllTransformations").click(function() {
+		
+		$("#selectAllProjects").change(function(){
+			$(".checkbox1 input[type='checkbox']").prop('checked', $(this).prop('checked'));
+			$(".checkbox1 input[type='checkbox']").trigger("change");
+		});
+				
+		$("#selectAllTransformations").change(function() {
 			$(".transformationList").prop('checked', $(this).prop('checked'));
 		});
-	});
+	    
+		});
+	
 </script>
 
 <script type="text/javascript">

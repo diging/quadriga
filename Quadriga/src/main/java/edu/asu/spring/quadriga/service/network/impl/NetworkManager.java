@@ -104,7 +104,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private IWorkspaceManager workspaceManager;
-    
+
     @Autowired
     private ITextFileManager txtManager;
 
@@ -208,7 +208,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return null;
     }
 
-    
+
     /**
      * 
      * {@inheritDoc}
@@ -253,32 +253,32 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         networkXML = networkXML.substring(networkXML.indexOf("element_events") - 1, networkXML.length());
         return networkXML;
     }
-    
+
     @Override
     public List<TextOccurance> getTextsForConceptId(String conceptId, ETextAccessibility access) throws Exception {
         String results = qStoreConnector.searchNodesByConcept(conceptId);
         ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
-        
+
         List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
-        
+
         List<TextOccurance> occurances = new ArrayList<TextOccurance>();
-        
+
         Map<String, TextOccurance> textOccurances = new HashMap<String, TextOccurance>();
-        
+
         for (CreationEvent event : eventList) {
             if (!(event instanceof AppellationEventType)) {
                 // we're only interested in appellation events here
                 continue;
             }
-            
+
             TextOccurance occur = textOccurances.get(event.getSourceReference());
-            
+
             if (occur == null) {
                 occur = new TextOccurance();
                 occur.setTextUri(event.getSourceReference());
                 textOccurances.put(event.getSourceReference(), occur);
                 ITextFile txtFile = txtManager.getTextFileByUri(occur.getTextUri());
-                
+
                 if (txtFile != null && txtFile.getAccessibility() == access) {
                     occur.setContents(txtManager.retrieveTextFileContent(txtFile.getTextId()));
                     occur.setTextId(txtFile.getTextId());
@@ -286,17 +286,17 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                 } else {
                     continue;
                 }
-                
+
                 occur.setProject(projectManager.getProjectDetails(txtFile.getProjectId()));
-                
+
             }
-            
-            
-            
-            
+
+
+
+
             // there should only be one
             List<TermType> terms = ((AppellationEventType)event).getTerms();
-            
+
             if (terms != null && terms.size() > 0) {
                 TermType term = terms.get(0);
                 PrintedRepresentationType printed = term.getPrintedRepresentation();
@@ -318,11 +318,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                     }
                 }
             }
-            
-            
+
+
         }
-        
-        
+
+
         return occurances;
     }
 
@@ -341,12 +341,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Transactional
     public INetwork getNetwork(String networkId) throws QuadrigaStorageException {
         INetwork network = null;
-        try {
-            network = networkmapper.getNetwork(networkId);
-        } catch (QuadrigaStorageException e) {
-            logger.error("Something went wrong in DB", e);
-        }
-        return network;
+        
+        NetworksDTO networkDto = dbConnect.getNetworksDTO(networkId);
+        return networkmapper.getNetwork(networkDto);
     }
 
     /**
@@ -406,7 +403,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         List<INetwork> networksList = new ArrayList<>();
         if (status == null) {
             for (NetworksDTO nwDTO : networksDTO) {                
-                networksList.add(networkmapper.getNetworkFromDTO(nwDTO));
+                networksList.add(networkmapper.getNetwork(nwDTO));
             }
 
             return networksList;
@@ -414,14 +411,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         for (NetworksDTO nwDTO : networksDTO) {
             if (nwDTO.getStatus().equals(status)) {
-                networksList.add(networkmapper.getNetworkFromDTO(nwDTO));
+                networksList.add(networkmapper.getNetwork(nwDTO));
             }
         }
 
-        if (networksList != null) {
-            return networksList;
-        }
-        return null;
+        return networksList;
     }
 
     @Override
@@ -995,7 +989,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         while (workspaceNetworkListIterator.hasNext()) {
             IWorkspaceNetwork workspaceNetwork = workspaceNetworkListIterator.next();
             workspaceNetwork.getNetwork()
-                    .setStatus(getNetworkStatusCode(workspaceNetwork.getNetwork().getStatus()) + "");
+            .setStatus(getNetworkStatusCode(workspaceNetwork.getNetwork().getStatus()) + "");
         }
 
         return workspaceNetworkList;
