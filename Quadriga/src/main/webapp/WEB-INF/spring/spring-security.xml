@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 	http://www.springframework.org/schema/security
-	http://www.springframework.org/schema/security/spring-security.xsd">
+	http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 	<http pattern="/rest/**" auto-config="true" use-expressions="true" create-session="stateless">
 		<intercept-url pattern="/rest/**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<http-basic/>		
@@ -32,14 +32,18 @@
 		<intercept-url pattern="/auth/rest/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/conceptcollections/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/conceptdetails/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
+		<intercept-url pattern="/auth/transformation/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/searchitems/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
-		<intercept-url pattern="/auth/dictionaries/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
+		<intercept-url pattern="/auth/dictionaries/add" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD')"/>
+        <intercept-url pattern="/auth/dictionaries/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/editing/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/networks/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/users/**" access="hasRole('ROLE_QUADRIGA_USER_ADMIN')"/>
 		<intercept-url pattern="/requests/*" access="hasRole('ROLE_QUADRIGA_NOACCOUNT')"/>
+		<intercept-url pattern="/checks/**" access="hasRole('ROLE_QUADRIGA_USER_ADMIN')"/>
 		<intercept-url pattern="/auth/profile/**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/sites/**" access="permitAll" />
+		<intercept-url pattern="/public/**" access="permitAll" />
 		<intercept-url pattern="/**" access="denyAll" />
 		
 		<form-login login-page="/login" default-target-url="/auth/welcome"
@@ -60,7 +64,7 @@
 	<authentication-manager alias="authenticationManager" erase-credentials="false">
 		<authentication-provider>
 		    <user-service>
-	       		<user name="${quadriga.admin.username}" password="${quadriga.admin.password}" authorities="ROLE_QUADRIGA_USER_ADMIN, ROLE_QUADRIGA_USER_STANDARD, ROLE_QUADRIGA_USER_COLLABORATOR" />
+	       		<user name="${quadriga.admin.username}" password="${quadriga.admin.password}" authorities="ROLE_QUADRIGA_USER_ADMIN" />
 	        </user-service>
    		</authentication-provider>
 		<authentication-provider ref="authProvider"></authentication-provider>

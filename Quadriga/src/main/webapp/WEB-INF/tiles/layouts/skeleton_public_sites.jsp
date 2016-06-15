@@ -13,6 +13,11 @@
 	rel='stylesheet' type='text/css'>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+<script
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
+
 <title><tiles:insertAttribute name="title" /></title>
 
 <!-- Bootstrap core CSS -->
@@ -108,7 +113,7 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="">Quadriga Sites</a>
+					<a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites">Quadriga Sites</a>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">

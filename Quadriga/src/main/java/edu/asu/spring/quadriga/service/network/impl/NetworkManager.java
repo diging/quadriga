@@ -4,7 +4,6 @@ import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import java.util.UUID;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -32,27 +32,24 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.dspace.IBitStream;
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
-import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
+import edu.asu.spring.quadriga.domain.impl.networks.PrintedRepresentationType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
+import edu.asu.spring.quadriga.domain.impl.networks.TermPartType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
@@ -61,13 +58,14 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
+import edu.asu.spring.quadriga.service.network.domain.impl.TextPhrase;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
+import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -85,7 +83,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private IQStoreConnector qStoreConnector;
-    
+
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
 
@@ -94,18 +92,21 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private INetworkMapper networkmapper;
-    
+
     @Autowired
-    private IProjectShallowMapper projectShallowMapper;
+    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private INetworkDAO dbConnect;
-    
+
     @Autowired
     private IMarshallingService marshallingService;
-    
+
     @Autowired
     private IWorkspaceManager workspaceManager;
+
+    @Autowired
+    private ITextFileManager txtManager;
 
     /**
      * 
@@ -206,36 +207,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         return null;
     }
-    
-    /**
-     * Check if we have bit streams in the network XML
-     * 
-     * @param uri
-     *            URI is for DSpace based URI of type {@link String}
-     * @param bitStreamList
-     *            {@link List} of {@link IBitStream} objects
-     * @return Returns boolean values true or false
-     * @author Lohith Dwaraka
-     */
-    public boolean hasBitStream(String uri, List<IWorkspaceBitStream> workspaceBitStreamList) {
-        if (uri.isEmpty()) {
-            logger.debug("true");
-            return true;
-        }
-        String fileId = uri = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
-        if (workspaceBitStreamList != null) {
-            for (IWorkspaceBitStream workspaceBitStream : workspaceBitStreamList) {
-
-                if (fileId.equals(workspaceBitStream.getBitStream().getId())) {
-                    logger.debug("true");
-                    return true;
-                }
-            }
-        }
-
-        logger.debug("false");
-        return false;
-    }
 
 
     /**
@@ -249,7 +220,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return Long.toString(l, Character.MAX_RADIX);
     }
 
-    
     @Override
     @Transactional
     public String getNetworkXML(String networkId) throws Exception {
@@ -260,7 +230,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         try {
             engine.init();
             template = engine.getTemplate("velocitytemplates/getnetworksfromqstore.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             List<INetworkNodeInfo> networkTopNodes = getNetworkTopNodes(networkId);
             context.put("statmentList", networkTopNodes);
             writer = new StringWriter();
@@ -283,7 +253,79 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         networkXML = networkXML.substring(networkXML.indexOf("element_events") - 1, networkXML.length());
         return networkXML;
     }
-    
+
+    @Override
+    public List<TextOccurance> getTextsForConceptId(String conceptId, ETextAccessibility access) throws Exception {
+        String results = qStoreConnector.searchNodesByConcept(conceptId);
+        ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
+
+        List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
+
+        List<TextOccurance> occurances = new ArrayList<TextOccurance>();
+
+        Map<String, TextOccurance> textOccurances = new HashMap<String, TextOccurance>();
+
+        for (CreationEvent event : eventList) {
+            if (!(event instanceof AppellationEventType)) {
+                // we're only interested in appellation events here
+                continue;
+            }
+
+            TextOccurance occur = textOccurances.get(event.getSourceReference());
+
+            if (occur == null) {
+                occur = new TextOccurance();
+                occur.setTextUri(event.getSourceReference());
+                textOccurances.put(event.getSourceReference(), occur);
+                ITextFile txtFile = txtManager.getTextFileByUri(occur.getTextUri());
+
+                if (txtFile != null && txtFile.getAccessibility() == access) {
+                    occur.setContents(txtManager.retrieveTextFileContent(txtFile.getTextId()));
+                    occur.setTextId(txtFile.getTextId());
+                    occurances.add(occur);
+                } else {
+                    continue;
+                }
+
+                occur.setProject(projectManager.getProjectDetails(txtFile.getProjectId()));
+
+            }
+
+
+
+
+            // there should only be one
+            List<TermType> terms = ((AppellationEventType)event).getTerms();
+
+            if (terms != null && terms.size() > 0) {
+                TermType term = terms.get(0);
+                PrintedRepresentationType printed = term.getPrintedRepresentation();
+                if (printed == null) {
+                    continue;
+                }
+                List<TermPartType> termparts = printed.getTermPart();
+                occur.setTextPhrases(new ArrayList<TextPhrase>());
+                for (TermPartType tp : termparts) {
+                    TextPhrase phrase = new TextPhrase();
+                    phrase.setExpression(tp.getExpression());
+                    phrase.setFormat(tp.getFormat());
+                    phrase.setFormattedPointer(tp.getFormattedPointer());
+                    if (StringUtils.isNumeric(tp.getPosition())) {
+                        phrase.setPosition(Integer.parseInt(tp.getPosition()));
+                    }
+                    if (!occur.getTextPhrases().contains(phrase)) {
+                        occur.getTextPhrases().add(phrase);
+                    }
+                }
+            }
+
+
+        }
+
+
+        return occurances;
+    }
+
     @Override
     public String storeNetworks(String xml) throws QStoreStorageException {
         return qStoreConnector.store(xml);
@@ -299,12 +341,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Transactional
     public INetwork getNetwork(String networkId) throws QuadrigaStorageException {
         INetwork network = null;
-        try {
-            network = networkmapper.getNetwork(networkId);
-        } catch (QuadrigaStorageException e) {
-            logger.error("Something went wrong in DB", e);
-        }
-        return network;
+        
+        NetworksDTO networkDto = dbConnect.getNetworksDTO(networkId);
+        return networkmapper.getNetwork(networkDto);
     }
 
     /**
@@ -357,15 +396,26 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      */
     @Override
     @Transactional
-    public List<INetwork> getNetworksInProject(String projectid) throws QuadrigaStorageException {
+    public List<INetwork> getNetworksInProject(String projectid, String status) throws QuadrigaStorageException {
 
-        // Fetch the list of networks in the project
-        List<INetwork> networksList = networkmapper.getNetworkListForProject(projectid);
+        List<NetworksDTO> networksDTO = dbConnect.getNetworkDTOList(projectid);
 
-        if (networksList != null) {
+        List<INetwork> networksList = new ArrayList<>();
+        if (status == null) {
+            for (NetworksDTO nwDTO : networksDTO) {                
+                networksList.add(networkmapper.getNetwork(nwDTO));
+            }
+
             return networksList;
         }
-        return null;
+
+        for (NetworksDTO nwDTO : networksDTO) {
+            if (nwDTO.getStatus().equals(status)) {
+                networksList.add(networkmapper.getNetwork(nwDTO));
+            }
+        }
+
+        return networksList;
     }
 
     @Override
@@ -474,7 +524,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         List<IProject> projectList = null;
         JSONObject core = new JSONObject();
         try {
-            projectList = projectShallowMapper.getProjectList(userName);
+            projectList = projectManager.getProjectList(userName);
             JSONArray dataArray = new JSONArray();
             if (projectList != null) {
                 for (IProject project : projectList) {
@@ -541,7 +591,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     @Transactional
     public String storeNetworkDetails(String xml, IUser user, String networkName, String workspaceId,
-            String uploadStatus, String networkId, int version) throws JAXBException {
+            String uploadStatus, String networkId, int version, String networkStatus, String externalUserId) throws JAXBException {
         ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
 
         // Get Workspace details.
@@ -554,20 +604,16 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             logger.error("User doesn't have access to workspace", e3);
         }
 
-        // Get DSpace of the workspace
-        List<IWorkspaceBitStream> workspaceBitStreamList = workspace.getWorkspaceBitStreams();
-
         NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
 
         // Below code reads the top level Appellation events
 
-        newNetworkDetailCache = parseNewNetworkStatement(elementEventType, workspaceBitStreamList,
-                newNetworkDetailCache);
+        newNetworkDetailCache = parseNewNetworkStatement(elementEventType, newNetworkDetailCache);
 
         // Add network into database
         if (uploadStatus == INetworkManager.NEWNETWORK) {
             try {
-                networkId = dbConnect.addNetworkRequest(networkName, user, workspaceId);
+                networkId = dbConnect.addNetwork(networkName, user, workspaceId, networkStatus, externalUserId);
             } catch (QuadrigaStorageException e1) {
                 logger.error("DB action error ", e1);
             }
@@ -578,7 +624,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         for (NetworkEntry entry : networkDetailsCache) {
             try {
                 String rowid = generateUniqueID();
-                dbConnect.addNetworkStatement(rowid, networkId, entry.getId(), entry.getType(), entry.isTop() ? 1 : 0, user, version);
+                dbConnect.addNetworkStatement(rowid, networkId, entry.getId(), entry.getType(), entry.isTop() ? 1 : 0,
+                        user, version);
             } catch (QuadrigaStorageException e1) {
                 logger.error("DB error while adding network statment", e1);
             }
@@ -601,11 +648,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *         the cache of network details
      */
     private NewNetworkDetailsCache parseNewNetworkStatement(ElementEventsType elementEventType,
-            List<IWorkspaceBitStream> workspaceBitStreamList, NewNetworkDetailsCache newNetworkDetailCache) {
+            NewNetworkDetailsCache newNetworkDetailCache) {
 
         List<CreationEvent> creationEventList = elementEventType.getRelationEventOrAppellationEvent();
         Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-        
+
         while (creationEventIterator.hasNext()) {
             CreationEvent creationEvent = creationEventIterator.next();
             // Cache Appellation Events
@@ -617,7 +664,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                 parseNewRelationEvent(newNetworkDetailCache, creationEvent);
             }
         }
-        
+
         return newNetworkDetailCache;
     }
 
@@ -639,28 +686,22 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private NetworkEntry parseNewAppellationEvent(NewNetworkDetailsCache newNetworkDetailCache,
             CreationEvent creationEvent) {
 
-        List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
-        Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
         NetworkEntry entry = new NetworkEntry();
-        
-        while (elementsIterator.hasNext()) {
-            JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
-            if (element.getName().toString().contains("id")) {
-                String id = element.getValue().toString();
-                if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                    entry = newNetworkDetailCache.getById(id);
-                } else {
-                    entry.setId(id);
-                    entry.setType(INetworkManager.APPELLATIONEVENT);
-                    entry.setTop(true);
-                    newNetworkDetailCache.addEntry(entry);
-                }
-            }
-            if (element.getName().toString().endsWith("}refId")) {
-                entry.setRefId(element.getValue().toString());
+
+        if (creationEvent.getId() != null && !creationEvent.getId().isEmpty()) {
+            String id = creationEvent.getId();
+            if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                entry = newNetworkDetailCache.getById(id);
+            } else {
+                entry.setId(id);
+                entry.setType(INetworkManager.APPELLATIONEVENT);
+                entry.setTop(true);
+                newNetworkDetailCache.addEntry(entry);
             }
         }
-
+        if (creationEvent.getRefId() != null && !creationEvent.getRefId().isEmpty()) {
+            entry.setRefId(creationEvent.getRefId());
+        }
         return entry;
     }
 
@@ -681,27 +722,21 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     private NetworkEntry parseNewRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,
             CreationEvent creationEvent) {
 
-        List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
-        Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
         NetworkEntry entry = new NetworkEntry();
-        
-        while (elementsIterator.hasNext()) {
-            JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
 
-            // get relation event id
-            if (element.getName().toString().contains("id")) {
-                String id = element.getValue().toString();
-                if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                    entry = newNetworkDetailCache.getById(id);
-                } else {
-                    entry.setId(id);
-                    entry.setType(INetworkManager.RELATIONEVENT);
-                    entry.setTop(true);
-                    newNetworkDetailCache.addEntry(entry);
-                }
+        // get relation event id
+        if (creationEvent.getId() != null && !creationEvent.getId().isEmpty()) {
+            String id = creationEvent.getId();
+            if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                entry = newNetworkDetailCache.getById(id);
+            } else {
+                entry.setId(id);
+                entry.setType(INetworkManager.RELATIONEVENT);
+                entry.setTop(true);
+                newNetworkDetailCache.addEntry(entry);
             }
-            
         }
+
         RelationEventType relationEventType = (RelationEventType) (creationEvent);
         try {
             // Go Recursively and check for Relation event within a relation
@@ -734,8 +769,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *             Throws Database storage exception
      */
     private NetworkEntry parseIntoRelationEventElement(RelationEventType relationEventType,
-            NewNetworkDetailsCache newNetworkDetailCache)
-                    throws QuadrigaStorageException {
+            NewNetworkDetailsCache newNetworkDetailCache) throws QuadrigaStorageException {
 
         List<?> creatorOrRelationList = relationEventType.getRelationCreatorOrRelation();
         Iterator<?> creatorOrRelationIterator = creatorOrRelationList.iterator();
@@ -805,45 +839,38 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *             Throws Database storage exception
      */
     private NetworkEntry parseNewSubjectObjectType(NewNetworkDetailsCache newNetworkDetailCache,
-            SubjectObjectType subjectOrObject)
-                    throws QuadrigaStorageException {
+            SubjectObjectType subjectOrObject) throws QuadrigaStorageException {
 
         // Check for relation event inside subject
         RelationEventType relationEventType = subjectOrObject.getRelationEvent();
         if (relationEventType == null) {
             // Check for Appellation event inside subject and add if any
             AppellationEventType appellationEventType = subjectOrObject.getAppellationEvent();
-            return parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache,
-                    appellationEventType);
+            return parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache, appellationEventType);
         } else {
-            List<JAXBElement<?>> elementsList = relationEventType.getIdOrCreatorOrCreationDate();
-            Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
             NetworkEntry entry = new NetworkEntry();
-            
-            while (elementsIterator.hasNext()) {
-                JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
 
-                if (element.getName().toString().contains("id")) {
-                    String id = element.getValue().toString();
-                    if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                        entry = newNetworkDetailCache.getById(id);
-                    } else {
-                        entry.setId(id);
-                        entry.setType(INetworkManager.RELATIONEVENT);
-                        entry.setTop(true);
-                        newNetworkDetailCache.addEntry(entry);
-                    }
-                }
-
-                if (element.getName().toString().endsWith("}refId")) {
-                    entry.setRefId(element.getValue().toString());
+            if (relationEventType.getId() != null && !relationEventType.getId().isEmpty()) {
+                String id = relationEventType.getId();
+                if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                    entry = newNetworkDetailCache.getById(id);
+                } else {
+                    entry.setId(id);
+                    entry.setType(INetworkManager.RELATIONEVENT);
+                    entry.setTop(true);
+                    newNetworkDetailCache.addEntry(entry);
                 }
             }
+
+            if (relationEventType.getRefId() != null && !relationEventType.getRefId().isEmpty()) {
+                entry.setRefId(relationEventType.getRefId());
+            }
+
             NetworkEntry nestedEntry = parseIntoRelationEventElement(relationEventType, newNetworkDetailCache);
             if (nestedEntry != null) {
                 nestedEntry.setTop(false);
             }
-            
+
             return entry;
         }
     }
@@ -862,8 +889,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      * @return Returns updated {@link NewNetworkDetailsCache} object which holds
      *         the cache of network details
      */
-    private NetworkEntry parseNewAppellationEventFoundInRelationEvent(
-            NewNetworkDetailsCache newNetworkDetailCache, AppellationEventType appellationEventType) {
+    private NetworkEntry parseNewAppellationEventFoundInRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,
+            AppellationEventType appellationEventType) {
 
         // Check for Appellation event inside predicate
         if (appellationEventType == null) {
@@ -871,35 +898,28 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             return null;
         } else {
             logger.debug("AE1 found object");
-            List<JAXBElement<?>> elementsList = appellationEventType.getIdOrCreatorOrCreationDate();
-            Iterator<JAXBElement<?>> elementsIterator = elementsList.iterator();
             NetworkEntry entry = new NetworkEntry();
-            
-            while (elementsIterator.hasNext()) {
-                JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
 
-                if (element.getName().toString().contains("id")) {
-                    String id = element.getValue().toString();
-                    if (newNetworkDetailCache.getAddedIds().contains(id)) {
-                        entry = newNetworkDetailCache.getById(id);
-                    } else {
-                        entry.setId(id);
-                        entry.setType(INetworkManager.APPELLATIONEVENT);
-                        entry.setTop(false);
-                        newNetworkDetailCache.addEntry(entry);
-                    }
-                }
-
-                if (element.getName().toString().endsWith("}refId")) {
-                    entry.setRefId(element.getValue().toString());
+            if (appellationEventType.getId() != null && !appellationEventType.getId().isEmpty()) {
+                String id = appellationEventType.getId();
+                if (newNetworkDetailCache.getAddedIds().contains(id)) {
+                    entry = newNetworkDetailCache.getById(id);
+                } else {
+                    entry.setId(id);
+                    entry.setType(INetworkManager.APPELLATIONEVENT);
+                    entry.setTop(false);
+                    newNetworkDetailCache.addEntry(entry);
                 }
             }
-            
+
+            if (appellationEventType.getRefId() != null && !appellationEventType.getRefId().isEmpty()) {
+                entry.setRefId(appellationEventType.getRefId());
+            }
+
             return entry;
         }
 
     }
-
 
     /**
      * 
@@ -969,7 +989,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         while (workspaceNetworkListIterator.hasNext()) {
             IWorkspaceNetwork workspaceNetwork = workspaceNetworkListIterator.next();
             workspaceNetwork.getNetwork()
-                    .setStatus(getNetworkStatusCode(workspaceNetwork.getNetwork().getStatus()) + "");
+            .setStatus(getNetworkStatusCode(workspaceNetwork.getNetwork().getStatus()) + "");
         }
 
         return workspaceNetworkList;
@@ -1042,7 +1062,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     public NetworksDTO getDTO(String id) {
         return getDTO(NetworksDTO.class, id);
     }
-    
+
     /**
      * This inner class would be used to cache the network details of newly
      * uploaded network. We use hold the cache until all the data in the
@@ -1052,11 +1072,11 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      *
      */
     class NewNetworkDetailsCache {
-        
+
         private boolean fileExists;
         private List<NetworkEntry> entries;
         private Map<String, NetworkEntry> addedIds;
-        
+
         public NewNetworkDetailsCache() {
             this.fileExists = true;
             entries = new ArrayList<NetworkManager.NetworkEntry>();
@@ -1070,32 +1090,32 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         public void setFileExists(boolean fileExists) {
             this.fileExists = fileExists;
         }
-        
+
         public void addEntry(NetworkEntry entry) {
             entries.add(entry);
             addedIds.put(entry.getId(), entry);
         }
-        
+
         public List<NetworkEntry> getEntries() {
             return entries;
         }
-        
+
         public Set<String> getAddedIds() {
             return addedIds.keySet();
         }
-        
+
         public NetworkEntry getById(String id) {
             return addedIds.get(id);
         }
 
     }
-    
+
     class NetworkEntry {
         private String refId;
         private String id;
         private String type;
         private boolean isTop;
-        
+
         public String getId() {
             return id;
         }

@@ -27,6 +27,10 @@ public class AccountApprovalValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "action", "account_approval.action.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "username", "account_approval.error");
         
+        if (account.getAction() == null) {
+            return;
+        }
+        
         if (account.getAction().equals("approve")) {
             ValidationUtils.rejectIfEmpty(err, "roles", "account_approval.account_roles.required"); 
         }

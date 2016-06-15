@@ -46,3 +46,28 @@
   top: 100%;
   left: 0;
 }
+
+.x.axis path {
+  display: none;
+}
+
+.area {
+  fill: steelblue;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}

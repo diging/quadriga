@@ -2,110 +2,123 @@ package edu.asu.spring.quadriga.aspects;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
 
 /**
- * This class intercepts all controller methods. If one of the parameters of a
- * method is annotated with {@link InjectProject}, it will find the parameter
- * annotated with {@link PathVariable} that has refers to the same variable in
- * the path. It will then try to find the project with the unix name provided in
- * the path variable. For example, the following method annotations:
+ * This class intercepts all controller methods. If one of the methods is
+ * annotated with {@link InjectProjectById} or {@link InjectProjectByName}, it
+ * will find the parameter annotated with {@link ProjectIdentifier}. Retrieves
+ * the Project Name/ Project Id in the variable and injects the projects into
+ * the variable annotated with {@link InjectProject} For example, the following
+ * method annotations:
  * 
  * <code>
- * public String showProject(@PathVariable("ProjectUnixName") String unixName, @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
+ * &#64;InjectProjectByName
+ * public String showProject( @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName, @InjectProject IProject project)
  * </code>
  * 
  * will result in a project object filled with the information of the project
- * with the unix name "unixName".
+ * with the unix name specified inthe unixName variable.
  * 
- * @author jdamerow
+ * @author Julia Damerow, Nischal Samji
  *
  */
-@Aspect
-@Component
-public class InjectProjectAspect {
-
+public abstract class InjectProjectAspect {
+    
     @Autowired
-    private IRetrieveProjectManager projectManager;
+    private IPassThroughProjectManager passThroughManager;
 
-    @Around("within(edu.asu.spring.quadriga.web..*)")
     public Object injectProject(ProceedingJoinPoint joinPoint) throws Throwable {
-        // get all the values we need
+
+        // Get the Method signature and the arguments passed to the method.
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         Parameter[] paras = method.getParameters();
 
         int projectParamIdx = -1;
-        Map<String, Integer> pathParamMap = new HashMap<String, Integer>();
-        InjectProject injectAnnotation = null;
+        int projVarIndex = -1;
 
         IProject project = null;
+
+        // Get all arguments that are passed to the calling method.
         Object[] arguments = joinPoint.getArgs();
 
+        // Loop through all the parameters and get the indices of the parameters
+        // with annotations InjectProject and ProjectIdentifier.
         if (paras != null) {
-            // iterate over parameters and find out where the unixname is
-            // injected
-            // and where the project should be injected
+
             for (int i = 0; i < paras.length; i++) {
                 Parameter p = paras[i];
 
-                // this tests if the paramters is annotated with InjectProject
                 if (p.getAnnotation(InjectProject.class) != null) {
-                    injectAnnotation = p.getAnnotation(InjectProject.class);
                     projectParamIdx = i;
                 }
-                // this gets all parameters annotated with PathVariable
-                if (p.getAnnotation(PathVariable.class) != null) {
-                    PathVariable pathVar = p.getAnnotation(PathVariable.class);
-                    pathParamMap.put(pathVar.value(), i);
+
+                if (p.getAnnotation(ProjectIdentifier.class) != null) {
+                    projVarIndex = i;
                 }
             }
 
-            // if we want to inject a project
-            if (injectAnnotation != null) {
-                // get the index of the parameter that holds the unix name from
-                // the path
-                Integer idxOfProjectId = pathParamMap.get(injectAnnotation.unixNameParameter());
-                if (idxOfProjectId != null) {
+            if (projectParamIdx != -1) {
 
-                    // get project by its unix name
-                    String projectUnixName = (String) arguments[idxOfProjectId];
-                    project = projectManager.getProjectDetailsByUnixName(projectUnixName);
+                // Get the project based on the project identifier.
+                String projectVar = (String) arguments[projVarIndex];
+                project = getProject(projectVar);
 
-                    if (project == null)
-                        return "404";
-
-                    // replace the annotated project parameter with the
-                    // retrieved project
-                    Object[] newArgs = new Object[arguments.length];
-                    for (int i = 0; i < newArgs.length; i++) {
-                        if (i == projectParamIdx) {
-                            newArgs[i] = project;
-                        } else {
-                            newArgs[i] = arguments[i];
-                        }
-                    }
-                    // lets replace the old arguments with the new ones
-                    arguments = newArgs;
+                // let's see if there is a project with an external id
+                if (project == null) {
+                    project = getProjectByExternalId(projectVar);
                 }
+                
+                // If there is no project, associated return an error page.
+                if (project == null) {
+                    return getErrorPage();
+                }
+
+                // Inject the project at the index
+                arguments[projectParamIdx] = project;
             }
 
         }
 
-        // continue with controller method
+        // Continue with the controller method.
         return joinPoint.proceed(arguments);
     }
+    
+    protected IProject getProjectByExternalId(String proj) throws QuadrigaStorageException {
+        String[] parts = proj.split("\\+");
+        // if not following convention, no projet is found
+        if (parts.length != 2) {
+            return null;
+        }
+        return passThroughManager.getPassthroughProject(parts[0], parts[1]);
+    }
+
+    /**
+     * This method returns the error page when there is no project associated
+     * for the given project variable.
+     * 
+     * @return Returns the error page's model as a string
+     */
+    public abstract String getErrorPage();
+
+    /**
+     * @param proj
+     *            Project Id/ Unix name to retrieve the associated project.
+     * @return Returns a project object associated with the project id/ unix
+     *         name.
+     * @throws QuadrigaStorageException
+     */
+    public abstract IProject getProject(String proj) throws QuadrigaStorageException;
 }

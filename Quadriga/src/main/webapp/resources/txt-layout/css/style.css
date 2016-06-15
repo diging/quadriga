@@ -1006,3 +1006,9 @@
 	padding-top: 0;
 	padding-bottom: 0;
 }
+
+.modal-body{
+	max-height:400px;
+	overflow-y:auto;
+	white-space: pre-line;
+}

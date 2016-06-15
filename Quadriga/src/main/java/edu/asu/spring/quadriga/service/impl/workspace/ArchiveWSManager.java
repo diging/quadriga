@@ -34,7 +34,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
 	public void archiveWorkspace(String workspaceIdList,String wsUser) {
 		List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
 		for (String id : wsIds) {
-    		WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(id.trim());
+    		WorkspaceDTO wsDto = workspaceDao.getDTO(id.trim());
     		wsDto.setIsarchived(true);
     		wsDto.setUpdatedby(wsUser);
     		wsDto.setUpdateddate(new Date());
@@ -55,7 +55,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
 	public void unArchiveWorkspace(String workspaceIdList,String wsUser) {
 	    List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
         for (String id : wsIds) {
-            WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(id.trim());
+            WorkspaceDTO wsDto = workspaceDao.getDTO(id.trim());
             wsDto.setIsarchived(false);
             wsDto.setUpdatedby(wsUser);
             wsDto.setUpdateddate(new Date());
@@ -76,7 +76,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
 	public void deactivateWorkspace(String workspaceIdList,String wsUser) {
 	    List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
         for (String id : wsIds) {
-            WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(id.trim());
+            WorkspaceDTO wsDto = workspaceDao.getDTO(id.trim());
             wsDto.setIsdeactivated(true);
             wsDto.setUpdatedby(wsUser);
             wsDto.setUpdateddate(new Date());
@@ -99,7 +99,7 @@ public class ArchiveWSManager extends BaseWSManager implements IArchiveWSManager
 	{
 	    List<String> wsIds = Arrays.asList(workspaceIdList.split(","));
         for (String id : wsIds) {
-            WorkspaceDTO wsDto = workspaceDao.getWorkspaceDTO(id.trim());
+            WorkspaceDTO wsDto = workspaceDao.getDTO(id.trim());
             wsDto.setIsdeactivated(false);
             wsDto.setUpdatedby(wsUser);
             wsDto.setUpdateddate(new Date());

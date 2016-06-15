@@ -111,7 +111,7 @@ public class DictionaryManager implements IDictionaryManager {
     }
 
     /**
-     * Gets all the dictionaries of the user
+     * Method to retrieve all dictionaries a user is the owner of.
      * 
      * @return Return to list dictionary to controller
      * @throws QuadrigaStorageException
@@ -238,25 +238,18 @@ public class DictionaryManager implements IDictionaryManager {
         dictDao.updateDictionaryItems(dictionaryId, termid, term, pos);
     }
 
+    
     /**
-     * Gets all the dictionary item of the dictionary of the user
-     * 
-     * @return Return to list of dictionary item to controller
-     */
-    /**
-     * Gets all the dictionary item of the dictionary of the user
+     * Retrieves the list of entries in a dictionary.
      * 
      * @return Return to list of dictionary item to controller
      */
     @Override
     @Transactional
-    public List<IDictionaryItems> getDictionariesItems(String dictionaryid, String ownerName)
+    public List<IDictionaryItems> getDictionaryItems(String dictionaryid)
             throws QuadrigaStorageException {
         DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryid);
-
-        if (!dictionaryDTO.getDictionaryowner().getUsername().equals(ownerName))
-            return null;
-
+        
         IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryDTO);
         return dictionary.getDictionaryItems();
     }

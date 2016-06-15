@@ -17,6 +17,7 @@ public class Node {
     private String label;
     private String description;
     private String conceptId;
+    private String conceptIdShort;
     private String sourceReference;
     
     public Node() {
@@ -62,5 +63,15 @@ public class Node {
 
     public void setSourceReference(String sourceReference) {
         this.sourceReference = sourceReference;
+    }
+
+
+    public String getConceptIdShort() {
+        return conceptIdShort;
+    }
+
+
+    public void setConceptIdShort(String conceptIdShort) {
+        this.conceptIdShort = conceptIdShort;
     }
 }

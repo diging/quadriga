@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -26,13 +29,12 @@ public class ListProjectConceptCollectionController {
     private IProjectConceptCollectionManager projectConceptCollectionManager;
 
     @RequestMapping(value = "auth/workbench/{projectid}/conceptcollections", method = RequestMethod.GET)
-    public String listProjectConceptCollection(@PathVariable("projectid") String projectid, Model model,
-            Principal principal) throws QuadrigaStorageException {
-        String userId = principal.getName();
+    @InjectProjectById
+    public String listProjectConceptCollection(@ProjectIdentifier @PathVariable("projectid") String projectid,
+            @InjectProject IProject project, Model model, Principal principal) throws QuadrigaStorageException {
         List<IProjectConceptCollection> projectConceptCollectionList = projectConceptCollectionManager
-                .listProjectConceptCollection(projectid, userId);
+                .listProjectConceptCollection(projectid);
         model.addAttribute("projectConceptCollectionList", projectConceptCollectionList);
-        IProject project = projectManager.getProjectDetails(projectid);
         model.addAttribute("project", project);
         model.addAttribute("projectid", projectid);
         return "auth/workbench/project/conceptcollections";

@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 
@@ -40,19 +41,20 @@ public class QuadrigaRestExceptionHandler {
         StringWriter sw = new StringWriter();
         int errorcode = ex.getErrorcode();
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             if (errorcode == 0)
                 errorcode = 500;
             res.setStatus(errorcode);
             Template template = engine.getTemplate("velocitytemplates/resterror.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("status", "ERROR");
             context.put("ErrorCode", errorcode);
             context.put("message", errorProperties.getProperty("error_message_" + errorcode));
             context.put("exception", ex.getMessage());
             template.merge(context, sw);
-            return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+            return new ResponseEntity<String>(sw.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (ResourceNotFoundException e) {
             logger.error("Exception:", e);
         } catch (ParseErrorException e) {
@@ -62,7 +64,7 @@ public class QuadrigaRestExceptionHandler {
         } catch (Exception e) {
             logger.error("Exception:", e);
         }
-        return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
+        return new ResponseEntity<String>(sw.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

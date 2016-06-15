@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -48,7 +49,7 @@ public class NetworkWorkspaceDTO implements Serializable{
     @ManyToOne(optional = false)
     private WorkspaceDTO workspaceDTO;
     @JoinColumn(name = "networkid", referencedColumnName = "networkid", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private NetworksDTO networksDTO;
     
     public NetworkWorkspaceDTO()
@@ -141,4 +142,5 @@ public class NetworkWorkspaceDTO implements Serializable{
         }
         return true;
     }
+
 }

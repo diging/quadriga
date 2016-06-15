@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;

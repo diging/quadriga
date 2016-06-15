@@ -1,0 +1,92 @@
+/*TOOLTIPS*/
+.tip {
+    color: #111;
+    width: 139px;
+    background-color: white;
+    border:1px solid #ccc;
+    -moz-box-shadow:#555 2px 2px 8px;
+    -webkit-box-shadow:#555 2px 2px 8px;
+    -o-box-shadow:#555 2px 2px 8px;
+    box-shadow:#555 2px 2px 8px;
+    opacity:0.9;
+    filter:alpha(opacity=90);
+    font-size:10px;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding:7px;
+}
+
+/* Network full screen*/
+#chart {
+	height: 100%;
+	width: 100%;
+	min-height: 500px;
+}
+
+#chart>svg {
+	min-height: 500px;
+}
+
+.project-box {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #DCDBDB;
+	padding: 5px;
+}
+
+.project-outside {
+    padding-left: 2px;	
+}
+
+.project-boxes {
+	margin-right: 5px;
+	margin-left: 5px;
+	margin-top: 20px;
+}
+
+#main .container {
+	padding-bottom: 20px;
+}
+
+.back-nav>p {
+	margin-bottom: 0px;
+}
+.back-nav>hr:nth-of-type(1) {
+    margin-bottom: 5px;
+}
+.back-nav>hr:nth-of-type(2) {
+    margin-top: 5px;
+}
+
+.error {
+	color: #A21111;
+	font-size: 13px;
+}
+
+.icons {
+	font-size:140%;
+	vertical-align: sub;
+}
+
+.table-white {
+	background: white;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+	background-color: #C0392B;
+    border-color: #C0392B;
+}
+
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited {
+	color: #D3D0CB;
+}
+
+.page-404 {
+    font-size: 120px;
+    font-weight: bold;
+    color: #7C91A7;
+    float: right;
+}
+
+span.highlight {
+	font-weight: bold;
+}

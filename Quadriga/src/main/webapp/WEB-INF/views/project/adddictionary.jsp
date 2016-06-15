@@ -1,9 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
@@ -31,13 +30,6 @@
 		}
 	}
 
-	$(document).ready(function() {
-		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false
-		});
-	});
 	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
@@ -77,28 +69,34 @@
 			}
 		});
 	});
-
-
 </script>
 
-<h2>Project: ${project.projectName}</h2>
-<hr />
+<h2>Add Dictionaries to Project: ${project.projectName}</h2>
+<div class="back-nav">
+	<hr>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Project</a>
+	</p>
+	<hr>
+</div>
 
-	<c:choose>
-		<c:when test="${not empty dictinarylist}">
+<c:choose>
+	<c:when test="${not empty dictinarylist}">
 
-			<form method="POST">
-				<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"
-	value='Okay'/>
-	<br />
-				 <input type="submit" value="Add Dictionary"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionaries'" />
+		<form method="POST">
+			<div class="panel panel-default" style="margin-top: 20px;">
+				<div class="panel-heading">Available Dictionaries</div>
+				<div class="panel-body">
+					<p>Select dictionaries to add and then click "Add
+						Dictionaries".</p>
 
-				<br /> <br />
-				<table style="width: 100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">
-					<!-- <table  class="dataTable" id="pagination1"> -->
+					<input type="submit" value="Add Dictionaries"
+						class="btn btn-primary"
+						onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionaries'" />
+				</div>
+				<table class="table">
 					<thead>
 						<tr>
 							<th align="left"><input type="checkbox" id="selectall">Select
@@ -111,23 +109,26 @@
 					<tbody>
 						<c:forEach var="dictionary" items="${dictinarylist}">
 							<tr>
-								<td width="20%"><input type="checkbox" class="selected" name="selected"
+								<td width="10%"><input type="checkbox" class="selected"
+									name="selected"
 									value='<c:out value="${dictionary.dictionaryId}"></c:out>' /></td>
-								<td width="30%" align="center"><input name="items"
+								<td width="30%"><input name="items"
 									type="hidden"
-									value="<c:out value="${dictionary.dictionaryName}"></c:out>" /> 
+									value="<c:out value="${dictionary.dictionaryName}"></c:out>" />
 									<c:out value="${dictionary.dictionaryName}"></c:out></td>
-								<td width="45%"  align="justify">
-								<c:out	value="${dictionary.description}"></c:out></td>
+								<td><c:out
+										value="${dictionary.description}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 
 				</table>
-			</form>
-		</c:when>
+			</div>
+		</form>
+	</c:when>
 
-		<c:otherwise>
-			<br><spring:message code="empty.dictionary" />
+	<c:otherwise>
+		<br>
+		<spring:message code="empty.dictionary" />
 	</c:otherwise>
-	</c:choose>
+</c:choose>

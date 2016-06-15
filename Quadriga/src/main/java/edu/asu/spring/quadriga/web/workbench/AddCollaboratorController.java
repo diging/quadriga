@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.HibernateSystemException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -49,13 +48,13 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class AddCollaboratorController {
 
     @Autowired
-    IRetrieveProjectManager retrieveprojectManager;
+    private IRetrieveProjectManager retrieveprojectManager;
 
     @Autowired
-    IProjectCollaboratorManager projectCollaboratorManager;
+    private IProjectCollaboratorManager projectCollaboratorManager;
 
     @Autowired
-    IUserManager usermanager;
+    private IUserManager usermanager;
 
     @Autowired
     private IUserFactory userFactory;
@@ -75,49 +74,43 @@ public class AddCollaboratorController {
     @Autowired
     private IProjectCollaboratorFactory projectCollaboratorFactory;
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(AddCollaboratorController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AddCollaboratorController.class);
 
     @InitBinder()
-    protected void initBinder(HttpServletRequest request,
-            ServletRequestDataBinder binder, WebDataBinder validateBinder)
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder)
             throws Exception {
 
         validateBinder.setValidator(collaboratorValidator);
 
-        binder.registerCustomEditor(IUser.class, "userObj",
-                new PropertyEditorSupport() {
-                    @Override
-                    public void setAsText(String text) {
+        binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
 
-                        IUser user;
-                        try {
-                            user = usermanager.getUser(text);
-                            setValue(user);
-                        } catch (QuadrigaStorageException e) {
-                            logger.error("collaborator validator UserObj ", e);
-                        }
+                IUser user;
+                try {
+                    user = usermanager.getUser(text);
+                    setValue(user);
+                } catch (QuadrigaStorageException e) {
+                    logger.error("collaborator validator UserObj ", e);
+                }
 
-                    }
-                });
-        binder.registerCustomEditor(List.class, "collaboratorRoles",
-                new PropertyEditorSupport() {
+            }
+        });
+        binder.registerCustomEditor(List.class, "collaboratorRoles", new PropertyEditorSupport() {
 
-                    @Override
-                    public void setAsText(String text) {
+            @Override
+            public void setAsText(String text) {
 
-                        String[] roleIds = text.split(",");
-                        List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-                        for (String roleId : roleIds) {
-                            IQuadrigaRole role = collaboratorRoleManager
-                                    .getQuadrigaRoleById(
-                                            IQuadrigaRoleManager.PROJECT_ROLES,
-                                            roleId.trim());
-                            roles.add(role);
-                        }
-                        setValue(roles);
-                    }
-                });
+                String[] roleIds = text.split(",");
+                List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
+                for (String roleId : roleIds) {
+                    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRoleById(
+                            IQuadrigaRoleManager.PROJECT_ROLES, roleId.trim());
+                    roles.add(role);
+                }
+                setValue(roles);
+            }
+        });
     }
 
     @ModelAttribute
@@ -132,11 +125,9 @@ public class AddCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN,
-            RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.GET)
-    public ModelAndView displayAddCollaborator(
-            @PathVariable("projectid") String projectid, Principal principal)
+    public ModelAndView displayAddCollaborator(@PathVariable("projectid") String projectid, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         ModelAndView model;
@@ -159,8 +150,7 @@ public class AddCollaboratorController {
         // retrieve the collaborators who are not associated with project
         // TODO: getProjectNonCollaborators() method has not been changed for
         // mapper
-        List<IUser> nonCollaboratingUsers = projectCollaboratorManager
-                .getUsersNotCollaborating(projectid);
+        List<IUser> nonCollaboratingUsers = projectCollaboratorManager.getUsersNotCollaborating(projectid);
 
         // remove the restricted user
         Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
@@ -178,8 +168,7 @@ public class AddCollaboratorController {
         }
         model.getModelMap().put("notCollaboratingUsers", nonCollaboratingUsers);
 
-        List<IProjectCollaborator> projectCollaborators = retrieveprojectManager
-                .getCollaboratingUsers(projectid);
+        List<IProjectCollaborator> projectCollaborators = retrieveprojectManager.getCollaboratingUsers(projectid);
         model.getModelMap().put("projectCollaborators", projectCollaborators);
 
         // mapping collaborator Roles to jsp and restricting ADMIN role for
@@ -187,11 +176,10 @@ public class AddCollaboratorController {
         List<IQuadrigaRole> collaboratorRoles = collaboratorRoleManager
                 .getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
 
-        Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoles
-                .iterator();
+        Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoles.iterator();
         while (collabRoleIterator.hasNext()) {
             IQuadrigaRole collabRole = collabRoleIterator.next();
-            if (collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN)) {
+            if (collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_OWNER)) {
                 collabRoleIterator.remove();
             }
         }
@@ -202,76 +190,62 @@ public class AddCollaboratorController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN,
-            RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.POST)
-    public ModelAndView addCollaborator(
-            @PathVariable("projectid") String projectid,
-            @Validated @ModelAttribute("collaborator") Collaborator collaborator,
-            BindingResult result, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+    public ModelAndView addCollaborator(@PathVariable("projectid") String projectid,
+            @Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
+            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
 
-        ModelAndView model = null;
-        model = new ModelAndView("auth/workbench/addcollaborators");
-        try {
-            // retrieve the project details
-            IProject project = retrieveprojectManager
-                    .getProjectDetails(projectid);
-            model.getModelMap().put("projectname", project.getProjectName());
-            model.getModelMap().put("projectdesc", project.getDescription());
-            model.getModelMap().put("myprojectid", projectid);
+        ModelAndView model = new ModelAndView("auth/workbench/addcollaborators");
 
-            if (result.hasErrors()) {
-                model.getModelMap().put("collaborator", collaborator);
-            } else {
-                projectCollaboratorManager.addCollaborator(collaborator,
-                        projectid, principal.getName());
-                model.getModelMap().put("collaborator",
-                        collaboratorFactory.createCollaborator());
-            }
+        // retrieve the project details
+        IProject project = retrieveprojectManager.getProjectDetails(projectid);
+        model.getModelMap().put("projectname", project.getProjectName());
+        model.getModelMap().put("projectdesc", project.getDescription());
+        model.getModelMap().put("myprojectid", projectid);
 
-            List<IUser> nonCollaboratingUsers = projectCollaboratorManager
-                    .getUsersNotCollaborating(projectid);
-            // remove the restricted user
-            Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
-            while (userIterator.hasNext()) {
-                // fetch the quadriga roles and eliminate the restricted user
-                IUser user = userIterator.next();
-                List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
-                for (IQuadrigaRole role : userQuadrigaRole) {
-                    if (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) {
-                        userIterator.remove();
-                        break;
-                    }
-                }
-            }
-            model.getModelMap().put("notCollaboratingUsers",
-                    nonCollaboratingUsers);
-
-            List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
-            collaboratorRoles = collaboratorRoleManager
-                    .getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
-            Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoles
-                    .iterator();
-            while (collabRoleIterator.hasNext()) {
-                IQuadrigaRole collabRole = collabRoleIterator.next();
-                if (collabRole.getId()
-                        .equals(RoleNames.ROLE_COLLABORATOR_ADMIN)) {
-                    collabRoleIterator.remove();
-                }
-            }
-            model.getModelMap().put("possibleCollaboratorRoles",
-                    collaboratorRoles);
-
-            // List<ICollaborator> collaborators =
-            // retrieveProjCollabManager.getProjectCollaborators(projectid);
-            List<IProjectCollaborator> projectCollaborators = retrieveprojectManager
-                    .getCollaboratingUsers(projectid);
-            model.getModelMap().put("projectCollaborators",
-                    projectCollaborators);
-        } catch (HibernateSystemException ex) {
-            throw new QuadrigaStorageException();
+        if (result.hasErrors()) {
+            model.getModelMap().put("collaborator", collaborator);
+            model.getModelMap().addAttribute("show_error_alert", true);
+            model.getModelMap().addAttribute("error_alert_msg", "Could not add collaborator.");
+        } else {
+            projectCollaboratorManager.addCollaborator(collaborator, projectid, principal.getName());
+            model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
+            model.getModelMap().addAttribute("show_success_alert", true);
+            model.getModelMap().addAttribute("success_alert_msg", "Collaborator successfully added.");
         }
+
+        List<IUser> nonCollaboratingUsers = projectCollaboratorManager.getUsersNotCollaborating(projectid);
+        // remove the restricted user
+        Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
+        while (userIterator.hasNext()) {
+            // fetch the quadriga roles and eliminate the restricted user
+            IUser user = userIterator.next();
+            List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+            for (IQuadrigaRole role : userQuadrigaRole) {
+                if (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) {
+                    userIterator.remove();
+                    break;
+                }
+            }
+        }
+        model.getModelMap().put("notCollaboratingUsers", nonCollaboratingUsers);
+
+        List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
+        collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
+        Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoles.iterator();
+        while (collabRoleIterator.hasNext()) {
+            IQuadrigaRole collabRole = collabRoleIterator.next();
+            if (collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_OWNER)) {
+                collabRoleIterator.remove();
+            }
+        }
+        model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
+
+        // List<ICollaborator> collaborators =
+        // retrieveProjCollabManager.getProjectCollaborators(projectid);
+        List<IProjectCollaborator> projectCollaborators = retrieveprojectManager.getCollaboratingUsers(projectid);
+        model.getModelMap().put("projectCollaborators", projectCollaborators);
 
         return model;
     }

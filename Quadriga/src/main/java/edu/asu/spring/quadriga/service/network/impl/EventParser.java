@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.xml.bind.JAXBException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,6 @@ import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -88,7 +85,7 @@ public class EventParser {
         if (event instanceof AppellationEventType) {
             List<TermType> terms = ((AppellationEventType) event).getTerms();
             if (terms.size() > 0) {
-                String conceptId = terms.get(0).getTermID();
+                String conceptId = terms.get(0).getTermInterpertation();
                 if (leafNodes.containsKey(conceptId)) {
                     leafNodes.get(conceptId).getStatementIds().add(statementId);
                 } else {
@@ -118,11 +115,11 @@ public class EventParser {
             }
 
             Node objectNode = parseSubjectOrObjectEvent(
-                    relation.getObjectType(relation).getAppellationEvent(),
+                    relation.getObjectType().getAppellationEvent(),
                     statementId, leafNodes, links);
             if (objectNode == null) {
                 objectNode = parseSubjectOrObjectEvent(
-                        relation.getObjectType(relation).getRelationEvent(),
+                        relation.getObjectType().getRelationEvent(),
                         statementId, leafNodes, links);
             }
 
@@ -174,8 +171,16 @@ public class EventParser {
             label.append(type.getTermInterpertation());
             label.append(" ");
         }
-        node.setId(event.getAppellationEventID());
+        node.setId(event.getId());
         node.setConceptId(label.toString().trim());
+        String conceptId = node.getConceptId();
+        if (conceptId != null) {
+            int lastSlash = conceptId.lastIndexOf("/");
+            if (lastSlash > -1) {
+                node.setConceptIdShort(conceptId.substring(lastSlash + 1));
+            }
+        }
+        
         // set the source reference
         node.setSourceReference(event.getSourceReference());
 

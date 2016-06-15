@@ -11,7 +11,6 @@ public interface IProjectFactory {
 	
 	public abstract IProject  createProjectObject();
 	
-	
 	public abstract IProject cloneProjectObject(IProject project);
 
 }

@@ -41,8 +41,7 @@ public class DeleteWorkspaceDictionaryController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
-            RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionary", method = RequestMethod.GET)
     public String deleteWorkspaceDictionary(@PathVariable("workspaceid") String workspaceId, Model model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
@@ -67,14 +66,11 @@ public class DeleteWorkspaceDictionaryController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 2, userRole = {
-            RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 2, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionaries", method = RequestMethod.POST)
     public String deleteWorkspaceDictionary(HttpServletRequest req, @PathVariable("workspaceid") String workspaceId,
-            Model model, RedirectAttributes attr, Principal principal)
-                    throws QuadrigaStorageException, QuadrigaAccessException {
-        String userId = principal.getName();
-
+            Model model, RedirectAttributes attr, Principal principal) throws QuadrigaStorageException,
+            QuadrigaAccessException {
         String[] values = req.getParameterValues("selected");
         if (values == null) {
             attr.addFlashAttribute("show_error_alert", true);
@@ -82,10 +78,10 @@ public class DeleteWorkspaceDictionaryController {
             return "redirect:/auth/workbench/workspace/" + workspaceId + "/deletedictionary";
         }
         for (int i = 0; i < values.length; i++) {
-            workspaceDictionaryManager.deleteWorkspaceDictionary(workspaceId, userId, values[i]);
+            workspaceDictionaryManager.deleteWorkspaceDictionary(workspaceId, values[i]);
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Dictionaries deleted from workspace successfully.");
-        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
+        return "redirect:/auth/workbench/workspace/" + workspaceId;
     }
 }

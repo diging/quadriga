@@ -43,15 +43,14 @@ public class AddWorkspaceConceptCollectionController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
-            RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.GET)
     public String addWorkspaceConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
         List<IConceptCollection> conceptCollectionList = workspaceCCManager
-                .getNonAssociatedWorkspaceConcepts(workspaceId, userId);
+                .getNonAssociatedWorkspaceConcepts(workspaceId);
         model.addAttribute("conceptCollectionList", conceptCollectionList);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
@@ -69,12 +68,11 @@ public class AddWorkspaceConceptCollectionController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 2, userRole = {
-            RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 2, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.POST)
-    public String addWorkspaceConceptCollection(HttpServletRequest req, @PathVariable("workspaceid") String workspaceId,
-            Model model, RedirectAttributes attr, Principal principal)
-                    throws QuadrigaStorageException, QuadrigaAccessException {
+    public String addWorkspaceConceptCollection(HttpServletRequest req,
+            @PathVariable("workspaceid") String workspaceId, Model model, RedirectAttributes attr, Principal principal)
+            throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
         String[] values = req.getParameterValues("selected");
@@ -88,7 +86,7 @@ public class AddWorkspaceConceptCollectionController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Concept Collection added to workspace successfully.");
-        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
+        return "redirect:/auth/workbench/workspace/" + workspaceId;
     }
 
 }

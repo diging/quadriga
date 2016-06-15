@@ -48,7 +48,7 @@ public interface RoleNames {
 	/**
      * Project role: owner of a project.
      */
-	public static final String ROLE_COLLABORATOR_ADMIN = "ADMIN";
+	public static final String ROLE_COLLABORATOR_OWNER = "ADMIN";
 	/**
      * Project role: admin of a project.
      */

@@ -18,14 +18,14 @@ import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
-import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 
-//show collaborators for a project
-//show non collaborators for a project
+
 @Service
+@Transactional
 public class ProjectCollaboratorManager extends CollaboratorManager<ProjectCollaboratorDTO, ProjectCollaboratorDTOPK, ProjectDTO, ProjectDAO> implements IProjectCollaboratorManager 
 {
 
@@ -53,7 +53,8 @@ public class ProjectCollaboratorManager extends CollaboratorManager<ProjectColla
 		List<IProjectCollaborator> projectCollaboratorList = null;
 		//retrieve the collaborators associated with project
 
-		IProject project =  projectDeepMapper.getProjectDetails(projectId);
+		ProjectDTO projectDto = projectDao.getDTO(projectId);
+		IProject project =  projectDeepMapper.getProject(projectDto);
 		if(project != null){
 			projectCollaboratorList = project.getProjectCollaborators();
 		}

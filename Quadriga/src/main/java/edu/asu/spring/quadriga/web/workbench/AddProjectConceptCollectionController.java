@@ -38,7 +38,7 @@ public class AddProjectConceptCollectionController {
     private IProjectConceptCollectionManager projectConceptCollectionManager;
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
     public String addProjectConceptCollection(@PathVariable("projectid") String projectid, Model model,
             Principal principal) throws QuadrigaAccessException, QuadrigaStorageException {
@@ -52,7 +52,7 @@ public class AddProjectConceptCollectionController {
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.POST)
     public String addProjectConceptCollection(HttpServletRequest req, @PathVariable("projectid") String projectid,
             Model model, Principal principal, RedirectAttributes attr)

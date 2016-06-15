@@ -139,7 +139,7 @@
 		    })
 		})
 	</script>
-				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
 				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/communities" style="text-decoration: underline;">Communities</a> »
 				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
 				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/community/collection/${collectionId}"  style="text-decoration: underline;"><c:out value="${collectionName}"></c:out></a> »

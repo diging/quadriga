@@ -38,15 +38,15 @@ public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> imple
             throw new QuadrigaStorageException("Invalid workspace id");
         }
 
-        ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession()
-                .get(ConceptCollectionDTO.class, CCId);
+        ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(
+                ConceptCollectionDTO.class, CCId);
         if (conceptCollection == null) {
             throw new QuadrigaStorageException("Invalid concept collection");
         }
 
         WorkspaceConceptcollectionDTOPK wrkspaceCCDTOKey = new WorkspaceConceptcollectionDTOPK(workspaceId, CCId);
-        WorkspaceConceptcollectionDTO wrkspaceCCDTO = (WorkspaceConceptcollectionDTO) sessionFactory.getCurrentSession()
-                .get(WorkspaceConceptcollectionDTO.class, wrkspaceCCDTOKey);
+        WorkspaceConceptcollectionDTO wrkspaceCCDTO = (WorkspaceConceptcollectionDTO) sessionFactory
+                .getCurrentSession().get(WorkspaceConceptcollectionDTO.class, wrkspaceCCDTOKey);
         if (wrkspaceCCDTO != null) {
             throw new QuadrigaStorageException("Workspace is already associated with the concept collection");
         }
@@ -86,20 +86,16 @@ public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> imple
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId, String userId)
+    public List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId)
             throws QuadrigaStorageException {
         List<IConceptCollection> conceptCollectionList = new ArrayList<IConceptCollection>();
         List<ConceptCollectionDTO> conceptCollectionDTOList = new ArrayList<ConceptCollectionDTO>();
 
-        WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-
-        if (!workspace.getWorkspaceowner().getUsername().equals(userId)) {
-            throw new QuadrigaStorageException();
-        }
-
-        Query query = sessionFactory.getCurrentSession()
-                .createQuery("FROM ConceptCollectionDTO cc WHERE cc.conceptCollectionid NOT IN("
-                        + "SELECT w.workspaceConceptcollectionDTOPK.conceptcollectionid FROM WorkspaceConceptcollectionDTO w WHERE w.workspaceConceptcollectionDTOPK.workspaceid = :workspaceid)");
+        Query query = sessionFactory
+                .getCurrentSession()
+                .createQuery(
+                        "FROM ConceptCollectionDTO cc WHERE cc.conceptCollectionid NOT IN("
+                                + "SELECT w.workspaceConceptcollectionDTOPK.conceptcollectionid FROM WorkspaceConceptcollectionDTO w WHERE w.workspaceConceptcollectionDTOPK.workspaceid = :workspaceid)");
         query.setParameter("workspaceid", workspaceId);
         conceptCollectionDTOList = query.list();
 
@@ -123,16 +119,16 @@ public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> imple
             throw new QuadrigaStorageException("workspaceid is invalid");
         }
 
-        ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession()
-                .get(ConceptCollectionDTO.class, CCId);
+        ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(
+                ConceptCollectionDTO.class, CCId);
 
         if (conceptCollection == null) {
             throw new QuadrigaStorageException("ConceptCollection id is invalid");
         }
 
         // retrieve the concept collection associated with the workspace
-        WorkspaceConceptcollectionDTOPK workspaceConceptCollectionKey = new WorkspaceConceptcollectionDTOPK(workspaceId,
-                CCId);
+        WorkspaceConceptcollectionDTOPK workspaceConceptCollectionKey = new WorkspaceConceptcollectionDTOPK(
+                workspaceId, CCId);
 
         WorkspaceConceptcollectionDTO workspaceConceptCollection = (WorkspaceConceptcollectionDTO) sessionFactory
                 .getCurrentSession().get(WorkspaceConceptcollectionDTO.class, workspaceConceptCollectionKey);

@@ -23,6 +23,11 @@
 			<value>/add</value>
 		</constructor-arg>
 	</bean>
+	<bean id="qStoreURL_Search" class="java.lang.String">
+        <constructor-arg>
+            <value>/search</value>
+        </constructor-arg>
+    </bean>
 	<bean id="qStoreURL_Get" class="java.lang.String">
 		<constructor-arg>
 			<value>/get?id=</value>
@@ -141,14 +146,6 @@
 	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="classesToBeBound">
 			<list>
-				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunities
-				</value>
-				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream
-				</value>
-				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection
-				</value>
-				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceItems
-				</value>
 				<value>edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList
 				</value>
 				<value>edu.asu.spring.quadriga.domain.impl.WordpowerReply

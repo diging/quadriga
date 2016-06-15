@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
@@ -36,38 +35,42 @@
 <div style="clear: right;"></div>
 
 <c:forEach items="${projects}" var="project">
-<div class="projectList">
-<i class="fa fa-th-list" ></i>
-<!-- <img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/project-new.png"> -->
+<div class="panel panel-default">
+<div class="panel-body">
+
+
 <c:choose>
 <c:when test="${accessibleProjects[project.projectId]}">
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}">${project.projectName}</a> 
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><i class="ion-planet" ></i> ${project.projectName}</a> 
 </c:when>
 <c:otherwise>
-${project.projectName} <span style="font-size: 12px"><span title="No access" class="glyphicon glyphicon-eye-close"></span></span>
+<i class="ion-planet" ></i> ${project.projectName} <span style="font-size: 12px"><span title="No access" class="glyphicon glyphicon-eye-close"></span></span>
 </c:otherwise>
 </c:choose>
-	<span class="project_owner">
+
+	<div class="project_owner pull-right" style="font-size: 14px;">
 	Owned by: ${project.owner.name}
-	</span>
-	<hr style="clear: right">
+	</div>
+	<hr />
 	${project.description}
 	
-	<div class="toggleBtn">
+	<div class="toggleBtn" style=" margin-top: 15px;">
 	<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/open.png"> <a>Show Workspaces</a>
 	
 	<div style="display: none" class="toggled">
 	<ul class="workspaceToggleList">
 	<c:forEach items="${project.projectWorkspaces}" var="ws">
-		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${ws.workspace.workspaceId}"><i class="fa fa-folder-open"></i> ${ws.workspace.workspaceName}</a>
+		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${ws.workspace.workspaceId}"><i class="ion-filing icons"></i> ${ws.workspace.workspaceName}</a>
 			<br>${ws.workspace.description}
 		</li>
 	</c:forEach>
 	<c:if test="${empty  project.projectWorkspaces}">
-		There are workspaces.
+		There are no workspaces.
 	</c:if>
 	</ul>
 	</div>
+	</div>
+
 	</div>
 </div>
 </c:forEach>

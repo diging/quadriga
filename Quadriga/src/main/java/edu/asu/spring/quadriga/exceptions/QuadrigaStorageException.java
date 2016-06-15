@@ -5,7 +5,7 @@ package edu.asu.spring.quadriga.exceptions;
  * @author Julia Damerow
  * @author Lohith Dwaraka
  */
-public class QuadrigaStorageException extends Exception {
+public class QuadrigaStorageException extends QuadrigaException {
 
 	
 	/**

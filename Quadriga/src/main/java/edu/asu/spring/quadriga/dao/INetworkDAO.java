@@ -22,7 +22,7 @@ public interface INetworkDAO {
 	 * @return					return success/error message
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addNetworkRequest(String networkName, IUser user, String workspaceid)
+	public abstract String addNetwork(String networkName, IUser user, String workspaceid, String networkStatus, String externalUserId)
 			throws QuadrigaStorageException;
 	
 	/**

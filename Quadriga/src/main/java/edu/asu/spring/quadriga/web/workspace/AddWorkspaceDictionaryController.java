@@ -49,8 +49,7 @@ public class AddWorkspaceDictionaryController {
     public String addWorkspaceDictionary(@PathVariable("workspaceid") String workspaceId, Model model,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
-        List<IDictionary> dictionaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(workspaceId,
-                userId);
+        List<IDictionary> dictionaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(workspaceId);
         model.addAttribute("dictinarylist", dictionaryList);
         model.addAttribute("workspaceId", workspaceId);
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
@@ -87,7 +86,7 @@ public class AddWorkspaceDictionaryController {
         }
         attr.addFlashAttribute("show_success_alert", true);
         attr.addFlashAttribute("success_alert_msg", "Dictionaries added to workspace successfully.");
-        return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
+        return "redirect:/auth/workbench/workspace/" + workspaceId;
     }
 
 }

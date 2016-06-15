@@ -5,6 +5,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
 
 /**
  * This interface provides the methods available to perform User realted 
@@ -14,7 +15,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Ram Kumar Kumaresan
  *
  */
-public interface IUserDAO 
+public interface IUserDAO extends IBaseDAO<QuadrigaUserDTO>
 {
 	
 	/**
@@ -38,7 +39,7 @@ public interface IUserDAO
 	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
-	public abstract int deleteUser(String deleteUser, String deactivatedRole) throws QuadrigaStorageException;
+	public abstract int deleteUser(String deleteUser, String deactivatedRole) throws QuadrigaStorageException, UserOwnsOrCollaboratesDeletionException ;
 
 
 	/**
@@ -97,11 +98,9 @@ public interface IUserDAO
 	 * This method returns the user object for the given username
 	 * @param userName
 	 * @return
-	 * @throws QuadrigaStorageException
 	 * @author kiran batna
 	 */
-	public abstract QuadrigaUserDTO getUserDTO(String userName)
-			throws QuadrigaStorageException;
+	public abstract QuadrigaUserDTO getUserDTO(String userName);
 
 	/**
 	 * This method inserts the quadiriga Admin user record into the daabase

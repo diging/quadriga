@@ -1,16 +1,8 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
-import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.ISearchResult;
-import edu.asu.spring.quadriga.profile.IService;
-import edu.asu.spring.quadriga.service.network.ID3Creator;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
-import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.transform.Node;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -22,14 +14,32 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.List;
+import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.profile.ISearchResult;
+import edu.asu.spring.quadriga.profile.IService;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
- * This controller searches for concept terms
- * and returns json as response and also a combined network of searched terms
+ * This controller searches for concept terms and returns json as response and
+ * also a combined network of searched terms
  *
  * @author Vikranth Doosa
  */
@@ -52,8 +62,8 @@ public class NetworkSearchController {
     @Autowired
     private IConceptpowerConnector conceptpowerConnector;
 
-    private static String defaultJsonErrorMsg = "{\"status\" : 500," +
-            " \"message\": \"Unable to get the search terms\"}";
+    private static String defaultJsonErrorMsg = "{\"status\" : 500,"
+            + " \"message\": \"Unable to get the search terms\"}";
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkSearchController.class);
 
@@ -63,14 +73,11 @@ public class NetworkSearchController {
      * @return view
      * @throws QuadrigaStorageException
      */
+    @CheckPublicAccess
+    @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.GET)
-    public String getSearch(@PathVariable("projectUnixName") String projectUnixName, Model model)
-            throws QuadrigaStorageException {
-
-        IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
-        if (project == null) {
-            return "forbidden";
-        }
+    public String getSearch(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, Model model,
+            @CheckAccess @InjectProject IProject project) throws QuadrigaStorageException {
 
         model.addAttribute("project", project);
         return "sites/search";
@@ -81,10 +88,12 @@ public class NetworkSearchController {
      *
      * @return json
      */
-    @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @CheckPublicAccess
+    @RequestMapping(value = "sites/{projectUnixName}/search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm) {
+    @InjectProjectByName
+    public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm,
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, @CheckAccess @InjectProject IProject project) {
         List<ISearchResult> searchResults = service.search(searchTerm);
         List<JSONObject> jsonResults = new ArrayList<JSONObject>();
 
@@ -110,19 +119,15 @@ public class NetworkSearchController {
         return new ResponseEntity<String>(defaultJsonErrorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @CheckPublicAccess
+    @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
-    public String getSearchTransformedNetwork(@PathVariable("projectUnixName") String projectUnixName,
-                                              @RequestParam("conceptId") String conceptId,
-                                              Model model)
-        throws QuadrigaStorageException {
+    public String getSearchTransformedNetwork(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
+            @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project, Model model)
+                    throws QuadrigaStorageException {
 
-        IProject project = projectManager.getProjectDetailsByUnixName(projectUnixName);
-        if (project == null) {
-            return "forbidden";
-        }
-
-        ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetwork(
-                project.getProjectId(), conceptId);
+        ITransformedNetwork transformedNetwork = transformationManager
+                .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
 
         String json = null;
         if (transformedNetwork != null) {
@@ -146,8 +151,8 @@ public class NetworkSearchController {
         model.addAttribute("project", project);
         model.addAttribute("searchNodeLabel", searchNodeLabel);
         model.addAttribute("description", lemma);
+        model.addAttribute("unixName", projectUnixName);
 
         return "sites/networks/searchednetwork";
     }
-
 }

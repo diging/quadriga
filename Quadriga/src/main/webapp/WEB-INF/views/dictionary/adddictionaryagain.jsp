@@ -46,7 +46,7 @@
 			<br />
 		</c:otherwise>
 	</c:choose>
-	<form:form method="POST" action="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">
+	<form:form method="POST" action="${pageContext.servletContext.contextPath}/auth/dictionaries/add">
 		<table>
 			<tr>
 				<td>Name:</td>

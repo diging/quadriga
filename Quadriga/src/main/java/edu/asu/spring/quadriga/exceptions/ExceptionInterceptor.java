@@ -24,22 +24,7 @@ public class ExceptionInterceptor {
 	public void toRuntimeException(Throwable t)
 			throws QuadrigaStorageException, RestException,
 			QuadrigaAccessException, QuadrigaException {
-		if (t instanceof QuadrigaAccessException) {
-			logger.error(t.getMessage(), t);
-			throw (QuadrigaAccessException) t;
-		} else if (t instanceof QuadrigaStorageException) {
-			logger.error(t.getMessage(), t);
-			throw (QuadrigaStorageException) t;
-		}  else if (t instanceof RestException) {
-			logger.error(t.getMessage(), t);
-			throw (RestException) t;
-		} else if ( t instanceof NullPointerException){
-			logger.error(t.getMessage(), t);
-			throw new QuadrigaException(t);
-		}
-		
-		else {
-			logger.error(t.getMessage(), t);
+		if (!(t instanceof QuadrigaException)) {
 			QuadrigaException se = new QuadrigaException(t.getMessage());
 			se.setStackTrace(t.getStackTrace());
 			throw se;

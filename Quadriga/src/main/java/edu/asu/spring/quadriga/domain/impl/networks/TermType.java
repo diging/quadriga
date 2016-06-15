@@ -15,6 +15,7 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
@@ -53,9 +54,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "termType", propOrder = {
-    "idOrCreatorOrCreationDate"
-})
+@XmlType(name = "termType")
 public class TermType {
 
     @XmlElementRefs({
@@ -64,15 +63,36 @@ public class TermType {
         @XmlElementRef(name = "referenced_terms", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "certain", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "normalized_representation", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "printed_representation", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_place", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "internal_refId", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "interpretation", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class)
     })
     protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
+    
+    @XmlElement(name = "printed_representation", namespace = "http://digitalhps.org/creationEvents-model", type = PrintedRepresentationType.class)
+    private PrintedRepresentationType printedRepresentation;
+    
+    @XmlElement(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String sourceReference;
+   
+
+    public String getSourceReference() {
+        return sourceReference;
+    }
+
+    public void setSourceReference(String sourceReference) {
+        this.sourceReference = sourceReference;
+    }
+
+    public PrintedRepresentationType getPrintedRepresentation() {
+        return printedRepresentation;
+    }
+
+    public void setPrintedRepresentation(PrintedRepresentationType printedRepresentation) {
+        this.printedRepresentation = printedRepresentation;
+    }
 
     /**
      * Returns the interperation object 

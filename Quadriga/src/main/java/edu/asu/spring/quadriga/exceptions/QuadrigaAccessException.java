@@ -4,7 +4,7 @@ package edu.asu.spring.quadriga.exceptions;
  * @author satyaswaroop Boddu
  *
  */
-public class QuadrigaAccessException extends Exception {
+public class QuadrigaAccessException extends QuadrigaException {
 
 	private static final long serialVersionUID = -6019469278891056730L;
 

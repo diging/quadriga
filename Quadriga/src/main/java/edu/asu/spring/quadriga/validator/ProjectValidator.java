@@ -12,7 +12,7 @@ public class ProjectValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
-        return arg0.isAssignableFrom(Project.class);
+        return Project.class.isAssignableFrom(arg0);
     }
 
     /**

@@ -16,6 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -34,25 +37,23 @@ public class DeleteProjectDictionaryController {
     private IProjectDictionaryManager projectDictionaryManager;
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
-    public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model, Principal principal)
+    @InjectProjectById
+    public String deleteProjectDictionary(@ProjectIdentifier @PathVariable("projectid") String projectid,@InjectProject IProject project, Model model, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        String userId = principal.getName();
-
-        List<IProjectDictionary> dicitonaryList = projectDictionaryManager.listProjectDictionary(projectid, userId);
+        List<IProjectDictionary> dicitonaryList = projectDictionaryManager.listProjectDictionary(projectid);
         model.addAttribute("dicitonaryList", dicitonaryList);
-        IProject project = projectManager.getProjectDetails(projectid);
         model.addAttribute("project", project);
         return "auth/workbench/project/deletedictionaries";
     }
 
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
-            RoleNames.ROLE_COLLABORATOR_ADMIN, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/deletedictionaries", method = RequestMethod.POST)
     public String deleteProjectDictionary(HttpServletRequest req, @PathVariable("projectid") String projectid,
-            Model model, Principal principal, RedirectAttributes attr)
-                    throws QuadrigaStorageException, QuadrigaAccessException {
+            Model model, Principal principal, RedirectAttributes attr) throws QuadrigaStorageException,
+            QuadrigaAccessException {
         String userId = principal.getName();
 
         String[] values = req.getParameterValues("selected");

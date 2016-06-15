@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/passthroughproject.xsd">
+<Quadriga:passthroughproject>
+	<Quadriga:projectId>$projectId</Quadriga:projectId>
+	<Quadriga:projectName>$projectName</Quadriga:projectName>
+	<Quadriga:workspaceId>$workspaceId</Quadriga:workspaceId>
+	<Quadriga:workspaceName>$workspaceName</Quadriga:workspaceName>
+	#if($networkId)
+	<Quadriga:networkId>$networkId</Quadriga:networkId>
+	#end
+</Quadriga:passthroughproject>
+</Quadriga:QuadrigaReply>

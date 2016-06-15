@@ -12,6 +12,7 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300'
 	rel='stylesheet' type='text/css'>
+<link href="${pageContext.servletContext.contextPath}/resources/public/css/base.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script src="${pageContext.servletContext.contextPath}/resources/js/d3.min.js" charset="utf-8"></script>
@@ -81,7 +82,7 @@ list-style-type: none;}
 
 
 
-			<div  class="col-md-8" style="text-align:center">				
+			<div  class="col-md-9" style="text-align:center">				
 					<div class="content content=left">
 					<!-- Content -->
 					
@@ -90,7 +91,7 @@ list-style-type: none;}
 					<!-- /Content -->				
 			</div>
 			</div>
-			<div  class="col-md-4" style="text-align:center">
+			<div  class="col-md-3" style="text-align:center">
 					<!-- Sidebar -->
 					<!-- Recent Posts -->
 					<tiles:insertAttribute name="right-navigation" />
@@ -117,9 +118,8 @@ list-style-type: none;}
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	<!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
 	
-	<script
-		  src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkspublic.js"></script> 
-	
+	<script 
+	      src="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 	
 </body>
 </html>

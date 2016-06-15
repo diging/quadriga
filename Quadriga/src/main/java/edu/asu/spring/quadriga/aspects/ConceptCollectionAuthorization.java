@@ -119,4 +119,11 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         return false;
 
     }
+
+    @Override
+    public boolean chkAuthorization(String userName, List<String> accessObjectId, String[] userRoles)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

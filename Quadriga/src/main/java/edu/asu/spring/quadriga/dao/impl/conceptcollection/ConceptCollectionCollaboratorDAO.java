@@ -1,9 +1,6 @@
 package edu.asu.spring.quadriga.dao.impl.conceptcollection;
 
 import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;

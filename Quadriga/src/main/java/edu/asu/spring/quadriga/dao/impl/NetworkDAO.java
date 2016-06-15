@@ -21,6 +21,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkspaceNetwork;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
@@ -36,8 +37,8 @@ import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -50,8 +51,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  * 
  */
 @Repository
-public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
-        IEditorDAO {
+public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEditorDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -60,7 +60,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
     private NetworkDTOMapper networkMapper;
 
     @Autowired
-    private ProjectDTOMapper projectMapper;
+    private IProjectDeepMapper projectMapper;
 
     @Autowired
     private WorkspaceDTOMapper workspaceMapper;
@@ -71,8 +71,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
     @Autowired
     private IListWSManager wsManager;
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(NetworkDAO.class);
+    private static final Logger logger = LoggerFactory.getLogger(NetworkDAO.class);
 
     /**
      * 
@@ -81,12 +80,10 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * Uses Hibernate to get {@link NetworkDTO} of a {@link INetwork} ID.
      */
     @Override
-    public NetworksDTO getNetworksDTO(String networkId)
-            throws QuadrigaStorageException {
+    public NetworksDTO getNetworksDTO(String networkId) throws QuadrigaStorageException {
         NetworksDTO networksDTO = null;
         try {
-            networksDTO = (NetworksDTO) sessionFactory.getCurrentSession().get(
-                    NetworksDTO.class, networkId);
+            networksDTO = (NetworksDTO) sessionFactory.getCurrentSession().get(NetworksDTO.class, networkId);
             return networksDTO;
         } catch (Exception e) {
             logger.error("getNetworksDTO error :", e);
@@ -114,22 +111,21 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public String addNetworkRequest(String networkName, IUser user,
-            String workspaceid) throws QuadrigaStorageException {
+    public String addNetwork(String networkName, IUser user, String workspaceid, String networkStatus, String externalUserId)
+            throws QuadrigaStorageException {
 
         if (networkName == null || user == null || workspaceid == null)
             throw new QuadrigaStorageException("Error in adding a network");
 
         String networkid = generateUniqueID();
 
-        NetworksDTO networksDTO = new NetworksDTO(networkid, networkName,
-                user.getUserName(), INetworkStatus.PENDING, user.getUserName(),
-                new Date(), user.getUserName(), new Date());
+        NetworksDTO networksDTO = new NetworksDTO(networkid, networkName, user.getUserName(), networkStatus,
+                user.getUserName(), new Date(), user.getUserName(), new Date());
+        networksDTO.setExternalUserId(externalUserId);
         String userName = user.getUserName();
         Date date = new Date();
 
-        NetworkWorkspaceDTOPK networkWorkspaceDTOPK = new NetworkWorkspaceDTOPK(
-                networkid, workspaceid);
+        NetworkWorkspaceDTOPK networkWorkspaceDTOPK = new NetworkWorkspaceDTOPK(networkid, workspaceid);
         NetworkWorkspaceDTO networkWorkspaceDTO = new NetworkWorkspaceDTO();
         networkWorkspaceDTO.setNetworkWorkspaceDTOPK(networkWorkspaceDTOPK);
         networkWorkspaceDTO.setNetworksDTO(networksDTO);
@@ -137,9 +133,10 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
         networkWorkspaceDTO.setUpdateddate(date);
         networkWorkspaceDTO.setCreatedby(userName);
         networkWorkspaceDTO.setUpdatedby(userName);
+        
 
-        WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory
-                .getCurrentSession().get(WorkspaceDTO.class, workspaceid);
+        WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,
+                workspaceid);
         networkWorkspaceDTO.setWorkspaceDTO(workspaceDTO);
         networksDTO.setNetworkWorkspace(networkWorkspaceDTO);
         try {
@@ -178,13 +175,11 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public String addNetworkStatement(String rowid, String networkId,
-            String id, String type, int isTop, IUser user, int version)
-            throws QuadrigaStorageException {
+    public String addNetworkStatement(String rowid, String networkId, String id, String type, int isTop, IUser user,
+            int version) throws QuadrigaStorageException {
 
-        NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(
-                rowid, networkId, id, isTop, version, type,
-                user.getUserName(), new Date(), user.getUserName(), new Date());
+        NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(rowid, networkId, id, isTop, version,
+                type, user.getUserName(), new Date(), user.getUserName(), new Date());
 
         try {
             sessionFactory.getCurrentSession().save(networkStatementsDTO);
@@ -261,11 +256,9 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public List<NetworksDTO> getNetworkList(IUser user)
-            throws QuadrigaStorageException {
+    public List<NetworksDTO> getNetworkList(IUser user) throws QuadrigaStorageException {
         try {
-            Query query = sessionFactory.getCurrentSession().getNamedQuery(
-                    "NetworksDTO.findByNetworkowner");
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByNetworkowner");
             query.setParameter("networkowner", user.getUserName());
 
             @SuppressWarnings("unchecked")
@@ -319,16 +312,13 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public List<NetworkStatementsDTO> getNetworkNodes(String networkId,
-            int versionId) throws QuadrigaStorageException {
+    public List<NetworkStatementsDTO> getNetworkNodes(String networkId, int versionId) throws QuadrigaStorageException {
         int isTop = 1;
 
         try {
-            Query query = sessionFactory
-                    .getCurrentSession()
-                    .createQuery(
-                            " from NetworkStatementsDTO n WHERE n.networkid = :networkid"
-                                    + " AND n.version = :versionId AND n.istop= :isTop ");
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    " from NetworkStatementsDTO n WHERE n.networkid = :networkid"
+                            + " AND n.version = :versionId AND n.istop= :isTop ");
             query.setParameter("networkid", networkId);
             query.setParameter("versionId", versionId);
             query.setParameter("isTop", isTop);
@@ -366,8 +356,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public String archiveNetwork(String networkId)
-            throws QuadrigaStorageException {
+    public String archiveNetwork(String networkId) throws QuadrigaStorageException {
         Transaction transaction = null;
         try {
             // Obtain a stateless session to overcome OutOfMemory Exception
@@ -378,29 +367,23 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
 
             // Select only the rows matching the network id and obtain a
             // scrollable list
-            Query query = session
-                    .getNamedQuery("NetworkStatementsDTO.findByNetworkid");
+            Query query = session.getNamedQuery("NetworkStatementsDTO.findByNetworkid");
             query.setParameter("networkid", networkId);
-            ScrollableResults scrollableDTO = query
-                    .scroll(ScrollMode.FORWARD_ONLY);
+            ScrollableResults scrollableDTO = query.scroll(ScrollMode.FORWARD_ONLY);
 
             while (scrollableDTO.next()) {
                 // Update the network statements
-                NetworkStatementsDTO networkStatementDTO = (NetworkStatementsDTO) scrollableDTO
-                        .get(0);
+                NetworkStatementsDTO networkStatementDTO = (NetworkStatementsDTO) scrollableDTO.get(0);
                 versionNumber = networkStatementDTO.getVersion();
                 networkStatementDTO.setVersion(versionNumber + 1);
                 session.update(networkStatementDTO);
             }
 
-            scrollableDTO = session
-                    .getNamedQuery("NetworkAssignedDTO.findByNetworkid")
-                    .setParameter("networkid", networkId)
-                    .scroll(ScrollMode.FORWARD_ONLY);
+            scrollableDTO = session.getNamedQuery("NetworkAssignedDTO.findByNetworkid")
+                    .setParameter("networkid", networkId).scroll(ScrollMode.FORWARD_ONLY);
             while (scrollableDTO.next()) {
                 // update the network assigned rows
-                NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) scrollableDTO
-                        .get(0);
+                NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) scrollableDTO.get(0);
                 versionNumber = networkAssignedDTO.getVersion();
                 networkAssignedDTO.setVersion(versionNumber + 1);
                 session.update(networkAssignedDTO);
@@ -438,11 +421,9 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public String updateNetworkName(String networkId, String networkName)
-            throws QuadrigaStorageException {
+    public String updateNetworkName(String networkId, String networkName) throws QuadrigaStorageException {
         try {
-            Query query = sessionFactory.getCurrentSession().getNamedQuery(
-                    "NetworksDTO.findByNetworkid");
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByNetworkid");
             query.setParameter("networkid", networkId);
 
             NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
@@ -475,14 +456,12 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      *             connection troubles.
      */
     @Override
-    public List<NetworksDTO> getNetworkDTOList(String projectid)
-            throws QuadrigaStorageException {
+    public List<NetworksDTO> getNetworkDTOList(String projectid) throws QuadrigaStorageException {
         if (projectid == null || projectid.equals(""))
             return null;
 
         // Create a query to get all projects
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(
-                "ProjectWorkspaceDTO.findByProjectid");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
         query.setParameter("projectid", projectid);
 
         @SuppressWarnings("unchecked")
@@ -496,15 +475,13 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
         for (ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList) {
             if (projectWorkspaceDTO != null) {
 
-                String workspaceid1 = projectWorkspaceDTO
-                        .getProjectWorkspaceDTOPK().getWorkspaceid();
-                Query queryNetworks = sessionFactory.getCurrentSession()
-                        .getNamedQuery("NetworkWorkspaceDTO.findByWorkspaceid");
+                String workspaceid1 = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
+                Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery(
+                        "NetworkWorkspaceDTO.findByWorkspaceid");
                 queryNetworks.setParameter("workspaceid", workspaceid1);
 
                 @SuppressWarnings("unchecked")
-                List<NetworkWorkspaceDTO> networkWorkspaceDTOList = queryNetworks
-                        .list();
+                List<NetworkWorkspaceDTO> networkWorkspaceDTOList = queryNetworks.list();
                 for (NetworkWorkspaceDTO networkWorkspaceDTO : networkWorkspaceDTOList) {
                     networksDTOList.add(networkWorkspaceDTO.getNetworksDTO());
                 }
@@ -515,21 +492,18 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<INetwork> getAllNetworkVersions(String networkId)
-            throws QuadrigaStorageException {
+    public List<INetwork> getAllNetworkVersions(String networkId) throws QuadrigaStorageException {
         if (networkId == null || networkId.equals(""))
             return null;
 
         List<INetwork> networkList = new ArrayList<INetwork>();
 
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(
-                "NetworkAssignedDTO.findByNetworkid");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworkAssignedDTO.findByNetworkid");
         query.setParameter("networkid", networkId);
         List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
 
         if (networkAssignedDTOList != null) {
-            networkList.addAll(networkMapper
-                    .getNetworkVersions(networkAssignedDTOList));
+            networkList.addAll(networkMapper.getNetworkVersions(networkAssignedDTOList));
         }
 
         return networkList;
@@ -545,8 +519,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * {@inheritDoc}
      */
     @Override
-    public List<NetworksDTO> getEditorNetworkList(IUser user)
-            throws QuadrigaStorageException {
+    public List<NetworksDTO> getEditorNetworkList(IUser user) throws QuadrigaStorageException {
         // List<INetwork> networkList = new ArrayList<INetwork>();
 
         try {
@@ -568,8 +541,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
                     + "where pw.projectWorkspaceDTOPK.projectid in "
                     + "(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) "
                     + "or n.networkWorkspace.workspaceDTO.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we "
-                    + "where we.workspaceEditorDTOPK.editor = :username)))))"
-                    + "";
+                    + "where we.workspaceEditorDTOPK.editor = :username)))))" + "";
             System.out.println("Testing query :" + query1);
 
             query = sessionFactory.getCurrentSession().createQuery(query1);
@@ -590,8 +562,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * {@inheritDoc}
      */
     @Override
-    public List<Integer> getLatestVersionOfNetwork(String networkID)
-            throws QuadrigaStorageException {
+    public List<Integer> getLatestVersionOfNetwork(String networkID) throws QuadrigaStorageException {
         String query1 = "select max(ns.version) from NetworkStatementsDTO ns where ns.networkid= :networkId";
         Query query = sessionFactory.getCurrentSession().createQuery(query1);
         query.setParameter("networkId", networkID);
@@ -607,14 +578,13 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * {@inheritDoc}
      */
     @Override
-    public String assignNetworkToUser(String networkId, IUser user,
-            String networkName, int version) throws QuadrigaStorageException {
+    public String assignNetworkToUser(String networkId, IUser user, String networkName, int version)
+            throws QuadrigaStorageException {
 
         NetworkAssignedDTO networkAssignedDTO = new NetworkAssignedDTO();
         Date date = new Date();
         String assignedUsername = user.getUserName();
-        networkAssignedDTO.setNetworkAssignedDTOPK(new NetworkAssignedDTOPK(
-                networkId, assignedUsername, date));
+        networkAssignedDTO.setNetworkAssignedDTOPK(new NetworkAssignedDTOPK(networkId, assignedUsername, date));
         networkAssignedDTO.setStatus(INetworkStatus.ASSIGNED);
         networkAssignedDTO.setCreatedby(assignedUsername);
         networkAssignedDTO.setUpdatedby(assignedUsername);
@@ -641,11 +611,9 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * {@inheritDoc}
      */
     @Override
-    public String updateNetworkStatus(String networkId, String status)
-            throws QuadrigaStorageException {
+    public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
         try {
-            Query query = sessionFactory.getCurrentSession().getNamedQuery(
-                    "NetworksDTO.findByNetworkid");
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByNetworkid");
             query.setParameter("networkid", networkId);
 
             NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
@@ -664,8 +632,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * {@inheritDoc}
      */
     @Override
-    public String updateAssignedNetworkStatus(String networkId, String status,
-            int latestVersion) throws QuadrigaStorageException {
+    public String updateAssignedNetworkStatus(String networkId, String status, int latestVersion)
+            throws QuadrigaStorageException {
         try {
             Query query = sessionFactory
                     .getCurrentSession()
@@ -674,8 +642,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
             query.setParameter("networkid", networkId);
             query.setParameter("version", latestVersion);
 
-            NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query
-                    .uniqueResult();
+            NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query.uniqueResult();
             networkAssignedDTO.setStatus(status);
 
             sessionFactory.getCurrentSession().update(networkAssignedDTO);
@@ -691,39 +658,17 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * {@inheritDoc}
      */
     @Override
-    public String addAnnotationToNetwork(String networkId, String nodeId,
-            String nodeName, String annotationText, String userName,
-            String objectType) throws QuadrigaStorageException {
-        // NetworkAnnotationsDTO networkAnnotationsDTO = networkMapper
-        // .getNetworkAnnotationDTO(networkId,
-        // "ANNOT_" + generateUniqueID(),annotationText, objectType,userId);
-        //
-        // try {
-        // sessionFactory.getCurrentSession().save(networkAnnotationsDTO);
-        // return "";
-        // } catch (Exception e) {
-        // logger.error("Error in assigning network to user: ", e);
-        // throw new QuadrigaStorageException(e);
-        // }
+    public String addAnnotationToNetwork(String networkId, String nodeId, String nodeName, String annotationText,
+            String userName, String objectType) throws QuadrigaStorageException {
         try {
             List<NetworkNodeAnnotationsDTO> networkNodeAnnotationList = null;
-            String annotationId = "ANNOT_" + generateUniqueID();
-            NetworkAnnotationsDTO networkAnnotation = networkMapper
-                    .getNetworkAnnotationDTO(networkId, annotationId,
-                            annotationText, objectType, userName);
-            NetworkNodeAnnotationsDTO networkNodeAnnotation = networkMapper
-                    .getNetworkNodeAnnationDTO(networkAnnotation, userName,
-                            nodeId, nodeName);
+            String annotationId = generateUniqueID();
+            NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId,
+                    annotationText, objectType, userName);
+
+            NetworkNodeAnnotationsDTO networkNodeAnnotation = networkMapper.getNetworkNodeAnnationDTO(
+                    networkAnnotation, userName, nodeId, nodeName);
             networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation);
-            // networkNodeAnnotationList =
-            // networkAnnotation.getNetworkNodeAnnotationList();
-            // if(networkNodeAnnotationList == null)
-            // {
-            // networkNodeAnnotationList = new
-            // ArrayList<NetworkNodeAnnotationsDTO>();
-            // }
-            // networkNodeAnnotationList.add(networkNodeAnnotation);
-            // networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation.getAnnotationNodes());
 
             sessionFactory.getCurrentSession().save(networkAnnotation);
             sessionFactory.getCurrentSession().save(networkNodeAnnotation);
@@ -740,8 +685,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<NetworkNodeAnnotationsDTO> getAnnotationByNodeType(String type,
-            String nodeId, String networkId) throws QuadrigaStorageException {
+    public List<NetworkNodeAnnotationsDTO> getAnnotationByNodeType(String type, String nodeId, String networkId)
+            throws QuadrigaStorageException {
         try {
             List<NetworkNodeAnnotationsDTO> networkNodeAnnotationsDTOList = new ArrayList<NetworkNodeAnnotationsDTO>();
             Query query = sessionFactory
@@ -765,9 +710,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<NetworkEdgeAnnotationsDTO> getAnnotationByEdgeId(
-            String sourceId, String targetId, String userId, String networkId)
-            throws QuadrigaStorageException {
+    public List<NetworkEdgeAnnotationsDTO> getAnnotationByEdgeId(String sourceId, String targetId, String userId,
+            String networkId) throws QuadrigaStorageException {
         try {
             List<NetworkEdgeAnnotationsDTO> networkEdgeAnnotationsDTOList = new ArrayList<NetworkEdgeAnnotationsDTO>();
             Query query = sessionFactory
@@ -792,14 +736,12 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<NetworkAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
-            String networkId) throws QuadrigaStorageException {
+    public List<NetworkAnnotationsDTO> getAllAnnotationOfNetwork(String userId, String networkId)
+            throws QuadrigaStorageException {
         try {
             List<NetworkAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<NetworkAnnotationsDTO>();
-            Query query = sessionFactory
-                    .getCurrentSession()
-                    .createQuery(
-                            "from NetworkAnnotationsDTO n where username = :username and networkid =:networkid");
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    "from NetworkAnnotationsDTO n where username = :username and networkid =:networkid");
             query.setParameter("username", userId);
             query.setParameter("networkid", networkId);
 
@@ -816,14 +758,11 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * {@inheritDoc}
      */
     @Override
-    public String updateAnnotationToNetwork(String annotationId,
-            String annotationText) throws QuadrigaStorageException {
+    public String updateAnnotationToNetwork(String annotationId, String annotationText) throws QuadrigaStorageException {
         try {
-            Query query = sessionFactory.getCurrentSession().getNamedQuery(
-                    "NetworksAnnotationsDTO.findByAnnotationId");
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksAnnotationsDTO.findByAnnotationId");
             query.setParameter("annotationid", annotationId);
-            NetworkAnnotationsDTO annotation = (NetworkAnnotationsDTO) query
-                    .uniqueResult();
+            NetworkAnnotationsDTO annotation = (NetworkAnnotationsDTO) query.uniqueResult();
             annotation.setAnnotationText(annotationText);
             sessionFactory.getCurrentSession().update(annotation);
             return "";
@@ -881,8 +820,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * @throws QuadrigaStorageException
      */
     @Override
-    public List<NetworksDTO> getNetworksOfUserWithStatus(IUser user,
-            String networkStatus) throws QuadrigaStorageException {
+    public List<NetworksDTO> getNetworksOfUserWithStatus(IUser user, String networkStatus)
+            throws QuadrigaStorageException {
 
         try {
             Query query = sessionFactory
@@ -906,8 +845,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * {@inheritDoc}
      */
     @Override
-    public List<INetwork> getNetworkListOfOtherEditors(IUser user,
-            List<String> networkStatus) throws QuadrigaStorageException {
+    public List<INetwork> getNetworkListOfOtherEditors(IUser user, List<String> networkStatus)
+            throws QuadrigaStorageException {
         List<INetwork> networkList = new ArrayList<INetwork>();
 
         try {
@@ -922,7 +861,14 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
 
             @SuppressWarnings("unchecked")
             List<NetworksDTO> listNetworksDTO = query.list();
-            networkList = networkMapper.getListOfNetworks(listNetworksDTO);
+            for (NetworksDTO networkDto : listNetworksDTO) {
+                INetwork network = networkMapper.getNetwork(networkDto);
+                NetworkWorkspaceDTO nwDto = networkDto.getNetworkWorkspace();
+                WorkspaceDTO wsDto = nwDto.getWorkspaceDTO();
+                IWorkSpace workspace = workspaceMapper.getWorkSpace(wsDto);
+                networkMapper.mapWorkspaceNetworkDTO(nwDto, network, workspace);
+                networkList.add(network);
+            }
 
             // Update project name and workspace name of the network
             for (INetwork network : networkList) {
@@ -933,26 +879,20 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
                                 "from NetworkAssignedDTO na where na.networkAssignedDTOPK.networkid = :networkid and status = :status");
                 query.setParameter("networkid", network.getNetworkId());
                 query.setParameter("status", INetworkStatus.ASSIGNED);
-                NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query
-                        .uniqueResult();
+                NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query.uniqueResult();
                 if (networkAssignedDTO != null)
-                    network.setAssignedUser(networkAssignedDTO
-                            .getNetworkAssignedDTOPK().getAssigneduser());
+                    network.setAssignedUser(networkAssignedDTO.getNetworkAssignedDTOPK().getAssigneduser());
 
                 // Get the project id associated with the workspace id
-                query = sessionFactory.getCurrentSession().getNamedQuery(
-                        "ProjectWorkspaceDTO.findByWorkspaceid");
-                query.setParameter("workspaceid", network.getNetworkWorkspace()
-                        .getWorkspace().getWorkspaceId());
-                ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query
-                        .uniqueResult();
+                query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
+                query.setParameter("workspaceid", network.getNetworkWorkspace().getWorkspace().getWorkspaceId());
+                ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
 
                 if (projectWorkspaceDTO != null) {
                     if (projectWorkspaceDTO.getWorkspaceDTO() != null) {
                         IWorkspaceNetwork workspaceNetwork = new WorkspaceNetwork();
-                        workspaceNetwork.setWorkspace(workspaceMapper
-                                .getWorkSpace(projectWorkspaceDTO
-                                        .getWorkspaceDTO()));
+                        workspaceNetwork.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO
+                                .getWorkspaceDTO()));
                         workspaceNetwork.setNetwork(network);
                         network.setNetworkWorkspace(workspaceNetwork);
                     }
@@ -974,15 +914,13 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * @return
      * @throws QuadrigaStorageException
      */
-    public int updateNetwork(INetwork network, String username)
-            throws QuadrigaStorageException {
+    public int updateNetwork(INetwork network, String username) throws QuadrigaStorageException {
         if (network == null || username == null || username.equals(""))
             return FAILURE;
 
         try {
-            NetworksDTO networksDTO = new NetworksDTO(network.getNetworkId(),
-                    network.getNetworkName(), username, network.getStatus(),
-                    username, new Date(), username, new Date());
+            NetworksDTO networksDTO = new NetworksDTO(network.getNetworkId(), network.getNetworkName(), username,
+                    network.getStatus(), username, new Date(), username, new Date());
             // networkMapper.getNetworksDTO(network.getNetworkId(),
             // network.getNetworkName(), username, network.getStatus(),
             // network.getWorkspaceid());
@@ -1032,14 +970,12 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      */
 
     @Override
-    public String addAnnotationToEdge(String networkId, String sourceId,
-            String targetId, String sourceName, String targetName,
-            String annotationText, String userId, String objectType,
-            String targetType) throws QuadrigaStorageException {
-        NetworkEdgeAnnotationsDTO networkEdgeAnnotationsDTO = getNetworkEdgeAnnotationDTO(
-                networkId, sourceId, targetId, sourceName, targetName,
-                annotationText, "ANNOT_" + generateUniqueID(), userId,
-                objectType, targetType);
+    public String addAnnotationToEdge(String networkId, String sourceId, String targetId, String sourceName,
+            String targetName, String annotationText, String userId, String objectType, String targetType)
+            throws QuadrigaStorageException {
+        NetworkEdgeAnnotationsDTO networkEdgeAnnotationsDTO = getNetworkEdgeAnnotationDTO(networkId, sourceId,
+                targetId, sourceName, targetName, annotationText, "ANNOT_" + generateUniqueID(), userId, objectType,
+                targetType);
 
         try {
             sessionFactory.getCurrentSession().save(networkEdgeAnnotationsDTO);
@@ -1079,23 +1015,18 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * @author kiran batna
      */
     @Override
-    public void addAnnotationToRelation(String annotationText,
-            String networkId, String predicateId, String predicateName,
-            String subjectId, String subjectName, String objectId,
-            String objectName, String userName, String annotedObjectType)
-            throws QuadrigaStorageException {
+    public void addAnnotationToRelation(String annotationText, String networkId, String predicateId,
+            String predicateName, String subjectId, String subjectName, String objectId, String objectName,
+            String userName, String annotedObjectType) throws QuadrigaStorageException {
         try {
             List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList = null;
-            String annotationId = "ANNOT_" + generateUniqueID();
-            NetworkAnnotationsDTO networkAnnotation = networkMapper
-                    .getNetworkAnnotationDTO(networkId, annotationId,
-                            annotationText, annotedObjectType, userName);
-            NetworkRelationAnnotationsDTO networkRelationAnnotation = networkMapper
-                    .getNetworkRelationAnnationDTO(networkAnnotation, userName,
-                            predicateId, predicateName, subjectId, subjectName,
-                            objectId, objectName);
-            networkAnnotation
-                    .setNetworkRelationAnnotation(networkRelationAnnotation);
+            String annotationId = generateUniqueID();
+            NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId,
+                    annotationText, annotedObjectType, userName);
+            NetworkRelationAnnotationsDTO networkRelationAnnotation = networkMapper.getNetworkRelationAnnationDTO(
+                    networkAnnotation, userName, predicateId, predicateName, subjectId, subjectName, objectId,
+                    objectName);
+            networkAnnotation.setNetworkRelationAnnotation(networkRelationAnnotation);
 
             // networkRelationAnnotationList =
             // networkAnnotation.getNetworkRelationAnnotationList();
@@ -1138,18 +1069,15 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      * @author Sowjanya Amabati
      */
     @Override
-    public void addAnnotationToNode(String annotationText, String networkId,
-            String nodeId, String nodeName, String userName,
-            String annotedObjectType) throws QuadrigaStorageException {
+    public void addAnnotationToNode(String annotationText, String networkId, String nodeId, String nodeName,
+            String userName, String annotedObjectType) throws QuadrigaStorageException {
         try {
             List<NetworkNodeAnnotationsDTO> networkNodeAnnotationList = null;
             String annotationId = "ANNOT_" + generateUniqueID();
-            NetworkAnnotationsDTO networkAnnotation = networkMapper
-                    .getNetworkAnnotationDTO(networkId, annotationId,
-                            annotationText, annotedObjectType, userName);
-            NetworkNodeAnnotationsDTO networkNodeAnnotation = networkMapper
-                    .getNetworkNodeAnnationDTO(networkAnnotation, userName,
-                            nodeId, nodeName);
+            NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId,
+                    annotationText, annotedObjectType, userName);
+            NetworkNodeAnnotationsDTO networkNodeAnnotation = networkMapper.getNetworkNodeAnnationDTO(
+                    networkAnnotation, userName, nodeId, nodeName);
             networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation);
 
             // networkNodeAnnotationList =
@@ -1194,15 +1122,12 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(
-            String networkId, String subjectId, String objectId,
-            String predicateId, String userName)
-            throws QuadrigaStorageException {
+    public List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String networkId, String subjectId,
+            String objectId, String predicateId, String userName) throws QuadrigaStorageException {
         List<NetworkRelationAnnotationsDTO> networkRelationAnnotations = null;
         try {
             String queryString = "from NetworkRelationAnnotationsDTO n WHERE n.subjectId = :subjectid AND n.objectId = :objectid AND n.predicateId = :predicateid AND n.annotationRelation.networkId =:networkid";
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    queryString);
+            Query query = sessionFactory.getCurrentSession().createQuery(queryString);
             query.setParameter("subjectid", subjectId);
             query.setParameter("objectid", objectId);
             query.setParameter("predicateid", predicateId);
@@ -1216,14 +1141,11 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO,
 
     }
 
-    public NetworkEdgeAnnotationsDTO getNetworkEdgeAnnotationDTO(
-            String networkId, String sourceId, String targetId,
-            String sourceName, String targetName, String annotationText,
-            String annotationId, String userName, String objectType,
-            String targetNodeType) {
-        NetworkAnnotationsDTO networkAnnotationsDTO = new NetworkAnnotationsDTO(
-                annotationId, annotationText, networkId, userName, objectType,
-                userName, new Date(), userName, new Date());
+    public NetworkEdgeAnnotationsDTO getNetworkEdgeAnnotationDTO(String networkId, String sourceId, String targetId,
+            String sourceName, String targetName, String annotationText, String annotationId, String userName,
+            String objectType, String targetNodeType) {
+        NetworkAnnotationsDTO networkAnnotationsDTO = new NetworkAnnotationsDTO(annotationId, annotationText,
+                networkId, userName, objectType, userName, new Date(), userName, new Date());
         NetworkEdgeAnnotationsDTO networkEdgeAnnotationsDTO = new NetworkEdgeAnnotationsDTO();
         networkEdgeAnnotationsDTO.setSourceId(sourceId);
         networkEdgeAnnotationsDTO.setTargetId(targetId);

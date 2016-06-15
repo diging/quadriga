@@ -17,6 +17,7 @@ public class ModifyCollaborator
 	private String userName;
 	private String name;
 	private List<IQuadrigaRole> collaboratorRoles;
+	private List<String> roleIds;
 	
 	public ModifyCollaborator()
 	{
@@ -46,4 +47,12 @@ public class ModifyCollaborator
 	public void setCollaboratorRoles(List<IQuadrigaRole> collaboratorRoles) {
 		this.collaboratorRoles = collaboratorRoles;
 	}
+
+    public List<String> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<String> roleIds) {
+        this.roleIds = roleIds;
+    }
 }

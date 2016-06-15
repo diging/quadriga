@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -78,50 +77,63 @@
 		});
 	});
 </script>
-<h2>Project: ${project.projectName}</h2>
-<hr />
+<h2>Add Concept Collection to Project: ${project.projectName}</h2>
+<div class="back-nav">
+	<hr>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Project</a>
+	</p>
+	<hr>
+</div>
 
 
 <c:choose>
 	<c:when test="${not empty conceptCollectionList}">
 
 		<form method="POST">
-			<input type=button
-				onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}'"
-				value='Okay'> <br /><input type="submit"
-				value="Add Concept Collection"
-				onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection'" />
+			<div class="panel panel-default" style="margin-top: 20px;">
+				<div class="panel-heading">Available Concept Collections</div>
+				<div class="panel-body">
+					<p>Select concept collection to add to the project and then
+						click "Add Concept Collections".</p>
+					<p>
 
-			<br /> <br />
-			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
-				class="display dataTable">
-				<!-- <table  class="dataTable" id="pagination1"> -->
-				<thead>
-					<tr>
-						<th align="left"><input type="checkbox" id="selectall">
-							All</th>
-						<th>Concept Collection Name</th>
-						<th>Concept Collection Description</th>
-					</tr>
-				</thead>
+						<input type="submit" value="Add Concept Collections" class="btn btn-primary"
+							onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection'" />
 
-				<tbody>
-					<c:forEach var="conceptCollection" items="${conceptCollectionList}">
-						<tr>
-							<td width="10%"><input type="checkbox" class="selected"
-								name="selected"
-								value='<c:out value="${conceptCollection.conceptCollectionId}"></c:out>' /></td>
-							<td width="30%" align="center"><input name="items"
-								type="hidden"
-								value="<c:out value="${conceptCollection.conceptCollectionName}"></c:out>" /> <c:out
-									value="${conceptCollection.conceptCollectionName}"></c:out></td>
-							<td width="60%" align="justify"><c:out
-									value="${conceptCollection.description}"></c:out></td>
-						</tr>
-					</c:forEach>
-				</tbody>
+					</p>
+					</div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th align="left"><input type="checkbox" id="selectall">
+									All</th>
+								<th>Concept Collection Name</th>
+								<th>Concept Collection Description</th>
+							</tr>
+						</thead>
 
-			</table>
+						<tbody>
+							<c:forEach var="conceptCollection"
+								items="${conceptCollectionList}">
+								<tr>
+									<td width="10%"><input type="checkbox" class="selected"
+										name="selected"
+										value='<c:out value="${conceptCollection.conceptCollectionId}"></c:out>' /></td>
+									<td width="30%"><input name="items"
+										type="hidden"
+										value="<c:out value="${conceptCollection.conceptCollectionName}"></c:out>" />
+										<c:out value="${conceptCollection.conceptCollectionName}"></c:out></td>
+									<td><c:out
+											value="${conceptCollection.description}"></c:out></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+
+					</table>
+					</div>
 		</form>
 	</c:when>
 

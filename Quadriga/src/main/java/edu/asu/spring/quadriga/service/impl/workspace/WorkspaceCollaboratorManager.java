@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
@@ -18,10 +19,10 @@ import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
 @Service
 public class WorkspaceCollaboratorManager extends CollaboratorManager<WorkspaceCollaboratorDTO, WorkspaceCollaboratorDTOPK, WorkspaceDTO, WorkspaceDAO> implements IWorkspaceCollaboratorManager 
@@ -68,13 +69,15 @@ public class WorkspaceCollaboratorManager extends CollaboratorManager<WorkspaceC
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public List<IWorkspaceCollaborator> getWorkspaceCollaborators(String workspaceId) throws QuadrigaStorageException
 	{
 		List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
 		IQuadrigaRole role;
 		List<IQuadrigaRole> roleList;
 
-		IWorkSpace workspace =workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
+		WorkspaceDTO workspaceDTO  = workspaceDao.getDTO(workspaceId);
+        IWorkSpace workspace = workspaceDeepMapper.mapWorkspaceDTO(workspaceDTO);
 		//retrieve the collaborators associated with project
 		if(workspace != null){
 			workspaceCollaboratorList = workspace.getWorkspaceCollaborators();

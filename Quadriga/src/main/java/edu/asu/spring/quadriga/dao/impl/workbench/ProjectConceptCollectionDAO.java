@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
@@ -22,7 +23,7 @@ import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
-import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 
 @Repository
 public class ProjectConceptCollectionDAO extends BaseDAO<ProjectConceptCollectionDTO> implements IProjectConceptCollectionDAO 
@@ -35,7 +36,8 @@ public class ProjectConceptCollectionDAO extends BaseDAO<ProjectConceptCollectio
 	private ConceptCollectionDTOMapper collectionMapper;
 	
 	@Autowired
-	private ProjectDTOMapper projectMapper;
+	@Qualifier("ProjectBaseMapper")
+	private IProjectBaseMapper projectMapper;
 	
 	@Resource(name = "database_error_msgs")
 	private Properties messages;

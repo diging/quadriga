@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -32,7 +31,7 @@ $(document).ready(function() {
 <br>
 <c:forEach var="workspace" items="${archivedWSList}">
     <li class="ws with-icon"><a
-        href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}">
+        href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.id}">
             <c:out value="${workspace.name}"></c:out>
     </a> (Owner) <br> <c:out value="${workspace.description}"></c:out>
     </li>

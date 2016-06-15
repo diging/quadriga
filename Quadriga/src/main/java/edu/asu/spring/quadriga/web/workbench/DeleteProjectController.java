@@ -23,20 +23,22 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class DeleteProjectController {
     @Autowired
     private IModifyProjectManager projectManager;
+
     /**
      * This method calls the user manager to delete the project.
      * 
-     * @param projectId Project identifier corresponding to project to be deleted
+     * @param projectId
+     *            Project identifier corresponding to project to be deleted
      * @return model - URL on success and failure.
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = { RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/deleteproject/{projectId}", method = RequestMethod.GET)
-    public ModelAndView deleteProjectRequest(
-            @PathVariable("projectId") String projectId,
-            RedirectAttributes redirectAttributes, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+    public ModelAndView deleteProjectRequest(@PathVariable("projectId") String projectId,
+            RedirectAttributes redirectAttributes, Principal principal) throws QuadrigaStorageException,
+            QuadrigaAccessException {
         ModelAndView model = new ModelAndView("redirect:/auth/workbench");
 
         ArrayList<String> projectIdList = new ArrayList<String>();
@@ -45,8 +47,7 @@ public class DeleteProjectController {
         projectManager.deleteProjectRequest(projectIdList, principal);
 
         redirectAttributes.addFlashAttribute("show_success_alert", true);
-        redirectAttributes.addFlashAttribute("success_alert_msg",
-                "The project has been successfully deleted.");
+        redirectAttributes.addFlashAttribute("success_alert_msg", "The project has been successfully deleted.");
 
         return model;
     }

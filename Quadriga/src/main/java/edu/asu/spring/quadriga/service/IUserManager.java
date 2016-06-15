@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
@@ -97,7 +98,7 @@ public interface IUserManager {
 	public abstract int addAccountRequest(String userId) throws QuadrigaStorageException;
 
 
-	public abstract void deleteUser(String sUserId, String sAdminId) throws QuadrigaStorageException;
+	public abstract void deleteUser(String sUserId, String sAdminId) throws QuadrigaStorageException, UserOwnsOrCollaboratesDeletionException ;
 
 
 	/**

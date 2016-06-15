@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
@@ -50,37 +49,37 @@ function resetSelectAll() {
 			Concept Search
 		</h2><hr>
 <form  action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/searchitems" method="get">
-<table>
-<tr>
-		<td>Word:</td>
-		<td>
-		<input type="text"  name="name" id ="name" placeholder="enter a word">
-		</td></tr>
-		<tr>
-		<td>
-		POS:
-		</td>
-		<td>
-		<select name="pos">
-						<option value="noun">Nouns</option>
-						<option value="verb">Verb</option>
-						<option value="adverb">Adverb</option>
-						<option value="adjective">Adjective</option>
-						<option value="other">Other</option>
-		</select></td>
-		</tr>
-		<tr>
-		<td colspan="2">
-		<input type="submit" value="Search" >
-		</td></tr>
-</table>		
+
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">Search term:</span>
+		  <input type="text" class="form-control" name="name" id ="name" placeholder="Enter a word" aria-describedby="basic-addon1">
+		</div>
+		<br>
+		<div class="input-group">
+		     <span class="input-group-addon" id="basic-addon2">POS:</span>
+	         <select class="form-control" name="pos"  aria-describedby="basic-addon2">
+	            <option value="noun">Nouns</option>
+	            <option value="verb">Verb</option>
+	            <option value="adverb">Adverb</option>
+	            <option value="adjective">Adjective</option>
+	            <option value="other">Other</option>
+	        </select>
+		</div>
+		<br>
+		
+		<input class="btn btn-primary" type="submit" value="Search" >
+			
 </form>
 
 <c:if test="${not empty result}">
-		<h3>Results Of the search</h3>
+		<h3>The following concepts were found:</h3>
+		
 		<form action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addItems" method="post">
-		<input type="submit"  value="Select & Save" /><br><br>
-		<table   style="width: 100%" class="display dataTable"  id="conceptSearch">
+		<p>Select the concepts you want to add and click "Select & Save".</p>
+		<input type="submit"  value="Select & Save" class="btn btn-primary"/><br><br>
+		<div class="panel panel-default">
+		
+		<table   style="width: 100%" class="table"  id="conceptSearch">
 			<thead>
 				<tr>
 					<th><input type="checkbox" id="selectall"></input></th>
@@ -98,37 +97,37 @@ function resetSelectAll() {
 				<c:forEach var="concept" items="${result}">
 					<tr>
 						<td width="5%" > <input type="checkbox"  class="selected" name = "selected" value='<c:out value="${concept.id}"></c:out>' /></td>
-						<td width="10%"  align="justify">
+						<td width="10%">
 						  <font size="2">
 						  <c:out value="${concept.lemma}"></c:out>
 						  </font>
 						  <input type="hidden" name="lemma" value="${concept.lemma}"/>
 						</td>
-						<td width="25%"  align="justify">
+						<td width="25%" >
 						  <font size="2">
 						  <c:out value="${concept.id}"></c:out>
 						  <input type="hidden" name="id" value="${concept.id}"/>
 						  </font>
 						</td>
-						<td width="5%"  class="center" align="justify">
+						<td width="5%"  class="center" >
 						<font size="2"><c:out
 									value="${concept.pos}"></c:out>
 						<input type="hidden" name="pos" value="${concept.pos}"/>
 						</font>
 						</td>
-						<td width="30%" align="justify">
+						<td width="30%">
 						<font size="2"><c:out
 									value="${concept.description}"></c:out>
 						<input type="hidden" name="description" value="${concept.description}"/>
 						</font>
 						</td>
-						<td width="10%" class="center" align="justify">
+						<td width="10%" class="center">
 						<font size="2"><c:out
 									value="${concept.type}"></c:out>
 						<input type="hidden" name="type" value="${concept.type}"/>
 						</font>
 						</td>
-						<td width="15%" class="center" align="justify">
+						<td width="15%" class="center" >
 						<font size="2"><c:out
 									value="${concept.conceptList}"></c:out>
 						<input type="hidden" name="conceptList" value="${concept.conceptList}"/>
@@ -140,7 +139,7 @@ function resetSelectAll() {
 			</tbody>
 			
 		</table>
-		
+		</div>
 				</form>
 	</c:if>
 

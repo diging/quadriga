@@ -143,7 +143,9 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	 */
 	@Override
 	public List<IQuadrigaRole> getQuadrigaRoles(String type) {
-		return rolesMap.get(type);
+	    List<IQuadrigaRole> listForType = rolesMap.get(type);
+	    List<IQuadrigaRole> returnList = new ArrayList<IQuadrigaRole>(listForType);
+		return returnList;
 	}
 	
 	@Override

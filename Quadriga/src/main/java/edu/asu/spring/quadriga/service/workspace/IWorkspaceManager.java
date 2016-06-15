@@ -1,13 +1,9 @@
 package edu.asu.spring.quadriga.service.workspace;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-
-import org.codehaus.jettison.json.JSONException;
 
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
-import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -29,11 +25,6 @@ public interface IWorkspaceManager {
 
     IWorkSpace getWorkspaceDetails(String workspaceId)
             throws QuadrigaStorageException, QuadrigaAccessException;
-
-    String getItemMetadataAsJson(String fileid, String dspaceUsername,
-            String dspacePassword, IDspaceKeys dspaceKeys)
-            throws NoSuchAlgorithmException, QuadrigaStorageException,
-            JSONException;
 
     String getProjectIdFromWorkspaceId(String workspaceId)
             throws QuadrigaStorageException;

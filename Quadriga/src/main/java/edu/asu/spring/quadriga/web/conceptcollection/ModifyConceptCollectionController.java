@@ -1,9 +1,12 @@
 package edu.asu.spring.quadriga.web.conceptcollection;
 
 import java.security.Principal;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -40,10 +44,12 @@ public class ModifyConceptCollectionController {
 
     @Autowired
     private ConceptCollectionValidator validator;
+    
+    @Autowired
+    private MessageSource messageSource;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-
         binder.setValidator(validator);
     }
 
@@ -68,7 +74,6 @@ public class ModifyConceptCollectionController {
         IConceptCollection collection = conceptControllerManager
                 .getConceptCollection(collectionid);
         model.getModelMap().put("collection", collection);
-        model.getModelMap().put("success", 0);
 
         return model;
     }
@@ -85,24 +90,27 @@ public class ModifyConceptCollectionController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION, paramIndex = 3, userRole = { RoleNames.ROLE_CC_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.POST)
-    public ModelAndView updateConceptCollectionDetails(
+    public String updateConceptCollectionDetails(
             @Validated @ModelAttribute("collection") ConceptCollection collection,
             BindingResult result,
             @PathVariable("collectionid") String collectionid,
-            Principal principal) throws QuadrigaStorageException,
+            Principal principal, Model model, RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException,
             QuadrigaAccessException {
-        String userName = principal.getName();
-
-        ModelAndView model = new ModelAndView(
-                "auth/conceptcollections/updatecollectiondetails");
         if (result.hasErrors()) {
-            model.getModelMap().put("collection", collection);
-            model.getModelMap().put("success", 0);
+            model.addAttribute("collection", collection);
+            model.addAttribute("show_error_alert", true);
+            model.addAttribute("error_alert_msg",
+                    messageSource.getMessage("concept_collection.modify.failure", new Object[] {}, locale));
+
+            return "auth/conceptcollections/updatecollectiondetails";
         } else {
-            collectionManager.updateCollectionDetails(collection, userName);
-            model.getModelMap().put("success", 1);
+            collectionManager.updateCollectionDetails(collection, principal.getName());
+            redirectAttrs.addFlashAttribute("show_success_alert", true);
+            redirectAttrs.addFlashAttribute("success_alert_msg",
+                    messageSource.getMessage("concept_collection.modify.success", new Object[] {}, locale));
         }
-        return model;
+        
+        return "redirect:/auth/conceptcollections/" + collectionid;
     }
 
 }

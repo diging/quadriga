@@ -5,12 +5,14 @@ import java.util.Properties;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 
 @Repository
+@Transactional
 public class ProjectDAO extends BaseDAO<ProjectDTO> implements IProjectDAO {
     
     @Resource(name = "projectconstants")

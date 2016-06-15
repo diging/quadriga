@@ -2,12 +2,10 @@ package edu.asu.spring.quadriga.dao.impl.conceptcollection;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,9 +14,6 @@ import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionConcepts;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
@@ -27,7 +22,6 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
 
 /**
