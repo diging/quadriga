@@ -56,6 +56,23 @@
 </c:if>
 </div>
 
+<div class="row">
+<c:if test="${blogEntryExists}">
+	<div  class="col-lg-4">
+		<h2>Recent Project Blog</h2>
+		<h3>${latestProjectBlogEntry.title}</h3>
+		<p>
+			<i>Posted by ${latestProjectBlogEntry.author.name} on
+				${latestProjectBlogEntry.createdDate}</i>
+		</p>
+		<p>${latestProjectBlogEntrySnippet}...</p>
+		<p>
+		<a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblog">	Read More </a>	
+		</p>
+	</div>
+</c:if>
+</div>
+
 </c:if>
 
 

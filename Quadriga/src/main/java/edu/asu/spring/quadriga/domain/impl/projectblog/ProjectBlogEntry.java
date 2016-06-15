@@ -120,18 +120,19 @@ public class ProjectBlogEntry implements IProjectBlogEntry {
      */
     @Override
     public String getStripped(String input, int wordCount) {
-        for (int i = 0; i < input.length(); i++) {
-            // When a space is encountered, reduce words remaining by 1.
-            if (input.charAt(i) == ' ') {
-                wordCount--;
-            }
-            // If no more words remaining, return a substring.
-            if (wordCount == 0) {
-                return input.substring(0, i);
-            }
+        
+        String[] words = input.split(" ");
+        
+        if(words.length < wordCount)
+            return input;
+        
+        String result = "";
+        
+        for (int i = 0; i < wordCount; i++){
+            result += words[i] + " ";
         }
-        // Error case.
-        return "";
+       
+        return result;
     }
 
     /**
