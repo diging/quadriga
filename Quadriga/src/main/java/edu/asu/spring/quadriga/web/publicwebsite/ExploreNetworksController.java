@@ -16,10 +16,9 @@ import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.network.ID3Creator;
+import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
-import edu.asu.spring.quadriga.service.network.impl.JsonCreator;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Controller
@@ -29,7 +28,7 @@ public class ExploreNetworksController {
     private INetworkTransformationManager transformationManager;
 
     @Autowired
-    private JsonCreator jsonCreator;
+    private IJsonCreator jsonCreator;
 
 
     /**

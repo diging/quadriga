@@ -6,12 +6,13 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
 
 @Service
-public class CytoscapeJsonCreator implements JsonCreator {
+public class CytoscapeJsonCreator implements IJsonCreator {
 
     /* (non-Javadoc)
      * @see edu.asu.spring.quadriga.service.network.impl.JsonCreator#getJson(java.util.Map, java.util.List)
