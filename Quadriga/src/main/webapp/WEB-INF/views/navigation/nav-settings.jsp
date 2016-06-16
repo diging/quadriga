@@ -12,10 +12,7 @@
 		class="glyphicon glyphicon-circle-arrow-left"></span> Back to Project</a>
 </div>
 
-<br />
-
-<script
-	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
+<br/>
 
 <div class="panel panel-default">
 

@@ -20,11 +20,11 @@
 	function performAction(obj) {
 		var data = {};
 		var publicpageid = $(obj).closest('div.publicpageform').find('.publicpageid').val();
-		var title = $(obj).closest('div.publicpageform').find('#title').val();
-		var desc = $(obj).closest('div.publicpageform').find('#description').val();
-		var order = $(obj).closest('div.publicpageform').find('#orderValue').val();
-		var linkTo = $(obj).closest('div.publicpageform').find('#linkTo').val();
-		var linkText = $(obj).closest('div.publicpageform').find('#linkText').val();
+		var title = $(obj).closest('div.publicpageform').find('.titleValue').val();
+		var desc = $(obj).closest('div.publicpageform').find('.descValue').val();
+		var order = $(obj).closest('div.publicpageform').find('.orderValue').val();
+		var linkTo = $(obj).closest('div.publicpageform').find('.linkTo').val();
+		var linkText = $(obj).closest('div.publicpageform').find('.linkTextValue').val();
 		
 		var mandatory = 0;
 		if (title.length < 1) {
@@ -106,20 +106,20 @@
 					<td >Title *</td>
 					
 					<td ><input path="title" size="60" 
-						class="form-control" id="title" value="${publicpageObject0.title}" />
+						class="form-control titleValue" id="title1" value="${publicpageObject0.title}" />
 					<div id="title_err"></div></td>
 					
 				</tr>
 				<tr>
 					<td style="vertical-align: top">Description *</td>
 					<td><textarea path="description" cols="60" rows="6"
-							id="description" class="form-control">${publicpageObject0.description}</textarea>
+							id="description1" class="form-control descValue">${publicpageObject0.description}</textarea>
 					<div id="desc_err"></div></td>
 					
 				</tr>
 				<tr>
 				    <td style="vertical-align: top">Link to *</td>
-				    <td><select class="linkTo" path="linkTo" id="linkTo" >
+				    <td><select class="linkTo" path="linkTo" id="linkTo1" >
 						<c:forEach var="item" items="${linkTypes}">
 						<option value="${item.key}"  ${item.key == publicpageObject0.linkTo ? 'selected' : ''}>${item.value}</option>
 						</c:forEach> 
@@ -131,14 +131,14 @@
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td ><input type="text" class="form-control" id="linkText"
+                    <td ><input type="text" class="form-control linkTextValue" id="linkText1"
                         path="linkText"  value="${publicpageObject0.linkText}"><div id="linkText_err"></div></td>
                     
                 </tr>
 				<tr>
 					<td >Order Preference *</td>
-					<td ><input type="number" id="orderValue"
-						path="order" class="form-control" value="${publicpageObject0.order}">
+					<td ><input type="number" id="order1"
+						path="order" class="form-control orderValue" value="${publicpageObject0.order}">
 					<div id="order_err"></div></td>
 					
 				</tr>
@@ -160,19 +160,19 @@
 				<tr>
 					<td>Title *</td>
 					<td ><form:input path="title" size="60"
-							id="title" class="form-control" value="${publicpageObject1.title}" />
+							id="title2" class="form-control titleValue" value="${publicpageObject1.title}" />
 					<div id="title_err"></div></td>
 					
 				</tr>
 				<tr>
 					<td style="vertical-align: top">Description *</td>
 					<td><textarea path="description" cols="60" rows="6"
-							id="description" class="form-control" >${publicpageObject1.description}</textarea>
+							id="description2" class="form-control descValue" >${publicpageObject1.description}</textarea>
 					<div id="desc_err"></div></td>
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link to *</td>
-                    <td><select class="linkTo" path="linkTo" id="linkTo" >
+                    <td><select class="linkTo" path="linkTo" id="linkTo2" >
 						<c:forEach var="item" items="${linkTypes}">
 						<option value="${item.key}"  ${item.key == publicpageObject1.linkTo ? 'selected' : ''}>${item.value}</option>
 						</c:forEach> 
@@ -183,14 +183,14 @@
                 </tr>
                 <tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td ><input id="linkText" type="text" class="form-control"
+                    <td ><input id="linkText2" type="text" class="form-control linkTextValue"
                         path="linkText" value="${publicpageObject1.linkText}"/>
                     <div id="linkText_err"></div></td>
                 </tr>
 				<tr>
 					<td >Order Preference *</td>
-					<td ><input type="number" id="orderValue"
-						path="order" class="form-control" value="${publicpageObject1.order}" />
+					<td ><input type="number" id="order2"
+						path="order" class="form-control orderValue" value="${publicpageObject1.order}" />
 					<div id="order_err"></div></td>
 					
 				</tr>
@@ -210,20 +210,20 @@
 				<tr>
 					<td>Title *</td>
 					<td ><form:input path="title" size="60"
-							id="title" class="form-control" value="${publicpageObject2.title}" />
+							id="title3" class="form-control titleValue" value="${publicpageObject2.title}" />
 					<div id="title_err"></div>
 					</td>
 				</tr>
 				<tr>
 					<td style="vertical-align: top">Description *</td>
 					<td><textarea path="description" cols="60" rows="6"
-							id="description" class="form-control">${publicpageObject2.description}</textarea>
+							id="description3" class="form-control descValue">${publicpageObject2.description}</textarea>
 					<div id="desc_err"></div></td>
 				</tr>
 				<tr>
                     <td style="vertical-align: top">Link to *</td>
                     <td>
-                    <select class="linkTo" path="linkTo" id="linkTo" >
+                    <select class="linkTo" path="linkTo" id="linkTo3" >
 						<c:forEach var="item" items="${linkTypes}">
 						<option value="${item.key}"  ${item.key == publicpageObject2.linkTo ? 'selected' : ''}>${item.value}</option>
 						</c:forEach> 
@@ -234,15 +234,15 @@
                 </tr>
                 <tr>
                     <td style="vertical-align: top">Link Text *</td>
-                    <td ><input class="form-control" type="text" id="linkText"
+                    <td ><input class="form-control linkTextValue" type="text" id="linkText3"
                         path="linkText" value="${publicpageObject2.linkText}">
                     <div id="linkText_err"></div></td>
                     
                 </tr>
 				<tr>
 					<td>Order Preference *</td>
-					<td><input type="number" id="orderValue"
-						path="order" class="form-control" value="${publicpageObject2.order}">
+					<td><input type="number" id="order3"
+						path="order" class="form-control orderValue" value="${publicpageObject2.order}">
 					<div id="order_err"></div></td>
 					
 				</tr>
