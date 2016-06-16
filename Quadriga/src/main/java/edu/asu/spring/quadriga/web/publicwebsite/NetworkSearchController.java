@@ -31,7 +31,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
-import edu.asu.spring.quadriga.service.network.ID3Creator;
+import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -47,14 +47,14 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 public class NetworkSearchController {
 
     @Autowired
-    IRetrieveProjectManager projectManager;
+    private IRetrieveProjectManager projectManager;
 
     @Qualifier("conceptPowerService")
     @Autowired
-    IService service;
+    private IService service;
 
     @Autowired
-    private ID3Creator d3Creator;
+    private IJsonCreator jsonCreator;
 
     @Autowired
     private INetworkTransformationManager transformationManager;
@@ -131,7 +131,7 @@ public class NetworkSearchController {
 
         String json = null;
         if (transformedNetwork != null) {
-            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
 
         if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
