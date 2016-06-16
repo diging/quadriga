@@ -59,7 +59,7 @@
 <div class="row">
 <c:if test="${blogEntryExists}">
 	<div  class="col-lg-4">
-		<h2>Recent Project Blog</h2>
+		<h2>Latest Blog Post</h2>
 		<h3>${latestProjectBlogEntry.title}</h3>
 		<p>
 			<i>Posted by ${latestProjectBlogEntry.author.name} on

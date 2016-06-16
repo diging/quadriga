@@ -59,7 +59,7 @@ public class WebsiteProjectController {
 
     @Autowired
     private IPublicPageManager publicPageManager;
-    
+
     @Autowired
     private IRetrieveProjectManager projectManager;
 
@@ -75,6 +75,8 @@ public class WebsiteProjectController {
     @Autowired
     private IProjectBlogEntryManager projectBlogEntryManager;
 
+    private static final int WORD_COUNT = 30;  
+
     public IRetrieveProjectManager getProjectManager() {
         return projectManager;
     }
@@ -84,7 +86,7 @@ public class WebsiteProjectController {
     }
 
 
-    
+
     /**
      * This method displays the public or external Website for the particular
      * project
@@ -107,6 +109,10 @@ public class WebsiteProjectController {
     public String showProject(Model model, @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,
             Principal principal, @CheckAccess @InjectProject(unixNameParameter = "ProjectUnixName") IProject project) throws QuadrigaStorageException {
 
+        String projectId = project.getProjectId();
+        Integer count = 1;
+        String user = null;
+
         model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 
         List<IPublicPage> publicPages = publicPageManager.retrievePublicPageContent(project.getProjectId());
@@ -121,50 +127,36 @@ public class WebsiteProjectController {
         publicPages.forEach(item -> item.setLinkTo(linkToMap.get(item.getLinkTo())));
 
         model.addAttribute("blocks", publicPages);
-
         model.addAttribute("project", project);
-        
-        String user = null;
+
         if (principal != null) {
             user = principal.getName();
         }
+
         // Fetch blog entries for a project identified by project unix name
-        String projectId = project.getProjectId();
-        Integer count = 1;
         List<IProjectBlogEntry> latestProjectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId,
                 count);
-        model.addAttribute("projectBlogEntry",new ProjectBlogEntry());
+
         if (latestProjectBlogEntryList.size() < 1 ) {
             model.addAttribute("blogEntryExists",false);
         }
         else {
             model.addAttribute("blogEntryExists",true);
             model.addAttribute("latestProjectBlogEntry", latestProjectBlogEntryList.get(0));
-            model.addAttribute("latestProjectBlogEntrySnippet",latestProjectBlogEntryList.get(0).getSnippet(4));
-        }
-        model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
-
-        if (user == null) {
-            if (projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
-                model.addAttribute("project", project);
-                return "sites/website";
-            } else {
-                return "forbidden";
-            }
+            model.addAttribute("latestProjectBlogEntrySnippet",latestProjectBlogEntryList.get(0).getSnippet(WORD_COUNT));
         }
 
         if (projectManager.canAccessProjectWebsite(unixName, user)
                 || projectManager.getPublicProjectWebsiteAccessibility(unixName)) {
             model.addAttribute("project", project);
             return "sites/website";
-
         } else {
             return "forbidden";
         }
     }
-    
+
     /*
-     * This is kind of ugly and should be replace with a better solution. But
+     * This is kind of ugly and should be replaced with a better solution. But
      * well, it works.
      */
     private Map<String, String> getLinkTargetMap() {
