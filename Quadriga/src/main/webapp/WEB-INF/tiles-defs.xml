@@ -34,6 +34,7 @@
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="left-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
+		<put-attribute name="currentTab" value="" />
 	</definition>
 
 	<definition name="base.definition.rightnav" template="/WEB-INF/tiles/layouts/skeleton_right.jsp">
@@ -611,6 +612,8 @@
 	<definition name="auth/workbench/addpublicpage" extends="base.definition.workbench.nav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Add Public Page Settings" />
+		<put-attribute name="currentTab"
+			value="mainPageSettings" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-settings.jsp" />
 		<put-attribute name="content"
@@ -618,7 +621,7 @@
 	</definition>
 
 	<definition name="auth/editabout" extends="base.definition.workbench.nav">
-		<put-attribute name="currentPage" value="editabout" />
+		<put-attribute name="currentTab" value="aboutPage" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-settings.jsp" />
 		<put-attribute name="content"
