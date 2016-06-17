@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd 
 	http://www.springframework.org/schema/aop
@@ -24,10 +23,10 @@
 		</constructor-arg>
 	</bean>
 	<bean id="qStoreURL_Search" class="java.lang.String">
-        <constructor-arg>
-            <value>/search</value>
-        </constructor-arg>
-    </bean>
+		<constructor-arg>
+			<value>/search</value>
+		</constructor-arg>
+	</bean>
 	<bean id="qStoreURL_Get" class="java.lang.String">
 		<constructor-arg>
 			<value>/get?id=</value>
@@ -38,80 +37,80 @@
 			<value>/get</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="wordPowerURL" class="java.lang.String">
 		<constructor-arg>
 			<value>${profile.wordpower.url}</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="searchWordPowerURLPath" class="java.lang.String">
 		<constructor-arg>
 			<value>/rest/WordLookup/</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="conceptPowerURL" class="java.lang.String">
 		<constructor-arg>
-		<value>${profile.conceptpower.url}</value>
+			<value>${profile.conceptpower.url}</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="searchConceptPowerURLPath" class="java.lang.String">
 		<constructor-arg>
 			<value>/rest/ConceptLookup/</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="searchConceptpowerEndpoint" class="java.lang.String">
-        <constructor-arg>
-            <value>/rest/ConceptSearch</value>
-        </constructor-arg>
-    </bean>
-	
-	<bean id="viafURL" class="java.lang.String">
 		<constructor-arg>
-		<value>http://viaf.org/viaf/search</value>
+			<value>/rest/ConceptSearch</value>
 		</constructor-arg>
 	</bean>
-	
+
+	<bean id="viafURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://viaf.org/viaf/search</value>
+		</constructor-arg>
+	</bean>
+
 	<bean id="searchViafURLPath" class="java.lang.String">
 		<constructor-arg>
-			<value>?query=local.names all 
+			<value>?query=local.names all
 			</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="searchViafURLPath1" class="java.lang.String">
 		<constructor-arg>
 			<value>
-			+&amp;maximumRecords=100&amp;startRecord=
+				+&amp;maximumRecords=100&amp;startRecord=
 			</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="searchViafURLPath2" class="java.lang.String">
 		<constructor-arg>
 			<value>
-			&amp;sortKeys=holdingscount&amp;httpAccept=application/rss+xml
+				&amp;sortKeys=holdingscount&amp;httpAccept=application/rss+xml
 			</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="updateFromWordPowerURLPath" class="java.lang.String">
 		<constructor-arg>
 			<value>/rest/Word/</value>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="updateConceptPowerURLPath" class="java.lang.String">
 		<constructor-arg>
 			<value>/rest/Concept?id=</value>
 		</constructor-arg>
 	</bean>
-	
-	
-	
+
+
+
 
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
@@ -127,13 +126,12 @@
 			</list>
 		</property>
 	</bean>
- 
- 	<bean id="restTemplateViaf" class="org.springframework.web.client.RestTemplate">
+
+	<bean id="restTemplateViaf" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
 			<list>
-				 <!-- <bean
-					class="org.springframework.http.converter.StringHttpMessageConverter">
-				</bean>  -->
+				<!-- <bean class="org.springframework.http.converter.StringHttpMessageConverter"> 
+					</bean> -->
 				<bean
 					class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
 					<property name="marshaller" ref="jaxbMarshaller" />
@@ -145,10 +143,10 @@
 			</list>
 		</property>
 	</bean>
-			
-        
-    
-        
+
+
+
+
 	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="classesToBeBound">
 			<list>
@@ -166,26 +164,27 @@
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="marshallingConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-	<constructor-arg ref="jaxbMarshaller" />
-    <property name="supportedMediaTypes" value="application/xml"/>
-      </bean>
-    
+
+	<bean id="marshallingConverter"
+		class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		<constructor-arg ref="jaxbMarshaller" />
+		<property name="supportedMediaTypes" value="application/xml" />
+	</bean>
+
 
 	<bean id="errorMessages"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/errormessages.properties" />
 	</bean>
-	
+
 	<bean id="uiMessages"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/messages_en_US.properties" />
 	</bean>
-	
+
 	<bean id="dspaceStrings"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:dspacestrings.properties" />
 	</bean>
-	
+
 </beans>

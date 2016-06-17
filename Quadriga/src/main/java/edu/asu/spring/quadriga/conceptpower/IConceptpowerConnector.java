@@ -1,10 +1,5 @@
 package edu.asu.spring.quadriga.conceptpower;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.cache.annotation.Cacheable;
-
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 
 public interface IConceptpowerConnector {

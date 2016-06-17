@@ -14,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;
 
 /**
  * This class provides functionality to search Conceptpower.
