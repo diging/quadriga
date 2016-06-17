@@ -19,6 +19,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
 import static org.junit.Assert.assertNotNull;
+
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 
 public class ConceptpowerConnectorTest {
@@ -33,7 +35,7 @@ public class ConceptpowerConnectorTest {
     private String idURL = "idUrl";
 
     @InjectMocks
-    private ConceptpowerConnector connectorUnderTest;
+    private IConceptpowerConnector connectorUnderTest;
 
     @Before
     public void init() {

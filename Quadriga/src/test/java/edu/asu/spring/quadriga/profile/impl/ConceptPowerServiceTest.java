@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import edu.asu.spring.quadriga.conceptpower.POS;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
@@ -50,7 +51,7 @@ public class ConceptPowerServiceTest {
         reply = new ConceptpowerReply();
         reply.setConceptEntry(entries);
         
-        Mockito.when(mockedCollectionManager.search(rhino, IService.POS_NOUN)).thenReturn(reply);
+        Mockito.when(mockedCollectionManager.search(rhino, POS.NOUN)).thenReturn(reply);
     }
 
     @Test

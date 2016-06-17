@@ -1,5 +1,10 @@
 package edu.asu.spring.quadriga.conceptpower;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.cache.annotation.Cacheable;
+
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 
 public interface IConceptpowerConnector {
@@ -19,5 +24,7 @@ public interface IConceptpowerConnector {
      * @return The concept for the provided id.
      */
     public abstract ConceptpowerReply getById(String id);
+
+    ConceptpowerReply search(String searchTerm);
 
 }

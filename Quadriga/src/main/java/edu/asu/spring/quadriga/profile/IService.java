@@ -23,8 +23,6 @@ public interface IService {
 	 */
 	public abstract List<ISearchResult> search(String word);
 	
-	public static final String POS_NOUN = "noun";
-	
 	public static final String STARTINDEX = "1";
 
 }

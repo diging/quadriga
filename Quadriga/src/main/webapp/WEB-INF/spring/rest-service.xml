@@ -63,6 +63,12 @@
 		</constructor-arg>
 	</bean>
 	
+	<bean id="searchConceptpowerEndpoint" class="java.lang.String">
+        <constructor-arg>
+            <value>/rest/ConceptSearch</value>
+        </constructor-arg>
+    </bean>
+	
 	<bean id="viafURL" class="java.lang.String">
 		<constructor-arg>
 		<value>http://viaf.org/viaf/search</value>

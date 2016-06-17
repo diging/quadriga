@@ -733,7 +733,7 @@
 	<!-- Site search -->
 	<definition name="sites/search" extends="base.definition.public">
 		<put-attribute name="currentPage" value="networksearch" />
-		<put-attribute name="content" value="/WEB-INF/views/networksearch.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/public/networks/networksearch.jsp" />
 	</definition>
 
 	<definition name="sites/public/PublicWebsiteAbout" extends="base.definition.public">
@@ -886,7 +886,7 @@
 		<put-attribute name="currentPage" value="networksearch" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
 		<put-attribute name="right-navigation"
-			value="/WEB-INF/views/navigation/nav-networkrightsearchplane.jsp" />
+			value="/WEB-INF/views/public/nav/nav-networkrightsearchplane.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/public/network.jsp" />
 	</definition>
