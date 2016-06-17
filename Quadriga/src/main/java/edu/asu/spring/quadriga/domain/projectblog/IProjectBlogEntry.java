@@ -39,13 +39,6 @@ public interface IProjectBlogEntry {
     IUser getAuthor();
 
     /**
-     * @param string
-     *            to be stripped, number of words to strip
-     * 
-     */
-    String getStripped(String input, int wordCount);
-
-    /**
      * @param wordCount
      *            , number of words needed in the snippet
      * 

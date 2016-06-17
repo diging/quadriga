@@ -871,7 +871,7 @@
 			value="/WEB-INF/views/addprojectblogentry.jsp" />
 	</definition>
 	<definition name="sites/projectblogdetails" extends="base.definition.public">
- 		<put-attribute name="currentPage" value="home" />
+ 		<put-attribute name="currentPage" value="projectblog" />
  		<put-attribute name="content"
  			value="/WEB-INF/views/projectblogdetails.jsp" />
  	</definition>	

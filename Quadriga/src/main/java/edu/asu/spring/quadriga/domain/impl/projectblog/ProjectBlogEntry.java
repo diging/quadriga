@@ -115,24 +115,21 @@ public class ProjectBlogEntry implements IProjectBlogEntry {
         this.author = author;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getStripped(String input, int wordCount) {
+    private String getStripped(String input, int wordCount) {
         
         String[] words = input.split(" ");
         
         if(words.length < wordCount)
             return input;
         
-        String result = "";
+        StringBuilder result = new StringBuilder();
         
         for (int i = 0; i < wordCount; i++){
-            result += words[i] + " ";
+            result.append(words[i]);
+            result.append(" ");
         }
        
-        return result;
+        return result.toString();
     }
 
     /**

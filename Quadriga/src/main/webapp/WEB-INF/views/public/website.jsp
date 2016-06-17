@@ -57,7 +57,7 @@
 </div>
 
 <div class="row">
-<c:if test="${blogEntryExists}">
+<c:if test="${latestProjectBlogEntry != null}">
 	<div  class="col-lg-4">
 		<h2>Latest Blog Post</h2>
 		<h3>${latestProjectBlogEntry.title}</h3>
@@ -67,7 +67,7 @@
 		</p>
 		<p>${latestProjectBlogEntrySnippet}...</p>
 		<p>
-		<a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblog">	Read More </a>	
+		<a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblog/${latestProjectBlogEntry.projectBlogEntryId}">	Read More </a>	
 		</p>
 	</div>
 </c:if>

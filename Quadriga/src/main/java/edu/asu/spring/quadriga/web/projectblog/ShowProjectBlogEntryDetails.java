@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.projectblog;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,21 +41,20 @@ public class ShowProjectBlogEntryDetails {
      * @throws QuadrigaStorageException
      *             Database storage exception thrown
      */
-    @RequestMapping(value = "sites/{ProjectUnixName}/projectblogdetails/{projectBlogEntryId}", method = RequestMethod.GET)
-    public ModelAndView projectblogdetails(
+    @RequestMapping(value = "sites/{ProjectUnixName}/projectblog/{projectBlogEntryId}", method = RequestMethod.GET)
+    public String projectblogdetails(
+            Model model,
             @PathVariable("ProjectUnixName") String ProjectUnixName,
             @PathVariable("projectBlogEntryId") String projectBlogEntryId,
-            @InjectProject(unixNameParameter = "ProjectUnixName") IProject project)
-            throws QuadrigaStorageException {
+            @InjectProject IProject project)
+                    throws QuadrigaStorageException {
 
-        ModelAndView model = new ModelAndView("sites/projectblogdetails");
-        model.getModelMap().put("project", project);
+        IProjectBlogEntry projectBlogEntry = projectBlogEntryManager.getProjectBlogEntryDetails(projectBlogEntryId);    
+        
+        model.addAttribute("project", project);
+        model.addAttribute("projectBlogEntry", projectBlogEntry);
 
-        IProjectBlogEntry projectBlogEntry = projectBlogEntryManager.getProjectBlogEntryDetails(projectBlogEntryId);
-        model.getModelMap().put("projectBlogEntry", projectBlogEntry);
-
-        return model;
-
+        return "sites/projectblogdetails";
     }
 
 }
