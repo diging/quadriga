@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.conceptpower.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.Assert.assertNotNull;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 
 public class ConceptpowerConnectorTest {

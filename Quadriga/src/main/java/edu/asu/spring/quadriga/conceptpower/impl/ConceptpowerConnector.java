@@ -34,7 +34,11 @@ public class ConceptpowerConnector implements IConceptpowerConnector {
     @Autowired
     @Qualifier("searchConceptPowerURLPath")
     private String searchURL;
-
+    
+    @Autowired
+    @Qualifier("searchConceptpowerEndpoint")
+    private String searchEndpoint;
+    
     @Autowired
     @Qualifier("updateConceptPowerURLPath")
     private String idUrl;
@@ -51,6 +55,21 @@ public class ConceptpowerConnector implements IConceptpowerConnector {
 
         return restTemplate.getForObject(conceptURL + searchURL
                 + "{name}/{pos}", ConceptpowerReply.class, vars);
+    }
+    
+    /**
+     * Searches Conceptpower for the given term using Conceptpowers
+     * search API. Search query consists of word=searchTerm.
+     * @param searchTerm Term to search for.
+     * @return
+     */
+    @Override
+    @Cacheable(value="concepts")
+    public ConceptpowerReply search(String searchTerm) {
+        Map<String, String> vars = new HashMap<String, String>();
+        vars.put("searchterm", searchTerm);
+        
+        return restTemplate.getForObject(conceptURL + searchEndpoint + "?word={searchterm}", ConceptpowerReply.class, vars);
     }
     
     /* (non-Javadoc)
