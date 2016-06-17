@@ -23,10 +23,10 @@
 
 	<div class="list-group">
 		<a id="mainPageTab"
-			class='list-group-item ${currentTab != "mainPageSettings" ? "disabled" : ""}'
+			class='list-group-item ${currentTab == "mainPageSettings" ? "disabled" : ""}'
 			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i
 			class="fa fa-cog"></i> Main Page Settings</a> <a id="aboutTab"
-			class='list-group-item ${currentTab != "aboutPage" ? "disabled" : ""}'
+			class='list-group-item ${currentTab == "aboutPage" ? "disabled" : ""}'
 			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout"><i
 			class="fa fa-info-circle"></i> About Page</a>
 	</div>
