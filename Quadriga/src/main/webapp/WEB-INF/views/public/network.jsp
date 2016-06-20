@@ -6,52 +6,48 @@
 <!-- CSS Files -->
 <link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/css/d3.css"
-	rel="stylesheet" /> 
-	
-<script src="${pageContext.servletContext.contextPath}/resources/js/d3/common_functions.js"></script> 
+	rel="stylesheet" />
+
+<!-- <script src="${pageContext.servletContext.contextPath}/resources/js/d3/common_functions.js"></script> 
 <script
-	src="${pageContext.servletContext.contextPath}/resources/js/d3networkspublic.js"></script>
-	
-	<script
+	src="${pageContext.servletContext.contextPath}/resources/js/d3networkspublic.js"></script> -->
+
+<script
 	src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
-<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+<!-- <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script> -->
+<script
+	src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/dist/cytoscape.js"></script>
 
-
-</head>
-<script type="text/javascript">
-function changeLayout(json,networkid,path,type)
-{
-	d3visualizepublic(json,networkid,path,type, '${unixName}');
-}
-
-</script>
-
-<body
-	onload="d3visualizepublic(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force', '${unixName}');" />
+<!--  onload="d3visualizepublic(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force', '${unixName}');" />-->
 
 
 
-<button type="submit" onclick="goFullscreen('chart')" style="float: left">
-    <i class="fa fa-arrows-alt"></i> 
-    
-</button>
+
 <!-- <div id="dspace_metadata"></div>  -->
 
 <c:if test="${isNetworkEmpty}">
-<div class="row">
-	<div class="alert alert-info">Could not find any nodes for the search term in the project</div>
-</div>
+	<div class="row">
+		<div class="alert alert-info">Could not find any nodes for the
+			search term in the project</div>
+	</div>
 </c:if>
 
 <c:if test="${!isNetworkEmpty}">
+    <a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
+        <i class="fa fa-arrows-alt"></i>
+    </a>
+	
+	<div class="row">
+		<div id="networkBox" class="col-sm-12"
+			style="min-height: 500px; height: 100%; text-align: left;"></div>
+	</div>
 
-<div id="chart" class="row">
-</div>
-
-<div id="inner-details" class="row"></div>
-<div id="allannot_details" class="row">
-	<div class="row"><table id = "annotationsTable"></table></div>
-</div>
+	<div id="inner-details" class="row"></div>
+	<div id="allannot_details" class="row">
+		<div class="row">
+			<table id="annotationsTable"></table>
+		</div>
+	</div>
 </c:if>
 
 
@@ -78,7 +74,7 @@ function changeLayout(json,networkid,path,type)
 //# sourceURL=dynamicScript2.js 
 function clear()
 {
-	var element=document.getElementById('chart');
+	var element=document.getElementById('networkBox');
 	element.style.removeProperty('position');//=null;
 	element.style.top=null;
 	element.style.bottom=null;
@@ -109,4 +105,68 @@ function exitHandler()
     	}
     }
 }
+</script>
+
+<script
+	src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.2/cytoscape-cose-bilkent.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/publicNetwork.js" ></script>
+<script type="text/javascript">
+//# sourceURL=test.js
+
+var container = document.getElementById('networkBox');
+
+var cy = cytoscape({
+    container: container, // container to render in
+
+    elements: ${jsonstring},
+    layout: {
+        name: 'cose',
+        idealEdgeLength: 5
+      },
+    style: [ // the stylesheet for the graph
+             {
+               selector: 'node',
+               style: {
+                 'background-color': 'mapData(group, 0, 1, #E1CE7A, #FDD692)',
+                 'border-color' : '#B98F88',
+                 'border-width' : 1,
+                 'font-family': 'Open Sans',
+                 'font-size': '12px',
+                 'font-weight' : 'bold',
+                 'color': 'mapData(group, 0, 1, #666, #333)',
+                 'label': 'data(conceptName)',
+                 'width':'mapData(group, 0, 1, 40, 55)',
+                 "height":"mapData(group, 0, 1, 40, 55)",
+                 'text-valign' : 'center',
+               }
+             },
+
+             {
+               selector: 'edge',
+               style: {
+                 'width': 1,
+                 'line-color': '#754F44',
+                 'target-arrow-shape': 'none'
+               }
+             }
+           ]
+});
+
+defineListeners(cy, '${pageContext.servletContext.contextPath}', '${unixName}');
+
+$( document ).ready(function() {
+	$('#exportJson').on('click', function() {
+		var json = cy.json();
+		window.open('data:application/json,' +
+        encodeURIComponent(JSON.stringify(json), '_blank'));
+	});
+});
+
+$( document ).ready(function() {
+    $('#exportPng').on('click', function() {
+        var png = cy.png({'scale' : 5});
+        window.open(png, '_blank');
+    });
+});
+
 </script>

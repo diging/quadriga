@@ -18,12 +18,13 @@
 			</div>
 			<div class="row" id="search-results-wrapper" style="display: none;">
 				<div class="col-sm-12 search-results">
-					<div class="list-group" id="search-results-items">
+					<div class="list-group" style="border: 1px solid #dddddd; max-height: 300px; overflow-y:scroll;" id="search-results-items">
 					</div>
 					<div style="display: none;">
 						<a href="#" class="list-group-item" id="search-item-template">
-							<span class="search-name text-primary"><strong></strong></span>
-							<span class="search-desc text-muted"></span>
+							<span class="search-name text-primary"><strong></strong></span> <span class="search-type label label-primary"></span> 
+							<span class="search-pos label label-info text-lowercase"></span>
+							<small><br><span class="search-desc text-muted"></span></small>
 						</a>
 					</div>
 				</div>
@@ -70,7 +71,7 @@
 			var timeout;
 			var timeoutInt = 400;
 			var prevVal = '';
-			var minChars = 3;
+			var minChars = 2;
 			var change = function() {
 				$searchInput.trigger('textChange');
 			};
@@ -99,7 +100,7 @@
 		var addTerms = (function() {
 			// clear all the terms
 			var $a = $('#search-item-template');
-			var maxResults = 5;
+			var maxResults = 15;
 			return function(terms) {
 				// if terms are empty hide the search wrapper
 				if (terms && terms.length === 0) {
@@ -115,6 +116,8 @@
 					$link.find('.search-name strong').text(terms[i].name);
 					$link.attr('href', networkURL + terms[i].id);
 					$link.find('.search-desc').text(terms[i].description);
+					$link.find('.search-type').text(terms[i].type);
+					$link.find('.search-pos').text(terms[i].pos);
 					$items.append($link);
 				}
 				$resWrapper.show();

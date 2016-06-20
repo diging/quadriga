@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.conceptpower.POS;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.profile.ISearchResult;
@@ -55,7 +56,7 @@ public class ConceptPowerService implements IService {
 
 		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
 		
-		ConceptpowerReply conceptReply = collectionManager.search(term, IService.POS_NOUN);
+		ConceptpowerReply conceptReply = collectionManager.search(term, POS.NOUN);
 		if(conceptReply!=null)
 		{
 			List<ConceptEntry> conceptEntries = conceptReply.getConceptEntry();
