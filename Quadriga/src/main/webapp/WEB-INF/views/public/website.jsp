@@ -57,7 +57,7 @@
 </div>
 
 <div class="row">
-<c:if test="${latestProjectBlogEntry != null}">
+<c:if test="${not empty latestProjectBlogEntry}">
 	<div  class="col-lg-4">
 		<h2>Latest Blog Post</h2>
 		<h3>${latestProjectBlogEntry.title}</h3>

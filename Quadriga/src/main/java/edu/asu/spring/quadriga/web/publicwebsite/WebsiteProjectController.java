@@ -52,31 +52,9 @@ public class WebsiteProjectController {
     private IPublicPageManager publicPageManager;
 
     @Autowired
-    private IRetrieveProjectManager projectManager;
-
-    @Autowired
-    private INetworkManager networkmanager;
-
-    @Autowired
-    private INetworkTransformationManager transformationManager;
-
-    @Autowired
-    private ID3Creator d3Creator;
-
-    @Autowired
     private IProjectBlogEntryManager projectBlogEntryManager;
 
     private static final int WORD_COUNT = 30;  
-
-    public IRetrieveProjectManager getProjectManager() {
-        return projectManager;
-    }
-
-    public void setProjectManager(IRetrieveProjectManager projectManager) {
-        this.projectManager = projectManager;
-    }
-
-
 
     /**
      * This method displays the public or external Website for the particular
@@ -100,9 +78,6 @@ public class WebsiteProjectController {
     public String showProject(Model model, @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,
             Principal principal, @CheckAccess @InjectProject IProject project) throws QuadrigaStorageException {
 
-        String projectId = project.getProjectId();
-        Integer count = 1;
-
         model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 
         List<IPublicPage> publicPages = publicPageManager.retrievePublicPageContent(project.getProjectId());
@@ -117,8 +92,8 @@ public class WebsiteProjectController {
         publicPages.forEach(item -> item.setLinkTo(linkToMap.get(item.getLinkTo())));
 
         // Fetch blog entries for a project identified by project unix name
-        List<IProjectBlogEntry> latestProjectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(projectId,
-                count);
+        List<IProjectBlogEntry> latestProjectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(project.getProjectId(),
+                1);
 
         if (latestProjectBlogEntryList.size() > 0 ) {
 
@@ -146,5 +121,4 @@ public class WebsiteProjectController {
         linkTypes.put(IPublicPageBlockLinkTargets.STATS, "statistics");
         return linkTypes;
     }
-
 }

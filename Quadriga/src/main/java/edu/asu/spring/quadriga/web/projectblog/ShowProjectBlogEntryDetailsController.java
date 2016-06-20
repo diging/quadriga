@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -22,7 +23,7 @@ import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
  *
  */
 @Controller
-public class ShowProjectBlogEntryDetails {
+public class ShowProjectBlogEntryDetailsController {
     @Autowired
     private IProjectBlogEntryManager projectBlogEntryManager;
 
@@ -45,7 +46,7 @@ public class ShowProjectBlogEntryDetails {
     public String projectblogdetails(
             Model model,
             @PathVariable("ProjectUnixName") String ProjectUnixName,
-            @PathVariable("projectBlogEntryId") String projectBlogEntryId,
+            @ProjectIdentifier @PathVariable("projectBlogEntryId") String projectBlogEntryId,
             @InjectProject IProject project)
                     throws QuadrigaStorageException {
 

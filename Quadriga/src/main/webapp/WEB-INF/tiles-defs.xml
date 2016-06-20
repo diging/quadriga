@@ -873,7 +873,7 @@
 	<definition name="sites/projectblogdetails" extends="base.definition.public">
  		<put-attribute name="currentPage" value="projectblog" />
  		<put-attribute name="content"
- 			value="/WEB-INF/views/projectblogdetails.jsp" />
+ 			value="/WEB-INF/views/public/blog/projectblogdetails.jsp" />
  	</definition>	
 
 	<!-- Explore combined network -->
