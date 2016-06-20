@@ -328,8 +328,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     @Transactional
     public INetwork getNetwork(String networkId) throws QuadrigaStorageException {
-        INetwork network = null;
-
         NetworksDTO networkDto = dbConnect.getNetworksDTO(networkId);
         return networkmapper.getNetwork(networkDto);
     }
