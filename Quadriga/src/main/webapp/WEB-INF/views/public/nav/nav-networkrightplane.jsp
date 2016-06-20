@@ -4,27 +4,52 @@
 
 
 <c:if test="${not empty network}">
+    <div class="panel-group" id="info" role="tablist" aria-multiselectable="true">
 	<div class="panel panel-default">
-		<div class="panel-heading">Network Details</div>
-		<div class="panel-body" style="text-align: left;">
-			Network name:<br> <strong>${network.networkName}</strong><br>
-			Submitted by:<br> <strong>${network.creator.name}</strong><br>
-			Submitted on: <br> <strong>${network.createdDate}</strong><br>
-			Annotated text: <br> <strong>${network.textUrl}</strong>
+		<div class="panel-heading" role="tab" id="headingInfo">
+		    <a role="button" data-toggle="collapse" data-parent="#info" href="#bodyInfo" aria-expanded="true" aria-controls="bodyInfo">
+		    <small>Network Details <i class="fa fa-caret-down" aria-hidden="true"></i></small>
+		    </a> 
+		</div>
+		<div id="bodyInfo" class="panel-body panel-collapse collapse in" style="text-align: left;" role="tabpanel" aria-labelledby="headingInfo">
+			<p><small><span class="text-muted">Network name:</span><br>
+			${network.networkName}</small></p>
+			
+			<p><small><span class="text-muted">Submitted by:</span><br>
+			${network.creator.name}</small></p>
+			
+			<p><small><span class="text-muted">Submitted on: </span><br>
+			${network.createdDate}</small></p>
+			
+			<p><small><span class="text-muted">Annotated text:</span><br>
+			${network.textUrl}</small></p>
 		</div>
 	</div>
+	</div>
 </c:if>
-<div class="panel panel-default">
-	<div class="panel-heading" id="lemma_name">Select a node</div>
-	<div class="panel-body">
-		<div id="concept_desc">...to display node information</div>
+<div class="panel panel-default" id="concept" role="tablist" aria-multiselectable="true">
+	<div class="panel-heading" role="tab" id="headingConcept">
+	    <a role="button" data-toggle="collapse" data-parent="#concept" href="#bodyConcept" aria-expanded="true" aria-controls="bodyConcept">
+           <small>Concept: <span id="lemma_name">Select a node</span> <i class="fa fa-caret-down" aria-hidden="true"></i></small>
+        </a>
+	</div>
+	<div id="bodyConcept" class="panel-body panel-collapse collapse in" role="tabpanel" aria-labelledby="headingConcept">
+	<small>
+	<p class="text-left" style="overflow: scroll;"><span id="concept_desc">...to display concept information.</span></p>
+    </small>
 	</div>
 </div>
 
-<div class="panel panel-default">
-	<div class="panel-heading" id="lemma_name">Select a node</div>
-	<div class="panel-body">
-		<div id="texts">...to display text.</div>
+<div class="panel panel-default" id="textsPanel" role="tablist" aria-multiselectable="true">
+	<div class="panel-heading" role="tab" id="headingTexts">
+	   <a role="button" data-toggle="collapse" data-parent="#textsPanel" href="#bodyTexts" aria-expanded="true" aria-controls="bodyTexts">
+	   <small>Text occurrences <i class="fa fa-caret-down" aria-hidden="true"></i></small>
+	   </a>
+	</div>
+	<div id="bodyTexts" class="panel-body panel-collapse collapse in" style="text-align: left; max-height: 200px; overflow-y: scroll;" role="tabpanel" aria-labelledby="headingTexts">
+	<small>
+    <div id="texts" class="text-left">Select node to display text.</div>
+    </small>
 	</div>
 </div>
 

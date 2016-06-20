@@ -106,7 +106,7 @@ function fadeOut(statementIds) {
 function conceptDescription(path, node) {
 	lemma = node.data("conceptName");
 
-	var lemmaName = "Node: " + lemma;
+	var lemmaName = lemma;
 	var conceptDesc = "<div id=" + '"conceptdescTextArea"' + ">";
 
 	// This is done to replace all dot (.) with dollar ($)
@@ -148,11 +148,11 @@ function getTexts(node, path, unixName) {
 				parsedData = JSON.parse(data);
 				var projects = parsedData['projects'];
 				projects.forEach(function(element, index, array) {
-					conceptDesc += "<h5>" + element["text"] + "</h5>";
+					conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["text"] + "</p>";
 					conceptDesc += "... " + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
 				});
 			}
-			conceptDesc = "<div>" + conceptDesc + "</div>";
+			conceptDesc = "<p>" + conceptDesc + "</p>";
 			$('#texts').html(conceptDesc);
 		},
 		error : function() {
