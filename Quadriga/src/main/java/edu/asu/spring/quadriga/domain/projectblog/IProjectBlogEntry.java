@@ -39,9 +39,11 @@ public interface IProjectBlogEntry {
     IUser getAuthor();
 
     /**
+     * returns the first n words of the blog description where n is 
+     * the word count
      * @param wordCount
-     *            , number of words needed in the snippet
-     * 
+                 the count of number of words from the blog description
+     * @return returns a string which is the snippet of the blog
      */
     String getSnippet(int wordCount);
 }

@@ -96,8 +96,6 @@ public class WebsiteProjectController {
                 1);
 
         if (latestProjectBlogEntryList.size() > 0 ) {
-
-            
             model.addAttribute("latestProjectBlogEntry", latestProjectBlogEntryList.get(0));
             model.addAttribute("latestProjectBlogEntrySnippet",latestProjectBlogEntryList.get(0).getSnippet(WORD_COUNT));
         }

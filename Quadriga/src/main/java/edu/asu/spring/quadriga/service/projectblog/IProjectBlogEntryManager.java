@@ -40,12 +40,11 @@ public interface IProjectBlogEntryManager {
     List<IProjectBlogEntry> getProjectBlogEntryList(String projectId, Integer count) throws QuadrigaStorageException;
     
     /**
-     * 
+     * fetches the blog entry identified by project blog entry id
      * @param projectBlogEntryId
-     *            blog entry id used to obtain the blog entry   
+     *            id of the blog entry that should be retrieved from the database 
      * @return  project blog entry
      * @throws QuadrigaStorageException
      */
     IProjectBlogEntry getProjectBlogEntryDetails(String projectBlogEntryId) throws QuadrigaStorageException ;
-
 }

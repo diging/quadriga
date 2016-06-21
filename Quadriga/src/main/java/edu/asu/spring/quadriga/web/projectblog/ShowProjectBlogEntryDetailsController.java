@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
@@ -43,7 +42,7 @@ public class ShowProjectBlogEntryDetailsController {
      *             Database storage exception thrown
      */
     @RequestMapping(value = "sites/{ProjectUnixName}/projectblog/{projectBlogEntryId}", method = RequestMethod.GET)
-    public String projectblogdetails(
+    public String showProjectBlog(
             Model model,
             @PathVariable("ProjectUnixName") String ProjectUnixName,
             @ProjectIdentifier @PathVariable("projectBlogEntryId") String projectBlogEntryId,
@@ -57,5 +56,4 @@ public class ShowProjectBlogEntryDetailsController {
 
         return "sites/projectblogdetails";
     }
-
 }
