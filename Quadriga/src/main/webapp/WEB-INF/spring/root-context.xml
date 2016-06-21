@@ -53,14 +53,17 @@
         <beans:property name="cacheManager"><beans:ref bean="ehcache"/></beans:property>
     </beans:bean>
 
-	
-    <beans:bean id="ehcache"
+	<beans:bean id="ehcache"
         class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
         p:config-location="classpath:ehcache.xml" />
         
-    
-     <beans:bean id="txtfileSaveUtil" class="edu.asu.spring.quadriga.utilities.impl.FileSaveUtility">
+    <beans:bean id="txtfileSaveUtil" class="edu.asu.spring.quadriga.utilities.impl.FileSaveUtility">
      		<beans:property name="textFileLocation" value="${textfiles.location}"/>
-        </beans:bean>
+     </beans:bean>
+     
+     <beans:bean id="transformfileSaveUtil" class="edu.asu.spring.quadriga.utilities.impl.TransformationFileSaveUtility">
+     		<beans:property name="transformationFileLocation" value="${transformationfiles.location}"/>
+     </beans:bean>
+	
 	</beans:beans>
 
