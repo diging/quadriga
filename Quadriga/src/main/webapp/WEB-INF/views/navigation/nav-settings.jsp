@@ -22,13 +22,15 @@
 	</div>
 
 	<div class="list-group">
-		<a id="mainPageTab"
-			class='list-group-item ${currentTab == "mainPageSettings" ? "disabled" : ""}'
-			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i
-			class="fa fa-cog"></i> Main Page Settings</a> <a id="aboutTab"
-			class='list-group-item ${currentTab == "aboutPage" ? "disabled" : ""}'
-			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout"><i
-			class="fa fa-info-circle"></i> About Page</a>
+		<a id="mainPageTab" class='list-group-item ${currentTab == "mainPageSettings" ? "disabled" : ""}'
+		href="<c:choose><c:when test="${currentTab == 'mainPageSettings'}">#</c:when><c:otherwise>${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings</c:otherwise></c:choose>" >	 
+		<i class="fa fa-cog"></i> Main Page Settings</a> 
+			
+			
+		<a id="aboutTab" class='list-group-item ${currentTab == "aboutPage" ? "disabled" : ""}'
+		href="<c:choose><c:when test="${currentTab == 'aboutPage'}">#</c:when><c:otherwise>${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/editabout</c:otherwise></c:choose>" >
+		<i class="fa fa-info-circle"></i> About Page
+		</a>
 	</div>
 
 </div>
