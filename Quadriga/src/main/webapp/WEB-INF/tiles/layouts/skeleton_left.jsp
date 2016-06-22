@@ -57,6 +57,7 @@
 </head>
 <body data-spy="scroll" data-offset="0" data-target="#navigation">
 	<tiles:importAttribute name="currentPage" scope="request" />
+	<tiles:importAttribute name="currentTab" scope="request" />
 
 	<!-- Fixed navbar -->
 	<div id="navigation" class="navbar navbar-default navbar-fixed-top">
