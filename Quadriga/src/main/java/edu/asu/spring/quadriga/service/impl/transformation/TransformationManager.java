@@ -7,8 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.transform.ITransformFilesDAO;
+import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;
+import edu.asu.spring.quadriga.exceptions.FileStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
+import edu.asu.spring.quadriga.service.transformation.ITransformationSaveService;
 
 /**
  * This class is a service which takes the transformation files metadata and
@@ -22,6 +26,9 @@ public class TransformationManager implements ITransformationManager {
 
     @Autowired
     private ITransformFilesDAO transformationDAO;
+    
+    @Autowired
+    private ITransformationSaveService transformationFileService;
 
     @Transactional
     @Override
@@ -40,6 +47,12 @@ public class TransformationManager implements ITransformationManager {
     @Override
     public List<TransformFilesDTO> getTransformationsList() {
         return transformationDAO.getAllTransformations();
+    }
+
+    @Override
+    public void saveFiles(ITransformationFile transformationFile) throws FileStorageException {
+        // TODO Auto-generated method stub
+        transformationFileService.saveFileToLocal(transformationFile);
     }
 
 }

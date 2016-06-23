@@ -31,6 +31,7 @@
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
 		<textfiles.location></textfiles.location>
+		<transformationfiles.location></transformationfiles.location>
 	</properties>
 
 	<dependencies>

@@ -61,8 +61,8 @@
      		<beans:property name="textFileLocation" value="${textfiles.location}"/>
      </beans:bean>
      
-     <beans:bean id="transformfileSaveUtil" class="edu.asu.spring.quadriga.utilities.impl.TransformationFileSaveUtility">
-     		<beans:property name="transformationFileLocation" value="${transformationfiles.location}"/>
+     <beans:bean id="transformfileSaveUtil" class="edu.asu.spring.quadriga.utilities.impl.FileSaveUtility">
+     		<beans:property name="textFileLocation" value="${transformationfiles.location}"/>
      </beans:bean>
 	
 	</beans:beans>
