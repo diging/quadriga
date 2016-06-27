@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
+import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
@@ -40,6 +42,9 @@ public class UploadTransformFilesController {
     @Autowired
     private TransfomationFilesValidator validator;
 
+    @Autowired
+    private ITransformationFile transformationFile;
+    
     @InitBinder("transformationFilesBackingBean")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
@@ -76,18 +81,24 @@ public class UploadTransformFilesController {
             String patternTitle = formBean.getPatternTitle();
             String patternDescription = formBean.getPatternDescription();
             String patternFileName = file[0].getOriginalFilename();
-
+           
             String mappingTitle = formBean.getMappingTitle();
             String mappingDescription = formBean.getMappingDescription();
             String mappingFileName = file[1].getOriginalFilename();
 
-            transformationManager.saveTransformation(title, description,
-                    patternFileName, patternTitle, patternDescription,
-                    mappingFileName, mappingTitle, mappingDescription,userName);
-            // Only meta data is being saved in database. Saving files is not
-            // yet done..
-
-            model.getModelMap().put("show_success_alert", true);
+            transformationFile.setTitle(title);
+            transformationFile.setDescription(description);
+            transformationFile.setUserName(userName);
+            transformationFile.setPatternTitle(patternTitle);
+            transformationFile.setPatternDescription(patternDescription);
+            transformationFile.setPatternFileName(patternFileName);
+            transformationFile.setMappingTitle(mappingTitle);
+            transformationFile.setMappingDescription(mappingDescription);
+            transformationFile.setMappingFileName(mappingFileName);
+            
+            transformationManager.saveTransformations(transformationFile);
+                        model.getModelMap().put("show_success_alert", true);
+            
             model.getModelMap().put("success_alert_msg", "Upload Successful.");
             return model;
         }

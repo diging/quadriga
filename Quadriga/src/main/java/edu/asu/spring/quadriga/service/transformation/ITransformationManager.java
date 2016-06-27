@@ -14,10 +14,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public interface ITransformationManager {
 
-    public void saveTransformation(String title, String description,
-            String mappingTitle, String mappingDescription,
-            String mappingFileName, String transfomrTitle,
-            String transfomrDesc, String transformationFileName,String userName);
+    public void saveTransformations(ITransformationFile transformations);
     public List<TransformFilesDTO> getTransformationsList();
     
     public void saveFiles(ITransformationFile transformationFile) throws FileStorageException;

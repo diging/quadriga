@@ -10,7 +10,6 @@ import edu.asu.spring.quadriga.dao.transform.ITransformFilesDAO;
 import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 import edu.asu.spring.quadriga.service.transformation.ITransformationSaveService;
 
@@ -32,13 +31,11 @@ public class TransformationManager implements ITransformationManager {
 
     @Transactional
     @Override
-    public void saveTransformation(String title, String description,
-            String patternFileName, String patternTitle,
-            String patternDescription, String mappingFileName,
-            String mappingTitle, String mappingDescription,String userName) {
-        TransformFilesDTO tranformDTO = new TransformFilesDTO(title,
-                description, patternFileName, patternTitle, patternDescription,
-                mappingFileName, mappingTitle, mappingDescription, userName);
+    public void saveTransformations(ITransformationFile transformationFile) {
+        TransformFilesDTO tranformDTO = new TransformFilesDTO(transformationFile.getTitle(),
+                transformationFile.getDescription(), transformationFile.getPatternFileName(), transformationFile.getPatternTitle(), 
+                transformationFile.getPatternDescription(), transformationFile.getMappingFileName(), transformationFile.getMappingTitle(), 
+                transformationFile.getMappingDescription(), transformationFile.getUserName());
         tranformDTO.setId(transformationDAO.generateUniqueID());
         transformationDAO.saveNewDTO(tranformDTO);
     }
