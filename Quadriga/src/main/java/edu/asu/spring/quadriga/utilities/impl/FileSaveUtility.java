@@ -35,7 +35,7 @@ public class FileSaveUtility implements IFileSaveUtility {
 
         try {
             createDirectoryIfNotExists(textFileLocation + "/" + dirName);
-            File f = new File(textFileLocation + "/" + dirName + fileName);
+            File f = new File(textFileLocation + "/" + dirName + "/" + fileName);
             if (!f.exists()) {
                 f.createNewFile();
             }
