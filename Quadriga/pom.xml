@@ -31,7 +31,7 @@
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
 		<textfiles.location></textfiles.location>
-		<transformationfiles.location></transformationfiles.location>
+		<transformationfiles.location>/Users/diging_yogi/saveTransformations/</transformationfiles.location>
 	</properties>
 
 	<dependencies>

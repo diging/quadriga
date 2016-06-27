@@ -31,13 +31,20 @@ public class TransformationManager implements ITransformationManager {
 
     @Transactional
     @Override
-    public void saveTransformations(ITransformationFile transformationFile) {
+    public void saveTransformations(ITransformationFile transformationFile){
         TransformFilesDTO tranformDTO = new TransformFilesDTO(transformationFile.getTitle(),
                 transformationFile.getDescription(), transformationFile.getPatternFileName(), transformationFile.getPatternTitle(), 
                 transformationFile.getPatternDescription(), transformationFile.getMappingFileName(), transformationFile.getMappingTitle(), 
                 transformationFile.getMappingDescription(), transformationFile.getUserName());
         tranformDTO.setId(transformationDAO.generateUniqueID());
         transformationDAO.saveNewDTO(tranformDTO);
+        
+        try{
+        transformationFileService.saveFileToLocal(transformationFile);
+        }
+        catch(FileStorageException fs){
+            System.out.println("file storage exception");
+        }
     }
 
     @Transactional

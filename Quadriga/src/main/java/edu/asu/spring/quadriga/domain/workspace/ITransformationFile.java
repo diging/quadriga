@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
-import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
-
+/**
+ *  This interface contains the methods for storing details of transformations
+ * 
+ *  @author yoganandakishore
+ *
+ */
 public interface ITransformationFile {
 
-    
     public abstract String getTitle();
     public abstract void setTitle(String titleName);
     
@@ -32,12 +35,11 @@ public interface ITransformationFile {
     public abstract String getMappingFileName();
     public abstract void setMappingFileName(String MappingFileName);
     
-    public abstract String getMappingFileContent();
-    public abstract void setMappingFileContent(String MappingFileName);
+    public abstract byte[] getMappingFileContent();
+    public abstract void setMappingFileContent(byte[] mappingFileContent);
     
-    public abstract String getPatternFileContent();
-    public abstract void setPatternFileContent(String MappingFileName);
-    
+    public abstract byte[] getPatternFileContent();
+    public abstract void setPatternFileContent(byte[] patternFileContent);
 
 }
 

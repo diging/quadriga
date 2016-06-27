@@ -18,8 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.workspace.ITextFile;
-import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
+import edu.asu.spring.quadriga.domain.impl.workspace.TransformationFile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
@@ -42,9 +41,6 @@ public class UploadTransformFilesController {
     @Autowired
     private TransfomationFilesValidator validator;
 
-    @Autowired
-    private ITransformationFile transformationFile;
-    
     @InitBinder("transformationFilesBackingBean")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
@@ -86,19 +82,22 @@ public class UploadTransformFilesController {
             String mappingDescription = formBean.getMappingDescription();
             String mappingFileName = file[1].getOriginalFilename();
 
+            TransformationFile transformationFile = new TransformationFile();
             transformationFile.setTitle(title);
             transformationFile.setDescription(description);
             transformationFile.setUserName(userName);
             transformationFile.setPatternTitle(patternTitle);
             transformationFile.setPatternDescription(patternDescription);
             transformationFile.setPatternFileName(patternFileName);
+            transformationFile.setPatternFileContent(file[0].getBytes());
             transformationFile.setMappingTitle(mappingTitle);
             transformationFile.setMappingDescription(mappingDescription);
             transformationFile.setMappingFileName(mappingFileName);
+            transformationFile.setMappingFileContent(file[1].getBytes());
             
             transformationManager.saveTransformations(transformationFile);
-                        model.getModelMap().put("show_success_alert", true);
-            
+                        
+            model.getModelMap().put("show_success_alert", true);
             model.getModelMap().put("success_alert_msg", "Upload Successful.");
             return model;
         }

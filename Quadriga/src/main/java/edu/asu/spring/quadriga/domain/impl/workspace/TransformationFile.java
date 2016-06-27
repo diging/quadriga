@@ -2,6 +2,12 @@ package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
 
+/**
+ * This is a domain file object for storing transformation file properties
+ * 
+ *  @author yoganandakishore
+ *
+ */
 public class TransformationFile implements ITransformationFile{
 
     private String title;
@@ -13,8 +19,8 @@ public class TransformationFile implements ITransformationFile{
     private String mappingTitle;
     private String mappingDescription;
     private String mappingFileName;
-    private String patternFileContent;
-    private String mappingFileContent;
+    private byte[] patternFileContent;
+    private byte[] mappingFileContent;
     
     @Override
     public String getTitle() {
@@ -110,22 +116,22 @@ public class TransformationFile implements ITransformationFile{
     }
     
     @Override
-    public String getMappingFileContent() {
+    public byte[] getMappingFileContent() {
         return mappingFileContent;
     }
     
     @Override
-    public void setMappingFileContent(String mappingFileContent) {
+    public void setMappingFileContent(byte[] mappingFileContent) {
         this.mappingFileContent = mappingFileContent;
     }
     
     @Override
-    public String getPatternFileContent() {
+    public byte[] getPatternFileContent() {
         return patternFileContent;
     }
     
     @Override
-    public void setPatternFileContent(String patternFileContent) {
+    public void setPatternFileContent(byte[] patternFileContent) {
         this.patternFileContent = patternFileContent;
     }
    
