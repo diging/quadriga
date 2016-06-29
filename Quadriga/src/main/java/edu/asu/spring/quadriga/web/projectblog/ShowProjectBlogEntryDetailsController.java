@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.web.projectblog;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -41,16 +41,14 @@ public class ShowProjectBlogEntryDetailsController {
      * @throws QuadrigaStorageException
      *             Database storage exception thrown
      */
+    @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/projectblog/{projectBlogEntryId}", method = RequestMethod.GET)
-    public String showProjectBlog(
-            Model model,
-            @PathVariable("ProjectUnixName") String ProjectUnixName,
-            @ProjectIdentifier @PathVariable("projectBlogEntryId") String projectBlogEntryId,
-            @InjectProject IProject project)
-                    throws QuadrigaStorageException {
+    public String showBlogEntry(Model model, @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,
+            @PathVariable("projectBlogEntryId") String projectBlogEntryId, @InjectProject IProject project)
+            throws QuadrigaStorageException {
 
-        IProjectBlogEntry projectBlogEntry = projectBlogEntryManager.getProjectBlogEntryDetails(projectBlogEntryId);    
-        
+        IProjectBlogEntry projectBlogEntry = projectBlogEntryManager.getProjectBlogEntryDetails(projectBlogEntryId);
+
         model.addAttribute("project", project);
         model.addAttribute("projectBlogEntry", projectBlogEntry);
 

@@ -164,14 +164,51 @@ public class ProjectBlogEntryManagerTest {
         // Calling the method to test
         projectBlogEntryManagerUnderTest.addNewProjectBlogEntry(projectBlogEntry);
 
-        //Assert that id is assigned to projectBlogEntry object by addNewProjectBlogEntry method
+        // Assert that id is assigned to projectBlogEntry object by
+        // addNewProjectBlogEntry method
         assertEquals(UNIQUE_BLGE_ID, projectBlogEntry.getProjectBlogEntryId());
-        
-        //Assert that projectBlogEntry has date assigned by addNewProjectBlogEntry method
+
+        // Assert that projectBlogEntry has date assigned by
+        // addNewProjectBlogEntry method
         assertNotNull(projectBlogEntry.getCreatedDate());
-        
+
         // Verifying that saveNewDTO method is called
         verify(projectBlogEntryDAO).saveNewDTO(projectBlogEntryDTO);
+    }
+
+    /**
+     * tests
+     * {@link IProjectBlogEntryManager#getProjectBlogEntryDetails(projectBlogEntryId)}
+     * method responsible for fetching the blog entry identified by project blog
+     * entry id
+     * 
+     * @throws QuadrigaStorageException
+     */
+    @Test
+    public void projectBlogEntryDetailsTest() throws QuadrigaStorageException {
+
+        // Creating the dummy project Blog Entry
+        IProjectBlogEntry projectBlogEntry = new ProjectBlogEntry();
+        projectBlogEntry.setTitle(TITLE_NEW);
+        projectBlogEntry.setDescription(DESCRIPTION_NEW);
+
+        // Mocked ProjectBlogEntryDTO instance
+        ProjectBlogEntryDTO projectBlogEntryDTO = createProjectBlogEntryDTO(UNIQUE_BLGE_ID, TITLE_NEW, DESCRIPTION_NEW);
+
+        // Returning dummy project blog entry DTO
+        Mockito.when(projectBlogEntryDAO.getDTO(BLGE_ID_1)).thenReturn(projectBlogEntryDTO);
+
+        // Returning the created projectBlogEntry
+        Mockito.when(projectBlogEntryDTOMapper.getProjectBlogEntry(projectBlogEntryDTO)).thenReturn(projectBlogEntry);
+
+        // Calling the method to test
+        IProjectBlogEntry resultProjectBlogEntry = projectBlogEntryManagerUnderTest
+                .getProjectBlogEntryDetails(BLGE_ID_1);
+
+        // assert that the resultProjectBlogEntry has Title as expected
+        assertEquals(resultProjectBlogEntry.getTitle(), TITLE_NEW);
+        // assert that the resultProjectBlogEntry has description as expected
+        assertEquals(resultProjectBlogEntry.getDescription(), DESCRIPTION_NEW);
     }
 
 }
