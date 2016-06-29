@@ -213,6 +213,21 @@ public class ProjectBlogEntryManagerTest {
         // assert that the resultProjectBlogEntry has description as expected
         assertEquals(resultProjectBlogEntry.getDescription(), DESCRIPTION_NEW);
 
+    }
+
+    /**
+     * tests
+     * {@link IProjectBlogEntryManager#getProjectBlogEntryDetails(projectBlogEntryId)}
+     * method responsible for fetching the blog entry identified by project blog
+     * entry id
+     * 
+     * when there is no entry with the blog entry id
+     * 
+     * @throws QuadrigaStorageException
+     */
+    @Test
+    public void getProjectBlogEntryDetailsTestIdNotExist() throws QuadrigaStorageException {
+
         // Calling the method to test with blog entry id does not exist
         IProjectBlogEntry resultProjectBlogEntryWhenIdNotExist = projectBlogEntryManagerUnderTest
                 .getProjectBlogEntryDetails(BLGE_ID_2);
