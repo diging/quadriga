@@ -10,14 +10,15 @@ import edu.asu.spring.quadriga.service.transformation.ITransformationSaveService
 import edu.asu.spring.quadriga.utilities.IFileSaveUtility;
 
 /**
- * This service contains method to save transformation files to local file storage
+ * This service contains method to save contents of transformation files to
+ * local file storage
  * 
- *  @author yoganandakishore
+ * @author yoganandakishore
  *
  */
 
 @Service
-public class TransformationSaveService implements ITransformationSaveService{
+public class TransformationSaveService implements ITransformationSaveService {
 
     @Qualifier("transformfileSaveUtil")
     @Autowired
@@ -25,11 +26,10 @@ public class TransformationSaveService implements ITransformationSaveService{
 
     @Override
     public boolean saveFileToLocal(ITransformationFile transformationFile) throws FileStorageException {
-        
-        if( transformationFileManager.saveFiletoDir(transformationFile.getPatternTitle(), transformationFile.getPatternFileName(), transformationFile.getPatternFileContent()) &&
-            transformationFileManager.saveFiletoDir(transformationFile.getMappingTitle(), transformationFile.getMappingFileName(), transformationFile.getMappingFileContent()) ) {
-            return true;
-        } else
-            return false;
+
+        return (transformationFileManager.saveFiletoDir(transformationFile.getPatternTitle(),
+                transformationFile.getPatternFileName(), transformationFile.getPatternFileContent())
+                && transformationFileManager.saveFiletoDir(transformationFile.getMappingTitle(),
+                        transformationFile.getMappingFileName(), transformationFile.getMappingFileContent()));
     }
 }

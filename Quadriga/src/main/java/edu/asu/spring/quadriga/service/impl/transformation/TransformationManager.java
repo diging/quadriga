@@ -25,25 +25,25 @@ public class TransformationManager implements ITransformationManager {
 
     @Autowired
     private ITransformFilesDAO transformationDAO;
-    
+
     @Autowired
     private ITransformationSaveService transformationFileService;
 
     @Transactional
     @Override
-    public void saveTransformations(ITransformationFile transformationFile){
+    public void saveTransformations(ITransformationFile transformationFile) throws FileStorageException {
         TransformFilesDTO tranformDTO = new TransformFilesDTO(transformationFile.getTitle(),
-                transformationFile.getDescription(), transformationFile.getPatternFileName(), transformationFile.getPatternTitle(), 
-                transformationFile.getPatternDescription(), transformationFile.getMappingFileName(), transformationFile.getMappingTitle(), 
+                transformationFile.getDescription(), transformationFile.getPatternFileName(),
+                transformationFile.getPatternTitle(), transformationFile.getPatternDescription(),
+                transformationFile.getMappingFileName(), transformationFile.getMappingTitle(),
                 transformationFile.getMappingDescription(), transformationFile.getUserName());
         tranformDTO.setId(transformationDAO.generateUniqueID());
         transformationDAO.saveNewDTO(tranformDTO);
-        
-        try{
-        transformationFileService.saveFileToLocal(transformationFile);
-        }
-        catch(FileStorageException fs){
-            System.out.println("file storage exception");
+
+        try {
+            transformationFileService.saveFileToLocal(transformationFile);
+        } catch (FileStorageException fs) {
+            throw new FileStorageException(fs);
         }
     }
 
@@ -51,12 +51,6 @@ public class TransformationManager implements ITransformationManager {
     @Override
     public List<TransformFilesDTO> getTransformationsList() {
         return transformationDAO.getAllTransformations();
-    }
-
-    @Override
-    public void saveFiles(ITransformationFile transformationFile) throws FileStorageException {
-        // TODO Auto-generated method stub
-        transformationFileService.saveFileToLocal(transformationFile);
     }
 
 }
