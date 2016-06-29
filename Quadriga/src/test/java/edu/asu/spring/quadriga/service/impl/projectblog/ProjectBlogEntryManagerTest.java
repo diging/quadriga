@@ -185,12 +185,13 @@ public class ProjectBlogEntryManagerTest {
      * @throws QuadrigaStorageException
      */
     @Test
-    public void projectBlogEntryDetailsTest() throws QuadrigaStorageException {
+    public void getProjectBlogEntryDetailsTest() throws QuadrigaStorageException {
 
         // Creating the dummy project Blog Entry
         IProjectBlogEntry projectBlogEntry = new ProjectBlogEntry();
         projectBlogEntry.setTitle(TITLE_NEW);
         projectBlogEntry.setDescription(DESCRIPTION_NEW);
+        projectBlogEntry.setProjectBlogEntryId(BLGE_ID_1);
 
         // Mocked ProjectBlogEntryDTO instance
         ProjectBlogEntryDTO projectBlogEntryDTO = createProjectBlogEntryDTO(UNIQUE_BLGE_ID, TITLE_NEW, DESCRIPTION_NEW);
@@ -205,10 +206,18 @@ public class ProjectBlogEntryManagerTest {
         IProjectBlogEntry resultProjectBlogEntry = projectBlogEntryManagerUnderTest
                 .getProjectBlogEntryDetails(BLGE_ID_1);
 
+        // assert that the resultProjectBlogEntry has blog entry id as expected
+        assertEquals(resultProjectBlogEntry.getProjectBlogEntryId(), BLGE_ID_1);
         // assert that the resultProjectBlogEntry has Title as expected
         assertEquals(resultProjectBlogEntry.getTitle(), TITLE_NEW);
         // assert that the resultProjectBlogEntry has description as expected
         assertEquals(resultProjectBlogEntry.getDescription(), DESCRIPTION_NEW);
+
+        // Calling the method to test with blog entry id does not exist
+        IProjectBlogEntry resultProjectBlogEntryWhenIdNotExist = projectBlogEntryManagerUnderTest
+                .getProjectBlogEntryDetails(BLGE_ID_2);
+        // assert that the resultProjectBlogEntry is null
+        assertEquals(resultProjectBlogEntryWhenIdNotExist, null);
     }
 
 }
