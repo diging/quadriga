@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;"%>
+	<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
@@ -58,7 +58,7 @@
 
 <div class="row">
 <c:if test="${not empty latestProjectBlogEntry}">
-	<div  class="col-lg-4">
+	<div  class="col-lg-12">
 		<h2>Latest Blog Post</h2>
 		<h3>${latestProjectBlogEntry.title}</h3>
 		<p>
