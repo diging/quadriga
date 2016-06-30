@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.domain.impl.projectblog;
 
 import java.util.Date;
 
+import org.jsoup.Jsoup;
+
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 
@@ -111,6 +113,33 @@ public class ProjectBlogEntry implements IProjectBlogEntry {
     @Override
     public void setAuthor(IUser author) {
         this.author = author;
+    }
+
+    private String getStripped(String input, int wordCount) {
+        
+        String[] words = input.split(" ");
+        
+        if(words.length < wordCount)
+            return input;
+        
+        StringBuilder result = new StringBuilder();
+        
+        for (int i = 0; i < wordCount; i++){
+            result.append(words[i]);
+            result.append(" ");
+        }
+       
+        return result.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSnippet(int wordCount) {
+        org.jsoup.nodes.Document dom = Jsoup.parse(this.description);
+        String strippedtext = dom.text();
+        return getStripped(strippedtext, wordCount);
     }
 
 }

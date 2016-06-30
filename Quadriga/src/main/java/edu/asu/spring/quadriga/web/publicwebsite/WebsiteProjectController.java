@@ -21,11 +21,17 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.ID3Creator;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 import edu.asu.spring.quadriga.service.publicwebsite.IPublicPageBlockLinkTargets;
 import edu.asu.spring.quadriga.service.workbench.IPublicPageManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * This controller has all the mappings required to view the external website of
@@ -45,14 +51,17 @@ public class WebsiteProjectController {
     @Autowired
     private IPublicPageManager publicPageManager;
 
+    @Autowired
+    private IProjectBlogEntryManager projectBlogEntryManager;
+
+    private static final int WORD_COUNT = 30;  
+
     /**
      * This method displays the public or external Website for the particular
      * project
      * 
      * If the project has been set to 'accessible', then the public website page
      * is displayed. If the project does not exist then an error page is shown.
-     * 
-     * @param <T>
      * 
      * @param unixName
      *            unix name that is given to the project at the time of its
@@ -66,7 +75,7 @@ public class WebsiteProjectController {
     @CheckPublicAccess
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}", method = RequestMethod.GET)
-    public <T> String showProject(Model model, @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,
+    public String showProject(Model model, @ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,
             Principal principal, @CheckAccess @InjectProject IProject project) throws QuadrigaStorageException {
 
         model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
@@ -82,15 +91,22 @@ public class WebsiteProjectController {
         Map<String, String> linkToMap = getLinkTargetMap();
         publicPages.forEach(item -> item.setLinkTo(linkToMap.get(item.getLinkTo())));
 
-        model.addAttribute("blocks", publicPages);
+        // Fetch blog entries for a project identified by project unix name
+        List<IProjectBlogEntry> latestProjectBlogEntryList = projectBlogEntryManager.getProjectBlogEntryList(project.getProjectId(),
+                1);
 
+        if (latestProjectBlogEntryList.size() > 0 ) {
+            model.addAttribute("latestProjectBlogEntry", latestProjectBlogEntryList.get(0));
+            model.addAttribute("latestProjectBlogEntrySnippet",latestProjectBlogEntryList.get(0).getSnippet(WORD_COUNT));
+        }
+
+        model.addAttribute("blocks", publicPages);
         model.addAttribute("project", project);
         return "sites/website";
-
     }
 
     /*
-     * This is kind of ugly and should be replace with a better solution. But
+     * This is kind of ugly and should be replaced with a better solution. But
      * well, it works.
      */
     private Map<String, String> getLinkTargetMap() {
@@ -103,5 +119,4 @@ public class WebsiteProjectController {
         linkTypes.put(IPublicPageBlockLinkTargets.STATS, "statistics");
         return linkTypes;
     }
-
 }
