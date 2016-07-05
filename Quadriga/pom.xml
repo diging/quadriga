@@ -36,7 +36,7 @@
 		<email.username></email.username>
 		<email.pw></email.pw>
 		<email.from></email.from>
-        <quadriga.baseurl></quadriga.baseurl>
+		<quadriga.baseurl></quadriga.baseurl>
 	</properties>
 
 	<dependencies>

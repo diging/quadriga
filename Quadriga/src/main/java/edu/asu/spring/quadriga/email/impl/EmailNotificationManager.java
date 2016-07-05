@@ -22,96 +22,105 @@ import edu.asu.spring.quadriga.velocity.IVelocityBuilder;
 
 /**
  * This class manages all the outgoing emails from the Quadriga system.
+ * 
  * @author Ram Kumar Kumaresan
  */
 @Service
-public class EmailNotificationManager implements IEmailNotificationManager{
+public class EmailNotificationManager implements IEmailNotificationManager {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(EmailNotificationManager.class);
-	
-	@Autowired
-	private EmailNotificationSender emailSender;
-	
-	@Autowired
-	private IVelocityBuilder velocityBuilder;
-	
-	@Resource(name = "uiMessages")
-	private Properties emailMessages;
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void sendAccountDeactivationEmail(IUser user, String adminid) {
-		if(user.getEmail()!= null && !user.getEmail().equals(""))
-		{
-			emailSender.sendNotificationEmail(user.getEmail(), emailMessages.getProperty("email.account_deactivation_subject"), emailMessages.getProperty("email.account_deactivation_msg"));
-			logger.info("The admin <<"+adminid+">> sent a deactivation email to <"+user.getUserName()+">");
-		}	
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void sendAccountActivationEmail(IUser user, String adminid) {
-		if(user.getEmail()!= null && !user.getEmail().equals(""))
-		{
-			emailSender.sendNotificationEmail(user.getEmail(), emailMessages.getProperty("email.account_activation_subject"), emailMessages.getProperty("email.account_activation_msg"));
-			logger.info("The admin <<"+adminid+">> sent an activation email to <"+user.getUserName()+">");
-		}
-	}
+    private static final Logger logger = LoggerFactory.getLogger(EmailNotificationManager.class);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void sendNewAccountRequestPlacementEmail(IUser admin, String userid) {
-		if(admin.getEmail()!=null && !admin.getEmail().equals("") && userid!=null && !userid.equals(""))
-		{
-			String message = emailMessages.getProperty("email.account_request_msg_head")+userid+" "+emailMessages.getProperty("email.account_request_msg_tail");
-			emailSender.sendNotificationEmail(admin.getEmail(), emailMessages.getProperty("email.account_request_subject"), message );
-			logger.info("The system sent a user request email to <<"+admin.getUserName()+">> for the request placed by <"+userid+">");
-		}
-		
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void sendNewWorkspaceAddedToProject(IProject project, IWorkSpace workspace){
-		IUser projectOwner = project.getOwner();
-		if(projectOwner.getEmail() != null && !projectOwner.getEmail().equals(""))
-		{
-			//Build the message to be sent to the user
-			StringBuilder message = new StringBuilder(emailMessages.getProperty("email.new_workspace_msg_part1"));
-			message.append(project.getProjectName()+".");
-			message.append(emailMessages.getProperty("email.new_workspace_msg_part2"));
-			message.append(emailMessages.getProperty("email.new_workspace_msg_part3"));
-			message.append(workspace.getWorkspaceName());
-			message.append(emailMessages.getProperty("email.new_workspace_msg_part4"));
-			message.append(workspace.getDescription());
-			message.append(emailMessages.getProperty("email.new_workspace_msg_part5"));
-			message.append(workspace.getOwner().getUserName());
+    @Autowired
+    private EmailNotificationSender emailSender;
 
-			emailSender.sendNotificationEmail(projectOwner.getEmail(), emailMessages.getProperty("email.new_workspace_subject"), message.toString());
-			logger.info("The system sent an email notification to <<"+projectOwner.getEmail()+">> for the workspace <"+workspace.getWorkspaceName()+"> added by <"+workspace.getOwner().getUserName()+">");
-		}
-	}
-	
-	@Override
-    public void sendAccountCreatedEmail(String name, String username, String adminName, String adminEmail) throws QuadrigaNotificationException {
-	    Map<String, Object> contextProperties = new HashMap<String, Object>();
-	    
-	    contextProperties.put("createdUser", name);
-	    contextProperties.put("createdUsername", username);
-	    contextProperties.put("admin", adminName);
-	    
-	    try {
-            String msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/newAccount.vm", contextProperties);
-            emailSender.sendNotificationEmail(adminEmail, emailMessages.getProperty("email.account_created.subject"), msg);
+    @Autowired
+    private IVelocityBuilder velocityBuilder;
+
+    @Resource(name = "uiMessages")
+    private Properties emailMessages;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendAccountDeactivationEmail(IUser user, String adminid) {
+        if (user.getEmail() != null && !user.getEmail().equals("")) {
+            emailSender.sendNotificationEmail(user.getEmail(),
+                    emailMessages.getProperty("email.account_deactivation_subject"),
+                    emailMessages.getProperty("email.account_deactivation_msg"));
+            logger.info("The admin <<" + adminid + ">> sent a deactivation email to <" + user.getUserName() + ">");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendAccountActivationEmail(IUser user, String adminid) {
+        if (user.getEmail() != null && !user.getEmail().equals("")) {
+            emailSender.sendNotificationEmail(user.getEmail(),
+                    emailMessages.getProperty("email.account_activation_subject"),
+                    emailMessages.getProperty("email.account_activation_msg"));
+            logger.info("The admin <<" + adminid + ">> sent an activation email to <" + user.getUserName() + ">");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendNewAccountRequestPlacementEmail(IUser admin, String userid) {
+        if (admin.getEmail() != null && !admin.getEmail().equals("") && userid != null && !userid.equals("")) {
+            String message = emailMessages.getProperty("email.account_request_msg_head") + userid + " "
+                    + emailMessages.getProperty("email.account_request_msg_tail");
+            emailSender.sendNotificationEmail(admin.getEmail(),
+                    emailMessages.getProperty("email.account_request_subject"), message);
+            logger.info("The system sent a user request email to <<" + admin.getUserName()
+                    + ">> for the request placed by <" + userid + ">");
+        }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendNewWorkspaceAddedToProject(IProject project, IWorkSpace workspace) {
+        IUser projectOwner = project.getOwner();
+        if (projectOwner.getEmail() != null && !projectOwner.getEmail().equals("")) {
+            // Build the message to be sent to the user
+            StringBuilder message = new StringBuilder(emailMessages.getProperty("email.new_workspace_msg_part1"));
+            message.append(project.getProjectName() + ".");
+            message.append(emailMessages.getProperty("email.new_workspace_msg_part2"));
+            message.append(emailMessages.getProperty("email.new_workspace_msg_part3"));
+            message.append(workspace.getWorkspaceName());
+            message.append(emailMessages.getProperty("email.new_workspace_msg_part4"));
+            message.append(workspace.getDescription());
+            message.append(emailMessages.getProperty("email.new_workspace_msg_part5"));
+            message.append(workspace.getOwner().getUserName());
+
+            emailSender.sendNotificationEmail(projectOwner.getEmail(),
+                    emailMessages.getProperty("email.new_workspace_subject"), message.toString());
+            logger.info(
+                    "The system sent an email notification to <<" + projectOwner.getEmail() + ">> for the workspace <"
+                            + workspace.getWorkspaceName() + "> added by <" + workspace.getOwner().getUserName() + ">");
+        }
+    }
+
+    @Override
+    public void sendAccountCreatedEmail(String name, String username, String adminName, String adminEmail)
+            throws QuadrigaNotificationException {
+        Map<String, Object> contextProperties = new HashMap<String, Object>();
+
+        contextProperties.put("createdUser", name);
+        contextProperties.put("createdUsername", username);
+        contextProperties.put("admin", adminName);
+
+        try {
+            String msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/newAccount.vm",
+                    contextProperties);
+            emailSender.sendNotificationEmail(adminEmail, emailMessages.getProperty("email.account_created.subject"),
+                    msg);
         } catch (ResourceNotFoundException e) {
             throw new QuadrigaNotificationException(e);
         } catch (ParseErrorException e) {
@@ -119,29 +128,31 @@ public class EmailNotificationManager implements IEmailNotificationManager{
         } catch (Exception e) {
             throw new QuadrigaNotificationException(e);
         }
-	}
-	
-	@Override
+    }
+
+    @Override
     public void sendAccountProcessedEmail(IUser user, boolean approved) throws QuadrigaNotificationException {
-	    Map<String, Object> contextProperties = new HashMap<String, Object>();
+        Map<String, Object> contextProperties = new HashMap<String, Object>();
         contextProperties.put("user", user.getName());
         contextProperties.put("username", user.getUserName());
-        
+
         String msg;
         String subject;
         try {
             if (approved) {
-                msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/accountApproved.vm", contextProperties);
+                msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/accountApproved.vm",
+                        contextProperties);
                 subject = emailMessages.getProperty("email.account_approved.subject");
             } else {
-                msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/accountRejected.vm", contextProperties);
+                msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/accountRejected.vm",
+                        contextProperties);
                 subject = emailMessages.getProperty("email.account_rejected.subject");
             }
-            emailSender.sendNotificationEmail(user.getEmail(), subject , msg);
+            emailSender.sendNotificationEmail(user.getEmail(), subject, msg);
         } catch (Exception e) {
             // this method actually throws simply 'Exception'
             throw new QuadrigaNotificationException(e);
         }
-	}
+    }
 
 }
