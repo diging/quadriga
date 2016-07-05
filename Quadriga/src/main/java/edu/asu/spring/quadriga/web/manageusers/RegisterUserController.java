@@ -10,6 +10,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -36,7 +37,7 @@ public class RegisterUserController {
     }
 
     @RequestMapping(value = "register-user")
-    public String registerUser(ModelMap model, @Valid @ModelAttribute AccountRequest request, BindingResult result)
+    public String registerUser(ModelMap model, @Valid @ModelAttribute AccountRequest request, BindingResult result, RedirectAttributes redirectAttrs)
             throws QuadrigaStorageException, QuadrigaNotificationException {
         if (result.hasErrors()) {
             model.addAttribute("request", request);
@@ -56,7 +57,7 @@ public class RegisterUserController {
             request.setRepeatedPassword("");
             model.addAttribute("request", request);
             return "register";
-        } 
+        }
 
         if (!success) {
             model.addAttribute("errormsg_failure", "Sorry, user could not be added.");
@@ -66,7 +67,7 @@ public class RegisterUserController {
             return "register";
         }
 
-        model.addAttribute("successmsg", "User account request created. An administrator will review your request.");
+        redirectAttrs.addFlashAttribute("successmsg", "Your account has been created! An administrator will review the account and approve it. You will get an email once your account has been reviewed.");
         return "redirect:/login";
     }
 }
