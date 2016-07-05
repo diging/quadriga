@@ -14,9 +14,13 @@ import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
+import edu.asu.spring.quadriga.email.impl.EmailNotificationManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
@@ -184,12 +188,17 @@ public class UserManager implements IUserManager {
      * 
      * @author Ram Kumar Kumaresan
      * @throws QuadrigaStorageException
+     * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException {
+    public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException, QuadrigaNotificationException {
 
         int iResult = usermanagerDAO.approveUserRequest(sUserId, sRoles, sAdminId);
+        if (iResult == IUserDAO.SUCCESS) {
+            IUser user = getUser(sUserId);
+            emailManager.sendAccountProcessedEmail(user, true);
+        }
         return iResult;
     }
 
@@ -204,12 +213,21 @@ public class UserManager implements IUserManager {
      * 
      * @author Ram Kumar Kumaresan
      * @throws QuadrigaStorageException
+     * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException {
+    public int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException, QuadrigaNotificationException {
 
+        QuadrigaUserRequestsDTO user = usermanagerDAO.getUserRequestDTO(sUserId);
+        IUser deniedUser = new User();
+        deniedUser.setName(user.getFullname());
+        deniedUser.setEmail(user.getEmail());
+        deniedUser.setUserName(user.getUsername());
         int iResult = usermanagerDAO.denyUserRequest(sUserId, sAdminId);
+        if (iResult == IUserDAO.SUCCESS) {
+            emailManager.sendAccountProcessedEmail(deniedUser, false);
+        }
         return iResult;
     }
 
@@ -283,6 +301,7 @@ public class UserManager implements IUserManager {
      * @author jdamerow
      * @throws QuadrigaStorageException
      * @throws UsernameExistsException
+     * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
@@ -298,8 +317,23 @@ public class UserManager implements IUserManager {
             throw new UsernameExistsException("Username already in use.");
 
         String plainPassword = request.getPassword();
-        return usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
+        boolean success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
                 request.getName(), request.getEmail());
+        
+        if (success) {
+            IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
+            List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
+            for (QuadrigaUserDTO admin : admins) {
+                try {
+                    emailManager.sendAccountCreatedEmail(request.getName(), request.getUsername(), admin.getFullname(), admin.getEmail());
+                } catch (QuadrigaNotificationException e) {
+                    // let's log error but keep on going
+                    logger.error("Email to " + admin.getUsername() + " could not be sent.", e);
+                }
+            }
+        }
+        
+        return success;
     }
 
     private String encryptPassword(String password) {

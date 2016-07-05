@@ -383,4 +383,10 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
     public QuadrigaUserDTO getDTO(String id) {
         return getDTO(QuadrigaUserDTO.class, id);
     }
+    
+    @Override
+    public QuadrigaUserDeniedDTO getDeniedUser(String id) {
+        return (QuadrigaUserDeniedDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDeniedDTO.class, id);
+    }
+    
 }
