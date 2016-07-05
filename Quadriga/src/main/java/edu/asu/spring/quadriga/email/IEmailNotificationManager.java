@@ -1,8 +1,15 @@
 package edu.asu.spring.quadriga.email;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 
 /**
  * The purpose of this interface is to manage all the outgoing mails in the system.
@@ -42,5 +49,7 @@ public interface IEmailNotificationManager {
 	 * @param workspace	The workspace object which was added to the project.
 	 */
 	public void sendNewWorkspaceAddedToProject(IProject project, IWorkSpace workspace);
+
+    void sendAccountCreatedEmail(String name, String username, String adminName, String adminEmail)  throws QuadrigaNotificationException;
 
 }

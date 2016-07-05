@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
@@ -283,10 +284,11 @@ public class UserManager implements IUserManager {
      * @author jdamerow
      * @throws QuadrigaStorageException
      * @throws UsernameExistsException
+     * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException {
+    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException, QuadrigaNotificationException {
         QuadrigaUserDTO userDTO = usermanagerDAO.getUserDTO(request.getUsername());
 
         // Check if username is already in use
@@ -298,8 +300,18 @@ public class UserManager implements IUserManager {
             throw new UsernameExistsException("Username already in use.");
 
         String plainPassword = request.getPassword();
-        return usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
+        boolean success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
                 request.getName(), request.getEmail());
+        
+        if (success) {
+            IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
+            List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
+            for (QuadrigaUserDTO admin : admins) {
+                emailManager.sendAccountCreatedEmail(request.getName(), request.getUsername(), admin.getFullname(), admin.getEmail());
+            }
+        }
+        
+        return success;
     }
 
     private String encryptPassword(String password) {

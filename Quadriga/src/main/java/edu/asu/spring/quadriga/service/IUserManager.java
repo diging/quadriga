@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
@@ -124,6 +125,6 @@ public interface IUserManager {
 
 
     public abstract boolean addNewUser(AccountRequest request)
-            throws QuadrigaStorageException, UsernameExistsException;
+            throws QuadrigaStorageException, UsernameExistsException, QuadrigaNotificationException;
 
 }

@@ -27,9 +27,19 @@ public class EmailNotificationSender {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	private boolean enabled = true;
+	private boolean enabled = false;
 	
-	public boolean isEnabled() {
+	private String fromAddress;
+	
+	public String getFromAddress() {
+        return fromAddress;
+    }
+
+    public void setFromAddress(String fromAddress) {
+        this.fromAddress = fromAddress;
+    }
+
+    public boolean isEnabled() {
         return enabled;
     }
 
@@ -47,6 +57,7 @@ public class EmailNotificationSender {
     			MimeMessageHelper helper = new MimeMessageHelper(message, true);
     			helper.setTo(new InternetAddress(emailaddress));
     			helper.setSubject(subject);
+    			helper.setFrom(new InternetAddress(fromAddress));
     			
     			//Adding tail to the message text
     			msgText += emailMessages.getProperty("email.tail");

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -36,7 +37,7 @@ public class RegisterUserController {
 
     @RequestMapping(value = "register-user")
     public String registerUser(ModelMap model, @Valid @ModelAttribute AccountRequest request, BindingResult result)
-            throws QuadrigaStorageException {
+            throws QuadrigaStorageException, QuadrigaNotificationException {
         if (result.hasErrors()) {
             model.addAttribute("request", request);
             model.addAttribute("errors", result);
@@ -55,9 +56,7 @@ public class RegisterUserController {
             request.setRepeatedPassword("");
             model.addAttribute("request", request);
             return "register";
-        } catch (QuadrigaStorageException e) {
-            throw e;
-        }
+        } 
 
         if (!success) {
             model.addAttribute("errormsg_failure", "Sorry, user could not be added.");

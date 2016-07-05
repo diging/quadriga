@@ -1,9 +1,13 @@
 package edu.asu.spring.quadriga.email.impl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
 
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,8 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
+import edu.asu.spring.quadriga.velocity.IVelocityBuilder;
 
 /**
  * This class manages all the outgoing emails from the Quadriga system.
@@ -26,6 +32,9 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 	
 	@Autowired
 	private EmailNotificationSender emailSender;
+	
+	@Autowired
+	private IVelocityBuilder velocityBuilder;
 	
 	@Resource(name = "uiMessages")
 	private Properties emailMessages;
@@ -90,6 +99,26 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 			emailSender.sendNotificationEmail(projectOwner.getEmail(), emailMessages.getProperty("email.new_workspace_subject"), message.toString());
 			logger.info("The system sent an email notification to <<"+projectOwner.getEmail()+">> for the workspace <"+workspace.getWorkspaceName()+"> added by <"+workspace.getOwner().getUserName()+">");
 		}
+	}
+	
+	@Override
+    public void sendAccountCreatedEmail(String name, String username, String adminName, String adminEmail) throws QuadrigaNotificationException {
+	    Map<String, Object> contextProperties = new HashMap<String, Object>();
+	    
+	    contextProperties.put("createdUser", name);
+	    contextProperties.put("createdUsername", username);
+	    contextProperties.put("admin", adminName);
+	    
+	    try {
+            String msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/newAccount.vm", contextProperties);
+            emailSender.sendNotificationEmail(adminEmail, emailMessages.getProperty("email.account_created.subject"), msg);
+        } catch (ResourceNotFoundException e) {
+            throw new QuadrigaNotificationException(e);
+        } catch (ParseErrorException e) {
+            throw new QuadrigaNotificationException(e);
+        } catch (Exception e) {
+            throw new QuadrigaNotificationException(e);
+        }
 	}
 
 }
