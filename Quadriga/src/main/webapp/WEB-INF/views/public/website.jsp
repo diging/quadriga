@@ -13,18 +13,11 @@
 		${project.description}
 		</p>
 		<p  class="smaller">
-		<i class="fa fa-user"></i> ${project.owner.name}
-		</p>
-		<p  class="smaller">
-		<c:if test="${not empty project.projectCollaborators}">
-		   <i class="fa fa-users"></i>
-	       <c:forEach var="projectcollaborator"
-	                items="${project.projectCollaborators}" varStatus="loop">
-	        <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out><c:if test="${!loop.last}">, </c:if>
-	        </c:forEach>
-	        </ul>
-	    </c:if>
-		
+		<i class="fa fa-users"></i> ${project.owner.name}<c:if test="${not empty project.projectCollaborators}">,</c:if>
+		<c:forEach var="projectcollaborator"
+                    items="${project.projectCollaborators}" varStatus="loop">
+            <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out><c:if test="${!loop.last}">, </c:if>
+            </c:forEach>
 		</p>
 		<p class="smaller">
 		<i class="fa fa-commenting-o"></i> When citing this data set please use the following URL: <i>${project_baseurl}/sites/${project.unixName}</i>.
