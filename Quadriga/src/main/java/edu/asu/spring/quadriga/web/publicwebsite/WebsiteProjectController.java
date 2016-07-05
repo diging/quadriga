@@ -41,7 +41,7 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  *
  */
 
-@PropertySource(value = "classpath:/user.properties")
+@PropertySource(value = "classpath:/settings.properties")
 @Controller
 public class WebsiteProjectController {
 

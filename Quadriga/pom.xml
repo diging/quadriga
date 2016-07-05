@@ -31,6 +31,13 @@
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
 		<textfiles.location></textfiles.location>
+		<email.host></email.host>
+		<email.port></email.port>
+		<email.username></email.username>
+		<email.pw></email.pw>
+		<email.from></email.from>
+		<email.enabled>true</email.enabled>
+		<quadriga.baseurl></quadriga.baseurl>
 	</properties>
 
 	<dependencies>
