@@ -97,12 +97,7 @@ public class UploadTransformFilesController {
             transformationFile.setMappingFileName(mappingFileName);
             transformationFile.setMappingFileContent(file[1].getBytes());
 
-            try {
-                transformationManager.saveTransformations(transformationFile);
-            } catch (FileStorageException e) {
-                logger.error("Error in UploadTransformFiles Controller:", e);
-                throw new FileStorageException();
-            }
+            transformationManager.saveTransformations(transformationFile);
 
             model.getModelMap().put("show_success_alert", true);
             model.getModelMap().put("success_alert_msg", "Upload Successful.");

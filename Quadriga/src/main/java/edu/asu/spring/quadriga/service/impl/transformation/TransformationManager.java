@@ -40,11 +40,7 @@ public class TransformationManager implements ITransformationManager {
         tranformDTO.setId(transformationDAO.generateUniqueID());
         transformationDAO.saveNewDTO(tranformDTO);
 
-        try {
-            transformationFileService.saveFileToLocal(transformationFile);
-        } catch (FileStorageException fs) {
-            throw new FileStorageException(fs);
-        }
+        transformationFileService.saveFileToLocal(transformationFile);
     }
 
     @Transactional
