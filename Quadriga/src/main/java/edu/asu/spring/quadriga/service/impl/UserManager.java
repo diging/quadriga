@@ -305,7 +305,7 @@ public class UserManager implements IUserManager {
      */
     @Override
     @Transactional
-    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException, QuadrigaNotificationException {
+    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException {
         QuadrigaUserDTO userDTO = usermanagerDAO.getUserDTO(request.getUsername());
 
         // Check if username is already in use
@@ -324,7 +324,12 @@ public class UserManager implements IUserManager {
             IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
             List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
             for (QuadrigaUserDTO admin : admins) {
-                emailManager.sendAccountCreatedEmail(request.getName(), request.getUsername(), admin.getFullname(), admin.getEmail());
+                try {
+                    emailManager.sendAccountCreatedEmail(request.getName(), request.getUsername(), admin.getFullname(), admin.getEmail());
+                } catch (QuadrigaNotificationException e) {
+                    // let's log error but keep on going
+                    logger.error("Email to " + admin.getUsername() + " could not be sent.", e);
+                }
             }
         }
         
