@@ -1,4 +1,4 @@
-Hi ${admin}:
+Hi $admin:
 
 A new account for $createdUser ($createdUsername) has been created in Quadriga. Please review the account and approve or reject it here:
 http://$quadriga_url/auth/users/manage

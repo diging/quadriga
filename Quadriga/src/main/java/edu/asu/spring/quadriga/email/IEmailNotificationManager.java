@@ -52,4 +52,6 @@ public interface IEmailNotificationManager {
 
     void sendAccountCreatedEmail(String name, String username, String adminName, String adminEmail)  throws QuadrigaNotificationException;
 
+    void sendAccountProcessedEmail(IUser user, boolean approved) throws QuadrigaNotificationException;
+
 }

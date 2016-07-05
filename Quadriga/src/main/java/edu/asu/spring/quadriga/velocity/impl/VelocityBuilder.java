@@ -53,7 +53,7 @@ public class VelocityBuilder implements IVelocityBuilder {
             context.put(key, contextProperties.get(key));
         }
         
-        contextProperties.put("quadriga_url", env.getProperty("quadriga.baseurl"));
+        context.put("quadriga_url", env.getProperty("quadriga.baseurl"));
         
         StringWriter writer = new StringWriter();
         template.merge(context, writer);

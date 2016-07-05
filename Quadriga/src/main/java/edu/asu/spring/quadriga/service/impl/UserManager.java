@@ -14,9 +14,12 @@ import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
+import edu.asu.spring.quadriga.email.impl.EmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
@@ -185,12 +188,17 @@ public class UserManager implements IUserManager {
      * 
      * @author Ram Kumar Kumaresan
      * @throws QuadrigaStorageException
+     * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException {
+    public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException, QuadrigaNotificationException {
 
         int iResult = usermanagerDAO.approveUserRequest(sUserId, sRoles, sAdminId);
+        if (iResult == IUserDAO.SUCCESS) {
+            IUser user = getUser(sUserId);
+            emailManager.sendAccountProcessedEmail(user, true);
+        }
         return iResult;
     }
 
@@ -205,12 +213,21 @@ public class UserManager implements IUserManager {
      * 
      * @author Ram Kumar Kumaresan
      * @throws QuadrigaStorageException
+     * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException {
+    public int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException, QuadrigaNotificationException {
 
+        QuadrigaUserRequestsDTO user = usermanagerDAO.getUserRequestDTO(sUserId);
+        IUser deniedUser = new User();
+        deniedUser.setName(user.getFullname());
+        deniedUser.setEmail(user.getEmail());
+        deniedUser.setUserName(user.getUsername());
         int iResult = usermanagerDAO.denyUserRequest(sUserId, sAdminId);
+        if (iResult == IUserDAO.SUCCESS) {
+            emailManager.sendAccountProcessedEmail(deniedUser, false);
+        }
         return iResult;
     }
 

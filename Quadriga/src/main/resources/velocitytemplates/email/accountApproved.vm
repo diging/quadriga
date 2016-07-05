@@ -1,0 +1,6 @@
+Hi $user:
+
+Your account has been approved! You can now login to Quadriga at http://$quadriga_url/ with your username '$username'.
+
+Your Quadriga Team
+

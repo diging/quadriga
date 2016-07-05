@@ -35,8 +35,8 @@
 		<email.port></email.port>
 		<email.username></email.username>
 		<email.pw></email.pw>
-		<quadriga.baseurl></quadriga.baseurl>
 		<email.from></email.from>
+        <quadriga.baseurl></quadriga.baseurl>
 	</properties>
 
 	<dependencies>

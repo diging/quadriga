@@ -120,5 +120,28 @@ public class EmailNotificationManager implements IEmailNotificationManager{
             throw new QuadrigaNotificationException(e);
         }
 	}
+	
+	@Override
+    public void sendAccountProcessedEmail(IUser user, boolean approved) throws QuadrigaNotificationException {
+	    Map<String, Object> contextProperties = new HashMap<String, Object>();
+        contextProperties.put("user", user.getName());
+        contextProperties.put("username", user.getUserName());
+        
+        String msg;
+        String subject;
+        try {
+            if (approved) {
+                msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/accountApproved.vm", contextProperties);
+                subject = emailMessages.getProperty("email.account_approved.subject");
+            } else {
+                msg = velocityBuilder.getRenderedTemplate("velocitytemplates/email/accountRejected.vm", contextProperties);
+                subject = emailMessages.getProperty("email.account_rejected.subject");
+            }
+            emailSender.sendNotificationEmail(user.getEmail(), subject , msg);
+        } catch (Exception e) {
+            // this method actually throws simply 'Exception'
+            throw new QuadrigaNotificationException(e);
+        }
+	}
 
 }
