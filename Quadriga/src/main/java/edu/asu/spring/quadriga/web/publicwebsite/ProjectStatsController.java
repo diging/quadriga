@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -72,7 +74,7 @@ public class ProjectStatsController {
             JSONObject jsonObject = new JSONObject();
             IConceptStats conceptStats = conceptsList.get(i);
             jsonObject.put("conceptId", conceptStats.getConceptId().replace("\"", ""));
-            jsonObject.put("description", conceptStats.getDescription().replace("\"", ""));
+            jsonObject.put("description", StringEscapeUtils.escapeHtml(conceptStats.getDescription()));
             jsonObject.put("label", conceptStats.getLemma().replace("\"", ""));
             jsonObject.put("count", conceptStats.getCount());
             jsonArray.put(jsonObject);
