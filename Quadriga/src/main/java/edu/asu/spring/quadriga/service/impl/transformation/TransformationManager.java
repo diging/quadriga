@@ -37,8 +37,10 @@ public class TransformationManager implements ITransformationManager {
                 transformationFile.getPatternTitle(), transformationFile.getPatternDescription(),
                 transformationFile.getMappingFileName(), transformationFile.getMappingTitle(),
                 transformationFile.getMappingDescription(), transformationFile.getUserName());
-        tranformDTO.setId(transformationDAO.generateUniqueID());
+        String id = transformationDAO.generateUniqueID();
+        tranformDTO.setId(id);
         transformationDAO.saveNewDTO(tranformDTO);
+        transformationFile.setId(id);
 
         transformationFileService.saveFileToLocal(transformationFile);
     }
