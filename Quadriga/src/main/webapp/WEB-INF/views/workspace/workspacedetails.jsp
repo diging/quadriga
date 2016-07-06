@@ -193,7 +193,7 @@
 										<br><small>${textfile.fileName}</small>
 									</td>
 									<td align="left"><small><strong>URI:</strong> ${textfile.textFileURI}<br>
-									<strong>Original URI:</strong> ${textfile.refId}</small></td>
+									<strong>Original URI:</strong> <a target="_blank" href="${textfile.refId}">${textfile.refId}</a></small></td>
 								</tr>
 							</c:forEach>
 						</tbody>

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +22,6 @@ import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
  */
 @Service
 @Transactional
-@PropertySource(value = "classpath:/settings.properties")
 public class TextFileManager implements ITextFileManager {
 
     @Autowired
@@ -36,9 +33,7 @@ public class TextFileManager implements ITextFileManager {
     @Autowired
     private ITextFileMapper tfSMapper;
     
-    @Autowired
-    private Environment env;
-
+    
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, QuadrigaStorageException {
         String txtId = txtFileDAO.generateUniqueID();
@@ -55,10 +50,8 @@ public class TextFileManager implements ITextFileManager {
     public List<ITextFile> retrieveTextFiles(String wsId) throws QuadrigaStorageException {
         List<TextFileDTO> tfDTOList = txtFileDAO.getTextFileDTObyWsId(wsId);
         List<ITextFile> tfList = new ArrayList<>();
-        String uriPrefix = env.getProperty("textfiles.uri");
         for (TextFileDTO tfDTO : tfDTOList) {
             ITextFile textFile = tfSMapper.getTextFile(tfDTO);
-            textFile.setTextFileURI(uriPrefix);
             tfList.add(textFile);
         }
         return tfList;

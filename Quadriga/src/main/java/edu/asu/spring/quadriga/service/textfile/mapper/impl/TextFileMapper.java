@@ -2,9 +2,11 @@ package edu.asu.spring.quadriga.service.textfile.mapper.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
+import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
@@ -16,12 +18,15 @@ import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
  */
 @Service
 public class TextFileMapper implements ITextFileMapper {
+    
+    @Autowired
+    private ITextFileFactory textFileFactory;
 
     private static final Logger logger = LoggerFactory.getLogger(TextFileMapper.class);
 
     @Override
     public ITextFile getTextFile(TextFileDTO tfDTO) {
-        ITextFile txtFile = new TextFile();
+        ITextFile txtFile = textFileFactory.createTextFileObject();
         txtFile.setTextId(tfDTO.getTextId());
         txtFile.setRefId(tfDTO.getRefId());
         txtFile.setFileName(tfDTO.getFilename());

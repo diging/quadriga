@@ -61,6 +61,9 @@ public class TextXMLParser implements ITextXMLParser {
         NodeList handleNode = document.getElementsByTagName("handle");
         NodeList fileNameNode = document.getElementsByTagName("file_name");
         NodeList accessibilityNode = document.getElementsByTagName("accessibility");
+        NodeList authorNode = document.getElementsByTagName("author");
+        NodeList titleNode = document.getElementsByTagName("title");
+        NodeList dateNode = document.getElementsByTagName("createdDate");
 
         if (handleNode.getLength() == 0 && fileNameNode.getLength() == 0) {
             throw new TextFileParseException("Handle and file name must be specified in the input XML.");
@@ -78,6 +81,18 @@ public class TextXMLParser implements ITextXMLParser {
         String fileName = fileNameNode.item(0).getTextContent();
         String refId = handleNode.item(0).getTextContent();
         String accessibility = accessibilityNode.item(0).getTextContent();
+        String author = "";
+        if (authorNode != null && authorNode.getLength() > 0) {
+            author = authorNode.item(0).getTextContent();
+        }
+        String title = "";
+        if (titleNode != null && titleNode.getLength() > 0) {
+            title = titleNode.item(0).getTextContent();
+        }
+        String date = "";
+        if (dateNode != null && dateNode.getLength() > 0) {
+            date = dateNode.item(0).getTextContent();
+        }
 
         if (accessibility.isEmpty()) {
             throw new TextFileParseException("Specify accessibility options in the XML.");
@@ -100,6 +115,9 @@ public class TextXMLParser implements ITextXMLParser {
         txtFile.setWorkspaceId(wsId);
         txtFile.setProjectId(projId);
         txtFile.setAccessibility(ETextAccessibility.valueOf(accessibility.toUpperCase()));
+        txtFile.setAuthor(author);
+        txtFile.setTitle(title);
+        txtFile.setCreationDate(date);
 
         return txtFile;
     }

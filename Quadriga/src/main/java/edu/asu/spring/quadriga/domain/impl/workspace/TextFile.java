@@ -18,7 +18,7 @@ public class TextFile implements ITextFile {
     private String fileContent;
     private String refId;
     private ETextAccessibility accessibility;
-    private String textFileURI;
+    private String textFileURIPrefix;
     private String title;
     private String author;
     private String creationDate;
@@ -116,12 +116,24 @@ public class TextFile implements ITextFile {
         this.accessibility = accessibility;
     }
 
+    /** 
+     * This method returns the URI for a text file. It uses the prefix set
+     * through setTextFileURIPrefix() and appends the id of the text.
+     * 
+     * @return A URI for a text.
+     */
     public String getTextFileURI() {
-        return textFileURI;
+        return textFileURIPrefix + this.getTextId();
     }
 
-    public void setTextFileURI(String uriPrefix) {
-        this.textFileURI = uriPrefix + this.getTextId();
+    /**
+     * This is the setter method for the URI prefix used for text files.
+     * 
+     * @param uriPrefix The prefix that should be used to generate the URI
+     * for this text file.
+     */
+    public void setTextFileURIPrefix(String uriPrefix) {
+        this.textFileURIPrefix = uriPrefix;
     }
 
 }

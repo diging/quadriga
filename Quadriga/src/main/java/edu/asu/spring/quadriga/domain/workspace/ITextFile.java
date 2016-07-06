@@ -46,7 +46,7 @@ public interface ITextFile {
      *            Prefix for TextFile URI.
      * 
      */
-    public abstract void setTextFileURI(String uriPrefix);
+    public abstract void setTextFileURIPrefix(String uriPrefix);
 
     void setCreationDate(String creationDate);
 
