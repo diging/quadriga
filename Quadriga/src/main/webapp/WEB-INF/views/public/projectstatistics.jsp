@@ -8,10 +8,10 @@
 <link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css"
 	rel="stylesheet" />
-<link type="text/css"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/projectstatistics.css" rel="stylesheet" />
+<link type="text/css"	href="${pageContext.servletContext.contextPath}/resources/css/projectstatistics.css" rel="stylesheet" />
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3projectstatistics.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/d3/d3projectstatistics.js"></script>
 <script type="text/javascript">
 var labelCount = '${labelCount}'; 
 var submittedNetworksData = '${submittedNetworksData}';
@@ -37,48 +37,30 @@ document.body.onload = function()
 	}
 }
 </script> 
-<c:choose>
-    <c:when test="${not empty labelCount}">
-		<h3>Project Statistics</h3>
-		<div id='stats'></div>
-    </c:when>
-    <c:otherwise>
-		<h3>No project statistics data to show</h3>
-    </c:otherwise>
-</c:choose>
-<c:choose>
-    <c:when test="${not empty submittedNetworksData}">
-    	<h3>Submitted Networks </h3>
-        <div id='submit'></div>
-    </c:when>
-    <c:otherwise>
-		<h3>No submitted networks data to show</h3>
-    </c:otherwise>
-</c:choose>
-<c:choose>
-    <c:when test="${not empty approvedNetworksData}">
-    	<h3>Approved Networks </h3>
-        <div id='approved'></div>
-    </c:when>
-    <c:otherwise>
-		<h3>No approved networks data to show</h3>
-    </c:otherwise>
-</c:choose>
-<c:choose>
-    <c:when test="${not empty rejectedNetworksData}">
-    	<h3>Rejected Networks</h3>
-		<div id='rejected'></div>
-    </c:when>
-    <c:otherwise>
-		<h3>No rejected networks data to show</h3>
-    </c:otherwise>
-</c:choose>
-<c:choose>
-    <c:when test="${not empty workspaceData}">
-		<h3>Workspace</h3>
-		<div id='workspace'></div>
-    </c:when>
-    <c:otherwise>
-		<h3>No workspace data to show</h3>
-    </c:otherwise>
-</c:choose>
+<div class="row">
+<div class="col-md-12">
+<h2>Project Statistics</h2>
+
+<p>This page gives a brief overview of what has been happening in this project! </p>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-6">
+<h3>Concept Statistics</h3>
+<p>The diagram on the right shows what the most used concepts are in this project and how often they appear in the submitted Quadruples.
+</div>
+<div class="col-md-6">
+<div id='stats'></div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-6">
+    <div id='submit'></div>
+</div>
+<div class="col-md-6">
+   <h3>Submitted Networks </h3>
+   <p>The diagram on the left shows how many networks have been submitted to this project in the past.
+</div>
+</div>

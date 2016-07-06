@@ -8,9 +8,12 @@
 
 function d3ProjectStatistics(data) {
 
-	var margin = {top: 40, right: 20, bottom: 30, left: 300},
-	width = 960 - margin.left - margin.right,
-	height = 500 - margin.top - margin.bottom;
+	var origWidth = $('#stats').width();
+	var origHeight = $('#stats').height() > 400 ? $('#stats').height() : 400;
+
+	var margin = {top: 40, right: 20, bottom: 100, left: 30},
+	width = origWidth - margin.left - margin.right,
+	height = origHeight - margin.top - margin.bottom;
 
 	var formatPercent = d3.format("");
 
@@ -53,7 +56,8 @@ function d3ProjectStatistics(data) {
 	svg.append("g")
 	.attr("class", "x axis")
 	.attr("transform", "translate(0," + height + ")")
-	.call(xAxis);
+	.call(xAxis).selectAll("text").attr("y", 0)
+    .attr("x", 9).attr("dy", "0.2em").attr("transform", "rotate(70)").style("text-anchor", "start");
 
 	svg.append("g")
 	.attr("class", "y axis")
@@ -75,14 +79,19 @@ function d3ProjectStatistics(data) {
 	.attr("height", function(d) { return height - y(d.count); })
 	.on('mouseover', tip.show)
 	.on('mouseout', tip.hide);
+	
 }
 
 
 function d3ProjectActivity(data,divSection) {
+	
+	var origWidth = $('#'+divSection).width();
+	var origHeight = $('#' + divSection).height() > 400 ? $('#' + divSection).height() : 400;
 
-	var margin = {top: 40, right: 20, bottom: 30, left: 300},
-	width = 960 - margin.left - margin.right,
-	height = 500 - margin.top - margin.bottom;
+
+	var margin = {top: 40, right: 20, bottom: 100, left: 20},
+	width = origWidth - margin.left - margin.right,
+	height = origHeight - margin.top - margin.bottom;
 
 	var parseDate = d3.time.format("%d-%b-%y").parse,
 	bisectDate = d3.bisector(function(d) { return d.date; }).left,
@@ -137,7 +146,9 @@ function d3ProjectActivity(data,divSection) {
 	svg.append("g")
 	.attr("class", "x axis")
 	.attr("transform", "translate(0," + height + ")")
-	.call(xAxis);
+	.call(xAxis).selectAll("text").attr("y", 0)
+    .attr("x", 9).attr("dy", "0.2em").attr("transform", "rotate(70)").style("text-anchor", "start");
+;
 
 	svg.append("g")
 	.attr("class", "y axis")
