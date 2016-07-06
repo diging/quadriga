@@ -33,6 +33,9 @@ public class TextFileMapper implements ITextFileMapper {
             logger.error("error:", npe);
             txtFile.setAccessibility(ETextAccessibility.PRIVATE);
         }
+        txtFile.setAuthor(tfDTO.getAuthor());
+        txtFile.setTitle(tfDTO.getTitle());
+        txtFile.setCreationDate(tfDTO.getCreationDate());
         return txtFile;
     }
 
@@ -45,6 +48,10 @@ public class TextFileMapper implements ITextFileMapper {
         tfDTO.setRefId(txtFile.getRefId());
         tfDTO.setWorkspaceId(txtFile.getWorkspaceId());
         tfDTO.setAccessibility(txtFile.getAccessibility().name());
+        tfDTO.setTextId(txtFile.getTextId());
+        tfDTO.setAuthor(txtFile.getAuthor());
+        tfDTO.setTitle(txtFile.getTitle());
+        tfDTO.setCreationDate(txtFile.getCreationDate());
         return tfDTO;
     }
 

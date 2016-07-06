@@ -19,7 +19,40 @@ public class TextFile implements ITextFile {
     private String refId;
     private ETextAccessibility accessibility;
     private String textFileURI;
+    private String title;
+    private String author;
+    private String creationDate;
     
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public String getAuthor() {
+        return author;
+    }
+
+    @Override
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    @Override
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    @Override
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
     @Override
     public String getFileName() {
         return fileName;

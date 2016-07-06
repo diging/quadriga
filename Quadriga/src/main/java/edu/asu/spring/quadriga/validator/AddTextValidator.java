@@ -6,6 +6,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
 @Service
 public class AddTextValidator implements Validator {
@@ -26,7 +27,7 @@ public class AddTextValidator implements Validator {
     @Override
     public void validate(Object arg0, Errors err) {
 
-        TextFile txtFile = (TextFile) arg0;
+        ITextFile txtFile = (ITextFile) arg0;
         String filename = txtFile.getFileName();
 
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "fileName", "filename.required");
@@ -34,8 +35,8 @@ public class AddTextValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "refId", "reference.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "accessibility", "accessibility.required");
 
-        if (!filename.isEmpty() && !(filename.matches("[a-zA-Z0-9_-]{3,30}$")
-                || (filename.matches("[a-zA-Z0-9_-]{3,30}[.][a-zA-Z]{2,4}$")))) {
+        if (!filename.isEmpty() && !(filename.matches("[a-zA-Z0-9_-]{3,}$")
+                || (filename.matches("[a-zA-Z0-9_-]{3,}[.][a-zA-Z]{2,5}$")))) {
             err.rejectValue("fileName", "filename.proper");
         }
     }

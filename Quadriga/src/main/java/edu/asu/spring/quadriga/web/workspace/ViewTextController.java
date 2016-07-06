@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.workspace;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,8 @@ public class ViewTextController {
 
         String respMessage = null;
         try {
-            respMessage = tfManager.retrieveTextFileContent(txtId);
+            respMessage = StringEscapeUtils.escapeHtml(tfManager.retrieveTextFileContent(txtId));
+            respMessage = respMessage.replace("\n", "<br>");
             return new ResponseEntity<String>(respMessage, HttpStatus.OK);
             
         } catch (FileStorageException e) {

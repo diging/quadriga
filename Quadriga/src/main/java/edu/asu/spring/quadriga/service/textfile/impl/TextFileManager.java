@@ -2,11 +2,10 @@ package edu.asu.spring.quadriga.service.textfile.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +24,7 @@ import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
  */
 @Service
 @Transactional
+@PropertySource(value = "classpath:/settings.properties")
 public class TextFileManager implements ITextFileManager {
 
     @Autowired
@@ -35,18 +35,15 @@ public class TextFileManager implements ITextFileManager {
 
     @Autowired
     private ITextFileMapper tfSMapper;
-
-    @Resource(name = "projectconstants")
-    private Properties messages;
+    
+    @Autowired
+    private Environment env;
 
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, QuadrigaStorageException {
-        String textURI = messages.getProperty("textfiles.uri");
         String txtId = txtFileDAO.generateUniqueID();
         txtFile.setTextId(txtId);
-        txtFile.setTextFileURI(textURI);
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
-        txtFileDTO.setTextId(txtId);
         boolean status = fileSaveServ.saveFileToLocal(txtFile);
         if (status == true) {
             txtFileDAO.saveNewDTO(txtFileDTO);
@@ -58,8 +55,11 @@ public class TextFileManager implements ITextFileManager {
     public List<ITextFile> retrieveTextFiles(String wsId) throws QuadrigaStorageException {
         List<TextFileDTO> tfDTOList = txtFileDAO.getTextFileDTObyWsId(wsId);
         List<ITextFile> tfList = new ArrayList<>();
+        String uriPrefix = env.getProperty("textfiles.uri");
         for (TextFileDTO tfDTO : tfDTOList) {
-            tfList.add(tfSMapper.getTextFile(tfDTO));
+            ITextFile textFile = tfSMapper.getTextFile(tfDTO);
+            textFile.setTextFileURI(uriPrefix);
+            tfList.add(textFile);
         }
         return tfList;
 

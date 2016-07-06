@@ -48,4 +48,16 @@ public interface ITextFile {
      */
     public abstract void setTextFileURI(String uriPrefix);
 
+    void setCreationDate(String creationDate);
+
+    String getCreationDate();
+
+    void setAuthor(String author);
+
+    String getAuthor();
+
+    void setTitle(String title);
+
+    String getTitle();
+
 }

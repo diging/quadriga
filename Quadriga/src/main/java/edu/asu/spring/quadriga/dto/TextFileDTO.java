@@ -32,6 +32,34 @@ public class TextFileDTO implements Serializable {
     private String workspaceId;
     @Column(name = "accessibility")
     private String accessibility;
+    
+    private String title;
+    private String author;
+    private String creationDate;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
 
     public String getTextId() {
         return textId;

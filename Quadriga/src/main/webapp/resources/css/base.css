@@ -90,3 +90,7 @@
 span.highlight {
 	font-weight: bold;
 }
+
+.text-modal .modal-dialog {
+	width: 70%;
+}
