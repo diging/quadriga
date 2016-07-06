@@ -20,4 +20,6 @@ public interface IConceptpowerConnector {
      */
     public abstract ConceptpowerReply getById(String id);
 
+    ConceptpowerReply search(String searchTerm);
+
 }

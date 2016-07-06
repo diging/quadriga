@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html;"%>
+	<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
@@ -13,18 +13,11 @@
 		${project.description}
 		</p>
 		<p  class="smaller">
-		<i class="fa fa-user"></i> ${project.owner.name}
-		</p>
-		<p  class="smaller">
-		<c:if test="${not empty project.projectCollaborators}">
-		   <i class="fa fa-users"></i>
-	       <c:forEach var="projectcollaborator"
-	                items="${project.projectCollaborators}" varStatus="loop">
-	        <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out><c:if test="${!loop.last}">, </c:if>
-	        </c:forEach>
-	        </ul>
-	    </c:if>
-		
+		<i class="fa fa-users"></i> ${project.owner.name}<c:if test="${not empty project.projectCollaborators}">,</c:if>
+		<c:forEach var="projectcollaborator"
+                    items="${project.projectCollaborators}" varStatus="loop">
+            <c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out><c:if test="${!loop.last}">, </c:if>
+            </c:forEach>
 		</p>
 		<p class="smaller">
 		<i class="fa fa-commenting-o"></i> When citing this data set please use the following URL: <i>${project_baseurl}/sites/${project.unixName}</i>.
@@ -53,6 +46,23 @@
     <p>${blocks[2].description}</p>
     <p><a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/${blocks[2].linkTo}" role="button">${blocks[2].linkText}</a></p>
   </div>
+</c:if>
+</div>
+
+<div class="row">
+<c:if test="${not empty latestProjectBlogEntry}">
+	<div  class="col-lg-12">
+		<h2>Latest Blog Post</h2>
+		<h3>${latestProjectBlogEntry.title}</h3>
+		<p>
+			<i>Posted by ${latestProjectBlogEntry.author.name} on
+				${latestProjectBlogEntry.createdDate}</i>
+		</p>
+		<p>${latestProjectBlogEntrySnippet}...</p>
+		<p>
+		<a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}/projectblog/${latestProjectBlogEntry.projectBlogEntryId}">	Read More </a>	
+		</p>
+	</div>
 </c:if>
 </div>
 

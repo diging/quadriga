@@ -32,6 +32,13 @@
 		<pullrequest></pullrequest>
 		<textfiles.location></textfiles.location>
 		<transformationfiles.location></transformationfiles.location>
+		<email.host></email.host>
+		<email.port></email.port>
+		<email.username></email.username>
+		<email.pw></email.pw>
+		<email.from></email.from>
+		<email.enabled>true</email.enabled>
+		<quadriga.baseurl></quadriga.baseurl>
 	</properties>
 
 	<dependencies>
@@ -360,6 +367,12 @@
 			<version>2.6.0</version>
 		</dependency>
 
+		<!-- JSoup -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.9.2</version>
+		</dependency>
 
 	</dependencies>
 

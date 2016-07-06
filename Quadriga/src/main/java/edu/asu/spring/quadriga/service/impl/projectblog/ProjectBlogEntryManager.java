@@ -53,14 +53,25 @@ public class ProjectBlogEntryManager implements IProjectBlogEntryManager {
     public List<IProjectBlogEntry> getProjectBlogEntryList(String projectId, Integer limit)
             throws QuadrigaStorageException {
 
-        List<ProjectBlogEntryDTO> projectBlogEntryDTOList = projectBlogEntryDAO.getProjectBlogEntryDTOListByProjectId(projectId,
-                limit);
+        List<ProjectBlogEntryDTO> projectBlogEntryDTOList = projectBlogEntryDAO
+                .getProjectBlogEntryDTOListByProjectId(projectId, limit);
 
         List<IProjectBlogEntry> projectBlogEntryList = new ArrayList<>();
         for (ProjectBlogEntryDTO projectBlogEntryDTO : projectBlogEntryDTOList) {
             projectBlogEntryList.add(projectBlogEntryDTOMapper.getProjectBlogEntry(projectBlogEntryDTO));
         }
         return projectBlogEntryList;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IProjectBlogEntry getProjectBlogEntryDetails(String projectBlogEntryId) throws QuadrigaStorageException {
+
+        ProjectBlogEntryDTO projectBlogEntryDTO = projectBlogEntryDAO.getDTO(projectBlogEntryId);
+        IProjectBlogEntry projectBlogEntry = projectBlogEntryDTOMapper.getProjectBlogEntry(projectBlogEntryDTO);
+        return projectBlogEntry;
     }
 
 }

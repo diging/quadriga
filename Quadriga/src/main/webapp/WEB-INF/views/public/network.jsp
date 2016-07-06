@@ -22,11 +22,7 @@
 
 
 
-<button type="submit" onclick="goFullscreen('networkBox')"
-	style="float: left">
-	<i class="fa fa-arrows-alt"></i>
 
-</button>
 <!-- <div id="dspace_metadata"></div>  -->
 
 <c:if test="${isNetworkEmpty}">
@@ -37,7 +33,10 @@
 </c:if>
 
 <c:if test="${!isNetworkEmpty}">
-
+    <a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
+        <i class="fa fa-arrows-alt"></i>
+    </a>
+	
 	<div class="row">
 		<div id="networkBox" class="col-sm-12"
 			style="min-height: 500px; height: 100%; text-align: left;"></div>
@@ -154,5 +153,20 @@ var cy = cytoscape({
 });
 
 defineListeners(cy, '${pageContext.servletContext.contextPath}', '${unixName}');
+
+$( document ).ready(function() {
+	$('#exportJson').on('click', function() {
+		var json = cy.json();
+		window.open('data:application/json,' +
+        encodeURIComponent(JSON.stringify(json), '_blank'));
+	});
+});
+
+$( document ).ready(function() {
+    $('#exportPng').on('click', function() {
+        var png = cy.png({'scale' : 5});
+        window.open(png, '_blank');
+    });
+});
 
 </script>

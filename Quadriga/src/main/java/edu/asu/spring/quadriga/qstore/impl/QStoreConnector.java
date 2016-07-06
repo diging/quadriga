@@ -38,7 +38,7 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 
 @Service
-@PropertySource(value = "classpath:/user.properties")
+@PropertySource(value = "classpath:/settings.properties")
 public class QStoreConnector implements IQStoreConnector {
 
     private static final Logger logger = LoggerFactory

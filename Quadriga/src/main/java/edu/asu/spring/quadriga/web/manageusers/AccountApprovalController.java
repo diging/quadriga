@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.validator.AccountApprovalValidator;
@@ -44,7 +45,7 @@ public class AccountApprovalController {
     }
 
     @RequestMapping(value = "auth/users/access/handleRequest", method = RequestMethod.POST)
-    public String handleApprovalRequest(Model model, @Validated @ModelAttribute("approveAccount") ApproveAccount approveAccount, BindingResult result, Locale locale, RedirectAttributes attr, Principal principal) throws QuadrigaStorageException {
+    public String handleApprovalRequest(Model model, @Validated @ModelAttribute("approveAccount") ApproveAccount approveAccount, BindingResult result, Locale locale, RedirectAttributes attr, Principal principal) throws QuadrigaStorageException, QuadrigaNotificationException {
         
         if (result.hasErrors()) {
             StringBuffer errors = new StringBuffer();

@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.rest.open;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -35,7 +36,7 @@ public class NodeInfoController {
 
     @RequestMapping(value = "public/concept/texts", method = RequestMethod.GET)
     public ResponseEntity<String> getTextsForConcepts(@RequestParam String conceptId, @RequestParam String projectUnix) throws Exception {
-        List<TextOccurance> occurances = networkManager.getTextsForConceptId(conceptId, ETextAccessibility.PUBLIC);
+        Set<TextOccurance> occurances = networkManager.getTextsForConceptId(conceptId, ETextAccessibility.PUBLIC);
         JSONArray projectTexts = new JSONArray();
         JSONArray otherProjectsTexts = new JSONArray();
         

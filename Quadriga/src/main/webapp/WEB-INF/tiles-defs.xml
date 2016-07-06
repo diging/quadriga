@@ -34,6 +34,7 @@
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="left-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
+		<put-attribute name="currentTab" value="" />
 	</definition>
 
 	<definition name="base.definition.rightnav" template="/WEB-INF/tiles/layouts/skeleton_right.jsp">
@@ -611,6 +612,8 @@
 	<definition name="auth/workbench/addpublicpage" extends="base.definition.workbench.nav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Add Public Page Settings" />
+		<put-attribute name="currentTab"
+			value="mainPageSettings" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-settings.jsp" />
 		<put-attribute name="content"
@@ -618,7 +621,7 @@
 	</definition>
 
 	<definition name="auth/editabout" extends="base.definition.workbench.nav">
-		<put-attribute name="currentPage" value="editabout" />
+		<put-attribute name="currentTab" value="aboutPage" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-settings.jsp" />
 		<put-attribute name="content"
@@ -733,7 +736,7 @@
 	<!-- Site search -->
 	<definition name="sites/search" extends="base.definition.public">
 		<put-attribute name="currentPage" value="networksearch" />
-		<put-attribute name="content" value="/WEB-INF/views/networksearch.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/public/networks/networksearch.jsp" />
 	</definition>
 
 	<definition name="sites/public/PublicWebsiteAbout" extends="base.definition.public">
@@ -870,6 +873,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/addprojectblogentry.jsp" />
 	</definition>
+	<definition name="sites/projectblogdetails" extends="base.definition.public">
+ 		<put-attribute name="currentPage" value="projectblog" />
+ 		<put-attribute name="content"
+ 			value="/WEB-INF/views/public/blog/projectblogdetails.jsp" />
+ 	</definition>	
 
 	<!-- Explore combined network -->
 
@@ -886,7 +894,7 @@
 		<put-attribute name="currentPage" value="networksearch" />
 		<put-attribute name="title" value="Quadriga Networks Visualize" />
 		<put-attribute name="right-navigation"
-			value="/WEB-INF/views/navigation/nav-networkrightsearchplane.jsp" />
+			value="/WEB-INF/views/public/nav/nav-networkrightsearchplane.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/public/network.jsp" />
 	</definition>

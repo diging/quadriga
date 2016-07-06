@@ -164,14 +164,75 @@ public class ProjectBlogEntryManagerTest {
         // Calling the method to test
         projectBlogEntryManagerUnderTest.addNewProjectBlogEntry(projectBlogEntry);
 
-        //Assert that id is assigned to projectBlogEntry object by addNewProjectBlogEntry method
+        // Assert that id is assigned to projectBlogEntry object by
+        // addNewProjectBlogEntry method
         assertEquals(UNIQUE_BLGE_ID, projectBlogEntry.getProjectBlogEntryId());
-        
-        //Assert that projectBlogEntry has date assigned by addNewProjectBlogEntry method
+
+        // Assert that projectBlogEntry has date assigned by
+        // addNewProjectBlogEntry method
         assertNotNull(projectBlogEntry.getCreatedDate());
-        
+
         // Verifying that saveNewDTO method is called
         verify(projectBlogEntryDAO).saveNewDTO(projectBlogEntryDTO);
+    }
+
+    /**
+     * tests
+     * {@link IProjectBlogEntryManager#getProjectBlogEntryDetails(projectBlogEntryId)}
+     * method responsible for fetching the blog entry identified by project blog
+     * entry id
+     * 
+     * @throws QuadrigaStorageException
+     */
+    @Test
+    public void getProjectBlogEntryDetailsTest() throws QuadrigaStorageException {
+
+        // Creating the dummy project Blog Entry
+        IProjectBlogEntry projectBlogEntry = new ProjectBlogEntry();
+        projectBlogEntry.setTitle(TITLE_NEW);
+        projectBlogEntry.setDescription(DESCRIPTION_NEW);
+        projectBlogEntry.setProjectBlogEntryId(BLGE_ID_1);
+
+        // Mocked ProjectBlogEntryDTO instance
+        ProjectBlogEntryDTO projectBlogEntryDTO = createProjectBlogEntryDTO(UNIQUE_BLGE_ID, TITLE_NEW, DESCRIPTION_NEW);
+
+        // Returning dummy project blog entry DTO
+        Mockito.when(projectBlogEntryDAO.getDTO(BLGE_ID_1)).thenReturn(projectBlogEntryDTO);
+
+        // Returning the created projectBlogEntry
+        Mockito.when(projectBlogEntryDTOMapper.getProjectBlogEntry(projectBlogEntryDTO)).thenReturn(projectBlogEntry);
+
+        // Calling the method to test
+        IProjectBlogEntry resultProjectBlogEntry = projectBlogEntryManagerUnderTest
+                .getProjectBlogEntryDetails(BLGE_ID_1);
+
+        // assert that the resultProjectBlogEntry has blog entry id as expected
+        assertEquals(resultProjectBlogEntry.getProjectBlogEntryId(), BLGE_ID_1);
+        // assert that the resultProjectBlogEntry has Title as expected
+        assertEquals(resultProjectBlogEntry.getTitle(), TITLE_NEW);
+        // assert that the resultProjectBlogEntry has description as expected
+        assertEquals(resultProjectBlogEntry.getDescription(), DESCRIPTION_NEW);
+
+    }
+
+    /**
+     * tests
+     * {@link IProjectBlogEntryManager#getProjectBlogEntryDetails(projectBlogEntryId)}
+     * method responsible for fetching the blog entry identified by project blog
+     * entry id
+     * 
+     * when there is no entry with the blog entry id
+     * 
+     * @throws QuadrigaStorageException
+     */
+    @Test
+    public void getProjectBlogEntryDetailsTestIdNotExist() throws QuadrigaStorageException {
+
+        // Calling the method to test with blog entry id does not exist
+        IProjectBlogEntry resultProjectBlogEntryWhenIdNotExist = projectBlogEntryManagerUnderTest
+                .getProjectBlogEntryDetails(BLGE_ID_2);
+        // assert that the resultProjectBlogEntry is null
+        assertEquals(resultProjectBlogEntryWhenIdNotExist, null);
     }
 
 }

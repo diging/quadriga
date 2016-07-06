@@ -36,7 +36,7 @@ import edu.asu.spring.quadriga.transform.PredicateNode;
  * @author jdamerow
  *
  */
-@PropertySource(value = "classpath:/user.properties")
+@PropertySource(value = "classpath:/settings.properties")
 @Service
 public class EventParser {
 
