@@ -58,7 +58,7 @@
 		</div>
 
 		<div class="form-group required">
-			<div class="col-md-16">
+			<div class="col-md-12">
 				<input type="file" class="form-control" id="patternFile" name="file"
 					required="required">
 			</div>
