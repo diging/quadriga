@@ -1,16 +1,22 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import = "edu.asu.spring.quadriga.domain.impl.workspace.TextFile" %>
+
+
 <div class="container">
     <div class="row">
         <div class="col-sm-6 search-wrapper" style="position: relative">
-            <div id="search-form" style="margin-bottom: -20px; padding-bottom: 0px;">
-                <div class="form-group search-input" style="margin-bottom: -20px; padding-bottom: 0px;">
+            <h2>Text Search</h2>
+    
+            <div id="search-form" style="margin-top: 20px;">
+                <div class="form-group search-input">
                     <label for="search-term">What concept are you looking for?</label>
                     <input type="text" class="form-control" id="search-term" autocomplete="off">
                     <span style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
                           id="ajax-loader" class="search-loader"></span>
                 </div>
             </div>
-            <div class="row" id="search-results-wrapper" style="display: none;">
-                <div class="col-sm-12 search-results">
+            <div id="search-results-wrapper" style="display: none;">
+                <div class="col-sm-12 search-results" style="margin-top: -35px;">
                     <div class="list-group" style="border: 1px solid #dddddd; max-height: 300px; overflow-y:scroll;" id="search-results-items">
                     </div>
                     <div style="display: none;">
@@ -26,13 +32,54 @@
     </div>
     
     <div class="row">
-        <div class="col-sm-12">
-        <c:forEach items="${references}" var="ref">
-        ${ref}<br>
-        </c:forEach>
+        <div class="col-sm-12"> 
+        
+        <c:if test="${not empty concept}">
+            <h5>The following texts reference the concept "${concept.lemma}":</h5>
+        </c:if>
+        <div class="list-group">
+        <c:forEach items="${texts}" var="textfile">
+            <div class="list-group-item">
+            <p class="pull-right">
+               <a href="${textfile.refId}" title="Go to original" target="_blank">
+                  <i class="fa fa-share" aria-hidden="true"></i>
+               </a>
+            </p>
+            <h4>
+            <a data-toggle="modal"
+               data-target="#txtModal" data-txtid="${textfile.textId}"
+               data-txtname="${textfile.fileName}" data-txttitle="${textfile.title}"
+               data-txtauthor="${textfile.author}" data-txtdate="${textfile.creationDate}">
+		        <c:if test="${not empty textfile.author}">${textfile.author}, </c:if>
+		        <c:if test="${not empty textfile.title}"><em>${textfile.title}</em></c:if>
+		        <c:if test="${not empty textfile.creationDate}"> (${textfile.creationDate})</c:if>
+		    </a>
+		    </h4>
+		    
+		    <p style="margin-bottom: 0px; line-height: 1.3"><small>${textfile.snippet}</small></p>
+		    </div>
+		</c:forEach>
+        </div>
         </div>
     </div>
 </div>
+
+<div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog"
+    aria-labelledby="txtModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" style="height: 500px; overflow-y: scroll;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
 //# sourceURL=loader.js
     function init() {
@@ -166,4 +213,62 @@
                 .on('textChange', onChange);
     }
     window.onload = init;
+    
+    
+// text modal
+$(document)
+            .ready(
+                    function() {
+                        $('#txtModal')
+                                .on(
+                                        'show.bs.modal',
+                                        function(event) {
+                                            var link = $(event.relatedTarget);
+
+                                            var txtid = link.data('txtid');
+                                            var txtname = link.data('txtname');
+                                            var title = link.data('txttitle');
+                                            var author = link.data('txtauthor');
+                                            var date = link.data('txtdate');
+                                            
+                                            var header = "No author and title information provided."
+                                            if (title != '' || author != '' || date != '') {
+                                                header = '';
+                                                if (author != null) {
+                                                    header += author + ", ";
+                                                }
+                                                if (title != null) {
+                                                    header += "<em>" + title + "</em> ";
+                                                }
+                                                if (date != null) {
+                                                    header += "(" + date + ")";
+                                                }
+                                            }
+                                            header += "<br><small>" + txtname + "</small>";
+                                            $
+                                                    .ajax({
+                                                        type : "GET",
+                                                        url : "${pageContext.servletContext.contextPath}/public/text/view?txtid="
+                                                                + txtid,
+                                                        contentType : "text/plain",
+                                                        success : function(
+                                                                details) {
+                                                            $('.modal-title')
+                                                                    .html(header);
+                                                            $('.modal-body')
+                                                                    .html(details);
+                                                        },
+
+                                                        error : function(xhr,
+                                                                ajaxOptions) {
+                                                            if (xhr.status == 404) {
+                                                                $('.modal-body')
+                                                                        .text(
+                                                                                "Error while retrieving the text content.");
+                                                            }
+                                                        }
+                                                    });
+
+                                        });
+                    });
 </script>

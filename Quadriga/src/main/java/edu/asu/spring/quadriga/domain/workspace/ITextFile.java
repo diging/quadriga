@@ -60,4 +60,10 @@ public interface ITextFile {
 
     String getTitle();
 
+    String getSnippet();
+
+    void setSnippetLength(int snippetLength);
+
+    int getSnippetLength();
+
 }

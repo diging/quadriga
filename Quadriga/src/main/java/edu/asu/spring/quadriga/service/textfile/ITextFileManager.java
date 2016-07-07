@@ -45,4 +45,8 @@ public interface ITextFileManager {
 
     public abstract ITextFile getTextFileByUri(String uri) throws QuadrigaStorageException;
 
+    void loadFile(ITextFile txtFile) throws FileStorageException;
+
+    ITextFile getTextFile(String textId);
+
 }

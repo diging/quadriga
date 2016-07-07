@@ -22,7 +22,9 @@ public class TextFile implements ITextFile {
     private String title;
     private String author;
     private String creationDate;
-    
+    private String snippet;
+    private int snippetLength = 20;
+
     @Override
     public String getTitle() {
         return title;
@@ -116,7 +118,7 @@ public class TextFile implements ITextFile {
         this.accessibility = accessibility;
     }
 
-    /** 
+    /**
      * This method returns the URI for a text file. It uses the prefix set
      * through setTextFileURIPrefix() and appends the id of the text.
      * 
@@ -129,11 +131,45 @@ public class TextFile implements ITextFile {
     /**
      * This is the setter method for the URI prefix used for text files.
      * 
-     * @param uriPrefix The prefix that should be used to generate the URI
-     * for this text file.
+     * @param uriPrefix
+     *            The prefix that should be used to generate the URI for this
+     *            text file.
      */
     public void setTextFileURIPrefix(String uriPrefix) {
         this.textFileURIPrefix = uriPrefix;
+    }
+
+    /**
+     * Returns a snippet of the text content. The snippet will
+     * start at the first word of the text and have either as many words as specified
+     * in snippetLength or if the text is shorter than snippetLength, the whole text.
+     * Set the snippet length with {@link #setSnippetLength(int) setSnippetLength}.
+     * 
+     * @param numberOfWords Number of words in the snippet.
+     * @return The generated snippet.
+     */
+    @Override
+    public String getSnippet() {
+        if (this.fileContent == null) {
+            return "";
+        }
+        String[] words = fileContent.split(" ");
+        
+        StringBuffer snippet = new StringBuffer();
+        for (int i = 0; i<snippetLength && i < words.length; i++) {
+            snippet.append(words[i] + " ");
+        }
+        return snippet.toString().trim();
+    }
+    
+    @Override
+    public int getSnippetLength() {
+        return snippetLength;
+    }
+
+    @Override
+    public void setSnippetLength(int snippetLength) {
+        this.snippetLength = snippetLength;
     }
 
 }

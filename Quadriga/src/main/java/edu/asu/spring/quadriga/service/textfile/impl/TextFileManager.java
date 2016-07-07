@@ -71,6 +71,20 @@ public class TextFileManager implements ITextFileManager {
         }
         return null;
     }
+    
+    @Override
+    public ITextFile getTextFile(String textId) {
+        TextFileDTO txtDto = txtFileDAO.getDTO(textId);
+        if (txtDto != null) {
+            return tfSMapper.getTextFile(txtDto);
+        }
+        return null;
+    }
+    
+    @Override
+    public void loadFile(ITextFile txtFile) throws FileStorageException {
+        txtFile.setFileContent(retrieveTextFileContent(txtFile.getTextId()));
+    }
 
     @Override
     public String retrieveTextFileContent(String txtId) throws FileStorageException {
