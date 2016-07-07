@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ page import="edu.asu.spring.quadriga.domain.enums.ETextAccessibility" %>
 
 <script>
 	$(document).ready(function() {
@@ -191,6 +192,13 @@
 										<c:if test="${not empty textfile.creationDate}"> (${textfile.creationDate})</c:if>
 										<c:if test="${empty textfile.author and empty textfile.title and empty textfile.creationDate}">No author and title information provided.</c:if></a>
 										<br><small>${textfile.fileName}</small>
+										<br>
+										<c:if test="${textfile.accessibility == 'PUBLIC'}">
+										<span class="label label-success">Public</span>
+										</c:if>
+										<c:if test="${textfile.accessibility == 'PRIVATE'}">
+                                        <span class="label label-danger">Private</span>
+                                        </c:if>
 									</td>
 									<td align="left"><small><strong>URI:</strong> ${textfile.textFileURI}<br>
 									<strong>Original URI:</strong> <a target="_blank" href="${textfile.refId}">${textfile.refId}</a></small></td>
