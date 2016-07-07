@@ -15,8 +15,8 @@ import edu.asu.spring.quadriga.exceptions.FileStorageException;
 public interface ITransformationSaveService {
 
     /**
-     * tries to store the pattern file content and transformation file content
-     * of transformationFile object as two separate files in local file system
+     * Tries to store the pattern file content and transformation file content
+     * of transformationFile object as two separate files in local file system.
      * 
      * @param transformationFile
      *            Transformation File Object which contains content for pattern

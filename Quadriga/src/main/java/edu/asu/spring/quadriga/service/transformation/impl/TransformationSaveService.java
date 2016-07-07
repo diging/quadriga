@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.transformation;
+package edu.asu.spring.quadriga.service.transformation.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,19 +53,19 @@ public class TransformationSaveService implements ITransformationSaveService {
     private String getMetaDataContent(ITransformationFile transformationFile) {
 
         StringBuilder content = new StringBuilder();
-        content.append("Name of the User=");
+        content.append("nameOfTheUser=");
         content.append(transformationFile.getUserName());
         content.append(System.lineSeparator());
-        content.append("Title=");
+        content.append("title=");
         content.append(transformationFile.getTitle());
         content.append(System.lineSeparator());
-        content.append("Description=");
+        content.append("description=");
         content.append(transformationFile.getDescription());
         content.append(System.lineSeparator());
-        content.append("PatternFileName=");
+        content.append("patternFileName=");
         content.append(transformationFile.getPatternFileName());
         content.append(System.lineSeparator());
-        content.append("MappingFileName=");
+        content.append("mappingFileName=");
         content.append(transformationFile.getMappingFileName());
 
         return content.toString();
