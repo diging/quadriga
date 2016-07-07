@@ -69,6 +69,7 @@
 		    </div>
 		</c:forEach>
 		
+		<c:if test="${not empty references}">
 		<h4 style="margin-top: 30px;">External Resources</h4>
 		<c:forEach items="${references}" var="ref">
 		  <div class="list-group-item">
@@ -77,6 +78,8 @@
               </h4>
 		  </div>
 		</c:forEach>
+		</c:if>
+		
         </div>
         </div>
     </div>
