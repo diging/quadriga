@@ -266,11 +266,11 @@ a.list-group-item {
 
 /* search */
 .navbar-search {
-    background-color: #e8e8e8;
+    background-color: #3d96a5;
 }
 
 #c.footer-search {
-	background-color: #e8e8e8;
+	background-color: #3d96a5;
 	color: #333333;
 }
 
@@ -278,3 +278,22 @@ a.list-group-item {
 	color: #333333;
 }
 
+#c.footer-search a {
+    color: #ffffff;
+}
+
+.body-search {
+	background-color: #3d96a5;
+}
+
+.search-main {
+	background-color: #ffffff;
+}
+
+.body-search a {
+	color: #3d96a5;
+}
+
+.body-search a:hover {
+    color: #2c7786;
+}

@@ -58,7 +58,7 @@
     href="${pageContext.servletContext.contextPath}/resources/css/base.css"
     rel="stylesheet">
 </head>
-<body data-spy="scroll" data-offset="0" data-target="#navigation">
+<body data-spy="scroll" data-offset="0" data-target="#navigation" class="body-search">
     <tiles:importAttribute name="currentPage" scope="request" />
 
     <!-- Fixed navbar -->
@@ -126,7 +126,7 @@
 
 
     <!--  Main -->
-    <div class="row" style="min-height: 400px;">
+    <div class="row search-main" style="min-height: 500px;">
     
     <tiles:insertAttribute name="content" />
 
