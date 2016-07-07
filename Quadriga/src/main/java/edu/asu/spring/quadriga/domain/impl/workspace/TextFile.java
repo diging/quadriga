@@ -18,8 +18,43 @@ public class TextFile implements ITextFile {
     private String fileContent;
     private String refId;
     private ETextAccessibility accessibility;
-    private String textFileURI;
-    
+    private String textFileURIPrefix;
+    private String title;
+    private String author;
+    private String creationDate;
+    private String snippet;
+    private int snippetLength = 20;
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public String getAuthor() {
+        return author;
+    }
+
+    @Override
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    @Override
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    @Override
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
     @Override
     public String getFileName() {
         return fileName;
@@ -83,12 +118,58 @@ public class TextFile implements ITextFile {
         this.accessibility = accessibility;
     }
 
+    /**
+     * This method returns the URI for a text file. It uses the prefix set
+     * through setTextFileURIPrefix() and appends the id of the text.
+     * 
+     * @return A URI for a text.
+     */
     public String getTextFileURI() {
-        return textFileURI;
+        return textFileURIPrefix + this.getTextId();
     }
 
-    public void setTextFileURI(String uriPrefix) {
-        this.textFileURI = uriPrefix + this.getTextId();
+    /**
+     * This is the setter method for the URI prefix used for text files.
+     * 
+     * @param uriPrefix
+     *            The prefix that should be used to generate the URI for this
+     *            text file.
+     */
+    public void setTextFileURIPrefix(String uriPrefix) {
+        this.textFileURIPrefix = uriPrefix;
+    }
+
+    /**
+     * Returns a snippet of the text content. The snippet will
+     * start at the first word of the text and have either as many words as specified
+     * in snippetLength or if the text is shorter than snippetLength, the whole text.
+     * Set the snippet length with {@link #setSnippetLength(int) setSnippetLength}.
+     * 
+     * @param numberOfWords Number of words in the snippet.
+     * @return The generated snippet.
+     */
+    @Override
+    public String getSnippet() {
+        if (this.fileContent == null) {
+            return "";
+        }
+        String[] words = fileContent.split(" ");
+        
+        StringBuffer snippet = new StringBuffer();
+        for (int i = 0; i<snippetLength && i < words.length; i++) {
+            snippet.append(words[i] + " ");
+        }
+        return snippet.toString().trim();
+    }
+    
+    @Override
+    public int getSnippetLength() {
+        return snippetLength;
+    }
+
+    @Override
+    public void setSnippetLength(int snippetLength) {
+        this.snippetLength = snippetLength;
     }
 
 }

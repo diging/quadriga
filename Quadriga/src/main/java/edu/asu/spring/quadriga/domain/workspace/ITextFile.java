@@ -46,6 +46,24 @@ public interface ITextFile {
      *            Prefix for TextFile URI.
      * 
      */
-    public abstract void setTextFileURI(String uriPrefix);
+    public abstract void setTextFileURIPrefix(String uriPrefix);
+
+    void setCreationDate(String creationDate);
+
+    String getCreationDate();
+
+    void setAuthor(String author);
+
+    String getAuthor();
+
+    void setTitle(String title);
+
+    String getTitle();
+
+    String getSnippet();
+
+    void setSnippetLength(int snippetLength);
+
+    int getSnippetLength();
 
 }

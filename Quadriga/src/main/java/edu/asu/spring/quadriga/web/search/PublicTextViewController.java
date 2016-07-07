@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.workspace;
+package edu.asu.spring.quadriga.web.search;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,39 +10,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
-import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
+import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.util.TextHelper;
 
 @Controller
-public class ViewTextController {
-
+public class PublicTextViewController {
+    
     @Autowired
     private ITextFileManager tfManager;
     
     @Autowired
     private TextHelper textHelper;
 
-    private static final Logger logger = LoggerFactory.getLogger(ViewTextController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PublicTextViewController.class);
 
-    @ResponseBody
-    @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/viewtext", method = RequestMethod.GET)
-    @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {
-            RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_QUADRIGA_ADMIN,
-            RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR })
+    @RequestMapping(value = "public/text/view")
     public ResponseEntity<String> viewTextfile(@RequestParam("txtid") String txtId, HttpServletResponse response,
             HttpServletRequest request) throws QuadrigaAccessException {   
         try {
-            String text = tfManager.retrieveTextFileContent(txtId);
-            return textHelper.getResponse(text, response);        
+            ITextFile textFile = tfManager.getTextFile(txtId);
+            if (textFile.getAccessibility() == ETextAccessibility.PUBLIC) {
+                tfManager.loadFile(textFile);
+                return textHelper.getResponse(textFile.getFileContent(), response); 
+            }
+            
+            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);       
         } catch (FileStorageException e) {
             logger.error(e.getMessage());
             String respMessage = "Error while retrieving the file content";

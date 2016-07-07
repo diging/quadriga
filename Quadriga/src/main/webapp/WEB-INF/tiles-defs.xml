@@ -923,4 +923,12 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/public/searchsites.jsp" />
 	</definition>
+	
+	
+	<!--  general text search -->
+	<definition name="search/texts" extends="base.definition.empty">
+	   <put-attribute name="navigation"
+            value="" />
+	   <put-attribute name="content" value="/WEB-INF/views/search/texts/searchTexts.jsp" />
+	</definition>
 </tiles-definitions>

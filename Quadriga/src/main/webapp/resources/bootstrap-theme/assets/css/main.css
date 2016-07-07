@@ -263,3 +263,18 @@ a.list-group-item {
 .byline-sm a:hover {
 	text-decoration: underline;
 }
+
+/* search */
+.navbar-search {
+    background-color: #e8e8e8;
+}
+
+#c.footer-search {
+	background-color: #e8e8e8;
+	color: #333333;
+}
+
+#c.footer-search p {
+	color: #333333;
+}
+
