@@ -33,7 +33,7 @@
 	<div id="patternDiv" class="col-md-5"
 		style="border: 1px solid #A89E9E; border-radius: 10px;">
 		<h4 style="text-align: center">
-			<u> Upload Pattern/Transformation File </u>
+			<u> Upload Pattern File </u>
 		</h4>
 
 		<div class="form-group required">
