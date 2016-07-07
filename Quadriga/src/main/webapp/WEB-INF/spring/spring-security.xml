@@ -44,6 +44,7 @@
 		<intercept-url pattern="/auth/profile/**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/sites/**" access="permitAll" />
 		<intercept-url pattern="/public/**" access="permitAll" />
+		<intercept-url pattern="/search/**" access="permitAll" />
 		<intercept-url pattern="/**" access="denyAll" />
 		
 		<form-login login-page="/login" default-target-url="/auth/welcome"
