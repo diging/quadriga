@@ -62,22 +62,29 @@ public class TextConceptSearchController {
 
             Set<String> references = new HashSet<String>();
             List<ITextFile> texts = new ArrayList<ITextFile>();
+            List<String> textlessReferences = new ArrayList<String>();
+            
             for (CreationEvent event : eventList) {
                 String sourceRef = event.getSourceReference();
                 
                 // if we haven't seen the reference yet
                 if (references.add(sourceRef)) {
                     ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
-                    if (txtFile != null && txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
-                        texts.add(txtFile);
-                        textFileManager.loadFile(txtFile);
-                        txtFile.setSnippetLength(40);
+                    if (txtFile == null) {
+                        textlessReferences.add(sourceRef);
+                    } else {
+                        if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
+                            texts.add(txtFile);
+                            textFileManager.loadFile(txtFile);
+                            txtFile.setSnippetLength(40);
+                        }
                     }
+                    
                 }
             }
             
+            model.addAttribute("references", textlessReferences);
             model.addAttribute("concept", entry);
-            model.addAttribute("references", references);
             model.addAttribute("texts", texts);
         }
         
