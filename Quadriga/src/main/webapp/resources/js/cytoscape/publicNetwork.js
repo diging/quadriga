@@ -4,11 +4,11 @@ function defineListeners(cy, path, unixName) {
 	cy.on('mouseover', 'node', function(e) {
 		var ele = e.cyTarget;
 		var statementIds = ele.data('statementIds');
-		fadeOut(statementIds);
+		fadeOut(statementIds, 65, 50);
 	})
 	
 	cy.on('mouseout', 'node', function(e) {
-	    fadeIn();
+	    fadeIn(55, 40);
 	});
 	
 	cy.on('click', 'node', function(e) {
@@ -18,7 +18,30 @@ function defineListeners(cy, path, unixName) {
 	});
 }
 
-function fadeIn() {
+function defineFadeListenersSearch(cy, path) {
+	cy.on('mouseover', 'node', function(e) {
+		var ele = e.cyTarget;
+		var statementIds = ele.data('statementIds');
+		fadeOut(statementIds, 45, 30);
+	})
+	
+	cy.on('mouseout', 'node', function(e) {
+	    fadeIn(35, 10);
+	});
+}
+
+function defineDoubleClickSearch(cy, path) {
+	cy.on('click', 'node', function(e) {
+		var node = e.cyTarget;
+		var name = node.data('conceptName');
+		var uri = node.data('conceptUri');
+		$('#nodeName').html(name);
+		$('#searchForNode').css({'display':'inline'});
+		$('#searchNodeLink').attr('href', path + "/search/texts?conceptId=" + uri);
+	});
+}
+
+function fadeIn(sizeLeafs, sizePreds) {
 	cy.elements().animate({
       style: { 'opacity': '1' }
     }, {
@@ -34,7 +57,7 @@ function fadeIn() {
      });
     
 	leafs.animate({
-        css: { 'width':'55', 'height' : '55'}
+        css: { 'width': sizeLeafs, 'height' : sizeLeafs}
       }, {
         duration: animationDuration
       });
@@ -48,13 +71,13 @@ function fadeIn() {
      });
     
     predicates.animate({
-        css: { 'width':'40', 'height' : '40'}
+        css: { 'width':sizePreds, 'height' : sizePreds}
       }, {
         duration: animationDuration
       });
 }
 
-function fadeOut(statementIds) {
+function fadeOut(statementIds, sizeLeafs, sizePreds) {
     var faded = cy.filter(function(i, element){
         for (var i = 0; i<statementIds.length; i++) {
 	      if(element.data("statementIds").includes(statementIds[i])){
@@ -81,7 +104,7 @@ function fadeOut(statementIds) {
      });
     
     unfadedLeafs.animate({
-        css: { 'width':'65', 'height' : '65'}
+        css: { 'width':sizeLeafs, 'height' : sizeLeafs}
       }, {
         duration: animationDuration
       });
@@ -97,7 +120,7 @@ function fadeOut(statementIds) {
      });
     
     unfadedPredicates.animate({
-        css: { 'width':'50', 'height' : '50'}
+        css: { 'width':sizePreds, 'height' : sizePreds}
       }, {
         duration: animationDuration
       });

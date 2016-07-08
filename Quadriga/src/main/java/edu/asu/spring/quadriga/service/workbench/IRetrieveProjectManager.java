@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.workbench;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -35,7 +36,7 @@ public interface IRetrieveProjectManager {
     boolean canAccessProjectWebsite(String unixName, String user) 
             throws QuadrigaStorageException;
     
-    public abstract List<IProject> getProjectListByAccessibility(String name)
+    public abstract List<IProject> getProjectListByAccessibility(EProjectAccessibility accessibility)
             throws QuadrigaStorageException;
     
 	public abstract List<IProject> getRecentProjectList(String sUserName)

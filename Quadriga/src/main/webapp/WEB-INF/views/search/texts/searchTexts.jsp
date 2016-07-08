@@ -1,87 +1,116 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import = "edu.asu.spring.quadriga.domain.impl.workspace.TextFile" %>
 
+<script
+    src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/dist/cytoscape.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/publicNetwork.js" ></script>
+
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-6 search-wrapper" style="position: relative">
-            <h2>Text Search</h2>
     
-            <div id="search-form" style="margin-top: 20px;">
-                <div class="form-group search-input">
-                    <label for="search-term">What concept are you looking for?</label>
-                    <input placeholder="Enter search term" type="text" class="form-control" id="search-term" autocomplete="off">
-                    <span style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
-                          id="ajax-loader" class="search-loader"></span>
-                </div>
-            </div>
-            <div id="search-results-wrapper" style="display: none;">
-                <div class="col-sm-12 search-results" style="margin-top: -35px;">
-                    <div class="list-group" style="border: 1px solid #dddddd; max-height: 300px; overflow-y:scroll;" id="search-results-items">
+        <div class="col-md-8">
+            <div class="row">
+		        <div class="col-sm-12 search-wrapper" style="position: relative">
+		            <h2>Text Search</h2>
+		    
+		            <div id="search-form" style="margin-top: 20px;">
+		                <div class="form-group search-input">
+		                    <label for="search-term">What concept are you looking for?</label>
+		                    <input placeholder="Enter search term" type="text" class="form-control" id="search-term" autocomplete="off">
+		                    <span style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
+		                          id="ajax-loader" class="search-loader"></span>
+		                </div>
+		            </div>
+		            <div id="search-results-wrapper" style="display: none;">
+		                <div class="col-sm-12 search-results" style="margin-top: -35px;">
+		                    <div class="list-group" style="border: 1px solid #dddddd; max-height: 300px; overflow-y:scroll;" id="search-results-items">
+		                    </div>
+		                    <div style="display: none;">
+		                        <a href="#" class="list-group-item" id="search-item-template">
+		                            <span class="search-name text-primary"><strong></strong></span> <span class="search-type label label-primary"></span> 
+		                            <span class="search-pos label label-info text-lowercase"></span>
+		                            <small><br><span class="search-desc text-muted"></span></small>
+		                        </a>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    
+		    <div class="row">
+                <div class="col-sm-12"> 
+                
+                <c:if test="${not empty concept}">
+                    <h3 style="margin-bottom: 0px;">Results for:</h3>
+                    <h4 style="margin-bottom: 20px;">${concept.lemma}
+                    <small><span class="label label-default">${concept.type}</span>
+                    <br>${concept.description}
+                    </small>
+                    </h4>
+                </c:if>
+                <div class="list-group">
+                <c:if test="${empty texts and empty references}">
+                <p>Your search has no results.</p>
+                </c:if>
+                <c:forEach items="${texts}" var="textfile">
+                    <div class="list-group-item">
+                    <p class="pull-right">
+                       <a href="${textfile.refId}" title="Go to original" target="_blank">
+                          <i class="fa fa-share" aria-hidden="true"></i>
+                       </a>
+                    </p>
+                    <h4>
+                    <a href="#" data-toggle="modal"
+                       data-target="#txtModal" data-txtid="${textfile.textId}"
+                       data-txtname="${textfile.fileName}" data-txttitle="${textfile.title}"
+                       data-txtauthor="${textfile.author}" data-txtdate="${textfile.creationDate}">
+                       <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        <c:if test="${not empty textfile.author}">${textfile.author}, </c:if>
+                        <c:if test="${not empty textfile.title}"><em>${textfile.title}</em></c:if>
+                        <c:if test="${not empty textfile.creationDate}"> (${textfile.creationDate})</c:if>
+                        <c:if test="${empty textfile.author and empty textfile.title and empty textfile.creationDate}">No author and title information provided.</c:if>
+                    </a>
+                    </h4>
+                    
+                    <p style="margin-bottom: 0px; line-height: 1.3"><small>${textfile.snippet}</small></p>
                     </div>
-                    <div style="display: none;">
-                        <a href="#" class="list-group-item" id="search-item-template">
-                            <span class="search-name text-primary"><strong></strong></span> <span class="search-type label label-primary"></span> 
-                            <span class="search-pos label label-info text-lowercase"></span>
-                            <small><br><span class="search-desc text-muted"></span></small>
-                        </a>
-                    </div>
+                </c:forEach>
+                
+                <c:if test="${not empty references}">
+                <h4 style="margin-top: 30px;">External Resources</h4>
+                <c:forEach items="${references}" var="ref">
+                  <div class="list-group-item">
+                      <h4>
+                        <a href="${ref}" target="_blank"><i class="fa fa-share" aria-hidden="true"></i> ${ref}</a>
+                      </h4>
+                  </div>
+                </c:forEach>
+                </c:if>
+                
                 </div>
-            </div>
+             </div>
         </div>
     </div>
     
-    <div class="row">
-        <div class="col-sm-12"> 
-        
-        <c:if test="${not empty concept}">
-            <h3 style="margin-bottom: 0px;">Results for:</h3>
-            <h4 style="margin-bottom: 20px;">${concept.lemma}
-            <small><span class="label label-default">${concept.type}</span>
-            <br>${concept.description}
-            </small>
-            </h4>
-        </c:if>
-        <div class="list-group">
-        <c:if test="${empty texts}">
-        <p>Your search has no results.</p>
-        </c:if>
-        <c:forEach items="${texts}" var="textfile">
-            <div class="list-group-item">
-            <p class="pull-right">
-               <a href="${textfile.refId}" title="Go to original" target="_blank">
-                  <i class="fa fa-share" aria-hidden="true"></i>
-               </a>
-            </p>
-            <h4>
-            <a href="#" data-toggle="modal"
-               data-target="#txtModal" data-txtid="${textfile.textId}"
-               data-txtname="${textfile.fileName}" data-txttitle="${textfile.title}"
-               data-txtauthor="${textfile.author}" data-txtdate="${textfile.creationDate}">
-               <i class="fa fa-file-text-o" aria-hidden="true"></i>
-		        <c:if test="${not empty textfile.author}">${textfile.author}, </c:if>
-		        <c:if test="${not empty textfile.title}"><em>${textfile.title}</em></c:if>
-		        <c:if test="${not empty textfile.creationDate}"> (${textfile.creationDate})</c:if>
-		    </a>
-		    </h4>
-		    
-		    <p style="margin-bottom: 0px; line-height: 1.3"><small>${textfile.snippet}</small></p>
-		    </div>
-		</c:forEach>
-		
-		<c:if test="${not empty references}">
-		<h4 style="margin-top: 30px;">External Resources</h4>
-		<c:forEach items="${references}" var="ref">
-		  <div class="list-group-item">
-		      <h4>
-                <a href="${ref}" target="_blank"><i class="fa fa-share" aria-hidden="true"></i> ${ref}</a>
-              </h4>
-		  </div>
-		</c:forEach>
-		</c:if>
-		
-        </div>
-        </div>
+     <div class="col-md-4" style="padding-top: 100px;">
+        <div class="row">
+            <div class="col-sm-12">
+            <small>Click on a node to search for its concept.</small>
+            </div>
+            <div class="col-sm-12" style="min-height: 45px;">
+		       <small>
+		          <div id="searchForNode" style="display: none; ">
+	           Search for concept <em id="nodeName"></em>?&nbsp;&nbsp; <a id="searchNodeLink"><strong>Yes, search!</strong></a>
+	               </div>
+	           </small>
+	         </div>
+	         <div class="col-sm-12">
+		      <div id="networkBox" style="min-height: 500px; width: 100%; text-align: left;"></div>  
+	         </div>
+	     </div>
+	 </div>
+
     </div>
 </div>
 
@@ -99,6 +128,53 @@
         </div>
     </div>
 </div>
+
+<script>
+
+var container = document.getElementById('networkBox');
+
+var cy = cytoscape({
+    container: container, // container to render in
+
+    elements: ${jsonstring},
+    layout: {
+        name: 'cose',
+        idealEdgeLength: 5,
+        gravity: 80,
+        edgeElasticity: 20,
+      },
+    style: [ // the stylesheet for the graph
+             {
+               selector: 'node',
+               style: {
+                 'background-color': 'mapData(group, 0, 1, #E1CE7A, #FDD692)',
+                 'border-color' : '#B98F88',
+                 'border-width' : 1,
+                 'font-family': 'Raleway, Sans Serif',
+                 'font-size': '13px',
+                 'color': 'mapData(group, 0, 1, #666, #333)',
+                 'label': 'data(conceptName)',
+                 'width':'mapData(group, 0, 1, 10, 35)',
+                 "height":"mapData(group, 0, 1, 10, 35)",
+                 'text-valign' : 'center',
+               }
+             },
+
+             {
+               selector: 'edge',
+               style: {
+                 'width': 1,
+                 'line-color': '#754F44',
+                 'target-arrow-shape': 'none'
+               }
+             }
+           ]
+});
+
+defineFadeListenersSearch(cy, '${pageContext.servletContext.contextPath}');
+defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
+
+</script>
 
 
 <script>
