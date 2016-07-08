@@ -52,7 +52,7 @@
                     </h4>
                 </c:if>
                 <div class="list-group">
-                <c:if test="${empty texts and empty references}">
+                <c:if test="${empty texts and empty references and not empty concept}">
                 <div class="panel panel-default">
                     <div class="panel-body">Your search has no results.</div>
                 </div>
@@ -100,7 +100,9 @@
      <div class="col-md-4" style="padding-top: 100px;">
         <div class="row">
             <div class="col-sm-12">
-            <small>Click on a node to search for its concept.</small>
+            <c:if test="${jsonstring != '[]'}">
+                <small>Click on a node to search for its concept.</small>
+            </c:if>
             </div>
             <div class="col-sm-12" style="min-height: 45px;">
 		       <small>
