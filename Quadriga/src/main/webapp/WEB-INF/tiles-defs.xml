@@ -4,7 +4,7 @@
 <tiles-definitions>
 
 	<!-- Base definitions -->
-	<definition name="base.definition.empty" template="/WEB-INF/tiles/layouts/skeleton_empty.jsp">
+	<definition name="base.definition.textsearch" template="/WEB-INF/tiles/layouts/skeleton_textsearch.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
@@ -926,7 +926,7 @@
 	
 	
 	<!--  general text search -->
-	<definition name="search/texts" extends="base.definition.empty">
+	<definition name="search/texts" extends="base.definition.textsearch">
 	   <put-attribute name="navigation"
             value="" />
 	   <put-attribute name="content" value="/WEB-INF/views/search/texts/searchTexts.jsp" />

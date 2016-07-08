@@ -28,11 +28,7 @@
     href="${pageContext.servletContext.contextPath}/resources/css/jquery-ui.css" />
 
 <script
-    src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
-<script
-    src="${pageContext.servletContext.contextPath}/resources/js/jquery-ui.js"></script>
-<script
-    src="${pageContext.servletContext.contextPath}/resources/js/jquery-alert.js"></script>
+    src="${pageContext.servletContext.contextPath}/resources/js/jquery-3.0.0.min.js"></script>
 <script
     src="${pageContext.servletContext.contextPath}/resources/js/jquery.quick.pagination.min.js"></script>
 
