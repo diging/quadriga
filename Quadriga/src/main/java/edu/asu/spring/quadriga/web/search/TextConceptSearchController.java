@@ -6,23 +6,28 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
+import edu.asu.spring.quadriga.service.network.IJsonCreator;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Controller
 public class TextConceptSearchController {
@@ -38,9 +43,20 @@ public class TextConceptSearchController {
     
     @Autowired
     private ITextFileManager textFileManager;
+    
+    @Autowired
+    private IRetrieveProjectManager projectManager;
+    
+    @Autowired
+    private INetworkTransformationManager transformationManager;
+    
+    @Autowired
+    private IJsonCreator jsonCreator;
 
     @RequestMapping(value = "search/texts")
     public String prepareSearchPage(@RequestParam(defaultValue="") String conceptId, Model model) throws Exception {
+        
+        String conceptUri = conceptId;
         
         if (!conceptId.isEmpty()) {
             ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
@@ -88,6 +104,25 @@ public class TextConceptSearchController {
             model.addAttribute("texts", texts);
         }
         
+        List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
+        
+        List<String> projectIds = new ArrayList<String>();
+        projects.forEach(p -> projectIds.add(p.getProjectId()));
+        
+        ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds, conceptUri, INetworkStatus.APPROVED);
+        
+        String json = null;
+        if (transformedNetwork != null) {
+            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+        }
+
+        if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+            model.addAttribute("isNetworkEmpty", true);
+        }
+        
+        model.addAttribute("jsonstring", json);
+        
         return "search/texts";
     }
+
 }

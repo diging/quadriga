@@ -42,7 +42,7 @@ public class RetrieveProjectManagerTest {
     public void checkOnlyPublicProjectsAreReturned() throws QuadrigaStorageException {
         Mockito.when(mockedDBConnect.getAllProjectsDTOByAccessibility("PUBLIC")).thenReturn(createPublicProjectDTOList());
         Mockito.when(mockedProjectShallowMapper.getProjectDetails(Matchers.any(ProjectDTO.class))).thenReturn(createPublicIProject());
-        List<IProject> projectList = retrieveProjectManagerUnderTest.getProjectListByAccessibility("PUBLIC");
+        List<IProject> projectList = retrieveProjectManagerUnderTest.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
 
         assertNotNull(projectList);
         assertEquals(1, projectList.size());
@@ -56,7 +56,7 @@ public class RetrieveProjectManagerTest {
     @Test
     public void checkProjectListByAccessibilityReturnsEmptyListIfNoPublicProjects() throws QuadrigaStorageException {
         Mockito.when(mockedDBConnect.getAllProjectsDTOByAccessibility("PUBLIC")).thenReturn(new ArrayList<ProjectDTO>());
-        List<IProject> projectList = retrieveProjectManagerUnderTest.getProjectListByAccessibility("PUBLIC");
+        List<IProject> projectList = retrieveProjectManagerUnderTest.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
 
         assertNotNull(projectList);
         assertEquals(0, projectList.size());

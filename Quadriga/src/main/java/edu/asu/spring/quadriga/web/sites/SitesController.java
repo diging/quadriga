@@ -39,7 +39,7 @@ public class SitesController {
 	 */
 	@RequestMapping(value = "sites", method = RequestMethod.GET)
 	public String showQuadrigaPublicPages(Model model) throws QuadrigaStorageException {
-		List<IProject> projectList = retrieveProjectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC.name());
+		List<IProject> projectList = retrieveProjectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
 		model.addAttribute("projectList", projectList);
 		model.addAttribute("project_baseurl", env.getProperty("project.cite.baseurl"));
 		return "sites";
