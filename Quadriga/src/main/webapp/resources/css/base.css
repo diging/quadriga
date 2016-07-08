@@ -94,3 +94,16 @@ span.highlight {
 .text-modal .modal-dialog {
 	width: 70%;
 }
+
+
+/* Not to display IE clear */
+.search-wrapper .search-input::-ms-clear {
+    display: none;
+}
+
+.search-wrapper .search-loader {
+    width: 16px;
+    height: 16px;
+    display: none;
+    
+}
