@@ -101,7 +101,7 @@
 	</div>
 
 <div class="col-md-offset-5">
-<button type="button" class="btn btn-primary top5">Submit Files</button>
+<button type="submit" class="btn btn-primary top5">Submit Files</button>
 </div>
 	
 </form>
