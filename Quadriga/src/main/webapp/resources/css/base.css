@@ -107,3 +107,7 @@ span.highlight {
     display: none;
     
 }
+
+.highlight-phrase {
+	background-color: yellow;
+}

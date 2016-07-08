@@ -41,68 +41,30 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "appellationEventType", propOrder = {
-    "termOrExternalRefId"
-})
+@XmlType(name = "appellationEventType")
 public class AppellationEventType
     extends CreationEvent {
 
-    @XmlElements({
-        @XmlElement(name = "term", type = TermType.class),
-        @XmlElement(name = "external_refId", type = String.class)
-    })
-    protected List<Object> termOrExternalRefId;
-
-    /**
-     * Gets the value of the termOrExternalRefId property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the termOrExternalRefId property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getTermOrExternalRefId().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link TermType }
-     * {@link String }
-     * 
-     * 
-     */
-    public List<Object> getTermOrExternalRefId() {
-        if (termOrExternalRefId == null) {
-            termOrExternalRefId = new ArrayList<Object>();
-        }
-        return this.termOrExternalRefId;
-    }
+    @XmlElement(name = "external_refId", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String externalRefI;
     
-    /**
-     * Returns the list of terms in an Appellation
-     * @author Lohith Dwaraka
-     * @param aet  : AppellationEventType
-     * @return
-     */
-    public List<TermType> getTerms(){
-    	List<Object> objectList = getTermOrExternalRefId();
-    	List<TermType> termTypeList = new ArrayList<TermType>();
-    	Iterator <Object> I3 = objectList.iterator();
-		while(I3.hasNext()){
-			Object o = I3.next();
-			if(o instanceof TermType){
-				
-				TermType tt = (TermType) o;
-				termTypeList.add(tt);
-				
-			}
-		}    
-		return termTypeList;
+    public String getExternalRefI() {
+        return externalRefI;
     }
+
+    public void setExternalRefI(String externalRefI) {
+        this.externalRefI = externalRefI;
+    }
+
+    public TermType getTermType() {
+        return termType;
+    }
+
+    public void setTermType(TermType termType) {
+        this.termType = termType;
+    }
+
+    @XmlElement(name = "term", namespace = "http://digitalhps.org/creationEvents-model", type = TermType.class)
+    private TermType termType;
 
 }
