@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.transformation.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,14 @@ public class TransformationManager implements ITransformationManager {
     @Transactional
     @Override
     public void saveTransformations(ITransformationFile transformationFile) throws FileStorageException {
-        TransformFilesDTO tranformDTO = new TransformFilesDTO(transformationFile.getTitle(),
+        TransformFilesDTO transformDTO = new TransformFilesDTO(transformationFile.getTitle(),
                 transformationFile.getDescription(), transformationFile.getPatternFileName(),
                 transformationFile.getPatternTitle(), transformationFile.getPatternDescription(),
                 transformationFile.getMappingFileName(), transformationFile.getMappingTitle(),
                 transformationFile.getMappingDescription(), transformationFile.getUserName());
         String id = transformationDAO.generateUniqueID();
-        tranformDTO.setId(id);
-        transformationDAO.saveNewDTO(tranformDTO);
+        transformDTO.setId(id);
+        transformationDAO.saveNewDTO(transformDTO);
         transformationFile.setId(id);
 
         transformationFileService.saveFileToLocal(transformationFile);
@@ -51,4 +52,34 @@ public class TransformationManager implements ITransformationManager {
         return transformationDAO.getAllTransformations();
     }
 
+    @Transactional
+    @Override
+    public ArrayList<String> retrieveTransformationFilePaths(String transformationId) throws FileStorageException {
+
+        TransformFilesDTO transformDTO = (TransformFilesDTO) transformationDAO.getDTO(transformationId);
+        ArrayList<String> fileNames = new ArrayList<String>();
+        String fileLocation = transformationFileService.getTransformFileLocation();
+        String absolutePatternFilePath = getAbsoluteFilePath(fileLocation, transformationId,
+                transformDTO.getPatternFileName());
+        String absoluteMappingFilePath = getAbsoluteFilePath(fileLocation, transformationId,
+                transformDTO.getMappingFileName());
+
+        fileNames.add(absolutePatternFilePath);
+        fileNames.add(absoluteMappingFilePath);
+
+        return fileNames;
+    }
+
+    private String getAbsoluteFilePath(String location, String dirName, String fileName) {
+
+        StringBuffer filePath = new StringBuffer();
+
+        filePath.append(location);
+        filePath.append("/");
+        filePath.append(dirName);
+        filePath.append("/");
+        filePath.append(fileName);
+
+        return filePath.toString();
+    }
 }

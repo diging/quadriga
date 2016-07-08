@@ -70,4 +70,9 @@ public class TransformationSaveService implements ITransformationSaveService {
 
         return content.toString();
     }
+
+    @Override
+    public String getTransformFileLocation() {
+        return transformationFileManager.getFileLocation();
+    }
 }

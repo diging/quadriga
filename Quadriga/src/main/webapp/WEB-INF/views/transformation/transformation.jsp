@@ -348,7 +348,7 @@
 										<div class="checkbox_transformation"
 											id="divTransformationList">
 											<label> <input type="checkbox"
-												value="${transformations.title}" name="transformation"
+												value="${transformations.title},${transformations.id}" name="transformation"
 												class="transformationList"> &nbsp;&nbsp;&nbsp;&nbsp;<c:out
 													value="${transformations.title}"></c:out>
 

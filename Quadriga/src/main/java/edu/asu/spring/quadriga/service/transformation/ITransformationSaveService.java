@@ -27,4 +27,10 @@ public interface ITransformationSaveService {
      */
     boolean saveFileToLocal(ITransformationFile transformationFile) throws FileStorageException;
 
+    /**
+     * 
+     * @return location where transformations are stored
+     */
+    public String getTransformFileLocation();
+
 }

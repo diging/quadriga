@@ -73,10 +73,15 @@ public class FileSaveUtility implements IFileSaveUtility {
 
         }
         try {
-            return new String(fileBytes,"UTF-8");
+            return new String(fileBytes, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new FileStorageException(e);
         }
+    }
+
+    @Override
+    public String getFileLocation() {
+        return textFileLocation;
     }
 
 }
