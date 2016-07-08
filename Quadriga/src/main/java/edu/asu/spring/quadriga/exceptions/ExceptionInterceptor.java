@@ -25,9 +25,7 @@ public class ExceptionInterceptor {
 			throws QuadrigaStorageException, RestException,
 			QuadrigaAccessException, QuadrigaException {
 		if (!(t instanceof QuadrigaException)) {
-			QuadrigaException se = new QuadrigaException(t.getMessage());
-			se.setStackTrace(t.getStackTrace());
-			throw se;
+			throw new QuadrigaException(t);
 		}
 
 	}

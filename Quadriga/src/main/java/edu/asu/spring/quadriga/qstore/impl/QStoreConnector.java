@@ -3,7 +3,9 @@ package edu.asu.spring.quadriga.qstore.impl;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -11,6 +13,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +37,10 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
+import edu.asu.spring.quadriga.velocity.impl.VelocityBuilder;
 
 @Service
 @PropertySource(value = "classpath:/settings.properties")
@@ -74,6 +79,10 @@ public class QStoreConnector implements IQStoreConnector {
     
     @Autowired
     private IRestVelocityFactory restVelocityFactory;
+    
+    // TODO: we need to replace all restVelocityFactory uses with this builder
+    @Autowired
+    private VelocityBuilder velocityBuilder;
 
     @Autowired
     private Environment env;
@@ -156,18 +165,7 @@ public class QStoreConnector implements IQStoreConnector {
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-
-        // prepare http headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
+        HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
         HttpEntity<String> request = new HttpEntity<String>(xml, headers);
 
         try {
@@ -190,17 +188,7 @@ public class QStoreConnector implements IQStoreConnector {
         // Add message converters for JAxb
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-        // Add http header
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
+        HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
 
         HttpEntity<String> request = new HttpEntity<String>(xml, headers);
 
@@ -216,24 +204,48 @@ public class QStoreConnector implements IQStoreConnector {
     }
     
     @Override
+    @Cacheable(value="appellationEvents")
+    public String getAppellationEventsByConceptAndText(String conceptUri, String textUri) throws QuadrigaException {
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
+        
+        Map<String, Object> props = new HashMap<String, Object>();
+        props.put("conceptUri", conceptUri);
+        props.put("textUri", textUri);
+        
+        String payload;
+        try {
+            payload = velocityBuilder.getRenderedTemplate("velocitytemplates/searchQStore/searchAppEvents.vm", props);
+        } catch (ResourceNotFoundException e1) {
+            throw new QuadrigaException(e1);
+        } catch (ParseErrorException e1) {
+            throw new QuadrigaException(e1);
+        } catch (Exception e1) {
+            // the velocity engine actually throws 'Exception'
+            throw new QuadrigaException(e1);
+        }
+         
+        HttpEntity<String> request = new HttpEntity<String>(payload, headers);
+
+        String res = "";
+        try {
+            res = restTemplate.postForObject(getQStoreSearchUrl(), request, String.class);
+        } catch (Exception e) {
+            throw new QStoreStorageException(e);
+        }
+        return res;
+    }
+    
+    @Override
     public String searchNodesByConcept(String conceptId) throws Exception {
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_XML);
-        messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter());
-        restTemplate.setMessageConverters(messageConverters);
-        // Add http header
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_XML);
-        headers.setAccept(mediaTypes);
-        String authHeader = getAuthHeader();
-        headers.set("Authorization", authHeader);
+        HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
         
         VelocityEngine engine = restVelocityFactory.getVelocityEngine();
         engine.init();
-        Template template = engine.getTemplate("velocitytemplates/requestNodes.vm");
+        Template template = engine.getTemplate("velocitytemplates/searchQStore/requestNodes.vm");
         VelocityContext context = new VelocityContext();
         context.put("conceptId", conceptId);
         
@@ -252,6 +264,21 @@ public class QStoreConnector implements IQStoreConnector {
             return res;
         }
         return res;
+    }
+
+    protected HttpHeaders buildRestHeader(List<HttpMessageConverter<?>> messageConverters, RestTemplate restTemplate) {
+        List<MediaType> mediaTypes = new ArrayList<MediaType>();
+        mediaTypes.add(MediaType.APPLICATION_XML);
+        messageConverters.add(new FormHttpMessageConverter());
+        messageConverters.add(new StringHttpMessageConverter());
+        restTemplate.setMessageConverters(messageConverters);
+        // Add http header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_XML);
+        headers.setAccept(mediaTypes);
+        String authHeader = getAuthHeader();
+        headers.set("Authorization", authHeader);
+        return headers;
     }
 
 

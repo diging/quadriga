@@ -4,16 +4,20 @@
 	<defaultCache maxElementsInMemory="50" eternal="false"
 		overflowToDisk="false" memoryStoreEvictionPolicy="LFU" />
 
-	<cache name="concepts" eternal="false" maxElementsInMemory="200"
+	<cache name="concepts" eternal="false" maxElementsInMemory="500"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
-		timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" />
+		timeToLiveSeconds="86400" memoryStoreEvictionPolicy="LRU" />
 
-	<cache name="statements" eternal="false" maxElementsInMemory="500"
+	<cache name="statements" eternal="false" maxElementsInMemory="1000"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
-		timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" />
+		timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" />
 
-	<cache name="creationEvent" eternal="false" maxElementsInMemory="500"
+	<cache name="creationEvent" eternal="false" maxElementsInMemory="1000"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
-		timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" />
+		timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="appellationEvents" eternal="false" maxElementsInMemory="1000"
+        overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+        timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" />
 
 </ehcache>

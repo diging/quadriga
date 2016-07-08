@@ -283,15 +283,14 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             occur.setProject(projectManager.getProjectDetails(txtFile.getProjectId()));
             
             // there should only be one
-            List<TermType> terms = ((AppellationEventType) event).getTerms();
+            TermType term = ((AppellationEventType) event).getTermType();
 
-            if (terms != null && terms.size() > 0) {
-                TermType term = terms.get(0);
+            if (term != null) {
                 PrintedRepresentationType printed = term.getPrintedRepresentation();
                 if (printed == null) {
                     continue;
                 }
-                List<TermPartType> termparts = printed.getTermPart();
+                List<TermPartType> termparts = printed.getTermParts();
                 occur.setTextPhrases(new ArrayList<TextPhrase>());
                 for (TermPartType tp : termparts) {
                     TextPhrase phrase = new TextPhrase();

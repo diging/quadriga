@@ -352,7 +352,7 @@ $(document)
                                             $
                                                     .ajax({
                                                         type : "GET",
-                                                        url : "${pageContext.servletContext.contextPath}/public/text/view?txtid="
+                                                        url : "${pageContext.servletContext.contextPath}/public/text/view?conceptUri=${concept.id}&txtid="
                                                                 + txtid,
                                                         contentType : "text/plain",
                                                         success : function(
