@@ -34,7 +34,7 @@ public class ViewTextController {
     private static final Logger logger = LoggerFactory.getLogger(ViewTextController.class);
 
     @ResponseBody
-    @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/viewtext", method = RequestMethod.GET)
+    @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/viewtext", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {
             RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_QUADRIGA_ADMIN,
             RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR })

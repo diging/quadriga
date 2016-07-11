@@ -14,16 +14,18 @@
 		        <div class="col-sm-12 search-wrapper" style="position: relative">
 		            <h2>Text Search</h2>
 		    
-		            <div id="search-form" style="margin-top: 20px;">
-		                <div class="form-group search-input">
+		            <div id="search-form" class="form-inline" style="margin-top: 20px;">
+		                <div class="form-group search-input" style="width: 100%;">
 		                    <label for="search-term">What concept are you looking for?</label>
-		                    <input placeholder="Enter search term" type="text" class="form-control" id="search-term" autocomplete="off">
-		                    <span style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
-		                          id="ajax-loader" class="search-loader"></span>
+		                    <div class="input-group" style="width: 100%;">
+			                    <input placeholder="Enter search term" type="text" class="form-control" id="search-term" autocomplete="off">
+			                    <div div class="input-group-addon" style="width: 40px;"><div style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
+			                          id="ajax-loader" class="search-loader"></div></div>
+		                    </div>
 		                </div>
 		            </div>
 		            <div id="search-results-wrapper" style="display: none;">
-		                <div class="col-sm-12 search-results" style="margin-top: -35px;">
+		                <div class="col-sm-12 search-results">
 		                    <div class="list-group" style="border: 1px solid #dddddd; max-height: 300px; overflow-y:scroll;" id="search-results-items">
 		                    </div>
 		                    <div style="display: none;">
@@ -50,8 +52,10 @@
                     </h4>
                 </c:if>
                 <div class="list-group">
-                <c:if test="${empty texts and empty references}">
-                <p>Your search has no results.</p>
+                <c:if test="${empty texts and empty references and not empty concept}">
+                <div class="panel panel-default">
+                    <div class="panel-body">Your search has no results.</div>
+                </div>
                 </c:if>
                 <c:forEach items="${texts}" var="textfile">
                     <div class="list-group-item">
@@ -96,7 +100,9 @@
      <div class="col-md-4" style="padding-top: 100px;">
         <div class="row">
             <div class="col-sm-12">
-            <small>Click on a node to search for its concept.</small>
+            <c:if test="${jsonstring != '[]'}">
+                <small>Click on a node to search for its concept.</small>
+            </c:if>
             </div>
             <div class="col-sm-12" style="min-height: 45px;">
 		       <small>
@@ -182,11 +188,12 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
     function init() {
         // ajax loader
         var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId=';
-        var $loader = $('#ajax-loader');
         var $searchInput = $('#search-term');
         var $resWrapper = $('#search-results-wrapper');
         var $items = $('#search-results-items');
         var $list = $resWrapper.find('.list-group-item:first');
+        var $loader = $('#ajax-loader');
+        
         var loader = (function() {
             // var isVisible = false;
             var timeout;
@@ -212,7 +219,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
             ajaxStart: loader.show,
             ajaxStop: loader.hide
         });
-        var triggerChange = (function() {
+         var triggerChange = (function() {
             var timeout;
             var timeoutInt = 400;
             var prevVal = '';
@@ -345,7 +352,7 @@ $(document)
                                             $
                                                     .ajax({
                                                         type : "GET",
-                                                        url : "${pageContext.servletContext.contextPath}/public/text/view?txtid="
+                                                        url : "${pageContext.servletContext.contextPath}/public/text/view?conceptUri=${concept.id}&txtid="
                                                                 + txtid,
                                                         contentType : "text/plain",
                                                         success : function(

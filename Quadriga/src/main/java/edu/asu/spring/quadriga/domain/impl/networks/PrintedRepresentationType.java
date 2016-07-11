@@ -52,7 +52,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "creationDate",
     "creationPlace",
     "sourceReference",
-    "termPart",
+    "termParts",
     "internalRefId"
 })
 public class PrintedRepresentationType {
@@ -72,7 +72,7 @@ public class PrintedRepresentationType {
     @XmlSchemaType(name = "anyURI")
     protected String sourceReference;
     @XmlElement(name = "term_part", required = true)
-    protected List<TermPartType> termPart;
+    protected List<TermPartType> termParts;
     @XmlElement(name = "internal_refId")
     protected String internalRefId;
 
@@ -218,11 +218,11 @@ public class PrintedRepresentationType {
      * 
      * 
      */
-    public List<TermPartType> getTermPart() {
-        if (termPart == null) {
-            termPart = new ArrayList<TermPartType>();
+    public List<TermPartType> getTermParts() {
+        if (termParts == null) {
+            termParts = new ArrayList<TermPartType>();
         }
-        return this.termPart;
+        return this.termParts;
     }
 
     /**

@@ -63,27 +63,24 @@ public class EventGraphMapper {
 				node.setId(event.getId() + "");
 				node.setEventId(node.getId());
 				
-				List<TermType> terms = ((AppellationEventType) event).getTerms();
-				if (terms != null) {
+				TermType term = ((AppellationEventType) event).getTermType();
+				if (term != null) {
+					Term nodeTerm = new Term();
 					
-				    for (TermType term : terms) {
-    					Term nodeTerm = new Term();
-    					
-    					fillTermWithTermParts(nodeTerm, term);
-    					
-    					nodeTerm.setSourceUri(term.getSourceReference());
-    					
-    					
-    					node.addTerm(nodeTerm);
-    					String interpretation = term.getTermInterpertation();
-    					if (interpretation != null) {
-    						node.setConcept(interpretation);
-    						ConceptpowerReply reply = conceptpower.getById(interpretation);
-    						if (reply.getConceptEntry().size() > 0) {
-        						node.setType(reply.getConceptEntry().get(0).getTypeUri());
-    						}
-    					}
-				    }
+					fillTermWithTermParts(nodeTerm, term);
+					
+					nodeTerm.setSourceUri(term.getSourceReference());
+					
+					
+					node.addTerm(nodeTerm);
+					String interpretation = term.getTermInterpertation();
+					if (interpretation != null) {
+						node.setConcept(interpretation);
+						ConceptpowerReply reply = conceptpower.getById(interpretation);
+						if (reply.getConceptEntry().size() > 0) {
+    						node.setType(reply.getConceptEntry().get(0).getTypeUri());
+						}
+					}
 				}
 				nodeMap.put(node.getId(), node);
 			}
@@ -94,27 +91,24 @@ public class EventGraphMapper {
 					node.setId(((RelationEventType)event).getRelation().getId() + "" + ((RelationEventType)event).getRelation().getPredicateType().getAppellationEvent().getId() + "");
 					node.setEventId(node.getId());
 					
-					List<TermType> terms = ((RelationEventType) event).getRelation().getPredicateType().getAppellationEvent().getTerms();
-					if (terms != null) {
-						for (TermType term : terms) {
+					TermType term = ((RelationEventType) event).getRelation().getPredicateType().getAppellationEvent().getTermType();
+					if (term != null) {
+						Term nodeTerm = new Term();
 						
-						    Term nodeTerm = new Term();
-						
-						    fillTermWithTermParts(nodeTerm, term);
-						    
-						    nodeTerm.setSourceUri(term.getSourceReference());
-						
-						    node.addTerm(nodeTerm);
-						
-						    String interpretation = term.getTermInterpertation();
-    						if (interpretation != null) {
-    							node.setConcept(interpretation);
-    							ConceptpowerReply reply = conceptpower.getById(interpretation);
-                                if (reply.getConceptEntry().size() > 0) {
-                                    node.setType(reply.getConceptEntry().get(0).getTypeUri());
-                                }
-    						}
-    					}
+					    fillTermWithTermParts(nodeTerm, term);
+					    
+					    nodeTerm.setSourceUri(term.getSourceReference());
+					
+					    node.addTerm(nodeTerm);
+					
+					    String interpretation = term.getTermInterpertation();
+						if (interpretation != null) {
+							node.setConcept(interpretation);
+							ConceptpowerReply reply = conceptpower.getById(interpretation);
+                            if (reply.getConceptEntry().size() > 0) {
+                                node.setType(reply.getConceptEntry().get(0).getTypeUri());
+                            }
+						}
 					}
 					
 					nodeMap.put(node.getId(), node);
@@ -230,7 +224,7 @@ public class EventGraphMapper {
 	    if (printedRep == null) {
 	        return;
 	    }
-		List<TermPartType> itermParts = printedRep.getTermPart();
+		List<TermPartType> itermParts = printedRep.getTermParts();
 		if (itermParts != null) {
 
 			for (TermPartType part : itermParts) {
