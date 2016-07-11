@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
-import edu.asu.spring.quadriga.dao.impl.workbench.ProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
+import edu.asu.spring.quadriga.dao.workbench.impl.ProjectDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;

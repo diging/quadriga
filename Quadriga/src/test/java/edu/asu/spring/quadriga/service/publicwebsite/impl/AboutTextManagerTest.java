@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import edu.asu.spring.quadriga.dao.impl.publicwebsite.AboutTextDAO;
 import edu.asu.spring.quadriga.dao.publicwebsite.IAboutTextDAO;
+import edu.asu.spring.quadriga.dao.publicwebsite.impl.AboutTextDAO;
 import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

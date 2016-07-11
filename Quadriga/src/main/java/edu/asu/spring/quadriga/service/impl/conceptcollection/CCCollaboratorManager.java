@@ -7,7 +7,7 @@ import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
-import edu.asu.spring.quadriga.dao.impl.conceptcollection.ConceptCollectionDAO;
+import edu.asu.spring.quadriga.dao.conceptcollection.impl.ConceptCollectionDAO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
