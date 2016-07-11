@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.transform.ITransformFilesDAO;
+import edu.asu.spring.quadriga.domain.impl.networks.Transformation;
+import edu.asu.spring.quadriga.domain.impl.workspace.TransformationFile;
+import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
 import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
@@ -52,34 +55,67 @@ public class TransformationManager implements ITransformationManager {
         return transformationDAO.getAllTransformations();
     }
 
+    /**
+     * Retrieve the transformation file object which contains the absolute file
+     * paths of patternFile and MappingFile .
+     * 
+     * @param transformationId
+     *            Transformation ID of the transformation.
+     * @return Returns the transformation file object
+     */
     @Transactional
     @Override
-    public ArrayList<String> retrieveTransformationFilePaths(String transformationId) throws FileStorageException {
+    public ITransformationFile retrieveTransformationFilePaths(String transformationId) {
 
         TransformFilesDTO transformDTO = (TransformFilesDTO) transformationDAO.getDTO(transformationId);
-        ArrayList<String> fileNames = new ArrayList<String>();
+
         String fileLocation = transformationFileService.getTransformFileLocation();
         String absolutePatternFilePath = getAbsoluteFilePath(fileLocation, transformationId,
                 transformDTO.getPatternFileName());
         String absoluteMappingFilePath = getAbsoluteFilePath(fileLocation, transformationId,
                 transformDTO.getMappingFileName());
 
-        fileNames.add(absolutePatternFilePath);
-        fileNames.add(absoluteMappingFilePath);
+        TransformationFile transformFile = new TransformationFile();
+        transformFile.setAbsolutePatternFilePath(absolutePatternFilePath);
+        transformFile.setAbsoluteMappingFilePath(absoluteMappingFilePath);
 
-        return fileNames;
+        return transformFile;
     }
 
+    /**
+     * appends the location with dirName and fileName and returns the resultant
+     * string as absoluteFilePath
+     * 
+     * @param location
+     * @param dirName
+     * @param fileName
+     * @return
+     */
     private String getAbsoluteFilePath(String location, String dirName, String fileName) {
 
-        StringBuffer filePath = new StringBuffer();
+        StringBuffer absoluteFilePath = new StringBuffer();
 
-        filePath.append(location);
-        filePath.append("/");
-        filePath.append(dirName);
-        filePath.append("/");
-        filePath.append(fileName);
+        absoluteFilePath.append(location);
+        absoluteFilePath.append("/");
+        absoluteFilePath.append(dirName);
+        absoluteFilePath.append("/");
+        absoluteFilePath.append(fileName);
 
-        return filePath.toString();
+        return absoluteFilePath.toString();
+    }
+
+    @Override
+    public List<ITransformation> getTransformations(String transformationId) {
+
+        ITransformationFile transformFile = retrieveTransformationFilePaths(transformationId);
+
+        ITransformation transform = new Transformation();
+        transform.setPatternFilePath(transformFile.getAbsolutePatternFilePath());
+        transform.setTransformationFilePath(transformFile.getAbsoluteMappingFilePath());
+
+        List<ITransformation> transformations = new ArrayList<ITransformation>();
+        transformations.add(transform);
+
+        return transformations;
     }
 }

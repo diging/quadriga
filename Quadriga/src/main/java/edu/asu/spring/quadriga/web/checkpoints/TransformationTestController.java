@@ -1,6 +1,7 @@
-package edu.asu.spring.quadriga.web.transformation;
+package edu.asu.spring.quadriga.web.checkpoints;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,10 +9,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
@@ -23,10 +21,9 @@ import edu.asu.spring.quadriga.service.network.transform.impl.MatchGraphs;
 import edu.asu.spring.quadriga.service.network.transform.impl.TransformNode;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 
-@Controller
-public class TransformationController {
+public class TransformationTestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TransformationController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransformationTestController.class);
 
     @Autowired
     private MatchGraphs matchGraphs;
@@ -49,22 +46,36 @@ public class TransformationController {
      * @throws FileStorageException
      */
 
-    @RequestMapping(value = "checks/transformation", method = RequestMethod.POST)
+    // @RequestMapping(value = "checks/transformation", method =
+    // RequestMethod.POST)
     public String transformTest(@RequestParam("project") String project,
-            @RequestParam("transformation") String transformationId,
-            @RequestParam("sanitized_network_id") String networkIds, Model model)
+            @RequestParam("transformation") String transformationID,
+            @RequestParam("sanitized_network_id") String networkID, Model model)
             throws QuadrigaStorageException, IOException, QuadrigaGeneratorException, FileStorageException {
 
-        List<ITransformation> transformations = transformationManager.getTransformations(transformationId);
+        String directoryName = transformationID;
+        // ITransformationFile transformFile =
+        // transformationManager.retrieveTransformationFilePaths(directoryName);
 
-        List<String> networkIdList = Arrays.asList(networkIds.split("\\s*,\\s*"));
+        // ITransformation transform = new Transformation();
+        // transform.setPatternFilePath(transformFile.getAbsolutePatternFilePath());
+        // transform.setTransformationFilePath(transformFile.getAbsoluteMappingFilePath());
 
-        List<List<TransformNode>> results = matchGraphs.matchGraphs(transformations, networkIdList);
+        List<ITransformation> transformations = new ArrayList<ITransformation>();
+        transformations.add(null);
+
+        List<String> networkIdList = Arrays.asList(networkID.split("\\s*,\\s*"));
+        List<String> networkIds = new ArrayList<String>();
+        for (int i = 1; i < networkIdList.size(); i++) {
+            networkIds.add(networkIdList.get(i));
+        }
+
+        List<List<TransformNode>> results = matchGraphs.matchGraphs(transformations, networkIds);
         logger.info("Check results for transformations: " + results);
         String graphString = generator.generateText(results, null, true);
-
         model.addAttribute("graph", StringEscapeUtils.escapeHtml(graphString));
 
         return "check";
     }
+
 }

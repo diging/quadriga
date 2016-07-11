@@ -56,4 +56,12 @@ public interface ITransformationFile {
 
     public abstract void setId(String id);
 
+    public abstract void setAbsolutePatternFilePath(String absolutePatternFilePath);
+
+    public abstract String getAbsolutePatternFilePath();
+
+    public abstract void setAbsoluteMappingFilePath(String absolutePatternFilePath);
+
+    public abstract String getAbsoluteMappingFilePath();
+
 }

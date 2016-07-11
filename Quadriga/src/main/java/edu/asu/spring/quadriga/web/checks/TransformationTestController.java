@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.transformation;
+package edu.asu.spring.quadriga.web.checks;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
@@ -24,9 +22,9 @@ import edu.asu.spring.quadriga.service.network.transform.impl.TransformNode;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 
 @Controller
-public class TransformationController {
+public class TransformationTestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TransformationController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransformationTestController.class);
 
     @Autowired
     private MatchGraphs matchGraphs;
@@ -49,7 +47,8 @@ public class TransformationController {
      * @throws FileStorageException
      */
 
-    @RequestMapping(value = "checks/transformation", method = RequestMethod.POST)
+    // @RequestMapping(value = "transformation/result", method =
+    // RequestMethod.POST)
     public String transformTest(@RequestParam("project") String project,
             @RequestParam("transformation") String transformationId,
             @RequestParam("sanitized_network_id") String networkIds, Model model)
