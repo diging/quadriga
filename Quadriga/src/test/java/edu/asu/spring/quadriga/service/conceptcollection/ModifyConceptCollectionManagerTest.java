@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.conceptcollection;
+package edu.asu.spring.quadriga.service.conceptcollection;
 
 import static org.junit.Assert.assertEquals;
 

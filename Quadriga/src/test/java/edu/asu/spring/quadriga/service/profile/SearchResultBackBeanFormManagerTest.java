@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.profile;
+package edu.asu.spring.quadriga.service.profile;
 
 import org.junit.After;
 import org.junit.AfterClass;

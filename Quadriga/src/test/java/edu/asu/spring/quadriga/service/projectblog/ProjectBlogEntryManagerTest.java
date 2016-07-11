@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.projectblog;
+package edu.asu.spring.quadriga.service.projectblog;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

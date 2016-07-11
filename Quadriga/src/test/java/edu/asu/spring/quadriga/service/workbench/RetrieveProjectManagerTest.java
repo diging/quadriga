@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.workbench;
+package edu.asu.spring.quadriga.service.workbench;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
