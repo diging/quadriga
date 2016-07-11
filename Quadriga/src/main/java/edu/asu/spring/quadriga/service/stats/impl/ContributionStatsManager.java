@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.impl;
+package edu.asu.spring.quadriga.service.stats.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.IContributionStatsManager;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
+import edu.asu.spring.quadriga.service.stats.IContributionStatsManager;
 
 /**
  * This class is used to get the contribution count of network and workspace 

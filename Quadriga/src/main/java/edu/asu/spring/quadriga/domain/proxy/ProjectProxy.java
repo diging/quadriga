@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
+import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
@@ -36,6 +37,7 @@ public class ProjectProxy implements IProject
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
+	private IProjectHandleResolver resolver;
 	
 	/**
 	 *  Full project detail object. This would have object of type {@link Project} 
@@ -487,5 +489,15 @@ public class ProjectProxy implements IProject
 		}
 
 	}
+
+    @Override
+    public void setResolver(IProjectHandleResolver resolver) {
+        this.resolver = resolver;
+    }
+
+    @Override
+    public IProjectHandleResolver getResolver() {
+        return resolver;
+    }
 
 }

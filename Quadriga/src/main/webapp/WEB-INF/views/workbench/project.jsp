@@ -40,14 +40,15 @@
 				Project
 			</a>
 		</div>
-		</c:if>
-		<c:if test="${owner=='1' || isProjectAdmin==true}">
 		<div style="text-align: right">
 			<a
 				href="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}">
 				<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
 				Project URL
 			</a>
+		</div>
+		<div class="text-right">
+		  <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/resolvers/add">Add Project Handle Resolver</a>
 		</div>
 		</c:if>
 		<hr>

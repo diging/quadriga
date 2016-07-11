@@ -27,12 +27,12 @@ import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IConceptStats;
-import edu.asu.spring.quadriga.domain.IContributionStatsManager;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
+import edu.asu.spring.quadriga.service.stats.IContributionStatsManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**

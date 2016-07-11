@@ -51,12 +51,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     private IPassThroughProjectMapper passThroughMapper;
 
     @Autowired
-    private IProjectSecurityChecker projectSecurity;
-
-    @Autowired
-    private IProjectCollaboratorManager projectManager;
-
-    @Autowired
     private Environment env;
     
     private Map<Class<?>, IProjectBaseMapper> projectMappers;

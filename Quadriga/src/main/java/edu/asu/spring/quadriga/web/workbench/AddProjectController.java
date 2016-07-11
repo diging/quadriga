@@ -20,7 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectFactory;
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
@@ -82,7 +82,7 @@ public class AddProjectController {
      */
     @PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
     @RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
-    public ModelAndView addProjectRequest(@Validated @ModelAttribute("project") Project project, BindingResult result,
+    public ModelAndView addProjectRequest(@Validated @ModelAttribute("project") IProject project, BindingResult result,
             Principal principal, RedirectAttributes redirectAttribtutes) throws QuadrigaStorageException {
         ModelAndView model;
         if (result.hasErrors()) {

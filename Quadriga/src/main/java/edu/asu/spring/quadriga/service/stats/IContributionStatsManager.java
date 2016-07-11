@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.service.stats;
 
 import java.util.HashMap;
 import java.util.List;

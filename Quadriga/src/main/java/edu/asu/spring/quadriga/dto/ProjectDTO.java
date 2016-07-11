@@ -12,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -72,8 +74,20 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
     private List<ProjectCollaboratorDTO> projectCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project",orphanRemoval=true)
     private List<ProjectEditorDTO> projectEditorDTOList;
+    
+    @ManyToMany
+    @JoinTable(name="tbl_project_resolvers")
+    private List<ProjectHandleResolverDTO> resolvers;
 
-	public ProjectDTO() {
+	public List<ProjectHandleResolverDTO> getResolvers() {
+        return resolvers;
+    }
+
+    public void setResolvers(List<ProjectHandleResolverDTO> resolver) {
+        this.resolvers = resolver;
+    }
+
+    public ProjectDTO() {
     }
 
     public ProjectDTO(String projectid, String projectname, String unixname, String accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {

@@ -58,7 +58,12 @@
 
 <hr>
 To go to the public site, click this link <a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">http://quadriga.asu.edu/sites/${project.unixName}</a>
-                
+
+<c:if test="${not empty project.resolver}">          
+<hr>
+
+Project Resolver: ${project.resolver.projectName}
+</c:if>
 
 <hr>
 <c:if test="${owner=='1' || isProjectAdmin==true}">

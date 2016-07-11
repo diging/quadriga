@@ -32,7 +32,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.workbench.IModifyProjectFormFactory;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectFactory;
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -127,7 +126,7 @@ public class ModifyProjectController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
-    public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project") Project project,
+    public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project") IProject project,
             BindingResult result, @PathVariable("projectid") String projectid, Principal principal,
             RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model;

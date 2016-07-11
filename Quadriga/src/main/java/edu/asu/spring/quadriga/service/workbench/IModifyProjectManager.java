@@ -1,9 +1,12 @@
 package edu.asu.spring.quadriga.service.workbench;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IModifyProjectManager {
@@ -21,5 +24,7 @@ public interface IModifyProjectManager {
     void updateProjectURL(String projID, String unixName, String userName) throws QuadrigaStorageException;
 
     void addNewProject(IProject project, String userName) throws QuadrigaStorageException;
+
+    void addResolverToProject(String resolverId, IProject project);
 
 }
