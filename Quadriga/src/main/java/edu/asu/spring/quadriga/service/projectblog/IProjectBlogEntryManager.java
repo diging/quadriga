@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.projectblog.ProjectBlogEntryManager;
+import edu.asu.spring.quadriga.service.projectblog.impl.ProjectBlogEntryManager;
 
 /**
  * This interface provides template for project blog entry manager
