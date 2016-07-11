@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.publicwebsite;
+package edu.asu.spring.quadriga.service.publicwebsite.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

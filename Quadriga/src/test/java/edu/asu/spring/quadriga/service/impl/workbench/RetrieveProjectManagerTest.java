@@ -21,6 +21,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
+import edu.asu.spring.quadriga.service.workbench.impl.RetrieveProjectManager;
 
 public class RetrieveProjectManagerTest {
 

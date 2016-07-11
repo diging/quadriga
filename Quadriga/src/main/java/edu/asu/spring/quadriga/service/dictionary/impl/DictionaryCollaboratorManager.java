@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.dictionary;
+package edu.asu.spring.quadriga.service.dictionary.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

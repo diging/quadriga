@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.workspace.ArchiveWSManager;
+import edu.asu.spring.quadriga.service.workspace.impl.ArchiveWSManager;
 
 public class ArchiveWSManagerTest {
 

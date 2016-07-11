@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.conceptcollection;
+package edu.asu.spring.quadriga.service.conceptcollection.impl;
 
 import java.util.List;
 

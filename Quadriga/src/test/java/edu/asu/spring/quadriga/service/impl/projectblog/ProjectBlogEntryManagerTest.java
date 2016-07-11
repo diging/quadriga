@@ -21,6 +21,7 @@ import edu.asu.spring.quadriga.dto.ProjectBlogEntryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectBlogEntryDTOMapper;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
+import edu.asu.spring.quadriga.service.projectblog.impl.ProjectBlogEntryManager;
 
 /**
  * This class tests the following methods of class

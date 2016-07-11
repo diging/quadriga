@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.workspace;
+package edu.asu.spring.quadriga.service.workspace.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

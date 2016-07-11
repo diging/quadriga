@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.projectblog;
+package edu.asu.spring.quadriga.service.projectblog.impl;
 
 import java.util.ArrayList;
 import java.util.Date;

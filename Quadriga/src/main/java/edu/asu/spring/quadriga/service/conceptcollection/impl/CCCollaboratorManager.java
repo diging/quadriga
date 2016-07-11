@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.conceptcollection;
+package edu.asu.spring.quadriga.service.conceptcollection.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

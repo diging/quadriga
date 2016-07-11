@@ -32,6 +32,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
+import edu.asu.spring.quadriga.service.conceptcollection.impl.ConceptCollectionManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 

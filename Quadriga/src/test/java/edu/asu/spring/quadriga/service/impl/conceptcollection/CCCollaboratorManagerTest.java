@@ -21,6 +21,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.conceptcollection.impl.CCCollaboratorManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 

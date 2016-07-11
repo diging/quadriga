@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.passthroughproject;
+package edu.asu.spring.quadriga.service.passthroughproject.impl;
 
 import java.io.IOException;
 import java.io.StringReader;

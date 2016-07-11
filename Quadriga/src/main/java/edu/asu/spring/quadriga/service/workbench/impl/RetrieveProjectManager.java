@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.workbench;
+package edu.asu.spring.quadriga.service.workbench.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
