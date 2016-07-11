@@ -90,11 +90,11 @@ public class UploadTransformFilesController {
             transformationFile.setUserName(userName);
             transformationFile.setPatternTitle(patternTitle);
             transformationFile.setPatternDescription(patternDescription);
-            transformationFile.setPatternFileName(patternFileName);
+            transformationFile.setPatternFileName("Pattern_" + patternFileName);
             transformationFile.setPatternFileContent(file[0].getBytes());
             transformationFile.setMappingTitle(mappingTitle);
             transformationFile.setMappingDescription(mappingDescription);
-            transformationFile.setMappingFileName(mappingFileName);
+            transformationFile.setMappingFileName("Mapping_" + mappingFileName);
             transformationFile.setMappingFileContent(file[1].getBytes());
 
             transformationManager.saveTransformations(transformationFile);
