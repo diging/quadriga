@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
-import edu.asu.spring.quadriga.dao.impl.workspace.WorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
+import edu.asu.spring.quadriga.dao.workspace.impl.WorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;

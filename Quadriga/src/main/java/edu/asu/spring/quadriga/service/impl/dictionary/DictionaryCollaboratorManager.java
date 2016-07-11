@@ -7,7 +7,7 @@ import edu.asu.spring.quadriga.dao.IBaseDAO;
 import edu.asu.spring.quadriga.dao.ICollaboratorDAO;
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
-import edu.asu.spring.quadriga.dao.impl.dictionary.DictionaryDAO;
+import edu.asu.spring.quadriga.dao.dictionary.impl.DictionaryDAO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
