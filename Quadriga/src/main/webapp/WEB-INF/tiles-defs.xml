@@ -75,12 +75,15 @@
 	</definition>
 
 
-    <!-- checks -->
-    <definition name="check" extends="base.definition.nonav">
-        <put-attribute name="content" value="/WEB-INF/views/checks.jsp" />
+    <!-- result -->
+    <definition name="success_transform" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/success_transformation.jsp" />
+    </definition>
+    <definition name="failure_transform" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/failure_transformation.jsp" />
     </definition>
     
-
+	
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.home">
 		<put-attribute name="title" value="Quadriga - Login" />
