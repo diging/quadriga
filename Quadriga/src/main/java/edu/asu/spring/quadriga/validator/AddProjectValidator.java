@@ -9,6 +9,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Service
@@ -40,7 +41,7 @@ public class AddProjectValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "project_description.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectAccess", "project_projectAccess.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "unixName", "project_unixname.required");
-        Project project = (Project) obj;
+        IProject project = (IProject) obj;
         String projUnixName = project.getUnixName();
         String projectId = project.getProjectId();
         if (err.getFieldError("unixName") == null) {

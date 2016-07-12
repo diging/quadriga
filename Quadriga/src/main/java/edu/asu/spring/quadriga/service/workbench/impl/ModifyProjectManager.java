@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.workbench.impl;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -14,12 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
+import edu.asu.spring.quadriga.dao.resolver.IProjectHandleResolverDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectEditorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
+import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
@@ -27,6 +30,7 @@ import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTOPK;
+import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
@@ -63,6 +67,9 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
 
     @Autowired
     private IProjectEditorDAO projectEditorDao;
+    
+    @Autowired
+    private IProjectHandleResolverDAO projectHandleDao;
 
     @Resource(name = "projectconstants")
     private Properties messages;
@@ -178,6 +185,17 @@ public class ModifyProjectManager extends BaseManager implements IModifyProjectM
         if (projectEditor != null) {
             projectEditorDao.deleteDTO(projectEditor);
         }
+    }
+    
+    @Override
+    @Transactional
+    public void addResolverToProject(String resolverId, IProject project) {
+        ProjectHandleResolverDTO resolverDto = projectHandleDao.getDTO(resolverId);
+        ProjectDTO projectDto = projectDao.getDTO(project.getProjectId());
+        
+        projectDto.setResolvers(new ArrayList<ProjectHandleResolverDTO>());
+        projectDto.getResolvers().add(resolverDto);
+        projectDao.updateDTO(projectDto);
     }
 
     /*

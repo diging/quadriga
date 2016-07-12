@@ -34,6 +34,7 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.BaseMapper;
+import edu.asu.spring.quadriga.mapper.resolver.IProjectHandleResolverMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -60,6 +61,8 @@ public class ProjectDTOMapper extends BaseMapper implements IProjectBaseMapper {
     @Autowired
     private IQuadrigaRoleManager roleManager;
 
+    @Autowired
+    private IProjectHandleResolverMapper resolverMapper;
 
     /*
      * (non-Javadoc)
@@ -205,6 +208,9 @@ public class ProjectDTOMapper extends BaseMapper implements IProjectBaseMapper {
         project.setUpdatedDate(projectDTO.getUpdateddate());
         project.setOwner(userManager.getUser(projectDTO.getProjectowner().getUsername()));
         project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+        if (projectDTO.getResolvers() != null && projectDTO.getResolvers().size() > 0) {
+            project.setResolver(resolverMapper.mapProjectHandleResolver(projectDTO.getResolvers().get(0)));
+        }
     }
 
     /*
@@ -237,6 +243,11 @@ public class ProjectDTOMapper extends BaseMapper implements IProjectBaseMapper {
 
         if (project.getProjectAccess() != null) {
             projectDTO.setAccessibility(project.getProjectAccess().name());
+        }
+        
+        if (project.getResolver() != null) {
+            projectDTO.setResolvers(new ArrayList<>());
+            projectDTO.getResolvers().add(resolverMapper.mapProjectHandleResolver(project.getResolver()));
         }
     }
 

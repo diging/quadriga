@@ -4,9 +4,31 @@ import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 
 /**
- * @author Nischal Samji
  * 
- *         Domain object for handling Text File Operations.
+ * Domain object for handling Text File Operations. Text files have the following properties:
+ * 
+ * <ul>
+ *  <li>fileName: a filename in the file system</li>
+ *  <li>projectId: id of the project a file belongs to</li>
+ *  <li>workspaceId: id of the workspace a file belongs to</li>
+ *  <li>textId: id of the text in the database</li>
+ *  <li>fileContent: content of file</li>
+ *  <li>refId: URI of the text in an external repository</li>
+ *  <li>accessibility: PUBLIC or PRIVATE. only public text can be seen from users that do not belong
+ *  to the project</li>
+ *  <li>textFileURIPrefix: prefix use to generate the interal text URI</li>
+ *  <li>title: title of the text</li>
+ *  <li>author: author of the text</li>
+ *  <li>creationDate: date on which the text was created (note: this is not the creation date
+ *  in the system, but the date a text was originally created/published.</li>
+ *  <li>snippet: this variable is not used, but is required to make the class work with JSP pages</li>
+ *  <li>snippetLength: length of generated snippet</li>
+ *  <li>presentationUrl: URL for a webpresenation of the text outside of Quadriga (which is different
+ *  than the refId handle</li> 
+ *  
+ * </ul>
+ * 
+ * @author Nischal Samji, Julia Damerow     
  *
  */
 public class TextFile implements ITextFile {
@@ -24,6 +46,7 @@ public class TextFile implements ITextFile {
     private String creationDate;
     private String snippet;
     private int snippetLength = 20;
+    private String presentationUrl;
 
     @Override
     public String getTitle() {
@@ -170,6 +193,16 @@ public class TextFile implements ITextFile {
     @Override
     public void setSnippetLength(int snippetLength) {
         this.snippetLength = snippetLength;
+    }
+
+    @Override
+    public String getPresentationUrl() {
+        return presentationUrl;
+    }
+
+    @Override
+    public void setPresentationUrl(String presentationUrl) {
+        this.presentationUrl = presentationUrl;
     }
 
 }

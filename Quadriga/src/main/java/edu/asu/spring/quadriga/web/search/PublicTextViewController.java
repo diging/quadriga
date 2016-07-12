@@ -15,7 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
@@ -37,6 +40,10 @@ public class PublicTextViewController {
     
     @Autowired
     private IMarshallingService marshallingService;
+    
+    @Autowired
+    private IConceptpowerConnector conceptpowerConnector;
+    
 
     
     @Autowired
@@ -54,15 +61,37 @@ public class PublicTextViewController {
                 String contents = textFile.getFileContent();
                 
                 if (!conceptUri.isEmpty()) {
+                    ConceptpowerReply reply = conceptpowerConnector.getById(conceptUri);
+                    List<ConceptEntry> entries = reply.getConceptEntry();
+                    
+                    ConceptEntry entry = null;
+                    if (entries != null && !entries.isEmpty()) {
+                        entry = entries.get(0);
+                    }
+                    
                     // get appellations with original text URI
                     String result = qstoreConnector.getAppellationEventsByConceptAndText(conceptUri, textFile.getRefId());
                     ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(result);
                     List<CreationEvent> creationEvents = events.getRelationEventOrAppellationEvent();
-                   
+                    
                     // get appellations with Quadriga text URI
                     result = qstoreConnector.getAppellationEventsByConceptAndText(conceptUri, textFile.getTextFileURI());
                     events = marshallingService.unMarshalXmlToElementEventsType(result);
                     creationEvents.addAll(events.getRelationEventOrAppellationEvent());
+                    
+                    if (entry != null && entry.getWordnetId() != null && !entry.getWordnetId().isEmpty()) {
+                        int slashIdx = conceptUri.lastIndexOf("/");
+                        String base = conceptUri.substring(0, slashIdx);
+                        String wordnetUri = base + "/" + entry.getWordnetId();
+                        
+                        result = qstoreConnector.getAppellationEventsByConceptAndText(wordnetUri, textFile.getRefId());
+                        events = marshallingService.unMarshalXmlToElementEventsType(result);
+                        creationEvents.addAll(events.getRelationEventOrAppellationEvent());
+                        
+                        result = qstoreConnector.getAppellationEventsByConceptAndText(wordnetUri, textFile.getTextFileURI());
+                        events = marshallingService.unMarshalXmlToElementEventsType(result);
+                        creationEvents.addAll(events.getRelationEventOrAppellationEvent());
+                    }
                     
                     contents = textHelper.highlightAppellationEvents(contents, creationEvents);
                 }

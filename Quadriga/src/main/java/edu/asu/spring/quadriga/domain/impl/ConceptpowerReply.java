@@ -161,7 +161,17 @@ public class ConceptpowerReply {
         protected String description;
         @XmlElement(required = true, namespace="http://www.digitalhps.org/")
         protected String conceptList;
+        @XmlElement(name="wordnet_id", namespace="http://www.digitalhps.org/")
+        protected String wordnetId;
         
+        public String getWordnetId() {
+            return wordnetId;
+        }
+
+        public void setWordnetId(String wordnetId) {
+            this.wordnetId = wordnetId;
+        }
+
         @XmlElement(namespace="http://www.digitalhps.org/", type=ConceptpowerType.class)
         protected ConceptpowerType type;
 

@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.transformation;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
 import org.slf4j.Logger;
@@ -91,11 +92,11 @@ public class UploadTransformFilesController {
             transformationFile.setPatternTitle(patternTitle);
             transformationFile.setPatternDescription(patternDescription);
             transformationFile.setPatternFileName(patternFileName);
-            transformationFile.setPatternFileContent(file[0].getBytes());
+            transformationFile.setPatternFileContent(new String(file[0].getBytes(), StandardCharsets.UTF_8));
             transformationFile.setMappingTitle(mappingTitle);
             transformationFile.setMappingDescription(mappingDescription);
             transformationFile.setMappingFileName(mappingFileName);
-            transformationFile.setMappingFileContent(file[1].getBytes());
+            transformationFile.setMappingFileContent(new String(file[1].getBytes(), StandardCharsets.UTF_8));
 
             transformationManager.saveTransformations(transformationFile);
 
