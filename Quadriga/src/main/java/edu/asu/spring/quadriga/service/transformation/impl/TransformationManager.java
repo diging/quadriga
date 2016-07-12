@@ -104,6 +104,7 @@ public class TransformationManager implements ITransformationManager {
         return absoluteFilePath.toString();
     }
 
+    @Transactional
     @Override
     public List<ITransformation> getTransformations(String transformationId) {
 

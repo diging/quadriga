@@ -49,7 +49,7 @@ public class TransformationController {
      * @throws FileStorageException
      */
 
-    @RequestMapping(value = "checks/transformation", method = RequestMethod.POST)
+    @RequestMapping(value = "auth/transformation/result", method = RequestMethod.POST)
     public String transformTest(@RequestParam("project") String project,
             @RequestParam("transformation") String transformationId,
             @RequestParam("sanitized_network_id") String networkIds, Model model)

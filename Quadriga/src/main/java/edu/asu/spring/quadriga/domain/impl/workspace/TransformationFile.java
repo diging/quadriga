@@ -22,6 +22,8 @@ public class TransformationFile implements ITransformationFile {
     private String id;
     private byte[] patternFileContent;
     private byte[] mappingFileContent;
+    private String absolutePatternFilePath;
+    private String absoluteMappingFilePath;
 
     @Override
     public String getTitle() {
@@ -160,5 +162,28 @@ public class TransformationFile implements ITransformationFile {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public void setAbsolutePatternFilePath(String absolutePatternFilePath) {
+        this.absolutePatternFilePath = absolutePatternFilePath;
+
+    }
+
+    @Override
+    public String getAbsolutePatternFilePath() {
+        return absolutePatternFilePath;
+    }
+
+    @Override
+    public void setAbsoluteMappingFilePath(String absoluteMappingFilePath) {
+        this.absoluteMappingFilePath = absoluteMappingFilePath;
+
+    }
+
+    @Override
+    public String getAbsoluteMappingFilePath() {
+
+        return absoluteMappingFilePath;
     }
 }
