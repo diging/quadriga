@@ -179,7 +179,9 @@ public class ProjectHandleResolver implements IProjectHandleResolver {
         
         List<String> groups = new ArrayList<String>();
         while (matcher.find()) {
-            groups.add(matcher.group());
+            for (int i = 0; i < matcher.groupCount(); i++) {
+                groups.add(matcher.group(i+1));
+            }
         }
         
         String resolvedHandle = resolvedHandlePattern;

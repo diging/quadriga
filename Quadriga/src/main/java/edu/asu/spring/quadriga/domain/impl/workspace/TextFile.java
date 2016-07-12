@@ -24,6 +24,7 @@ public class TextFile implements ITextFile {
     private String creationDate;
     private String snippet;
     private int snippetLength = 20;
+    private String presentationUrl;
 
     @Override
     public String getTitle() {
@@ -170,6 +171,16 @@ public class TextFile implements ITextFile {
     @Override
     public void setSnippetLength(int snippetLength) {
         this.snippetLength = snippetLength;
+    }
+
+    @Override
+    public String getPresentationUrl() {
+        return presentationUrl;
+    }
+
+    @Override
+    public void setPresentationUrl(String presentationUrl) {
+        this.presentationUrl = presentationUrl;
     }
 
 }

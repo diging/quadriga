@@ -61,8 +61,13 @@
                     <div class="list-group-item">
                     <p class="pull-right">
                        <a href="${textfile.refId}" title="Go to original" target="_blank">
-                          <i class="fa fa-share" aria-hidden="true"></i>
+                          <i class="fa fa-share"></i>
                        </a>
+                       <c:if test="${not empty textfile.presentationUrl}">
+                       <a href="${textfile.presentationUrl}" title="Go to text webpage" target="_blank">
+                            <i class="fa fa-globe"></i>
+                       </a>
+                       </c:if>
                     </p>
                     <h4>
                     <a href="#" data-toggle="modal"
