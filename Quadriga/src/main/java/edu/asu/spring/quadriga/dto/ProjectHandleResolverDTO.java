@@ -10,12 +10,6 @@ public class ProjectHandleResolverDTO {
 
     @Id
     private String id;
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
     private String projectName;
     private String description;
     private String projectUrl;
@@ -25,6 +19,13 @@ public class ProjectHandleResolverDTO {
     private String handlePattern;
     private String handleExample;
     private String resolvedHandleExample;
+    
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
     
     public String getProjectName() {
         return projectName;
@@ -73,8 +74,6 @@ public class ProjectHandleResolverDTO {
     }
     public void setResolvedHandleExample(String resolvedHandleExample) {
         this.resolvedHandleExample = resolvedHandleExample;
-    }
-    
-    
+    }    
 }
 

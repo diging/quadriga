@@ -7,6 +7,13 @@ import edu.asu.spring.quadriga.domain.resolver.impl.ProjectHandleResolver;
 import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
 import edu.asu.spring.quadriga.mapper.resolver.IProjectHandleResolverMapper;
 
+/**
+ * This class maps {@link ProjectHandleResolverDTO}s to {@link ProjectHandleResolver}s and the
+ * other way around.
+ * 
+ * @author jdamerow
+ *
+ */
 @Service
 public class ProjectHandleResolverMapper implements IProjectHandleResolverMapper {
 

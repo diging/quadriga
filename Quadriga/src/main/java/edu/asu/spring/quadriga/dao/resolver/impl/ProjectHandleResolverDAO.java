@@ -10,6 +10,13 @@ import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.resolver.IProjectHandleResolverDAO;
 import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
 
+/**
+ * This DAO is responsible for storing and retrieving {@link ProjectHandleResolverDTO}s in and from
+ * the database. 
+ * 
+ * @author jdamerow
+ *
+ */
 @Repository
 @Transactional
 public class ProjectHandleResolverDAO extends BaseDAO<ProjectHandleResolverDTO> implements IProjectHandleResolverDAO {
