@@ -1,9 +1,13 @@
 package edu.asu.spring.quadriga.utilities.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
@@ -31,7 +35,7 @@ public class FileSaveUtility implements IFileSaveUtility {
     }
 
     @Override
-    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws FileStorageException {
+    public boolean saveFiletoDir(String dirName, String fileName, String fileContent) throws FileStorageException {
 
         try {
             createDirectoryIfNotExists(textFileLocation + "/" + dirName);
@@ -39,15 +43,19 @@ public class FileSaveUtility implements IFileSaveUtility {
             if (!f.exists()) {
                 f.createNewFile();
             }
-            FileOutputStream fos = new FileOutputStream(f);
-            fos.write(fileContent);
-            fos.close();
+            BufferedReader reader = new BufferedReader(new StringReader(fileContent));
+            PrintWriter writer = new PrintWriter(new FileWriter(f));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.println(line);
+            }
+            reader.close();
+            writer.close();
         } catch (IOException e) {
             throw new FileStorageException(e);
         }
 
         return true;
-
     }
 
     @Override

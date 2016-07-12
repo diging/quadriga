@@ -18,10 +18,26 @@ public class TransformationFile implements ITransformationFile {
     private String patternFileName;
     private String mappingTitle;
     private String mappingDescription;
+    public String getPatternFileContent() {
+        return patternFileContent;
+    }
+
+    public void setPatternFileContent(String patternFileContent) {
+        this.patternFileContent = patternFileContent;
+    }
+
+    public String getMappingFileContent() {
+        return mappingFileContent;
+    }
+
+    public void setMappingFileContent(String mappingFileContent) {
+        this.mappingFileContent = mappingFileContent;
+    }
+
     private String mappingFileName;
     private String id;
-    private byte[] patternFileContent;
-    private byte[] mappingFileContent;
+    private String patternFileContent;
+    private String mappingFileContent;
 
     @Override
     public String getTitle() {
@@ -132,25 +148,7 @@ public class TransformationFile implements ITransformationFile {
         this.mappingFileName = MappingFileName;
     }
 
-    @Override
-    public byte[] getMappingFileContent() {
-        return mappingFileContent;
-    }
-
-    @Override
-    public void setMappingFileContent(byte[] mappingFileContent) {
-        this.mappingFileContent = mappingFileContent;
-    }
-
-    @Override
-    public byte[] getPatternFileContent() {
-        return patternFileContent;
-    }
-
-    @Override
-    public void setPatternFileContent(byte[] patternFileContent) {
-        this.patternFileContent = patternFileContent;
-    }
+    
 
     @Override
     public String getId() {

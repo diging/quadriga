@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
-import edu.asu.spring.quadriga.domain.workspace.ITextFile;
+import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -114,7 +114,7 @@ public class AddTextController {
                     RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
                     RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/addtext", method = RequestMethod.POST)
-    public String saveTextFileForm(HttpServletResponse resp, @Validated @ModelAttribute("textfile") ITextFile txtFile,
+    public String saveTextFileForm(HttpServletResponse resp, @Validated @ModelAttribute("textfile") TextFile txtFile,
             BindingResult result, @PathVariable("workspaceid") String workspaceid,
             @PathVariable("projectid") String projid, RedirectAttributes redirectAttributes, Model model, Locale locale)
             throws QuadrigaAccessException, QuadrigaStorageException {

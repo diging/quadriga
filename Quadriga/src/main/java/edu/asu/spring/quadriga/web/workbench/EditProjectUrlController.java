@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -74,7 +75,7 @@ public class EditProjectUrlController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/editProjectPageURL/{projectid}", method = RequestMethod.POST)
-    public String editProjectPageURL(@Validated @ModelAttribute("project") IProject project, BindingResult result,
+    public String editProjectPageURL(@Validated @ModelAttribute("project") Project project, BindingResult result,
             @PathVariable("projectid") String projectid, Principal principal, ModelMap model,
             RedirectAttributes redirectAttributes, Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
         if (result.hasErrors()) {

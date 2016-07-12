@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
@@ -29,16 +28,12 @@ import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factory.workbench.IModifyProjectFormFactory;
-import edu.asu.spring.quadriga.domain.factory.workbench.IProjectFactory;
+import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.validator.ProjectValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -48,28 +43,10 @@ public class ModifyProjectController {
     private IModifyProjectManager projectManager;
 
     @Autowired
-    private IRetrieveProjectManager retrieveProjectManager;
-
-    @Autowired
-    private IProjectFactory projectFactory;
-
-    @Autowired
-    private IProjectSecurityChecker projectSecurity;
-
-    @Autowired
     private IUserManager userManager;
 
     @Autowired
     private ProjectValidator validator;
-
-    @Autowired
-    private IListWSManager wsManager;
-
-    @Autowired
-    private ICollaboratorFactory collaboratorFactory;
-
-    @Autowired
-    private IModifyProjectFormFactory projectFormFactory;
 
     @Resource(name = "projectconstants")
     private Properties messages;
@@ -126,7 +103,7 @@ public class ModifyProjectController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
-    public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project") IProject project,
+    public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project") Project project,
             BindingResult result, @PathVariable("projectid") String projectid, Principal principal,
             RedirectAttributes redirectAttributes) throws QuadrigaStorageException, QuadrigaAccessException {
         ModelAndView model;

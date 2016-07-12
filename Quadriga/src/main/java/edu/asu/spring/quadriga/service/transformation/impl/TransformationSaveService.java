@@ -31,7 +31,7 @@ public class TransformationSaveService implements ITransformationSaveService {
         String metaDataContent = getMetaDataContent(transformationFile);
 
         boolean isMetaDataFileSaved = transformationFileManager.saveFiletoDir(directoryName, "metadata.properties",
-                metaDataContent.getBytes());
+                metaDataContent);
         boolean isPatternFileSaved = transformationFileManager.saveFiletoDir(directoryName,
                 "Pattern_" + transformationFile.getPatternFileName(), transformationFile.getPatternFileContent());
         boolean isMappingFileSaved = transformationFileManager.saveFiletoDir(directoryName,
