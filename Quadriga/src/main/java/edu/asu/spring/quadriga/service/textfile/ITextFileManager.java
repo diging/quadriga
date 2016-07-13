@@ -47,6 +47,6 @@ public interface ITextFileManager {
 
     void loadFile(ITextFile txtFile) throws FileStorageException;
 
-    ITextFile getTextFile(String textId);
+    ITextFile getTextFile(String textId) throws QuadrigaStorageException;
 
 }

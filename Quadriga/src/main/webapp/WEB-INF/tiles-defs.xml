@@ -279,6 +279,14 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/editProjectPageURL.jsp" />
 	</definition>
+	
+	<definition name="auth/workbench/resolvers/add"
+        extends="base.definition.workbench.nonav">
+        <put-attribute name="title"
+            value="Quadriga Workbench - Add Project Handle Resolver" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/workbench/resolvers/add.jsp" />
+    </definition>
 
 	<!-- Add/Update/Delete Project Collaborator START -->
 	<definition name="auth/workbench/addcollaborators" extends="base.definition.workbench.nonav">
@@ -715,6 +723,23 @@
         <put-attribute name="content"
             value="/WEB-INF/views/exceptions/public/forbidden.jsp" />
     </definition>
+    
+    <!--  Resolvers  -->
+    <definition name="base.definition.resolvers" extends="base.definition.nonav">
+        <put-attribute name="currentPage" value="resolvers" />
+    </definition>
+    
+    <definition name="auth/resolvers" extends="base.definition.resolvers">
+        <put-attribute name="title" value="Quadriga - Project Handle Resolvers" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/resolvers/resolvers.jsp" />
+    </definition>
+    <definition name="auth/resolvers/add" extends="base.definition.resolvers">
+        <put-attribute name="title" value="Quadriga - Project Handle Resolvers" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/resolvers/add.jsp" />
+    </definition>
+   
 
 	<!-- Networks -->
 	<definition name="base.definition.networks" extends="base.definition">

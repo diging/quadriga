@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 
 /**
  * @description   : interface to implement Project class.
@@ -69,5 +70,9 @@ public interface IProject
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updateDate);
+
+    void setResolver(IProjectHandleResolver resolver);
+
+    IProjectHandleResolver getResolver();
 	
 }

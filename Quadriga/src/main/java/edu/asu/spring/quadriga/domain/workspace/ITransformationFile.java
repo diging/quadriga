@@ -44,13 +44,13 @@ public interface ITransformationFile {
 
     public abstract void setMappingFileName(String MappingFileName);
 
-    public abstract byte[] getMappingFileContent();
+    public abstract String getMappingFileContent();
 
-    public abstract void setMappingFileContent(byte[] mappingFileContent);
+    public abstract void setMappingFileContent(String mappingFileContent);
 
-    public abstract byte[] getPatternFileContent();
+    public abstract String getPatternFileContent();
 
-    public abstract void setPatternFileContent(byte[] patternFileContent);
+    public abstract void setPatternFileContent(String patternFileContent);
 
     public abstract String getId();
 

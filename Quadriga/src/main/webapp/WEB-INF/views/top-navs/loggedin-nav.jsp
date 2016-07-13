@@ -78,14 +78,14 @@
 				href="${pageContext.servletContext.contextPath}/auth/transformation/selectTransformationFiles">Upload Transformation</a></li>
 		</ul></li>
 </sec:authorize>
-<!--<sec:authorize access="permitAll">
-			<li ${currentPage == "sites" ? "class=\"current_page_item\"" : ""}><a
-				href="${pageContext.servletContext.contextPath}/sites">Browse Sites</a></li>
-		</sec:authorize>-->
 
 <sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
 	<li ${currentPage == "admin" ? "class=\"active\"" : ""}><a
 		href="${pageContext.servletContext.contextPath}/auth/users/manage">User
 			Management</a></li>
 </sec:authorize>
-<!-- <li class="page_item_logout"><a href="<c:url value="/j_spring_security_logout" />">Logout</a></li> -->
+
+<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_STANDARD')">
+    <li ${currentPage == "resolvers" ? "class=\"active\"" : ""}><a
+        href="${pageContext.servletContext.contextPath}/auth/resolvers">Resolvers</a></li>
+</sec:authorize>

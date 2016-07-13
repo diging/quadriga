@@ -54,7 +54,7 @@ public class TextConceptSearchController {
     private IJsonCreator jsonCreator;
 
     @RequestMapping(value = "search/texts")
-    public String prepareSearchPage(@RequestParam(defaultValue="") String conceptId, Model model) throws Exception {
+    public String search(@RequestParam(defaultValue="") String conceptId, Model model) throws Exception {
         
         String conceptUri = conceptId;
         
@@ -65,16 +65,24 @@ public class TextConceptSearchController {
             ConceptEntry entry = null;
             if (entries != null && !entries.isEmpty()) {
                 entry = entries.get(0);
+                entry.setId(conceptUri);
             }
             
             if (conceptId.startsWith("http://")) {
                 int lastIdx = conceptId.lastIndexOf("/");
                 conceptId = conceptId.substring(lastIdx+1);
             }
+            
             String results = qStoreConnector.searchNodesByConcept(conceptId);
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
-
+            
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
+            
+            if (entry.getWordnetId() != null && !entry.getWordnetId().isEmpty()) {
+                results = qStoreConnector.searchNodesByConcept(entry.getWordnetId());
+                events = marshallingService.unMarshalXmlToElementEventsType(results);
+                eventList.addAll(events.getRelationEventOrAppellationEvent());
+            }
 
             Set<String> references = new HashSet<String>();
             List<ITextFile> texts = new ArrayList<ITextFile>();

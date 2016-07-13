@@ -66,4 +66,8 @@ public interface ITextFile {
 
     int getSnippetLength();
 
+    void setPresentationUrl(String presentationUrl);
+
+    String getPresentationUrl();
+
 }

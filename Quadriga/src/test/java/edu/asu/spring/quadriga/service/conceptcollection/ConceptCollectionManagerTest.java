@@ -76,12 +76,12 @@ public class ConceptCollectionManagerTest {
         ConceptpowerReply rep = new ConceptpowerReply();
         rep.setConceptEntry(conceptEntries);
 
-        Project project = new Project();
+        IProject project = new Project();
         project.setCreatedBy("createdBy");
         project.setProjectName("test project");
         project.setProjectId("id");
 
-        Project project2 = new Project();
+        IProject project2 = new Project();
         project2.setCreatedBy("createdBy2");
         project2.setProjectName("test project2");
         project2.setProjectId("id2");

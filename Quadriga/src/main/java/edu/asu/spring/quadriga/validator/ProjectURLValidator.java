@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Service
@@ -36,7 +37,7 @@ public class ProjectURLValidator implements Validator {
     @Override
     public void validate(Object obj, Errors err) {
         // validate all the input parameters
-        Project project = (Project) obj;
+        IProject project = (IProject) obj;
 
         String projUnixName = project.getUnixName();
         String projectId = project.getProjectId();

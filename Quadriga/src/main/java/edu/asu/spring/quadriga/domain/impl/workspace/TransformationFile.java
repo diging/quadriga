@@ -18,12 +18,28 @@ public class TransformationFile implements ITransformationFile {
     private String patternFileName;
     private String mappingTitle;
     private String mappingDescription;
-    private String mappingFileName;
-    private String id;
-    private byte[] patternFileContent;
-    private byte[] mappingFileContent;
     private String absolutePatternFilePath;
     private String absoluteMappingFilePath;
+    private String patternFileContent;
+    private String mappingFileContent;
+    private String mappingFileName;
+    private String id;
+
+    public String getPatternFileContent() {
+        return patternFileContent;
+    }
+
+    public void setPatternFileContent(String patternFileContent) {
+        this.patternFileContent = patternFileContent;
+    }
+
+    public String getMappingFileContent() {
+        return mappingFileContent;
+    }
+
+    public void setMappingFileContent(String mappingFileContent) {
+        this.mappingFileContent = mappingFileContent;
+    }
 
     @Override
     public String getTitle() {
@@ -32,13 +48,11 @@ public class TransformationFile implements ITransformationFile {
 
     @Override
     public void setTitle(String titleName) {
-
         this.title = titleName;
     }
 
     @Override
     public String getUserName() {
-
         return userName;
     }
 
@@ -118,40 +132,17 @@ public class TransformationFile implements ITransformationFile {
 
     @Override
     public void setMappingDescription(String MappingDescription) {
-
         this.mappingDescription = MappingDescription;
     }
 
     @Override
     public String getMappingFileName() {
-
         return mappingFileName;
     }
 
     @Override
     public void setMappingFileName(String MappingFileName) {
-
         this.mappingFileName = MappingFileName;
-    }
-
-    @Override
-    public byte[] getMappingFileContent() {
-        return mappingFileContent;
-    }
-
-    @Override
-    public void setMappingFileContent(byte[] mappingFileContent) {
-        this.mappingFileContent = mappingFileContent;
-    }
-
-    @Override
-    public byte[] getPatternFileContent() {
-        return patternFileContent;
-    }
-
-    @Override
-    public void setPatternFileContent(byte[] patternFileContent) {
-        this.patternFileContent = patternFileContent;
     }
 
     @Override
@@ -183,7 +174,6 @@ public class TransformationFile implements ITransformationFile {
 
     @Override
     public String getAbsoluteMappingFilePath() {
-
         return absoluteMappingFilePath;
     }
 }

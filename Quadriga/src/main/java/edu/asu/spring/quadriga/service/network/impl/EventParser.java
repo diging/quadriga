@@ -187,7 +187,7 @@ public class EventParser {
         if (node.getConceptId() != null) {
             String id = node.getConceptId();
             ConceptpowerReply re = conceptPowerConnector.getById(id);
-            if (re.getConceptEntry().size() != 0) {
+            if (re != null && re.getConceptEntry().size() != 0) {
                 node.setLabel(getLemma(re));
                 node.setDescription(getDescription(re));
             } else {

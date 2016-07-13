@@ -111,3 +111,7 @@ span.highlight {
 .highlight-phrase {
 	background-color: yellow;
 }
+
+.form-horizontal .control-label-left {
+    text-align: left;
+}

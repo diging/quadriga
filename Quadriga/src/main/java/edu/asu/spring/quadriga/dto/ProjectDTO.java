@@ -12,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,26 +24,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *This class represents the column mappings for project table.
+ * This class represents the column mappings for project table.
+ * 
  * @author Karthik
  */
 @Entity
 @Table(name = "tbl_project")
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 @XmlRootElement
 
-@NamedQueries({
-    @NamedQuery(name = "ProjectDTO.findAll", query = "SELECT p FROM ProjectDTO p"),
-    @NamedQuery(name = "ProjectDTO.findByProjectname", query = "SELECT p FROM ProjectDTO p WHERE p.projectname = :projectname"),
-    @NamedQuery(name = "ProjectDTO.findByUnixname", query = "SELECT p FROM ProjectDTO p WHERE p.unixname = :unixname"),
-    @NamedQuery(name = "ProjectDTO.findByProjectid", query = "SELECT p FROM ProjectDTO p WHERE p.projectid = :projectid"),
-    @NamedQuery(name = "ProjectDTO.findByAccessibility", query = "SELECT p FROM ProjectDTO p WHERE p.accessibility = :accessibility"),
-    })
+@NamedQueries({ @NamedQuery(name = "ProjectDTO.findAll", query = "SELECT p FROM ProjectDTO p"),
+        @NamedQuery(name = "ProjectDTO.findByProjectname", query = "SELECT p FROM ProjectDTO p WHERE p.projectname = :projectname"),
+        @NamedQuery(name = "ProjectDTO.findByUnixname", query = "SELECT p FROM ProjectDTO p WHERE p.unixname = :unixname"),
+        @NamedQuery(name = "ProjectDTO.findByProjectid", query = "SELECT p FROM ProjectDTO p WHERE p.projectid = :projectid"),
+        @NamedQuery(name = "ProjectDTO.findByAccessibility", query = "SELECT p FROM ProjectDTO p WHERE p.accessibility = :accessibility"), })
 
-public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, ProjectCollaboratorDTO> implements Serializable 
-{
+public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, ProjectCollaboratorDTO>
+        implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Basic(optional = false)
     @Column(name = "projectname")
     private String projectname;
@@ -58,25 +59,38 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
     @Basic(optional = false)
     @Column(name = "accessibility")
     private String accessibility;
-    
+
     @JoinColumn(name = "projectowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO projectowner;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO",orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO", orphanRemoval = true)
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project",orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
     private List<ProjectDictionaryDTO> projectDictionaryDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO",orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO", orphanRemoval = true)
     private List<ProjectConceptCollectionDTO> projectConceptCollectionDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO",orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO", orphanRemoval = true)
     private List<ProjectCollaboratorDTO> projectCollaboratorDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project",orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
     private List<ProjectEditorDTO> projectEditorDTOList;
 
-	public ProjectDTO() {
+    @ManyToMany
+    @JoinTable(name = "tbl_project_resolvers")
+    private List<ProjectHandleResolverDTO> resolvers;
+
+    public List<ProjectHandleResolverDTO> getResolvers() {
+        return resolvers;
     }
 
-    public ProjectDTO(String projectid, String projectname, String unixname, String accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public void setResolvers(List<ProjectHandleResolverDTO> resolver) {
+        this.resolvers = resolver;
+    }
+
+    public ProjectDTO() {
+    }
+
+    public ProjectDTO(String projectid, String projectname, String unixname, String accessibility, String updatedby,
+            Date updateddate, String createdby, Date createddate) {
         this.projectid = projectid;
         this.projectname = projectname;
         this.unixname = unixname;
@@ -166,35 +180,33 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
     public void setProjectowner(QuadrigaUserDTO projectowner) {
         this.projectowner = projectowner;
     }
-    
+
     @XmlTransient
     public List<ProjectDictionaryDTO> getProjectDictionaryDTOList() {
- 		return projectDictionaryDTOList;
- 	}
+        return projectDictionaryDTOList;
+    }
 
- 	public void setProjectDictionaryDTOList(
- 			List<ProjectDictionaryDTO> projectDictionaryDTOList) {
- 		this.projectDictionaryDTOList = projectDictionaryDTOList;
- 	}
+    public void setProjectDictionaryDTOList(List<ProjectDictionaryDTO> projectDictionaryDTOList) {
+        this.projectDictionaryDTOList = projectDictionaryDTOList;
+    }
 
- 	@XmlTransient
- 	public List<ProjectConceptCollectionDTO> getProjectConceptCollectionDTOList() {
- 		return projectConceptCollectionDTOList;
- 	}
+    @XmlTransient
+    public List<ProjectConceptCollectionDTO> getProjectConceptCollectionDTOList() {
+        return projectConceptCollectionDTOList;
+    }
 
- 	public void setProjectConceptCollectionDTOList(
- 			List<ProjectConceptCollectionDTO> projectConceptCollectionDTOList) {
- 		this.projectConceptCollectionDTOList = projectConceptCollectionDTOList;
- 	}
+    public void setProjectConceptCollectionDTOList(List<ProjectConceptCollectionDTO> projectConceptCollectionDTOList) {
+        this.projectConceptCollectionDTOList = projectConceptCollectionDTOList;
+    }
 
- 	@XmlTransient
- 	public List<ProjectEditorDTO> getProjectEditorDTOList() {
- 		return projectEditorDTOList;
- 	}
+    @XmlTransient
+    public List<ProjectEditorDTO> getProjectEditorDTOList() {
+        return projectEditorDTOList;
+    }
 
- 	public void setProjectEditorDTOList(List<ProjectEditorDTO> projectEditorDTOList) {
- 		this.projectEditorDTOList = projectEditorDTOList;
- 	}
+    public void setProjectEditorDTOList(List<ProjectEditorDTO> projectEditorDTOList) {
+        this.projectEditorDTOList = projectEditorDTOList;
+    }
 
     @XmlTransient
     public List<ProjectWorkspaceDTO> getProjectWorkspaceDTOList() {
@@ -227,7 +239,8 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
             return false;
         }
         ProjectDTO other = (ProjectDTO) object;
-        if ((this.projectid == null && other.projectid != null) || (this.projectid != null && !this.projectid.equals(other.projectid))) {
+        if ((this.projectid == null && other.projectid != null)
+                || (this.projectid != null && !this.projectid.equals(other.projectid))) {
             return false;
         }
         return true;
@@ -250,7 +263,7 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
 
     @Override
     public QuadrigaUserDTO getOwner() {
-       return projectowner;
+        return projectowner;
     }
 
     @Override

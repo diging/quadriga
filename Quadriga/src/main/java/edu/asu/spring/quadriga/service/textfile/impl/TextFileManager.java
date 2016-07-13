@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
@@ -15,6 +16,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * @author Nischal Samji
@@ -32,6 +34,9 @@ public class TextFileManager implements ITextFileManager {
 
     @Autowired
     private ITextFileMapper tfSMapper;
+    
+    @Autowired
+    private IRetrieveProjectManager projectManager;
     
     
     @Override
@@ -67,16 +72,32 @@ public class TextFileManager implements ITextFileManager {
             txtDto = txtFileDAO.getTextFileByUri(uri);
         }
         if (txtDto != null) {
-            return tfSMapper.getTextFile(txtDto);
+            ITextFile textFile = tfSMapper.getTextFile(txtDto);
+            String projectId = textFile.getProjectId();
+            IProject project = projectManager.getProjectDetails(projectId);
+            
+            if (project.getResolver() != null && textFile.getRefId() != null) {
+                String resolvedHandle = project.getResolver().buildResolvedHandle(textFile.getRefId());
+                textFile.setPresentationUrl(resolvedHandle);
+            }
+            return textFile;
         }
         return null;
     }
     
     @Override
-    public ITextFile getTextFile(String textId) {
+    public ITextFile getTextFile(String textId) throws QuadrigaStorageException {
         TextFileDTO txtDto = txtFileDAO.getDTO(textId);
         if (txtDto != null) {
-            return tfSMapper.getTextFile(txtDto);
+            ITextFile textFile = tfSMapper.getTextFile(txtDto);
+            String projectId = textFile.getProjectId();
+            IProject project = projectManager.getProjectDetails(projectId);
+            
+            if (project.getResolver() != null && textFile.getRefId() != null) {
+                String resolvedHandle = project.getResolver().buildResolvedHandle(textFile.getRefId());
+                textFile.setPresentationUrl(resolvedHandle);
+            }
+            return textFile;
         }
         return null;
     }

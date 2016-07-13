@@ -25,7 +25,7 @@ public interface IFileSaveUtility {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws FileStorageException;
+    public boolean saveFiletoDir(String dirName, String fileName, String fileContent) throws FileStorageException;
 
     /**
      * @param fileName
