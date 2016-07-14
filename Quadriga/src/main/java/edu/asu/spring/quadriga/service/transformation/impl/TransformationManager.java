@@ -65,7 +65,7 @@ public class TransformationManager implements ITransformationManager {
      */
     @Transactional
     @Override
-    public ITransformationFile retrieveTransformationFilePaths(String transformationId) {
+    public ITransformationFile getTransformationFile(String transformationId) {
 
         TransformFilesDTO transformDTO = (TransformFilesDTO) transformationDAO.getDTO(transformationId);
 
@@ -78,6 +78,15 @@ public class TransformationManager implements ITransformationManager {
         TransformationFile transformFile = new TransformationFile();
         transformFile.setAbsolutePatternFilePath(absolutePatternFilePath);
         transformFile.setAbsoluteMappingFilePath(absoluteMappingFilePath);
+        transformFile.setTitle(transformDTO.getTitle());
+        transformFile.setDescription(transformDTO.getDescription());
+        transformFile.setPatternFileName(transformDTO.getPatternFileName());
+        transformFile.setPatternDescription(transformDTO.getMappingDescription());
+        transformFile.setPatternTitle(transformDTO.getPatternTitle());
+        transformFile.setMappingFileName(transformDTO.getMappingFileName());
+        transformFile.setMappingDescription(transformDTO.getMappingDescription());
+        transformFile.setMappingTitle(transformDTO.getMappingTitle());
+        transformFile.setUserName(transformDTO.getUserName());
 
         return transformFile;
     }
@@ -106,16 +115,19 @@ public class TransformationManager implements ITransformationManager {
 
     @Transactional
     @Override
-    public List<ITransformation> getTransformations(String transformationId) {
+    public List<ITransformation> getTransformations(String transformationIds) {
 
-        ITransformationFile transformFile = retrieveTransformationFilePaths(transformationId);
-
-        ITransformation transform = new Transformation();
-        transform.setPatternFilePath(transformFile.getAbsolutePatternFilePath());
-        transform.setTransformationFilePath(transformFile.getAbsoluteMappingFilePath());
-
+        String[] transformationIdsList = transformationIds.split(",");
         List<ITransformation> transformations = new ArrayList<ITransformation>();
-        transformations.add(transform);
+
+        for (int i = 0; i < transformationIdsList.length; i++) {
+
+            ITransformationFile transformFile = getTransformationFile(transformationIdsList[i]);
+            ITransformation transform = new Transformation();
+            transform.setPatternFilePath(transformFile.getAbsolutePatternFilePath());
+            transform.setTransformationFilePath(transformFile.getAbsoluteMappingFilePath());
+            transformations.add(transform);
+        }
 
         return transformations;
     }

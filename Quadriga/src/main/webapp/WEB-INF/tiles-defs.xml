@@ -76,13 +76,15 @@
 
 
     <!-- result -->
-    <definition name="success_transform" extends="base.definition.nonav">
-        <put-attribute name="content" value="/WEB-INF/views/success_transformation.jsp" />
+    <definition name = "status" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/status_transform.jsp" />
     </definition>
-    <definition name="failure_transform" extends="base.definition.nonav">
-        <put-attribute name="content" value="/WEB-INF/views/failure_transformation.jsp" />
+    <definition name="success" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/success_transform.jsp" />
     </definition>
-    
+	<definition name="failure" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/failure_transform.jsp" />
+    </definition>
 	
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.home">

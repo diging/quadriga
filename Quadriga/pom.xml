@@ -24,21 +24,21 @@
 		<database.pw>dbadmin</database.pw>
 		<qstore.url>http://localhost:8080/qstore4s</qstore.url>
 		<wordpower.url>http://digitalhps-develop.asu.edu:8080/wordpower</wordpower.url>
-		<conceptpower.url>https://chps.asu.edu/conceptpower</conceptpower.url>
+		<conceptpower.url>http://diging-dev.asu.edu:8081/conceptpower-test</conceptpower.url>
 		<qstore.admin.username>admin</qstore.admin.username>
 		<qstore.admin.password>admin</qstore.admin.password>
 		<quadriga.admin.username>admin</quadriga.admin.username>
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
 		<textfiles.location></textfiles.location>
-		<transformationfiles.location>/Users/yoganandakishore/transformationFiles</transformationfiles.location>
-		<email.host>abcd@email.com</email.host>
-		<email.port>25</email.port>
-		<email.username>abcd</email.username>
-		<email.pw>efgh</email.pw>
-		<email.from>lkjh@gmail.com</email.from>
-		<email.enabled>true</email.enabled>
-		<quadriga.baseurl>sample.com</quadriga.baseurl>
+		<transformationfiles.location></transformationfiles.location>
+		<email.host></email.host>
+		<email.port></email.port>
+		<email.username></email.username>
+		<email.pw></email.pw>
+		<email.from></email.from>
+		<email.enabled></email.enabled>
+		<quadriga.baseurl></quadriga.baseurl>
 	</properties>
 
 	<dependencies>

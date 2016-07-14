@@ -18,8 +18,15 @@ public interface ITransformationManager {
 
     public List<TransformFilesDTO> getTransformationsList();
 
-    public List<ITransformation> getTransformations(String transformationId);
+    /**
+     * each transformationId is used to get transformation, all the obtained
+     * transformations are returned in a list
+     * 
+     * @param transformationIds
+     * @return list of transformations
+     */
+    public List<ITransformation> getTransformations(String transformationIds);
 
-    public ITransformationFile retrieveTransformationFilePaths(String transformationId);
+    public ITransformationFile getTransformationFile(String transformationId);
 
 }

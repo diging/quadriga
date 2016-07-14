@@ -58,75 +58,61 @@ public class TransformationFile implements ITransformationFile {
 
     @Override
     public void setUserName(String userName) {
-
         this.userName = userName;
-
     }
 
     @Override
     public String getDescription() {
-
         return description;
     }
 
     @Override
     public void setDescription(String description) {
-
         this.description = description;
     }
 
     @Override
     public String getPatternTitle() {
-
         return patternTitle;
     }
 
     @Override
     public void setPatternTitle(String patternTitle) {
-
         this.patternTitle = patternTitle;
     }
 
     @Override
     public String getPatternDescription() {
-
         return patternDescription;
     }
 
     @Override
     public void setPatternDescription(String patternDescription) {
-
         this.patternDescription = patternDescription;
-
     }
 
     @Override
     public String getPatternFileName() {
-
         return patternFileName;
     }
 
     @Override
     public void setPatternFileName(String patternFileName) {
-
         this.patternFileName = patternFileName;
     }
 
     @Override
     public String getMappingTitle() {
-
         return mappingTitle;
     }
 
     @Override
     public void setMappingTitle(String MappingTitle) {
-
         this.mappingTitle = MappingTitle;
     }
 
     @Override
     public String getMappingDescription() {
-
         return mappingDescription;
     }
 
@@ -158,7 +144,6 @@ public class TransformationFile implements ITransformationFile {
     @Override
     public void setAbsolutePatternFilePath(String absolutePatternFilePath) {
         this.absolutePatternFilePath = absolutePatternFilePath;
-
     }
 
     @Override
@@ -169,7 +154,6 @@ public class TransformationFile implements ITransformationFile {
     @Override
     public void setAbsoluteMappingFilePath(String absoluteMappingFilePath) {
         this.absoluteMappingFilePath = absoluteMappingFilePath;
-
     }
 
     @Override

@@ -226,7 +226,7 @@
 
 
 <form
-	action="${pageContext.servletContext.contextPath}/auth/transformation/result"
+	action="${pageContext.servletContext.contextPath}/auth/transformation/start"
 	method="POST" id="form1">
 
 	<div>
