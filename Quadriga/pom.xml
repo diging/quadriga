@@ -24,7 +24,7 @@
 		<database.pw>dbadmin</database.pw>
 		<qstore.url>http://localhost:8080/qstore4s</qstore.url>
 		<wordpower.url>http://digitalhps-develop.asu.edu:8080/wordpower</wordpower.url>
-		<conceptpower.url>http://diging-dev.asu.edu:8081/conceptpower-test</conceptpower.url>
+		<conceptpower.url>https://chps.asu.edu/conceptpower</conceptpower.url>
 		<qstore.admin.username>admin</qstore.admin.username>
 		<qstore.admin.password>admin</qstore.admin.password>
 		<quadriga.admin.username>admin</quadriga.admin.username>
