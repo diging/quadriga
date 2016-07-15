@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -59,40 +58,35 @@ public class TransformationController {
             @RequestParam("sanitized_network_id") String networkIds, Model model)
             throws QuadrigaStorageException, IOException, QuadrigaGeneratorException, FileStorageException {
 
-        List<ITransformation> transformations = transformationManager.getTransformations(transformationIds);
+        String[] transformationIdsList = transformationIds.split(",");
+        List<ITransformation> transformations = transformationManager.getTransformations(transformationIdsList);
         List<String> networkIdList = Arrays.asList(networkIds.split("\\s*,\\s*"));
 
-        try {
-            List<Future<String>> futureEvents = new ArrayList<>();
-            future = transformProcessor.runTransformationAsync(transformations, networkIdList);
-            futureEvents.add(future);
-        } catch (Exception e) {
-            System.out.println(" ");
-        }
+        future = transformProcessor.runTransformationAsync(transformations, networkIdList);
 
-        return "status";
+        return "status_transform";
     }
 
     /**
-     * Checks the status of future event, if it's done directs to result page
+     * Checks the status of future evenTt, if it's done directs to result page
      * and if it's not done directs to status page
      * 
      * @return
      * @throws ExecutionException
      * @throws InterruptedException
      */
-    @RequestMapping(value = "auth/transformation/start", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/transformation/result/status", method = RequestMethod.GET)
     public String showStatus() throws InterruptedException, ExecutionException {
 
         if (future.isDone()) {
             result = future.get();
 
             if (result == null)
-                return "failure";
+                return "failure_transform";
 
-            return "success";
+            return "success_transform";
         }
-        return "status";
+        return "status_transform";
     }
 
     /**

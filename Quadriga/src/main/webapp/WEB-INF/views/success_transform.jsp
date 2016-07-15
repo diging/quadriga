@@ -1,10 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<h1>Your Transformation is successful</h1>
 
-<body>
+<p><a href="${pageContext.servletContext.contextPath}/auth/transformation/result/download">Click here to download file</a></p>
 
- <h1>Your Transformation is successful</h1>
 
- <h2><a href="${pageContext.servletContext.contextPath}/auth/transformation/result/download">Click here to download file</a></h2>
-
-</body>

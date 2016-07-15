@@ -25,7 +25,7 @@ public interface ITransformationManager {
      * @param transformationIds
      * @return list of transformations
      */
-    public List<ITransformation> getTransformations(String transformationIds);
+    public List<ITransformation> getTransformations(String[] transformationIds);
 
     public ITransformationFile getTransformationFile(String transformationId);
 

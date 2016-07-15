@@ -71,6 +71,28 @@ public class TransformationSaveService implements ITransformationSaveService {
         return content.toString();
     }
 
+    /**
+     * appends the location with dirName and fileName and returns the resultant
+     * string as absoluteFilePath
+     * 
+     * @param location
+     * @param dirName
+     * @param fileName
+     * @return
+     */
+    public String getAbsoluteFilePath(String location, String dirName, String fileName) {
+
+        StringBuffer absoluteFilePath = new StringBuffer();
+
+        absoluteFilePath.append(location);
+        absoluteFilePath.append("/");
+        absoluteFilePath.append(dirName);
+        absoluteFilePath.append("/");
+        absoluteFilePath.append(fileName);
+
+        return absoluteFilePath.toString();
+    }
+
     @Override
     public String getTransformFileLocation() {
         return transformationFileManager.getFileLocation();

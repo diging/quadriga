@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.web.transformation;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -18,14 +16,14 @@ import edu.asu.spring.quadriga.service.network.transform.impl.TransformNode;
 
 /**
  * 
+ * generation of transformed network is done as async task
+ * 
  * @author yoganandakishore
  *
  */
 
 @Service
 public class TransformationProcessor {
-
-    private static final Logger logger = LoggerFactory.getLogger(TransformationController.class);
 
     @Autowired
     private Generator generator;
@@ -47,9 +45,7 @@ public class TransformationProcessor {
             throws QuadrigaGeneratorException {
 
         List<List<TransformNode>> results = matchGraphs.matchGraphs(transformations, networkIdList);
-        logger.info("Check results for transformations: " + results);
         String graphString = generator.generateText(results, null, true);
-
         return new AsyncResult<>(graphString);
     }
 }

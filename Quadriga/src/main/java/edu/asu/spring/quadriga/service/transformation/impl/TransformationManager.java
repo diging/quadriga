@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.transform.ITransformFilesDAO;
 import edu.asu.spring.quadriga.domain.impl.networks.Transformation;
-import edu.asu.spring.quadriga.domain.impl.workspace.TransformationFile;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
 import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
 import edu.asu.spring.quadriga.service.transformation.ITransformationSaveService;
+import edu.asu.spring.quadriga.service.transformation.mapper.ITransformationMapper;
 
 /**
  * This class is a service which takes the transformation files metadata and
@@ -33,19 +33,17 @@ public class TransformationManager implements ITransformationManager {
     @Autowired
     private ITransformationSaveService transformationFileService;
 
+    @Autowired
+    private ITransformationMapper transformationMapper;
+
     @Transactional
     @Override
     public void saveTransformations(ITransformationFile transformationFile) throws FileStorageException {
-        TransformFilesDTO transformDTO = new TransformFilesDTO(transformationFile.getTitle(),
-                transformationFile.getDescription(), transformationFile.getPatternFileName(),
-                transformationFile.getPatternTitle(), transformationFile.getPatternDescription(),
-                transformationFile.getMappingFileName(), transformationFile.getMappingTitle(),
-                transformationFile.getMappingDescription(), transformationFile.getUserName());
+        TransformFilesDTO transformDTO = transformationMapper.getTransformFilesDTO(transformationFile);
         String id = transformationDAO.generateUniqueID();
         transformDTO.setId(id);
         transformationDAO.saveNewDTO(transformDTO);
         transformationFile.setId(id);
-
         transformationFileService.saveFileToLocal(transformationFile);
     }
 
@@ -70,54 +68,22 @@ public class TransformationManager implements ITransformationManager {
         TransformFilesDTO transformDTO = (TransformFilesDTO) transformationDAO.getDTO(transformationId);
 
         String fileLocation = transformationFileService.getTransformFileLocation();
-        String absolutePatternFilePath = getAbsoluteFilePath(fileLocation, transformationId,
+        String absolutePatternFilePath = transformationFileService.getAbsoluteFilePath(fileLocation, transformationId,
                 transformDTO.getPatternFileName());
-        String absoluteMappingFilePath = getAbsoluteFilePath(fileLocation, transformationId,
+        String absoluteMappingFilePath = transformationFileService.getAbsoluteFilePath(fileLocation, transformationId,
                 transformDTO.getMappingFileName());
 
-        TransformationFile transformFile = new TransformationFile();
+        ITransformationFile transformFile = transformationMapper.getTransformFile(transformDTO);
         transformFile.setAbsolutePatternFilePath(absolutePatternFilePath);
         transformFile.setAbsoluteMappingFilePath(absoluteMappingFilePath);
-        transformFile.setTitle(transformDTO.getTitle());
-        transformFile.setDescription(transformDTO.getDescription());
-        transformFile.setPatternFileName(transformDTO.getPatternFileName());
-        transformFile.setPatternDescription(transformDTO.getMappingDescription());
-        transformFile.setPatternTitle(transformDTO.getPatternTitle());
-        transformFile.setMappingFileName(transformDTO.getMappingFileName());
-        transformFile.setMappingDescription(transformDTO.getMappingDescription());
-        transformFile.setMappingTitle(transformDTO.getMappingTitle());
-        transformFile.setUserName(transformDTO.getUserName());
 
         return transformFile;
     }
 
-    /**
-     * appends the location with dirName and fileName and returns the resultant
-     * string as absoluteFilePath
-     * 
-     * @param location
-     * @param dirName
-     * @param fileName
-     * @return
-     */
-    private String getAbsoluteFilePath(String location, String dirName, String fileName) {
-
-        StringBuffer absoluteFilePath = new StringBuffer();
-
-        absoluteFilePath.append(location);
-        absoluteFilePath.append("/");
-        absoluteFilePath.append(dirName);
-        absoluteFilePath.append("/");
-        absoluteFilePath.append(fileName);
-
-        return absoluteFilePath.toString();
-    }
-
     @Transactional
     @Override
-    public List<ITransformation> getTransformations(String transformationIds) {
+    public List<ITransformation> getTransformations(String[] transformationIdsList) {
 
-        String[] transformationIdsList = transformationIds.split(",");
         List<ITransformation> transformations = new ArrayList<ITransformation>();
 
         for (int i = 0; i < transformationIdsList.length; i++) {
@@ -128,7 +94,7 @@ public class TransformationManager implements ITransformationManager {
             transform.setTransformationFilePath(transformFile.getAbsoluteMappingFilePath());
             transformations.add(transform);
         }
-
         return transformations;
     }
+
 }
