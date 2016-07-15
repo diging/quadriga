@@ -98,11 +98,16 @@ public class TransformationController {
      * @throws InterruptedException
      */
     @RequestMapping(value = "auth/transformation/result/download")
-    public void downloadTransformation(HttpServletResponse response) throws IOException {
+    public String downloadTransformation(HttpServletResponse response) throws IOException {
+
+        if (result == null)
+            return "failure_transform";
 
         InputStream inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
         response.setContentLength(result.length());
         response.setHeader("Content-Disposition", String.format("attachment; filename=" + "TransformationResult"));
         FileCopyUtils.copy(inputStream, response.getOutputStream());
+
+        return null;
     }
 }
