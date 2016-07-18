@@ -39,6 +39,7 @@ public class EditResolverController {
             return "auth/resolvers/edit";
         }
 
+        resolver.setUsername(principal.getName());
         resolverManager.saveProjectHandleResolver(resolver, principal.getName());
         return "redirect:/auth/resolvers";
     }
