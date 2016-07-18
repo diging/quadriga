@@ -53,8 +53,7 @@ public class TransformationController {
      */
 
     @RequestMapping(value = "auth/transformation/start", method = RequestMethod.POST)
-    public String generateTransform(@RequestParam("project") String project,
-            @RequestParam("transformation") String transformationIds,
+    public String generateTransform(@RequestParam("transformation") String transformationIds,
             @RequestParam("sanitized_network_id") String networkIds, Model model)
             throws QuadrigaStorageException, IOException, QuadrigaGeneratorException, FileStorageException {
 
