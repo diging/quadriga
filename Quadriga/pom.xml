@@ -37,7 +37,7 @@
 		<email.username></email.username>
 		<email.pw></email.pw>
 		<email.from></email.from>
-		<email.enabled></email.enabled>
+		<email.enabled>true</email.enabled>
 		<quadriga.baseurl></quadriga.baseurl>
 	</properties>
 
