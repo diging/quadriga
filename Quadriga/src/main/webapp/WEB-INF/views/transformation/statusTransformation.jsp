@@ -2,5 +2,5 @@
 
 <h1> Transformation is running</h1>
 
-<p>The transformation is RUNNING. Please stay on this page. It will display a download link, once the transformation has finished.
+<p>The transformation is running. Please stay on this page. It will display a download link, once the transformation has finished.
 </p>
