@@ -33,9 +33,9 @@ public class TransformationSaveService implements ITransformationSaveService {
         boolean isMetaDataFileSaved = transformationFileManager.saveFiletoDir(directoryName, "metadata.properties",
                 metaDataContent);
         boolean isPatternFileSaved = transformationFileManager.saveFiletoDir(directoryName,
-                "Pattern_" + transformationFile.getPatternFileName(), transformationFile.getPatternFileContent());
+                transformationFile.getPatternFileName(), transformationFile.getPatternFileContent());
         boolean isMappingFileSaved = transformationFileManager.saveFiletoDir(directoryName,
-                "Mapping_" + transformationFile.getMappingFileName(), transformationFile.getMappingFileContent());
+                transformationFile.getMappingFileName(), transformationFile.getMappingFileContent());
 
         return isMetaDataFileSaved && isPatternFileSaved && isMappingFileSaved;
     }
@@ -69,5 +69,32 @@ public class TransformationSaveService implements ITransformationSaveService {
         content.append(transformationFile.getMappingFileName());
 
         return content.toString();
+    }
+
+    /**
+     * appends the location with dirName and fileName and returns the resultant
+     * string as absoluteFilePath
+     * 
+     * @param location
+     * @param dirName
+     * @param fileName
+     * @return
+     */
+    public String getAbsoluteFilePath(String location, String dirName, String fileName) {
+
+        StringBuffer absoluteFilePath = new StringBuffer();
+
+        absoluteFilePath.append(location);
+        absoluteFilePath.append("/");
+        absoluteFilePath.append(dirName);
+        absoluteFilePath.append("/");
+        absoluteFilePath.append(fileName);
+
+        return absoluteFilePath.toString();
+    }
+
+    @Override
+    public String getTransformFileLocation() {
+        return transformationFileManager.getFileLocation();
     }
 }

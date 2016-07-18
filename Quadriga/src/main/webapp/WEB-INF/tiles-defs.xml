@@ -74,14 +74,12 @@
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
+   <!-- checks -->
+   <definition name="check" extends="base.definition.nonav">
+       <put-attribute name="content" value="/WEB-INF/views/checks.jsp" />
+	</definition>
 
-    <!-- checks -->
-    <definition name="check" extends="base.definition.nonav">
-        <put-attribute name="content" value="/WEB-INF/views/checks.jsp" />
-    </definition>
-    
-
-	<!-- Home pages -->
+    <!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.home">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
@@ -790,6 +788,18 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/transformation/uploadTransformation.jsp" />
 	</definition>
+	
+	<definition name ="auth/transformation/statusTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/statusTransformation.jsp" />
+    </definition>
+    
+    <definition name="auth/transformation/successTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/successTransformation.jsp" />
+    </definition>
+	
+	<definition name="auth/transformation/failureTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/failureTransformation.jsp" />
+    </definition>
 
 	<!-- editing -->
 	<definition name="base.definition.editing" extends="base.definition.nonav">

@@ -27,4 +27,21 @@ public interface ITransformationSaveService {
      */
     boolean saveFileToLocal(ITransformationFile transformationFile) throws FileStorageException;
 
+    /**
+     * appends the location with dirName and fileName and returns the resultant
+     * string as absoluteFilePath
+     * 
+     * @param location
+     * @param dirName
+     * @param fileName
+     * @return
+     */
+    public String getAbsoluteFilePath(String location, String dirName, String fileName);
+
+    /**
+     * 
+     * @return location where transformations are stored
+     */
+    public String getTransformFileLocation();
+
 }
