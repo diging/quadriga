@@ -103,7 +103,8 @@ public class TransformationController {
         }
         InputStream inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
         response.setContentLength(result.length());
-        response.setHeader("Content-Disposition", String.format("attachment; filename=" + "TransformationResult"));
+        response.setHeader("Content-Disposition",
+                String.format("attachment; filename=" + "TransformationResult.graphml"));
         FileCopyUtils.copy(inputStream, response.getOutputStream());
 
         return null;
