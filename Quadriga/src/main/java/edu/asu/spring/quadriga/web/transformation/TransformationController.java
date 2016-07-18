@@ -80,8 +80,9 @@ public class TransformationController {
 
         if (future.isDone()) {
             result = future.get();
-            if (result == null)
-                return "auth/failureTransformation";
+            if (result == null) {
+                return "auth/emptyTransformation";
+            }
             return "auth/successTransformation";
         }
         return "auth/statusTransformation";
