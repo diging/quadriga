@@ -66,6 +66,8 @@
         </div>
    </div>
    
+   <form:input type="hidden" path="id" value="${resolver.id}"/>
+   
    <button type="submit" class="btn btn-primary">Update</button>
    <a href="${pageContext.servletContext.contextPath}/auth/resolvers" class="btn btn-default">Cancel</a>
 </form:form>
