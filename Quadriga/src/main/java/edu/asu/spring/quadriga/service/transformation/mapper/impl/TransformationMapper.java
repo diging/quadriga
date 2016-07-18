@@ -19,6 +19,7 @@ public class TransformationMapper implements ITransformationMapper {
     public ITransformationFile getTransformFile(TransformFilesDTO transformFilesDTO) {
 
         TransformationFile transformFile = new TransformationFile();
+        transformFile.setId(transformFilesDTO.getId());
         transformFile.setTitle(transformFilesDTO.getTitle());
         transformFile.setDescription(transformFilesDTO.getDescription());
         transformFile.setPatternFileName(transformFilesDTO.getPatternFileName());
@@ -35,6 +36,7 @@ public class TransformationMapper implements ITransformationMapper {
     public TransformFilesDTO getTransformFilesDTO(ITransformationFile transformationFile) {
 
         TransformFilesDTO transformFilesDTO = new TransformFilesDTO();
+        transformFilesDTO.setId(transformationFile.getId());
         transformFilesDTO.setTitle(transformationFile.getTitle());
         transformFilesDTO.setDescription(transformationFile.getDescription());
         transformFilesDTO.setPatternFileName(transformationFile.getPatternFileName());

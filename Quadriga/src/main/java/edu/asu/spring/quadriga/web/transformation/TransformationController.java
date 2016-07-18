@@ -64,7 +64,7 @@ public class TransformationController {
 
         future = transformProcessor.runTransformationAsync(transformations, networkIdList);
 
-        return "auth/statusTransformation";
+        return "auth/transformation/statusTransformation";
     }
 
     /**
@@ -81,11 +81,11 @@ public class TransformationController {
         if (future.isDone()) {
             result = future.get();
             if (result == null) {
-                return "auth/emptyTransformation";
+                return "auth/transformation/emptyTransformation";
             }
-            return "auth/successTransformation";
+            return "auth/transformation/successTransformation";
         }
-        return "auth/statusTransformation";
+        return "auth/transformation/statusTransformation";
     }
 
     /**
@@ -99,9 +99,9 @@ public class TransformationController {
     @RequestMapping(value = "auth/transformation/result/download")
     public String downloadTransformation(HttpServletResponse response) throws IOException {
 
-        if (result == null)
-            return "auth/failureTransformation";
-
+        if (result == null) {
+            return "auth/transformation/failureTransformation";
+        }
         InputStream inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
         response.setContentLength(result.length());
         response.setHeader("Content-Disposition", String.format("attachment; filename=" + "TransformationResult"));
