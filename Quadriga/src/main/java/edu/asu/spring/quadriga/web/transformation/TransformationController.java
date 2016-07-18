@@ -64,11 +64,11 @@ public class TransformationController {
 
         future = transformProcessor.runTransformationAsync(transformations, networkIdList);
 
-        return "status_transform";
+        return "auth/statusTransformation";
     }
 
     /**
-     * Checks the status of future evenTt, if it's done directs to result page
+     * Checks the status of future event, if it's done directs to result page
      * and if it's not done directs to status page
      * 
      * @return
@@ -80,13 +80,11 @@ public class TransformationController {
 
         if (future.isDone()) {
             result = future.get();
-
             if (result == null)
-                return "failure_transform";
-
-            return "success_transform";
+                return "auth/failureTransformation";
+            return "auth/successTransformation";
         }
-        return "status_transform";
+        return "auth/statusTransformation";
     }
 
     /**
@@ -101,7 +99,7 @@ public class TransformationController {
     public String downloadTransformation(HttpServletResponse response) throws IOException {
 
         if (result == null)
-            return "failure_transform";
+            return "auth/failureTransformation";
 
         InputStream inputStream = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
         response.setContentLength(result.length());

@@ -80,14 +80,14 @@
 	</definition>
 
     <!-- result -->
-    <definition name ="status_transform" extends="base.definition.nonav">
-        <put-attribute name="content" value="/WEB-INF/views/status_transform.jsp" />
+    <definition name ="auth/statusTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/statusTransformation.jsp" />
     </definition>
-    <definition name="success_transform" extends="base.definition.nonav">
-        <put-attribute name="content" value="/WEB-INF/views/success_transform.jsp" />
+    <definition name="auth/successTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/successTransformation.jsp" />
     </definition>
-	<definition name="failure_transform" extends="base.definition.nonav">
-        <put-attribute name="content" value="/WEB-INF/views/failure_transform.jsp" />
+	<definition name="auth/failureTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/failureTransformation.jsp" />
     </definition>
 	
 	<!-- Home pages -->
