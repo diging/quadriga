@@ -12,4 +12,6 @@ public interface IProjectHandleResolverManager {
 
     List<IProjectHandleResolver> getProjectHandleResolvers(String username);
 
+    boolean deleteProjectHandleResolver(IProjectHandleResolver resolver);
+
 }
