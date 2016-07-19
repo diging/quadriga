@@ -275,6 +275,7 @@
 			value="/WEB-INF/views/workbench/editProjectPageURL.jsp" />
 	</definition>
 	
+	
 	<definition name="auth/workbench/resolvers/add"
         extends="base.definition.workbench.nonav">
         <put-attribute name="title"
@@ -282,8 +283,8 @@
         <put-attribute name="content"
             value="/WEB-INF/views/workbench/resolvers/add.jsp" />
     </definition>
-
-	<!-- Add/Update/Delete Project Collaborator START -->
+    
+    <!-- Add/Update/Delete Project Collaborator START -->
 	<definition name="auth/workbench/addcollaborators" extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Project - Add Collaborators" />
@@ -734,6 +735,14 @@
         <put-attribute name="content"
             value="/WEB-INF/views/resolvers/add.jsp" />
     </definition>
+    <definition name="auth/resolvers/edit"
+        extends="base.definition.resolvers">
+        <put-attribute name="title"
+            value="Quadriga Project Handle Resolver" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/resolvers/edit.jsp" />
+    </definition>
+    
    
 
 	<!-- Networks -->
