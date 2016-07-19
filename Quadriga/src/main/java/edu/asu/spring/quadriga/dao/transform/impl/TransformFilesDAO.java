@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.impl.transform;
+package edu.asu.spring.quadriga.dao.transform.impl;
 
 import java.util.List;
 

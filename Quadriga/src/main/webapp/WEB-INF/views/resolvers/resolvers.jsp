@@ -18,6 +18,8 @@ handles of a repository to the URLs of a project website.</p>
 	    <th>Project URL</th>
 	    <th>Handle Pattern</th>
 	    <th>Resolved Handle Pattern</th>
+	    <th>Options</th>
+	    <th>Options</th>
 	</tr>
 
 <c:forEach items="${resolvers}" var="resolver">
@@ -28,10 +30,15 @@ handles of a repository to the URLs of a project website.</p>
         <td>${resolver.handlePattern}</td>
         <td>${resolver.resolvedHandlePattern}</td>
         <td>
-         <form action="${pageContext.servletContext.contextPath}/auth/resolvers/delete" method="POST">
-         <button type="submit" value="${resolver.id}" name="resolverId"  class="btn btn-primary">Delete</button>
-    		</form>
+        <form action="${pageContext.servletContext.contextPath}/auth/resolvers/edit" method="POST">
+         <button type="submit" value="${resolver.id}" name="resolverId"  class="btn btn-primary">Edit</button>
+    	</form>
  		</td>
+ 		<td>
+        <form action="${pageContext.servletContext.contextPath}/auth/resolvers/delete" method="POST">
+        <button type="submit" value="${resolver.id}" name="resolverId"  class="btn btn-primary">Delete</button>
+   		</form>
+   		</td>
     </tr>    
 </c:forEach>
 

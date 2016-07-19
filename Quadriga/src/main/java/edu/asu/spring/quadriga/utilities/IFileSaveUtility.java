@@ -37,4 +37,6 @@ public interface IFileSaveUtility {
      * @throws IOException
      */
     public String readFileContent(String fileName, String dirName) throws FileStorageException;
+
+    public String getFileLocation();
 }
