@@ -66,7 +66,10 @@
         </div>
    </div>
         
+   <button type="submit" name="test" class="btn btn-primary">Test</button>
    <button type="submit" class="btn btn-primary">Create</button>
    <a href="${pageContext.servletContext.contextPath}/auth/resolvers" class="btn btn-default">Cancel</a>
 </form:form>
+        
+        
         

@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tbl_projectresolver")
+@Table(name = "tbl_projectresolver")
 public class ProjectHandleResolverDTO {
 
     @Id
@@ -14,66 +14,90 @@ public class ProjectHandleResolverDTO {
     private String description;
     private String projectUrl;
     private String username;
-    
+
     private String resolvedHandlePattern;
     private String handlePattern;
     private String handleExample;
     private String resolvedHandleExample;
-    
+    private String validation;
+
+    public String getValidation() {
+        return validation;
+    }
+
+    public void setValidation(String validation) {
+        this.validation = validation;
+    }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getProjectName() {
         return projectName;
     }
+
     public void setProjectName(String projectName) {
         this.projectName = projectName;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getProjectUrl() {
         return projectUrl;
     }
+
     public void setProjectUrl(String projectUrl) {
         this.projectUrl = projectUrl;
     }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public String getResolvedHandlePattern() {
         return resolvedHandlePattern;
     }
+
     public void setResolvedHandlePattern(String resolvedHandlePattern) {
         this.resolvedHandlePattern = resolvedHandlePattern;
     }
+
     public String getHandlePattern() {
         return handlePattern;
     }
+
     public void setHandlePattern(String handlePattern) {
         this.handlePattern = handlePattern;
     }
+
     public String getHandleExample() {
         return handleExample;
     }
+
     public void setHandleExample(String handleExample) {
         this.handleExample = handleExample;
     }
+
     public String getResolvedHandleExample() {
         return resolvedHandleExample;
     }
+
     public void setResolvedHandleExample(String resolvedHandleExample) {
         this.resolvedHandleExample = resolvedHandleExample;
-    }    
+    }
 }
-

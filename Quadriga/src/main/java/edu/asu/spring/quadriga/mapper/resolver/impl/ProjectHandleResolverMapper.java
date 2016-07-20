@@ -4,12 +4,13 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 import edu.asu.spring.quadriga.domain.resolver.impl.ProjectHandleResolver;
+import edu.asu.spring.quadriga.domain.resolver.impl.ProjectHandleResolver.STATUS;
 import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
 import edu.asu.spring.quadriga.mapper.resolver.IProjectHandleResolverMapper;
 
 /**
- * This class maps {@link ProjectHandleResolverDTO}s to {@link ProjectHandleResolver}s and the
- * other way around.
+ * This class maps {@link ProjectHandleResolverDTO}s to
+ * {@link ProjectHandleResolver}s and the other way around.
  * 
  * @author jdamerow
  *
@@ -17,13 +18,18 @@ import edu.asu.spring.quadriga.mapper.resolver.IProjectHandleResolverMapper;
 @Service
 public class ProjectHandleResolverMapper implements IProjectHandleResolverMapper {
 
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.mapper.resolver.impl.IProjectHandleResolverMapper#mapProjectHandleResolver(edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.mapper.resolver.impl.IProjectHandleResolverMapper
+     * #mapProjectHandleResolver(edu.asu.spring.quadriga.dto.
+     * ProjectHandleResolverDTO)
      */
     @Override
     public IProjectHandleResolver mapProjectHandleResolver(ProjectHandleResolverDTO dto) {
         IProjectHandleResolver resolver = new ProjectHandleResolver();
-        
+
         resolver.setDescription(dto.getDescription());
         resolver.setHandleExample(dto.getHandleExample());
         resolver.setHandlePattern(dto.getHandlePattern());
@@ -33,17 +39,23 @@ public class ProjectHandleResolverMapper implements IProjectHandleResolverMapper
         resolver.setResolvedHandlePattern(dto.getResolvedHandlePattern());
         resolver.setUsername(dto.getUsername());
         resolver.setResolvedHandleExample(dto.getResolvedHandleExample());
-        
+        resolver.setValidation(STATUS.valueOf(dto.getValidation()));
+
         return resolver;
     }
-    
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.mapper.resolver.impl.IProjectHandleResolverMapper#mapProjectHandleResolver(edu.asu.spring.quadriga.domain.resolver.impl.IProjectHandleResolver)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.mapper.resolver.impl.IProjectHandleResolverMapper
+     * #mapProjectHandleResolver(edu.asu.spring.quadriga.domain.resolver.impl.
+     * IProjectHandleResolver)
      */
     @Override
     public ProjectHandleResolverDTO mapProjectHandleResolver(IProjectHandleResolver resolver) {
         ProjectHandleResolverDTO dto = new ProjectHandleResolverDTO();
-        
+
         dto.setDescription(resolver.getDescription());
         dto.setHandleExample(resolver.getHandleExample());
         dto.setHandlePattern(resolver.getHandlePattern());
@@ -53,7 +65,9 @@ public class ProjectHandleResolverMapper implements IProjectHandleResolverMapper
         dto.setResolvedHandlePattern(resolver.getResolvedHandlePattern());
         dto.setUsername(resolver.getUsername());
         dto.setResolvedHandleExample(resolver.getResolvedHandleExample());
-        
+        dto.setValidation(resolver.getValidation().toString());
+
+        System.out.println(resolver.getValidation().toString());
         return dto;
     }
 }
