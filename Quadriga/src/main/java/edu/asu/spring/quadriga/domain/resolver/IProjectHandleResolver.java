@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.domain.resolver;
 
-import edu.asu.spring.quadriga.domain.resolver.impl.ProjectHandleResolver.STATUS;
-
 public interface IProjectHandleResolver {
 
     String getId();
@@ -42,8 +40,8 @@ public interface IProjectHandleResolver {
 
     String getResolvedHandleExample();
 
-    public STATUS getValidation();
+    public Status getValidation();
 
-    public void setValidation(STATUS validation);
+    public void setValidation(Status failed);
 
 }

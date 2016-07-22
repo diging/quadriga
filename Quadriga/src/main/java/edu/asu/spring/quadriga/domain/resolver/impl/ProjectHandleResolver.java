@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
+import edu.asu.spring.quadriga.domain.resolver.Status;
 
 /**
  * A ProjectHandleResolver describes how original handles referenced in creation
@@ -51,11 +52,7 @@ public class ProjectHandleResolver implements IProjectHandleResolver {
     private String handlePattern;
     private String handleExample;
     private String resolvedHandleExample;
-    private STATUS validation = STATUS.NOT_RUN;
-
-    public enum STATUS {
-        PASSED, FAILED, NOT_RUN
-    }
+    private Status validation = Status.NOT_RUN;
 
     /*
      * (non-Javadoc)
@@ -233,16 +230,6 @@ public class ProjectHandleResolver implements IProjectHandleResolver {
         this.resolvedHandleExample = resolvedHandleExample;
     }
 
-    @Override
-    public STATUS getValidation() {
-        return validation;
-    }
-
-    @Override
-    public void setValidation(STATUS validation) {
-        this.validation = validation;
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -267,5 +254,15 @@ public class ProjectHandleResolver implements IProjectHandleResolver {
         }
 
         return resolvedHandle;
+    }
+
+    @Override
+    public Status getValidation() {
+        return validation;
+    }
+
+    @Override
+    public void setValidation(Status validation) {
+        this.validation = validation;
     }
 }

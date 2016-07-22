@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 import edu.asu.spring.quadriga.domain.resolver.impl.ProjectHandleResolver;
-import edu.asu.spring.quadriga.domain.resolver.impl.ProjectHandleResolver.STATUS;
 import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
 import edu.asu.spring.quadriga.mapper.resolver.IProjectHandleResolverMapper;
 
@@ -39,7 +38,7 @@ public class ProjectHandleResolverMapper implements IProjectHandleResolverMapper
         resolver.setResolvedHandlePattern(dto.getResolvedHandlePattern());
         resolver.setUsername(dto.getUsername());
         resolver.setResolvedHandleExample(dto.getResolvedHandleExample());
-        resolver.setValidation(STATUS.valueOf(dto.getValidation()));
+        resolver.setValidation(dto.getValidation());
 
         return resolver;
     }
@@ -65,9 +64,8 @@ public class ProjectHandleResolverMapper implements IProjectHandleResolverMapper
         dto.setResolvedHandlePattern(resolver.getResolvedHandlePattern());
         dto.setUsername(resolver.getUsername());
         dto.setResolvedHandleExample(resolver.getResolvedHandleExample());
-        dto.setValidation(resolver.getValidation().toString());
+        dto.setValidation(resolver.getValidation());
 
-        System.out.println(resolver.getValidation().toString());
         return dto;
     }
 }

@@ -25,7 +25,7 @@ handles of a repository to the URLs of a project website.</p>
 	    <th>Handle Pattern</th>
 	    <th>Resolved Handle Pattern</th>
 	    <th>Status</th>
-	    <th>Action</th>
+	    <th>Actions</th>
 	    
 	</tr>
 

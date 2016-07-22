@@ -2,7 +2,11 @@ package edu.asu.spring.quadriga.web.resolver;
 
 import java.security.Principal;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +16,11 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
+import edu.asu.spring.quadriga.domain.resolver.Status;
 import edu.asu.spring.quadriga.domain.resolver.impl.ProjectHandleResolver;
 import edu.asu.spring.quadriga.service.resolver.IProjectHandleResolverManager;
 import edu.asu.spring.quadriga.validator.ProjectHandleResolverValidator;
@@ -52,22 +59,25 @@ public class AddResolverController {
         return "redirect:/auth/resolvers";
     }
 
-    @RequestMapping(value = "/auth/resolvers/add", method = RequestMethod.POST, params = "test")
-    public String editPage(Principal principal, Model model,
-            @Validated @ModelAttribute("resolver") ProjectHandleResolver projectHandleResolver,
-            RedirectAttributes redirectAttributes) {
+    @RequestMapping(method = RequestMethod.POST, value = "auth/resolvers/testAdd")
+    public @ResponseBody ResponseEntity<String> testAddPageSuccess(@RequestParam("data") JSONObject data)
+            throws JSONException {
 
-        String resolvedHandle = projectHandleResolver.buildResolvedHandle(projectHandleResolver.getHandleExample());
+        IProjectHandleResolver projectHandleResolver = new ProjectHandleResolver();
 
-        if ((projectHandleResolver.getResolvedHandleExample()).equals(resolvedHandle)) {
-            redirectAttributes.addFlashAttribute("show_success_alert", true);
-            redirectAttributes.addFlashAttribute("success_alert_msg", "Test on Resolver successful.");
+        projectHandleResolver.setProjectName(data.getString("projectName"));
+        projectHandleResolver.setDescription(data.getString("projectDescription"));
+        projectHandleResolver.setProjectUrl(data.getString("projectUrl"));
+        projectHandleResolver.setHandlePattern(data.getString("handlePattern"));
+        projectHandleResolver.setResolvedHandlePattern(data.getString("resolvedHandlePattern"));
+        projectHandleResolver.setHandleExample(data.getString("handleExample"));
+        projectHandleResolver.setResolvedHandleExample(data.getString("resolvedHandleExample"));
+
+        if ((resolverManager.getValidationProjectHandleResolver(projectHandleResolver)) == Status.PASSED) {
+            return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
         } else {
-            redirectAttributes.addFlashAttribute("show_error_alert", true);
-            redirectAttributes.addFlashAttribute("error_alert_msg", "Test on Resolver Unsuccessful.");
+            return new ResponseEntity<String>("FAILURE", HttpStatus.OK);
         }
-
-        return "redirect:/auth/resolvers/add";
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.resolver.IProjectHandleResolverDAO;
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
+import edu.asu.spring.quadriga.domain.resolver.Status;
 import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
 import edu.asu.spring.quadriga.mapper.resolver.IProjectHandleResolverMapper;
 import edu.asu.spring.quadriga.service.resolver.IProjectHandleResolverManager;
@@ -24,16 +25,17 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
 
     @Autowired
     private IProjectHandleResolverDAO resolverDao;
-    
+
     @Autowired
     private IProjectHandleResolverMapper mapper;
-    
-   
+
     /**
      * Saves or updates and object in the database.
      * 
-     * @param resolver The project handle resolver to save or update.
-     * @param username The username of the user that created the resolver.
+     * @param resolver
+     *            The project handle resolver to save or update.
+     * @param username
+     *            The username of the user that created the resolver.
      */
     @Override
     @Transactional
@@ -43,32 +45,49 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
             resolver.setId(id);
             resolver.setUsername(username);
         }
-        
+
         ProjectHandleResolverDTO resolverDto = mapper.mapProjectHandleResolver(resolver);
         resolverDao.saveOrUpdateDTO(resolverDto);
-        
+
         return true;
     }
-    
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.service.resolver.impl.IProjectHandleResolverManager#getProjectHandleResolver(java.lang.String)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see edu.asu.spring.quadriga.service.resolver.impl.
+     * IProjectHandleResolverManager#getProjectHandleResolver(java.lang.String)
      */
     @Override
     public IProjectHandleResolver getProjectHandleResolver(String id) {
         ProjectHandleResolverDTO dto = resolverDao.getDTO(id);
         return mapper.mapProjectHandleResolver(dto);
     }
-    
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.service.resolver.impl.IProjectHandleResolverManager#getProjectHandleResolvers(java.lang.String)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see edu.asu.spring.quadriga.service.resolver.impl.
+     * IProjectHandleResolverManager#getProjectHandleResolvers(java.lang.String)
      */
     @Override
     public List<IProjectHandleResolver> getProjectHandleResolvers(String username) {
         List<ProjectHandleResolverDTO> resolverDtos = resolverDao.getProjectResolversForUser(username);
-        
+
         List<IProjectHandleResolver> resolvers = new ArrayList<IProjectHandleResolver>();
         resolverDtos.forEach(dto -> resolvers.add(mapper.mapProjectHandleResolver(dto)));
-        
+
         return resolvers;
+    }
+
+    @Override
+    public Status getValidationProjectHandleResolver(IProjectHandleResolver resolver) {
+
+        String resolvedHandle = resolver.buildResolvedHandle(resolver.getHandleExample());
+        if ((resolver.getResolvedHandleExample()).equals(resolvedHandle)) {
+            return Status.PASSED;
+        } else {
+            return Status.FAILED;
+        }
     }
 }

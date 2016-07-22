@@ -1,8 +1,12 @@
 package edu.asu.spring.quadriga.dto;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import edu.asu.spring.quadriga.domain.resolver.Status;
 
 @Entity
 @Table(name = "tbl_projectresolver")
@@ -19,13 +23,14 @@ public class ProjectHandleResolverDTO {
     private String handlePattern;
     private String handleExample;
     private String resolvedHandleExample;
-    private String validation;
+    @Enumerated(EnumType.STRING)
+    private Status validation;
 
-    public String getValidation() {
+    public Status getValidation() {
         return validation;
     }
 
-    public void setValidation(String validation) {
+    public void setValidation(Status validation) {
         this.validation = validation;
     }
 
