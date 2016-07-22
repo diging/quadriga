@@ -89,6 +89,11 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
     @Transactional
     public boolean deleteProjectHandleResolver(IProjectHandleResolver resolver) {
 
+        if (resolverDao.getProjectsForResolverId(resolver.getId()).size() > 0) {
+            throw new RuntimeException("resolver cannot be deleted as it is being used by project");
+        }
+        ;
+
         ProjectHandleResolverDTO resolverDto = mapper.mapProjectHandleResolver(resolver);
         resolverDao.deleteDTO(resolverDto);
 

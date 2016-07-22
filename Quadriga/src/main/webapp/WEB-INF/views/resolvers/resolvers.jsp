@@ -30,14 +30,27 @@ handles of a repository to the URLs of a project website.</p>
         <td>${resolver.handlePattern}</td>
         <td>${resolver.resolvedHandlePattern}</td>
         <td>
+        </td>
+        
+        <td>
         <form action="${pageContext.servletContext.contextPath}/auth/resolvers/edit" method="POST">
-         <button type="submit" value="${resolver.id}" name="resolverId"  class="btn btn-primary">Edit</button>
-    	</form>
- 		</td>
- 		<td>
-        <form action="${pageContext.servletContext.contextPath}/auth/resolvers/delete" method="POST">
-        <button type="submit" value="${resolver.id}" name="resolverId"  class="btn btn-primary">Delete</button>
+        <button type="submit" title="Edit Resolver" value="${resolver.id}" name="resolverId">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+        </button>
    		</form>
+   		
+   		<form action="${pageContext.servletContext.contextPath}/auth/resolvers/test" method="POST">
+        <button type="submit" title="Test Resolver" value="${resolver.id}" name="resolverId">
+        <i class="fa fa-check-square" aria-hidden="true"></i>
+        </button>
+   		</form>
+   		
+   		<form action="${pageContext.servletContext.contextPath}/auth/resolvers/delete" method="POST">
+        <button type="submit" title="Delete Resolver" value="${resolver.id}" name="resolverId">
+        <span class="glyphicon glyphicon-remove"></span>
+        </button>
+   		</form>
+   		
    		</td>
     </tr>    
 </c:forEach>
