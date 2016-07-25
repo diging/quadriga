@@ -1,19 +1,23 @@
 package edu.asu.spring.quadriga.web.resolver;
 
 import java.security.Principal;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.service.resolver.IProjectHandleResolverManager;
 
 /**
- * This controller handles the deletion of project handle resolver
+ * This controller handles the deletion of project handle resolver.
  * 
  * @author yoganandakishore
  *
@@ -24,11 +28,21 @@ public class DeleteResolverController {
     @Autowired
     private IProjectHandleResolverManager resolverManager;
 
-    @RequestMapping(value = "/auth/resolvers/delete", method = RequestMethod.POST)
-    public String preparePage(Principal principal, Model model, @RequestParam("resolverId") String resolverId) {
+    @Autowired
+    private MessageSource messageSource;
+
+    @RequestMapping(value = "/auth/resolvers/{resolverId}/delete", method = RequestMethod.POST)
+    public String preparePage(Principal principal, Model model, @RequestParam("resolverId") String resolverId,
+            RedirectAttributes redirectAttributes, Locale locale) {
 
         IProjectHandleResolver projectHandleResolver = resolverManager.getProjectHandleResolver(resolverId);
-        resolverManager.deleteProjectHandleResolver(projectHandleResolver);
+        try {
+            resolverManager.deleteProjectHandleResolver(projectHandleResolver);
+        } catch (QuadrigaException e) {
+            redirectAttributes.addFlashAttribute("show_error_alert", true);
+            redirectAttributes.addFlashAttribute("error_alert_msg",
+                    messageSource.getMessage("resolver.delete_failure", new Object[] {}, locale));
+        }
         return "redirect:/auth/resolvers";
     }
 }

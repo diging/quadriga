@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.resolver;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 
 public interface IProjectHandleResolverManager {
 
@@ -12,6 +13,6 @@ public interface IProjectHandleResolverManager {
 
     List<IProjectHandleResolver> getProjectHandleResolvers(String username);
 
-    boolean deleteProjectHandleResolver(IProjectHandleResolver resolver);
+    boolean deleteProjectHandleResolver(IProjectHandleResolver resolver) throws QuadrigaException;
 
 }

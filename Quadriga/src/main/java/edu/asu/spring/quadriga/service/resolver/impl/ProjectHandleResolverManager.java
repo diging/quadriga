@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.resolver.IProjectHandleResolverDAO;
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.mapper.resolver.IProjectHandleResolverMapper;
 import edu.asu.spring.quadriga.service.resolver.IProjectHandleResolverManager;
 
@@ -80,19 +81,21 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
     }
 
     /**
-     * deletes the resolver object from the database
+     * Checks whether the given resolver is used by any project and if it's
+     * true, throws exception indicating the error. If no project is using the
+     * resolver, then the resolver is deleted from the database.
      * 
      * @param resolver
      *            The project handle resolver to delete.
+     * @throws QuadrigaException
      */
     @Override
     @Transactional
-    public boolean deleteProjectHandleResolver(IProjectHandleResolver resolver) {
+    public boolean deleteProjectHandleResolver(IProjectHandleResolver resolver) throws QuadrigaException {
 
         if (resolverDao.getProjectsForResolverId(resolver.getId()).size() > 0) {
-            throw new RuntimeException("resolver cannot be deleted as it is being used by project");
+            throw new QuadrigaException("resolver cannot be deleted as it is being used by project");
         }
-        ;
 
         ProjectHandleResolverDTO resolverDto = mapper.mapProjectHandleResolver(resolver);
         resolverDao.deleteDTO(resolverDto);

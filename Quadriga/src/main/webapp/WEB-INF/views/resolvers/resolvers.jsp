@@ -1,5 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<style>
+form { display: inline; }
+</style>
 
 <h2>Project Handle Resolvers</h2>
 
@@ -19,7 +22,6 @@ handles of a repository to the URLs of a project website.</p>
 	    <th>Handle Pattern</th>
 	    <th>Resolved Handle Pattern</th>
 	    <th>Options</th>
-	    <th>Options</th>
 	</tr>
 
 <c:forEach items="${resolvers}" var="resolver">
@@ -29,9 +31,6 @@ handles of a repository to the URLs of a project website.</p>
         <td>${resolver.projectUrl}</td>
         <td>${resolver.handlePattern}</td>
         <td>${resolver.resolvedHandlePattern}</td>
-        <td>
-        </td>
-        
         <td>
         <form action="${pageContext.servletContext.contextPath}/auth/resolvers/edit" method="POST">
         <button type="submit" title="Edit Resolver" value="${resolver.id}" name="resolverId">
@@ -45,7 +44,7 @@ handles of a repository to the URLs of a project website.</p>
         </button>
    		</form>
    		
-   		<form action="${pageContext.servletContext.contextPath}/auth/resolvers/delete" method="POST">
+   		<form action="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/delete" method="POST">
         <button type="submit" title="Delete Resolver" value="${resolver.id}" name="resolverId">
         <span class="glyphicon glyphicon-remove"></span>
         </button>
