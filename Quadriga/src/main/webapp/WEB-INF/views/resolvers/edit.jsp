@@ -41,8 +41,6 @@ function performAction(obj) {
 			$(".input-group-addon").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
         },
         success : function(data,status) {
-			console.log(data);
-			console.log(status);
 			handleResult(data);
 		},
 		error : function(e) {

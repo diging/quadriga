@@ -51,7 +51,7 @@ handles of a repository to the URLs of a project website.</p>
         </td>
         
         <td>
-        <form action="${pageContext.servletContext.contextPath}/auth/resolvers/edit" method="POST">
+        <form action="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/edit" method="POST">
         <button type="submit" title="Edit Resolver" value="${resolver.id}" name="resolverId">
         <i class="fa fa-cog" aria-hidden="true"></i>
         </button>

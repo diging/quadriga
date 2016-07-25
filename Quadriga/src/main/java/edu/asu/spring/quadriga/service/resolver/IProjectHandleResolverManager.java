@@ -13,6 +13,16 @@ public interface IProjectHandleResolverManager {
 
     List<IProjectHandleResolver> getProjectHandleResolvers(String username);
 
-    Status getValidationProjectHandleResolver(IProjectHandleResolver resolver);
+    /**
+     * HandleExample of project handle resolver is validated and the result of
+     * validation is returned.
+     * 
+     * @param resolver
+     * @param setResolverValidation
+     *            If it's true, the result of validation should be set as
+     *            validation field of resolver, otherwise not
+     * @return Status
+     */
+    Status validateProjectResolverHandle(IProjectHandleResolver resolver, boolean setResolverValidation);
 
 }

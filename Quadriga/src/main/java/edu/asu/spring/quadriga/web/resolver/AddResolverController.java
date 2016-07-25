@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 import edu.asu.spring.quadriga.domain.resolver.Status;
@@ -60,8 +59,7 @@ public class AddResolverController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "auth/resolvers/testAdd")
-    public @ResponseBody ResponseEntity<String> testAddPageSuccess(@RequestParam("data") JSONObject data)
-            throws JSONException {
+    public ResponseEntity<String> testAddPageSuccess(@RequestParam("data") JSONObject data) throws JSONException {
 
         IProjectHandleResolver projectHandleResolver = new ProjectHandleResolver();
 
@@ -73,7 +71,7 @@ public class AddResolverController {
         projectHandleResolver.setHandleExample(data.getString("handleExample"));
         projectHandleResolver.setResolvedHandleExample(data.getString("resolvedHandleExample"));
 
-        if ((resolverManager.getValidationProjectHandleResolver(projectHandleResolver)) == Status.PASSED) {
+        if (resolverManager.validateProjectResolverHandle(projectHandleResolver, false) == Status.PASSED) {
             return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("FAILURE", HttpStatus.OK);

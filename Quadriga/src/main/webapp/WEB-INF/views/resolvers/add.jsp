@@ -4,14 +4,12 @@
 <script>
 	
 $(function() {
-	$("#testAdd").click(function(){
-		performAction(this)
-		});
+	$("#testAdd").click(function(){performAction(this)});
 });
 
 function handleResult(status){
 	
-	if (status == "SUCCESS") {
+   	if (status == "SUCCESS") {
 	$(".input-group-addon").html('<i class="fa fa-check-circle"></i>');
 	} else if (status == "FAILURE") {
 	$(".input-group-addon").html('<i class="fa fa-times"></i>');	
@@ -41,8 +39,7 @@ function performAction(obj) {
 			$(".input-group-addon").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
         },
         success : function(data,status) {
-			console.log($("#handlePattern").closest("div").html());
-        	handleResult(data);
+			handleResult(data);
 		},
 		error : function(e) {
 			console.log("ERROR: ", e.responseText);

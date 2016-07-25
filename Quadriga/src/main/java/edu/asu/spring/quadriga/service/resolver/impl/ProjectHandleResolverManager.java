@@ -81,13 +81,30 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
     }
 
     @Override
-    public Status getValidationProjectHandleResolver(IProjectHandleResolver resolver) {
+    public Status validateProjectResolverHandle(IProjectHandleResolver resolver, boolean setResolverValidation) {
 
         String resolvedHandle = resolver.buildResolvedHandle(resolver.getHandleExample());
         if ((resolver.getResolvedHandleExample()).equals(resolvedHandle)) {
+            setResolverStatus(resolver, setResolverValidation, Status.PASSED);
             return Status.PASSED;
         } else {
+            setResolverStatus(resolver, setResolverValidation, Status.FAILED);
             return Status.FAILED;
         }
     }
+
+    /**
+     * If setResolverValidation is true, validation is set, otherwise not.
+     * 
+     * @param resolver
+     * @param setResolverValidation
+     * @param status
+     */
+    private void setResolverStatus(IProjectHandleResolver resolver, boolean setResolverValidation, Status status) {
+
+        if (setResolverValidation == true) {
+            resolver.setValidation(status);
+        }
+    }
+
 }

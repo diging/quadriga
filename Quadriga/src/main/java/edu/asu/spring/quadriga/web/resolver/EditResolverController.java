@@ -39,7 +39,7 @@ public class EditResolverController {
         binder.setValidator(validator);
     }
 
-    @RequestMapping(value = "/auth/resolvers/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth/resolvers/{resolverId}/edit", method = RequestMethod.POST)
     public String editPage(Principal principal, Model model, @RequestParam("resolverId") String resolverId) {
 
         IProjectHandleResolver projectHandleResolver = resolverManager.getProjectHandleResolver(resolverId);
@@ -66,15 +66,12 @@ public class EditResolverController {
 
         IProjectHandleResolver projectHandleResolver = new ProjectHandleResolver();
 
-        projectHandleResolver.setProjectName(data.getString("projectName"));
-        projectHandleResolver.setDescription(data.getString("projectDescription"));
-        projectHandleResolver.setProjectUrl(data.getString("projectUrl"));
         projectHandleResolver.setHandlePattern(data.getString("handlePattern"));
         projectHandleResolver.setResolvedHandlePattern(data.getString("resolvedHandlePattern"));
         projectHandleResolver.setHandleExample(data.getString("handleExample"));
         projectHandleResolver.setResolvedHandleExample(data.getString("resolvedHandleExample"));
 
-        if ((resolverManager.getValidationProjectHandleResolver(projectHandleResolver)) == Status.PASSED) {
+        if (resolverManager.validateProjectResolverHandle(projectHandleResolver, false) == Status.PASSED) {
             return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("FAILURE", HttpStatus.OK);
