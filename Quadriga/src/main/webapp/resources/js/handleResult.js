@@ -1,8 +1,8 @@
 function handleResult(status) {
     if (status == "SUCCESS") {
-    $(".input-group-addon").html('<i class="fa fa-check-circle"></i>');
+        $(".input-group-addon").html('<i class="fa fa-check-circle"></i>');
     } else if (status == "FAILURE") {
-    $(".input-group-addon").html('<i class="fa fa-times"></i>');
+        $(".input-group-addon").html('<i class="fa fa-times"></i>');
     }
 }
 
@@ -18,19 +18,19 @@ function performAction(obj) {
 
     $
     .ajax({
-    type : "POST",
-    url : "/quadriga/auth/resolvers/check",
-    data : {
-    data : JSON.stringify(data)
-    },
-    beforeSend : function() {
-        $(".input-group-addon").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
-    },
-    success : function(data, status) {
-        handleResult(data);
-    },
-    error : function(e) {
-        console.log("ERROR: ", e.responseText);
-    }
+        type : "POST",
+        url : "/quadriga/auth/resolvers/check",
+        data : {
+            data : JSON.stringify(data)
+        },
+        beforeSend : function() {
+            $(".input-group-addon").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+        },
+        success : function(data, status) {
+            handleResult(data);
+        },
+        error : function(e) {
+            console.log("ERROR: ", e.responseText);
+        }
     });
 }
