@@ -19,22 +19,21 @@ function performAction(obj) {
 	data['resolvedHandleExample'] = $('#resolvedHandleExample').val();
 
 	$
-			.ajax({
-				type : "POST",
-				url : "/quadriga/auth/resolvers/check",
-				data : {
-					data : JSON.stringify(data)
-				},
-				beforeSend : function() {
-					$(".input-group-addon")
-							.html(
-									'<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
-				},
-				success : function(data, status) {
-					handleResult(data);
-				},
-				error : function(e) {
-					console.log("ERROR: ", e.responseText);
-				}
-			});
+	.ajax({
+	type : "POST",
+	url : "/quadriga/auth/resolvers/check",
+	data : {
+	data : JSON.stringify(data)
+	},
+	beforeSend : function() {
+	$(".input-group-addon")
+	.html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+	},
+	success : function(data, status) {
+	handleResult(data);
+	},
+	error : function(e) {
+	console.log("ERROR: ", e.responseText);
+	}
+	});
 }
