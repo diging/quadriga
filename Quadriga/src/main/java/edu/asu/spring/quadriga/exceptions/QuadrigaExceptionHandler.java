@@ -33,7 +33,7 @@ public class QuadrigaExceptionHandler {
         modelAndView.setViewName("auth/notImplemented");
         modelAndView.addObject("ex_name", ex.getClass().getName());
         modelAndView.addObject("ex_message", ex.getMessage());
-        // logger.error(ex.getMessage(), ex);
+        logger.error(ex.getMessage(), ex);
         return modelAndView;
     }
 

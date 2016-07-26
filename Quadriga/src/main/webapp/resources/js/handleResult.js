@@ -1,9 +1,9 @@
 function handleResult(status) {
 
 	if (status == "SUCCESS") {
-		$(".input-group-addon").html('<i class="fa fa-check-circle"></i>');
+	$(".input-group-addon").html('<i class="fa fa-check-circle"></i>');
 	} else if (status == "FAILURE") {
-		$(".input-group-addon").html('<i class="fa fa-times"></i>');
+	$(".input-group-addon").html('<i class="fa fa-times"></i>');
 	}
 }
 
