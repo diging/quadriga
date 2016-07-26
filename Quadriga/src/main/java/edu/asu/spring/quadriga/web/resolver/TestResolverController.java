@@ -43,7 +43,6 @@ public class TestResolverController {
                     messageSource.getMessage("resolver.validate_failure", new Object[] {}, locale));
         }
 
-        resolverManager.saveProjectHandleResolver(projectHandleResolver, projectHandleResolver.getUsername());
         return "redirect:/auth/resolvers";
     }
 }

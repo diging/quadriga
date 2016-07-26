@@ -19,7 +19,7 @@ public interface IProjectHandleResolverManager {
      * 
      * @param resolver
      * @param setResolverValidation
-     *            If it's true, the result of validation should be set as
+     *            If it's true, the result of validation is assigned to
      *            validation field of resolver, otherwise not
      * @return Status
      */

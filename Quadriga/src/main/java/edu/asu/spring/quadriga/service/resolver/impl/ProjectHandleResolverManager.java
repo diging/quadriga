@@ -87,8 +87,10 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
 
         Status status = (resolver.getResolvedHandleExample()).equals(resolvedHandle) ? Status.PASSED : Status.FAILED;
 
-        if (setResolverValidation)
+        if (setResolverValidation) {
             resolver.setValidation(status);
+            saveProjectHandleResolver(resolver, resolver.getUsername());
+        }
 
         return status;
     }

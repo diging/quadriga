@@ -18,10 +18,9 @@ function performAction(obj) {
 	data['handleExample'] = $('#handleExample').val();
 	data['resolvedHandleExample'] = $('#resolvedHandleExample').val();
 	
-	$
-	.ajax({
+	$.ajax({
  	type : "POST",
-	url : "/quadriga/auth/resolvers/check",
+	url  : "/quadriga/auth/resolvers/check",
 	data : {
 	data : JSON.stringify(data)
 	},
