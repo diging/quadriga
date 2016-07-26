@@ -1,54 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
+<script src="${pageContext.servletContext.contextPath}/resources/js/handleResult.js"></script>
+
 <script>
-	
+
 $(function() {
-	$("#testEdit").click(function(){
-		performAction(this)
-		});
+	$("#testEdit").click(function(){performAction(this)});
 });
 
-function handleResult(status){
-	
-	if (status == "SUCCESS") {
-	$(".input-group-addon").html('<i class="fa fa-check-circle"></i>');
-	} else if (status == "FAILURE") {
-	$(".input-group-addon").html('<i class="fa fa-times"></i>');	
-	}
-	
-}
-
-function performAction(obj) {
-	
-	var data = {};
-	data['projectName'] = $("#projectName").val();
-	data['projectDescription'] = $('#projectDescription').val();
-	data['projectUrl'] = $('#projectUrl').val();
-	data['handlePattern'] = $('#handlePattern').val();
-	data['resolvedHandlePattern'] = $('#resolvedHandlePattern').val();
-	data['handleExample'] = $('#handleExample').val();
-	data['resolvedHandleExample'] = $('#resolvedHandleExample').val();
-	
-	$
-	.ajax({
-		type : "POST",
-		url : "${pageContext.servletContext.contextPath}/auth/resolvers/testEdit",
-		data : {
-			data : JSON.stringify(data)
-		},
-		beforeSend: function() {
-			$(".input-group-addon").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
-        },
-        success : function(data,status) {
-			handleResult(data);
-		},
-		error : function(e) {
-			console.log("ERROR: ", e.responseText);
-		}
-	});
-}
-	
 </script>
 
 <h2>Edit new Project Handle Resolver</h2>

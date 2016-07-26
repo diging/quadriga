@@ -2,11 +2,7 @@ package edu.asu.spring.quadriga.web.resolver;
 
 import java.security.Principal;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +12,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
-import edu.asu.spring.quadriga.domain.resolver.Status;
 import edu.asu.spring.quadriga.domain.resolver.impl.ProjectHandleResolver;
 import edu.asu.spring.quadriga.service.resolver.IProjectHandleResolverManager;
 import edu.asu.spring.quadriga.validator.ProjectHandleResolverValidator;
@@ -56,26 +49,6 @@ public class AddResolverController {
         resolverManager.saveProjectHandleResolver(resolver, principal.getName());
 
         return "redirect:/auth/resolvers";
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "auth/resolvers/testAdd")
-    public ResponseEntity<String> testAddPageSuccess(@RequestParam("data") JSONObject data) throws JSONException {
-
-        IProjectHandleResolver projectHandleResolver = new ProjectHandleResolver();
-
-        projectHandleResolver.setProjectName(data.getString("projectName"));
-        projectHandleResolver.setDescription(data.getString("projectDescription"));
-        projectHandleResolver.setProjectUrl(data.getString("projectUrl"));
-        projectHandleResolver.setHandlePattern(data.getString("handlePattern"));
-        projectHandleResolver.setResolvedHandlePattern(data.getString("resolvedHandlePattern"));
-        projectHandleResolver.setHandleExample(data.getString("handleExample"));
-        projectHandleResolver.setResolvedHandleExample(data.getString("resolvedHandleExample"));
-
-        if (resolverManager.validateProjectResolverHandle(projectHandleResolver, false) == Status.PASSED) {
-            return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<String>("FAILURE", HttpStatus.OK);
-        }
     }
 
 }

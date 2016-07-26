@@ -60,7 +60,7 @@ public class EditResolverController {
         return "redirect:/auth/resolvers";
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "auth/resolvers/testEdit")
+    @RequestMapping(method = RequestMethod.POST, value = "auth/resolvers/check")
     public @ResponseBody ResponseEntity<String> testEditPageSuccess(@RequestParam("data") JSONObject data)
             throws JSONException {
 
