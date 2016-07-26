@@ -94,7 +94,7 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
     public boolean deleteProjectHandleResolver(IProjectHandleResolver resolver) throws QuadrigaException {
 
         if (resolverDao.getProjectsForResolverId(resolver.getId()).size() > 0) {
-            throw new QuadrigaException("resolver cannot be deleted as it is being used by project");
+            throw new QuadrigaException("The given resolver cannot be deleted as it is being used by Project.");
         }
 
         ProjectHandleResolverDTO resolverDto = mapper.mapProjectHandleResolver(resolver);
