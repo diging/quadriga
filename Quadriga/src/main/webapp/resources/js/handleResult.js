@@ -24,8 +24,7 @@ function performAction(obj) {
     data : JSON.stringify(data)
     },
     beforeSend : function() {
-    $(".input-group-addon")
-    .html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+    $(".input-group-addon").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
     },
     success : function(data, status) {
     handleResult(data);
