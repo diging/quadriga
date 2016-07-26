@@ -31,14 +31,14 @@
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
 		<textfiles.location></textfiles.location>
-		<transformationfiles.location></transformationfiles.location>
-		<email.host></email.host>
-		<email.port></email.port>
-		<email.username></email.username>
-		<email.pw></email.pw>
-		<email.from></email.from>
+		<transformationfiles.location>/Users/yoganandakishore/transformationFiles</transformationfiles.location>
+		<email.host>abcd@gmail.com</email.host>
+		<email.port>25</email.port>
+		<email.username>yyk</email.username>
+		<email.pw>asdf</email.pw>
+		<email.from>asdf@gmail.com</email.from>
 		<email.enabled>true</email.enabled>
-		<quadriga.baseurl></quadriga.baseurl>
+		<quadriga.baseurl>abcd@email.com</quadriga.baseurl>
 	</properties>
 
 	<dependencies>

@@ -33,7 +33,7 @@ public class QuadrigaExceptionHandler {
         modelAndView.setViewName("auth/notImplemented");
         modelAndView.addObject("ex_name", ex.getClass().getName());
         modelAndView.addObject("ex_message", ex.getMessage());
-        logger.error(ex.getMessage(), ex);
+        // logger.error(ex.getMessage(), ex);
         return modelAndView;
     }
 
@@ -58,13 +58,13 @@ public class QuadrigaExceptionHandler {
         logger.error(ex.getMessage(), ex);
         return modelAndView;
     }
-    
+
     @ExceptionHandler(value = { Quadriga404Exception.class })
     public ModelAndView handle404Exception(Quadriga404Exception ex) {
         ModelAndView modelAndView = new ModelAndView("auth/404");
         modelAndView.addObject("ex_msg", ex.getMessage());
         logger.error(ex.getMessage(), ex);
-        return modelAndView;        
+        return modelAndView;
     }
 
 }
