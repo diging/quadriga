@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.resolver;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
+import edu.asu.spring.quadriga.domain.resolver.Status;
 
 public interface IProjectHandleResolverManager {
 
@@ -13,5 +14,17 @@ public interface IProjectHandleResolverManager {
     List<IProjectHandleResolver> getProjectHandleResolvers(String username);
 
     boolean deleteProjectHandleResolver(IProjectHandleResolver resolver);
+
+    /**
+     * HandleExample of project handle resolver is validated and the result of
+     * validation is returned.
+     * 
+     * @param resolver
+     * @param setResolverValidation
+     *            If it's true, the result of validation is assigned to
+     *            validation field of resolver, otherwise not
+     * @return Status
+     */
+    Status validateProjectResolverHandle(IProjectHandleResolver resolver, boolean setResolverValidation);
 
 }

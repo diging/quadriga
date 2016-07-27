@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.resolver.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.resolver.IProjectHandleResolverDAO;
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
+import edu.asu.spring.quadriga.domain.resolver.Status;
 import edu.asu.spring.quadriga.dto.ProjectHandleResolverDTO;
 import edu.asu.spring.quadriga.mapper.resolver.IProjectHandleResolverMapper;
 import edu.asu.spring.quadriga.service.resolver.IProjectHandleResolverManager;
@@ -99,5 +101,27 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
         resolverDao.deleteDTO(resolverDto);
 
         return true;
+    }
+
+    @Transactional
+    @Override
+    public Status validateProjectResolverHandle(IProjectHandleResolver resolver, boolean setResolverValidation) {
+
+        String resolvedHandle;
+
+        try {
+            resolvedHandle = resolver.buildResolvedHandle(resolver.getHandleExample());
+        } catch (PatternSyntaxException e) {
+            return Status.FAILED;
+        }
+
+        Status status = (resolver.getResolvedHandleExample()).equals(resolvedHandle) ? Status.PASSED : Status.FAILED;
+
+        if (setResolverValidation) {
+            resolver.setValidation(status);
+            saveProjectHandleResolver(resolver, resolver.getUsername());
+        }
+
+        return status;
     }
 }

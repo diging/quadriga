@@ -1,6 +1,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
+<script src="${pageContext.servletContext.contextPath}/resources/js/handleResult.js"></script>
+
+<script>
+
+$(function() {
+	$("#testEdit").click(function(){performAction(this,this.id,'${pageContext.servletContext.contextPath}')});
+});
+
+</script>
 
 <h2>Edit new Project Handle Resolver</h2>
 
@@ -37,10 +46,20 @@
    <div class="form-group">
         <label for="handlePattern" class="col-sm-3 control-label control-label-left">Handle Pattern *</label>
         <div class="col-sm-9">
-           <form:input class="form-control" id="handlePattern" path="handlePattern"/>
+        <div class="input-group">
+           <form:input type="text" class="form-control" id="handlePattern" path="handlePattern" placeholder="e.g. (/[0-9]+/[0-9]+$)" />
+           <span class="input-group-btn">
+           <button class="btn btn-primary" type="button" id="testEdit">
+						<i class="fa fa-question" aria-hidden="true"></i>
+					</button>
+           </span>
+         </div>
+         <div>
            <form:errors path="handlePattern" class="error"></form:errors>
         </div>
+        </div>
    </div>
+
    
    <div class="form-group">
         <label for="resolvedHandlePattern" class="col-sm-3 control-label control-label-left">Resolved Handle Pattern *</label>
@@ -50,7 +69,7 @@
         </div>
    </div>
    
-    <div class="form-group">
+     <div class="form-group">
         <label for="resolvedHandlePattern" class="col-sm-3 control-label control-label-left">Handle Example *</label>
         <div class="col-sm-9">
            <form:input class="form-control" id="handleExample" path="handleExample"/>
@@ -68,8 +87,8 @@
    
    <form:input type="hidden" path="id" value="${resolver.id}"/>
    <form:input type="hidden" path="username" value="${resolver.username}"/>
-   
-   <button type="submit" class="btn btn-primary">Update</button>
+   <form:input type="hidden" path="validation" value="${resolver.validation}"/>
+   <button type="submit" class="btn btn-primary">Edit</button>
    <a href="${pageContext.servletContext.contextPath}/auth/resolvers" class="btn btn-default">Cancel</a>
 </form:form>
         
