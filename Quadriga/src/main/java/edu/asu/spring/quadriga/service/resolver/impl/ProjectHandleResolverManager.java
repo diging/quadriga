@@ -80,6 +80,7 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
         return resolvers;
     }
 
+    @Transactional
     @Override
     public Status validateProjectResolverHandle(IProjectHandleResolver resolver, boolean setResolverValidation) {
 

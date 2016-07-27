@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,8 +40,8 @@ public class EditResolverController {
         binder.setValidator(validator);
     }
 
-    @RequestMapping(value = "/auth/resolvers/{resolverId}/edit", method = RequestMethod.POST)
-    public String editPage(Principal principal, Model model, @RequestParam("resolverId") String resolverId) {
+    @RequestMapping(value = "/auth/resolvers/{resolverId}/edit", method = RequestMethod.GET)
+    public String editPage(Principal principal, Model model, @PathVariable("resolverId") String resolverId) {
 
         IProjectHandleResolver projectHandleResolver = resolverManager.getProjectHandleResolver(resolverId);
         model.addAttribute("resolver", projectHandleResolver);
