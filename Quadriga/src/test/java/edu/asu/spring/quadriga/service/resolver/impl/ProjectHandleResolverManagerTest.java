@@ -82,7 +82,7 @@ public class ProjectHandleResolverManagerTest {
      */
 
     @Test(expected = QuadrigaException.class)
-    public void deleteProjectHandleResolverProjectUsingResolverTest() throws QuadrigaException {
+    public void deleteProjectHandleResolverThrowExceptionTest() throws QuadrigaException {
 
         // Creating dummyId
         String id = "456";

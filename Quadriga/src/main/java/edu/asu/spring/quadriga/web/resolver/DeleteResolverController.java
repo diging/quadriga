@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
-import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.service.resolver.IProjectHandleResolverManager;
 
 /**
@@ -36,9 +35,8 @@ public class DeleteResolverController {
             RedirectAttributes redirectAttributes, Locale locale) {
 
         IProjectHandleResolver projectHandleResolver = resolverManager.getProjectHandleResolver(resolverId);
-        try {
-            resolverManager.deleteProjectHandleResolver(projectHandleResolver);
-        } catch (QuadrigaException e) {
+
+        if (!resolverManager.deleteProjectHandleResolver(projectHandleResolver)) {
             redirectAttributes.addFlashAttribute("show_error_alert", true);
             redirectAttributes.addFlashAttribute("error_alert_msg",
                     messageSource.getMessage("resolver.delete_failure", new Object[] {}, locale));
