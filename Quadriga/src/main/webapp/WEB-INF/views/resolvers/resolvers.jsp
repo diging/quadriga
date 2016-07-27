@@ -40,7 +40,7 @@ handles of a repository to the URLs of a project website.</p>
         <i class="fa fa-check-square" aria-hidden="true"></i>
         </a>
         
-   		<a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/delete">
+   		<a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/delete" title="Delete Resolver">
         <i class="fa fa-times" aria-hidden="true"></i>
         </a>
         

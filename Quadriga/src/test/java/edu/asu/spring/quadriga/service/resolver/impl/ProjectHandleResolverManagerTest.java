@@ -76,13 +76,14 @@ public class ProjectHandleResolverManagerTest {
      * {@link IProjectHandleResolverManager#deleteProjectHandleResolver(resolver)}
      * method responsible for deleting the resolver from the database.
      * 
-     * when there is a project using the resolver
+     * when there is a project using the resolver, thus cannot delete the
+     * resolver
      * 
      * @throws QuadrigaException
      */
 
-    @Test(expected = QuadrigaException.class)
-    public void deleteProjectHandleResolverThrowExceptionTest() throws QuadrigaException {
+    @Test
+    public void deleteProjectHandleResolverCannotDeleteTest() throws QuadrigaException {
 
         // Creating dummyId
         String id = "456";
@@ -98,7 +99,8 @@ public class ProjectHandleResolverManagerTest {
         // calling the method to test
         Mockito.when(resolverDao.getProjectsForResolverId(id)).thenReturn(projectDTOList);
 
-        projectHandleResolverManagerUnderTest.deleteProjectHandleResolver(resolver);
+        boolean deleteStatus = projectHandleResolverManagerUnderTest.deleteProjectHandleResolver(resolver);
+        assertEquals(deleteStatus, false);
     }
 
 }
