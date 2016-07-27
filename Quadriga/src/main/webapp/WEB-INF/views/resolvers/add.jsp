@@ -6,7 +6,7 @@
 <script>
 
 $(function() {
-	$("#testAdd").click(function(){performAction(this)});
+	$("#testAdd").click(function(){performAction(this,this.id);});
 });
 
 </script>
@@ -48,9 +48,12 @@ $(function() {
         <div class="col-sm-9">
         <div class="input-group">
            <form:input type="text" class="form-control" id="handlePattern" path="handlePattern" placeholder="e.g. (/[0-9]+/[0-9]+$)" />
-           <span class="input-group-addon">
-           </span>
-         </div>
+         	<span class="input-group-btn">
+           <button class="btn btn-primary" type="button" id="testAdd">
+						<i class="fa fa-check-square" aria-hidden="true"></i>
+					</button>
+           </span>  
+        </div>
          <div>
            <form:errors path="handlePattern" class="error"></form:errors>
         </div>
@@ -81,9 +84,6 @@ $(function() {
         </div>
    </div>
       
-   <button type="button" id="testAdd" class="btn btn-primary">
-    <i class="fa fa-check-square" aria-hidden="true"></i>
-   </button>     
    <button type="submit" class="btn btn-primary">Create</button>
    <a href="${pageContext.servletContext.contextPath}/auth/resolvers" class="btn btn-default">Cancel</a>
 </form:form>

@@ -6,7 +6,7 @@
 <script>
 
 $(function() {
-	$("#testEdit").click(function(){performAction(this)});
+	$("#testEdit").click(function(){performAction(this,this.id)});
 });
 
 </script>
@@ -48,7 +48,10 @@ $(function() {
         <div class="col-sm-9">
         <div class="input-group">
            <form:input type="text" class="form-control" id="handlePattern" path="handlePattern" placeholder="e.g. (/[0-9]+/[0-9]+$)" />
-           <span class="input-group-addon">
+           <span class="input-group-btn">
+           <button class="btn btn-primary" type="button" id="testEdit">
+						<i class="fa fa-check-square" aria-hidden="true"></i>
+					</button>
            </span>
          </div>
          <div>
@@ -66,7 +69,7 @@ $(function() {
         </div>
    </div>
    
-    <div class="form-group">
+     <div class="form-group">
         <label for="resolvedHandlePattern" class="col-sm-3 control-label control-label-left">Handle Example *</label>
         <div class="col-sm-9">
            <form:input class="form-control" id="handleExample" path="handleExample"/>
@@ -84,11 +87,8 @@ $(function() {
    
    <form:input type="hidden" path="id" value="${resolver.id}"/>
    <form:input type="hidden" path="username" value="${resolver.username}"/>
-   
-   <button type="button" id="testEdit" class="btn btn-primary">
-   		<i class="fa fa-check-square" aria-hidden="true"></i>
-   </button>
-   <button type="submit" class="btn btn-primary">Create</button>
+   <form:input type="hidden" path="validation" value="${resolver.validation}"/>
+   <button type="submit" class="btn btn-primary">Edit</button>
    <a href="${pageContext.servletContext.contextPath}/auth/resolvers" class="btn btn-default">Cancel</a>
 </form:form>
         

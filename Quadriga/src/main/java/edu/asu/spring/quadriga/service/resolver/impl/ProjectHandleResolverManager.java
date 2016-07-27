@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.resolver.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,7 +85,13 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
     @Override
     public Status validateProjectResolverHandle(IProjectHandleResolver resolver, boolean setResolverValidation) {
 
-        String resolvedHandle = resolver.buildResolvedHandle(resolver.getHandleExample());
+        String resolvedHandle;
+
+        try {
+            resolvedHandle = resolver.buildResolvedHandle(resolver.getHandleExample());
+        } catch (PatternSyntaxException e) {
+            return Status.FAILED;
+        }
 
         Status status = (resolver.getResolvedHandleExample()).equals(resolvedHandle) ? Status.PASSED : Status.FAILED;
 
