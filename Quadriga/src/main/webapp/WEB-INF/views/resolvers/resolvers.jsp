@@ -39,22 +39,22 @@ handles of a repository to the URLs of a project website.</p>
         <td>
         <c:choose>
     	<c:when test="${resolver.validation eq 'PASSED'}">
-        <i class="fa fa-check" aria-hidden="true"></i>
+        <i title="Validation Status" class="fa fa-check" aria-hidden="true"></i>
     	</c:when>
     	<c:when test="${resolver.validation eq 'FAILED'}">
-        <i class="fa fa-times" aria-hidden="true"></i>
+        <i title="Validation Status" class="fa fa-times" aria-hidden="true"></i>
     	</c:when>
     	<c:otherwise>
-        <i class="fa fa-question" aria-hidden="true"></i>
+        <i title="Validation Status" class="fa fa-question" aria-hidden="true"></i>
     	</c:otherwise>
 		</c:choose>
         </td>
         <td>
-        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/edit">
+        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/edit" title="Edit Resolver">
         <i class="fa fa-cog" aria-hidden="true"></i>
         </a>
         
-        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/test">
+        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/test" title="Test Resolver">
         <i class="fa fa-check-square" aria-hidden="true"></i>
         </a>
         </td>
