@@ -32,25 +32,19 @@ handles of a repository to the URLs of a project website.</p>
         <td>${resolver.handlePattern}</td>
         <td>${resolver.resolvedHandlePattern}</td>
         <td>
-        <form action="${pageContext.servletContext.contextPath}/auth/resolvers/edit" method="POST">
-        <button type="submit" title="Edit Resolver" value="${resolver.id}" name="resolverId">
+        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/edit">
         <i class="fa fa-cog" aria-hidden="true"></i>
-        </button>
-   		</form>
-   		
-   		<form action="${pageContext.servletContext.contextPath}/auth/resolvers/test" method="POST">
-        <button type="submit" title="Test Resolver" value="${resolver.id}" name="resolverId">
+        </a>
+        
+        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/test">
         <i class="fa fa-check-square" aria-hidden="true"></i>
-        </button>
-   		</form>
-   		
-   		<form action="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/delete" method="POST">
-        <button type="submit" title="Delete Resolver" value="${resolver.id}" name="resolverId">
-        <span class="glyphicon glyphicon-remove"></span>
-        </button>
-   		</form>
-   		
-   		</td>
+        </a>
+        
+   		<a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/delete">
+        <i class="fa fa-times" aria-hidden="true"></i>
+        </a>
+        
+    	</td>
     </tr>    
 </c:forEach>
 
