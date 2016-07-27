@@ -6,7 +6,7 @@ function handleResult(status, id) {
     }
 }
 
-function performAction(obj, id) {
+function performAction(obj, id, contextPath) {
     var data = {};
     data['projectName'] = $("#projectName").val();
     data['projectDescription'] = $('#projectDescription').val();
@@ -15,11 +15,11 @@ function performAction(obj, id) {
     data['resolvedHandlePattern'] = $('#resolvedHandlePattern').val();
     data['handleExample'] = $('#handleExample').val();
     data['resolvedHandleExample'] = $('#resolvedHandleExample').val();
-
+    
     $
     .ajax({
         type : "POST",
-        url : "/quadriga/auth/resolvers/check",
+        url :  contextPath + '/auth/resolvers/check',
         data : {
             data : JSON.stringify(data)
         },

@@ -6,7 +6,7 @@
 <script>
 
 $(function() {
-	$("#testAdd").click(function(){performAction(this,this.id);});
+	$("#testAdd").click(function(){performAction(this,this.id,'${pageContext.servletContext.contextPath}');});
 });
 
 </script>
@@ -50,7 +50,7 @@ $(function() {
            <form:input type="text" class="form-control" id="handlePattern" path="handlePattern" placeholder="e.g. (/[0-9]+/[0-9]+$)" />
          	<span class="input-group-btn">
            <button class="btn btn-primary" type="button" id="testAdd">
-						<i class="fa fa-check-square" aria-hidden="true"></i>
+						<i class="fa fa-question" aria-hidden="true"></i>
 					</button>
            </span>  
         </div>
