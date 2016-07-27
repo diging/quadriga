@@ -58,13 +58,13 @@ public class QuadrigaExceptionHandler {
         logger.error(ex.getMessage(), ex);
         return modelAndView;
     }
-    
+
     @ExceptionHandler(value = { Quadriga404Exception.class })
     public ModelAndView handle404Exception(Quadriga404Exception ex) {
         ModelAndView modelAndView = new ModelAndView("auth/404");
         modelAndView.addObject("ex_msg", ex.getMessage());
         logger.error(ex.getMessage(), ex);
-        return modelAndView;        
+        return modelAndView;
     }
 
 }

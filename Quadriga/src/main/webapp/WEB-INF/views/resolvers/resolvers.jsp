@@ -1,5 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<style>
+form
+{
+    display: inline-block;
+}
+</style>
 
 <h2>Project Handle Resolvers</h2>
 
@@ -18,7 +24,9 @@ handles of a repository to the URLs of a project website.</p>
 	    <th>Project URL</th>
 	    <th>Handle Pattern</th>
 	    <th>Resolved Handle Pattern</th>
-	    <th>Options</th>
+	    <th>Status</th>
+	    <th>Actions</th>
+	    
 	</tr>
 
 <c:forEach items="${resolvers}" var="resolver">
@@ -29,11 +37,29 @@ handles of a repository to the URLs of a project website.</p>
         <td>${resolver.handlePattern}</td>
         <td>${resolver.resolvedHandlePattern}</td>
         <td>
-        <form action="${pageContext.servletContext.contextPath}/auth/resolvers/edit" method="POST">
-        <button type="submit" value="${resolver.id}" name="resolverId"  class="btn btn-primary">Edit</button>
-   		</form>
-   		</td>
+        <c:choose>
+    	<c:when test="${resolver.validation eq 'PASSED'}">
+        <i title="Validation Status" class="fa fa-check" aria-hidden="true"></i>
+    	</c:when>
+    	<c:when test="${resolver.validation eq 'FAILED'}">
+        <i title="Validation Status" class="fa fa-times" aria-hidden="true"></i>
+    	</c:when>
+    	<c:otherwise>
+        <i title="Validation Status" class="fa fa-question" aria-hidden="true"></i>
+    	</c:otherwise>
+		</c:choose>
+        </td>
+        <td>
+        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/edit" title="Edit Resolver">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+        </a>
+        
+        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/test" title="Test Resolver">
+        <i class="fa fa-check-square" aria-hidden="true"></i>
+        </a>
+        </td>
     </tr>    
 </c:forEach>
 
 </table>
+

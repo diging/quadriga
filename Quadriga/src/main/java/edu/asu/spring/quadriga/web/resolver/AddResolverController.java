@@ -50,4 +50,5 @@ public class AddResolverController {
 
         return "redirect:/auth/resolvers";
     }
+
 }
