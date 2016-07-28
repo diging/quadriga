@@ -40,7 +40,12 @@ public class DeleteResolverController {
             redirectAttributes.addFlashAttribute("show_error_alert", true);
             redirectAttributes.addFlashAttribute("error_alert_msg",
                     messageSource.getMessage("resolver.delete_failure", new Object[] {}, locale));
+        } else {
+            redirectAttributes.addFlashAttribute("show_success_alert", true);
+            redirectAttributes.addFlashAttribute("success_alert_msg",
+                    messageSource.getMessage("resolver.delete_success", new Object[] {}, locale));
         }
+
         return "redirect:/auth/resolvers";
     }
 }
