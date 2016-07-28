@@ -81,6 +81,28 @@ public class ProjectHandleResolverManager implements IProjectHandleResolverManag
         return resolvers;
     }
 
+    /**
+     * Checks whether the given resolver is used by any project and if it's
+     * true, returns false. If no project is using the resolver, then the
+     * resolver is deleted from the database.
+     * 
+     * @param resolver
+     *            The project handle resolver to delete.
+     */
+    @Override
+    @Transactional
+    public boolean deleteProjectHandleResolver(IProjectHandleResolver resolver) {
+
+        if (resolverDao.getProjectsForResolverId(resolver.getId()).size() > 0) {
+            return false;
+        }
+
+        ProjectHandleResolverDTO resolverDto = mapper.mapProjectHandleResolver(resolver);
+        resolverDao.deleteDTO(resolverDto);
+
+        return true;
+    }
+
     @Transactional
     @Override
     public Status validateProjectResolverHandle(IProjectHandleResolver resolver, boolean setResolverValidation) {

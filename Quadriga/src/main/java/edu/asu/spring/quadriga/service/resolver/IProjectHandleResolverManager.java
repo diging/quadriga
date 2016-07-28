@@ -13,6 +13,8 @@ public interface IProjectHandleResolverManager {
 
     List<IProjectHandleResolver> getProjectHandleResolvers(String username);
 
+    boolean deleteProjectHandleResolver(IProjectHandleResolver resolver);
+
     /**
      * HandleExample of project handle resolver is validated and the result of
      * validation is returned.

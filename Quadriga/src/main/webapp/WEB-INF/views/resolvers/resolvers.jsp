@@ -1,12 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<style>
-form
-{
-    display: inline-block;
-}
-</style>
-
 <h2>Project Handle Resolvers</h2>
 
 <p>This a list of all the project handle resolvers you have registered. A project handle resolvers 
@@ -56,6 +49,10 @@ handles of a repository to the URLs of a project website.</p>
         
         <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/test" title="Test Resolver">
         <i class="fa fa-check-square" aria-hidden="true"></i>
+        </a>
+        
+        <a href="${pageContext.servletContext.contextPath}/auth/resolvers/${resolver.id}/delete" title="Delete Resolver">
+        <i class="fa fa-times" aria-hidden="true"></i>
         </a>
         </td>
     </tr>    
