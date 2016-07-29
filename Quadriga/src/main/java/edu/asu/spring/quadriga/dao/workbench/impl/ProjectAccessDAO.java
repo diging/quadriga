@@ -16,7 +16,7 @@ public class ProjectAccessDAO extends BaseDAO<ProjectDTO> implements IProjectAcc
     @Autowired
     private SessionFactory sessionFactory;
 
-    public static final Logger logger = LoggerFactory.getLogger(ProjectAccessDAO.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProjectAccessDAO.class);
 
     /**
      * {@inheritDoc}
