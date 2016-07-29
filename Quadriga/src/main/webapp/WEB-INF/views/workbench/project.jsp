@@ -95,6 +95,7 @@
 			</div>
 		</c:forEach>
 
+		<c:if test="${editoraccess != '1'}">
 		<c:forEach var="workspace" items="${collabworkspacelist}">
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -106,6 +107,7 @@
 				</div>
 			</div>
 		</c:forEach>
+		</c:if>
 
 
 		<div style="float: right;">

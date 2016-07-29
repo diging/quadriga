@@ -125,8 +125,8 @@ public class ModifyProjectCollaboratorController {
     public ModelAndView updateCollaboratorRequest(
             @Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
             BindingResult result, @ProjectIdentifier @PathVariable("projectid") String projectid,
-            @InjectProject IProject project, Principal principal) throws QuadrigaStorageException,
-            QuadrigaAccessException {
+            @InjectProject IProject project, Principal principal)
+            throws QuadrigaStorageException, QuadrigaAccessException {
 
         // create model view
         ModelAndView model = new ModelAndView("auth/workbench/updatecollaborators");
@@ -168,7 +168,7 @@ public class ModifyProjectCollaboratorController {
                 model.getModelMap().put("myprojectid", projectid);
 
                 model.getModelMap().addAttribute("show_success_alert", true);
-                model.getModelMap().addAttribute("success_alert_msg", "Collaborator successfully added.");
+                model.getModelMap().addAttribute("success_alert_msg", "Collaborator successfully updated.");
             }
         }
 

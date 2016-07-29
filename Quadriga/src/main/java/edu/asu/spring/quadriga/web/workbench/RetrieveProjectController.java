@@ -36,7 +36,7 @@ public class RetrieveProjectController {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
-    
+
     @Autowired
     private IPassThroughProjectManager passThroughManager;
 
@@ -129,11 +129,12 @@ public class RetrieveProjectController {
 
         return model;
     }
-    
+
     @RequestMapping(value = "auth/workbench/projects/{extId:[0-9a-zA-Z-_]+}+{client:[0-9a-zA-Z-]+}", method = RequestMethod.GET)
-    public String getProjectByExternalId(@PathVariable String extId, @PathVariable String client) throws QuadrigaStorageException {
+    public String getProjectByExternalId(@PathVariable String extId, @PathVariable String client)
+            throws QuadrigaStorageException {
         IProject project = passThroughManager.getPassthroughProject(extId, client);
-        if (project == null) { 
+        if (project == null) {
             return "auth/404";
         }
         return "redirect:/auth/workbench/projects/" + project.getProjectId();
@@ -145,7 +146,7 @@ public class RetrieveProjectController {
     @RequestMapping(value = "auth/workbench/projects/{projectid:[0-9a-zA-Z-_]+}", method = RequestMethod.GET)
     public String getProjectDetails(@PathVariable("projectid") String projectid, Principal principal, Model model)
             throws QuadrigaStorageException, NoSuchRoleException, QuadrigaAccessException {
-      
+
         String userName = principal.getName();
         IProject project = projectManager.getProjectDetails(projectid);
 
@@ -173,34 +174,16 @@ public class RetrieveProjectController {
         } else {
             model.addAttribute("owner", 0);
         }
-        if (projectSecurity.isEditor(userName, projectid)) {
+        if (projectSecurity.isEditor(userName, RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR, projectid)) {
             model.addAttribute("editoraccess", 1);
         } else {
             model.addAttribute("editoraccess", 0);
         }
-        if (projectSecurity.isCollaborator(userName, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, project.getProjectId())) {
+        if (projectSecurity.isCollaborator(userName, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, projectid)) {
             model.addAttribute("isProjectAdmin", true);
         } else {
             model.addAttribute("isProjectAdmin", false);
         }
         return "auth/workbench/project";
     }
-
-    /*
-     * @RequestMapping(value="sites/{ProjectUnixName}",
-     * method=RequestMethod.GET) public String
-     * showProject(@PathVariable("ProjectUnixName") String unixName,Model model)
-     * throws QuadrigaStorageException {
-     * 
-     * 
-     * 
-     * IProject project = projectManager.getProjectDetailsByUnixName(unixName);
-     * if(project!=null){
-     * 
-     * model.addAttribute("project", project); return "website"; } else return
-     * "forbidden";
-     * 
-     * 
-     * }
-     */
 }
