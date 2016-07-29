@@ -14,9 +14,6 @@ public interface IProjectSecurityChecker {
     public abstract boolean isUserCollaboratorOnProject(String userName, String projectId, String collaboratorRole)
             throws QuadrigaStorageException;
 
-    public abstract boolean isEditor(String userName, String collaboratorRole, String projectId)
-            throws QuadrigaStorageException, NoSuchRoleException;
-
     public abstract boolean isCollaborator(String userName, String collaboratorRole, String projectId)
             throws QuadrigaStorageException, NoSuchRoleException;
 

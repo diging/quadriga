@@ -95,20 +95,29 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
     }
 
     /**
-     * This method checks if the user is project owner
+     * This method checks if the user has the specified collaboratorRole on the
+     * project
      * 
      * @param userName
-     * @return boolean - TRUE if the user is project owner else FALSE
+     * @param collaboratorRole
+     * @param projectId
+     * @return boolean - TRUE if the user has specified collaboratorRole else
+     *         FALSE
      * @throws QuadrigaStorageException
      * @author kiranbatna
      * @throws NoSuchRoleException
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker#
+     * isCollaborator(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
     @Transactional
     public boolean isCollaborator(String userName, String collaboratorRole, String projectId)
             throws QuadrigaStorageException, NoSuchRoleException {
-        IQuadrigaRole role = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES,
-                RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
+        IQuadrigaRole role = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, collaboratorRole);
 
         if (role == null) {
             throw new NoSuchRoleException("The role " + collaboratorRole + " does not exist.");
@@ -183,30 +192,6 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
             chkAccess = this.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN);
         }
         return chkAccess;
-    }
-
-    /**
-     * This method checks if the user has the editor role to this Project
-     * 
-     * @param userName
-     * @return boolean - TRUE if the user is editor on the project; otherwise
-     *         false
-     * @throws QuadrigaStorageException
-     * @author kiranbatna
-     * @throws NoSuchRoleException
-     */
-    @Override
-    @Transactional
-    public boolean isEditor(String userName, String collaboratorRole, String projectId)
-            throws QuadrigaStorageException, NoSuchRoleException {
-        // check if the user is project editor
-        IQuadrigaRole role = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES,
-                RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR);
-
-        if (role == null) {
-            throw new NoSuchRoleException("The role " + collaboratorRole + " does not exist.");
-        }
-        return accessManager.isUserEditorOfProject(userName, role.getDBid(), projectId) > 0;
     }
 
     @Override

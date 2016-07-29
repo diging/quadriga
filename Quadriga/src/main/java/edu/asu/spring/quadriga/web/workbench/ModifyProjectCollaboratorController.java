@@ -4,10 +4,12 @@ import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,7 +35,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -49,9 +50,6 @@ public class ModifyProjectCollaboratorController {
     private IModifyCollaboratorFormFactory collaboratorFactory;
 
     @Autowired
-    private IRetrieveProjectManager projectDetailsManager;
-
-    @Autowired
     private IQuadrigaRoleManager roleManager;
 
     @Autowired
@@ -59,6 +57,9 @@ public class ModifyProjectCollaboratorController {
 
     @Autowired
     private ModifyCollaboratorFormManager collaboratorManager;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @InitBinder("collaboratorform")
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder)
@@ -121,11 +122,12 @@ public class ModifyProjectCollaboratorController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/{projectid}/updatecollaborators", method = RequestMethod.POST)
+
     @InjectProjectById
     public ModelAndView updateCollaboratorRequest(
             @Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
             BindingResult result, @ProjectIdentifier @PathVariable("projectid") String projectid,
-            @InjectProject IProject project, Principal principal)
+            @InjectProject IProject project, Principal principal, Locale locale)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         // create model view
@@ -147,7 +149,8 @@ public class ModifyProjectCollaboratorController {
             // retrieve the project details
 
             model.getModelMap().addAttribute("show_error_alert", true);
-            model.getModelMap().addAttribute("error_alert_msg", "Could not add collaborator.");
+            model.getModelMap().addAttribute("error_alert_msg",
+                    messageSource.getMessage("collaborators.add.failure", new Object[] {}, locale));
             // add the model map
 
         } else {
@@ -168,7 +171,8 @@ public class ModifyProjectCollaboratorController {
                 model.getModelMap().put("myprojectid", projectid);
 
                 model.getModelMap().addAttribute("show_success_alert", true);
-                model.getModelMap().addAttribute("success_alert_msg", "Collaborator successfully updated.");
+                model.getModelMap().addAttribute("success_alert_msg",
+                        messageSource.getMessage("collaborators.success.update", new Object[] {}, locale));
             }
         }
 

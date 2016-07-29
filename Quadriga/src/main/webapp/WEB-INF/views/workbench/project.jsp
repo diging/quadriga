@@ -95,7 +95,7 @@
 			</div>
 		</c:forEach>
 
-		<c:if test="${editoraccess != '1'}">
+		<c:if test="${editoraccess != '1' || owner == '1' || isProjectAdmin || isProjectContributor}">
 		<c:forEach var="workspace" items="${collabworkspacelist}">
 			<div class="panel panel-default">
 				<div class="panel-body">
