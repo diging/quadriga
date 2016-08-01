@@ -26,6 +26,15 @@ public interface IProjectSecurityChecker {
 
     public abstract boolean isUnixnameInUse(String unixName, String projectId) throws QuadrigaStorageException;
 
+    /**
+     * The ID's of roles of a user are used as keys in HashMap. HashMap is
+     * initialized with role ID's as keys, values as false. For the roles user
+     * has on a project, the values are assigned to true. HashMap is returned.
+     * 
+     * @param userName
+     * @param projectId
+     * @return Map
+     */
     public abstract Map<String, Boolean> getCollaboratorRoles(String userName, String projectId);
 
 }

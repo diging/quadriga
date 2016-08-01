@@ -202,6 +202,12 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
         return accessManager.getProjectIdByUnixName(unixName) != null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker#
+     * getCollaboratorRoles(java.lang.String, java.lang.String)
+     */
     @Override
     public Map<String, Boolean> getCollaboratorRoles(String userName, String projectId) {
         Map<String, Boolean> collaboratorRolesMap = new HashMap<String, Boolean>();

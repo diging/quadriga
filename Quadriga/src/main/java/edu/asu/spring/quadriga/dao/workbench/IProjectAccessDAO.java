@@ -64,6 +64,14 @@ public interface IProjectAccessDAO {
      */
     public int getNrOfProjectsCollaboratingOn(String userName, String collaboratorRole) throws QuadrigaStorageException;
 
+    /**
+     * This method is used to get list of collaborator roles for a user on
+     * project.
+     * 
+     * @param userName
+     * @param projectId
+     * @return List of roles a user has on a project
+     */
     public List<String> getProjectCollaboratorRoles(String userName, String projectId);
 
 }
