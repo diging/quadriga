@@ -1,6 +1,8 @@
 package edu.asu.spring.quadriga.accesschecks.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,7 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
      */
     @Override
     @Transactional
-    public boolean checkQudrigaAdmin(String userName) throws QuadrigaStorageException {
+    public boolean checkQuadrigaAdmin(String userName) throws QuadrigaStorageException {
         boolean chkAccess;
         IUser user;
         List<IQuadrigaRole> quadrigaRoles;
@@ -198,5 +200,22 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
     @Transactional
     public boolean isUnixnameInUse(String unixName, String projectId) throws QuadrigaStorageException {
         return accessManager.getProjectIdByUnixName(unixName) != null;
+    }
+
+    @Override
+    public Map<String, Boolean> getCollaboratorRoles(String userName, String projectId) {
+        Map<String, Boolean> collaboratorRolesMap = new HashMap<String, Boolean>();
+        collaboratorRolesMap.put(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, false);
+        collaboratorRolesMap.put(RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, false);
+        collaboratorRolesMap.put(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR, false);
+
+        List<String> userDBRoles = accessManager.getProjectCollaboratorRoles(userName, projectId);
+
+        for (int i = 0; i < userDBRoles.size(); i++) {
+            collaboratorRolesMap.put(
+                    roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.PROJECT_ROLES, userDBRoles.get(i)).getId(),
+                    true);
+        }
+        return collaboratorRolesMap;
     }
 }

@@ -1,11 +1,14 @@
 package edu.asu.spring.quadriga.dao.workbench.impl;
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectAccessDAO;
@@ -81,23 +84,23 @@ public class ProjectAccessDAO extends BaseDAO<ProjectDTO> implements IProjectAcc
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int isUserEditorOfProject(String userName, String collaboratorRole, String projectId) {
-        Query query = sessionFactory.getCurrentSession().createQuery(
-                "SELECT count(pc.collaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.collaboratorDTOPK.collaboratoruser =:userName AND pc.collaboratorDTOPK.collaboratorrole =:collaboratorRole AND pc.collaboratorDTOPK.projectid =:projectId");
-        query.setParameter("userName", userName);
-        query.setParameter("collaboratorRole", collaboratorRole);
-        query.setParameter("projectId", projectId);
-
-        return ((Number) query.uniqueResult()).intValue();
-    }
-
     @Override
     public ProjectDTO getDTO(String id) {
         return getDTO(ProjectDTO.class, id);
+    }
+
+    @Transactional
+    @Override
+    public List<String> getProjectCollaboratorRoles(String userName, String projectId) {
+        // TODO Auto-generated method stub
+        Query query = sessionFactory.getCurrentSession().createQuery(
+                "SELECT pc.collaboratorDTOPK.collaboratorrole FROM ProjectCollaboratorDTO pc WHERE pc.collaboratorDTOPK.collaboratoruser =:userName AND pc.collaboratorDTOPK.projectid =:projectId");
+        query.setParameter("userName", userName);
+        query.setParameter("projectId", projectId);
+
+        List<String> userCollaboratorRoles = query.list();
+        System.out.println(query.list());
+        return userCollaboratorRoles;
     }
 
 }

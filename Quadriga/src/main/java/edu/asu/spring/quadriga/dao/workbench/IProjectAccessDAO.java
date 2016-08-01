@@ -1,21 +1,10 @@
 package edu.asu.spring.quadriga.dao.workbench;
 
+import java.util.List;
+
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IProjectAccessDAO {
-
-    /**
-     * This method checks if the user has editor role for the given project
-     * 
-     * @param userName
-     * @param collaboratorRole
-     * @param projectId
-     * @return true - if the user has editor role for the given project. false -
-     *         if the user does not have editor role for the given project.
-     * @throws QuadrigaStorageException
-     */
-    public int isUserEditorOfProject(String userName, String collaboratorRole, String projectId)
-            throws QuadrigaStorageException;
 
     /**
      * This method checks if the Unix name for a project already exists in the
@@ -74,5 +63,7 @@ public interface IProjectAccessDAO {
      * @throws QuadrigaStorageException
      */
     public int getNrOfProjectsCollaboratingOn(String userName, String collaboratorRole) throws QuadrigaStorageException;
+
+    public List<String> getProjectCollaboratorRoles(String userName, String projectId);
 
 }

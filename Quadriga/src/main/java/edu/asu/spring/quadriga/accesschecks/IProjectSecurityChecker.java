@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.accesschecks;
 
+import java.util.Map;
+
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -9,7 +11,7 @@ public interface IProjectSecurityChecker {
 
     public abstract boolean isProjectOwner(String userName, String projectId) throws QuadrigaStorageException;
 
-    public abstract boolean checkQudrigaAdmin(String userName) throws QuadrigaStorageException;
+    public abstract boolean checkQuadrigaAdmin(String userName) throws QuadrigaStorageException;
 
     public abstract boolean isUserCollaboratorOnProject(String userName, String projectId, String collaboratorRole)
             throws QuadrigaStorageException;
@@ -23,5 +25,7 @@ public interface IProjectSecurityChecker {
             throws QuadrigaStorageException;
 
     public abstract boolean isUnixnameInUse(String unixName, String projectId) throws QuadrigaStorageException;
+
+    public abstract Map<String, Boolean> getCollaboratorRoles(String userName, String projectId);
 
 }
