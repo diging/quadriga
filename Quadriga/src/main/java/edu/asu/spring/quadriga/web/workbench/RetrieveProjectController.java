@@ -169,24 +169,24 @@ public class RetrieveProjectController {
         model.addAttribute("deactivatedWSSize", deactivatedWSSize);
         model.addAttribute("archivedWSSize", archivedWSSize);
 
-        Map<String, Boolean> collaboratorRoles = projectSecurity.getCollaboratorRoles(userName, projectid);
+        List<String> collaboratorRoles = projectSecurity.getCollaboratorRoles(userName, projectid);
 
         if (projectSecurity.isProjectOwner(userName, projectid)) {
             model.addAttribute("owner", 1);
         } else {
             model.addAttribute("owner", 0);
         }
-        if (collaboratorRoles.get(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR)) {
-            model.addAttribute("editoraccess", 1);
+        if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR)) {
+            model.addAttribute("isProjectEditor", true);
         } else {
-            model.addAttribute("editoraccess", 0);
+            model.addAttribute("isProjectEditor", false);
         }
-        if (collaboratorRoles.get(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)) {
+        if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)) {
             model.addAttribute("isProjectAdmin", true);
         } else {
             model.addAttribute("isProjectAdmin", false);
         }
-        if (collaboratorRoles.get(RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR)) {
+        if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR)) {
             model.addAttribute("isProjectContributor", true);
         } else {
             model.addAttribute("isProjectContributor", false);

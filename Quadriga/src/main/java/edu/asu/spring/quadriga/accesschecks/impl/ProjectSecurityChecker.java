@@ -1,8 +1,7 @@
 package edu.asu.spring.quadriga.accesschecks.impl;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -209,19 +208,15 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
      * getCollaboratorRoles(java.lang.String, java.lang.String)
      */
     @Override
-    public Map<String, Boolean> getCollaboratorRoles(String userName, String projectId) {
-        Map<String, Boolean> collaboratorRolesMap = new HashMap<String, Boolean>();
-        collaboratorRolesMap.put(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, false);
-        collaboratorRolesMap.put(RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR, false);
-        collaboratorRolesMap.put(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR, false);
-
+    public List<String> getCollaboratorRoles(String userName, String projectId) {
         List<String> userDBRoles = accessManager.getProjectCollaboratorRoles(userName, projectId);
+        List<String> collaboratorRoles = new ArrayList<String>();
 
         for (int i = 0; i < userDBRoles.size(); i++) {
-            collaboratorRolesMap.put(
-                    roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.PROJECT_ROLES, userDBRoles.get(i)).getId(),
-                    true);
+            collaboratorRoles.add(
+                    roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.PROJECT_ROLES, userDBRoles.get(i)).getId());
         }
-        return collaboratorRolesMap;
+
+        return collaboratorRoles;
     }
 }

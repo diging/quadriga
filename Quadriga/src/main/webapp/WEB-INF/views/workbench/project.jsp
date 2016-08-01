@@ -58,7 +58,7 @@
 					href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/transfer/">Change</a>)</c:if>
 		</div>
 
-		<c:if test="${owner=='1' and editoraccess=='0' }">
+		<c:if test="${owner=='1' and isProjectEditor }">
 			<img
 				src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses-no.png"> You are not an Editor on this Project 
                         (<a
@@ -68,7 +68,7 @@
                         
                     </c:if>
 
-		<c:if test="${owner=='1' and editoraccess=='1' }">
+		<c:if test="${owner=='1' and isProjectEditor }">
 			<img
 				src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses.png"> You are an Editor on this Project
                     (<a

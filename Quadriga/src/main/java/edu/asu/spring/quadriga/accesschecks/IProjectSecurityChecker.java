@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.accesschecks;
 
-import java.util.Map;
+import java.util.List;
 
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -27,14 +27,14 @@ public interface IProjectSecurityChecker {
     public abstract boolean isUnixnameInUse(String unixName, String projectId) throws QuadrigaStorageException;
 
     /**
-     * The ID's of roles of a user are used as keys in HashMap. HashMap is
-     * initialized with role ID's as keys, values as false. For the roles user
-     * has on a project, the values are assigned to true. HashMap is returned.
+     * For the user, user's roles on the project are retrieved from the
+     * database. For each of these roles, respective id's are stored in a list
+     * and that list is returned.
      * 
      * @param userName
      * @param projectId
      * @return Map
      */
-    public abstract Map<String, Boolean> getCollaboratorRoles(String userName, String projectId);
+    public abstract List<String> getCollaboratorRoles(String userName, String projectId);
 
 }
