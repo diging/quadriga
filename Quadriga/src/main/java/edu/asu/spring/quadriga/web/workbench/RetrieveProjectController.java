@@ -172,9 +172,9 @@ public class RetrieveProjectController {
         List<String> collaboratorRoles = projectSecurity.getCollaboratorRoles(userName, projectid);
 
         if (projectSecurity.isProjectOwner(userName, projectid)) {
-            model.addAttribute("owner", 1);
+            model.addAttribute("owner", true);
         } else {
-            model.addAttribute("owner", 0);
+            model.addAttribute("owner", false);
         }
         if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR)) {
             model.addAttribute("isProjectEditor", true);

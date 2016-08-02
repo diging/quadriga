@@ -212,10 +212,8 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker {
         List<String> userDBRoles = accessManager.getProjectCollaboratorRoles(userName, projectId);
         List<String> collaboratorRoles = new ArrayList<String>();
 
-        for (int i = 0; i < userDBRoles.size(); i++) {
-            collaboratorRoles.add(
-                    roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.PROJECT_ROLES, userDBRoles.get(i)).getId());
-        }
+        userDBRoles.forEach(userDBRole -> collaboratorRoles
+                .add(roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.PROJECT_ROLES, userDBRole).getId()));
 
         return collaboratorRoles;
     }
