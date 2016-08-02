@@ -32,7 +32,7 @@
 			<i class="ion-planet"></i> Project: ${project.projectName}
 		</h2>
 		<div>${project.description}</div>
-		<c:if test="${owner=='1' || isProjectAdmin==true}">
+		<c:if test="${owner || isProjectAdmin}">
 		<div style="text-align: right">
 			<a
 				href="${pageContext.servletContext.contextPath}/auth/workbench/modifyproject/${project.projectId}">
@@ -54,11 +54,11 @@
 		<hr>
 		<div class="user">
 			Owned by: ${project.owner.name}
-			<c:if test="${owner=='1'}">(<a
+			<c:if test="${owner}">(<a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/transfer/">Change</a>)</c:if>
 		</div>
 
-		<c:if test="${owner=='1' and editoraccess=='0' }">
+		<c:if test="${owner and isProjectEditor }">
 			<img
 				src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses-no.png"> You are not an Editor on this Project 
                         (<a
@@ -68,7 +68,7 @@
                         
                     </c:if>
 
-		<c:if test="${owner=='1' and editoraccess=='1' }">
+		<c:if test="${owner and isProjectEditor }">
 			<img
 				src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses.png"> You are an Editor on this Project
                     (<a
@@ -95,6 +95,7 @@
 			</div>
 		</c:forEach>
 
+		<c:if test="${owner || isProjectAdmin || isProjectContributor}">
 		<c:forEach var="workspace" items="${collabworkspacelist}">
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -106,6 +107,7 @@
 				</div>
 			</div>
 		</c:forEach>
+		</c:if>
 
 
 		<div style="float: right;">
@@ -123,7 +125,7 @@
 		<div align="left">
 			<hr>
 			<c:choose>
-				<c:when test="${owner=='1'}">
+				<c:when test="${owner}">
 					<a
 						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
 						<i class="ion-ios-box-outline icons"></i> Show Inactive Workspaces
@@ -135,7 +137,7 @@
 
 		</div>
 		<div align="right">
-			<c:if test="${owner=='1'}">
+			<c:if test="${owner}">
 
 
 
@@ -191,7 +193,7 @@
 				</c:forEach>
 			</div>
 		</c:if>
-		<c:if test="${owner=='1' || isProjectAdmin==true}">
+		<c:if test="${owner || isProjectAdmin==true}">
 			<div style="border-top: dashed 1px #e7eae8; padding: 5px;">
 				<a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators"><i

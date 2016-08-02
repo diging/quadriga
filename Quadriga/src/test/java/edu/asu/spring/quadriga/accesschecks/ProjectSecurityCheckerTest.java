@@ -43,22 +43,13 @@ public class ProjectSecurityCheckerTest {
         mockedProjectManager = Mockito.mock(IProjectCollaboratorManager.class);
         MockitoAnnotations.initMocks(this);
 
-        Mockito.when(mockedManager.getProjectOwner("project1")).thenReturn(
-                "user1");
+        Mockito.when(mockedManager.getProjectOwner("project1")).thenReturn("user1");
         Mockito.when(mockedManager.getNrOfOwnedProjects("user1")).thenReturn(3);
         Mockito.when(mockedManager.getNrOfOwnedProjects("user2")).thenReturn(0);
         Mockito.when(mockedManager.getNrOfOwnedProjects("user3")).thenReturn(1);
-        Mockito.when(
-                mockedManager.getNrOfProjectsCollaboratingOn("user1", "role1"))
-                .thenReturn(3);
-        Mockito.when(
-                mockedManager.getNrOfProjectsCollaboratingOn("user2", "role1"))
-                .thenReturn(0);
-        Mockito.when(
-                mockedManager.getNrOfProjectsCollaboratingOn("user3", "role1"))
-                .thenReturn(1);
-        Mockito.when(mockedManager.isUserEditorOfProject("user1", "project1")).thenReturn(1);
-        Mockito.when(mockedManager.isUserEditorOfProject("user2", "project1")).thenReturn(0);
+        Mockito.when(mockedManager.getNrOfProjectsCollaboratingOn("user1", "role1")).thenReturn(3);
+        Mockito.when(mockedManager.getNrOfProjectsCollaboratingOn("user2", "role1")).thenReturn(0);
+        Mockito.when(mockedManager.getNrOfProjectsCollaboratingOn("user3", "role1")).thenReturn(1);
 
         IProjectCollaborator pColl1 = new ProjectCollaborator();
         ICollaborator coll1 = new Collaborator();
@@ -76,8 +67,7 @@ public class ProjectSecurityCheckerTest {
         List<IProjectCollaborator> collabs = new ArrayList<IProjectCollaborator>();
         collabs.add(pColl1);
 
-        Mockito.when(mockedProjectManager.getProjectCollaborators("project1"))
-                .thenReturn(collabs);
+        Mockito.when(mockedProjectManager.getProjectCollaborators("project1")).thenReturn(collabs);
     }
 
     @Test
@@ -106,54 +96,51 @@ public class ProjectSecurityCheckerTest {
     }
 
     /**
-     * Tests {@link edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker.collaboratesOnAtLeastOneProject(String, String)}
+     * Tests
+     * {@link edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker.collaboratesOnAtLeastOneProject(String,
+     * String)}
+     * 
      * @throws QuadrigaStorageException
      */
     @Test
-    public void testIsCollaboratingOnSeveralProjects()
-            throws QuadrigaStorageException {
-        assertTrue(securityChecker.collaboratesOnAtLeastOneProject("user1",
-                "role1"));
+    public void testIsCollaboratingOnSeveralProjects() throws QuadrigaStorageException {
+        assertTrue(securityChecker.collaboratesOnAtLeastOneProject("user1", "role1"));
     }
 
     /**
-     * Tests {@link edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker.collaboratesOnAtLeastOneProject(String, String)}
+     * Tests
+     * {@link edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker.collaboratesOnAtLeastOneProject(String,
+     * String)}
+     * 
      * @throws QuadrigaStorageException
      */
     @Test
     public void testIsNoCollaborator() throws QuadrigaStorageException {
-        assertFalse(securityChecker.collaboratesOnAtLeastOneProject("user2",
-                "role1"));
+        assertFalse(securityChecker.collaboratesOnAtLeastOneProject("user2", "role1"));
     }
 
     /**
-     * Tests {@link edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker.collaboratesOnAtLeastOneProject(String, String)}
+     * Tests
+     * {@link edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker.collaboratesOnAtLeastOneProject(String,
+     * String)}
+     * 
      * @throws QuadrigaStorageException
      */
     @Test
-    public void testIsCollaboratingOnOneProject()
-            throws QuadrigaStorageException {
-        assertTrue(securityChecker.collaboratesOnAtLeastOneProject("user3",
-                "role1"));
+    public void testIsCollaboratingOnOneProject() throws QuadrigaStorageException {
+        assertTrue(securityChecker.collaboratesOnAtLeastOneProject("user3", "role1"));
     }
 
     /**
-     * Tests {@link edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker.isUserCollaboratorOnProject(String, String, String)}
+     * Tests
+     * {@link edu.asu.spring.quadriga.accesschecks.impl.ProjectSecurityChecker.isUserCollaboratorOnProject(String,
+     * String, String)}
+     * 
      * @throws QuadrigaStorageException
      */
     @Test
     public void testUserHasProjectAccess() throws QuadrigaStorageException {
-        assertTrue(securityChecker.isUserCollaboratorOnProject("user1",
-                "project1", "role1"));
+        assertTrue(securityChecker.isUserCollaboratorOnProject("user1", "project1", "role1"));
     }
-    
-    @Test
-    public void testUserIsEditor() throws QuadrigaStorageException {
-        assertTrue(securityChecker.isEditor("user1", "project1"));
-    }
-    
-    @Test
-    public void testUserIsNotEditor() throws QuadrigaStorageException {
-        assertFalse(securityChecker.isEditor("user2", "project1"));
-    }
+
 }

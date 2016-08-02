@@ -36,7 +36,7 @@ public class RetrieveProjectController {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
-    
+
     @Autowired
     private IPassThroughProjectManager passThroughManager;
 
@@ -129,11 +129,12 @@ public class RetrieveProjectController {
 
         return model;
     }
-    
+
     @RequestMapping(value = "auth/workbench/projects/{extId:[0-9a-zA-Z-_]+}+{client:[0-9a-zA-Z-]+}", method = RequestMethod.GET)
-    public String getProjectByExternalId(@PathVariable String extId, @PathVariable String client) throws QuadrigaStorageException {
+    public String getProjectByExternalId(@PathVariable String extId, @PathVariable String client)
+            throws QuadrigaStorageException {
         IProject project = passThroughManager.getPassthroughProject(extId, client);
-        if (project == null) { 
+        if (project == null) {
             return "auth/404";
         }
         return "redirect:/auth/workbench/projects/" + project.getProjectId();
@@ -145,7 +146,7 @@ public class RetrieveProjectController {
     @RequestMapping(value = "auth/workbench/projects/{projectid:[0-9a-zA-Z-_]+}", method = RequestMethod.GET)
     public String getProjectDetails(@PathVariable("projectid") String projectid, Principal principal, Model model)
             throws QuadrigaStorageException, NoSuchRoleException, QuadrigaAccessException {
-      
+
         String userName = principal.getName();
         IProject project = projectManager.getProjectDetails(projectid);
 
@@ -168,39 +169,29 @@ public class RetrieveProjectController {
         model.addAttribute("deactivatedWSSize", deactivatedWSSize);
         model.addAttribute("archivedWSSize", archivedWSSize);
 
+        List<String> collaboratorRoles = projectSecurity.getCollaboratorRoles(userName, projectid);
+
         if (projectSecurity.isProjectOwner(userName, projectid)) {
-            model.addAttribute("owner", 1);
+            model.addAttribute("owner", true);
         } else {
-            model.addAttribute("owner", 0);
+            model.addAttribute("owner", false);
         }
-        if (projectSecurity.isEditor(userName, projectid)) {
-            model.addAttribute("editoraccess", 1);
+        if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR)) {
+            model.addAttribute("isProjectEditor", true);
         } else {
-            model.addAttribute("editoraccess", 0);
+            model.addAttribute("isProjectEditor", false);
         }
-        if (projectSecurity.isCollaborator(userName, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, project.getProjectId())) {
+        if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)) {
             model.addAttribute("isProjectAdmin", true);
         } else {
             model.addAttribute("isProjectAdmin", false);
         }
+        if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR)) {
+            model.addAttribute("isProjectContributor", true);
+        } else {
+            model.addAttribute("isProjectContributor", false);
+        }
+
         return "auth/workbench/project";
     }
-
-    /*
-     * @RequestMapping(value="sites/{ProjectUnixName}",
-     * method=RequestMethod.GET) public String
-     * showProject(@PathVariable("ProjectUnixName") String unixName,Model model)
-     * throws QuadrigaStorageException {
-     * 
-     * 
-     * 
-     * IProject project = projectManager.getProjectDetailsByUnixName(unixName);
-     * if(project!=null){
-     * 
-     * model.addAttribute("project", project); return "website"; } else return
-     * "forbidden";
-     * 
-     * 
-     * }
-     */
 }
