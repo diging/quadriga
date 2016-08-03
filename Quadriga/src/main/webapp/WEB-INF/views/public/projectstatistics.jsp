@@ -9,8 +9,8 @@
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css"
 	rel="stylesheet" />
 <link type="text/css"	href="${pageContext.servletContext.contextPath}/resources/css/projectstatistics.css" rel="stylesheet" />
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/js/d3/d3projectstatistics.js"></script>
 <script type="text/javascript">
 var labelCount = '${labelCount}'; 
