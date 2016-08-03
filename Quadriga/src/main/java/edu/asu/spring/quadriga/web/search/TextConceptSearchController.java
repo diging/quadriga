@@ -110,25 +110,27 @@ public class TextConceptSearchController {
             model.addAttribute("references", textlessReferences);
             model.addAttribute("concept", entry);
             model.addAttribute("texts", texts);
-        }
-        
-        List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
-        
-        List<String> projectIds = new ArrayList<String>();
-        projects.forEach(p -> projectIds.add(p.getProjectId()));
-        
-        ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds, conceptUri, INetworkStatus.APPROVED);
-        
-        String json = null;
-        if (transformedNetwork != null) {
-            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-        }
+            
+            List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
+            
+            List<String> projectIds = new ArrayList<String>();
+            projects.forEach(p -> projectIds.add(p.getProjectId()));
+            
+            ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds, conceptUri, INetworkStatus.APPROVED);
+            
+            String json = null;
+            if (transformedNetwork != null) {
+                json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+            }
 
-        if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-            model.addAttribute("isNetworkEmpty", true);
+            if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+                model.addAttribute("isNetworkEmpty", true);
+            }
+            
+            model.addAttribute("jsonstring", json);
+            
         }
         
-        model.addAttribute("jsonstring", json);
         
         return "search/texts";
     }

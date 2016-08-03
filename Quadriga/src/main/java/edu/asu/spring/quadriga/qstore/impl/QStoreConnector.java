@@ -146,6 +146,7 @@ public class QStoreConnector implements IQStoreConnector {
         logger.debug("URL : " + getQStoreGetURL() + id);
         // Get the XML from QStore
         try {
+            logger.debug("Requesting: " + getQStoreGetURL() + id);
             response = restTemplate
                 .exchange(getQStoreGetURL() + id, HttpMethod.GET,
                         new HttpEntity<String[]>(headers), String.class);

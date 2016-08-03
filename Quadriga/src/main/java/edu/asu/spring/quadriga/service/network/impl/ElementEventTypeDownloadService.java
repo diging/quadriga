@@ -4,6 +4,8 @@ import java.util.concurrent.Future;
 
 import javax.xml.bind.JAXBException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -22,6 +24,8 @@ import edu.asu.spring.quadriga.qstore.IQStoreConnector;
  */
 @Service
 public class ElementEventTypeDownloadService {
+    
+    Logger logger = LoggerFactory.getLogger(ElementEventTypeDownloadService.class);
 
     @Autowired
     private IMarshallingService marshallingService;
@@ -37,16 +41,28 @@ public class ElementEventTypeDownloadService {
      * @throws JAXBException
      */
     @Async
-    public Future<ElementEventsType> getElementEventTypeAsync(String relationEventId)
-            throws QStoreStorageException, JAXBException {
-        String xml = qstoreConnector.getCreationEvent(relationEventId);
+    public Future<ElementEventsType> getElementEventTypeAsync(String relationEventId) {
+        String xml;
+        try {
+            xml = qstoreConnector.getCreationEvent(relationEventId);
+        } catch (QStoreStorageException e) {
+            logger.error("Error retrieving element " + relationEventId + " from QStore.", e);
+            return new AsyncResult<ElementEventsType>(null);
+        }
 
         if (xml == null) {
-            throw new QStoreStorageException("Unable to download data from QStore for" +
+           logger.error("Unable to download data from QStore for" +
                     " relation event id: " + relationEventId);
+           return new AsyncResult<ElementEventsType>(null);
+           
         }
         // convert the xml to ElementEventsType object
-        ElementEventsType elementEventsType = marshallingService.unMarshalXmlToElementEventsType(xml);
+        ElementEventsType elementEventsType = null;
+        try {
+            elementEventsType = marshallingService.unMarshalXmlToElementEventsType(xml);
+        } catch (JAXBException e) {
+            logger.error("Could not unmarshal XML.", e);
+        }
         // asyn task ends here
         return new AsyncResult<>(elementEventsType);
     }
