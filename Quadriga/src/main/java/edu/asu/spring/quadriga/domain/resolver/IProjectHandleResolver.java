@@ -40,4 +40,8 @@ public interface IProjectHandleResolver {
 
     String getResolvedHandleExample();
 
+    public Status getValidation();
+
+    public void setValidation(Status failed);
+
 }

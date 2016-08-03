@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
 @Transactional
-public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO {
+public class WorkspaceDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -36,18 +36,18 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
     private IProjectDAO projectDAO;
 
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAO.class);
-    
+
     @Override
     public WorkspaceDTO getDTO(String id) {
         return getDTO(WorkspaceDTO.class, id);
     }
-    
+
     @Override
     public String getIdPrefix() {
         return messages.getProperty("workspace_id.prefix");
     }
 
-    @Override   
+    @Override
     public boolean deleteWorkspace(String wsId) {
         WorkspaceDTO workspace = getDTO(wsId);
         if (workspace == null) {
@@ -62,18 +62,18 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
         deleteWorkspaceNetworkMappings(workspace);
 
         // save the above changes
-        //updateDTO(workspace);
+        // updateDTO(workspace);
         // then delete
         deleteDTO(workspace);
         return true;
     }
-    
+
     /*
-     * ================================================================= 
-     * Listing Workspaces Methods 
+     * ================================================================= Listing
+     * Workspaces Methods
      * =================================================================
      */
-    
+
     /**
      * {@inheritDoc}
      */
@@ -161,8 +161,11 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
             throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = null;
         try {
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    "Select distinct projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where workcollab.quadrigaUserDTO.username =:username and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated");
+            Query query = sessionFactory.getCurrentSession()
+                    .createQuery("Select distinct projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN "
+                            + "projWork.projectDTO.projectCollaboratorDTOList projcollab where projWork.workspaceDTO.createdby !=:username and projWork.projectDTO.projectid =:projectid "
+                            + "and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated");
+
             query.setParameter("username", username);
             query.setParameter("projectid", projectid);
             query.setParameter("isdeactivated", false);
@@ -226,9 +229,8 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO>implements IWorkspaceDAO 
     }
 
     /*
-     * ================================================================= 
-     * Private Methods 
-     * =================================================================
+     * ================================================================= Private
+     * Methods =================================================================
      */
 
     /**
