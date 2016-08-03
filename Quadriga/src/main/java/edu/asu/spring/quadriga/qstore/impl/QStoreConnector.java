@@ -239,6 +239,7 @@ public class QStoreConnector implements IQStoreConnector {
     }
     
     @Override
+    @Cacheable(value="conceptSearch")
     public String searchNodesByConcept(String conceptId) throws Exception {
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
