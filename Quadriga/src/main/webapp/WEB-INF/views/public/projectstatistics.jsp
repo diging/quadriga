@@ -13,7 +13,7 @@
 <script src="${pageContext.servletContext.contextPath}/resources/js/d3/d3tip.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/js/d3/d3projectstatistics.js"></script>
 <script type="text/javascript">
-var labelCount = '${labelCount}';
+var labelCount = ${labelCount};
 var submittedNetworksData = '${submittedNetworksData}';
 var approvedNetworksData = '${approvedNetworksData}';
 var rejectedNetworksData = '${rejectedNetworksData}';

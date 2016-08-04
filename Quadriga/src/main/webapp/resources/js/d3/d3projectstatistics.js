@@ -49,7 +49,6 @@ function d3ProjectStatistics(data) {
 
 	svg.call(tip);	
 
-	data = JSON.parse(data);
 	x.domain(data.map(function(d) { return d.label; }));
 	y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
