@@ -2,11 +2,16 @@ package edu.asu.spring.quadriga.qstore;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 
 public interface IQStoreConnector {
 
@@ -41,5 +47,7 @@ public interface IQStoreConnector {
     public abstract String getStatements(String xml);
 
     public abstract String searchNodesByConcept(String conceptId) throws Exception;
+
+    String getAppellationEventsByConceptAndText(String conceptUri, String textUri) throws QuadrigaException;
 
 }

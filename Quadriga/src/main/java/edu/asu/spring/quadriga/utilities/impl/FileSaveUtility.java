@@ -1,9 +1,13 @@
 package edu.asu.spring.quadriga.utilities.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
@@ -31,23 +35,27 @@ public class FileSaveUtility implements IFileSaveUtility {
     }
 
     @Override
-    public boolean saveFiletoDir(String dirName, String fileName, byte[] fileContent) throws FileStorageException {
+    public boolean saveFiletoDir(String dirName, String fileName, String fileContent) throws FileStorageException {
 
         try {
             createDirectoryIfNotExists(textFileLocation + "/" + dirName);
-            File f = new File(textFileLocation + "/" + dirName + fileName);
+            File f = new File(textFileLocation + "/" + dirName + "/" + fileName);
             if (!f.exists()) {
                 f.createNewFile();
             }
-            FileOutputStream fos = new FileOutputStream(f);
-            fos.write(fileContent);
-            fos.close();
+            BufferedReader reader = new BufferedReader(new StringReader(fileContent));
+            PrintWriter writer = new PrintWriter(new FileWriter(f));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.println(line);
+            }
+            reader.close();
+            writer.close();
         } catch (IOException e) {
             throw new FileStorageException(e);
         }
 
         return true;
-
     }
 
     @Override
@@ -73,10 +81,15 @@ public class FileSaveUtility implements IFileSaveUtility {
 
         }
         try {
-            return new String(fileBytes,"UTF-8");
+            return new String(fileBytes, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new FileStorageException(e);
         }
+    }
+
+    @Override
+    public String getFileLocation() {
+        return textFileLocation;
     }
 
 }

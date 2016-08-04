@@ -19,7 +19,7 @@ import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.impl.ConceptPowerService;
 import edu.asu.spring.quadriga.profile.impl.SearchResult;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.impl.ConceptCollectionManager;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class ConceptPowerServiceTest {

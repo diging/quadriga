@@ -179,10 +179,26 @@
 			</div>
 			    
 			<!-- Accordion -->
+			
+			<div class="centered" style="padding-bottom: 40px;">
+	          <a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/">See all Project</a>
+	        </div>
+        
 		</div>
-		<div class="centered">
-		<a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/sites/">See all Project</a>
+		
+		
+		 
+        <div class="row">
+            <hr style="padding-top: 20px;">
+            <h1 class="centered">Search Texts</h1>
+            
+            <p>Quadruples contain references to the exact position in a text where a concept is used or where a statement is made. 
+            We can use this feature to implement search engines that do not use string comparison techniques to find texts of interest,
+            but rather search for the actual concept or statement in a text that the user is interested. To try out our prototype for such
+            a search, head over to our <a href="${pageContext.servletContext.contextPath}/search/texts"><i class="fa fa-search" aria-hidden="true"></i>
+             text search interface</a>.
         </div>
+        
 	</div>
 </div>
 <!--/ .container -->

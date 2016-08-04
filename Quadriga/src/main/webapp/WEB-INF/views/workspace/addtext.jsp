@@ -25,6 +25,21 @@
                 <form:errors path="fileName" class="error"></form:errors></td>
 		</tr>
 		<tr>
+            <td style="width: 170px; vertical-align:top;">Author:</td>
+            <td><form:input class="form-control" path="author" size="60" id="author" />
+                <form:errors path="author" class="error"></form:errors></td>
+        </tr>
+        <tr>
+            <td style="width: 170px; vertical-align:top;">Title:</td>
+            <td><form:input class="form-control" path="title" size="60" id="title" />
+                <form:errors path="title" class="error"></form:errors></td>
+        </tr>
+        <tr>
+            <td style="width: 170px; vertical-align:top;">Creation Date:</td>
+            <td><form:input class="form-control" path="creationDate" size="60" id="creationDate" />
+                <form:errors path="creationDate" class="error"></form:errors></td>
+        </tr>
+		<tr>
 			<td style="width: 170px; vertical-align:top;">Reference:</td>
 			<td><form:input class="form-control" path="refId" size="60" id="refID" />
         <form:errors path="refId" class="error"></form:errors></td>

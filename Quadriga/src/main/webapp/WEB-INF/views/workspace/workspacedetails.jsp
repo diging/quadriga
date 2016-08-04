@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ page import="edu.asu.spring.quadriga.domain.enums.ETextAccessibility" %>
 
 <script>
 	$(document).ready(function() {
@@ -25,6 +26,24 @@
 
 											var txtid = link.data('txtid');
 											var txtname = link.data('txtname');
+											var title = link.data('txttitle');
+											var author = link.data('txtauthor');
+											var date = link.data('txtdate');
+											
+											var header = "No author and title information provided."
+											if (title != '' || author != '' || date != '') {
+												header = '';
+												if (author != null) {
+													header += author + ", ";
+												}
+												if (title != null) {
+													header += "<em>" + title + "</em> ";
+												}
+												if (date != null) {
+													header += "(" + date + ")";
+												}
+											}
+											header += "<br><small>" + txtname + "</small>";
 											$
 													.ajax({
 														type : "GET",
@@ -34,11 +53,9 @@
 														success : function(
 																details) {
 															$('.modal-title')
-																	.text(
-																			txtname);
+																	.html(header);
 															$('.modal-body')
-																	.text(
-																			details);
+																	.html(details);
 														},
 
 														error : function(xhr,
@@ -157,20 +174,34 @@
 					<table style="width: 100%" class="table">
 						<thead>
 							<tr>
-								<th>Text File Name</th>
-								<th>Reference</th>
+								<th width="55%">Text File</th>
+								<th>URIs</th>
 							</tr>
 						</thead>
 
 						<tbody>
 							<c:forEach var="textfile" items="${textFileList}">
 								<tr>
-									<td width="25%" align="left"><a data-toggle="modal"
+									<td align="left">
+									<a data-toggle="modal"
 										data-target="#txtModal" data-txtid="${textfile.textId}"
-										data-txtname="${textfile.fileName}"><c:out
-												value="${textfile.fileName}"></c:out></a></td>
-									<td width="25%" align="left"><c:out
-											value="${textfile.refId}"></c:out></td>
+										data-txtname="${textfile.fileName}" data-txttitle="${textfile.title}"
+										data-txtauthor="${textfile.author}" data-txtdate="${textfile.creationDate}">
+										<c:if test="${not empty textfile.author}">${textfile.author}, </c:if>
+										<c:if test="${not empty textfile.title}"><em>${textfile.title}</em></c:if>
+										<c:if test="${not empty textfile.creationDate}"> (${textfile.creationDate})</c:if>
+										<c:if test="${empty textfile.author and empty textfile.title and empty textfile.creationDate}">No author and title information provided.</c:if></a>
+										<br><small>${textfile.fileName}</small>
+										<br>
+										<c:if test="${textfile.accessibility == 'PUBLIC'}">
+										<span class="label label-success">Public</span>
+										</c:if>
+										<c:if test="${textfile.accessibility == 'PRIVATE'}">
+                                        <span class="label label-danger">Private</span>
+                                        </c:if>
+									</td>
+									<td align="left"><small><strong>URI:</strong> ${textfile.textFileURI}<br>
+									<strong>Original URI:</strong> <a target="_blank" href="${textfile.refId}">${textfile.refId}</a></small></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -264,7 +295,7 @@
 			<div class="modal-header">
 				<h4 class="modal-title" id="myModalLabel"></h4>
 			</div>
-			<div class="modal-body"></div>
+			<div class="modal-body" style="height: 500px; overflow-y: scroll;"></div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>

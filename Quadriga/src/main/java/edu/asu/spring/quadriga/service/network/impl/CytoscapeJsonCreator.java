@@ -21,7 +21,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     public String getJson(Map<String, Node> nodes, List<Link> links) {
         StringBuffer sb = new StringBuffer();
         
-        sb.append("[\n");
+        sb.append("[");
         List<Node> nodeList = new ArrayList<Node>(nodes.values());
         for (Node node : nodeList) {
             sb.append("{ ");

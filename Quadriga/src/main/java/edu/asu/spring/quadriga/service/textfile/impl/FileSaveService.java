@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.textfile.impl;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,7 +39,7 @@ public class FileSaveService implements IFileSaveService {
         fileContent.append("ReferenceId:" + txtFile.getRefId() + "\n");
         fileContent.append("TextFileId:" + txtFile.getTextId() + "\n");
         String filePath = txtFile.getTextId();
-        if (fileManager.saveFiletoDir(filePath, "/meta.properties", fileContent.toString().getBytes())) {
+        if (fileManager.saveFiletoDir(filePath, "/meta.properties", fileContent.toString())) {
             return true;
         } else
             return false;
@@ -54,13 +53,7 @@ public class FileSaveService implements IFileSaveService {
         } else {
             saveTxtFile = ("/" + fileName + ".txt");
         }
-        byte[] fileContentBytes;
-        try {
-            fileContentBytes = txtFile.getFileContent().getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new FileStorageException(e);
-        }
-        if (fileManager.saveFiletoDir(txtFile.getTextId(), saveTxtFile, fileContentBytes)) {
+        if (fileManager.saveFiletoDir(txtFile.getTextId(), saveTxtFile, txtFile.getFileContent())) {
             return true;
         } else
             return false;

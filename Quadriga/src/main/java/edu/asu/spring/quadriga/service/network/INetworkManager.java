@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.network;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
@@ -332,6 +333,6 @@ public interface INetworkManager {
 
     public String storeNetworks(String xml) throws QStoreStorageException;
 
-    List<TextOccurance> getTextsForConceptId(String conceptId, ETextAccessibility access) throws Exception;
+    Set<TextOccurance> getTextsForConceptId(String conceptId, ETextAccessibility access) throws Exception;
 	
 }

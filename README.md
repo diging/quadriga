@@ -1,5 +1,5 @@
 # Quadriga
 
-[![Build Status](http://diging-dev.asu.edu:8091/buildStatus/icon?job=Quadriga_run_tests_on_push)](http://diging-dev.asu.edu:8091/job/Quadriga_run_tests_on_push/)
+[![Build Status](https://diging-dev.asu.edu/jenkins/buildStatus/icon?job=Quadriga_run_tests_on_push)](https://diging-dev.asu.edu/jenkins/job/Quadriga_run_tests_on_push/)
 
-See http://diging.github.io/quadriga/index.html.
+See http://diging.github.io/quadriga/index.html and https://diging.atlassian.net/wiki/display/QUADDOC/Quadriga+Documentation.

@@ -226,7 +226,7 @@
 
 
 <form
-	action="${pageContext.servletContext.contextPath}/checks/transformation"
+	action="${pageContext.servletContext.contextPath}/auth/transformation/start"
 	method="POST" id="form1">
 
 	<div>
@@ -348,7 +348,7 @@
 										<div class="checkbox_transformation"
 											id="divTransformationList">
 											<label> <input type="checkbox"
-												value="${transformations.title}" name="transformation"
+												value="${transformations.id}" name="transformation"
 												class="transformationList"> &nbsp;&nbsp;&nbsp;&nbsp;<c:out
 													value="${transformations.title}"></c:out>
 

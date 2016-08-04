@@ -36,7 +36,7 @@ import edu.asu.spring.quadriga.transform.PredicateNode;
  * @author jdamerow
  *
  */
-@PropertySource(value = "classpath:/user.properties")
+@PropertySource(value = "classpath:/settings.properties")
 @Service
 public class EventParser {
 
@@ -83,9 +83,9 @@ public class EventParser {
         }
 
         if (event instanceof AppellationEventType) {
-            List<TermType> terms = ((AppellationEventType) event).getTerms();
-            if (terms.size() > 0) {
-                String conceptId = terms.get(0).getTermInterpertation();
+            TermType term = ((AppellationEventType) event).getTermType();
+            if (term != null) {
+                String conceptId = term.getTermInterpertation();
                 if (leafNodes.containsKey(conceptId)) {
                     leafNodes.get(conceptId).getStatementIds().add(statementId);
                 } else {
@@ -167,8 +167,8 @@ public class EventParser {
     private void parseNode(AppellationEventType event, Node node,
             String statementId) {
         StringBuffer label = new StringBuffer();
-        for (TermType type : event.getTerms()) {
-            label.append(type.getTermInterpertation());
+        if (event.getTermType() != null) {
+            label.append(event.getTermType().getTermInterpertation());
             label.append(" ");
         }
         node.setId(event.getId());
@@ -187,7 +187,7 @@ public class EventParser {
         if (node.getConceptId() != null) {
             String id = node.getConceptId();
             ConceptpowerReply re = conceptPowerConnector.getById(id);
-            if (re.getConceptEntry().size() != 0) {
+            if (re != null && re.getConceptEntry().size() != 0) {
                 node.setLabel(getLemma(re));
                 node.setDescription(getDescription(re));
             } else {

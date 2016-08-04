@@ -74,6 +74,7 @@
 			<thead>
 				<tr>
 					<th>Username</th>
+					<th>Email</th>
 					<th>Admin</th>
 					<th>Standard User</th>
 					<th>Restricted User</th>
@@ -86,6 +87,7 @@
 					<tr>
 						<td width="20%"><font size="3"><c:out
 									value="${user.userName}"></c:out></font></td>
+						<td>${user.email}</td>
 						<td class="center"><c:set var="flag" value="0" /> <c:forEach
 								items="${user.quadrigaRoles}" var="role">
 

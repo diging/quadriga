@@ -5,6 +5,9 @@
 	content: "*";
 	color: red;
 }
+
+.top5 { margin-top:5px;
+		}
 </style>
 
 <form name="selectTransformFiles" method="post" class="form-horizontal"
@@ -55,7 +58,7 @@
 		</div>
 
 		<div class="form-group required">
-			<div class="col-md-16">
+			<div class="col-md-12">
 				<input type="file" class="form-control" id="patternFile" name="file"
 					required="required">
 			</div>
@@ -97,8 +100,8 @@
 
 	</div>
 
-	<div class="form-group">
-		<div class="col-md-offset-5 col-md-6">
-			<input type="submit" value="Submit Files">
-		</div>
+<div class="col-md-offset-5">
+<button type="submit" class="btn btn-primary top5">Submit Files</button>
+</div>
+	
 </form>

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -25,12 +26,12 @@ import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IConceptStats;
-import edu.asu.spring.quadriga.domain.IContributionStatsManager;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.publicwebsite.impl.ProjectStats;
+import edu.asu.spring.quadriga.service.stats.IContributionStatsManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -41,7 +42,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  *
  */
 
-@PropertySource(value = "classpath:/user.properties")
+@PropertySource(value = "classpath:/settings.properties")
 @Controller
 public class ProjectStatsController {
 
@@ -71,9 +72,9 @@ public class ProjectStatsController {
         for (int i = 0; i < length; i++) {
             JSONObject jsonObject = new JSONObject();
             IConceptStats conceptStats = conceptsList.get(i);
-            jsonObject.put("conceptId", conceptStats.getConceptId().replace("\"", ""));
-            jsonObject.put("description", conceptStats.getDescription().replace("\"", ""));
-            jsonObject.put("label", conceptStats.getLemma().replace("\"", ""));
+            jsonObject.put("conceptId", conceptStats.getConceptId());
+            jsonObject.put("description", StringEscapeUtils.escapeHtml(conceptStats.getDescription()));
+            jsonObject.put("label", StringEscapeUtils.escapeHtml(conceptStats.getLemma()));
             jsonObject.put("count", conceptStats.getCount());
             jsonArray.put(jsonObject);
         }
@@ -125,7 +126,7 @@ public class ProjectStatsController {
     @RequestMapping(value = "sites/{projectUnixName}/statistics", method = RequestMethod.GET)
     public String showProjectStatistics(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
             @CheckAccess @InjectProject IProject project, Model model, Principal principal)
-                    throws JAXBException, QuadrigaStorageException {
+            throws JAXBException, QuadrigaStorageException {
 
         String projectId = project.getProjectId();
         model.addAttribute("project", project);
@@ -154,7 +155,6 @@ public class ProjectStatsController {
                 model.addAttribute("networks", networks);
                 model.addAttribute("labelCount", labelCount.length() > 0 ? labelCount.toString() : null);
                 model.addAttribute("networkid", "\"\"");
-
             } catch (JSONException e) {
 
                 StringBuffer errorMsg = new StringBuffer();

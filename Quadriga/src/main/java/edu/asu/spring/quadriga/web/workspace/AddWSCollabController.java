@@ -40,9 +40,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.impl.workspace.WorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
+import edu.asu.spring.quadriga.service.workspace.impl.WorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 

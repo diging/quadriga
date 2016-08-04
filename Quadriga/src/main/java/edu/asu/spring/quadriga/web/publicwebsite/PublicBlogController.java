@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 /**
  * This controller is responsible for showing project blog entries for a
  * particular project. Number of project blogs to display is specified in
- * <code>user.properties</code> as <code>projectblogentry.list.count</code>
+ * <code>settings.properties</code> as <code>projectblogentry.list.count</code>
  *
  * @author Kavinya Rajendran
  * @author PawanMahalle

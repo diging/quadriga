@@ -19,9 +19,9 @@
 	rel="stylesheet">
 
 <link
-	href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic'
+	href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic'
 	rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700'
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700'
 	rel='stylesheet' type='text/css'>
 
 <link rel="stylesheet"
@@ -44,18 +44,19 @@
 
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/font-awesome-4.5.0/css/font-awesome.min.css">
-	
+
 <!-- Ionicons -->
-    <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/resources/ionicons/css/ionicons.min.css">
-    
-    
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/ionicons/css/ionicons.min.css">
+
+
 <!-- Custom styles for this template -->
 <link
-    href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css"
-    rel="stylesheet">
+	href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css"
+	rel="stylesheet">
 <link
-    href="${pageContext.servletContext.contextPath}/resources/css/base.css"
-    rel="stylesheet">
+	href="${pageContext.servletContext.contextPath}/resources/css/base.css"
+	rel="stylesheet">
 </head>
 <body data-spy="scroll" data-offset="0" data-target="#navigation">
 	<tiles:importAttribute name="currentPage" scope="request" />
@@ -92,13 +93,14 @@
 								name="password" placeholder="Password">
 						</div>
 						<div class="form-group">
-						   <button type="submit" class="btn btn-primary btn-sm">Sign In</button>
-					    </div>
-					    <div class="form-group">
-	                       <a class="btn btn-info btn-sm" href="register">Sign up</a>
-	                    </div>
+							<button type="submit" class="btn btn-primary btn-sm">Sign
+								In</button>
+						</div>
+						<div class="form-group">
+							<a class="btn btn-info btn-sm" href="register">Sign up</a>
+						</div>
 					</form>
-					
+
 
 				</sec:authorize>
 			</div>
@@ -124,21 +126,33 @@
 
 	<c:choose>
 		<c:when test="${show_success_alert}">
-			<div class="alert alert-success">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				${success_alert_msg}
+			<div class="row" style="margin-top: 20px;">
+				<div class="col-md-offset-1 col-md-10">
+					<div class="alert alert-success">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						${success_alert_msg}
+					</div>
+				</div>
 			</div>
 		</c:when>
 		<c:when test="${show_error_alert}">
-			<div class="alert alert-danger">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				${error_alert_msg}
+			<div class="row" style="margin-top: 20px;">
+				<div class="col-md-offset-1 col-md-10">
+					<div class="alert alert-danger">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						${error_alert_msg}
+					</div>
+				</div>
 			</div>
 		</c:when>
 		<c:when test="${show_info_alert}">
-			<div class="alert alert-info">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				${info_alert_msg}
+			<div class="row" style="margin-top: 20px;">
+				<div class="col-md-offset-1 col-md-10">
+					<div class="alert alert-info">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						${info_alert_msg}
+					</div>
+				</div>
 			</div>
 		</c:when>
 	</c:choose>
@@ -172,17 +186,18 @@
 		</div>
 	</div>
 	<div id="c">
-	    <div class="container">
-	        <div class="col-md-6" style="text-align: left;">
-            <c:set var="PR" value="${pullrequest}" />
-            Version: ${buildNumber}<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if> 
-            </div>
-		    <div class="col-md-6">
-			<p>
-				Design by <a href="http://www.blacktie.co">BLACKTIE.CO</a>
-			</p>
+		<div class="container">
+			<div class="col-md-6" style="text-align: left;">
+				<c:set var="PR" value="${pullrequest}" />
+				Version: ${buildNumber}
+				<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if>
 			</div>
-			
+			<div class="col-md-6">
+				<p>
+					Design by <a href="http://www.blacktie.co">BLACKTIE.CO</a>
+				</p>
+			</div>
+
 		</div>
 	</div>
 

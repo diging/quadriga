@@ -4,7 +4,7 @@
 <tiles-definitions>
 
 	<!-- Base definitions -->
-	<definition name="base.definition.empty" template="/WEB-INF/tiles/layouts/skeleton_empty.jsp">
+	<definition name="base.definition.textsearch" template="/WEB-INF/tiles/layouts/skeleton_textsearch.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
@@ -34,6 +34,7 @@
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="left-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
+		<put-attribute name="currentTab" value="" />
 	</definition>
 
 	<definition name="base.definition.rightnav" template="/WEB-INF/tiles/layouts/skeleton_right.jsp">
@@ -73,14 +74,12 @@
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
+   <!-- checks -->
+   <definition name="check" extends="base.definition.nonav">
+       <put-attribute name="content" value="/WEB-INF/views/checks.jsp" />
+	</definition>
 
-    <!-- checks -->
-    <definition name="check" extends="base.definition.nonav">
-        <put-attribute name="content" value="/WEB-INF/views/checks.jsp" />
-    </definition>
-    
-
-	<!-- Home pages -->
+    <!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.home">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
@@ -275,8 +274,17 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/editProjectPageURL.jsp" />
 	</definition>
-
-	<!-- Add/Update/Delete Project Collaborator START -->
+	
+	
+	<definition name="auth/workbench/resolvers/add"
+        extends="base.definition.workbench.nonav">
+        <put-attribute name="title"
+            value="Quadriga Workbench - Add Project Handle Resolver" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/workbench/resolvers/add.jsp" />
+    </definition>
+    
+    <!-- Add/Update/Delete Project Collaborator START -->
 	<definition name="auth/workbench/addcollaborators" extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga Project - Add Collaborators" />
@@ -611,6 +619,8 @@
 	<definition name="auth/workbench/addpublicpage" extends="base.definition.workbench.nav">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Add Public Page Settings" />
+		<put-attribute name="currentTab"
+			value="mainPageSettings" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-settings.jsp" />
 		<put-attribute name="content"
@@ -618,7 +628,7 @@
 	</definition>
 
 	<definition name="auth/editabout" extends="base.definition.workbench.nav">
-		<put-attribute name="currentPage" value="editabout" />
+		<put-attribute name="currentTab" value="aboutPage" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-settings.jsp" />
 		<put-attribute name="content"
@@ -709,6 +719,31 @@
         <put-attribute name="content"
             value="/WEB-INF/views/exceptions/public/forbidden.jsp" />
     </definition>
+    
+    <!--  Resolvers  -->
+    <definition name="base.definition.resolvers" extends="base.definition.nonav">
+        <put-attribute name="currentPage" value="resolvers" />
+    </definition>
+    
+    <definition name="auth/resolvers" extends="base.definition.resolvers">
+        <put-attribute name="title" value="Quadriga - Project Handle Resolvers" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/resolvers/resolvers.jsp" />
+    </definition>
+    <definition name="auth/resolvers/add" extends="base.definition.resolvers">
+        <put-attribute name="title" value="Quadriga - Project Handle Resolvers" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/resolvers/add.jsp" />
+    </definition>
+    <definition name="auth/resolvers/edit"
+        extends="base.definition.resolvers">
+        <put-attribute name="title"
+            value="Quadriga Project Handle Resolver" />
+        <put-attribute name="content"
+            value="/WEB-INF/views/resolvers/edit.jsp" />
+    </definition>
+    
+   
 
 	<!-- Networks -->
 	<definition name="base.definition.networks" extends="base.definition">
@@ -762,6 +797,18 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/transformation/uploadTransformation.jsp" />
 	</definition>
+	
+	<definition name ="auth/transformation/statusTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/statusTransformation.jsp" />
+    </definition>
+    
+    <definition name="auth/transformation/successTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/successTransformation.jsp" />
+    </definition>
+	
+	<definition name="auth/transformation/failureTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/failureTransformation.jsp" />
+    </definition>
 
 	<!-- editing -->
 	<definition name="base.definition.editing" extends="base.definition.nonav">
@@ -870,6 +917,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/addprojectblogentry.jsp" />
 	</definition>
+	<definition name="sites/projectblogdetails" extends="base.definition.public">
+ 		<put-attribute name="currentPage" value="projectblog" />
+ 		<put-attribute name="content"
+ 			value="/WEB-INF/views/public/blog/projectblogdetails.jsp" />
+ 	</definition>	
 
 	<!-- Explore combined network -->
 
@@ -914,5 +966,13 @@
 			value="/WEB-INF/views/public/sitesnavbarleft.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/public/searchsites.jsp" />
+	</definition>
+	
+	
+	<!--  general text search -->
+	<definition name="search/texts" extends="base.definition.textsearch">
+	   <put-attribute name="navigation"
+            value="" />
+	   <put-attribute name="content" value="/WEB-INF/views/search/texts/searchTexts.jsp" />
 	</definition>
 </tiles-definitions>

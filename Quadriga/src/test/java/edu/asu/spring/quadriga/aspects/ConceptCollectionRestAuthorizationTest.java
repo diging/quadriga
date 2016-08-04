@@ -31,7 +31,7 @@ import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.impl.ConceptCollectionManager;
 
 public class ConceptCollectionRestAuthorizationTest {
 

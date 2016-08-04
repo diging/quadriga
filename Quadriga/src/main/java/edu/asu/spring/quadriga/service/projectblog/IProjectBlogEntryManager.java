@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.projectblog.IProjectBlogEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.projectblog.ProjectBlogEntryManager;
+import edu.asu.spring.quadriga.service.projectblog.impl.ProjectBlogEntryManager;
 
 /**
  * This interface provides template for project blog entry manager
@@ -38,4 +38,13 @@ public interface IProjectBlogEntryManager {
      * @throws QuadrigaStorageException
      */
     List<IProjectBlogEntry> getProjectBlogEntryList(String projectId, Integer count) throws QuadrigaStorageException;
+    
+    /**
+     * fetches the blog entry identified by project blog entry id
+     * @param projectBlogEntryId
+     *            id of the blog entry that should be retrieved from the database 
+     * @return  project blog entry
+     * @throws QuadrigaStorageException
+     */
+    IProjectBlogEntry getProjectBlogEntryDetails(String projectBlogEntryId) throws QuadrigaStorageException ;
 }

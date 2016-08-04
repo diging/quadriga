@@ -20,33 +20,32 @@ import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.util.TextHelper;
 
 @Controller
 public class ViewTextController {
 
     @Autowired
     private ITextFileManager tfManager;
+    
+    @Autowired
+    private TextHelper textHelper;
 
     private static final Logger logger = LoggerFactory.getLogger(ViewTextController.class);
 
     @ResponseBody
-    @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/viewtext", method = RequestMethod.GET)
+    @RequestMapping(value = "/auth/workbench/workspace/{projectid}/{workspaceid}/viewtext", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 0, userRole = {
             RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_QUADRIGA_ADMIN,
             RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR })
     public ResponseEntity<String> viewTextfile(@RequestParam("txtid") String txtId, HttpServletResponse response,
-            HttpServletRequest request) throws QuadrigaAccessException {
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-
-        String respMessage = null;
+            HttpServletRequest request) throws QuadrigaAccessException {   
         try {
-            respMessage = tfManager.retrieveTextFileContent(txtId);
-            return new ResponseEntity<String>(respMessage, HttpStatus.OK);
-            
+            String text = tfManager.retrieveTextFileContent(txtId);
+            return textHelper.getResponse(text, response);        
         } catch (FileStorageException e) {
             logger.error(e.getMessage());
-            respMessage = "Error while retrieving the file content";
+            String respMessage = "Error while retrieving the file content";
             return new ResponseEntity<String>(respMessage, HttpStatus.NOT_FOUND);
         }
 

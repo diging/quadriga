@@ -26,9 +26,9 @@
 	rel="stylesheet">
 
 <link
-	href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic'
+	href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic'
 	rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700'
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700'
 	rel='stylesheet' type='text/css'>
 
 <link rel="stylesheet"
@@ -57,6 +57,7 @@
 </head>
 <body data-spy="scroll" data-offset="0" data-target="#navigation">
 	<tiles:importAttribute name="currentPage" scope="request" />
+	<tiles:importAttribute name="currentTab" scope="request" />
 
 	<!-- Fixed navbar -->
 	<div id="navigation" class="navbar navbar-default navbar-fixed-top">

@@ -2,15 +2,13 @@ package edu.asu.spring.quadriga.service.textfile.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
@@ -18,6 +16,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.textfile.IFileSaveService;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * @author Nischal Samji
@@ -35,18 +34,16 @@ public class TextFileManager implements ITextFileManager {
 
     @Autowired
     private ITextFileMapper tfSMapper;
-
-    @Resource(name = "projectconstants")
-    private Properties messages;
-
+    
+    @Autowired
+    private IRetrieveProjectManager projectManager;
+    
+    
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, QuadrigaStorageException {
-        String textURI = messages.getProperty("textfiles.uri");
         String txtId = txtFileDAO.generateUniqueID();
         txtFile.setTextId(txtId);
-        txtFile.setTextFileURI(textURI);
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
-        txtFileDTO.setTextId(txtId);
         boolean status = fileSaveServ.saveFileToLocal(txtFile);
         if (status == true) {
             txtFileDAO.saveNewDTO(txtFileDTO);
@@ -59,7 +56,8 @@ public class TextFileManager implements ITextFileManager {
         List<TextFileDTO> tfDTOList = txtFileDAO.getTextFileDTObyWsId(wsId);
         List<ITextFile> tfList = new ArrayList<>();
         for (TextFileDTO tfDTO : tfDTOList) {
-            tfList.add(tfSMapper.getTextFile(tfDTO));
+            ITextFile textFile = tfSMapper.getTextFile(tfDTO);
+            tfList.add(textFile);
         }
         return tfList;
 
@@ -74,9 +72,39 @@ public class TextFileManager implements ITextFileManager {
             txtDto = txtFileDAO.getTextFileByUri(uri);
         }
         if (txtDto != null) {
-            return tfSMapper.getTextFile(txtDto);
+            ITextFile textFile = tfSMapper.getTextFile(txtDto);
+            String projectId = textFile.getProjectId();
+            IProject project = projectManager.getProjectDetails(projectId);
+            
+            if (project.getResolver() != null && textFile.getRefId() != null) {
+                String resolvedHandle = project.getResolver().buildResolvedHandle(textFile.getRefId());
+                textFile.setPresentationUrl(resolvedHandle);
+            }
+            return textFile;
         }
         return null;
+    }
+    
+    @Override
+    public ITextFile getTextFile(String textId) throws QuadrigaStorageException {
+        TextFileDTO txtDto = txtFileDAO.getDTO(textId);
+        if (txtDto != null) {
+            ITextFile textFile = tfSMapper.getTextFile(txtDto);
+            String projectId = textFile.getProjectId();
+            IProject project = projectManager.getProjectDetails(projectId);
+            
+            if (project.getResolver() != null && textFile.getRefId() != null) {
+                String resolvedHandle = project.getResolver().buildResolvedHandle(textFile.getRefId());
+                textFile.setPresentationUrl(resolvedHandle);
+            }
+            return textFile;
+        }
+        return null;
+    }
+    
+    @Override
+    public void loadFile(ITextFile txtFile) throws FileStorageException {
+        txtFile.setFileContent(retrieveTextFileContent(txtFile.getTextId()));
     }
 
     @Override

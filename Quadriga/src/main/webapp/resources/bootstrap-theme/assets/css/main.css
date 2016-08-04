@@ -263,3 +263,38 @@ a.list-group-item {
 .byline-sm a:hover {
 	text-decoration: underline;
 }
+
+/* search */
+.navbar-search {
+    background-color: #3d96a5;
+}
+
+#c.footer-search {
+	background-color: #3d96a5;
+	color: #333333;
+}
+
+#c.footer-search p {
+	color: #333333;
+}
+
+#c.footer-search a {
+    color: #ffffff;
+}
+
+.body-search {
+	background-color: #3d96a5;
+}
+
+.search-main {
+	background-color: #ffffff;
+}
+
+.body-search a {
+	color: #3d96a5;
+}
+
+.body-search a:hover {
+    color: #2c7786;
+}
+

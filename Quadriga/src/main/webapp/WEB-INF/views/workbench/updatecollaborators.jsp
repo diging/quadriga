@@ -22,7 +22,7 @@
 	<hr>
 	<p>
 		<a
-			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}"><i
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}"><i
 			class="fa fa-arrow-circle-left"></i> Back to Project</a>
 	</p>
 	<hr>

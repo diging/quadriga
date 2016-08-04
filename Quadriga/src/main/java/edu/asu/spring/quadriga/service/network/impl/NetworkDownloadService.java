@@ -38,20 +38,12 @@ public class NetworkDownloadService {
             final List<INetworkNodeInfo> networkNodeInfoList) {
         List<Future<ElementEventsType>> futureEvents = new ArrayList<>();
         networkNodeInfoList.forEach(networkNodeInfo -> {
-            try {
-                // adding future tasks to a list
-                // this is asynchronous
-                Future<ElementEventsType> future = elementEventTypeDownloadService
-                        .getElementEventTypeAsync(networkNodeInfo.getId());
-                futureEvents.add(future);
-            } catch (QStoreStorageException | JAXBException e) {
-                logger.error("Error while fetching data for relation event id: " + networkNodeInfo.getId(),
-                        e);
-                // all the future lists have not been added
-                // add an empty future list so that the nodes size
-                // is equal to the future list size
-                futureEvents.add(new AsyncResult<>(null));
-            }
+       
+            // adding future tasks to a list
+            // this is asynchronous
+            Future<ElementEventsType> future = elementEventTypeDownloadService
+                    .getElementEventTypeAsync(networkNodeInfo.getId());
+            futureEvents.add(future);       
         });
 
         // Get the data from future tasks
