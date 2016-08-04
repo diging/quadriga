@@ -16,7 +16,7 @@
 	rel="stylesheet" />
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/d3networkvisualize.js"></script>
-<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
 
 </head>
 <script type="text/javascript">
