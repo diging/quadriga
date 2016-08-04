@@ -73,8 +73,8 @@ public class ProjectStatsController {
             JSONObject jsonObject = new JSONObject();
             IConceptStats conceptStats = conceptsList.get(i);
             jsonObject.put("conceptId", conceptStats.getConceptId());
-            jsonObject.put("description", StringEscapeUtils.escapeJavaScript(conceptStats.getDescription()));
-            jsonObject.put("label", StringEscapeUtils.escapeJavaScript(conceptStats.getLemma()));
+            jsonObject.put("description", StringEscapeUtils.escapeHtml(conceptStats.getDescription()));
+            jsonObject.put("label", StringEscapeUtils.escapeHtml(conceptStats.getLemma()));
             jsonObject.put("count", conceptStats.getCount());
             jsonArray.put(jsonObject);
         }
