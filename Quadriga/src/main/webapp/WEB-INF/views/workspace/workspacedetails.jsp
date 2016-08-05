@@ -195,9 +195,15 @@
 										<br>
 										<c:if test="${textfile.accessibility == 'PUBLIC'}">
 										<span class="label label-success">Public</span>
+										<a data-toggle="modal" data-target="#changeaccess-ws" id="${textfile.textId}">
+										<i class="fa fa-unlock" aria-hidden="true"></i>
+										</a>
 										</c:if>
 										<c:if test="${textfile.accessibility == 'PRIVATE'}">
                                         <span class="label label-danger">Private</span>
+                                        <a data-toggle="modal" data-target="#changeaccess-ws" id="${textfile.textId}">
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
+                                        </a>
                                         </c:if>
 									</td>
 									<td align="left"><small><strong>URI:</strong> ${textfile.textFileURI}<br>
@@ -382,10 +388,38 @@
 </div>
 <!-- /.modal -->
 
+<!-- Changing Text Accessibility modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="changeaccess-ws">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Update Text Accessibility</h4>
+			</div>
+			<div class="modal-body">
+				<p>Are you sure you want to change accessibility of text file?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" id="changeaccess-btn">Yes,
+					change</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
 <script>
 	$(document)
 			.ready(
 					function() {
+						var textFileId;
 						$('#deactivate-btn')
 								.click(
 										function(event) {
@@ -401,6 +435,16 @@
 										function(event) {
 											location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteSingleWorkspace/${workspaceid}?projectId=${myprojectid}';
 										});
+						
+						$('#changeaccess-btn')
+								.click(
+										function(event) {
+											location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/' + textFileId + '/updateAccessibility';
+										});
+						
+						$('#changeaccess-ws').on('show.bs.modal', function (e) {
+							textFileId = e.relatedTarget.id;
+						});
 
-					});
+						});
 </script>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
@@ -34,21 +35,26 @@ public class TextFileManager implements ITextFileManager {
 
     @Autowired
     private ITextFileMapper tfSMapper;
-    
+
     @Autowired
     private IRetrieveProjectManager projectManager;
-    
-    
+
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, QuadrigaStorageException {
         String txtId = txtFileDAO.generateUniqueID();
         txtFile.setTextId(txtId);
-        TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
+
         boolean status = fileSaveServ.saveFileToLocal(txtFile);
         if (status == true) {
-            txtFileDAO.saveNewDTO(txtFileDTO);
+            saveTextFileToDB(txtFile);
         }
         return status;
+    }
+
+    @Override
+    public void saveTextFileToDB(ITextFile txtFile) {
+        TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
+        txtFileDAO.saveOrUpdateDTO(txtFileDTO);
     }
 
     @Override
@@ -62,7 +68,7 @@ public class TextFileManager implements ITextFileManager {
         return tfList;
 
     }
-    
+
     @Override
     public ITextFile getTextFileByUri(String uri) throws QuadrigaStorageException {
         int idxLastSegment = uri.lastIndexOf("/");
@@ -75,7 +81,7 @@ public class TextFileManager implements ITextFileManager {
             ITextFile textFile = tfSMapper.getTextFile(txtDto);
             String projectId = textFile.getProjectId();
             IProject project = projectManager.getProjectDetails(projectId);
-            
+
             if (project.getResolver() != null && textFile.getRefId() != null) {
                 String resolvedHandle = project.getResolver().buildResolvedHandle(textFile.getRefId());
                 textFile.setPresentationUrl(resolvedHandle);
@@ -84,7 +90,7 @@ public class TextFileManager implements ITextFileManager {
         }
         return null;
     }
-    
+
     @Override
     public ITextFile getTextFile(String textId) throws QuadrigaStorageException {
         TextFileDTO txtDto = txtFileDAO.getDTO(textId);
@@ -92,7 +98,7 @@ public class TextFileManager implements ITextFileManager {
             ITextFile textFile = tfSMapper.getTextFile(txtDto);
             String projectId = textFile.getProjectId();
             IProject project = projectManager.getProjectDetails(projectId);
-            
+
             if (project.getResolver() != null && textFile.getRefId() != null) {
                 String resolvedHandle = project.getResolver().buildResolvedHandle(textFile.getRefId());
                 textFile.setPresentationUrl(resolvedHandle);
@@ -101,7 +107,7 @@ public class TextFileManager implements ITextFileManager {
         }
         return null;
     }
-    
+
     @Override
     public void loadFile(ITextFile txtFile) throws FileStorageException {
         txtFile.setFileContent(retrieveTextFileContent(txtFile.getTextId()));
@@ -114,7 +120,16 @@ public class TextFileManager implements ITextFileManager {
         if (!fileName.contains("."))
             fileName += ".txt";
         return fileSaveServ.retrieveFileFromLocal(fileName, txtId);
-
     }
 
+    @Override
+    public ITextFile updateTextFileAccessibility(ITextFile textFile) {
+
+        if (textFile.getAccessibility() == ETextAccessibility.PUBLIC) {
+            textFile.setAccessibility(ETextAccessibility.PRIVATE);
+        } else {
+            textFile.setAccessibility(ETextAccessibility.PUBLIC);
+        }
+        return textFile;
+    }
 }
