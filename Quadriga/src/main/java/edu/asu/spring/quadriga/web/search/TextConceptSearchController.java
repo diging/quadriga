@@ -31,53 +31,53 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Controller
 public class TextConceptSearchController {
-    
+
     @Autowired
     private IConceptpowerConnector conceptpowerConnector;
-    
+
     @Autowired
     private IQStoreConnector qStoreConnector;
-    
+
     @Autowired
     private IMarshallingService marshallingService;
-    
+
     @Autowired
     private ITextFileManager textFileManager;
-    
+
     @Autowired
     private IRetrieveProjectManager projectManager;
-    
+
     @Autowired
     private INetworkTransformationManager transformationManager;
-    
+
     @Autowired
     private IJsonCreator jsonCreator;
 
     @RequestMapping(value = "search/texts")
-    public String search(@RequestParam(defaultValue="") String conceptId, Model model) throws Exception {
-        
+    public String search(@RequestParam(defaultValue = "") String conceptId, Model model) throws Exception {
+
         String conceptUri = conceptId;
-        
+
         if (!conceptId.isEmpty()) {
             ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
             List<ConceptEntry> entries = reply.getConceptEntry();
-            
+
             ConceptEntry entry = null;
             if (entries != null && !entries.isEmpty()) {
                 entry = entries.get(0);
                 entry.setId(conceptUri);
             }
-            
+
             if (conceptId.startsWith("http://")) {
                 int lastIdx = conceptId.lastIndexOf("/");
-                conceptId = conceptId.substring(lastIdx+1);
+                conceptId = conceptId.substring(lastIdx + 1);
             }
-            
+
             String results = qStoreConnector.searchNodesByConcept(conceptId);
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
-            
+
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
-            
+
             if (entry.getWordnetId() != null && !entry.getWordnetId().isEmpty()) {
                 results = qStoreConnector.searchNodesByConcept(entry.getWordnetId());
                 events = marshallingService.unMarshalXmlToElementEventsType(results);
@@ -87,37 +87,39 @@ public class TextConceptSearchController {
             Set<String> references = new HashSet<String>();
             List<ITextFile> texts = new ArrayList<ITextFile>();
             List<String> textlessReferences = new ArrayList<String>();
-            
+
             for (CreationEvent event : eventList) {
                 String sourceRef = event.getSourceReference();
-                
+
                 // if we haven't seen the reference yet
                 if (references.add(sourceRef)) {
                     ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
                     if (txtFile == null) {
                         textlessReferences.add(sourceRef);
                     } else {
-                        if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
+                        if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC
+                                || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
                             texts.add(txtFile);
                             textFileManager.loadFile(txtFile);
                             txtFile.setSnippetLength(40);
                         }
                     }
-                    
+
                 }
             }
-            
+
             model.addAttribute("references", textlessReferences);
             model.addAttribute("concept", entry);
             model.addAttribute("texts", texts);
-            
+
             List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
-            
+
             List<String> projectIds = new ArrayList<String>();
             projects.forEach(p -> projectIds.add(p.getProjectId()));
-            
-            ITransformedNetwork transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds, conceptUri, INetworkStatus.APPROVED);
-            
+
+            ITransformedNetwork transformedNetwork = transformationManager
+                    .getSearchTransformedNetworkMultipleProjects(projectIds, conceptUri, INetworkStatus.APPROVED);
+
             String json = null;
             if (transformedNetwork != null) {
                 json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
@@ -126,12 +128,11 @@ public class TextConceptSearchController {
             if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
                 model.addAttribute("isNetworkEmpty", true);
             }
-            
+
             model.addAttribute("jsonstring", json);
-            
+
         }
-        
-        
+
         return "search/texts";
     }
 
