@@ -454,6 +454,6 @@
 						    
 						    var content = "Are you sure you want to make this text file " + changedTextFileAccess + "?";
 						    $(this).find('.modal-body p').text(content);
-						    });
-	                });
+						});
+	                	});
 </script>
