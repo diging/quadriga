@@ -46,13 +46,13 @@ public class TextFileManager implements ITextFileManager {
 
         boolean status = fileSaveServ.saveFileToLocal(txtFile);
         if (status == true) {
-            saveTextFileToDB(txtFile);
+            storeTextFile(txtFile);
         }
         return status;
     }
 
     @Override
-    public void saveTextFileToDB(ITextFile txtFile) {
+    public void storeTextFile(ITextFile txtFile) {
         TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
         txtFileDAO.saveOrUpdateDTO(txtFileDTO);
     }

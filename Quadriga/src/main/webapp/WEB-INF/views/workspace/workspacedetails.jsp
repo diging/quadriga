@@ -195,13 +195,13 @@
 										<br>
 										<c:if test="${textfile.accessibility == 'PUBLIC'}">
 										<span class="label label-success">Public</span>
-										<a data-toggle="modal" data-target="#changeaccess-ws" id="${textfile.textId}">
+										<a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}">
 										<i class="fa fa-unlock" aria-hidden="true"></i>
 										</a>
 										</c:if>
 										<c:if test="${textfile.accessibility == 'PRIVATE'}">
                                         <span class="label label-danger">Private</span>
-                                        <a data-toggle="modal" data-target="#changeaccess-ws" id="${textfile.textId}">
+                                        <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}">
                                         <i class="fa fa-lock" aria-hidden="true"></i>
                                         </a>
                                         </c:if>
@@ -389,7 +389,7 @@
 <!-- /.modal -->
 
 <!-- Changing Text Accessibility modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="changeaccess-ws">
+<div class="modal fade" tabindex="-1" role="dialog" id="changeaccess-tf">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -442,8 +442,9 @@
 											location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/' + textFileId + '/updateAccessibility';
 										});
 						
-						$('#changeaccess-ws').on('show.bs.modal', function (e) {
+						$('#changeaccess-tf').on('show.bs.modal', function (e) {
 							textFileId = e.relatedTarget.id;
+							console.log(e.relatedTarget.html);
 						});
 
 						});

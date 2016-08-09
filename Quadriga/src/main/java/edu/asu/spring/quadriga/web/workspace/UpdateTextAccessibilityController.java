@@ -24,7 +24,7 @@ public class UpdateTextAccessibilityController {
 
         ITextFile textFile = tfManager.getTextFile(textId);
         ITextFile updatedTextFile = tfManager.updateTextFileAccessibility(textFile);
-        tfManager.saveTextFileToDB(updatedTextFile);
+        tfManager.storeTextFile(updatedTextFile);
         return "redirect:/auth/workbench/workspace/" + workspaceId;
     }
 }

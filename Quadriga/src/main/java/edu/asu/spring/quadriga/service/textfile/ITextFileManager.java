@@ -58,7 +58,7 @@ public interface ITextFileManager {
      *            operations.
      * @return
      */
-    void saveTextFileToDB(ITextFile txtFile);
+    void storeTextFile(ITextFile txtFile);
 
     /**
      * If the accessibility of textFile is public, it's set to private.
