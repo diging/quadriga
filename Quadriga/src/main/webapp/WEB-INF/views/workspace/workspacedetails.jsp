@@ -195,13 +195,13 @@
 										<br>
 										<c:if test="${textfile.accessibility == 'PUBLIC'}">
 										<span class="label label-success">Public</span>
-										<a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}">
+										<a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}" data-textaccess="${textfile.accessibility}">
 										<i class="fa fa-unlock" aria-hidden="true"></i>
 										</a>
 										</c:if>
 										<c:if test="${textfile.accessibility == 'PRIVATE'}">
                                         <span class="label label-danger">Private</span>
-                                        <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}">
+                                        <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}" data-textaccess="${textfile.accessibility}">
                                         <i class="fa fa-lock" aria-hidden="true"></i>
                                         </a>
                                         </c:if>
@@ -400,7 +400,7 @@
 				<h4 class="modal-title">Update Text Accessibility</h4>
 			</div>
 			<div class="modal-body">
-				<p>Are you sure you want to change accessibility of text file?</p>
+				<p></p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -444,8 +444,16 @@
 						
 						$('#changeaccess-tf').on('show.bs.modal', function (e) {
 							textFileId = e.relatedTarget.id;
-							console.log(e.relatedTarget.html);
-						});
-
+							textFileAccess = $("#" + textFileId).data("textaccess");
+							
+							if (textFileAccess === "PUBLIC") {
+								textFileAccess = "Private";
+							} else if (textFileAccess === "PRIVATE") {
+								textFileAccess = "Public";
+							}
+							
+							var content = "Are you sure you want to make this text file " + textFileAccess + "?";
+							$(this).find('.modal-body p').text(content);
+							});
 						});
 </script>

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -23,8 +24,14 @@ public class UpdateTextAccessibilityController {
             @PathVariable("workspaceId") String workspaceId) throws QuadrigaStorageException, FileStorageException {
 
         ITextFile textFile = tfManager.getTextFile(textId);
-        ITextFile updatedTextFile = tfManager.updateTextFileAccessibility(textFile);
-        tfManager.storeTextFile(updatedTextFile);
+
+        if (textFile.getAccessibility() == ETextAccessibility.PUBLIC) {
+            textFile.setAccessibility(ETextAccessibility.PRIVATE);
+        } else if (textFile.getAccessibility() == ETextAccessibility.PRIVATE) {
+            textFile.setAccessibility(ETextAccessibility.PUBLIC);
+        }
+
+        tfManager.storeTextFile(textFile);
         return "redirect:/auth/workbench/workspace/" + workspaceId;
     }
 }

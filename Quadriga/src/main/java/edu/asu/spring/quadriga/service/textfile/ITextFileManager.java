@@ -59,16 +59,4 @@ public interface ITextFileManager {
      * @return
      */
     void storeTextFile(ITextFile txtFile);
-
-    /**
-     * If the accessibility of textFile is public, it's set to private.
-     * otherwise it is set to public.
-     * 
-     * @param textFile
-     *            Text File object from web controller to handle text
-     *            operations.
-     * @return textFile with updated accessibility
-     */
-    ITextFile updateTextFileAccessibility(ITextFile textFile);
-
 }

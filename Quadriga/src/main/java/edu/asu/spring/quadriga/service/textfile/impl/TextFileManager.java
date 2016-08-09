@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.textfile.ITextFileDAO;
-import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
@@ -120,16 +119,5 @@ public class TextFileManager implements ITextFileManager {
         if (!fileName.contains("."))
             fileName += ".txt";
         return fileSaveServ.retrieveFileFromLocal(fileName, txtId);
-    }
-
-    @Override
-    public ITextFile updateTextFileAccessibility(ITextFile textFile) {
-
-        if (textFile.getAccessibility() == ETextAccessibility.PUBLIC) {
-            textFile.setAccessibility(ETextAccessibility.PRIVATE);
-        } else {
-            textFile.setAccessibility(ETextAccessibility.PUBLIC);
-        }
-        return textFile;
     }
 }
