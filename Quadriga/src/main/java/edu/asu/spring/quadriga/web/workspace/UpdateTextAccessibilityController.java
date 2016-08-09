@@ -19,18 +19,13 @@ public class UpdateTextAccessibilityController {
     @Autowired
     private ITextFileManager tfManager;
 
-    @RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/{textId}/updateAccessibility", method = RequestMethod.GET)
+    @RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/{textId}/{accessStatus}/updateAccessibility", method = RequestMethod.GET)
     public String updateTextFileAccessibility(Model model, @PathVariable("textId") String textId,
-            @PathVariable("workspaceId") String workspaceId) throws QuadrigaStorageException, FileStorageException {
+            @PathVariable("workspaceId") String workspaceId, @PathVariable("accessStatus") String accessibility)
+            throws QuadrigaStorageException, FileStorageException {
 
         ITextFile textFile = tfManager.getTextFile(textId);
-
-        if (textFile.getAccessibility() == ETextAccessibility.PUBLIC) {
-            textFile.setAccessibility(ETextAccessibility.PRIVATE);
-        } else if (textFile.getAccessibility() == ETextAccessibility.PRIVATE) {
-            textFile.setAccessibility(ETextAccessibility.PUBLIC);
-        }
-
+        textFile.setAccessibility(ETextAccessibility.valueOf(accessibility.toUpperCase()));
         tfManager.storeTextFile(textFile);
         return "redirect:/auth/workbench/workspace/" + workspaceId;
     }

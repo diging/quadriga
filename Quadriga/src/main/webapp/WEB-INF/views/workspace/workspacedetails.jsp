@@ -439,21 +439,21 @@
 						$('#changeaccess-btn')
 								.click(
 										function(event) {
-											location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/' + textFileId + '/updateAccessibility';
+											location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/' + textFileId + '/' + changedTextFileAccess + '/updateAccessibility';
 										});
 						
 						$('#changeaccess-tf').on('show.bs.modal', function (e) {
-							textFileId = e.relatedTarget.id;
-							textFileAccess = $("#" + textFileId).data("textaccess");
-							
-							if (textFileAccess === "PUBLIC") {
-								textFileAccess = "Private";
-							} else if (textFileAccess === "PRIVATE") {
-								textFileAccess = "Public";
-							}
-							
-							var content = "Are you sure you want to make this text file " + textFileAccess + "?";
-							$(this).find('.modal-body p').text(content);
-							});
-						});
+						    textFileId = e.relatedTarget.id;
+						    textFileAccess = $("#" + textFileId).data("textaccess");
+						    
+						    if (textFileAccess === "PUBLIC") {
+					            changedTextFileAccess = "Private";
+						    } else if (textFileAccess === "PRIVATE") {
+						        changedTextFileAccess = "Public";
+						    }
+						    
+						    var content = "Are you sure you want to make this text file " + changedTextFileAccess + "?";
+						    $(this).find('.modal-body p').text(content);
+						    });
+	                });
 </script>
