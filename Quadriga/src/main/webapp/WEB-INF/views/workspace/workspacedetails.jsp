@@ -447,7 +447,7 @@
 						    textFileAccess = $("#" + textFileId).data("textaccess");
 						    
 						    if (textFileAccess === "PUBLIC") {
-					            changedTextFileAccess = "Private";
+						        changedTextFileAccess = "Private";
 						    } else if (textFileAccess === "PRIVATE") {
 						        changedTextFileAccess = "Public";
 						    }
