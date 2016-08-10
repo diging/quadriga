@@ -72,9 +72,9 @@
         
                 $.each($("input[name='individualnetwork']:checked"),function() {
                     var arrayofNetworks = $(this).val().split(",");
-                    networks.push(arrayOfNetworks[0]);
-                    networkID.push(arrayOfNetworks[2]);                                                             
-                    networkIDvariable =  networkIDvariable + "," + arrayOfNetworks[2];                                                      
+                    networks.push(arrayofNetworks[0]);
+                    networkID.push(arrayofNetworks[2]);                                                             
+                    networkIDvariable =  networkIDvariable + "," + arrayofNetworks[2];                                                      
             
                     if ((jQuery.inArray(arrayofNetworks[1],projects) == -1)) {
                         projects.push(arrayofNetworks[1]);
@@ -206,13 +206,6 @@
             </c:otherwise>
         </c:choose>
     </div>
-
-
-
-
-
-
-
 
     <div class="row">
         <div class="col-md-8">
