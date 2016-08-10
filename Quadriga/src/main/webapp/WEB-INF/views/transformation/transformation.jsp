@@ -16,49 +16,52 @@
 		$('#' + pID).find(':checkbox').each(function() {
 			jQuery(this).prop('checked', status);
 		});
-
 	}
 
-	$(document).ready(function() {
+	$(document).ready(
+			function() {
 
-		
-		$("input[type=button]").button().click(function(event) {
-			event.preventDefault();
-		});
+				$("input[type=button]").button().click(function(event) {
+					event.preventDefault();
+				});
 
-		$(".checkbox1 input[type='checkbox']").change(function() {
-			status = $(this).is(':checked');
-			parent = $(this).parents('.panel');
-			ckBoxes = parent.find(':checkbox');
-			ckBoxes.each(function() {
-				if (status === "true") {
-					this.checked = true;
-				} else {
-					this.checked = false;
-				}
+				$(".checkbox1 input[type='checkbox']").change(function() {
+					status = $(this).is(':checked');
+					parent = $(this).parents('.panel');
+					ckBoxes = parent.find(':checkbox');
+					ckBoxes.each(function() {
+						if (status === "true") {
+							this.checked = true;
+						} else {
+							this.checked = false;
+						}
+
+					});
+				});
+
+				$("#selectAllProjects").change(
+						function() {
+							$(".checkbox1 input[type='checkbox']").prop(
+									'checked', $(this).prop('checked'));
+							$(".checkbox1 input[type='checkbox']").trigger(
+									"change");
+						});
+
+				$("#selectAllTransformations").change(
+						function() {
+							$(".transformationList").prop('checked',
+									$(this).prop('checked'));
+						});
 
 			});
-		});
-		
-		$("#selectAllProjects").change(function(){
-			$(".checkbox1 input[type='checkbox']").prop('checked', $(this).prop('checked'));
-			$(".checkbox1 input[type='checkbox']").trigger("change");
-		});
-				
-		$("#selectAllTransformations").change(function() {
-			$(".transformationList").prop('checked', $(this).prop('checked'));
-		});
-	    
-		});
-	
 </script>
 
 <script type="text/javascript">
 	$(document)
 			.ready(
-				   function() {
-					    var networkID;
-					    var networkIDvariable;
+					function() {
+						var networkID;
+						var networkIDvariable;
 						$('#confirmationTransformation')
 								.click(
 										function() {
@@ -112,28 +115,44 @@
 																				.push(arrayofNetworks[1]);
 																	}
 																});
-												
-												$('#confirmationTransformation').attr('data-target','#confirm');
-												jQuery("#contentholder").html("<h3>Transformations:</h3> " + 
-												transformations.join("<br/>") + "" + " <br/> <br/><h3>Projects </h3> "
-												+ projects.join("<br/>") + " <br/> <br/><h3>Networks</h3> "
-												+ networks.join("<br/>"));
-												}
+
+												$('#confirmationTransformation')
+														.attr('data-target',
+																'#confirm');
+												jQuery("#contentholder")
+														.html(
+																"<h3>Transformations:</h3> "
+																		+ transformations
+																				.join("<br/>")
+																		+ ""
+																		+ " <br/> <br/><h3>Projects </h3> "
+																		+ projects
+																				.join("<br/>")
+																		+ " <br/> <br/><h3>Networks</h3> "
+																		+ networks
+																				.join("<br/>"));
+											}
 
 											else {
-											    $('#confirmationTransformation').attr('data-target','#alert');
-											    jQuery("#alertholder")
-											    .html("Please select at least one transformation and project.");
+												$('#confirmationTransformation')
+														.attr('data-target',
+																'#alert');
+												jQuery("#alertholder")
+														.html(
+																"Please select at least one transformation and project.");
 											}
 										});
 						$('#submit-btn')
-								    .click(
-										    function(event)	{
-										    	document.getElementById('sanitized_network_id').value = networkID;
-									            $('#sanitized_network_id').val(networkIDvariable);
-										        document.getElementById('form1').submit();
-									        })
-					   });
+								.click(
+										function(event) {
+											document
+													.getElementById('sanitized_network_id').value = networkID;
+											$('#sanitized_network_id').val(
+													networkIDvariable);
+											document.getElementById('form1')
+													.submit();
+										})
+					});
 </script>
 
 <style>
@@ -316,58 +335,59 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
-    
-    <p>
-	<input class="btn btn-primary" type="button" data-toggle="modal" value='Submit Project and Transformations'
-		id="confirmationTransformation" /> <input type="hidden"
-		id="sanitized_network_id" name="sanitized_network_id" value="1234">
-	</p>
-	
-	
-<div class="modal fade" tabindex="-1" role="dialog" id="alert">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title">Transformation cannot be processed.</h4>
-			</div>
-			<div class="modal-body">
-				<h4>No transformations or projects selected.</h4>
-				<p id="alertholder"></p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
-			</div>
-		</div>
-	</div>
-</div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="confirm">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title">Confirm transformation</h4>
-			</div>
-			<div class="modal-body">
-				<h4>
-				Are you sure you want to transform the following <br>networks
-				with below transformation files?
-				</h4>
-				<p id="contentholder"></p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary" id="submit-btn">Submit</button>
+	<p>
+		<input class="btn btn-primary" type="button" data-toggle="modal"
+			value='Submit Project and Transformations'
+			id="confirmationTransformation" /> <input type="hidden"
+			id="sanitized_network_id" name="sanitized_network_id" value="1234">
+	</p>
+
+
+	<div class="modal fade" tabindex="-1" role="dialog" id="alert">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Transformation cannot be processed.</h4>
+				</div>
+				<div class="modal-body">
+					<h4>No transformations or projects selected.</h4>
+					<p id="alertholder"></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" id="confirm">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Confirm transformation</h4>
+				</div>
+				<div class="modal-body">
+					<h4>
+						Are you sure you want to transform the following <br>networks
+						with below transformation files?
+					</h4>
+					<p id="contentholder"></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" id="submit-btn">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </form>
