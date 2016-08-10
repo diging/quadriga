@@ -13,34 +13,34 @@
 <script type="text/javascript" charset="utf8">
 	//@ sourceURL=filename.js
     function checkCheckboxes(id, pID, status) {
-	    $('#' + pID).find(':checkbox').each(function() {
-		    jQuery(this).prop('checked', status);
-	    });
+        $('#' + pID).find(':checkbox').each(function() {
+            jQuery(this).prop('checked', status);
+        });
     }
 
     $(document).ready(function() {
 
-	    $("input[type=button]").button().click(function(event) {
-	        event.preventDefault();
-	    });
+        $("input[type=button]").button().click(function(event) {
+            event.preventDefault();
+        });
 
-	    $(".checkbox1 input[type='checkbox']").change(function() {
-	        status = $(this).is(':checked');
-	        parent = $(this).parents('.panel');
-	        ckBoxes = parent.find(':checkbox');
-	        ckBoxes.each(function() {
-	            if (status === "true") {
+        $(".checkbox1 input[type='checkbox']").change(function() {
+            status = $(this).is(':checked');
+            parent = $(this).parents('.panel');
+            ckBoxes = parent.find(':checkbox');
+            ckBoxes.each(function() {
+                if (status === "true") {
                     this.checked = true;
 	            } else {
-				    this.checked = false;
+                    this.checked = false;
 	            }
             });
          });
 
         $("#selectAllProjects").change(function() {
             $(".checkbox1 input[type='checkbox']").prop('checked', $(this).prop('checked'));
-		    $(".checkbox1 input[type='checkbox']").trigger("change");
-		});
+            $(".checkbox1 input[type='checkbox']").trigger("change");
+        });
 
         $("#selectAllTransformations").change(function() {
             $(".transformationList").prop('checked',$(this).prop('checked'));
