@@ -12,147 +12,91 @@
 -->
 <script type="text/javascript" charset="utf8">
 	//@ sourceURL=filename.js
-	function checkCheckboxes(id, pID, status) {
-		$('#' + pID).find(':checkbox').each(function() {
-			jQuery(this).prop('checked', status);
+    function checkCheckboxes(id, pID, status) {
+	    $('#' + pID).find(':checkbox').each(function() {
+		    jQuery(this).prop('checked', status);
+	    });
+    }
+
+    $(document).ready(function() {
+
+	    $("input[type=button]").button().click(function(event) {
+	        event.preventDefault();
+	    });
+
+	    $(".checkbox1 input[type='checkbox']").change(function() {
+	        status = $(this).is(':checked');
+	        parent = $(this).parents('.panel');
+	        ckBoxes = parent.find(':checkbox');
+	        ckBoxes.each(function() {
+	            if (status === "true") {
+                    this.checked = true;
+	            } else {
+				    this.checked = false;
+	            }
+            });
+         });
+
+        $("#selectAllProjects").change(function() {
+            $(".checkbox1 input[type='checkbox']").prop('checked', $(this).prop('checked'));
+		    $(".checkbox1 input[type='checkbox']").trigger("change");
 		});
-	}
 
-	$(document).ready(
-			function() {
+        $("#selectAllTransformations").change(function() {
+            $(".transformationList").prop('checked',$(this).prop('checked'));
+        });
 
-				$("input[type=button]").button().click(function(event) {
-					event.preventDefault();
-				});
-
-				$(".checkbox1 input[type='checkbox']").change(function() {
-					status = $(this).is(':checked');
-					parent = $(this).parents('.panel');
-					ckBoxes = parent.find(':checkbox');
-					ckBoxes.each(function() {
-						if (status === "true") {
-							this.checked = true;
-						} else {
-							this.checked = false;
-						}
-
-					});
-				});
-
-				$("#selectAllProjects").change(
-						function() {
-							$(".checkbox1 input[type='checkbox']").prop(
-									'checked', $(this).prop('checked'));
-							$(".checkbox1 input[type='checkbox']").trigger(
-									"change");
-						});
-
-				$("#selectAllTransformations").change(
-						function() {
-							$(".transformationList").prop('checked',
-									$(this).prop('checked'));
-						});
-
-			});
+    });
 </script>
 
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						var networkID;
-						var networkIDvariable;
-						$('#confirmationTransformation')
-								.click(
-										function() {
-											if ((jQuery('#divProjectList input[type=checkbox]:checked').length || jQuery('#individualNetworks input[type=checkbox]:checked').length)
+	$(document).ready(function() {
+        var networkID;
+        var networkIDvariable;
+        $('#confirmationTransformation').click(function() {
+            if ((jQuery('#divProjectList input[type=checkbox]:checked').length || jQuery('#individualNetworks input[type=checkbox]:checked').length)
 													&& jQuery('#headingTwo input[type=checkbox]:checked').length) {
 
-												var projects = [];
-												$
-														.each(
-																$("input[name='project']:checked"),
-																function() {
-																	projects
-																			.push($(
-																					this)
-																					.val());
-																});
-												var transformations = [];
-												$
-														.each(
-																$("input[name='transformation']:checked"),
-																function() {
-																	transformations
-																			.push($(
-																					this)
-																					.val());
-																});
-												var networks = [];
-												networkID = [];
-												networkIDvariable = "";
-												$
-														.each(
-																$("input[name='individualnetwork']:checked"),
-																function() {
-																	var arrayofNetworks = $(
-																			this)
-																			.val()
-																			.split(
-																					",");
-																	networks
-																			.push(arrayofNetworks[0]);
-																	networkID
-																			.push(arrayofNetworks[2]);
-																	networkIDvariable = networkIDvariable
-																			+ ","
-																			+ arrayofNetworks[2];
-																	if ((jQuery
-																			.inArray(
-																					arrayofNetworks[1],
-																					projects) == -1)) {
-																		projects
-																				.push(arrayofNetworks[1]);
-																	}
-																});
+                var projects = [];
+                $.each($("input[name='project']:checked"),function() {
+			        projects.push($(this).val());
+                });
+        
+                var transformations = [];
+                $.each($("input[name='transformation']:checked"),function() {
+		            transformations.push($(this).val());
+                });
+        
+  	            var networks = [];
+                networkID = [];										
+		        networkIDvariable = "";								
+        
+		        $.each($("input[name='individualnetwork']:checked"),function() {
+		            var arrayofNetworks = $(this).val().split(",");
+		            networks.push(arrayOfNetworks[0]);
+		            networkID.push(arrayOfNetworks[2]);																
+			        networkIDvariable =  networkIDvariable + "," + arrayOfNetworks[2];														
+            
+		            if ((jQuery.inArray(arrayofNetworks[1],projects) == -1)) {
+                        projects.push(arrayofNetworks[1]);
+			        }
+	            });
 
-												$('#confirmationTransformation')
-														.attr('data-target',
-																'#confirm');
-												jQuery("#contentholder")
-														.html(
-																"<h3>Transformations:</h3> "
-																		+ transformations
-																				.join("<br/>")
-																		+ ""
-																		+ " <br/> <br/><h3>Projects </h3> "
-																		+ projects
-																				.join("<br/>")
-																		+ " <br/> <br/><h3>Networks</h3> "
-																		+ networks
-																				.join("<br/>"));
-											}
-
-											else {
-												$('#confirmationTransformation')
-														.attr('data-target',
-																'#alert');
-												jQuery("#alertholder")
-														.html(
-																"Please select at least one transformation and project.");
-											}
-										});
-						$('#submit-btn')
-								.click(
-										function(event) {
-											document
-													.getElementById('sanitized_network_id').value = networkID;
-											$('#sanitized_network_id').val(
-													networkIDvariable);
-											document.getElementById('form1')
-													.submit();
-										})
-					});
+               $('#confirmationTransformation').attr('data-target','#confirm');jQuery("#contentholder")
+		       .html("<h3>Transformations:</h3> "+ transformations.join("<br/>") + ""
+			    + " <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")
+			    + " <br/> <br/><h3>Networks</h3> " + networks.join("<br/>"));
+		    } else {
+			    $('#confirmationTransformation').attr('data-target','#alert');
+			    jQuery("#alertholder").html("Please select at least one transformation and project.");
+	        }});
+		   
+            $('#submit-btn').click(function(event) {
+	   		    document.getElementById('sanitized_network_id').value = networkID;
+                $('#sanitized_network_id').val(networkIDvariable);
+                document.getElementById('form1').submit();
+	        })
+	});
 </script>
 
 <style>
