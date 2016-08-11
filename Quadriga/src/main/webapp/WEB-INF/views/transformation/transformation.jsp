@@ -35,16 +35,16 @@
                     this.checked = false;
                 }
             });
-         });
+        });
 
-         $("#selectAllProjects").change(function() {
-             $(".checkbox1 input[type='checkbox']").prop('checked', $(this).prop('checked'));
-             $(".checkbox1 input[type='checkbox']").trigger("change");
-         });
+        $("#selectAllProjects").change(function() {
+            $(".checkbox1 input[type='checkbox']").prop('checked', $(this).prop('checked'));
+            $(".checkbox1 input[type='checkbox']").trigger("change");
+        });
 
-         $("#selectAllTransformations").change(function() {
-             $(".transformationList").prop('checked',$(this).prop('checked'));
-         });
+        $("#selectAllTransformations").change(function() {
+            $(".transformationList").prop('checked',$(this).prop('checked'));
+        });
     });
 </script>
 
@@ -77,7 +77,7 @@
                 + "<br/><h3>Networks</h3> " + networks.join("<br/>"));
             } else {
                 $('#confirmationTransformation').attr('data-target','#alert');
-            	    jQuery("#alertholder").html("Please select at least one transformation and project.");
+            	jQuery("#alertholder").html("Please select at least one transformation and project.");
             }});
            
             $('#submit-btn').click(function(event) {
