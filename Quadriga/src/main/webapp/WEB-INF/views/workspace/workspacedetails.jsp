@@ -404,6 +404,7 @@
 </div>
 <!-- /.modal -->
 
+<form style="display: hidden" action="" method="POST" id="hiddenform"></form>
 
 <script>
     $(document).ready(function() {
@@ -427,8 +428,11 @@
                         $('#changeaccess-btn')
                                 .click(
                                         function(event) {
-                                            location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/' + textFileId + '/' + changedTextFileAccess + '/updateAccessibility';
+                                            var url = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/' + textFileId + '/' + changedTextFileAccess;
+                                            $("#hiddenform").attr("action", url);
+                                            $("#hiddenform").submit();
                                         });
+                                        
                         
                         $('#changeaccess-tf').on('show.bs.modal', function (e) {
                             textFileId = e.relatedTarget.id;
@@ -443,5 +447,5 @@
                             var content = "Are you sure you want to make this text file " + changedTextFileAccess + "?";
                             $(this).find('.modal-body p').text(content);
                         });
-                        });
+    });
 </script>
