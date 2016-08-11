@@ -3,6 +3,12 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page import="edu.asu.spring.quadriga.domain.enums.ETextAccessibility" %>
 
+<style>
+a { 
+cursor: pointer; 
+}
+</style>
+
 <script>
     $(document).ready(function() {
         $("input[type=button]").button().click(function(event) {
@@ -184,15 +190,15 @@
                                         <br><small>${textfile.fileName}</small>
                                         <br>
                                         <c:if test="${textfile.accessibility == 'PUBLIC'}">
-                                        <span class="label label-success">Public</span>
+                                        <span class="label label-success pointer label">Public</span>
                                         <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}" data-textaccess="${textfile.accessibility}">
-                                        <i class="fa fa-unlock" aria-hidden="true"></i>
+                                        <i class="fa fa-unlock"></i>
                                         </a>
                                         </c:if>
                                         <c:if test="${textfile.accessibility == 'PRIVATE'}">
-                                        <span class="label label-danger">Private</span>
+                                        <span class="label label-danger pointerlabel">Private</span>
                                         <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}" data-textaccess="${textfile.accessibility}">
-                                        <i class="fa fa-lock" aria-hidden="true"></i>
+                                        <i class="fa fa-lock"></i>
                                         </a>
                                         </c:if>
                                     </td>
