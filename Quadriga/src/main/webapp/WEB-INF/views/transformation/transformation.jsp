@@ -56,14 +56,9 @@
             if ((jQuery('#divProjectList input[type=checkbox]:checked').length || jQuery('#individualNetworks input[type=checkbox]:checked').length)
                     && jQuery('#headingTwo input[type=checkbox]:checked').length) {
 
-                var projects = [];
-                $.each($("input[name='project']:checked"),function() {
-                    projects.push($(this).val());
-                });
-        
                 var transformations = [];
                 $.each($("input[name='transformation']:checked"),function() {
-                transformations.push($(this).val());
+                transformations.push($(this).data("transformtitle"));
                 });
 
                 var networks = [];
@@ -72,22 +67,17 @@
         
                 $.each($("input[name='individualnetwork']:checked"),function() {
                     var arrayofNetworks = $(this).val().split(",");
-                    networks.push(arrayofNetworks[0]);
+                    networks.push(arrayofNetworks[0] + " {" + arrayofNetworks[1] + "}");
                     networkID.push(arrayofNetworks[2]);                                                             
                     networkIDvariable =  networkIDvariable + "," + arrayofNetworks[2];                                                      
-            
-                    if ((jQuery.inArray(arrayofNetworks[1],projects) == -1)) {
-                        projects.push(arrayofNetworks[1]);
-                    }
                 });
 
-               $('#confirmationTransformation').attr('data-target','#confirm');jQuery("#contentholder")
-               .html("<h3>Transformations:</h3> "+ transformations.join("<br/>") + ""
-                + " <br/> <br/><h3>Projects </h3> " + projects.join("<br/>")
-                + " <br/> <br/><h3>Networks</h3> " + networks.join("<br/>"));
+                $('#confirmationTransformation').attr('data-target','#confirm');
+                jQuery("#contentholder").html("<h3>Transformations:</h3> "+ transformations.join("<br/>") 
+                + "<br/><h3>Networks</h3> " + networks.join("<br/>"));
             } else {
                 $('#confirmationTransformation').attr('data-target','#alert');
-                jQuery("#alertholder").html("Please select at least one transformation and project.");
+            	    jQuery("#alertholder").html("Please select at least one transformation and project.");
             }});
            
             $('#submit-btn').click(function(event) {
@@ -230,7 +220,7 @@
                                             id="divTransformationList">
                                             <label> <input type="checkbox"
                                                 value="${transformations.id}" name="transformation"
-                                                class="transformationList"> &nbsp;&nbsp;&nbsp;&nbsp;<c:out
+                                                class="transformationList" data-transformtitle="${transformations.title}"> &nbsp;&nbsp;&nbsp;&nbsp;<c:out
                                                     value="${transformations.title}"></c:out>
 
                                             </label>
