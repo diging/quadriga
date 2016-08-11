@@ -67,7 +67,7 @@
         
                 $.each($("input[name='individualnetwork']:checked"),function() {
                     var arrayofNetworks = $(this).val().split(",");
-                    networks.push(arrayofNetworks[0] + " {" + arrayofNetworks[1] + "}");
+                    networks.push(arrayofNetworks[0] + " (" + arrayofNetworks[1] + ")");
                     networkID.push(arrayofNetworks[2]);                                                             
                     networkIDvariable =  networkIDvariable + "," + arrayofNetworks[2];                                                      
                 });
