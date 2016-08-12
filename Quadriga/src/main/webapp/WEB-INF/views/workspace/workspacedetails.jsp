@@ -191,13 +191,13 @@ cursor: pointer;
                                         <br>
                                         <c:if test="${textfile.accessibility == 'PUBLIC'}">
                                         <span class="label label-success pointer label">Public</span>
-                                        <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}" data-textaccess="${textfile.accessibility}">
+                                        <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}" data-textaccess="${textfile.accessibility}" title="Make text private">
                                         <i class="fa fa-unlock"></i>
                                         </a>
                                         </c:if>
                                         <c:if test="${textfile.accessibility == 'PRIVATE'}">
                                         <span class="label label-danger pointerlabel">Private</span>
-                                        <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}" data-textaccess="${textfile.accessibility}">
+                                        <a data-toggle="modal" data-target="#changeaccess-tf" id="${textfile.textId}" data-textaccess="${textfile.accessibility}" title="Make text public">
                                         <i class="fa fa-lock"></i>
                                         </a>
                                         </c:if>
