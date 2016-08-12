@@ -34,21 +34,26 @@ public class TextFileManager implements ITextFileManager {
 
     @Autowired
     private ITextFileMapper tfSMapper;
-    
+
     @Autowired
     private IRetrieveProjectManager projectManager;
-    
-    
+
     @Override
     public boolean saveTextFile(ITextFile txtFile) throws FileStorageException, QuadrigaStorageException {
         String txtId = txtFileDAO.generateUniqueID();
         txtFile.setTextId(txtId);
-        TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
+
         boolean status = fileSaveServ.saveFileToLocal(txtFile);
         if (status == true) {
-            txtFileDAO.saveNewDTO(txtFileDTO);
+            storeTextFile(txtFile);
         }
         return status;
+    }
+
+    @Override
+    public void storeTextFile(ITextFile txtFile) {
+        TextFileDTO txtFileDTO = tfSMapper.getTextFileDTO(txtFile);
+        txtFileDAO.saveOrUpdateDTO(txtFileDTO);
     }
 
     @Override
@@ -62,7 +67,7 @@ public class TextFileManager implements ITextFileManager {
         return tfList;
 
     }
-    
+
     @Override
     public ITextFile getTextFileByUri(String uri) throws QuadrigaStorageException {
         int idxLastSegment = uri.lastIndexOf("/");
@@ -75,7 +80,7 @@ public class TextFileManager implements ITextFileManager {
             ITextFile textFile = tfSMapper.getTextFile(txtDto);
             String projectId = textFile.getProjectId();
             IProject project = projectManager.getProjectDetails(projectId);
-            
+
             if (project.getResolver() != null && textFile.getRefId() != null) {
                 String resolvedHandle = project.getResolver().buildResolvedHandle(textFile.getRefId());
                 textFile.setPresentationUrl(resolvedHandle);
@@ -84,7 +89,7 @@ public class TextFileManager implements ITextFileManager {
         }
         return null;
     }
-    
+
     @Override
     public ITextFile getTextFile(String textId) throws QuadrigaStorageException {
         TextFileDTO txtDto = txtFileDAO.getDTO(textId);
@@ -92,7 +97,7 @@ public class TextFileManager implements ITextFileManager {
             ITextFile textFile = tfSMapper.getTextFile(txtDto);
             String projectId = textFile.getProjectId();
             IProject project = projectManager.getProjectDetails(projectId);
-            
+
             if (project.getResolver() != null && textFile.getRefId() != null) {
                 String resolvedHandle = project.getResolver().buildResolvedHandle(textFile.getRefId());
                 textFile.setPresentationUrl(resolvedHandle);
@@ -101,7 +106,7 @@ public class TextFileManager implements ITextFileManager {
         }
         return null;
     }
-    
+
     @Override
     public void loadFile(ITextFile txtFile) throws FileStorageException {
         txtFile.setFileContent(retrieveTextFileContent(txtFile.getTextId()));
@@ -114,7 +119,5 @@ public class TextFileManager implements ITextFileManager {
         if (!fileName.contains("."))
             fileName += ".txt";
         return fileSaveServ.retrieveFileFromLocal(fileName, txtId);
-
     }
-
 }
