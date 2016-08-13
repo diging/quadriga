@@ -94,17 +94,15 @@ public class TextConceptSearchController {
                 // if we haven't seen the reference yet
                 if (references.add(sourceRef)) {
                     ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
-                    if (txtFile == null) {
+                    if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
                         handles.add(sourceRef);
                     } else {
-                        if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC
-                                || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
+                        if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
                             texts.add(txtFile);
                             textFileManager.loadFile(txtFile);
                             txtFile.setSnippetLength(40);
                         }
                     }
-
                 }
             }
 
