@@ -86,7 +86,7 @@ public class TextConceptSearchController {
 
             Set<String> references = new HashSet<String>();
             List<ITextFile> texts = new ArrayList<ITextFile>();
-            List<String> textlessReferences = new ArrayList<String>();
+            List<String> handles = new ArrayList<String>();
 
             for (CreationEvent event : eventList) {
                 String sourceRef = event.getSourceReference();
@@ -95,7 +95,7 @@ public class TextConceptSearchController {
                 if (references.add(sourceRef)) {
                     ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
                     if (txtFile == null) {
-                        textlessReferences.add(sourceRef);
+                        handles.add(sourceRef);
                     } else {
                         if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC
                                 || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
@@ -108,7 +108,7 @@ public class TextConceptSearchController {
                 }
             }
 
-            model.addAttribute("references", textlessReferences);
+            model.addAttribute("references", handles);
             model.addAttribute("concept", entry);
             model.addAttribute("texts", texts);
 
