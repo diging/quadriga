@@ -31,10 +31,10 @@
       
        <style>
        
-       #c {
+       #cdef {
       
-      color: white;
-      padding-top: 80px;
+      
+      padding-top: 100px;
       padding-bottom: 60px;
       text-align: left;
       }
@@ -88,7 +88,7 @@
       </div> <!-- /container -->
 
 
-      <div id="c" class="navbar-colored">
+      <div id="cdef">
           <div class="container">
               <div class="col-md-6" style="text-align: left;">
                   <c:set var="PR" value="${pullrequest}" />
@@ -97,7 +97,9 @@
               </div>
               <div class="col-md-6">
                   <p>
-                      Design by <a href="http://www.blacktie.co">BLACKTIE.CO</a>
+                  	  <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/login/">Login</a>
+                      <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/auth/home">Home</a>
+                      <a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites/">Go to all public sites</a>
                   </p>
               </div>
 
