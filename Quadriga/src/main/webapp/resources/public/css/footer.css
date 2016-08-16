@@ -1,0 +1,20 @@
+#footer {
+   position:fixed;
+   left:0px;
+   bottom:0px;
+   height:30px;
+   width:100%;
+   background:#999;
+   background-color: #487FB7;
+   color: #3D4350;
+   border-color: rgb(72, 127, 183);
+   border-width: 1px;
+   border-style: solid;
+   color:white;
+   padding-top: 4px;
+   padding-bottom: 4px;
+}
+
+.href-brand {
+	color: white;
+}
