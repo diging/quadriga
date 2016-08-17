@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -45,6 +46,9 @@ public class RetrieveProjectController {
 
     @Autowired
     private IListWSManager wsManager;
+
+    @Autowired
+    private IProjectCollaboratorManager ProjectCollaboratorManager;
 
     /**
      * this method acts as a controller for handling all the activities on the
@@ -163,11 +167,14 @@ public class RetrieveProjectController {
 
         int archivedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
 
+        List<String> projectOwnerAndAdminNames = ProjectCollaboratorManager.getProjectOwnerAndAdminNames(project);
+
         model.addAttribute("project", project);
         model.addAttribute("workspaceList", workspaceList);
         model.addAttribute("collabworkspacelist", collaboratorWorkspaceList);
         model.addAttribute("deactivatedWSSize", deactivatedWSSize);
         model.addAttribute("archivedWSSize", archivedWSSize);
+        model.addAttribute("ownerAndAdmins", projectOwnerAndAdminNames);
 
         List<String> collaboratorRoles = projectSecurity.getCollaboratorRoles(userName, projectid);
 
