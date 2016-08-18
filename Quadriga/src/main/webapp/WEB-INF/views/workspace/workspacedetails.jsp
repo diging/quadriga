@@ -286,6 +286,21 @@ cursor: pointer;
             </div>
         </c:if>
     </div>
+    
+    
+    <div class="col-md-3">
+		<h5 class="major">
+			<span>Below users have complete access to workspace</span>
+		</h5>
+		<div style="padding: 5px;">
+				<c:forEach var="collaborator"
+					items="${ownerAndAdmins}">
+					<i class="fa fa-user" aria-hidden="true"></i>
+					<c:out value="${collaborator}"></c:out>
+					<br>
+				</c:forEach>
+		</div>
+	</div>
 </div>
 
 <!--  Modals -->

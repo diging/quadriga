@@ -48,7 +48,7 @@ public class RetrieveProjectController {
     private IListWSManager wsManager;
 
     @Autowired
-    private IProjectCollaboratorManager ProjectCollaboratorManager;
+    private IProjectCollaboratorManager projectCollaboratorManager;
 
     /**
      * this method acts as a controller for handling all the activities on the
@@ -167,7 +167,7 @@ public class RetrieveProjectController {
 
         int archivedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
 
-        List<String> projectOwnerAndAdminNames = ProjectCollaboratorManager.getProjectOwnerAndAdminNames(project);
+        List<String> projectOwnerAndAdminNames = projectCollaboratorManager.getProjectOwnerAndAdminNames(project);
 
         model.addAttribute("project", project);
         model.addAttribute("workspaceList", workspaceList);
