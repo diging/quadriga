@@ -94,6 +94,10 @@ public class WorkspaceController {
         String projectId = wsManager.getProjectIdFromWorkspaceId(workspaceid);
         IProject project = projectManager.getProjectDetails(projectId);
 
+        // List<IProjectCollaborator> collaboratorsList =
+        // projectCollaboratorManager.getProjectCollaborators(projectId);
+        // collaboratorsList.get(0).getCollaborator().getCollaboratorRoles().co
+
         if (workspace == null) {
             throw new Quadriga404Exception("Workspace with ID " + workspaceid + " does not exist.");
         }
@@ -106,6 +110,7 @@ public class WorkspaceController {
         List<String> projectOwnerAndAdminNames = projectCollaboratorManager.getProjectOwnerAndAdminNames(project);
 
         List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceid);
+        model.addAttribute("projectOwner", project.getOwner());
         model.addAttribute("networkList", workspaceNetworkList);
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("textFileList", tfList);
