@@ -107,14 +107,13 @@ public class WorkspaceController {
         workspace.setWorkspaceCollaborators(workspaceCollaboratorList);
 
         List<ITextFile> tfList = tfManager.retrieveTextFiles(workspaceid);
-        List<String> projectOwnerAndAdminNames = projectCollaboratorManager.getProjectOwnerAndAdminNames(project);
 
         List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceid);
+
         model.addAttribute("projectOwner", project.getOwner());
         model.addAttribute("networkList", workspaceNetworkList);
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("textFileList", tfList);
-        model.addAttribute("ownerAndAdmins", projectOwnerAndAdminNames);
 
         String adminRoles[] = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_COLLABORATOR_OWNER };
 
