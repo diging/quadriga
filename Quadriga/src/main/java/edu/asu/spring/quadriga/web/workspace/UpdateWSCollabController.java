@@ -126,13 +126,8 @@ public class UpdateWSCollabController {
 
         // create a model for collaborators
         collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
-
         collaboratorForm.setCollaborators(collaboratorList);
 
-        List<IQuadrigaRole> quadrigaProjectRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
-        quadrigaProjectRoles.remove(RoleNames.ROLE_COLLABORATOR_OWNER);
-
-        model.getModelMap().put("projectcollabroles", quadrigaProjectRoles);
         // add the collaborator roles to the model
         model.getModelMap().put("wscollabroles", collaboratorRoles);
         model.getModelMap().put("collaboratorform", collaboratorForm);
