@@ -293,7 +293,7 @@ cursor: pointer;
 			<span>Below users have complete access to workspace</span>
 		</h5>
 		<div style="padding: 5px;">
-				<i class="fa fa-user" aria-hidden="true"></i> ${projectOwner.userName}
+				<i class="fa fa-user" aria-hidden="true"></i> ${projectOwner.userName} (Project ADMIN)
 				<br>
 				<c:forEach var="collaborator"
 					items="${projectAdmins}">
