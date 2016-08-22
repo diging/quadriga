@@ -101,16 +101,17 @@ public class ModifyProjectCollaboratorController {
         collaboratorList = collaboratorManager.getProjectCollaborators(projectid);
 
         // fetch the roles that can be associated to the workspace collaborator
-        List<IQuadrigaRole> collaboratorRoles = roleManager
-                .getProjectCollaboratorRoles((IQuadrigaRoleManager.PROJECT_ROLES));
+        List<IQuadrigaRole> quadrigaProjectRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
+        quadrigaProjectRoles.remove(RoleNames.ROLE_COLLABORATOR_OWNER);
+        System.out.println(quadrigaProjectRoles);
 
         // create a model for collaborators
         collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
 
         collaboratorForm.setCollaborators(collaboratorList);
 
-        // add the collaborator roles to the model
-        model.getModelMap().put("projcollabroles", collaboratorRoles);
+        // add the project collaborator roles to the model
+        model.getModelMap().put("projectcollabroles", quadrigaProjectRoles);
         model.getModelMap().put("collaboratorform", collaboratorForm);
         model.getModelMap().put("myprojectid", projectid);
         model.getModel().put("myprojectname", project.getProjectName());

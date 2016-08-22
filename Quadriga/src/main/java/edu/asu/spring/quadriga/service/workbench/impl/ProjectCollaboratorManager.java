@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.workbench.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Service
 @Transactional
@@ -96,26 +94,5 @@ public class ProjectCollaboratorManager
     @Override
     public ICollaboratorDAO<ProjectCollaboratorDTO> getCollaboratorDao() {
         return projectCollabDAO;
-    }
-
-    @Override
-    public List<String> getProjectOwnerAndAdminNames(IProject project) {
-
-        List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
-        List<String> projectOwnerAndAdminNames = new ArrayList<String>();
-        List<IQuadrigaRole> collaboratorRoles = null;
-
-        projectOwnerAndAdminNames.add(project.getOwner().getUserName());
-        for (IProjectCollaborator collaborator : projectCollaborators) {
-            collaboratorRoles = collaborator.getCollaborator().getCollaboratorRoles();
-
-            List<String> roleIds = new ArrayList<String>();
-            collaboratorRoles.forEach(collaboratorRole -> roleIds.add(collaboratorRole.getId()));
-
-            if (roleIds.contains(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)) {
-                projectOwnerAndAdminNames.add(collaborator.getCollaborator().getUserObj().getName());
-            }
-        }
-        return projectOwnerAndAdminNames;
     }
 }

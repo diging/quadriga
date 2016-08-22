@@ -51,13 +51,4 @@ public interface IQuadrigaRoleManager {
 
     public abstract List<IQuadrigaRole> getSelectableQuarigaRoles(String type);
 
-    /**
-     * Returns the list of collaborator roles that can be assigned to
-     * collaborator for any project
-     * 
-     * @param type
-     *            The type of roles, here it will be PROJECT_ROLES
-     * @return list of collaborator roles for any project
-     */
-    public abstract List<IQuadrigaRole> getProjectCollaboratorRoles(String type);
 }

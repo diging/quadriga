@@ -63,7 +63,7 @@
 
 							<td align="left"><font size="3"> <form:checkboxes
 										path="collaborators[${status.index}].collaboratorRoles"
-										class="roles" items="${projcollabroles}" itemValue="id"
+										class="roles" items="${projectcollabroles}" itemValue="id"
 										itemLabel="displayName" /></font> <form:errors
 									path="collaborators[${status.index}].collaboratorRoles"
 									class="ui-state-error-text"></form:errors></td>

@@ -167,14 +167,13 @@ public class RetrieveProjectController {
 
         int archivedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
 
-        List<String> projectOwnerAndAdminNames = projectCollaboratorManager.getProjectOwnerAndAdminNames(project);
+        projectCollaboratorManager.getProjectCollaborators(projectid);
 
         model.addAttribute("project", project);
         model.addAttribute("workspaceList", workspaceList);
         model.addAttribute("collabworkspacelist", collaboratorWorkspaceList);
         model.addAttribute("deactivatedWSSize", deactivatedWSSize);
         model.addAttribute("archivedWSSize", archivedWSSize);
-        model.addAttribute("ownerAndAdmins", projectOwnerAndAdminNames);
 
         List<String> collaboratorRoles = projectSecurity.getCollaboratorRoles(userName, projectid);
 

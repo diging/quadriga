@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * QuadrigaRoleManager is used to read the user roles from context file and
@@ -152,17 +151,4 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager {
         return selectableRoles;
     }
 
-    @Override
-    public List<IQuadrigaRole> getProjectCollaboratorRoles(String type) {
-        List<IQuadrigaRole> projectRoles = rolesMap.get(type);
-        List<IQuadrigaRole> projectCollabRoles = new ArrayList<IQuadrigaRole>();
-
-        for (IQuadrigaRole projectRole : projectRoles) {
-            if (!RoleNames.ROLE_COLLABORATOR_OWNER.equals(projectRole.getId())) {
-                projectCollabRoles.add(projectRole);
-            }
-        }
-
-        return projectCollabRoles;
-    }
 }
