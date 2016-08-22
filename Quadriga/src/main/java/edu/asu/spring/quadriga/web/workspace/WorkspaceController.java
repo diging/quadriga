@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.workspace;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.IAuthorization;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -110,6 +113,22 @@ public class WorkspaceController {
 
         List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceid);
 
+        List<IProjectCollaborator> projectCollaborators = projectCollaboratorManager.getProjectCollaborators(projectId);
+
+        List<IProjectCollaborator> projectAdmins = new ArrayList<IProjectCollaborator>();
+
+        for (IProjectCollaborator collaborator : projectCollaborators) {
+            List<IQuadrigaRole> collaboratorRoles = collaborator.getCollaborator().getCollaboratorRoles();
+
+            List<String> roleIds = new ArrayList<String>();
+            collaboratorRoles.forEach(collaboratorRole -> roleIds.add(collaboratorRole.getId()));
+
+            if (roleIds.contains(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)) {
+                projectAdmins.add(collaborator);
+            }
+        }
+
+        model.addAttribute("projectAdmins", projectAdmins);
         model.addAttribute("projectOwner", project.getOwner());
         model.addAttribute("networkList", workspaceNetworkList);
         model.addAttribute("workspacedetails", workspace);

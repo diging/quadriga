@@ -293,10 +293,12 @@ cursor: pointer;
 			<span>Below users have complete access to workspace</span>
 		</h5>
 		<div style="padding: 5px;">
+				<i class="fa fa-user" aria-hidden="true"></i> ${projectOwner.userName}
+				<br>
 				<c:forEach var="collaborator"
-					items="${ownerAndAdmins}">
+					items="${projectAdmins}">
 					<i class="fa fa-user" aria-hidden="true"></i>
-					<c:out value="${collaborator}"></c:out>
+					<c:out value="${collaborator.collaborator.userObj.name}"></c:out>
 					<br>
 				</c:forEach>
 		</div>
