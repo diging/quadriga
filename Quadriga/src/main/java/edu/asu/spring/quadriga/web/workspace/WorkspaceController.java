@@ -94,16 +94,13 @@ public class WorkspaceController {
             ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, Quadriga404Exception {
         String userName = principal.getName();
         IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
-        String projectId = wsManager.getProjectIdFromWorkspaceId(workspaceid);
-        IProject project = projectManager.getProjectDetails(projectId);
-
-        // List<IProjectCollaborator> collaboratorsList =
-        // projectCollaboratorManager.getProjectCollaborators(projectId);
-        // collaboratorsList.get(0).getCollaborator().getCollaboratorRoles().co
 
         if (workspace == null) {
             throw new Quadriga404Exception("Workspace with ID " + workspaceid + " does not exist.");
         }
+
+        String projectId = wsManager.getProjectIdFromWorkspaceId(workspaceid);
+        IProject project = projectManager.getProjectDetails(projectId);
 
         // retrieve the collaborators associated with the workspace
         List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
@@ -134,7 +131,8 @@ public class WorkspaceController {
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("textFileList", tfList);
 
-        String adminRoles[] = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_COLLABORATOR_OWNER };
+        String adminRoles[] = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_COLLABORATOR_OWNER,
+                RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN };
 
         boolean isAdmin = authorization.chkAuthorization(userName, workspaceid, adminRoles);
 

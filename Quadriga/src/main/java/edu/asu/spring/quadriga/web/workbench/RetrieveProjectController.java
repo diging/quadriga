@@ -167,8 +167,6 @@ public class RetrieveProjectController {
 
         int archivedWSSize = archivedWorkspaceList == null ? 0 : archivedWorkspaceList.size();
 
-        projectCollaboratorManager.getProjectCollaborators(projectid);
-
         model.addAttribute("project", project);
         model.addAttribute("workspaceList", workspaceList);
         model.addAttribute("collabworkspacelist", collaboratorWorkspaceList);
