@@ -131,8 +131,7 @@ public class WorkspaceController {
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("textFileList", tfList);
 
-        String adminRoles[] = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_COLLABORATOR_OWNER,
-                RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN };
+        String adminRoles[] = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN };
 
         boolean isAdmin = authorization.chkAuthorization(userName, workspaceid, adminRoles);
 
