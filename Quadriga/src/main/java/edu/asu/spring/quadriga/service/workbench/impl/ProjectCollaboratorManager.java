@@ -23,57 +23,60 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.impl.CollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 
-
 @Service
 @Transactional
-public class ProjectCollaboratorManager extends CollaboratorManager<ProjectCollaboratorDTO, ProjectCollaboratorDTOPK, ProjectDTO, ProjectDAO> implements IProjectCollaboratorManager 
-{
+public class ProjectCollaboratorManager
+        extends CollaboratorManager<ProjectCollaboratorDTO, ProjectCollaboratorDTOPK, ProjectDTO, ProjectDAO>
+        implements IProjectCollaboratorManager {
 
-	@Autowired
-	private IQuadrigaRoleManager roleManager;
+    @Autowired
+    private IQuadrigaRoleManager roleManager;
 
-	@Autowired
-	private IProjectDeepMapper projectDeepMapper;
+    @Autowired
+    private IProjectDeepMapper projectDeepMapper;
 
-	@Autowired
+    @Autowired
     private IProjectCollaboratorDAO projectCollabDAO;
-   
-	@Autowired
-	private IProjectDAO projectDao;
 
-	/**
-	 * This method retrieves the collaborators associated with the project
-	 * @param projectId - project id
-	 * @return List<ICollaborator> - list of collaborators associated with the project.
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	public List<IProjectCollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
-	{
-		List<IProjectCollaborator> projectCollaboratorList = null;
-		//retrieve the collaborators associated with project
+    @Autowired
+    private IProjectDAO projectDao;
 
-		ProjectDTO projectDto = projectDao.getDTO(projectId);
-		IProject project =  projectDeepMapper.getProject(projectDto);
-		if(project != null){
-			projectCollaboratorList = project.getProjectCollaborators();
-		}
+    /**
+     * This method retrieves the collaborators associated with the project
+     * 
+     * @param projectId
+     *            - project id
+     * @return List<ICollaborator> - list of collaborators associated with the
+     *         project.
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    public List<IProjectCollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException {
+        List<IProjectCollaborator> projectCollaboratorList = null;
+        // retrieve the collaborators associated with project
 
-		//map the collaborators to UI XML values
-		if(projectCollaboratorList!=null){
-			for (IProjectCollaborator projectCollaborator : projectCollaboratorList) 
-			{
-				if(projectCollaborator.getCollaborator() != null && projectCollaborator.getCollaborator().getCollaboratorRoles() != null){
-					for (IQuadrigaRole collaboratorRole : projectCollaborator.getCollaborator().getCollaboratorRoles()) {
-						roleManager.fillQuadrigaRole(IQuadrigaRoleManager.PROJECT_ROLES, collaboratorRole);
-					}
-				}
-			}
-		}
-		return projectCollaboratorList;
-	}
-	
-	@Override
+        ProjectDTO projectDto = projectDao.getDTO(projectId);
+        IProject project = projectDeepMapper.getProject(projectDto);
+        if (project != null) {
+            projectCollaboratorList = project.getProjectCollaborators();
+        }
+
+        // map the collaborators to UI XML values
+        if (projectCollaboratorList != null) {
+            for (IProjectCollaborator projectCollaborator : projectCollaboratorList) {
+                if (projectCollaborator.getCollaborator() != null
+                        && projectCollaborator.getCollaborator().getCollaboratorRoles() != null) {
+                    for (IQuadrigaRole collaboratorRole : projectCollaborator.getCollaborator()
+                            .getCollaboratorRoles()) {
+                        roleManager.fillQuadrigaRole(IQuadrigaRoleManager.PROJECT_ROLES, collaboratorRole);
+                    }
+                }
+            }
+        }
+        return projectCollaboratorList;
+    }
+
+    @Override
     public ProjectCollaboratorDTO createNewCollaboratorDTO() {
         return new ProjectCollaboratorDTO();
     }

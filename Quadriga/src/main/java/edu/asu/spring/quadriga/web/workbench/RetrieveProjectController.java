@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -45,6 +46,9 @@ public class RetrieveProjectController {
 
     @Autowired
     private IListWSManager wsManager;
+
+    @Autowired
+    private IProjectCollaboratorManager projectCollaboratorManager;
 
     /**
      * this method acts as a controller for handling all the activities on the

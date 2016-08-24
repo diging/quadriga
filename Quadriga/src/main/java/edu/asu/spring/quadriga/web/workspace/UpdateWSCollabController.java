@@ -64,7 +64,6 @@ public class UpdateWSCollabController {
     @Autowired
     private MessageSource messageSource;
 
-    
     /**
      * Custom validator to validate the input selection form the user
      * 
@@ -86,8 +85,8 @@ public class UpdateWSCollabController {
                 String[] roleIds = text.split(",");
                 List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
                 for (String roleId : roleIds) {
-                    IQuadrigaRole role = roleManager
-                            .getQuadrigaRoleById(IQuadrigaRoleManager.WORKSPACE_ROLES, roleId.trim());
+                    IQuadrigaRole role = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.WORKSPACE_ROLES,
+                            roleId.trim());
                     roles.add(role);
                 }
                 setValue(roles);
@@ -105,7 +104,8 @@ public class UpdateWSCollabController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = {
+            RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.GET)
     public ModelAndView updateWorkspaceCollaboratorForm(@PathVariable("workspaceid") String workspaceid,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
@@ -126,7 +126,6 @@ public class UpdateWSCollabController {
 
         // create a model for collaborators
         collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
-
         collaboratorForm.setCollaborators(collaboratorList);
 
         // add the collaborator roles to the model
@@ -151,12 +150,13 @@ public class UpdateWSCollabController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 3, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 3, userRole = {
+            RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.POST)
     public String updateWorkspaceCollaborator(
             @Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
-            BindingResult result, @PathVariable("workspaceid") String workspaceid, Principal principal, Model model, Locale locale, RedirectAttributes redirectAttrs)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+            BindingResult result, @PathVariable("workspaceid") String workspaceid, Principal principal, Model model,
+            Locale locale, RedirectAttributes redirectAttrs) throws QuadrigaStorageException, QuadrigaAccessException {
         // create model view
         if (result.hasErrors()) {
             // add the workspace details
@@ -177,8 +177,9 @@ public class UpdateWSCollabController {
             List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
             model.addAttribute("wscollabroles", collaboratorRoles);
             model.addAttribute("show_error_alert", true);
-            model.addAttribute("error_alert_msg", messageSource.getMessage("workspace.collaborators.update.failure", new String[] {}, locale));
-            
+            model.addAttribute("error_alert_msg",
+                    messageSource.getMessage("workspace.collaborators.update.failure", new String[] {}, locale));
+
             return "auth/workbench/workspace/updatecollaborators";
         }
 
@@ -200,9 +201,10 @@ public class UpdateWSCollabController {
             // call the database to modify the record
             wsModifyCollabManager.updateCollaborators(workspaceid, collabUser, collabRoles, principal.getName());
         }
-        
+
         redirectAttrs.addFlashAttribute("show_success_alert", true);
-        redirectAttrs.addFlashAttribute("success_alert_msg", messageSource.getMessage("workspace.collaborators.update.success", new String[] {}, locale));
+        redirectAttrs.addFlashAttribute("success_alert_msg",
+                messageSource.getMessage("workspace.collaborators.update.success", new String[] {}, locale));
 
         return "redirect:/auth/workbench/workspace/" + workspaceid;
     }

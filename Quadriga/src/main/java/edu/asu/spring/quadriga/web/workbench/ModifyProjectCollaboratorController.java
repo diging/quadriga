@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.workbench;
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -101,15 +102,21 @@ public class ModifyProjectCollaboratorController {
         collaboratorList = collaboratorManager.getProjectCollaborators(projectid);
 
         // fetch the roles that can be associated to the workspace collaborator
-        List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
+        List<IQuadrigaRole> quadrigaProjectRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
+
+        for (Iterator<IQuadrigaRole> iterator = quadrigaProjectRoles.iterator(); iterator.hasNext();) {
+            IQuadrigaRole quadrigaRole = iterator.next();
+            if (RoleNames.ROLE_COLLABORATOR_OWNER.equals(quadrigaRole.getId())) {
+                iterator.remove();
+            }
+        }
 
         // create a model for collaborators
         collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
-
         collaboratorForm.setCollaborators(collaboratorList);
 
-        // add the collaborator roles to the model
-        model.getModelMap().put("projcollabroles", collaboratorRoles);
+        // add the project collaborator roles to the model
+        model.getModelMap().put("projcollabroles", quadrigaProjectRoles);
         model.getModelMap().put("collaboratorform", collaboratorForm);
         model.getModelMap().put("myprojectid", projectid);
         model.getModel().put("myprojectname", project.getProjectName());
@@ -181,5 +188,4 @@ public class ModifyProjectCollaboratorController {
 
         return model;
     }
-
 }

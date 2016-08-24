@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.workspace;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.IAuthorization;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -24,9 +28,9 @@ import edu.asu.spring.quadriga.exceptions.Quadriga404Exception;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
-import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -57,15 +61,16 @@ public class WorkspaceController {
     private IWSSecurityChecker workspaceSecurity;
 
     @Autowired
-    private IWorkspaceCollaboratorManager wsCollabManager;
-
-    @Autowired
     private ITextFileManager tfManager;
 
     @Autowired
-    private INetworkManager networkManager;
-    
-    @Autowired @Qualifier("workspaceAuthorization")
+    private IProjectCollaboratorManager projectCollaboratorManager;
+
+    @Autowired
+    private IRetrieveProjectManager projectManager;
+
+    @Autowired
+    @Qualifier("workspaceAuthorization")
     private IAuthorization authorization;
 
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceController.class);
@@ -94,19 +99,42 @@ public class WorkspaceController {
             throw new Quadriga404Exception("Workspace with ID " + workspaceid + " does not exist.");
         }
 
+        String projectId = wsManager.getProjectIdFromWorkspaceId(workspaceid);
+        IProject project = projectManager.getProjectDetails(projectId);
+
         // retrieve the collaborators associated with the workspace
         List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
-        List<ITextFile> tfList = tfManager.retrieveTextFiles(workspaceid);
         workspace.setWorkspaceCollaborators(workspaceCollaboratorList);
+
+        List<ITextFile> tfList = tfManager.retrieveTextFiles(workspaceid);
+
         List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceid);
+
+        List<IProjectCollaborator> projectCollaborators = projectCollaboratorManager.getProjectCollaborators(projectId);
+
+        List<IProjectCollaborator> projectAdmins = new ArrayList<IProjectCollaborator>();
+
+        for (IProjectCollaborator collaborator : projectCollaborators) {
+            List<IQuadrigaRole> collaboratorRoles = collaborator.getCollaborator().getCollaboratorRoles();
+
+            List<String> roleIds = new ArrayList<String>();
+            collaboratorRoles.forEach(collaboratorRole -> roleIds.add(collaboratorRole.getId()));
+
+            if (roleIds.contains(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)) {
+                projectAdmins.add(collaborator);
+            }
+        }
+
+        model.addAttribute("projectAdmins", projectAdmins);
+        model.addAttribute("projectOwner", project.getOwner());
         model.addAttribute("networkList", workspaceNetworkList);
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("textFileList", tfList);
 
-        String adminRoles[] = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_COLLABORATOR_OWNER}; 
-        
+        String adminRoles[] = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN };
+
         boolean isAdmin = authorization.chkAuthorization(userName, workspaceid, adminRoles);
-        
+
         if (workspaceSecurity.checkWorkspaceOwner(userName, workspaceid)) {
             model.addAttribute("owner", 1);
         } else {
