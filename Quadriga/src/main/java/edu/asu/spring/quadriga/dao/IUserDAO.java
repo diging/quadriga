@@ -3,8 +3,10 @@ package edu.asu.spring.quadriga.dao;
 import java.util.List;
 
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
 
 /**
  * This interface provides the methods available to perform User realted 
@@ -14,7 +16,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Ram Kumar Kumaresan
  *
  */
-public interface IUserDAO 
+public interface IUserDAO extends IBaseDAO<QuadrigaUserDTO>
 {
 	
 	/**
@@ -38,7 +40,7 @@ public interface IUserDAO
 	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
-	public abstract int deleteUser(String deleteUser, String deactivatedRole) throws QuadrigaStorageException;
+	public abstract int deleteUser(String deleteUser, String deactivatedRole) throws QuadrigaStorageException, UserOwnsOrCollaboratesDeletionException ;
 
 
 	/**
@@ -75,7 +77,7 @@ public interface IUserDAO
 	 * @param sRoles The roles set by the admin. Must correspond to the roles found in the application context file
 	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
-	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * @return Returns the status of the operation. 1 - Approved. 0 - Error occurred.
 	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
@@ -87,7 +89,7 @@ public interface IUserDAO
 	 * @param sUserId		The userid of the user whose request is rejected
 	 * @param sAdminId 		The admin-userid who rejected the request
 	 * 
-	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * @return Returns the status of the operation. 1 - Denied. 0 - Error occurred.
 	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
@@ -97,11 +99,9 @@ public interface IUserDAO
 	 * This method returns the user object for the given username
 	 * @param userName
 	 * @return
-	 * @throws QuadrigaStorageException
 	 * @author kiran batna
 	 */
-	public abstract QuadrigaUserDTO getUserDTO(String userName)
-			throws QuadrigaStorageException;
+	public abstract QuadrigaUserDTO getUserDTO(String userName);
 
 	/**
 	 * This method inserts the quadiriga Admin user record into the daabase
@@ -150,5 +150,8 @@ public interface IUserDAO
 
     public abstract QuadrigaUserRequestsDTO getUserRequestDTO(String username)
             throws QuadrigaStorageException;
+
+
+    QuadrigaUserDeniedDTO getDeniedUser(String id);
 
 }

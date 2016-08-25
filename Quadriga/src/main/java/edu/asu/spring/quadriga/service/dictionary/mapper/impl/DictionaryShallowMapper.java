@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.dictionary.IDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
@@ -19,48 +18,57 @@ import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 @Service
 public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 
-	@Autowired
-	private IDictionaryDAO dictDao;
-	
-	@Autowired
-	private IDictionaryManager dictionaryManager;
-	
-	@Autowired
-	private IUserDeepMapper userDeepMapper;
-	
-	@Override
-	@Transactional
-	public List<IDictionary> getDictionaryList(String userName) throws QuadrigaStorageException {
-		
-		List<DictionaryDTO> dictionaryDTOList = dictDao.getDictionaryDTOList(userName);
-		
-		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
-		if(dictionaryDTOList != null) {
-			for(DictionaryDTO dictionaryDTO: dictionaryDTOList) {
-				dictionaryList.add(createDictionaryProxy(dictionaryDTO));
-			}
-		}
-		
-		return dictionaryList;
-	}
-	
-	@Override
-	@Transactional
-	public List<IDictionary> getDictionaryListOfCollaborator(String userName) throws QuadrigaStorageException {
-		
-		List<DictionaryDTO> dictionaryDTOList = dictDao.getDictionaryCollabOfUser(userName);
-		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
-		if(dictionaryDTOList != null) {
-			for(DictionaryDTO dictionaryDTO: dictionaryDTOList) {
-				dictionaryList.add(createDictionaryProxy(dictionaryDTO));
-			}
-		}
-		
-		return dictionaryList;
-	}
+    @Autowired
+    private IDictionaryManager dictionaryManager;
 
-    private IDictionary createDictionaryProxy(DictionaryDTO dictionaryDTO)
+    @Autowired
+    private IUserDeepMapper userDeepMapper;
+
+    @Override
+    @Transactional
+    public List<IDictionary> getDictionaryList(List<DictionaryDTO> dictionaryDTOList) throws QuadrigaStorageException {
+
+        List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+        if (dictionaryDTOList != null) {
+            for (DictionaryDTO dictionaryDTO : dictionaryDTOList) {
+                dictionaryList.add(createDictionaryProxy(dictionaryDTO));
+            }
+        }
+
+        return dictionaryList;
+    }
+
+    @Override
+    @Transactional
+    public List<IDictionary> getNonAssociatedProjectDictionaries(List<DictionaryDTO> dictionaryDTOList)
             throws QuadrigaStorageException {
+
+        List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+        if (dictionaryDTOList != null) {
+            for (DictionaryDTO dictionaryDTO : dictionaryDTOList) {
+                dictionaryList.add(createDictionaryProxy(dictionaryDTO));
+            }
+        }
+
+        return dictionaryList;
+    }
+
+    @Override
+    @Transactional
+    public List<IDictionary> getDictionaryListOfCollaborator(List<DictionaryDTO> dictionaryDTOList)
+            throws QuadrigaStorageException {
+
+        List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+        if (dictionaryDTOList != null) {
+            for (DictionaryDTO dictionaryDTO : dictionaryDTOList) {
+                dictionaryList.add(createDictionaryProxy(dictionaryDTO));
+            }
+        }
+
+        return dictionaryList;
+    }
+
+    private IDictionary createDictionaryProxy(DictionaryDTO dictionaryDTO) throws QuadrigaStorageException {
         IDictionary dictionaryProxy = new DictionaryProxy(dictionaryManager);
         dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
         dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
@@ -73,21 +81,11 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
         return dictionaryProxy;
     }
 
-	@Override
-	public IDictionary getDictionaryDetails(DictionaryDTO  dictionaryDTO)
-			throws QuadrigaStorageException {
-	    if (dictionaryDTO == null)
-	        return null;
-	    return createDictionaryProxy(dictionaryDTO);
-	}
-
-
-	@Override
-	@Transactional
-	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException{
-		DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryId);
-		if (dictionaryDTO == null)
+    @Override
+    public IDictionary getDictionaryDetails(DictionaryDTO dictionaryDTO) throws QuadrigaStorageException {
+        if (dictionaryDTO == null)
             return null;
         return createDictionaryProxy(dictionaryDTO);
-	}
+    }
+
 }

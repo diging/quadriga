@@ -67,8 +67,6 @@ public class QuadrigaUserDTO implements Serializable {
     private Date createddate;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
-    private List<DspaceKeysDTO> dspaceKeysDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<ConceptCollectionCollaboratorDTO> conceptcollectionsCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectowner")
     private List<ProjectDTO> projectDTOList;
@@ -237,15 +235,6 @@ public class QuadrigaUserDTO implements Serializable {
 
     public void setCreateddate(Date createddate) {
         this.createddate = createddate;
-    }
-
-    @XmlTransient
-    public List<DspaceKeysDTO> getDspaceKeysDTOList() {
-        return dspaceKeysDTOList;
-    }
-
-    public void setDspaceKeysDTOList(List<DspaceKeysDTO> dspaceKeysDTOList) {
-        this.dspaceKeysDTOList = dspaceKeysDTOList;
     }
 
     @XmlTransient

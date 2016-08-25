@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<graph label="This is my first graph" directed="1" xmlns="http://www.cs.rpi.edu/XGMML">
+
+#foreach ($node in $nodes)
+	<node label="$node.conceptName" id="$node.id">
+    	<att name="type" type="string" value="$node.type" />
+    	<att name="uri" type="string" value="$node.concept" />
+    	<att name="label" type="string" value="$node.conceptName" />
+ 	</node>
+#end
+
+#foreach ($link in $links)
+	<edge label="$link.conceptName" id="$link.id" source="$link.subject.id" target="$link.object.id" #if ($link.occurTime) start="$link.occurTime" #end #if ($link.startTime) start="$link.startTime" #end #if ($link.endTime) end="$link.endTime" #end >
+#if ( $link.concept )
+	   	<att name="label" type="string" value="$link.conceptName" />
+	   	<att name="concept" type="string" value="$link.concept" />
+#end
+	 </edge>
+#end
+
+</graph>

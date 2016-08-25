@@ -2,21 +2,14 @@ package edu.asu.spring.quadriga.service.network.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformer;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
@@ -35,16 +28,10 @@ import edu.asu.spring.quadriga.transform.Node;
 public class NetworkTransformer implements INetworkTransformer {
 
     @Autowired
-    private INetworkManager networkManager;
-
-    @Autowired
-    private IConceptCollectionManager conceptCollectionManager;
-
-    @Autowired
     private EventParser parser;
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(NetworkTransformer.class);
+    @Autowired
+    private NetworkDownloadService networkDownloadService;
 
     /**
      * 
@@ -52,37 +39,36 @@ public class NetworkTransformer implements INetworkTransformer {
      */
     @Override
     public ITransformedNetwork transformNetwork(
-            List<INetworkNodeInfo> networkTopNodesList) {
-        Map<String, Node> nodes = new HashMap<String, Node>();
-        List<Link> links = new ArrayList<Link>();
+            List<INetworkNodeInfo> networkNodeInfoList) {
+        Map<String, Node> nodes = new HashMap<>();
+        List<Link> links = new ArrayList<>();
+        ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
 
-        if (networkTopNodesList != null) {
-
-            if (networkTopNodesList.size() > 0) {
-                Iterator<INetworkNodeInfo> topNodeIterator = networkTopNodesList
-                        .iterator();
-                while (topNodeIterator.hasNext()) {
-                    INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
-                    if (networkNodeInfo.getStatementType().equals(
-                            INetworkManager.RELATIONEVENT)) {
-                        try {
-                            parser.parseStatement(networkNodeInfo.getId(),
-                                    nodes, links);
-                        } catch (JAXBException e) {
-                            logger.error("Issue while parsing the JAXB object",
-                                    e);
-                        } catch (QStoreStorageException e) {
-                            logger.error("QStore retrieve error", e);
-                        }
-                    }
-                }
-            } else {
-                return null;
-            }
-        } else {
-            return null;
+        if (networkNodeInfoList == null || networkNodeInfoList.size() == 0) {
+            // return the trasnformed network
+            return transformedNetwork;
         }
 
-        return new TransformedNetwork(nodes, links);
+        List<ElementEventsType> elementEventsTypeList = networkDownloadService
+                .getElementEventTypes(networkNodeInfoList);
+
+        // loop through all the elementEventsTypeList and parse the staement
+        // We made sure that networkNodeInfoList and elementEventsTypeList
+        // have same size.
+
+        int index = 0;
+        for (INetworkNodeInfo networkNodeInfo: networkNodeInfoList) {
+            ElementEventsType elementEventsType = elementEventsTypeList.get(index++);
+            // Do not proceed if the elementEventsType is null
+            // null implies there is some exception while retrieving the dataj
+            if (elementEventsType == null) {
+                continue;
+            }
+            parser.parseStatement(networkNodeInfo.getId(), elementEventsType, nodes, links);
+        }
+
+        // Instead of sending null
+        // send an empty transformed network
+        return transformedNetwork;
     }
 }

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
     
@@ -34,14 +33,6 @@
 
 <script>
 $(document).ready(function() {
-    activeTable = $('.dataTable').dataTable({
-    	"bJQueryUI" : true,
-		"sPaginationType" : "full_numbers",
-		"bAutoWidth" : false
-    });
-} );
-
-$(document).ready(function() {
 	$("input[type=submit]").button().click(function(event) {
 
 	});
@@ -49,60 +40,65 @@ $(document).ready(function() {
 
 	});
 });
-
-function onSubmit(){
-	
-	location.href='${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}';
-}
-
 </script>
 
+<h2>Add Collaborator to Project: ${projectname}</h2>
+<div class="back-nav">
+        <hr>
+        <p>
+            <a
+                href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}"><i
+                class="fa fa-arrow-circle-left"></i> Back to Project</a>
+        </p>
+        <hr>
+    </div>
 <form:form method="POST" name="myForm" commandName="collaborator" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/addcollaborators">
-  <h2>Project Collaborators:</h2>
-<h3>Project: ${projectname}</h3>
-<div>${projectdesc}</div>
+  
 <c:if test="${not empty notCollaboratingUsers}">
-<hr>
 
-<div class="wrap">
+<div class="row">
 
-<div class="ex" >
-    <h4>select collaborator</h4>
-	<form:select path="userObj" id="userName">
+<div class="col-md-4">
+    <h4>Select collaborator:</h4>
+	<form:select class="form-control" path="userObj" id="userName">
 	    <form:option value="NONE" label="----- Select -----"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select>
-	<br> 
- 	<div class="userError"><form:errors path="userObj" class="ui-state-error-text"></form:errors></div>
+	 
+ 	<div class="userError"><form:errors path="userObj" class="error"></form:errors></div>
 </div> 	 
-<br/>
 
-<div class="ex1">
-    <h4>select access rights</h4>
-	<ul><form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="id" itemLabel="displayName" element="li" /> </ul>	
-	<div class="rolesError"><form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors></div>
+<div class="col-md-8">
+    <h4>Select access rights:</h4>
+	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="id" itemLabel="displayName" element="div" /> 	
+	<div class="error"><form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors></div>
 </div>
 
 </div>
 <br/>
-<input type="submit" value="Add">
-<input type="button" value="Cancel" onClick="onSubmit()">
+<input class="btn btn-primary" type="submit" value="Add">
+<a class="btn btn-default"
+            href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}">Done</a>
+
 </c:if>
 <c:if test="${empty notCollaboratingUsers}">
-<hr>
- <span>You've added all Quadriga users to this project.</span><br>
- <input type="button" value="Return to Project" onClick="onSubmit()">
+
+ <p>You've added all Quadriga users to this project as collaborators.</p><br>
+ <a class="btn btn-primary"
+            href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectid}">Done</a>
+
 </c:if>
 <br>
 <c:if test="${not empty projectCollaborators}">
 <hr>
-<span class="byline">List of Project Collaborators :</span>
-<table style="width:100%" class="display dataTable">					
+<h4>Current collaborators:</h4>
+<div class="panel panel-default">
+        <table class="table">					
 	<thead>
 		<tr>	
-			<th align="left">collaborator</th>
-			<th align="left">roles</th>	
+			<th align="left">Collaborator</th>
+			<th align="left">Roles</th>	
 		</tr>
 	</thead>
 	

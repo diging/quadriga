@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+    <graph id="$graphId" edgedefault="undirected">
+		#foreach ($node in $nodeList)
+		<node id="$node.id">
+			<data key="label">$node.label</data>
+			<data key="description">$node.description</data>
+		</node>
+		#end
+
+		#foreach ($link in $linkList)
+		<edge source="$link.subject.id" target="$link.object.id">
+			<data key="subjectLabel">$link.subject.label</data>
+			<data key="objectLabel">$link.object.label</data>
+			<data key="linkLabel">$link.label</data>
+			<data key="statementId">$link.statementId</data>
+		</edge>
+		#end
+	</graph>
+</graphml>

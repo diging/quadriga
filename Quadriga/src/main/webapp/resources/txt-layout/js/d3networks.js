@@ -25,8 +25,8 @@ function d3visualize(graph, networkId, path,type) {
 		alert("no network");
 	}
 	// Layout size
-	var width = 500,
-	height = 500;
+	var width = $('#chart').parent().width();
+	var height = $('#chart').parent().height();
 	var layout;
 	var color = d3.scale.category20();
 	// Preparing the force directed graph
@@ -53,8 +53,8 @@ function d3visualize(graph, networkId, path,type) {
 
 
 	var vis = d3.select("#chart").append("svg:svg")
-			.attr("width", width)
-			.attr("height", height)
+			.attr("width", "100%")
+			.attr("height", "100%")
 			.append('svg:g')
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
@@ -228,7 +228,11 @@ function d3visualize(graph, networkId, path,type) {
 			
 			var stId = d.statementid;
 			var associated_nodes = vis.selectAll('circle').filter(function(node) {
-				return ($.inArray(stId[0], node.statementid)) > -1;
+				for (var i = 0; i < stId.length; i++) {
+				    if (($.inArray(stId[i], node.statementid)) > -1)
+				    	return true;
+				}
+				return false;
 			});
 			associated_nodes.each(function(a) {
 				d3.select(this).style("opacity", 1);
@@ -478,27 +482,27 @@ function d3visualize(graph, networkId, path,type) {
 	}
 
 	function displayItemData(){
-		$.ajax({
-			url : path+"auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				if (data.length > 0) {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-					$('#metadataTable')
-							.dataTable().fnAddData(data);
-				} else {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-				}
-			},
-			error: function() {
-				alert("error");
-			}
-		});
+//		$.ajax({
+//			url : path+"auth/editing/getitemmetadata/"+networkId,
+//			type : "GET",
+//			dataType: 'json',
+//			success : function(data) {
+//				if (data.length > 0) {
+//					$('#metadataTable')
+//							.dataTable()
+//							.fnClearTable();
+//					$('#metadataTable')
+//							.dataTable().fnAddData(data);
+//				} else {
+//					$('#metadataTable')
+//							.dataTable()
+//							.fnClearTable();
+//				}
+//			},
+//			error: function() {
+//				alert("error");
+//			}
+//		});
 	}
 	
 	function defineMetadataTable(){

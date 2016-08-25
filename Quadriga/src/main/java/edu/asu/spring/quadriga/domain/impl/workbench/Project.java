@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
@@ -35,6 +36,7 @@ public class Project implements IProject {
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
+	private IProjectHandleResolver resolver;
 	
 	/**
 	 * retrieves the internal id of the project
@@ -215,6 +217,17 @@ public class Project implements IProject {
 	public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;		
 	}
+
+    @Override
+    public IProjectHandleResolver getResolver() {
+        return resolver;
+    }
+
+    @Override
+    public void setResolver(IProjectHandleResolver resolver) {
+        this.resolver = resolver;
+    }
+
 
 //	@Override
 //	public int hashCode() {

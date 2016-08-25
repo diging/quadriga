@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -101,36 +100,6 @@ extends CreationEvent
 			}
 		}
 		return relationType;
-	}
-
-	/**
-	 * Helper class to get relation event ID
-	 * @param re
-	 * @return
-	 */
-	public String getRelationEventId(RelationEventType relationEventType){
-		List<JAXBElement<?>> relationEventElementList = relationEventType.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> relationEventElementIterator = relationEventElementList.iterator();
-		while(relationEventElementIterator.hasNext()){
-			JAXBElement<?> relationEventElement = (JAXBElement<?>) relationEventElementIterator.next();
-			if(relationEventElement.getName().toString().contains("id")){
-				return relationEventElement.getValue().toString();
-			}
-		}
-		return "";
-	}
-
-	
-	public String getRelationEventSourceReference(){
-		List<JAXBElement<?>> relationEventElementList = this.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> relationEventElementIterator = relationEventElementList.iterator();
-		while(relationEventElementIterator.hasNext()){
-			JAXBElement<?> relationEventElement = (JAXBElement<?>) relationEventElementIterator.next();
-			if(relationEventElement.getName().toString().contains("source_reference")){
-				return relationEventElement.getValue().toString();
-			}
-		}
-		return null;
 	}
 	
 }

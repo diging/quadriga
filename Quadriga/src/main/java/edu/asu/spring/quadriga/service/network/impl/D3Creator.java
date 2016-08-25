@@ -28,6 +28,12 @@ public class D3Creator implements ID3Creator {
             buffer.append("\"id\":\"");
             buffer.append(node.getId());
             buffer.append("\",");
+            buffer.append("\"conceptId\":\"");
+            buffer.append(node.getConceptId());
+            buffer.append("\",");
+            buffer.append("\"conceptCpId\":\"");
+            buffer.append(node.getConceptIdShort());
+            buffer.append("\",");
             buffer.append("\"group\":");
             if (node instanceof PredicateNode) {
                 buffer.append("0");
@@ -35,6 +41,9 @@ public class D3Creator implements ID3Creator {
                 buffer.append("1");
             }          
             buffer.append(",");
+            // add source reference
+            buffer.append("\"sourceReference\": \"" + node.getSourceReference() + "\",");
+            // source reference end
             buffer.append("\"statementid\":[");
             for (int j = 0; j < node.getStatementIds().size(); j++) {
                 buffer.append("\"");
@@ -65,7 +74,10 @@ public class D3Creator implements ID3Creator {
             buffer.append("\"label\":");
             buffer.append("\"");
             buffer.append(link.getLabel());
-            buffer.append("\"");
+            buffer.append("\",");
+            // add source reference
+            buffer.append("\"sourceReference\": \"" + link.getSourceReference() + "\",");
+            // source reference end
             buffer.append("}");
             if (links.indexOf(link) < links.size() - 1) {
                 buffer.append(",");

@@ -19,8 +19,17 @@ body {
  color: #E1EAF3;
 }
 
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: white;
+}
+
+.navbar-default .navbar-toggle {
+	color: white;
+}
+
 .navbar-colored {
 	background-color: #487FB7;
+	z-index: 100;
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
@@ -39,7 +48,13 @@ body {
 }
 
 .jumbotron {
-	background-color: #F1DFC4;
+	background-color: rgba(42, 75, 103, 0.15);
+	color: #3D4350;
+	position: relative;
+	border-radius: 6px;
+    border-color: rgb(72, 127, 183);
+    border-width: 1px;
+    border-style: solid;
 }
 .jumbotron .smaller {
     font-size: 16px;
@@ -57,3 +72,20 @@ table.networks {
 	width: 96%;
 }
 
+li.two-row-li {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: center;
+}
+
+div.navbar-two-rows, div.navbar-two-rows a {
+	padding: 2px 0px 2px 0px;
+	margin: 2px 0px 2px 0px;
+	font-size: 11px;
+	color: white;
+}
+
+.main-container {
+	z-index: 100;
+	position: relative;
+}

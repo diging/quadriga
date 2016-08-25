@@ -14,8 +14,8 @@ function d3init(graph, networkId, path,type) {
 		alert("no network");
 	}
 	// Layout size
-	var width = 500,
-	height = 500;
+	var width = $('#chart').parent().width();
+	var height = $('#chart').parent().height();
 	var layout;
 	var color = d3.scale.category20();
 	// Preparing the force directed graph
@@ -46,8 +46,8 @@ function d3init(graph, networkId, path,type) {
 
 
 	var vis = d3.select("#chart").append("svg:svg")
-			.attr("width", width)
-			.attr("height", height)
+			.attr("width", "100%")
+			.attr("height", "100%")
 			.append('svg:g')
 			// Zoom in and out
 			.call(d3.behavior.zoom().on("zoom", redraw))
@@ -236,7 +236,11 @@ function d3init(graph, networkId, path,type) {
 			
 			var stId = d.statementid;
 			var associated_nodes = vis.selectAll('circle').filter(function(node) {
-				return ($.inArray(stId[0], node.statementid)) > -1;
+				for (var i = 0; i < stId.length; i++) {
+				    if (($.inArray(stId[i], node.statementid)) > -1)
+				    	return true;
+				}
+				return false;
 			});
 			associated_nodes.each(function(a) {
 				d3.select(this).style("opacity", 1);
@@ -484,132 +488,36 @@ function d3init(graph, networkId, path,type) {
 				});
 		//displayAllAnnotationsNew();
 	}
-/*
-	/*function displayItemData(){
-		$.ajax({
-			url : path+"/auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				console.log(data);
-				if (data.length > 0) {
-					$.each(data.text, function(key,value) {
-					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
-					console.log(value.filename);
-					$("#metadataTable").append(row);
-                        });
-            
-				} 
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-	}*/
-	
-	/*function displayItemData(){
-		$.ajax({
-			url : path+"/auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				//var cnt = 0;
-				output += "<ol>";
-				$.each(data.text, function(key,value){
-					//content += ++cnt +'.<li>'+value.name+'</li>'+value.text+'</li>'; 
-					output+="<li>" + File Name + " " + value.filename + "</li>"; 
-					output+="<li>" + Author + " " + value.submitter + "</li>"; 
-					output+="<li>" + Last Updated+ " " + value.modifieddate + "</li>"; 
-				});
-				output += "</ol>";
-				//$('#item_metadata').html(output);
-				
-				//drawTable(data.text);
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-	}
-	*/
 	
 	function displayItemData(){
 		var output = "";
-		$.ajax({
-			url : path+"/auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				console.log(data);
-				//var cnt = 0;
-				//output += "<ol>";
-				$.each(data.text, function(key,value){
-					console.log("came in");
-					//output+="<li>" + "<b>File Name</b>" + " --> " + value.filename + "</li>"; 
-					//output+="<li>" + "<b>Author</b>" + " --> " + value.submitter + "</li>"; 
-					//output+="<li>" + "<b>Last Updated</b>" + " --> " + value.modifieddate + "</li>"; 
-					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
-					$('#metadataTable').append(row);
-				});
-				//output += "</ol>";
-				//$('#metadataTable').html(row);
-				
-				//drawTable(data.text);
-			},
-			error: function() {
-				alert("error");
-			}
-		});
+//		$.ajax({
+//			url : path+"/auth/editing/getitemmetadata/"+networkId,
+//			type : "GET",
+//			dataType: 'json',
+//			success : function(data) {
+//				console.log(data);
+//				//var cnt = 0;
+//				//output += "<ol>";
+//				$.each(data.text, function(key,value){
+//					console.log("came in");
+//					//output+="<li>" + "<b>File Name</b>" + " --> " + value.filename + "</li>"; 
+//					//output+="<li>" + "<b>Author</b>" + " --> " + value.submitter + "</li>"; 
+//					//output+="<li>" + "<b>Last Updated</b>" + " --> " + value.modifieddate + "</li>"; 
+//					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
+//					$('#metadataTable').append(row);
+//				});
+//				//output += "</ol>";
+//				//$('#metadataTable').html(row);
+//				
+//				//drawTable(data.text);
+//			},
+//			error: function() {
+//				alert("error");
+//			}
+//		});
 	}
 	
-	
-	
-	/*function displayItemData(){
-		console.log("came here");
-		$.ajax({
-			url : path+"auth/editing/getitemmetadata/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				if (data.length > 0) {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-					$('#metadataTable')
-							.dataTable().fnAddData(data);
-				} else {
-					$('#metadataTable')
-							.dataTable()
-							.fnClearTable();
-				}
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-	}*/
-	
-	/*function defineMetadataTable(){
-		$('#metadataTable')
-		.dataTable(
-				{
-					"bJQueryUI" : true,
-					"sPaginationType" : "full_numbers",
-					"bAutoWidth" : false,
-					"aoColumns" : [ {
-						"sTitle" : "FileName",
-						"mDataProp" :"filename",
-					},{
-						"sTitle" : "Author",
-						"mDataProp" :"submitter",
-					}, {
-						"sTitle" : "Last Modified Date",
-						"mDataProp" :"modifieddate",
-					}],
-				});
-	}*/
-	
-
 	function rightClick(d){
 		var html = "";
 		// If the node type is Predicate

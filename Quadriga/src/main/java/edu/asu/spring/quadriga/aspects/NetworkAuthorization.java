@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.aspects;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,5 +70,12 @@ public class NetworkAuthorization implements IAuthorization {
 		
 		return haveAccess;
 	}
+
+    @Override
+    public boolean chkAuthorization(String userName, List<String> accessObjectId, String[] userRoles)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 }

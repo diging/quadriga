@@ -10,7 +10,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -20,12 +22,12 @@ import edu.asu.spring.quadriga.web.manageusers.beans.NewUserAccountValidator;
 @Controller
 public class RegisterUserController {
 
-    @Autowired 
+    @Autowired
     private IUserManager usermanager;
-    
+
     @InitBinder("accountRequest")
     protected void initBinder(WebDataBinder binder) {
-       binder.setValidator(new NewUserAccountValidator());
+        binder.setValidator(new NewUserAccountValidator());
     }
 
     @RequestMapping(value = "register")
@@ -33,28 +35,30 @@ public class RegisterUserController {
         model.addAttribute("request", new AccountRequest());
         return "register";
     }
-    
+
     @RequestMapping(value = "register-user")
-    public String registerUser(ModelMap model, @Valid @ModelAttribute AccountRequest request, BindingResult result) throws QuadrigaStorageException {
+    public String registerUser(ModelMap model, @Valid @ModelAttribute AccountRequest request, BindingResult result, RedirectAttributes redirectAttrs)
+            throws QuadrigaStorageException, QuadrigaNotificationException {
         if (result.hasErrors()) {
             model.addAttribute("request", request);
             model.addAttribute("errors", result);
             return "register";
         }
-        
+
         boolean success = false;
+        String username = request.getUsername();
         try {
+            request.setUsername(username.toLowerCase());
             success = usermanager.addNewUser(request);
         } catch (UsernameExistsException e) {
-           model.addAttribute("errormsg_username_in_use", "Username already in use.");
-           request.setPassword("");
-           request.setRepeatedPassword("");
-           model.addAttribute("request", request);
-           return "register";
-        } catch (QuadrigaStorageException e) {
-            throw e;
+            model.addAttribute("errormsg_username_in_use", "Username already in use.");
+            request.setUsername(username);
+            request.setPassword("");
+            request.setRepeatedPassword("");
+            model.addAttribute("request", request);
+            return "register";
         }
-        
+
         if (!success) {
             model.addAttribute("errormsg_failure", "Sorry, user could not be added.");
             request.setPassword("");
@@ -62,8 +66,8 @@ public class RegisterUserController {
             model.addAttribute("request", request);
             return "register";
         }
-        
-        model.addAttribute("successmsg", "User account request created. An administrator will review your request.");
+
+        redirectAttrs.addFlashAttribute("successmsg", "Your account has been created! An administrator will review the account and approve it. You will get an email once your account has been reviewed.");
         return "redirect:/login";
     }
 }

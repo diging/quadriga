@@ -30,12 +30,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -45,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
@@ -148,12 +147,13 @@ public class ConceptCollectionRestController {
     public ResponseEntity<String> listConceptCollections(ModelMap model, Principal principal, HttpServletRequest req)
             throws RestException {
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             String userId = principal.getName();
             List<IConceptCollection> collectionsList = conceptControllerManager.getCollectionsOwnedbyUser(userId);
             Template template = engine.getTemplate("velocitytemplates/conceptcollections.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
             context.put("list", collectionsList);
 
             StringWriter writer = new StringWriter();
@@ -173,11 +173,12 @@ public class ConceptCollectionRestController {
 
     }
 
-
     /**
      * Rest interface to get conceptcollections related to workspace
-     * http://<<URL>:<PORT>>/quadriga/auth/rest/workspace/{workspaceid}/conceptcollections.json
-     * http://localhost:8080/quadriga/auth/rest/workspace/e23a8585-20bc-458e-ab7d-c758962b11aa/conceptcollections.json
+     * http://<<URL
+     * >:<PORT>>/quadriga/auth/rest/workspace/{workspaceid}/conceptcollections
+     * .json http://localhost:8080/quadriga/auth/rest/workspace/e23a8585-20bc-
+     * 458e-ab7d-c758962b11aa/conceptcollections.json
      * 
      * 
      * @author Ajay Modi & Bharath Srikantan
@@ -189,45 +190,41 @@ public class ConceptCollectionRestController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/rest/workspace/{workspaceid}/conceptcollections.json", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public ResponseEntity<String> listWorkspaceConceptCollection(
-            @PathVariable("workspaceid") String workspaceId, Model model,
-            Principal principal) {
+    public ResponseEntity<String> listWorkspaceConceptCollection(@PathVariable("workspaceid") String workspaceId,
+            Model model, Principal principal) {
         String userId = principal.getName();
-        
+
         List<IWorkspaceConceptCollection> conceptCollectionList = null;
         JSONArray ja = new JSONArray();
         try {
-            conceptCollectionList = workspaceCCManager.listWorkspaceCC(
-                    workspaceId, userId);    
-                
-        }catch (QuadrigaStorageException e) {
+            conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId);
+
+        } catch (QuadrigaStorageException e) {
             logger.error("QuadrigaStorageException:", e);
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    
-        if(conceptCollectionList!=null){
-            
+
+        if (conceptCollectionList != null) {
+
             for (IWorkspaceConceptCollection conceptCollection : conceptCollectionList) {
                 JSONObject j = new JSONObject();
                 try {
-                    j.put("id", conceptCollection.getConceptCollection()
-                            .getConceptCollectionId());
-                    j.put("name", conceptCollection.getConceptCollection()
-                            .getConceptCollectionName());
+                    j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
+                    j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
                     ja.put(j);
-    
+
                 } catch (JSONException e) {
                     logger.error("JSONException:", e);
                     return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         }
-        
+
         return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
     }
-    
+
     /**
-     * Rest interface for uploading XML for concept collection 
+     * Rest interface for uploading XML for concept collection
      * http://<<URL>:<PORT>>/quadriga/rest/syncconcepts/{conceptCollectionID}
      * http://localhost:8080/quadriga/rest/syncconcepts/
      * 
@@ -253,14 +250,14 @@ public class ConceptCollectionRestController {
      * @throws QuadrigaStorageException
      * @throws RestException
      */
-    @RestAccessPolicies({@ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST, paramIndex = 1, userRole = { 
+    @RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST, paramIndex = 1, userRole = {
             RoleNames.ROLE_CC_COLLABORATOR_ADMIN, RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
     public ResponseEntity<String> addConceptsToConceptCollection(
             @PathVariable("conceptCollectionID") String conceptCollectionId, HttpServletRequest request,
             HttpServletResponse response, @RequestBody String xml, @RequestHeader("Accept") String accept,
             Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException,
-                    JAXBException, QuadrigaAccessException, QuadrigaStorageException, RestException {
+            JAXBException, QuadrigaAccessException, QuadrigaStorageException, RestException {
         IUser user = userManager.getUser(principal.getName());
         if (xml.equals("")) {
             String errorMsg = restMessage.getErrorMsg("Please provide XML in body of the post request.", request);
@@ -336,14 +333,15 @@ public class ConceptCollectionRestController {
             ModelMap model, Principal principal, HttpServletRequest req) throws RestException {
 
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
             String userId = principal.getName();
-            List<IWorkspaceConceptCollection> collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+            List<IWorkspaceConceptCollection> collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId);
             Template template = engine.getTemplate("velocitytemplates/workspaceconceptcollections.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             context.put("list", collectionsList);
-
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+            
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
             return new ResponseEntity<String>(writer.toString(), HttpStatus.OK);
@@ -395,8 +393,8 @@ public class ConceptCollectionRestController {
     @RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
     public ResponseEntity<String> addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,
             HttpServletRequest request, HttpServletResponse response, @RequestBody String xml,
-            @RequestHeader("Accept") String accept, ModelMap model, Principal principal)
-                    throws RestException, QuadrigaStorageException, QuadrigaAccessException {
+            @RequestHeader("Accept") String accept, ModelMap model, Principal principal) throws RestException,
+            QuadrigaStorageException, QuadrigaAccessException {
         IUser user = usermanager.getUser(principal.getName());
         String ccName = request.getParameter("name");
         String desc = request.getParameter("desc");
@@ -450,8 +448,8 @@ public class ConceptCollectionRestController {
             Concept concept = iter.next();
             logger.debug(concept.toString());
             try {
-                conceptControllerManager.addItems(concept.getName().trim(), concept.getUri().trim(),
-                        concept.getPos().trim(), concept.getDescription().trim(), ccId, user.getUserName());
+                conceptControllerManager.addItems(concept.getName().trim(), concept.getUri().trim(), concept.getPos()
+                        .trim(), concept.getDescription().trim(), ccId, user.getUserName());
             } catch (QuadrigaStorageException e) {
                 logger.error("Errors in adding items", e);
                 String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error", request);
@@ -490,17 +488,23 @@ public class ConceptCollectionRestController {
     public ResponseEntity<String> getConceptList(@PathVariable("collectionID") String collectionID, ModelMap model,
             HttpServletRequest req, Principal principal) throws RestException {
         StringWriter sw = new StringWriter();
-        IConceptCollection collection = collectionFactory.createConceptCollectionObject();
+        IConceptCollection collection;
+        try {
+            collection = conceptControllerManager.getConceptCollection(collectionID);
+        } catch (QuadrigaStorageException e1) {
+            throw new RestException(500, e1);
+        }
         collection.setConceptCollectionId(collectionID);
         try {
-            VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+            VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
-            conceptControllerManager.fillCollectionDetails(collection, principal.getName());
             Template template = engine.getTemplate("velocitytemplates/conceptdetails.vm");
-            VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+            VelocityContext context = new VelocityContext();
             context.put("list", collection.getConceptCollectionConcepts());
             context.put("conceptPowerURL", conceptPowerURL);
             context.put("path", updateConceptPowerURLPath);
+            context.put("url", ServletUriComponentsBuilder.fromContextPath(req).toUriString());
+            
             template.merge(context, sw);
             return new ResponseEntity<String>(sw.toString(), HttpStatus.OK);
 
@@ -519,12 +523,14 @@ public class ConceptCollectionRestController {
         }
 
     }
-    
-    
+
     /**
      * Rest interface to get conceptcollections related to project
-     * http://<<URL>:<PORT>>/quadriga/auth/rest/<projectid>/conceptcollections.json
-     * http://localhost:8080/quadriga/auth/rest/PROJ_bb7ad41b-3e85-4309-b2ff-47d644307b9b/conceptcollections.json
+     * http://<<URL>:
+     * <PORT>>/quadriga/auth/rest/<projectid>/conceptcollections.json
+     * http://localhost
+     * :8080/quadriga/auth/rest/PROJ_bb7ad41b-3e85-4309-b2ff-47d644307
+     * b9b/conceptcollections.json
      * 
      * 
      * @author Ajay Modi & Bharath Srikantan
@@ -535,32 +541,27 @@ public class ConceptCollectionRestController {
      */
 
     @RequestMapping(value = "auth/rest/{projectid}/conceptcollections.json", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<String> listProjectConceptCollectionJson(
-            @PathVariable("projectid") String projectid, Model model,
-            Principal principal) {
+    public ResponseEntity<String> listProjectConceptCollectionJson(@PathVariable("projectid") String projectid,
+            Model model, Principal principal) {
         String userId = principal.getName();
         List<IProjectConceptCollection> projectConceptCollectionList = null;
         // TODO: listProjectConceptCollection() needs to be modified
-        try{
-            projectConceptCollectionList = projectConceptCollectionManager
-                .listProjectConceptCollection(projectid, userId);
-        }catch (QuadrigaStorageException e) {
+        try {
+            projectConceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid);
+        } catch (QuadrigaStorageException e) {
             logger.error("QuadrigaStorageException:", e);
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
-            
+
         JSONArray ja = new JSONArray();
-            
-        if(projectConceptCollectionList!=null){
+
+        if (projectConceptCollectionList != null) {
             for (IProjectConceptCollection conceptCollection : projectConceptCollectionList) {
                 JSONObject j = new JSONObject();
                 try {
 
-                    j.put("id", conceptCollection.getConceptCollection()
-                            .getConceptCollectionId());
-                    j.put("name", conceptCollection.getConceptCollection()
-                            .getConceptCollectionName());
+                    j.put("id", conceptCollection.getConceptCollection().getConceptCollectionId());
+                    j.put("name", conceptCollection.getConceptCollection().getConceptCollectionName());
                     ja.put(j);
 
                 } catch (JSONException e) {
@@ -569,10 +570,10 @@ public class ConceptCollectionRestController {
                 }
 
             }
-        
+
         }
-        
+
         return new ResponseEntity<String>(ja.toString(), HttpStatus.OK);
-            
+
     }
 }

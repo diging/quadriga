@@ -1,0 +1,55 @@
+.page-404 {
+    font-size: 120px;
+    font-weight: bold;
+    color: #7C91A7;
+    float: right;
+}
+
+#chart {
+	height: 100%;
+	width: 100%;
+	min-height: 500px;
+}
+
+#chart>svg {
+	min-height: 500px;
+}
+
+.image-bg {
+	width: 100%;
+	height: 140%;
+	position: absolute;
+	top: 0;
+	left: 0;
+    
+}
+
+.image-bg img {
+    opacity: 0.1;
+    height: auto;
+    width: 100%;
+    z-index: 10;
+    
+}
+
+.image-bg:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.1;
+    background-image: url('../imgs/nw-big-5.png');
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+
+span.highlight {
+    background-color: rgb(206, 167, 24);
+}

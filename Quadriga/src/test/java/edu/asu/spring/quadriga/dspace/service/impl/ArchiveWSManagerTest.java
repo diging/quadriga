@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.workspace.ArchiveWSManager;
+import edu.asu.spring.quadriga.service.workspace.impl.ArchiveWSManager;
 
 public class ArchiveWSManagerTest {
 
@@ -48,8 +48,8 @@ public class ArchiveWSManagerTest {
         wsDto2.setWorkspaceid("ws2");
         wsDto2.setIsdeactivated(false);
         
-        Mockito.when(workspaceDao.getWorkspaceDTO("ws1")).thenReturn(wsDto1);
-        Mockito.when(workspaceDao.getWorkspaceDTO("ws2")).thenReturn(wsDto2);
+        Mockito.when(workspaceDao.getDTO("ws1")).thenReturn(wsDto1);
+        Mockito.when(workspaceDao.getDTO("ws2")).thenReturn(wsDto2);
     }
     
     @Test

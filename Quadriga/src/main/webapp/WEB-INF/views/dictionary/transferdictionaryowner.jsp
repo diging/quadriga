@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <style>
@@ -9,59 +8,62 @@
 }
 </style>
 <script>
-	function submitClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}';
-	}
 	
-	function submitCollabClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionaryid}';
-	}
-	
+
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
 	});
-	
+
 	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 		});
 	});
 </script>
 
+<h2>Dictionary: ${dictionaryname}</h2>
+<div class="back-nav">
+    <hr>
+    <p>
+        <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}"><i
+            class="fa fa-arrow-circle-left"></i> Back to Dictionary</a>
+    </p>
+    <hr>
+</div>
+
 <form:form commandName="user" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/dictionaries/changedictionaryowner/${dictionaryid}">
-	<c:choose>
-		<c:when test="${success=='0'}">
+	
 			<c:if test="${not empty collaboratinguser}">
-			   <h2>Dictionary: ${dictionaryname}</h2>
-			   <hr>
-			   <div class="user">Owned by: ${dictionaryowner}</div>
-			   <hr>
-			   <div>Assign new owner to dictionary</div>
-				<form:select path="userName">
+			
+			 <div class="alert alert-info" role="alert">Dictionary is
+            currently owned by: ${dictionaryowner}</div>
+
+				
+				<p>Select a new owner for the dictionary:</p>
+				<p>
+				<form:select path="userName" class="form-control">
 					<form:option value="" label="--- Select ---" />
-					<form:options items="${collaboratinguser}"
-						itemValue="userName" itemLabel="userName" />
+					<form:options items="${collaboratinguser}" itemValue="userName"
+						itemLabel="userName" />
 				</form:select>
 				<form:errors path="userName" cssClass="error"></form:errors>
-				<div>Note:Current owner will become dictionary admin</div>
-				<td><input type="submit" value="Assign"></td>
+				</p>
+				<div class="alert alert-warning" role="alert">Note: The current
+            owner of this dictionary will become a dictionary
+            admin and will not be able to undo the ownership transfer.</div>
+            
+				<p><input class="btn btn-primary" type="submit" value="Assign">
+				<a class="btn btn-default" href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}">Cancel</a></p>
 			</c:if>
 			<c:if test="${empty collaboratinguser}">
-          You don't have any collaborators assigned to dictionary.
-          <ul>
-				<li><input type="button" onClick="submitClick(this.id);"
-					value='Okay'></li>
-			</ul>	   
-		</c:if>
-		</c:when>
-		<c:otherwise>
-			<span class="byline">Dictionary Ownership transferred successfully.</span>
-			<br />
-			<ul>
-				<li><input type="button" onClick="submitCollabClick(this.id);"
-					value='Okay'></li>
-			</ul>
-		</c:otherwise>
-	</c:choose>
+				<p>You don't have any collaborators assigned to this dictionary.
+					To transfer ownership of this dictionary, first add another user as
+					collaborator to the dictionary.</p>
+				<p>
+					<a class="btn btn-primary" href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}">Back</a>
+				    
+				</p>
+			</c:if>
+		
 </form:form>

@@ -15,6 +15,7 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
@@ -51,25 +52,47 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "termPartType", propOrder = {
-    "idOrCreatorOrCreationDate"
-})
+@XmlType(name = "termPartType")
 public class TermPartType {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "formatted_pointer", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "normalization", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_date", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "format", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creation_place", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "id", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "position", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "internal_refId", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "source_reference", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
-        @XmlElementRef(name = "expression", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class),
         @XmlElementRef(name = "creator", namespace = "http://digitalhps.org/creationEvents-model", type = JAXBElement.class)
     })
     protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
+    
+    @XmlElement(name = "expression", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String expression;
+    
+    @XmlElement(name = "position", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String position;
+    
+    @XmlElement(name = "formatted_pointer", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String formattedPointer;
+    
+    public String getFormattedPointer() {
+        return formattedPointer;
+    }
+
+    public void setFormattedPointer(String formattedPointer) {
+        this.formattedPointer = formattedPointer;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    @XmlElement(name = "format", namespace = "http://digitalhps.org/creationEvents-model", type = String.class)
+    private String format;
 
     /**
      * Gets the value of the idOrCreatorOrCreationDate property.
@@ -108,6 +131,22 @@ public class TermPartType {
             idOrCreatorOrCreationDate = new ArrayList<JAXBElement<?>>();
         }
         return this.idOrCreatorOrCreationDate;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
 }

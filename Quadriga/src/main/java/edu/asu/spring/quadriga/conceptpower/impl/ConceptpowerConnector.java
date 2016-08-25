@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,14 +16,18 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.web.workbench.AddCollaboratorController;
 
 /**
  * This class provides functionality to search Conceptpower.
+ * 
  * @author Julia Damerow, satyaswaroop
  *
  */
 @Service
 public class ConceptpowerConnector implements IConceptpowerConnector {
+
+    private static final Logger logger = LoggerFactory.getLogger(ConceptpowerConnector.class);
 
     @Inject
     @Named("restTemplate")
@@ -36,32 +42,68 @@ public class ConceptpowerConnector implements IConceptpowerConnector {
     private String searchURL;
 
     @Autowired
+    @Qualifier("searchConceptpowerEndpoint")
+    private String searchEndpoint;
+
+    @Autowired
     @Qualifier("updateConceptPowerURLPath")
     private String idUrl;
 
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.conceptpower.impl.IConceptpowerConnector#search(java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.conceptpower.impl.IConceptpowerConnector#search(
+     * java.lang.String, java.lang.String)
      */
     @Override
-    @Cacheable(value="concepts")
+    @Cacheable(value = "concepts")
     public ConceptpowerReply search(String item, String pos) {
         Map<String, String> vars = new HashMap<String, String>();
         vars.put("name", item);
         vars.put("pos", pos);
 
-        return restTemplate.getForObject(conceptURL + searchURL
-                + "{name}/{pos}", ConceptpowerReply.class, vars);
+        return restTemplate.getForObject(conceptURL + searchURL + "{name}/{pos}", ConceptpowerReply.class, vars);
     }
-    
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.conceptpower.impl.IConceptpowerConnector#getById(java.lang.String)
+
+    /**
+     * Searches Conceptpower for the given term using Conceptpowers search API.
+     * Search query consists of word=searchTerm.
+     * 
+     * @param searchTerm
+     *            Term to search for.
+     * @return
      */
     @Override
-    @Cacheable(value="concepts", key="#id")
+    @Cacheable(value = "concepts")
+    public ConceptpowerReply search(String searchTerm) {
+        Map<String, String> vars = new HashMap<String, String>();
+        vars.put("searchterm", searchTerm);
+
+        return restTemplate.getForObject(conceptURL + searchEndpoint + "?word={searchterm}", ConceptpowerReply.class,
+                vars);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.conceptpower.impl.IConceptpowerConnector#getById(
+     * java.lang.String)
+     */
+    @Override
+    @Cacheable(value = "concepts", key = "#id")
     public ConceptpowerReply getById(String id) {
         Map<String, String> vars = new HashMap<String, String>();
-        //vars.put("name", id);
+        // vars.put("name", id);
         String url = conceptURL + idUrl + id.trim();
-        return restTemplate.getForObject(url, ConceptpowerReply.class, vars);
+        try {
+            return restTemplate.getForObject(url, ConceptpowerReply.class, vars);
+        } catch (Exception ex) {
+            logger.error("Offending id: " + id);
+            logger.error("Could not get concept", ex);
+
+            return null;
+        }
     }
 }

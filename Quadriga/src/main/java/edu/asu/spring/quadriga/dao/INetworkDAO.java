@@ -22,7 +22,7 @@ public interface INetworkDAO {
 	 * @return					return success/error message
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addNetworkRequest(String networkName, IUser user, String workspaceid)
+	public abstract String addNetwork(String networkName, IUser user, String workspaceid, String networkStatus, String externalUserId)
 			throws QuadrigaStorageException;
 	
 	/**
@@ -39,7 +39,7 @@ public interface INetworkDAO {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String addNetworkStatement(String rowid,String networkId, String id, String type,
-			String isTop, IUser user, int version) throws QuadrigaStorageException;
+			int isTop, IUser user, int version) throws QuadrigaStorageException;
 
 
 	/**

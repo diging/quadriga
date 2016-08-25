@@ -1,6 +1,9 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -10,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.aspects.annotations.NoAuthorizationCheck;
-import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * The controller to manage the login step performed by every user in Quadriga Database
@@ -22,13 +28,16 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class LoginController {
 
 	@Autowired
-	IUserManager userManager;
-	IUser user;
-
+	private IUserManager userManager;
+	
+	@Autowired
+	private IRetrieveProjectManager retrieveProjectManager;
+	
 	/**
 	 * A valid authenticated user is redirected to the home page.
 	 * 
 	 * @return 		Returned to the home page of Quadriga.
+	 * @throws QuadrigaStorageException 
 	 */
 	@NoAuthorizationCheck
 	@RequestMapping(value = "auth/welcome", method = RequestMethod.GET)
@@ -38,8 +47,7 @@ public class LoginController {
 		// Get the LDAP-authenticated userid
 		String sUserId = principal.getName();		
 		model.addAttribute("username", sUserId);
-		
-		return "auth/home";
+		return "redirect:home";
 
 	}
 
@@ -47,11 +55,21 @@ public class LoginController {
 	 * User requests a login page
 	 * 
 	 * @return		Redirected to the login page
+	 * @throws QuadrigaStorageException 
 	 */
 	@NoAuthorizationCheck
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(ModelMap model) {
+	public String login(ModelMap model) throws QuadrigaStorageException {
+	    List<IProject> projectList = retrieveProjectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
+        Collections.sort(projectList, new Comparator<IProject>() {
 
+            @Override
+            public int compare(IProject o1, IProject o2) {
+                return o1.getUpdatedDate().compareTo(o2.getUpdatedDate());
+            }
+        });
+        int size = projectList.size() > 4 ? 4 : projectList.size();
+        model.addAttribute("latestProjects", projectList.subList(0, size));
 		return "login";
 
 	}

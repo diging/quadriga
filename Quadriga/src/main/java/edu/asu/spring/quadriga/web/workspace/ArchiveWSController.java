@@ -6,12 +6,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
@@ -25,7 +29,6 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
 import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
 import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceFormManager;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ArchiveWSController 
@@ -56,7 +59,7 @@ public class ArchiveWSController
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 			,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value="auth/workbench/{projectid}/archiveworkspace", method=RequestMethod.GET)
 	public ModelAndView archiveWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -92,7 +95,7 @@ public class ArchiveWSController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/workbench/{projectid}/archiveworkspace", method = RequestMethod.POST)
 	public ModelAndView archiveWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
@@ -164,7 +167,7 @@ public class ArchiveWSController
 	 */
 	@AccessPolicies({
 			@ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {
-					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_COLLABORATOR_OWNER,
 					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
 					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR
 			})
@@ -182,7 +185,7 @@ public class ArchiveWSController
 		redirectAttributes.addFlashAttribute("success_alert_msg",
 				"The workspace has been successfully archived.");
 
-		return "redirect:/auth/workbench/workspace/workspacedetails/"
+		return "redirect:/auth/workbench/workspace/"
 				+ workspaceId;
 	}
 	
@@ -194,7 +197,7 @@ public class ArchiveWSController
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value="auth/workbench/{projectid}/unarchiveworkspace", method=RequestMethod.GET)
 	public ModelAndView unarchiveWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -232,7 +235,7 @@ public class ArchiveWSController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_OWNER,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/workbench/{projectid}/unarchiveworkspace", method = RequestMethod.POST)
 	public ModelAndView unarchiveWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
@@ -301,7 +304,7 @@ public class ArchiveWSController
 	 */
 	@AccessPolicies({
 			@ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {
-					RoleNames.ROLE_COLLABORATOR_ADMIN,
+					RoleNames.ROLE_COLLABORATOR_OWNER,
 					RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
 					RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR
 			})
@@ -317,7 +320,7 @@ public class ArchiveWSController
 		redirectAttributes.addFlashAttribute("show_success_alert", true);
 		redirectAttributes.addFlashAttribute("success_alert_msg", "The workspace has been successfully unarchived.");
 
-		return "redirect:/auth/workbench/workspace/workspacedetails/" + workspaceId;
+		return "redirect:/auth/workbench/workspace/" + workspaceId;
 	}
 
 }

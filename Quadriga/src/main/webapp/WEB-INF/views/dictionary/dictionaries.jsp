@@ -1,92 +1,56 @@
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec"
+    uri="http://www.springframework.org/security/tags"%>
 
-
-<!--  
-	Author Lohith Dwaraka  
-	Used to list the dictionaries
-	and add dictionary	
--->
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("ul.pagination1").quickPagination({
-			pageSize : "5"
-		});
-	});
-	$(function() {
-		$("#tabs").tabs();
-	});
-</script>
-<style>
-.tabs {
-	font-size: 80%;
-}
-</style>
-<header>
-    <h2>Dictionaries</h2>
-    <span class="byline">Manage your dictionaries here.</span>
-</header>
-
-<c:choose>
-    <c:when test="${adddicsuccess=='1'}">
-        <font color="blue"><spring:message
-                code="add.dictionary.success" /></font>
-    </c:when>
-    <c:when test="${deldicitonarysuccess=='1'}">
-        <font color="blue"><spring:message
-                code="delete.dictionary.success" /></font>
-    </c:when>
-    <c:when test="${deldicitonarysuccess=='0'}">
-        <font color="red"><spring:message
-                code="delete.dictionary.fail" /></font>
-    </c:when>
-    <c:when test="${dictionaryaccesserror=='0'}">
-        <font color="red"><spring:message
-                code="delete.dictionary.access.fail" /></font>
-    </c:when>
-</c:choose>
-<br />
+<h2>Dictionaries</h2>
+<span class="byline">Manage your dictionaries here.</span>
 
 <div>
-    <c:if test="${not empty dictinarylist}">
-	    You own these Dictionaries:
-	    <ul>
-            <c:forEach var="dictionary" items="${dictinarylist}">
-                <li class="dt">
-                <a
-                    href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
-                        <i class="fa fa-book"></i>
-                        <c:out value="${dictionary.dictionaryName}"></c:out>
-                </a> 
-                <br> <c:out value="${dictionary.description}"></c:out>
-                </li>
-            </c:forEach>
-        </ul>
-    </c:if>
-    <c:if test="${empty dictinarylist}"> You don't own any dictionaries.
+	<c:if test="${not empty dictionarylist}">
+		<h4>You own these Dictionaries:</h4>
+
+		<c:forEach var="dictionary" items="${dictionarylist}">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<a
+						href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
+						<i class="fa fa-book"></i> <c:out
+							value="${dictionary.dictionaryName}"></c:out>
+					</a> <br>
+					<c:out value="${dictionary.description}"></c:out>
+				</div>
+			</div>
+		</c:forEach>
+	</c:if>
+	<c:if test="${empty dictionarylist}"> You don't own any dictionaries.
     </c:if>
 </div>
 
-<div style="float:right;">
-	<i class="fa fa-plus-circle"></i> <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">Add Dictionary</a>
+<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD')">
+<div style="float: right;">
+	<a
+		href="${pageContext.servletContext.contextPath}/auth/dictionaries/add"><i
+		class="fa fa-plus-circle"></i> Add Dictionary</a>
 </div>
+</sec:authorize>
 </br>
 <c:if test="${not empty dictionaryCollabList}">
-    You participate in these Dictionaries:
-    <ul>
-        <c:forEach var="dictionary" items="${dictionaryCollabList}">
-            <li class="dt">
-            <a
-                href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.dictionaryId}">
-                <i class="fa fa-book"></i>
-                <c:out value="${dictionary.dictionaryName}"></c:out>
-            </a> <br> <c:out value="${dictionary.description}"></c:out>
-            </li>
-        </c:forEach>
-    </ul>
+    You collaborate on these Dictionaries:
+    	<c:forEach var="dictionary" items="${dictionaryCollabList}">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<a
+					href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
+					<i class="fa fa-book"></i> <c:out
+						value="${dictionary.dictionaryName}"></c:out>
+				</a> <br>
+				<c:out value="${dictionary.description}"></c:out>
+			</div>
+		</div>
+	</c:forEach>
 </c:if>
 
 <c:if test="${empty dictionaryCollabList}">

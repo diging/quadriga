@@ -17,6 +17,8 @@ public class Node {
     private String label;
     private String description;
     private String conceptId;
+    private String conceptIdShort;
+    private String sourceReference;
     
     public Node() {
         statementIds = new ArrayList<String>();
@@ -53,6 +55,23 @@ public class Node {
     public void setConceptId(String conceptId) {
         this.conceptId = conceptId;
     }
-    
-    
+
+
+    public String getSourceReference() {
+        return sourceReference;
+    }
+
+    public void setSourceReference(String sourceReference) {
+        this.sourceReference = sourceReference;
+    }
+
+
+    public String getConceptIdShort() {
+        return conceptIdShort;
+    }
+
+
+    public void setConceptIdShort(String conceptIdShort) {
+        this.conceptIdShort = conceptIdShort;
+    }
 }

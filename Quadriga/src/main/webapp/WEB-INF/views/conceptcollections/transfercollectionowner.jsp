@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <style>
@@ -17,47 +16,52 @@
 		$("input[type=submit]").button().click(function(event) {
 		});
 	});
-	
+
 	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 		});
 	});
 </script>
 
+<h2>Transfer Ownership of Concept Collection: ${collectionname}</h2>
+<div class="back-nav">
+	<hr>
+	<p>
+		<a
+			href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}"><i
+			class="fa fa-arrow-circle-left"></i> Back to Concept Collection</a>
+	</p>
+	<hr>
+</div>
+
+
 <form:form commandName="user" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/conceptcollections/transferconceptcollectionowner/${collectionid}">
-	<c:choose>
-		<c:when test="${success=='0'}">
-			<c:if test="${not empty collaboratinguser}">
-			   <h2>ConceptCollection: ${collectionname}</h2>
-			   <hr>
-			   <div class="user">Owned by: ${collectionowner}</div>
-			   <hr>
-			   <div>Assign new owner to the concept collection</div>
-				<form:select path="userName">
-					<form:option value="" label="--- Select ---" />
-					<form:options items="${collaboratinguser}"
-						itemValue="userName" itemLabel="userName" />
-				</form:select>
-				<form:errors path="userName" cssClass="error"></form:errors>
-				<div>Note:Current owner will become concept collection admin</div>
-				<td><input type="submit" value="Assign"></td>
-			</c:if>
-			<c:if test="${empty collaboratinguser}">
-          You don't have any collaborators assigned to concept collection.
-          <ul>
-				<li><input type="button" onClick="submitClick(this.id);"
-					value='Okay'></li>
-			</ul>	   
-		</c:if>
-		</c:when>
-		<c:otherwise>
-			<span class="byline">Concept collection Ownership transferred successfully.</span>
-			<br />
-			<ul>
-				<li><input type="button" onClick="submitClick(this.id);"
-					value='Okay'></li>
-			</ul>
-		</c:otherwise>
-	</c:choose>
+	<c:if test="${not empty collaboratinguser}">
+		<div class="alert alert-info" role="alert">Concept Collection
+			currently owned by: ${collectionowner}</div>
+
+		<p>Select a new owner for the concept collection:</p>
+		<p>
+			<form:select class="form-control" path="userName">
+				<form:option value="" label="--- Select ---" />
+				<form:options items="${collaboratinguser}" itemValue="userName"
+					itemLabel="name" />
+			</form:select>
+			<form:errors path="userName" cssClass="error"></form:errors>
+		</p>
+		<div class="alert alert-warning" role="alert">Note: The current
+			owner of this concept collection will become a concept collection
+			admin and will not be able to undo ownership transfer.</div>
+
+		<input class="btn btn-primary" type="submit" value="Assign">
+		<a class="btn btn-default"
+			href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}">Cancel</a>
+	</c:if>
+	<c:if test="${empty collaboratinguser}">
+		<p>You don't have any collaborators assigned to concept
+			collection.</p>
+		<input class="btn btn-primary" type="button"
+			onClick="submitClick(this.id);" value='Okay'>
+	</c:if>
 </form:form>

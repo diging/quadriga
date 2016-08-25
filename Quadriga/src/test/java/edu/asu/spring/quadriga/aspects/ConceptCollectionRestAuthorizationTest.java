@@ -31,7 +31,7 @@ import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.impl.ConceptCollectionManager;
 
 public class ConceptCollectionRestAuthorizationTest {
 
@@ -92,8 +92,10 @@ public class ConceptCollectionRestAuthorizationTest {
                 return null;
             }
         
-        }).when(mockedManager).fillCollectionDetails(Mockito.isA(IConceptCollection.class), Mockito.anyString());
+        }).when(mockedManager).fillConceptCollection(Mockito.isA(IConceptCollection.class));
       
+        Mockito.when(mockedManager.getConceptCollection("collectionid")).thenReturn(collection);
+        
     }
     
     @Test

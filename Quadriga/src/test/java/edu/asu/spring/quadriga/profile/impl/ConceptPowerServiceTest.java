@@ -12,18 +12,20 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import edu.asu.spring.quadriga.conceptpower.POS;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.impl.ConceptPowerService;
 import edu.asu.spring.quadriga.profile.impl.SearchResult;
-import edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.impl.ConceptCollectionManager;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class ConceptPowerServiceTest {
 
     @Mock
-    private ConceptCollectionManager mockedCollectionManager;
+    private IConceptCollectionManager mockedCollectionManager;
     
     @InjectMocks
     private ConceptPowerService conceptPowerService;
@@ -49,7 +51,7 @@ public class ConceptPowerServiceTest {
         reply = new ConceptpowerReply();
         reply.setConceptEntry(entries);
         
-        Mockito.when(mockedCollectionManager.search(rhino, IService.POS_NOUN)).thenReturn(reply);
+        Mockito.when(mockedCollectionManager.search(rhino, POS.NOUN)).thenReturn(reply);
     }
 
     @Test
