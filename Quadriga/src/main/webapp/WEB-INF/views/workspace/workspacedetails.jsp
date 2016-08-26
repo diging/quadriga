@@ -65,6 +65,12 @@ cursor: pointer;
                     }
                 });     
         });
+        
+        $(".modal").on("hidden.bs.modal", function(){
+            $(".modal-body").html("");
+            $(".modal-title").html("");
+        });
+        
     });
                                            
 </script>
@@ -289,20 +295,20 @@ cursor: pointer;
     
     
     <div class="col-md-3">
-		<h5 class="major">
-			<span>Below users have complete access to workspace</span>
-		</h5>
-		<div style="padding: 5px;">
-				<i class="fa fa-user" aria-hidden="true"></i> ${projectOwner.userName} (Project Owner)
-				<br>
-				<c:forEach var="collaborator"
-					items="${projectAdmins}">
-					<i class="fa fa-user" aria-hidden="true"></i>
-					<c:out value="${collaborator.collaborator.userObj.name}"></c:out>
-					<br>
-				</c:forEach>
-		</div>
-	</div>
+        <h5 class="major">
+            <span>Below users have complete access to workspace</span>
+        </h5>
+        <div style="padding: 5px;">
+                <i class="fa fa-user" aria-hidden="true"></i> ${projectOwner.userName} (Project Owner)
+                <br>
+                <c:forEach var="collaborator"
+                    items="${projectAdmins}">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <c:out value="${collaborator.collaborator.userObj.name}"></c:out>
+                    <br>
+                </c:forEach>
+        </div>
+    </div>
 </div>
 
 <!--  Modals -->
@@ -467,8 +473,12 @@ cursor: pointer;
                                 changedTextFileAccess = "Public";
                             }
                             
-                            var content = "Are you sure you want to make this text file " + changedTextFileAccess + "?";
-                            $(this).find('.modal-body p').text(content);
+                            var titlecontent = "Update Text Accessibility"
+                            var bodycontent = "Are you sure you want to make this text file " + changedTextFileAccess + "?";
+                            
+                            $(this).find('.modal-title').html(titlecontent);
+                            $(this).find('.modal-body').html(bodycontent);
+                            
                         });
     });
 </script>
