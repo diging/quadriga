@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
-import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -13,6 +12,7 @@ public interface ITextFileManager {
 
     /**
      * Save the Text file in the database and Local File System.
+     * 
      * @param txtfile
      *            Text File object from web controller to handle text
      *            operations.
@@ -34,12 +34,13 @@ public interface ITextFileManager {
 
     /**
      * Retrieve the text file content as a string.
+     * 
      * @param txtId
      *            Text ID of the file to be retrieved.
      * @return Returns the contents of the file as a string.
      * @throws FileNotFoundException
      * @throws IOException
-     * @throws FileStorageException 
+     * @throws FileStorageException
      */
     String retrieveTextFileContent(String txtId) throws FileStorageException;
 
@@ -49,4 +50,13 @@ public interface ITextFileManager {
 
     ITextFile getTextFile(String textId) throws QuadrigaStorageException;
 
+    /**
+     * saves or updates the txtFile in the database.
+     * 
+     * @param txtFile
+     *            Text File object from web controller to handle text
+     *            operations.
+     * @return
+     */
+    void storeTextFile(ITextFile txtFile);
 }

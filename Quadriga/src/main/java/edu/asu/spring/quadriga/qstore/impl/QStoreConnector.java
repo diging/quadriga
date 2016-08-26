@@ -231,6 +231,7 @@ public class QStoreConnector implements IQStoreConnector {
 
         String res = "";
         try {
+            logger.debug("Search Qstore for " + conceptUri + " and " + textUri);
             res = restTemplate.postForObject(getQStoreSearchUrl(), request, String.class);
         } catch (Exception e) {
             throw new QStoreStorageException(e);

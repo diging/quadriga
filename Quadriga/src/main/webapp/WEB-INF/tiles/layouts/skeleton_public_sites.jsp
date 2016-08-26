@@ -25,9 +25,15 @@
 	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
 	rel="stylesheet">
 
+<link
+    href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic'
+    rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700'
+    rel='stylesheet' type='text/css'>
+    
 <!-- Custom styles for this template -->
 <link
-	href="${pageContext.servletContext.contextPath}/resources/public/css/navbar.css"
+	href="${pageContext.servletContext.contextPath}/resources/css/public-sites.css"
 	rel="stylesheet">
 
 <link rel="stylesheet"
@@ -99,33 +105,20 @@
 </head>
 <body>
 	<tiles:importAttribute name="currentPage" scope="request" />
+	
+	 <div class="container-fluid">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav pull-right">
+            <tiles:insertAttribute name="navigation" />
+          </ul>
+        </nav>
+        <h3 class="text-muted"><a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites"><img
+                    src="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/img/QuadrigaLogo-grey.png"
+                    height="35px" style="margin-top: -5px;"></a></h3>
+      </div>
 
-	<div class="container">
-
-		<!-- Static navbar -->
-		<nav class="navbar navbar-default navbar-colored">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed"
-						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-						aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites">Quadriga Sites</a>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
-						<tiles:insertAttribute name="navigation" />
-					</ul>
-				</div>
-				<!--/.nav-collapse -->
-			</div>
-			<!--/.container-fluid -->
-		</nav>
+		
 		<tiles:insertAttribute name="content" />
 	</div>
 </body>
