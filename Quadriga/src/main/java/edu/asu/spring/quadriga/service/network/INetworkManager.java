@@ -78,6 +78,14 @@ public interface INetworkManager {
      *             Database storage exception thrown
 	 */
     public abstract List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException;
+    
+    
+    /**
+     * Get all approved {@link INetwork} objects
+     * @return
+     * @throws QuadrigaStorageException
+     */
+    public abstract List<INetwork> getApprovedNetworkList() throws QuadrigaStorageException;
 
 	/**
      * Get only the Top Nodes of the {@link INetworkNodeInfo}. In a XML received

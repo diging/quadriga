@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +24,6 @@ import edu.asu.spring.quadriga.transform.PredicateNode;
 @Service
 public class NetworkTransformationManager implements INetworkTransformationManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(NetworkTransformationManager.class);
-
     @Autowired
     private INetworkManager networkManager;
 
@@ -38,36 +34,31 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     public ITransformedNetwork getTransformedNetwork(String networkId, String versionID)
             throws QuadrigaStorageException {
 
-        ITransformedNetwork networkJSon = null;
-        List<INetworkNodeInfo> oldNetworkTopNodesList = null;
+        List<INetworkNodeInfo> oldNetworkTopNodesList = networkManager.getNetworkTopNodesByVersion(networkId,
+                Integer.parseInt(versionID));
 
-        try {
-            oldNetworkTopNodesList = networkManager.getNetworkTopNodesByVersion(networkId, Integer.parseInt(versionID));
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while getting network top nodes", e);
-        }
-
-        networkJSon = transformer.transformNetwork(oldNetworkTopNodesList);
-        return networkJSon;
+        return transformer.transformNetwork(oldNetworkTopNodesList);
     }
 
     @Override
     public ITransformedNetwork getTransformedNetwork(String networkId) throws QuadrigaStorageException {
 
-        ITransformedNetwork networkJSon = null;
+        List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
 
-        List<INetworkNodeInfo> networkTopNodesList = null;
+        return transformer.transformNetwork(networkTopNodesList);
+    }
 
-        try {
-            networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while getting network top nodes", e);
-            return null;
+    @Override
+    public ITransformedNetwork getTransformedApprovedNetworks(List<INetwork> networkList)
+            throws QuadrigaStorageException {
+
+        List<INetworkNodeInfo> networkTopNodesList = new ArrayList<INetworkNodeInfo>();
+        for (INetwork curnetwork : networkList) {
+            List<INetworkNodeInfo> curTopNodesList = networkManager.getNetworkTopNodes(curnetwork.getNetworkId());
+            networkTopNodesList.addAll(curTopNodesList);
         }
 
-        networkJSon = transformer.transformNetwork(networkTopNodesList);
-
-        return networkJSon;
+        return transformer.transformNetwork(networkTopNodesList);
     }
 
     @Override
@@ -79,16 +70,15 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         if (networkList == null) {
             return null;
         }
-        
-        ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
-        
-        return transformedNetwork;
+
+        return getTransformedNetworkusingNetworkList(networkList);
+
     }
 
-
     /**
-     * This method returns a network that consists of all the statements in the given projects that contain the provided
-     * concept id.
+     * This method returns a network that consists of all the statements in the
+     * given projects that contain the provided concept id.
+     * 
      * @param projectIds
      * @param conceptId
      * @return ITransformedNetwork
@@ -97,7 +87,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      */
     @Override
     public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId, String status)
-        throws QuadrigaStorageException {
+            throws QuadrigaStorageException {
         // get the transformed network and search for the concept id
         List<INetwork> networkList = getNetworkList(projectId, status);
 
@@ -107,57 +97,51 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
         // get the transformed network of all the networks in a project
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
-        // create finalnetwork using conceptId 
-        ITransformedNetwork finalTransformedNetwork = getFinalTransformedNetwork(transformedNetwork,conceptId);
+        // create finalnetwork using conceptId
+        return getFinalTransformedNetwork(transformedNetwork, conceptId);
 
-        return finalTransformedNetwork;
     }
 
     private List<INetwork> getNetworkList(String projectId, String status) throws QuadrigaStorageException {
-        List<INetwork> networkList;
-        try {
-            networkList = networkManager.getNetworksInProject(projectId, status);
-        } catch (QuadrigaStorageException e) {
-            throw new QuadrigaStorageException("Database error while getting networks of a project" +
-                    " with id: " + projectId, e);
+        return networkManager.getNetworksInProject(projectId, status);
+    }
+
+    /**
+     * This method searches for concept specified by conceptId in the networks
+     * of projects specified by project Ids and returns transformed networks of
+     * all projects specified by projectIds containing given conceptId.
+     * 
+     * @param projectIds
+     *            : List of projectIds for projects to search under
+     * @param conceptId
+     *            : Id of concept to search
+     * @return ITransformedNetwork
+     * @throws QuadrigaStorageException
+     * @author suraj nilapwar
+     */
+    @Override
+    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId,
+            String status) throws QuadrigaStorageException {
+        // get the transformed network and search for the concept id
+        List<INetwork> networkList = new ArrayList<>();
+
+        for (String projectId : projectIds) {
+            List<INetwork> networks = getNetworkList(projectId, status);
+            if (networks != null) {
+                networkList.addAll(networks);
+            }
         }
 
-        return networkList;
-    }
-    
-    /**
-	 * This method searches for concept specified by conceptId in the networks of projects specified by project Ids and
-	 * returns transformed networks of all projects specified by projectIds containing given conceptId.
-	 * @param projectIds : List of projectIds for projects to search under
-	 * @param conceptId : Id of concept to search
-	 * @return ITransformedNetwork
-	 * @throws QuadrigaStorageException
-	 * @author suraj nilapwar
-	 */
-    @Override
-    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId, String status)
-        throws QuadrigaStorageException {
-    	// get the transformed network and search for the concept id
-        List<INetwork> networkList = new ArrayList<>();
-        
-        for(String projectId : projectIds){
-        	List<INetwork> networks = getNetworkList(projectId, status);
-        	if(networks != null){
-        		networkList.addAll(networks);
-        	}
-        }
-        
-        if (networkList.size()==0) {
+        if (networkList.size() == 0) {
             return null;
         }
 
         // get the transformed network of all the networks in projects
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
-        // create finalnetwork using conceptId 
-        ITransformedNetwork finalTransformedNetwork = getFinalTransformedNetwork(transformedNetwork,conceptId);
-        
-        return finalTransformedNetwork;  
-     }
+        // create finalnetwork using conceptId
+        return getFinalTransformedNetwork(transformedNetwork, conceptId);
+
+    }
 
     @Override
     public ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList)
@@ -165,15 +149,9 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
         List<INetworkNodeInfo> networkNodeInfoList = new ArrayList<INetworkNodeInfo>();
         for (INetwork network : networkList) {
-            try {
-                List<INetworkNodeInfo> localNetworkNodeInfoList =
-                        networkManager.getNetworkTopNodes(network.getNetworkId());
-                if (localNetworkNodeInfoList != null) {
-                    networkNodeInfoList.addAll(localNetworkNodeInfoList);
-                }
-            } catch (QuadrigaStorageException e) {
-                throw new QuadrigaStorageException("Database Error while getting network top nodes for a network with ID: " +
-                        network.getNetworkId(), e);
+            List<INetworkNodeInfo> localNetworkNodeInfoList = networkManager.getNetworkTopNodes(network.getNetworkId());
+            if (localNetworkNodeInfoList != null) {
+                networkNodeInfoList.addAll(localNetworkNodeInfoList);
             }
         }
 
@@ -185,7 +163,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         List<Link> links = transformedNetwork.getLinks();
 
         Map<String, Node> updatedNodes = new HashMap<String, Node>();
-        for (Map.Entry<String, Node> entry: nodes.entrySet()) {
+        for (Map.Entry<String, Node> entry : nodes.entrySet()) {
             Node node = entry.getValue();
             // if the node is predicate node
             // add to the updated nodes map
@@ -205,7 +183,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         // update the links to point to the new updatedNodes
-        for (Link link: links) {
+        for (Link link : links) {
             Node subjectNode = link.getSubject();
             if (!(subjectNode instanceof PredicateNode)) {
                 link.setSubject(updatedNodes.get(subjectNode.getConceptId()));
@@ -220,14 +198,13 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // return new network with updated nodes and links
         return new TransformedNetwork(updatedNodes, links);
     }
-    
-    private ITransformedNetwork getFinalTransformedNetwork(ITransformedNetwork transformedNetwork, String conceptId)
-    {
+
+    private ITransformedNetwork getFinalTransformedNetwork(ITransformedNetwork transformedNetwork, String conceptId) {
         // Filter the nodes with the concept id
         // add all the statement ids to a set
         Set<String> statementIdSearchSet = new HashSet<String>();
         List<Node> searchedNodes = new ArrayList<Node>();
-        for (Node node: transformedNetwork.getNodes().values()) {
+        for (Node node : transformedNetwork.getNodes().values()) {
             if (conceptId.equals(node.getConceptId())) {
                 searchedNodes.add(node);
                 statementIdSearchSet.addAll(node.getStatementIds());
@@ -241,7 +218,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // To store already added nodes to the final nodes map
         // this would avoid duplicate nodes
         Set<Node> addedNodes = new HashSet<Node>();
-        for (Link link: transformedNetwork.getLinks()) {
+        for (Link link : transformedNetwork.getLinks()) {
             if (statementIdSearchSet.contains(link.getStatementId())) {
                 // statement id match
                 // add to the final link list
@@ -265,7 +242,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         // finally add the searched concept nodes if they are not present
-        for (Node node: searchedNodes) {
+        for (Node node : searchedNodes) {
             if (!searchedNodes.contains(node)) {
                 finalNodes.put(node.getId(), node);
             }
