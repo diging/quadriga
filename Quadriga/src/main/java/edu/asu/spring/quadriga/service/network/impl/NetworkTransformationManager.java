@@ -69,6 +69,27 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
         return networkJSon;
     }
+    
+    @Override
+    public ITransformedNetwork getTransformedApprovedNetworks(List<INetwork> networkList) throws QuadrigaStorageException {
+
+        ITransformedNetwork networkJSon = null;
+
+        List<INetworkNodeInfo> networkTopNodesList = new ArrayList<INetworkNodeInfo>();
+        for(INetwork curnetwork: networkList){
+            try {
+                List<INetworkNodeInfo> curTopNodesList = networkManager.getNetworkTopNodes(curnetwork.getNetworkId());
+                networkTopNodesList.addAll(curTopNodesList) ;
+            } catch (QuadrigaStorageException e) {
+                logger.error("DB Error while getting network top nodes", e);
+                return null;
+            }
+        }
+        
+        networkJSon = transformer.transformNetwork(networkTopNodesList);
+
+        return networkJSon;
+    }
 
     @Override
     public ITransformedNetwork getTransformedNetworkOfProject(String projectId, String status)

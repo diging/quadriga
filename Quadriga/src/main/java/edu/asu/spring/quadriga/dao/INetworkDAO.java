@@ -61,6 +61,14 @@ public interface INetworkDAO {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract List<NetworksDTO> getNetworkList(IUser user) throws QuadrigaStorageException;
+	
+	
+	/**
+	 * This would give the list of {@link INetwork} that are approved.
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract List<NetworksDTO> getApprovedNetworkList() throws QuadrigaStorageException;
 
 
 	/**
