@@ -88,7 +88,7 @@ function d3ProjectActivity(data,divSection) {
 	var origHeight = $('#' + divSection).height() > 400 ? $('#' + divSection).height() : 400;
 
 
-	var margin = {top: 40, right: 20, bottom: 100, left: 20},
+	var margin = {top: 40, right: 40, bottom: 100, left: 20},
 	width = origWidth - margin.left - margin.right,
 	height = origHeight - margin.top - margin.bottom;
 
@@ -105,7 +105,8 @@ function d3ProjectActivity(data,divSection) {
 
 	var xAxis = d3.svg.axis()
 	.scale(x)
-	.orient("bottom");
+	.orient("bottom")
+	.tickFormat(d3.time.format("%B %Y"));
 	
 	var yAxis = d3.svg.axis()
 	.scale(y)
