@@ -112,11 +112,10 @@ function d3ProjectActivity(data,divSection) {
 	.scale(y)
 	.orient("left")
 	.tickFormat(d3.format("d"))
-
-	var area = d3.svg.area()
-	.x(function(d) { return x(d.date); })
-	.y0(height)
-	.y1(function(d) { return y(d.count); });
+	
+	var line = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.count); });
 
 	var svg = d3.select("#"+divSection).append("svg")
 	.attr("width", width + margin.left + margin.right)
@@ -140,8 +139,8 @@ function d3ProjectActivity(data,divSection) {
 
 	svg.append("path")
 	.datum(data)
-	.attr("class", "area")
-	.attr("d", area);
+	.attr("class", "line")
+	.attr("d", line);
 
 	svg.append("g")
 	.attr("class", "x axis")
