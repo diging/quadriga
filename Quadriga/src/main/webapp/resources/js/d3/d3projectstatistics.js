@@ -106,7 +106,7 @@ function d3ProjectActivity(data,divSection) {
 	var xAxis = d3.svg.axis()
 	.scale(x)
 	.orient("bottom")
-	.tickFormat(d3.time.format("%B %Y"));
+	.tickFormat(d3.time.format("%d %B %Y"));
 	
 	var yAxis = d3.svg.axis()
 	.scale(y)
