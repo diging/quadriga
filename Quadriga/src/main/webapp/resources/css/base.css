@@ -115,3 +115,8 @@ span.highlight {
 .form-horizontal .control-label-left {
     text-align: left;
 }
+
+/* Search Page Customizations*/
+.search-control{
+	display: inline-block;
+}

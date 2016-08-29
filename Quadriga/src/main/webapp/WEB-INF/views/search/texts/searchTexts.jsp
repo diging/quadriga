@@ -17,8 +17,9 @@
 		            <div id="search-form" class="form-inline" style="margin-top: 20px;">
 		                <div class="form-group search-input" style="width: 100%;">
 		                    <label for="search-term">What concept are you looking for?</label>
-		                    <div class="input-group" style="width: 100%;">
-			                    <input placeholder="Enter search term" type="text" class="form-control" id="search-term" autocomplete="off">
+		                    <div class="input-group container" style="width: 100%;">
+		                    	<div><span class="glyphicon glyphicon-plus"></span></div>
+			                    <input placeholder="Enter search term" type="text" class="form-control " id="search-term" autocomplete="off">
 			                    <div div class="input-group-addon" style="width: 40px;"><div style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
 			                          id="ajax-loader" class="search-loader"></div></div>
 		                    </div>
