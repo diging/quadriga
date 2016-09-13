@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.search;
+ package edu.asu.spring.quadriga.web.search;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -74,6 +74,7 @@ public class TextConceptSearchController {
             }
 
             String results = qStoreConnector.searchNodesByConcept(conceptId);
+            System.out.println("Error here"+results);
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
 
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
