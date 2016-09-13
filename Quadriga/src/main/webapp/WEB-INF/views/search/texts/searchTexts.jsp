@@ -20,7 +20,7 @@
 		                    <div class="input-group row" style="width: 100%;">
 		                    	<button type="button" class="btn btn-default" onclick="addSearchBox()"><span class="glyphicon glyphicon-plus"></button></span>
 			                    <input placeholder="Enter search term" type="text" class="form-control search-control" id="search-term" autocomplete="off">
-			                    <input placeholder="Enter search term" type="text" class="form-control search-control" id="search-term2" autocomplete="off">
+			                    <input placeholder="Enter search term" type="text" style="visibility:hidden" class="form-control search-control" id="search-term2" autocomplete="off">
 			                    <div class="input-group-addon" style="width: 40px;"><div style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
 			                          id="ajax-loader" class="search-loader"></div>
 			                          <button type="submit" class="btn btn-default">Submit</button>
@@ -145,7 +145,7 @@
 
 <script>
 function addSearchBox(){
-	//$(".input-group").append("<input placeholder='Enter search term' type='text' class='form-control search-control' id='search-term' autocomplete='off'>");
+	$("#search-term2").css('visibility','visible');
 }
 </script>
 <script>
@@ -206,7 +206,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
         var $items = $('#search-results-items');
         var $list = $resWrapper.find('.list-group-item:first');
         var $loader = $('#ajax-loader');
-        
+        console.log("printing search query" + $searchInput);
         var loader = (function() {
             // var isVisible = false;
             var timeout;

@@ -74,7 +74,6 @@ public class TextConceptSearchController {
             }
 
             String results = qStoreConnector.searchNodesByConcept(conceptId);
-            System.out.println("Error here"+results);
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
 
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
