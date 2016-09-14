@@ -135,7 +135,7 @@ function d3ProjectActivity(data,divSection) {
 	});
 
 	x.domain([data[0].date, data[data.length - 1].date]);
-	y.domain(d3.extent(data, function(d) { return d.count; }));
+	y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
 	svg.append("path")
 	.datum(data)
