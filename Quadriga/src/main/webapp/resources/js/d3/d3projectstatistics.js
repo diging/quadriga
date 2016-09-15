@@ -97,8 +97,7 @@ function d3ProjectActivity(data,divSection) {
 	formatValue = d3.format("d"),
 	formatCurrency = function(d) { return + formatValue(d); };
 	
-	var x = d3.time.scale()
-	.range([0, width]);
+	var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
 
 	var y = d3.scale.linear()
 	.range([height, 0]);
@@ -137,10 +136,14 @@ function d3ProjectActivity(data,divSection) {
 	x.domain([data[0].date, data[data.length - 1].date]);
 	y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
-	svg.append("path")
-	.datum(data)
-	.attr("class", "line")
-	.attr("d", line);
+	 svg.selectAll("bar")
+     .data(data)
+     .enter().append("rect")
+     .style("fill", "steelblue")
+     .attr("x", function(d) { return x(d.date); })
+     .attr("width", 25)
+     .attr("y", function(d) { return y(d.count); })
+     .attr("height", function(d) { return height - y(d.count); });
 
 	svg.append("g")
 	.attr("class", "x axis")
