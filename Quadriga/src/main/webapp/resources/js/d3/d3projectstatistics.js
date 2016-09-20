@@ -83,6 +83,9 @@ function d3ProjectStatistics(data) {
 
 
 function d3ProjectActivity(data,divSection) {
+	data = JSON.parse(data);
+	
+	
 	
 	var origWidth = $('#'+divSection).width();
 	var origHeight = $('#' + divSection).height() > 400 ? $('#' + divSection).height() : 400;
@@ -97,15 +100,36 @@ function d3ProjectActivity(data,divSection) {
 	formatValue = d3.format("d"),
 	formatCurrency = function(d) { return + formatValue(d); };
 	
-	var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
-
+	
+	
+	data.forEach(function(d) {
+		d.date = parseDate(d.date);
+		d.count = +d.count;
+	});
+	
+	
+	
+	data.sort(function(a, b) {
+		return a.date - b.date;
+	});
+	
+	var dateArray = [];
+	data.forEach(function(d){
+		dateArray.push(d.date);
+	});
+	
+	var x = d3.scale.ordinal().domain(dateArray).rangePoints([margin.left,width - 40]);
+	
 	var y = d3.scale.linear()
 	.range([height, 0]);
 
 	var xAxis = d3.svg.axis()
 	.scale(x)
 	.orient("bottom")
+	.tickValues(dateArray)
 	.tickFormat(d3.time.format("%d %B %Y"));
+	
+	
 	
 	var yAxis = d3.svg.axis()
 	.scale(y)
@@ -122,34 +146,29 @@ function d3ProjectActivity(data,divSection) {
 	.append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	data = JSON.parse(data);
 	
-	data.forEach(function(d) {
-		d.date = parseDate(d.date);
-		d.count = +d.count;
-	});
+	
+	
 
-	data.sort(function(a, b) {
-		return a.date - b.date;
-	});
+	
 
-	x.domain([data[0].date, data[data.length - 1].date]);
+	//x.domain([data[0].date, data[data.length - 1].date]);
 	y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
 	 svg.selectAll("bar")
      .data(data)
      .enter().append("rect")
      .style("fill", "steelblue")
-     .attr("x", function(d) { return x(d.date); })
-     .attr("width", 25)
+     .attr("x", function(d) { console.log(d.date + x(d.date)); return x(d.date); })
+     .attr("width", 50)
      .attr("y", function(d) { return y(d.count); })
      .attr("height", function(d) { return height - y(d.count); });
 
 	svg.append("g")
 	.attr("class", "x axis")
-	.attr("transform", "translate(0," + height + ")")
-	.call(xAxis).selectAll("text").attr("y", 0)
-    .attr("x", 9).attr("dy", "0.2em").attr("transform", "rotate(70)").style("text-anchor", "start");
+	.attr("transform", "translate(30," + height + ")")
+	.call(xAxis).selectAll("text").attr("y", 6)
+    .attr("x", 6).attr("dy", "0.2em").attr("transform", "rotate(70)").style("text-anchor", "start");
 ;
 
 	svg.append("g")
