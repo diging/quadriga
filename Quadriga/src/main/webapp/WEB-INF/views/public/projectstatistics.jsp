@@ -61,6 +61,6 @@ document.body.onload = function()
 </div>
 <div class="col-md-6">
    <h3>Submitted Networks </h3>
-   <p>The diagram on the left shows how many networks have been submitted to this project in the past.
+   <p>The diagram on the left shows how many networks have been submitted to this project in the past one month.
 </div>
 </div>
