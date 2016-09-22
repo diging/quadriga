@@ -19,8 +19,8 @@
 		                    <label for="search-term">What concept are you looking for?</label>
 		                    <div class="input-group row" style="width: 100%;">
 		                    	<button type="button" class="btn btn-default" onclick="addSearchBox()"><span class="glyphicon glyphicon-plus"></button></span>
-			                    <input placeholder="Enter search term" type="text" class="form-control search-control" id="search-term" autocomplete="off">
-			                    <input placeholder="Enter search term" type="text" style="visibility:hidden" class="form-control search-control" id="search-term2" autocomplete="off">
+			                    <input placeholder="Enter search term" type="text" onkeyup="clickedevent(this)" class="form-control search-control" id="search-term" autocomplete="off">
+			                    <input placeholder="Enter search term" type="text" onkeyup="clickedevent(this)" style="visibility:hidden" class="form-control search-control" id="search-term2" autocomplete="off">
 			                    <div class="input-group-addon" style="width: 40px;"><div style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
 			                          id="ajax-loader" class="search-loader"></div>
 			                          <button type="submit" class="btn btn-default">Submit</button>
@@ -198,10 +198,11 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 
 <script>
 //# sourceURL=loader.js
-    function init() {
+    function clickedevent(selected) {
         // ajax loader
+        console.log(selected.id);
         var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId=';
-        var $searchInput = $('#search-term');
+        var $searchInput = $("#"+selected.id);
         var $resWrapper = $('#search-results-wrapper');
         var $items = $('#search-results-items');
         var $list = $resWrapper.find('.list-group-item:first');
@@ -329,7 +330,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
         $searchInput.on('keyup', triggerChange)
                 .on('textChange', onChange);
     }
-    window.onload = init;
+    //window.onload = init;
 
     
     
@@ -342,7 +343,8 @@ $(document)
                                         'show.bs.modal',
                                         function(event) {
                                             var link = $(event.relatedTarget);
-
+											console.log(link);
+											console.log("link clicked");
                                             var txtid = link.data('txtid');
                                             var txtname = link.data('txtname');
                                             var title = link.data('txttitle');
