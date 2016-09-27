@@ -346,6 +346,27 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             networkList = networkmapper.getListOfNetworksForUser(user);
         } catch (QuadrigaStorageException e) {
             logger.error("Something went wrong in DB", e);
+            throw e;
+        }
+        return networkList;
+    }
+    
+    /**
+    * 
+    * {@inheritDoc}
+    * 
+    * This implementation uses the hibernate for dataaccess from the database
+    */
+    @Override
+    @Transactional
+    public List<INetwork> getApprovedNetworkList() throws QuadrigaStorageException {
+        List<INetwork> networkList = new ArrayList<INetwork>();
+
+        try {
+            networkList = networkmapper.getListOfApprovedNetworks();
+        } catch (QuadrigaStorageException e) {
+            logger.error("Something went wrong in DB", e);
+            throw e;
         }
         return networkList;
     }

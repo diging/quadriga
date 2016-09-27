@@ -294,6 +294,24 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             throw new QuadrigaStorageException(e);
         }
     }
+    
+    /**
+     * This would give the list of {@link INetwork} that are approved 
+     */
+    @Override
+    public List<NetworksDTO> getApprovedNetworkList() throws QuadrigaStorageException {
+        try {
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findApprovedNetworks");
+
+            @SuppressWarnings("unchecked")
+            List<NetworksDTO> listNetworksDTO = query.list();
+
+            return listNetworksDTO;
+        } catch (Exception e) {
+            logger.error("Error in fetching a network status: ", e);
+            throw new QuadrigaStorageException(e);
+        }
+    }
 
     /**
      * Get all the network statements {@link INetworkNodeInfo} for a network.

@@ -38,4 +38,6 @@ public interface INetworkTransformationManager {
 	
 	ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList)
 			throws QuadrigaStorageException;
+
+    ITransformedNetwork getTransformedApprovedNetworks(List<INetwork> networkList) throws QuadrigaStorageException;
 }
