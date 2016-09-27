@@ -47,6 +47,7 @@
 		</c:otherwise>
 	</c:choose>
 	<form:form method="POST" action="${pageContext.servletContext.contextPath}/auth/dictionaries/add">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<table>
 			<tr>
 				<td>Name:</td>

@@ -141,6 +141,7 @@
 		<c:when test="${not empty dictinarylist}">
 
 			<form method="POST">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<div class="panel panel-default">
 					<table style="width: 100%" cellpadding="0" cellspacing="0"
 						border="0" class="table">

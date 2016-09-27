@@ -49,7 +49,7 @@ function resetSelectAll() {
 			Concept Search
 		</h2><hr>
 <form  action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/searchitems" method="get">
-
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="input-group">
 		  <span class="input-group-addon" id="basic-addon1">Search term:</span>
 		  <input type="text" class="form-control" name="name" id ="name" placeholder="Enter a word" aria-describedby="basic-addon1">
@@ -75,6 +75,7 @@ function resetSelectAll() {
 		<h3>The following concepts were found:</h3>
 		
 		<form action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addItems" method="post">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<p>Select the concepts you want to add and click "Select & Save".</p>
 		<input type="submit"  value="Select & Save" class="btn btn-primary"/><br><br>
 		<div class="panel panel-default">

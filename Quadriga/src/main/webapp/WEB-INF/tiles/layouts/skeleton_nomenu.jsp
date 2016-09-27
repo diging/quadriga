@@ -60,7 +60,7 @@
           <ul class="nav navbar-nav">
             <tiles:insertAttribute name="navigation" />
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
         <sec:authorize access="not isAuthenticated()">
             <form name='f' action="<c:url value='/login' />" method='POST' class="navbar-form navbar-right">
                  <div class="form-group">
@@ -77,6 +77,7 @@
                         <div class="form-group">
                            <a class="btn btn-info btn-sm" href="register">Sign up</a>
                         </div>
+             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
              </form>
         </sec:authorize>
         </div>

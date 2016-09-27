@@ -166,6 +166,7 @@
 				<p>These are all the concepts in this collection.</p>
 				<form method="post"
 					action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/deleteitems">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<c:if test="${isAdmin || hasReadWrite}">
 					<button type="button" class="btn btn-primary btn-sm"
 						onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'">
