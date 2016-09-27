@@ -131,12 +131,11 @@ public class NetworkMapper implements INetworkMapper{
     
     @Override
     public List<INetwork> getListOfApprovedNetworks() throws QuadrigaStorageException {
-        List<INetwork> networkList = null;
         List<NetworksDTO> networksDTO = dbconnect.getApprovedNetworkList();
         if(networksDTO!=null){
-            networkList = getNetworkListFromDTOList(networksDTO);
+            return getNetworkListFromDTOList(networksDTO);
         }
-        return networkList;
+        return null;
     }
     
     @Override

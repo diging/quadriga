@@ -42,7 +42,7 @@ public class NodeInfoController {
 
         for (TextOccurance occur : occurances) {
             if (occur.getProject().getUnixName().equals(projectUnix.trim())
-                    || occur.getProject().getUnixName().equals("unkown")) {
+                    || occur.getProject().getUnixName().equals("unknown")) {
                 JSONObject occurance = new JSONObject();
                 occurance.append("text", occur.getTextUri());
                 JSONArray phraseArray = new JSONArray();

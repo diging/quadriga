@@ -346,6 +346,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             networkList = networkmapper.getListOfNetworksForUser(user);
         } catch (QuadrigaStorageException e) {
             logger.error("Something went wrong in DB", e);
+            throw e;
         }
         return networkList;
     }
@@ -365,6 +366,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             networkList = networkmapper.getListOfApprovedNetworks();
         } catch (QuadrigaStorageException e) {
             logger.error("Something went wrong in DB", e);
+            throw e;
         }
         return networkList;
     }

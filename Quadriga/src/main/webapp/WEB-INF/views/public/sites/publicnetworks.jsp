@@ -144,7 +144,7 @@ var cy = cytoscape({
            ]
 });
 
-defineListeners(cy, '${pageContext.servletContext.contextPath}', 'unkown');
+defineListeners(cy, '${pageContext.servletContext.contextPath}', 'unknown');
 
 $( document ).ready(function() {
 	$('#exportJson').on('click', function() {
