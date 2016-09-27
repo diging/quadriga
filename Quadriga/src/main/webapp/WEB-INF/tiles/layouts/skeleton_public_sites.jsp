@@ -15,6 +15,9 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+	
+<script
+	src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 
@@ -108,18 +111,34 @@
 	
 	 <div class="container-fluid">
       <div class="header clearfix">
-        <nav>
-          <ul class="nav pull-right">
-            <tiles:insertAttribute name="navigation" />
-          </ul>
-        </nav>
+        <div class="navbar-collapse collapse navbar-right">
+					<ul class="nav navbar-nav">
+						<tiles:insertAttribute name="navigation" />
+					</ul>
+		</div>
         <h3 class="text-muted"><a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites"><img
                     src="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/img/QuadrigaLogo-grey.png"
                     height="35px" style="margin-top: -5px;"></a></h3>
       </div>
 
 		
-		<tiles:insertAttribute name="content" />
+		<div  class="col-md-9" style="text-align:center">				
+					<div class="content content=left">
+					<!-- Content -->
+					
+						<tiles:insertAttribute name="content" />
+					
+					<!-- /Content -->				
+			</div>
+			</div>
+			<div  class="col-md-3" style="text-align:center">
+					<!-- Sidebar -->
+					<!-- Recent Posts -->
+					<tiles:insertAttribute name="right-navigation" />
+					<!-- /Recent Posts -->
+					<!-- /Sidebar -->
+			</div>
+			</div>	
 	</div>
 </body>
 </html>
