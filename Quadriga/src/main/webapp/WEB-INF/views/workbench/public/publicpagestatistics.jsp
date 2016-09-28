@@ -37,7 +37,7 @@
 
 <form:form method="POST" modelAttribute="statisticsSettingsBean"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/submitstatistics">
-
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<table class="display dataTable" cellpadding="0" cellspacing="0"
 		border="0" style="width: 100%">
 		<thead>

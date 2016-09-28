@@ -95,6 +95,7 @@
 <article class="is-page-content">
 	<form:form commandName="publicpage" method="POST" 
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<header>
 			<h2>Editing Text Contents to be shown</h2>
 			<span class="byline">Please fill in the following information:</span>
@@ -154,6 +155,7 @@
 	</form:form>
 	<form:form commandName="publicpage" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="publicpageform">
 			<table style="width: 100%">
 
@@ -205,6 +207,7 @@
 	</form:form>
 	<form:form commandName="publicpage" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="publicpageform">
 			<table style="width: 100%">
 				<tr>

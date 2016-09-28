@@ -14,7 +14,7 @@
 	action="${pageContext.servletContext.contextPath}/auth/transformation/upload"
 	enctype="multipart/form-data"
 	modelAttribute="UploadTransformationBackingBean">
-
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<div class="form-group required">
 		<label for="title" class="col-md-2 control-label"
 			style="font-weight: bold;"> Title</label>

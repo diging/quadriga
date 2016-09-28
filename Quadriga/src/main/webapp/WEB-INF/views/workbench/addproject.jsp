@@ -14,6 +14,7 @@
 
 <form:form commandName="project" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/addproject">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<h2>Create new Project</h2>
 	<p>Please fill in the following information:</p>
 	<table style="width: 100%">

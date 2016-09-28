@@ -85,7 +85,7 @@
 <c:choose>
 	<c:when test="${not empty dicitonaryList}">
 		<form method="POST">
-
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="panel panel-default" style="margin-top: 20px;">
 				<div class="panel-heading">Available Dictionaries</div>
 				<div class="panel-body">
