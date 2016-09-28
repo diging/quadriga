@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.projectblog;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,13 +25,16 @@ import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
+import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 import edu.asu.spring.quadriga.validator.AddProjectBlogEntryValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * This controller is responsible for providing UI to create project blog entry
@@ -43,6 +47,9 @@ public class AddProjectBlogEntryController {
 
     @Autowired
     private IUserManager userManager;
+    
+    @Autowired
+    private INetworkManager networkmanager;
 
     @Autowired
     private AddProjectBlogEntryValidator validator;
@@ -136,9 +143,11 @@ public class AddProjectBlogEntryController {
             String username = principal.getName();
             IUser user = userManager.getUser(username);
             projectBlogEntry.setAuthor(user);
-
+            List<INetwork> networks = networkmanager.getNetworksInProject(project.getProjectId(), INetworkStatus.APPROVED);
+            System.out.println(networks.size());
             projectBlogEntryManager.addNewProjectBlogEntry(projectBlogEntry);
             model = new ModelAndView("redirect:" + "/sites/" + project.getUnixName() + "/projectblog");
+            model.getModelMap().put("networks", networks);
             model.getModelMap().put("project", project);
         }
         return model;
