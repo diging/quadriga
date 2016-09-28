@@ -26,72 +26,79 @@ import edu.asu.spring.quadriga.service.network.domain.impl.TextPhrase;
 @PropertySource(value = "classpath:/settings.properties")
 @Controller
 public class NodeInfoController {
-    
+
     @Autowired
     private INetworkManager networkManager;
-    
+
     @Autowired
     private Environment env;
 
-
     @RequestMapping(value = "public/concept/texts", method = RequestMethod.GET)
-    public ResponseEntity<String> getTextsForConcepts(@RequestParam String conceptId, @RequestParam String projectUnix) throws Exception {
+    public ResponseEntity<String> getTextsForConcepts(@RequestParam String conceptId, @RequestParam String projectUnix)
+            throws Exception {
         Set<TextOccurance> occurances = networkManager.getTextsForConceptId(conceptId, ETextAccessibility.PUBLIC);
         JSONArray projectTexts = new JSONArray();
         JSONArray otherProjectsTexts = new JSONArray();
-        
-        for (TextOccurance occur : occurances) {
-            if (occur.getProject().getUnixName().equals(projectUnix.trim())) {
-                JSONObject occurance = new JSONObject();
-                occurance.append("text", occur.getTextUri());
-                JSONArray phraseArray = new JSONArray();
-                
-                List<TextPhrase> phrases = occur.getTextPhrases();
-                Collections.sort(phrases, new Comparator<TextPhrase>() {
 
-                    @Override
-                    public int compare(TextPhrase o1, TextPhrase o2) {
-                        return o1.getPosition() - o2.getPosition();
-                    }
-                });
-                Integer offset = new Integer(env.getProperty("network.display.text.offset"));
-                
-                int start = 0;
-                int end = 0;
-                if (phrases.size() > 0) {
-                    start = phrases.get(0).getPosition();
-                    end = phrases.get(phrases.size() -1).getPosition();
-                    
-                    if (start < offset) {
-                        start = 0;
-                    } else {
-                        start = start - offset;
-                    }
-                    
-                    if (occur.getContents().length() < end + offset) {
-                        end = occur.getContents().length() -1;
-                    } else {
-                        end = end + offset;
-                    }
-                    
-                    String cutContent = occur.getContents().substring(start, end);
-                    occurance.append("textContent", cutContent);
-                    
+        for (TextOccurance occur : occurances) {
+            if (occur.getProject().getUnixName().equals(projectUnix.trim()) || "".equals(projectUnix.trim())) {
+                boolean flag = true;
+                if ("".equals(projectUnix.trim())
+                        && occur.getProject().getProjectAccess() != EProjectAccessibility.PUBLIC) {
+                    flag = false;
                 }
-                for (TextPhrase phrase : phrases) {
-                    if (phrase.getFormattedPointer() == null || phrase.getFormattedPointer().trim().isEmpty()) {
-                        JSONObject jsonPhrase = new JSONObject();
-                        int position = phrase.getPosition();
-                        if (position > start) {
-                            position -= start;
+                if (flag) {
+                    JSONObject occurance = new JSONObject();
+                    occurance.append("text", occur.getTextUri());
+                    JSONArray phraseArray = new JSONArray();
+
+                    List<TextPhrase> phrases = occur.getTextPhrases();
+                    Collections.sort(phrases, new Comparator<TextPhrase>() {
+
+                        @Override
+                        public int compare(TextPhrase o1, TextPhrase o2) {
+                            return o1.getPosition() - o2.getPosition();
                         }
-                        jsonPhrase.put("position", position);
-                        jsonPhrase.put("expression", phrase.getExpression());
-                        phraseArray.put(jsonPhrase);
+                    });
+                    Integer offset = new Integer(env.getProperty("network.display.text.offset"));
+
+                    int start = 0;
+                    int end = 0;
+                    if (phrases.size() > 0) {
+                        start = phrases.get(0).getPosition();
+                        end = phrases.get(phrases.size() - 1).getPosition();
+
+                        if (start < offset) {
+                            start = 0;
+                        } else {
+                            start = start - offset;
+                        }
+
+                        if (occur.getContents().length() < end + offset) {
+                            end = occur.getContents().length() - 1;
+                        } else {
+                            end = end + offset;
+                        }
+
+                        String cutContent = occur.getContents().substring(start, end);
+                        occurance.append("textContent", cutContent);
+
                     }
+                    for (TextPhrase phrase : phrases) {
+                        if (phrase.getFormattedPointer() == null || phrase.getFormattedPointer().trim().isEmpty()) {
+                            JSONObject jsonPhrase = new JSONObject();
+                            int position = phrase.getPosition();
+                            if (position > start) {
+                                position -= start;
+                            }
+                            jsonPhrase.put("position", position);
+                            jsonPhrase.put("expression", phrase.getExpression());
+                            phraseArray.put(jsonPhrase);
+                        }
+                    }
+                    occurance.put("phrases", phraseArray);
+                    projectTexts.put(occurance);
                 }
-                occurance.put("phrases", phraseArray);
-                projectTexts.put(occurance);
             } else {
                 if (occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                     JSONObject occurance = new JSONObject();
@@ -101,13 +108,13 @@ public class NodeInfoController {
                     otherProjectsTexts.put(occurance);
                 }
             }
-            
+
         }
-        
+
         JSONObject result = new JSONObject();
         result.put("projects", projectTexts);
         result.put("otherProjects", otherProjectsTexts);
         return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
-        
+
     }
 }
