@@ -54,10 +54,13 @@ public class TextConceptSearchController {
     private IJsonCreator jsonCreator;
 
     @RequestMapping(value = "search/texts")
-    public String search(@RequestParam(defaultValue = "") String conceptId, Model model) throws Exception {
-
-        String conceptUri = conceptId;
-
+    public String search(@RequestParam(value="conceptId",defaultValue = "") String conceptId,@RequestParam(value="conceptId2",defaultValue = "") String conceptId2, Model model) throws Exception {
+        
+        ArrayList<String> concepts = new ArrayList<>();
+        concepts.add(conceptId);
+        concepts.add(conceptId2);
+        for(String conceptUri : concepts){
+        System.out.println(conceptUri);
         if (!conceptId.isEmpty()) {
             ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
             List<ConceptEntry> entries = reply.getConceptEntry();
@@ -89,8 +92,9 @@ public class TextConceptSearchController {
             List<String> handles = new ArrayList<String>();
 
             for (CreationEvent event : eventList) {
+                
                 String sourceRef = event.getSourceReference();
-
+                System.out.println("Reference:"+sourceRef);
                 // if we haven't seen the reference yet
                 if (references.add(sourceRef)) {
                     ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
@@ -130,7 +134,7 @@ public class TextConceptSearchController {
             model.addAttribute("jsonstring", json);
 
         }
-
+        }
         return "search/texts";
     }
 
