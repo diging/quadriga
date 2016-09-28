@@ -101,23 +101,17 @@ function d3ProjectActivity(data, divSection) {
 		return a.date - b.date;
 	});
 
-	var dateArray = [];
-	data.forEach(function(d) {
-		dateArray.push(d.date);
-	});
-
 	var todayDate = new Date();
 	var minDate = new Date();
-	minDate.setDate(todayDate.getDate()- 30);
-	console.log("fixed date" + minDate);
-	
-	var x = d3.time.scale().domain([minDate,todayDate]).range(
-			[ 20, width - 40 ]);
+	minDate.setDate(todayDate.getDate() - 30);
+
+	var x = d3.time.scale().domain([ minDate, todayDate ]).range(
+			[ 10, width - 40 ]);
 
 	var y = d3.scale.linear().range([ height, 0 ]);
 
-	var xAxis = d3.svg.axis().scale(x).orient("bottom")
-			.tickFormat(d3.time.format("%d %B %Y"));
+	var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(
+			d3.time.format("%d %B %Y"));
 
 	var yAxis = d3.svg.axis().scale(y).orient("left")
 			.tickFormat(d3.format("d"))
@@ -140,7 +134,6 @@ function d3ProjectActivity(data, divSection) {
 
 	svg.selectAll("bar").data(data).enter().append("rect").style("fill",
 			"steelblue").attr("x", function(d) {
-		console.log(d.date + x(d.date));
 		return x(d.date);
 	}).attr("width", 10).attr("y", function(d) {
 		return y(d.count);
@@ -174,8 +167,8 @@ function d3ProjectActivity(data, divSection) {
 	function mousemove() {
 		var x0 = x.invert(d3.mouse(this)[0]), i = bisectDate(data, x0, 1), d0 = data[i - 1], d1 = i == 1 ? data[i - 1]
 				: data[i], d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-		focus.attr("transform", "translate(" + (x(d.date) + 5) + "," + y(d.count)
-				+ ")");
+		focus.attr("transform", "translate(" + (x(d.date) + 5) + ","
+				+ y(d.count) + ")");
 		focus.select("text").text(formatCurrency(d.count));
 	}
 }
