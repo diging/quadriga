@@ -1,27 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-
-<!-- Script to generate rich text editor -->
-<script>
-	tinymce
-			.init({
-				selector : '#description',
-				height : 300,
-				fontsize_formats : "8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 22pt 24pt 48pt 72pt",
-				theme : 'modern',
-				plugins : 'advlist autolink save link image lists charmap print preview',
-				menubar : false,
-				toolbar : 'undo redo | fontsizeselect | fontselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons',
-				setup : function(ed) {
-					ed.on('init', function() {
-						this.getDoc().body.style.fontSize = '14px';
-					});
-				}
-
-			});
-</script>
 <div class="modal text-modal" id="txtModal" role="dialog"
 	aria-labelledby="txtModal" aria-hidden="true">
 	<div class="modal-dialog">
@@ -62,6 +40,28 @@
 		</div>
 	</div>
 </div>
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+<!-- Script to generate rich text editor -->
+<script>
+	tinymce
+			.init({
+				selector : '#description',
+				height : 300,
+				fontsize_formats : "8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 22pt 24pt 48pt 72pt",
+				theme : 'modern',
+				plugins : 'advlist autolink save link image lists charmap print preview',
+				menubar : false,
+				toolbar : 'undo redo | fontsizeselect | fontselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons',
+				setup : function(ed) {
+					ed.on('init', function() {
+						this.getDoc().body.style.fontSize = '14px';
+					});
+				}
+
+			});
+</script>
+
 <article class="is-page-content">
 	<form:form commandName="projectBlogEntry" method="POST"
 		action="${pageContext.servletContext.contextPath}/sites/${project.unixName}/addprojectblogentry">

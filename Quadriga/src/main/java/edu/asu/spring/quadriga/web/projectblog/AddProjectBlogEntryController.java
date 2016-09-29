@@ -47,7 +47,7 @@ public class AddProjectBlogEntryController {
 
     @Autowired
     private IUserManager userManager;
-    
+
     @Autowired
     private INetworkManager networkmanager;
 
@@ -87,14 +87,13 @@ public class AddProjectBlogEntryController {
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.GET)
     public String addProjectBlogEntryForm(@ProjectIdentifier @PathVariable("ProjectUnixName") String projectUnixName,
-            @InjectProject IProject project,
-            @RequestParam("projectId") String projectId, Model model)
+            @InjectProject IProject project, @RequestParam("projectId") String projectId, Model model)
             throws QuadrigaStorageException, QuadrigaAccessException {
-
+        List<INetwork> networks = networkmanager.getNetworksInProject(project.getProjectId(), INetworkStatus.APPROVED);
         // Add the critical data to model object
         model.addAttribute("projectBlogEntry", new ProjectBlogEntry());
         model.addAttribute("project", project);
-
+        model.addAttribute("networks", networks);
         return "sites/addprojectblogentry";
     }
 
@@ -129,8 +128,7 @@ public class AddProjectBlogEntryController {
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.POST)
     public ModelAndView addProjectBlogEntryRequest(
             @Validated @ModelAttribute("projectBlogEntry") ProjectBlogEntry projectBlogEntry, BindingResult result,
-            @ProjectIdentifier @PathVariable("ProjectUnixName") String projectUnixName,
-            @InjectProject IProject project,
+            @ProjectIdentifier @PathVariable("ProjectUnixName") String projectUnixName, @InjectProject IProject project,
             @RequestParam("projectId") String projectId, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
@@ -139,15 +137,15 @@ public class AddProjectBlogEntryController {
         if (result.hasErrors()) {
             model = new ModelAndView("sites/addprojectblogentry");
             model.getModelMap().put("project", project);
+
         } else {
             String username = principal.getName();
             IUser user = userManager.getUser(username);
             projectBlogEntry.setAuthor(user);
-            List<INetwork> networks = networkmanager.getNetworksInProject(project.getProjectId(), INetworkStatus.APPROVED);
-            System.out.println(networks.size());
+
             projectBlogEntryManager.addNewProjectBlogEntry(projectBlogEntry);
             model = new ModelAndView("redirect:" + "/sites/" + project.getUnixName() + "/projectblog");
-            model.getModelMap().put("networks", networks);
+
             model.getModelMap().put("project", project);
         }
         return model;
