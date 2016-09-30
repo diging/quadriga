@@ -101,6 +101,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 	<c:if test="${not empty searchResultList}">
 		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		 <h3>Search results</h3>
 		 
 		 <input type="button" value="Select All" name="selectAll"> 
@@ -145,6 +146,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
 		 Results of the Search
 		 <br>
+		 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		 <input type="button" value="Select All" name="selectAll"> 
 		 <input type="button" value="Deselect All" name="deselectAll">
 		

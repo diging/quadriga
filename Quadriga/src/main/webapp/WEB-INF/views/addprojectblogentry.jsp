@@ -28,7 +28,7 @@
 <article class="is-page-content">
 	<form:form commandName="projectBlogEntry" method="POST"
 		action="${pageContext.servletContext.contextPath}/sites/${project.unixName}/addprojectblogentry">
-
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<header>
 			<h2>Create new blog entry</h2>
 		</header>

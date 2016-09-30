@@ -52,7 +52,7 @@ div.rolesError {
 
 <form:form commandName="collaborator" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/addcollaborators">
-
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<c:if test="${not empty noncollabusers}">
 
 		<div class="row">

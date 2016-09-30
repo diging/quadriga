@@ -24,7 +24,7 @@
 
 <form:form commandName="workspace" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.workspaceId}/update">
-
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 	<p>Please update the the following information:</p>
 	<table style="width: 100%">
