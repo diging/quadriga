@@ -416,7 +416,7 @@ cursor: pointer;
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Update Text Accessibility</h4>
+                <h4 class="modal-title">
             </div>
             <div class="modal-body">
                 <p></p>
@@ -467,17 +467,15 @@ cursor: pointer;
                             textFileId = e.relatedTarget.id;
                             textFileAccess = $("#" + textFileId).data("textaccess");
                             
-                            if (textFileAccess === "PUBLIC") {
-                                changedTextFileAccess = "Private";
-                            } else if (textFileAccess === "PRIVATE") {
-                                changedTextFileAccess = "Public";
-                            }
+                            var textFileAccessMap = new Object();
+                            textFileAccessMap["PUBLIC"] = "Are you sure you want to make this text file Private";
+                            textFileAccessMap["PRIVATE"] = "Are you sure you want to make this text file Public";
                             
-                            var titlecontent = "Update Text Accessibility"
-                            var bodycontent = "Are you sure you want to make this text file " + changedTextFileAccess + "?";
+                            changedTextFileAccess = textFileAccess === "PUBLIC" ? "Private" : "Public";
                             
+                            var titlecontent = "Update Text Accessibility";
                             $(this).find('.modal-title').html(titlecontent);
-                            $(this).find('.modal-body').html(bodycontent);
+                            $(this).find('.modal-body').html(textFileAccessMap[textFileAccess]); 
                             
                         });
     });
