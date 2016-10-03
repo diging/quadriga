@@ -3,7 +3,11 @@ package edu.asu.spring.quadriga.web.projectblog;
 import java.security.Principal;
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
+import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
@@ -30,7 +36,10 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 import edu.asu.spring.quadriga.validator.AddProjectBlogEntryValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -56,6 +65,12 @@ public class AddProjectBlogEntryController {
 
     @Autowired
     private IProjectBlogEntryManager projectBlogEntryManager;
+
+    @Autowired
+    private INetworkTransformationManager transformationManager;
+
+    @Autowired
+    private IJsonCreator jsonCreator;
 
     /**
      * Attach the custom validator to the Spring context
@@ -149,5 +164,20 @@ public class AddProjectBlogEntryController {
             model.getModelMap().put("project", project);
         }
         return model;
+    }
+
+    @CheckPublicAccess
+    @InjectProjectByName
+    @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
+            @PathVariable("networkId") String networkId, Principal principal,
+            @CheckAccess @InjectProject IProject project) throws QuadrigaStorageException, JAXBException {
+        
+        ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+        String json = null;
+        if (transformedNetwork != null) {
+            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+        }
+        return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 }
