@@ -143,7 +143,11 @@ function conceptDescription(path, node) {
 	$.ajax({
 		url : path + "/public/concept?id=" + encodeURIComponent(node.data("conceptUri")),
 		type : "GET",
+		beforeSend: function() { 
+			$('#loading').show();
+			},
 		success : function(data) {
+			$('#loading').hide();
 			if (data == '') {
 				data = "No information available."
 			}
@@ -153,6 +157,7 @@ function conceptDescription(path, node) {
 			$('#concept_desc').html(conceptDesc);
 		},
 		error : function() {
+			$('#loading').hide();
 			alert("error");
 		}
 	});
@@ -164,7 +169,11 @@ function getTexts(node, path, unixName) {
 	$.ajax({
 		url : path + "/public/concept/texts?conceptId=" + encodeURIComponent(node.data("conceptId")) + "&projectUnix=" + unixName,
 		type : "GET",
+		beforeSend: function() { 
+			$('#loading1').show(); 
+			},
 		success : function(data) {
+			$('#loading1').hide();
 			if (data == '') {
 				data = "No texts available."
 			} else {
@@ -179,6 +188,7 @@ function getTexts(node, path, unixName) {
 			$('#texts').html(conceptDesc);
 		},
 		error : function() {
+			$('#loading1').hide();
 			// do nothing
 		}
 	});

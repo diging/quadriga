@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "NetworksDTO.findByNetworkname", query = "SELECT n FROM NetworksDTO n WHERE n.networkname = :networkname"),
     @NamedQuery(name = "NetworksDTO.findByNetworkowner", query = "SELECT n FROM NetworksDTO n WHERE n.networkowner = :networkowner"),
     @NamedQuery(name = "NetworksDTO.findByStatus", query = "SELECT n FROM NetworksDTO n WHERE n.status = :status"),
-    })
+    @NamedQuery(name = "NetworksDTO.findApprovedNetworks", query = "SELECT n FROM NetworksDTO n WHERE n.status = 'APPROVED'")})
 public class NetworksDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
