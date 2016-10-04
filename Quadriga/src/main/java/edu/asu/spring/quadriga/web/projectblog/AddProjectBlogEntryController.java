@@ -166,13 +166,32 @@ public class AddProjectBlogEntryController {
         return model;
     }
 
-    @CheckPublicAccess
+    /**
+     * This method is used to return a JSON string for visualizing a network
+     * based on the Network id selected from the UI.
+     * 
+     * @param unixName
+     *            Unix Name given for the Project
+     * @param networkId
+     *            Network Id for the network selected from the UI.
+     * @param principal
+     *            principal object which is required to fetch information about
+     *            logged in user.
+     * @param project
+     *            project instance obtained using @InjectProject annotation
+     * @return Returns a JSON string as a response entity based on the network
+     *         selected from the UI.
+     * @throws QuadrigaStorageException
+     * @throws JAXBException
+     */
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
+            RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @InjectProjectByName
-    @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "text/plain")
     public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, Principal principal,
             @CheckAccess @InjectProject IProject project) throws QuadrigaStorageException, JAXBException {
-        
+
         ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
         String json = null;
         if (transformedNetwork != null) {

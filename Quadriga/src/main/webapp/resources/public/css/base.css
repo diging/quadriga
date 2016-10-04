@@ -53,3 +53,11 @@
 span.highlight {
     background-color: rgb(206, 167, 24);
 }
+
+
+#networkView{
+		width: 100%;
+        height: 30%;
+        top: 0px;
+        left: 0px;
+}
