@@ -130,6 +130,15 @@ public class NetworkMapper implements INetworkMapper{
     }
     
     @Override
+    public List<INetwork> getListOfApprovedNetworks() throws QuadrigaStorageException {
+        List<NetworksDTO> networksDTO = dbconnect.getApprovedNetworkList();
+        if(networksDTO!=null){
+            return getNetworkListFromDTOList(networksDTO);
+        }
+        return null;
+    }
+    
+    @Override
     public List<INetwork> getNetworkListForProject(String projectid) throws QuadrigaStorageException{
         List<INetwork> networkList = null;
         List<NetworksDTO> networksDTO = dbconnect.getNetworkDTOList(projectid);
