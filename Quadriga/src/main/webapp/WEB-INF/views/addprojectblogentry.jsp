@@ -61,9 +61,8 @@
 								<c:forEach var="network" items="${networks}">
 									<tr>
 										<td>${network.networkName}</td>
-										<td><a class="btn btn-primary" data-toggle="collapse"
-											href="#networkBox" aria-expanded="false"
-											aria-controls="collapseExample"
+										<td><a class="btn btn-primary" href="#networkBox"
+											aria-expanded="false" aria-controls="collapseExample"
 											value=${network.networkId
 											}
 											onclick="loadNetwork(this)">View Network</a></td>
@@ -72,16 +71,21 @@
 								</c:forEach>
 							</tbody>
 						</table>
-						<div id="networkBox" class="collapse"
+						<div id="addImage" style="display: none">
+							<button class="btn btn-primary" type="button">
+								<i class="fa fa-plus-circle" aria-hidden="true"></i> Add This
+								Network To Editor<a></a>
+							</button>
+						</div>
+						<div id="networkBox"
 							style="min-height: 500px; width: 100%; text-align: left;">
-							<div id="addImage">
-								<button class="btn btn-primary" type="button">
-									<i class="fa fa-plus-circle" aria-hidden="true"></i> Add This
-									Network To Editor<a></a>
-								</button>
-							</div>
+
+
 						</div>
 					</div>
+				</c:when>
+				<c:when test="${empty networks}">
+					<p>There are no networks in this project.</p>
 				</c:when>
 			</c:choose>
 		</div>
@@ -102,7 +106,6 @@
 	type="text/javascript"></script>
 <script type="text/javascript">
 	function loadNetwork(selectedNW) {
-		console.log(selectedNW);
 		var projid = $('#projectId').val();
 		var projName = $('#projectName').val();
 		var nwid = selectedNW.getAttribute('value');
@@ -117,17 +120,26 @@
 					+ "/visualizenetwork/" + nwid,
 			timeout : 100000,
 			success : function(data) {
-				visualizeNetwork(data);
+				if (data === '') {
+					loadErrorMessage()
+				} else
+					visualizeNetwork(data);
 			},
 			error : function(e) {
-				console.log(e.Message);
+				loadErrorMessage();
 			}
 		});
 
 	}
 
-	function visualizeNetwork(jsonString) {
+	function loadErrorMessage() {
+		$('#networkBox')
+				.append(
+						"<p>There was an error while loading this network. Please contact an administrator</p>");
+	}
 
+	function visualizeNetwork(jsonString) {
+		$('#addImage').show();
 		var container = document.getElementById('networkBox');
 
 		var cy = cytoscape({
