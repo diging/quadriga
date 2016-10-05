@@ -87,29 +87,29 @@
         </nav>
 
         <tiles:insertAttribute name="content" />
-
-        <div id="footer">
-
-            <div class="row col-lg-12">
-
-                <div class="col-lg-1"></div>
-                <div class="col-lg-4">
+        
+        <div class="footer">
+            <div class="container-fluid">
+            	
+            	<div class="footer-col-lg-4 " align="left">
                     <c:set var="PR" value="${pullrequest}" />
                     Version: ${buildNumber}
                     <c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if>
                 </div>
-                <div class="col-lg-5">
+                
+                <div class="footer-col-lg-4 " align="center">
                     <a class="href-brand"
                         href="${pageContext.servletContext.contextPath}/"><i
                         class="fa fa-home" aria-hidden="true"></i></a>
                 </div>
-                <div class="col-lg-2">
+                
+                <div class="footer-col-lg-4 " align="right">
                     <a class="href-brand"
                         href="${pageContext.servletContext.contextPath}/sites/"
                         style="color: white">Public Sites</a>
                 </div>
+                
             </div>
-
         </div>
 
     </div>

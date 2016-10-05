@@ -1,20 +1,27 @@
-#footer {
-   position:fixed;
-   left:0px;
-   bottom:0px;
-   height:30px;
-   width:100%;
-   background:#999;
-   background-color: #487FB7;
-   color: #3D4350;
-   border-color: rgb(72, 127, 183);
-   border-width: 1px;
-   border-style: solid;
-   color:white;
-   padding-top: 4px;
-   padding-bottom: 4px;
+.footer, .push {
+  	margin-bottom: 10px;
+  	position: relative;
+   	bottom: -40px;
+   	height: 30px;
+   	width: 100%;
+   	background: #999;
+   	background-color: #487FB7;
+   	color: #3D4350;
+   	border-color: rgb(72, 127, 183);
+   	border-width: 1px;
+   	border-style: solid;
+   	color: white;
+   	padding-top: 4px;
+   	padding-bottom: 4px;
+   	border-radius: 4px;
+   	z-index: 100;
 }
 
 .href-brand {
 	color: white;
+}
+
+.footer-col-lg-4 {
+	float: left;
+    width: 33.33333333%;
 }
