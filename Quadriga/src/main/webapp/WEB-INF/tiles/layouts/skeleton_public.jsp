@@ -47,17 +47,18 @@
 
 
 <script
-	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
-<script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"
+	type="text/javascript"></script>
+<script src="https://d3js.org/d3.v3.js" charset="utf-8"
+	type="text/javascript"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+	type="text/javascript"></script>
+<script type="text/javascript">
 	window.jQuery
 			|| document
 					.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
 </script>
-<script
-	src="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -113,7 +114,9 @@
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-
+	<script
+		src="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/js/bootstrap.min.js"
+		type="text/javascript"></script>
 
 
 </body>

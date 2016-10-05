@@ -190,13 +190,16 @@ public class AddProjectBlogEntryController {
     @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "text/plain")
     public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, Principal principal,
-            @CheckAccess @InjectProject IProject project) throws QuadrigaStorageException, JAXBException {
+            @InjectProject IProject project,@RequestParam("projectId") String projectId) throws QuadrigaStorageException, JAXBException {
 
         ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
         String json = null;
         if (transformedNetwork != null) {
             json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
+        else
+            return new ResponseEntity<String>(json, HttpStatus.NO_CONTENT);
+        
         return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 }

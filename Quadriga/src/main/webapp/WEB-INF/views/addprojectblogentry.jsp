@@ -42,7 +42,9 @@
 		</table>
 
 
-		<input type="hidden" name="projectId" value="${project.projectId}">
+		<input type="hidden" id="projectId" name="projectId"
+			value="${project.projectId}">
+		<input type="hidden" id="projectName" value="${project.unixName}">
 		<div id="networkTable" class="collapse">
 			<c:choose>
 				<c:when test="${not empty networks}">
@@ -61,14 +63,16 @@
 										<td>${network.networkName}</td>
 										<td><a class="btn btn-primary" data-toggle="collapse"
 											href="#networkBox" aria-expanded="false"
-											aria-controls="collapseExample" onclick="loadNetwork()">View
-												Network</a></td>
+											aria-controls="collapseExample"
+											value=${network.networkId
+											}
+											onclick="loadNetwork(this)">View Network</a></td>
 
 									</tr>
 								</c:forEach>
 							</tbody>
 						</table>
-						<div id="networkBox" class="collapse" 
+						<div id="networkBox" class="collapse"
 							style="min-height: 500px; width: 100%; text-align: left;">
 							<div id="addImage">
 								<button class="btn btn-primary" type="button">
@@ -97,13 +101,20 @@
 	src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/dist/cytoscape.js"
 	type="text/javascript"></script>
 <script type="text/javascript">
-	function loadNetwork() {
+	function loadNetwork(selectedNW) {
+		console.log(selectedNW);
+		var projid = $('#projectId').val();
+		var projName = $('#projectName').val();
+		var nwid = selectedNW.getAttribute('value');
 		$.ajax({
 			type : "GET",
+			data : {
+				projectId : projid
+			},
 			contentType : "application/json",
 			datatype : 'text',
-			url : "${pageContext.servletContext.contextPath}/sites/"
-					+ "sampleproj" + "/visualizenetwork/" + 'NETCEnz9o',
+			url : "${pageContext.servletContext.contextPath}/sites/" + projName
+					+ "/visualizenetwork/" + nwid,
 			timeout : 100000,
 			success : function(data) {
 				visualizeNetwork(data);
@@ -160,23 +171,18 @@
 		defineListeners(cy, '${pageContext.servletContext.contextPath}',
 				'${unixName}');
 
-		$(document)
-				.ready(
-						function() {
-							$('#addImage')
-									.on(
-											'click',
-											function() {
-												var png = cy.png({
-													'scale' : 0.75
-												});
-												tinyMCE
-														.execCommand(
-																'mceInsertContent',
-																false,
-																'<img alt="Smiley face" src="' + png + '"/>');
-											});
-						});
+		$(document).ready(
+				function() {
+					$('#addImage').on(
+							'click',
+							function() {
+								var png = cy.png({
+									'scale' : 0.75
+								});
+								tinyMCE.execCommand('mceInsertContent', false,
+										'<img src="' + png + '"/>');
+							});
+				});
 	}
 </script>
 
