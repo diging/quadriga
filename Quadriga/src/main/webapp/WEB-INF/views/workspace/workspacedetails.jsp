@@ -468,8 +468,8 @@ cursor: pointer;
                             textFileAccess = $("#" + textFileId).data("textaccess");
                             
                             var textFileAccessMap = new Object();
-                            textFileAccessMap["PUBLIC"] = "Are you sure you want to make this text file Private";
-                            textFileAccessMap["PRIVATE"] = "Are you sure you want to make this text file Public";
+                            textFileAccessMap["PUBLIC"] = "Are you sure you want to make this text file Private ?";
+                            textFileAccessMap["PRIVATE"] = "Are you sure you want to make this text file Public ?";
                             
                             changedTextFileAccess = textFileAccess === "PUBLIC" ? "Private" : "Public";
                             
