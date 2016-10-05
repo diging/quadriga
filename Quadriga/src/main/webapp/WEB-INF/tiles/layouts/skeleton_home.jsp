@@ -117,6 +117,14 @@
 							property="principal.username" /></span>!
 				</div>
 				<div class="col-md-2">
+				<form action="<c:url value='/logout' />" method='POST'
+						class="navbar-form navbar-right">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<div class="form-group">
+							<button type="submit" class="btn btn-link btn-danger pull-right"><i
+						class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+						</div>
+				</form>
 					<a class="pull-right" href="<c:url value='/logout' />"><i
 						class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
 				</div>
