@@ -67,7 +67,6 @@
 
 	<c:if test="${showNetwork != 'False'}">
 		<div class="image-bg">
-			<!-- <img src="${pageContext.servletContext.contextPath}/resources/public/imgs/nw-big-5.png"> -->
 		</div>
 	</c:if>
 	<div class="container main-container">

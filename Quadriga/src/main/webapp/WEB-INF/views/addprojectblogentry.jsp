@@ -63,8 +63,8 @@
 										<td>${network.networkName}</td>
 										<td><a class="btn btn-primary" href="#networkBox"
 											aria-expanded="false" aria-controls="collapseExample"
-											value=${network.networkId
-											}
+											value="${network.networkId
+											}"
 											onclick="loadNetwork(this)">View Network</a></td>
 
 									</tr>

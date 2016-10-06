@@ -196,8 +196,9 @@ public class AddProjectBlogEntryController {
         String json = null;
         if (transformedNetwork != null) {
             json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-        } else
-            return new ResponseEntity<String>(json, HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<String>(json, HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<String>(json, HttpStatus.OK);
     }
