@@ -65,6 +65,12 @@ cursor: pointer;
                     }
                 });     
         });
+        
+        $(".modal").on("hidden.bs.modal", function(){
+            $(".modal-body").html("");
+            $(".modal-title").html("");
+        });
+        
     });
                                            
 </script>
@@ -289,20 +295,20 @@ cursor: pointer;
     
     
     <div class="col-md-3">
-		<h5 class="major">
-			<span>Below users have complete access to workspace</span>
-		</h5>
-		<div style="padding: 5px;">
-				<i class="fa fa-user" aria-hidden="true"></i> ${projectOwner.userName} (Project Owner)
-				<br>
-				<c:forEach var="collaborator"
-					items="${projectAdmins}">
-					<i class="fa fa-user" aria-hidden="true"></i>
-					<c:out value="${collaborator.collaborator.userObj.name}"></c:out>
-					<br>
-				</c:forEach>
-		</div>
-	</div>
+        <h5 class="major">
+            <span>Below users have complete access to workspace</span>
+        </h5>
+        <div style="padding: 5px;">
+                <i class="fa fa-user" aria-hidden="true"></i> ${projectOwner.userName} (Project Owner)
+                <br>
+                <c:forEach var="collaborator"
+                    items="${projectAdmins}">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <c:out value="${collaborator.collaborator.userObj.name}"></c:out>
+                    <br>
+                </c:forEach>
+        </div>
+    </div>
 </div>
 
 <!--  Modals -->
@@ -410,7 +416,7 @@ cursor: pointer;
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Update Text Accessibility</h4>
+                <h4 class="modal-title">
             </div>
             <div class="modal-body">
                 <p></p>
@@ -463,14 +469,16 @@ cursor: pointer;
                             textFileId = e.relatedTarget.id;
                             textFileAccess = $("#" + textFileId).data("textaccess");
                             
-                            if (textFileAccess === "PUBLIC") {
-                                changedTextFileAccess = "Private";
-                            } else if (textFileAccess === "PRIVATE") {
-                                changedTextFileAccess = "Public";
-                            }
+                            var textFileAccessMap = new Object();
+                            textFileAccessMap["PUBLIC"] = "Are you sure you want to make this text file Private?";
+                            textFileAccessMap["PRIVATE"] = "Are you sure you want to make this text file Public?";
                             
-                            var content = "Are you sure you want to make this text file " + changedTextFileAccess + "?";
-                            $(this).find('.modal-body p').text(content);
+                            changedTextFileAccess = textFileAccess === "PUBLIC" ? "Private" : "Public";
+                            
+                            var titlecontent = "Update Text Accessibility";
+                            $(this).find('.modal-title').html(titlecontent);
+                            $(this).find('.modal-body').html(textFileAccessMap[textFileAccess]); 
+                            
                         });
     });
 </script>

@@ -34,6 +34,9 @@
         </a>
 	</div>
 	<div id="bodyConcept" class="panel-body panel-collapse collapse in" role="tabpanel" aria-labelledby="headingConcept">
+	<div id="loading" style="display:none">
+	  			<p><img src="${pageContext.servletContext.contextPath}/resources/public/imgs/ajax-loader.gif" /><small>Loading...</small></p>
+	</div>
 	<small>
 	<p class="text-left" style="overflow: scroll;"><span id="concept_desc">...to display concept information.</span></p>
     </small>
@@ -47,6 +50,11 @@
 	   </a>
 	</div>
 	<div id="bodyTexts" class="panel-body panel-collapse collapse in" style="text-align: left; max-height: 200px; overflow-y: scroll;" role="tabpanel" aria-labelledby="headingTexts">
+	<center>
+	<div id="loading1" style="display:none">
+ 		<p><img src="${pageContext.servletContext.contextPath}/resources/public/imgs/ajax-loader.gif" /> <small>Loading...</small></p>
+	</div>
+	</center>
 	<small>
     <div id="texts" class="text-left">Select node to display text.</div>
     </small>

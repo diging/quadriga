@@ -32,5 +32,7 @@ public interface INetworkMapper {
     public List<INetworkNodeInfo> getNetworkNodes(String networkId, int versionId) throws QuadrigaStorageException;
 
     public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException;
+    
+    public List<INetwork> getListOfApprovedNetworks() throws QuadrigaStorageException;
 
 }

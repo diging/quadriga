@@ -6,7 +6,6 @@
 	$(document).ready(function() {
 		$('#example').DataTable();
 	});
-
 	function handle(e) {
 		if (e.keyCode === 13) {
 			document.getElementById("sites").submit();
