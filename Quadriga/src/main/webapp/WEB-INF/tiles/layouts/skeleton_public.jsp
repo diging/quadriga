@@ -42,6 +42,7 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
+      
 </head>
 
 <body>
@@ -53,7 +54,8 @@
             <!-- <img src="${pageContext.servletContext.contextPath}/resources/public/imgs/nw-big-5.png"> -->
         </div>
     </c:if>
-    <div class="container main-container">
+    
+    <div class="container main-container" style="min-height:90vh">
 
         <!-- Static navbar -->
         <nav class="navbar navbar-default navbar-colored">
@@ -85,34 +87,35 @@
             </div>
             <!--/.container-fluid -->
         </nav>
-
+	
         <tiles:insertAttribute name="content" />
         
-        <div class="footer">
-            <div class="container-fluid">
+    </div>   
+        
+    <div class="container main-container">
+        
+		<div class="footer">
+			<div class="container-fluid">
             	
-            	<div class="footer-col-lg-4 " align="left">
-                    <c:set var="PR" value="${pullrequest}" />
-                    Version: ${buildNumber}
-                    <c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if>
-                </div>
+				<div class="footer-col-lg-4 " align="left">
+					<c:set var="PR" value="${pullrequest}" />
+						Version: ${buildNumber}
+						<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if>
+				</div>
                 
-                <div class="footer-col-lg-4 " align="center">
-                    <a class="href-brand"
-                        href="${pageContext.servletContext.contextPath}/"><i
-                        class="fa fa-home" aria-hidden="true"></i></a>
-                </div>
+				<div class="footer-col-lg-4 " align="center">
+					<a class="href-brand" href="${pageContext.servletContext.contextPath}/">
+					<i class="fa fa-home" aria-hidden="true"></i></a>
+				</div>
                 
-                <div class="footer-col-lg-4 " align="right">
-                    <a class="href-brand"
-                        href="${pageContext.servletContext.contextPath}/sites/"
-                        style="color: white">Public Sites</a>
-                </div>
+				<div class="footer-col-lg-4 " align="right">
+					<a class="href-brand" href="${pageContext.servletContext.contextPath}/sites/" style="color: white">Public Sites</a>
+				</div>
                 
-            </div>
-        </div>
+			</div>
+		</div>
 
-    </div>
+	</div>
     <!-- /container -->
 
     <!-- Bootstrap core JavaScript
