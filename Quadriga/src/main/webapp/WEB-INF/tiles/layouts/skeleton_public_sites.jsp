@@ -17,7 +17,8 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
-
+    <!-- Custom styles for this template -->
+    <link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css" rel="stylesheet">
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
 <script
@@ -40,6 +41,10 @@
 <link
 	href="${pageContext.servletContext.contextPath}/resources/css/public-sites.css"
 	rel="stylesheet">
+	
+<link
+    href="${pageContext.servletContext.contextPath}/resources/public/css/footer.css"
+    rel="stylesheet" type="text/css">
 
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
@@ -111,7 +116,7 @@
 <body>
 	<tiles:importAttribute name="currentPage" scope="request" />
 
-	<div class="container-fluid">
+	<div class="container-fluid" style="min-height:90vh">
 		<div class="header clearfix">
 			<div class="navbar-collapse collapse navbar-right">
 				<ul class="nav navbar-nav">
@@ -146,6 +151,37 @@
 		</div>
 		</c:if>
 	</div>
+	
+    <div id="footerwrap">
+        <div class="container">
+            <div class="col-lg-5">
+                <h3>The Digital Innovation Group</h3>
+                <p>
+                Quadriga is being developed by the <a href="http://diging.asu.edu/">Digital Innovation Group</a> in the <a href="http://cbs.asu.edu/">Center for Biology and Society</a> at <a href="http://www.asu.edu/">Arizona State University</a>.
+                </p>
+            </div>
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-5">
+                <h3>Find us</h3>
+                <p>Quadriga is open-source software hosted on <a href="http://diging.github.io/quadriga/">GitHub</a>.
+            </div>
+        </div>
+    </div>
+    <div id="c">
+        <div class="container">
+            <div class="col-md-6" style="text-align: left;">
+            <c:set var="PR" value="${pullrequest}" />
+            Version: ${buildNumber}<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if> 
+            </div>
+            <div class="col-md-6">
+            <p>
+                Design by <a href="http://www.blacktie.co">BLACKTIE.CO</a>
+            </p>
+            </div>
+            
+        </div>
+    </div>
 	
 	<!-- Bootstrap core JavaScript
     ================================================== -->
