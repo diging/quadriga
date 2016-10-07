@@ -35,7 +35,6 @@
 	src="${pageContext.servletContext.contextPath}/resources/js/jquery-alert.js"></script>
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/jquery.quick.pagination.min.js"></script>
-
 <!-- Datatables -->
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.datatables.net/u/bs/dt-1.10.12/datatables.min.css" />
@@ -118,15 +117,13 @@
 				</div>
 				<div class="col-md-2">
 				<form action="<c:url value='/logout' />" method='POST'
-						class="navbar-form navbar-right">
+						class="pull-right">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-						<div class="form-group">
-							<button type="submit" class="btn btn-link btn-danger pull-right"><i
+						<div>
+							<button type="submit" class="btn btn-link" style="color:#800000"><i
 						class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
 						</div>
 				</form>
-					<a class="pull-right" href="<c:url value='/logout' />"><i
-						class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
 				</div>
 			</div>
 			<hr>
