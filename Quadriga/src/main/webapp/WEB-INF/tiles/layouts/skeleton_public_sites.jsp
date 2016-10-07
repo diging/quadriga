@@ -17,8 +17,8 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
-    <!-- Custom styles for this template -->
-    <link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css" rel="stylesheet">
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
 <script
@@ -48,6 +48,8 @@
 
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+	
+	
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script
 	src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
