@@ -120,3 +120,21 @@ span.highlight {
 .search-control{
 	display: inline-block;
 }
+#search-term, #search-term2{
+	width:92%;
+	
+}
+#search-term2{
+	    margin-left: 8%;
+    margin-top: 5px;
+}
+.input-group button:first-child{
+	width: 6%;
+    margin-right: 2%;
+}
+#search-results-wrapper{
+    width: 97%;
+    float: right;
+}
+
+

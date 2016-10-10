@@ -13,14 +13,16 @@
             <div class="row">
 		        <div class="col-sm-12 search-wrapper" style="position: relative">
 		            <h2>Text Search</h2>
-		    
+		     <input type = "hidden" id="concept1" value="" style= "display:none"/>
+		            <input type = "hidden" id="concept2" value="" style= "display:none"/>
+		            
 		            <div id="search-form" class="form-inline" style="margin-top: 20px;">
 		                <div class="form-group search-input" style="width: 100%;">
 		                    <label for="search-term">What concept are you looking for?</label>
 		                    <div class="input-group row" style="width: 100%;">
 		                    	<button type="button" class="btn btn-default" onclick="addSearchBox()"><span class="glyphicon glyphicon-plus"></button></span>
-			                    <input placeholder="Enter search term" type="text" onkeyup="clickedevent(this)" class="form-control search-control" id="search-term" autocomplete="off">
-			                    <input placeholder="Enter search term" type="text" onkeyup="clickedevent(this)" style="visibility:hidden" class="form-control search-control" id="search-term2" autocomplete="off">
+			                    <input placeholder="Enter search term" type="text" onkeyup="clickedevent(this)" class="form-control search-control width90" id="search-term" autocomplete="off">
+			                    <input placeholder="Enter search term" type="text" onkeyup="clickedevent(this)" style="display:none" class="form-control search-control width90" id="search-term2" autocomplete="off">
 			                    <div class="input-group-addon" style="width: 40px;"><div style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
 			                          id="ajax-loader" class="search-loader"></div>
 			                          <button type="submit" class="btn btn-default">Submit</button>
@@ -32,14 +34,17 @@
 		                    <div class="list-group" style="border: 1px solid #dddddd; max-height: 300px; overflow-y:scroll;" id="search-results-items">
 		                    </div>
 		                    <div style="display: none;">
-		                        <a href="#" class="list-group-item" id="search-item-template">
+		                        <div class="list-group-item" id="search-item-template">
 		                            <span class="search-name text-primary"><strong></strong></span> <span class="search-type label label-primary"></span> 
 		                            <span class="search-pos label label-info text-lowercase"></span>
 		                            <small><br><span class="search-desc text-muted"></span></small>
-		                        </a>
+		                        </div>
 		                    </div>
 		                </div>
 		            </div>
+		            
+		           
+		            
 		        </div>
 		    </div>
 		    
@@ -145,7 +150,7 @@
 
 <script>
 function addSearchBox(){
-	$("#search-term2").css('visibility','visible');
+	$("#search-term2").css('display','block');
 }
 </script>
 <script>
@@ -198,16 +203,39 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 
 <script>
 //# sourceURL=loader.js
+
+
+    $('.list-group').on("click",".list-group-item",function(){
+        	
+        	if(myId === "search-term"){
+        		console.log("in 1");
+        		$('#concept1').val($(this).attr('data-value'));
+        	}
+        	else if(myId === "search-term2"){
+        		console.log("in 2");
+        		$('#concept2').val($(this).attr('data-value'));
+        	}
+        	
+			$('#search-results-wrapper').hide();
+			
+		});
+
+
+
     function clickedevent(selected) {
         // ajax loader
-        console.log(selected.id);
+        //alert(selected.id);
+        
+      
+        console.log("in clicked Event")
+        console.log($(this))
         var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId=';
         var $searchInput = $("#"+selected.id);
         var $resWrapper = $('#search-results-wrapper');
         var $items = $('#search-results-items');
         var $list = $resWrapper.find('.list-group-item:first');
         var $loader = $('#ajax-loader');
-        console.log("printing search query" + $searchInput);
+        myId = selected.id;
         var loader = (function() {
             // var isVisible = false;
             var timeout;
@@ -229,6 +257,13 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
             };
         })();
         // ajax loader
+        
+        //------------
+      
+
+        
+        //----------------------   end- vin
+        
         $(document).on({
             ajaxStart: loader.show,
             ajaxStop: loader.hide
@@ -243,6 +278,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
             };
             return function(ev) {
                 var val = $searchInput.val().trim();
+                
                 if (val === prevVal || val.length < minChars) {
                     return;
                 }
@@ -280,7 +316,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
                     $link = $a.clone();
                     $link.attr('id', '');
                     $link.find('.search-name strong').text(terms[i].name);
-                    $link.attr('href', networkURL + terms[i].id);
+                    $link.attr('data-value', terms[i].id);
                     $link.find('.search-desc').text(terms[i].description);
                     $link.find('.search-type').text(terms[i].type);
                     $link.find('.search-pos').text(terms[i].pos);
@@ -290,6 +326,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
             };
         })();
         var onChange = (function(ev) {
+        	
             // cancel the original request
             // and make a new request
             var $xhr;
@@ -316,13 +353,13 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
                 }
                 // start a new request
                 $xhr = $.ajax({
-                    method: 'get',
-                    dataType: 'json',
+                   method: 'get',
+                   dataType: 'json',
                     url: "${pageContext.servletContext.contextPath}/public/concept/search",
                     data: {
                         searchTerm: searchVal
-                    }
-                }).done(done).fail(fail).always(always);
+                    }         
+                    }).done(done).fail(fail).always(always);
             };
         })();
         // custom event for value change
