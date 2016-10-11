@@ -1,4 +1,4 @@
- package edu.asu.spring.quadriga.web.search;
+package edu.asu.spring.quadriga.web.search;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -54,86 +54,86 @@ public class TextConceptSearchController {
     private IJsonCreator jsonCreator;
 
     @RequestMapping(value = "search/texts")
-    public String search(@RequestParam(value="conceptId",defaultValue = "") String conceptId,@RequestParam(value="conceptId2",defaultValue = "") String conceptId2, Model model) throws Exception {
-        
+    public String search(@RequestParam(value = "conceptId", defaultValue = "") String conceptId,
+            @RequestParam(value = "conceptId2", defaultValue = "") String conceptId2, Model model) throws Exception {
+
         ArrayList<String> concepts = new ArrayList<>();
         concepts.add(conceptId);
         concepts.add(conceptId2);
-        for(String conceptUri : concepts){
-        System.out.println(conceptUri);
-        if (!conceptId.isEmpty()) {
-            ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
-            List<ConceptEntry> entries = reply.getConceptEntry();
+        Set<String> references = new HashSet<String>();
+        List<ITextFile> texts = new ArrayList<ITextFile>();
+        List<String> handles = new ArrayList<String>();
+        for (String conceptUri : concepts) {
+            System.out.println(conceptUri);
+            if (!conceptId.isEmpty()) {
+                ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
+                List<ConceptEntry> entries = reply.getConceptEntry();
 
-            ConceptEntry entry = null;
-            if (entries != null && !entries.isEmpty()) {
-                entry = entries.get(0);
-                entry.setId(conceptUri);
-            }
+                ConceptEntry entry = null;
+                if (entries != null && !entries.isEmpty()) {
+                    entry = entries.get(0);
+                    entry.setId(conceptUri);
+                }
 
-            if (conceptId.startsWith("http://")) {
-                int lastIdx = conceptId.lastIndexOf("/");
-                conceptId = conceptId.substring(lastIdx + 1);
-            }
+                if (conceptId.startsWith("http://")) {
+                    int lastIdx = conceptId.lastIndexOf("/");
+                    conceptId = conceptId.substring(lastIdx + 1);
+                }
 
-            String results = qStoreConnector.searchNodesByConcept(conceptId);
-            ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
+                String results = qStoreConnector.searchNodesByConcept(conceptId);
+                ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
 
-            List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
+                List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
 
-            if (entry.getWordnetId() != null && !entry.getWordnetId().isEmpty()) {
-                results = qStoreConnector.searchNodesByConcept(entry.getWordnetId());
-                events = marshallingService.unMarshalXmlToElementEventsType(results);
-                eventList.addAll(events.getRelationEventOrAppellationEvent());
-            }
+                if (entry.getWordnetId() != null && !entry.getWordnetId().isEmpty()) {
+                    results = qStoreConnector.searchNodesByConcept(entry.getWordnetId());
+                    events = marshallingService.unMarshalXmlToElementEventsType(results);
+                    eventList.addAll(events.getRelationEventOrAppellationEvent());
+                }
 
-            Set<String> references = new HashSet<String>();
-            List<ITextFile> texts = new ArrayList<ITextFile>();
-            List<String> handles = new ArrayList<String>();
+                   for (CreationEvent event : eventList) {
 
-            for (CreationEvent event : eventList) {
-                
-                String sourceRef = event.getSourceReference();
-                System.out.println("Reference:"+sourceRef);
-                // if we haven't seen the reference yet
-                if (references.add(sourceRef)) {
-                    ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
-                    if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
-                        handles.add(sourceRef);
-                    } else {
-                        if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
-                            texts.add(txtFile);
-                            textFileManager.loadFile(txtFile);
-                            txtFile.setSnippetLength(40);
+                    String sourceRef = event.getSourceReference();
+                    System.out.println("Reference:" + sourceRef);
+                    // if we haven't seen the reference yet
+                    if (references.add(sourceRef)) {
+                        ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
+                        if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
+                            handles.add(sourceRef);
+                        } else {
+                            if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
+                                texts.add(txtFile);
+                                textFileManager.loadFile(txtFile);
+                                txtFile.setSnippetLength(40);
+                            }
                         }
                     }
                 }
+
+                model.addAttribute("references", handles);
+                model.addAttribute("concept", entry);
+                model.addAttribute("texts", texts);
+
+                List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
+
+                List<String> projectIds = new ArrayList<String>();
+                projects.forEach(p -> projectIds.add(p.getProjectId()));
+
+                ITransformedNetwork transformedNetwork = transformationManager
+                        .getSearchTransformedNetworkMultipleProjects(projectIds, conceptUri, INetworkStatus.APPROVED);
+
+                String json = null;
+                if (transformedNetwork != null) {
+                    json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+                }
+
+                if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+                    model.addAttribute("isNetworkEmpty", true);
+                }
+
+                model.addAttribute("jsonstring", json);
+
             }
-
-            model.addAttribute("references", handles);
-            model.addAttribute("concept", entry);
-            model.addAttribute("texts", texts);
-
-            List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
-
-            List<String> projectIds = new ArrayList<String>();
-            projects.forEach(p -> projectIds.add(p.getProjectId()));
-
-            ITransformedNetwork transformedNetwork = transformationManager
-                    .getSearchTransformedNetworkMultipleProjects(projectIds, conceptUri, INetworkStatus.APPROVED);
-
-            String json = null;
-            if (transformedNetwork != null) {
-                json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-            }
-
-            if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-                model.addAttribute("isNetworkEmpty", true);
-            }
-
-            model.addAttribute("jsonstring", json);
-
-        }
         }
         return "search/texts";
     }
