@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,7 @@ import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 import edu.asu.spring.quadriga.validator.AddProjectBlogEntryValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
+import edu.asu.spring.quadriga.web.workspace.ModifyWSController;
 
 /**
  * This controller is responsible for providing UI to create project blog entry
@@ -71,6 +74,8 @@ public class AddProjectBlogEntryController {
 
     @Autowired
     private IJsonCreator jsonCreator;
+
+    private static final Logger logger = LoggerFactory.getLogger(AddProjectBlogEntryController.class);
 
     /**
      * Attach the custom validator to the Spring context
@@ -189,10 +194,16 @@ public class AddProjectBlogEntryController {
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "text/plain")
     public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
-            @PathVariable("networkId") String networkId, Principal principal, @InjectProject IProject project,
-            @RequestParam("projectId") String projectId) throws QuadrigaStorageException {
+            @PathVariable("networkId") String networkId, Principal principal,
+            @CheckAccess @InjectProject IProject project, @RequestParam("projectId") String projectId) {
+        ITransformedNetwork transformedNetwork = null;
+        try {
+            transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+        } catch (QuadrigaStorageException qse) {
 
-        ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+            logger.error("Error:" + qse.getMessage());
+            return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         String json = null;
         if (transformedNetwork != null) {
             json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
