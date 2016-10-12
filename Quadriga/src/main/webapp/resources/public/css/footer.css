@@ -26,3 +26,17 @@
   float: left;
   width: 33.33333333%;
 }
+
+#footerwrap {
+	background-color: #2f2f2f;
+	color: white;
+	padding-top: 40px;
+	padding-bottom: 60px;
+	text-align: left;
+}
+
+#c {
+	background: #222222;
+	padding-top: 15px;
+	text-align: right;
+}

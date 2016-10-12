@@ -18,7 +18,7 @@
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
 <!-- Custom styles for this template -->
-<link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css" rel="stylesheet">
+<link href="${pageContext.servletContext.contextPath}/resources/public/css/footer.css" rel="stylesheet">
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
 <script
@@ -41,10 +41,6 @@
 <link
 	href="${pageContext.servletContext.contextPath}/resources/css/public-sites.css"
 	rel="stylesheet">
-	
-<link
-    href="${pageContext.servletContext.contextPath}/resources/public/css/footer.css"
-    rel="stylesheet" type="text/css">
 
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
