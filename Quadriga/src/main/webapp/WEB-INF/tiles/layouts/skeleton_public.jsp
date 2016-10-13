@@ -17,9 +17,8 @@
 
 <!-- Bootstrap core CSS -->
 <link
-    href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/bootstrap.css"
+    href="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/css/bootstrap.min.css"
     rel="stylesheet">
-<!--  <link href="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">-->
 
 <!-- Custom styles for this template -->
 <link
@@ -28,37 +27,22 @@
 <link
     href="${pageContext.servletContext.contextPath}/resources/public/css/base.css"
     rel="stylesheet" type="text/css">
-<link type="text/css"
-    href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css"
-    rel="stylesheet" />
 
-<link type="text/css"
-    href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ForceDirected.css"
-    rel="stylesheet" />
+<link
+    href="${pageContext.servletContext.contextPath}/resources/public/css/footer.css"
+    rel="stylesheet" type="text/css">
+
+
 <!-- Search template -->
 <link
     href="${pageContext.servletContext.contextPath}/resources/public/css/search.css"
     rel="stylesheet">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-
-<script
-    src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"
-    type="text/javascript"></script>
-<script src="https://d3js.org/d3.v3.js" charset="utf-8"
-    type="text/javascript"></script>
-<script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
-    type="text/javascript"></script>
-<script type="text/javascript">
-    window.jQuery
-            || document
-                    .write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
-</script>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+      
 </head>
 
 <body>
@@ -66,22 +50,21 @@
     <tiles:importAttribute name="showNetwork" scope="request" />
 
     <c:if test="${showNetwork != 'False'}">
-        <div class="image-bg"></div>
+        <div class="image-bg">
+            <!-- <img src="${pageContext.servletContext.contextPath}/resources/public/imgs/nw-big-5.png"> -->
+        </div>
     </c:if>
-    <div class="container main-container">
-
+    
+    <div class="container main-container" style="min-height:90vh">
 
         <!-- Static navbar -->
         <nav class="navbar navbar-default navbar-colored">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button"
-                        class="navbar-toggle collapsed"
-                        data-toggle="collapse" data-target="#navbar"
-                        aria-expanded="false">
+                <div class="navbar- ">
+                    <button type="button" class="navbar-toggle collapsed"
+                        data-toggle="collapse" data-target="#navbar" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span> <span
-                            class="icon-bar"></span> <span
-                            class="icon-bar"></span> <span
+                            class="icon-bar"></span> <span class="icon-bar"></span> <span
                             class="icon-bar"></span>
                     </button>
                     <c:if test="${not empty project}">
@@ -104,21 +87,49 @@
             </div>
             <!--/.container-fluid -->
         </nav>
-
+	
         <tiles:insertAttribute name="content" />
+        
+    </div>   
+        
+    <div class="container main-container">
+        
+		<div class="footer">
+			<div class="container-fluid">
+            	
+				<div class="footer-col-lg-4 " align="left">
+					<c:set var="PR" value="${pullrequest}" />
+						Version: ${buildNumber}
+						<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if>
+				</div>
+                
+				<div class="footer-col-lg-4 " align="center">
+					<a class="href-brand" href="${pageContext.servletContext.contextPath}/">
+					<i class="fa fa-home" aria-hidden="true"></i></a>
+				</div>
+                
+				<div class="footer-col-lg-4 " align="right">
+					<a class="href-brand" href="${pageContext.servletContext.contextPath}/sites/" style="color: white">Public Sites</a>
+				</div>
+                
+			</div>
+		</div>
 
-
-    </div>
+	</div>
     <!-- /container -->
 
-
     <!-- Bootstrap core JavaScript
-    ================================================== -->
+      ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script
-        src="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/js/bootstrap.min.js"
-        type="text/javascript"></script>
-
+        src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        window.jQuery
+                || document
+                        .write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
+    </script>
+    <script
+        src="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>
