@@ -201,7 +201,7 @@ public class AddProjectBlogEntryController {
             transformedNetwork = transformationManager.getTransformedNetwork(networkId);
         } catch (QuadrigaStorageException qse) {
 
-            logger.error("Error:" + qse.getMessage());
+            logger.error("Error:" + qse);
             return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         String json = null;
