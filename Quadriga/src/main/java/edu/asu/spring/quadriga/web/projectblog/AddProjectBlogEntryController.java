@@ -184,6 +184,7 @@ public class AddProjectBlogEntryController {
      *            logged in user.
      * @param project
      *            project instance obtained using @InjectProject annotation
+     *        
      * @return Returns a JSON string as a response entity based on the network
      *         selected from the UI.
      * @throws QuadrigaStorageException

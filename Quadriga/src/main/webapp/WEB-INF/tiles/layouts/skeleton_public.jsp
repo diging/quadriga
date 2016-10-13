@@ -57,7 +57,7 @@
 <script type="text/javascript">
     window.jQuery
             || document
-                    .write('_$tag_______________________________________________$tag_____')
+                    .write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
 </script>
 </head>
 

@@ -119,8 +119,6 @@
     type="text/javascript"></script>
 <script type="text/javascript">
     function loadNetwork(selectedNW) {
-        var projid = $('#projectId').val();
-        var projName = $('#projectName').val();
         var nwid = selectedNW.getAttribute('value');
         $.ajax({
             type : "GET",
@@ -129,7 +127,7 @@
             },
             contentType : "application/json",
             datatype : 'text',
-            url : "${pageContext.servletContext.contextPath}/sites/" + '${project.unixName}'
+            url : "${pageContext.servletContext.contextPath}/sites/" +'${project.unixName}'
                     + "/visualizenetwork/" + nwid,
             timeout : 100000,
             success : function(data) {
@@ -148,7 +146,7 @@
     function loadErrorMessage() {
         $('#networkBox')
                 .append(
-                        "<p>There was an error while loading this network. Please contact an administrator</p>");
+                        "<p>There was an error while loading this network. Please contact an administrator.</p>");
     }
 
     function visualizeNetwork(jsonString) {
