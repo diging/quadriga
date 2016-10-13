@@ -166,7 +166,7 @@
             </div>
         </div>
     </div>
-    <div id="c">
+    <div id="copyrightwrap">
         <div class="container">
             <div class="col-md-6" style="text-align: left;">
             <c:set var="PR" value="${pullrequest}" />
