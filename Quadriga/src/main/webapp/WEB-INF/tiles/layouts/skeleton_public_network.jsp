@@ -29,6 +29,10 @@
 <link
 	href="${pageContext.servletContext.contextPath}/resources/public/css/navbar.css"
 	rel="stylesheet">
+	
+<link
+    href="${pageContext.servletContext.contextPath}/resources/public/css/footer.css"
+    rel="stylesheet" type="text/css">
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -43,7 +47,7 @@ list-style-type: none;}
 
 <body>
 	<tiles:importAttribute name="currentPage" scope="request" />
-	<div class="container">
+	<div class="container" style="min-height:90vh">
 
 		<!-- Static navbar -->
 		<nav class="navbar navbar-default navbar-colored">
@@ -98,7 +102,30 @@ list-style-type: none;}
 					<!-- /Recent Posts -->
 					<!-- /Sidebar -->
 			</div>
-			</div>	
+	</div>	
+			
+	<div class="container">
+        
+		<div class="footer">
+			<div class="container-fluid">
+            	
+				<div class="footer-col-lg-4 " align="left">
+					<c:set var="PR" value="${pullrequest}" />
+						Version: ${buildNumber}
+						<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if>
+				</div>
+                
+				<div class="footer-col-lg-4 " align="center">
+					<a class="href-brand" href="${pageContext.servletContext.contextPath}/">
+					<i class="fa fa-home" aria-hidden="true"></i></a>
+				</div>
+                
+				<div class="footer-col-lg-4 " align="right">
+					<a class="href-brand" href="${pageContext.servletContext.contextPath}/sites/" style="color: white">Public Sites</a>
+				</div>
+                
+			</div>
+		</div>
 
 	</div>
 
