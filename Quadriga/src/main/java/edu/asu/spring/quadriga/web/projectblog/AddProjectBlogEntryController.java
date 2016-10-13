@@ -195,7 +195,7 @@ public class AddProjectBlogEntryController {
     @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "text/plain")
     public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, Principal principal,
-            @CheckAccess @InjectProject IProject project, @RequestParam("projectId") String projectId) {
+            @CheckAccess @InjectProject IProject project) {
         ITransformedNetwork transformedNetwork = null;
         try {
             transformedNetwork = transformationManager.getTransformedNetwork(networkId);
