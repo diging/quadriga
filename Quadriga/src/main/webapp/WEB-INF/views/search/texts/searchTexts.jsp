@@ -38,7 +38,8 @@
 									<div
 										style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
 										id="ajax-loader" class="search-loader"></div>
-									<a href="" class="btn btn-info" role="button">Submit</a>
+									<button type="button" class="btn btn-submit"
+										onclick="loadResults()">Submit</button>
 								</div>
 							</div>
 						</div>
@@ -179,6 +180,15 @@ function addSearchBox(){
 }
 </script>
 	<script>
+function loadResults(){
+	var conceptid1 = $("#concept1").val();
+	var conceptid2 = $("#concept2").val();
+	var networkURL = '${pageContext.servletContext.contextPath}/search/texts?'
+	var url = networkURL + "conceptid1=" + conceptid1 + "&conceptid2=" + conceptid2;
+	window.location.href = url;
+}
+</script>
+	<script>
 var container = document.getElementById('networkBox');
 var cy = cytoscape({
     container: container, // container to render in
@@ -223,11 +233,14 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 	<script>
 //# sourceURL=loader.js
     $('.list-group').on("click",".list-group-item",function(){
-        	
+        var title = $(this).find('.search-name strong').text();
+        var pos  = $(this).find('.search-pos').text();
         	if(myId === "search-term"){
+        	    $('#search-term').val(title + ' - ' + pos);
         		$('#concept1').val($(this).attr('data-value'));
         	}
         	else if(myId === "search-term2"){
+        	    $('#search-term2').val(title + ' - ' + pos);
         		$('#concept2').val($(this).attr('data-value'));
         	}
         	
@@ -236,7 +249,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 		});
     function clickedevent(selected) {
         // ajax loader
-         var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId=';
+        var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId=';
         var $searchInput = $("#"+selected.id);
         var $resWrapper = $('#search-results-wrapper');
         var $items = $('#search-results-items');
@@ -300,7 +313,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
         };
         var reqFail = function(err) {
             // triggered even when abort is called
-            console.log(err);
+            //console.log(err);
         };
         var reqAlways = function(obj) {
             // this triggered always
@@ -385,8 +398,6 @@ $(document)
                                         'show.bs.modal',
                                         function(event) {
                                             var link = $(event.relatedTarget);
-											console.log(link);
-											console.log("link clicked");
                                             var txtid = link.data('txtid');
                                             var txtname = link.data('txtname');
                                             var title = link.data('txttitle');

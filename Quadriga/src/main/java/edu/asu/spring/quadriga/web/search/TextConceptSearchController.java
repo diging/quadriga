@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
+import edu.asu.spring.quadriga.rest.open.SearchConceptController;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
@@ -52,12 +55,16 @@ public class TextConceptSearchController {
 
     @Autowired
     private IJsonCreator jsonCreator;
-
+    private static final Logger logger = LoggerFactory.getLogger(TextConceptSearchController.class);
     @RequestMapping(value = "search/texts")
-    public String search(@RequestParam(value = "conceptId", defaultValue = "") String conceptId,
-            @RequestParam(value = "conceptId2", defaultValue = "") String conceptId2, Model model) throws Exception {
+    public String search(@RequestParam(value = "conceptid1", defaultValue = "") String conceptId,
+            @RequestParam(value = "conceptid2", defaultValue = "") String conceptId2, Model model) throws Exception {
 
         ArrayList<String> concepts = new ArrayList<>();
+        
+       
+        logger.info(conceptId);
+        logger.info(conceptId2);
         concepts.add(conceptId);
         concepts.add(conceptId2);
         Set<String> references = new HashSet<String>();
