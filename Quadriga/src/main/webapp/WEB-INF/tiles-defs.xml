@@ -809,6 +809,10 @@
 	<definition name="auth/transformation/failureTransformation" extends="base.definition.nonav">
         <put-attribute name="content" value="/WEB-INF/views/transformation/failureTransformation.jsp" />
     </definition>
+    
+    <definition name="auth/transformation/emptyTransformation" extends="base.definition.nonav">
+        <put-attribute name="content" value="/WEB-INF/views/transformation/emptyTransformation.jsp" />
+    </definition>
 
 	<!-- editing -->
 	<definition name="base.definition.editing" extends="base.definition.nonav">

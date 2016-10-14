@@ -96,6 +96,7 @@ public class MatchGraphs {
 
                 // Path of the transformation file that will be retrieved from db using DTO which is uploaded in quad-138
                 String orgFilePath = m.getPatternFilePath();
+                orgFilePath = m.getTransformationFilePath();
                 mapper.createGraph(orgFilePath);
 
                 eventMapper.buildGraphs(allEvents);

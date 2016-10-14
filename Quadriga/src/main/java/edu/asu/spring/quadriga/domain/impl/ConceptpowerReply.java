@@ -56,7 +56,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "conceptEntry"
+    "conceptEntry", "alternativeIds"
 })
 @XmlRootElement(name = "conceptpowerReply")
 public class ConceptpowerReply {
@@ -97,6 +97,36 @@ public class ConceptpowerReply {
         this.conceptEntry = entries;
     }
 
+    @XmlElement(required = true, namespace="http://www.digitalhps.org/")
+    protected List<ConceptpowerReply.AlternativeIds> alternativeIds;
+    
+    public List<ConceptpowerReply.AlternativeIds> getAlternativeIds() {
+        if (alternativeIds == null) {
+            alternativeIds = new ArrayList<ConceptpowerReply.AlternativeIds>();
+        }
+        return this.alternativeIds;
+    }
+
+    public void setAlternativeIds(List<ConceptpowerReply.AlternativeIds> alternativeIds) {
+        this.alternativeIds = alternativeIds;
+    }
+    
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class AlternativeIds {
+        
+        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
+        protected ArrayList<String> id;
+
+        public ArrayList<String> getId() {
+            return id;
+        }
+
+        public void setId(ArrayList<String> id) {
+            this.id = id;
+        }
+        
+    }
 
     /**
      * <p>Java class for anonymous complex type.
