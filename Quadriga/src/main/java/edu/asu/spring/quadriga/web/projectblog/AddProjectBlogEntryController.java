@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
+import edu.asu.spring.quadriga.aspects.annotations.CheckAccessById;
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
@@ -190,13 +191,12 @@ public class AddProjectBlogEntryController {
      * @throws QuadrigaStorageException
      * @throws JAXBException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 4, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
-    @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "text/plain")
     public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, Principal principal,
-            @CheckAccess @InjectProject IProject project, @RequestParam("projectId") String projectId) {
+            @CheckAccess @InjectProject IProject project,@CheckAccessById @RequestParam("projectId") String projectId) {
         ITransformedNetwork transformedNetwork = null;
         try {
             transformedNetwork = transformationManager.getTransformedNetwork(networkId);
