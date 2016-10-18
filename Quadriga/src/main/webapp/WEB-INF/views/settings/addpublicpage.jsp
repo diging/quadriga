@@ -4,6 +4,11 @@
 <!-- Content -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+
 <script>
 //@ sourceURL=filename.js
 	 
@@ -71,10 +76,15 @@
 		data["publicpageid"] = publicpageid;
 		data["linkTo"] = linkTo;
 		data["linkText"] = linkText;
+		var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 		$
 				.ajax({
 					type : "POST",
 					url : "${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess",
+					beforeSend: function(xhr) {
+		                xhr.setRequestHeader(header, token);
+		            },
 					data : {
 						data : JSON.stringify(data)
 					},

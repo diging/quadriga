@@ -2,6 +2,9 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script>
 
@@ -26,10 +29,15 @@
 							Submit : function() {
 								$(this).dialog("close");
 								//$("#deletewsform")[0].submit();
+								var token = $("meta[name='_csrf']").attr("content");
+        						var header = $("meta[name='_csrf_header']").attr("content");
 								$
 										.ajax({
 											url : "${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/saveabout",
 											type : "POST",
+											beforeSend: function(xhr) {
+								                xhr.setRequestHeader(header, token);
+								            },
 											data : "selected="
 													+ $('#hidden').val(),
 											success : function() {

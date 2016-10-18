@@ -13,6 +13,11 @@
 <link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css"
 	rel="stylesheet" />
+	
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
 <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>

@@ -13,13 +13,17 @@
 <link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/css/d3.css"
 	rel="stylesheet" />
+	
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/d3/common_functions.js"></script>
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/d3networkvisualize.js"></script>
 <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
 
-</head>
 <script type="text/javascript">
 function changeLayout(json,networkid,path,type)
 {
@@ -49,10 +53,15 @@ $("input[type=button]").button().click(function(event) {
         var objecttype = "node";
         var dId = $('#nodeid').val();
         var dName = $("#nodename").val();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
         $.ajax({
             url : $('#annot_form').attr("action"),
             type : "POST",
             data :"nodename="+dName+"&nodeid="+dId+"&annotText="+annottext+"&objecttype="+objecttype,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
             success : function() {
             	$('#annotationModal').modal('hide');
                 displayAllAnnotationsNew(${networkid}, '${pageContext.servletContext.contextPath}');
@@ -73,10 +82,15 @@ $("input[type=button]").button().click(function(event) {
         }
         var dId = $('#nodeidRel').val();
         var dName = $("#nodenameRel").val();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
         $.ajax({
             url : $('#annot_form').attr("action"),
             type : "POST",
             data :"objecttype="+objecttype+"&nodename="+dName+"&nodeid="+dId+"&annotText="+annottext,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
             success : function() {
             	$('#annotationModalPredicate').modal('hide');
             	displayAllAnnotationsNew(${networkid}, '${pageContext.servletContext.contextPath}');

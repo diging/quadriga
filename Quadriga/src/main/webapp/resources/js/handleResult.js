@@ -15,6 +15,8 @@ function performAction(obj, id, contextPath) {
     data['resolvedHandlePattern'] = $('#resolvedHandlePattern').val();
     data['handleExample'] = $('#handleExample').val();
     data['resolvedHandleExample'] = $('#resolvedHandleExample').val();
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
     
     $
     .ajax({
@@ -23,7 +25,8 @@ function performAction(obj, id, contextPath) {
         data : {
             data : JSON.stringify(data)
         },
-        beforeSend : function() {
+        beforeSend : function(xhr) {
+        	xhr.setRequestHeader(header, token);
             $('#' + id).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
         },
         success : function(data, status) {
