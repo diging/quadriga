@@ -97,6 +97,7 @@
 						<div class="form-group">
 							<a class="btn btn-info btn-sm" href="register">Sign up</a>
 						</div>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 				</sec:authorize>
 			</div>
@@ -112,8 +113,13 @@
 							property="principal.username" /></span>!
 				</div>
 				<div class="col-md-2">
-					<a class="pull-right" href="<c:url value='/logout' />"><i
-						class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+				<form action="<c:url value='/logout' />" method='POST' class="pull-right">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<div>
+						<button type="submit" class="btn btn-link" style="color:#800000"><i
+					class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+					</div>
+				</form>
 				</div>
 			</div>
 			<hr>

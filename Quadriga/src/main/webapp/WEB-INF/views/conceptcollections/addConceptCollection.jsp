@@ -33,6 +33,7 @@
 
 
 <form:form method="POST" action="addCollectionsForm">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<h2>Add concept collection</h2>
 
 	<div class="back-nav">

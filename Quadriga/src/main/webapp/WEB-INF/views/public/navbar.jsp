@@ -24,8 +24,15 @@
 	   <div class="navbar-two-rows"><i class="fa fa-user"></i>
 	       <sec:authentication property="principal.username" />
 	   </div>
-	   <div class="navbar-two-rows"><i class="fa fa-sign-out"></i>
-	       <a href="<c:url value="/logout" />"class="navbar-two-rows">
-            Logout </a></div>
+	   <div class="navbar-two-rows">
+	   <form action="<c:url value='/logout' />" method='POST'
+			class="pull-right">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			<div>
+				<button type="submit" class="btn btn-link" style="color:#800000"><i
+			class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+			</div>
+		</form>
+		</div>
 </sec:authorize>
 

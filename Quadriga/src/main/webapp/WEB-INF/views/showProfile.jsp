@@ -82,7 +82,7 @@ $(function(){
 <input type="button" value="Select All" name="selectAll"> <input type="button" value="Deselect All" name="deselectAll">
 <form:form method="POST" modelAttribute="SearchResultBackBeanForm" 
 action="${pageContext.servletContext.contextPath}/auth/profile/delete">
-
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
  	<table class="display dataTable" cellpadding="0" cellspacing="0" border="0" style="width:100%">
 			<thead>
 				<tr>
@@ -122,7 +122,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/delete">
 <input type="button" value="Select All" name="selectAll"> <input type="button" value="Deselect All" name="deselectAll">
 <form:form method="POST" modelAttribute="SearchResultBackBeanForm" 
 action="${pageContext.servletContext.contextPath}/auth/profile/delete">
-
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <%-- <c:if test="${not empty resultLists}"> --%>
  	<table class="display dataTable" cellpadding="0" cellspacing="0" border="0" style="width:100%">
 			<thead>

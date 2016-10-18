@@ -42,6 +42,7 @@ $(function() {
 <article class="is-page-content">
 	<form:form modelAttribute="workspaceform" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/deactivateworkspace" id="deactivatewsform">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<c:choose>
 			<c:when test="${success == '0'}">
 					<c:if test="${not empty workspaceform.workspaceList}">

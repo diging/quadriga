@@ -32,6 +32,7 @@
 <form:form commandName="collaboratorform" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/updatecollaborators"
 	id="updateprojcollabform">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<c:if test="${not empty collaboratorform.collaborators}">
 
 		<p>Select permissions for collaborators and click "Update".</p>

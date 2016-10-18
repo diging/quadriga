@@ -54,6 +54,7 @@
 
 <form name='searchItem' method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/dictionaries/dictionary/wordSearch/${dictionaryid}">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<div class="input-group">
 		<span class="input-group-addon" id="basic-addon1">Search term:</span>
 		<input type="text" class="form-control" name="itemName" id="itemname"
@@ -85,6 +86,7 @@
 		<p>Select the words you want to add and click "Select & Save".</p>
 
 		<form method="POST">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<p>
 				<input type="hidden" name="pos" value="${pos}" /> <input
 					type="hidden" name="word" value="${word}" /> <input type="submit"

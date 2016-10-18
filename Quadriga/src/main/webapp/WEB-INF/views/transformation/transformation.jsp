@@ -106,7 +106,7 @@
 <form
     action="${pageContext.servletContext.contextPath}/auth/transformation/start"
     method="POST" id="form1">
-
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <div>
         <header>
             <h2>

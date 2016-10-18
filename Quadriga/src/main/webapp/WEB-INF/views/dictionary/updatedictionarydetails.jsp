@@ -14,6 +14,7 @@
 
 <form:form commandName="dictionary" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionaryid}">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<h2>Update Dictionary</h2>
 	<div class="back-nav">
 		<hr>
