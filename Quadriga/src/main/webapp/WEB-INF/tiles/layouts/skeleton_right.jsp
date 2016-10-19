@@ -13,8 +13,8 @@
     <meta name="description" content="Quadriga">
     
     <meta name="_csrf" content="${_csrf.token}"/>
-	<!-- default header name is X-CSRF-TOKEN -->
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
     
     <!-- Bootstrap core CSS -->
     <link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/bootstrap.css" rel="stylesheet">

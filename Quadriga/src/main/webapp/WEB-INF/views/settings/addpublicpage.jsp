@@ -77,14 +77,14 @@
 		data["linkTo"] = linkTo;
 		data["linkText"] = linkText;
 		var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 		$
 				.ajax({
 					type : "POST",
 					url : "${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess",
 					beforeSend: function(xhr) {
-		                xhr.setRequestHeader(header, token);
-		            },
+						xhr.setRequestHeader(header, token);
+					},
 					data : {
 						data : JSON.stringify(data)
 					},

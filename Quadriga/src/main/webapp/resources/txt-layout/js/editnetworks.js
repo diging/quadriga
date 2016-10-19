@@ -30,7 +30,7 @@ var Log = {
 function init(json, networkId, path) {
 	
 	var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
     
 	console.log("init");
 	pathName = path;
@@ -353,8 +353,8 @@ function init(json, networkId, path) {
 										url : $('#annot_form').attr("action"),
 										type : "POST",
 										beforeSend: function(xhr) {
-							                xhr.setRequestHeader(header, token);
-							            },
+											xhr.setRequestHeader(header, token);
+										},
 										data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
 										success : function() {
 											alert("done");
@@ -421,8 +421,8 @@ function init(json, networkId, path) {
 										url : $('#annot_form').attr("action"),
 										type : "POST",
 										beforeSend: function(xhr) {
-							                xhr.setRequestHeader(header, token);
-							            },
+											xhr.setRequestHeader(header, token);
+										},
 										data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
 										success : function() {
 											alert("done");

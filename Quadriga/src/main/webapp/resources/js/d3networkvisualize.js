@@ -10,7 +10,7 @@
 function d3init(graph, networkId, path, type) {
 	
 	var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
     
 	if (graph == null) {
 		alert("no network");
@@ -506,8 +506,8 @@ function d3init(graph, networkId, path, type) {
 						type : "POST",
 						data : input,
 						beforeSend: function(xhr) {
-			                xhr.setRequestHeader(header, token);
-			            },
+							xhr.setRequestHeader(header, token);
+						},
 						contentType : 'application/json; charset=utf-8',
 						success : function() {
 							$('#' + popupId + '').dialog('close');

@@ -27,7 +27,7 @@ function performAction(obj, id, contextPath) {
         },
         beforeSend : function(xhr) {
         	xhr.setRequestHeader(header, token);
-            $('#' + id).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+        	$('#' + id).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
         },
         success : function(data, status) {
             handleResult(data, id);

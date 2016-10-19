@@ -83,7 +83,7 @@
 								Submit : function() {
 									$(this).dialog("close");
 									var token = $("meta[name='_csrf']").attr("content");
-								    var header = $("meta[name='_csrf_header']").attr("content");
+									var header = $("meta[name='_csrf_header']").attr("content");
 									//$("#deletewsform")[0].submit();
 									$
 											.ajax({
@@ -92,8 +92,8 @@
 														+ "/adddictionaries",
 												type : "POST",
 												beforeSend: function(xhr) {
-									                xhr.setRequestHeader(header, token);
-									            },
+													xhr.setRequestHeader(header, token);
+												},
 												data : "selected="
 														+ $('#hidden').val(),
 												success : function() {
@@ -132,8 +132,8 @@
 							buttons : {
 								Submit : function() {
 									$(this).dialog("close");
-									 var token = $("meta[name='_csrf']").attr("content");
-								     var header = $("meta[name='_csrf_header']").attr("content");
+									var token = $("meta[name='_csrf']").attr("content");
+									var header = $("meta[name='_csrf_header']").attr("content");
 									//$("#deletewsform")[0].submit();
 									$
 											.ajax({
@@ -142,8 +142,8 @@
 														+ "/adddictionaries",
 												type : "POST",
 												beforeSend: function(xhr) {
-									                xhr.setRequestHeader(header, token);
-									            },
+													xhr.setRequestHeader(header, token);
+												},
 												data : "selected="
 														+ $('#hidden').val(),
 												success : function() {
