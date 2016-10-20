@@ -55,6 +55,10 @@ public class AuthorizationManager implements IAuthorizationManager
 	@Qualifier("networkAuthorization")
 	private IAuthorization networkAuthorization;
 	
+	@Autowired
+    @Qualifier("objectAuthorization")
+    private ObjectAuthorization objectAuthorization;
+	
 	private HashMap<CheckedElementType,IAuthorization> accessManager;
 	
 	/**
@@ -74,6 +78,7 @@ public class AuthorizationManager implements IAuthorizationManager
 		accessManager.put(CheckedElementType.CONCEPTCOLLECTION_REST, conceptCollectionRestAuthorization);
 		accessManager.put(CheckedElementType.DICTIONARY, dictionaryAuthorization);
 		accessManager.put(CheckedElementType.NETWORK,networkAuthorization);
+		//accessManager.put(CheckedElementType.OBJECT,objectAuthorization);
 		
 	}
 	

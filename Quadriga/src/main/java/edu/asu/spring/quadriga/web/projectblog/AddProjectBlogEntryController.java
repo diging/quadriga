@@ -191,18 +191,18 @@ public class AddProjectBlogEntryController {
      * @throws QuadrigaStorageException
      * @throws JAXBException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 4, userRole = {
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "text/plain")
     public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, Principal principal,
-            @CheckAccess @InjectProject IProject project,@CheckAccessById @RequestParam("projectId") String projectId) {
+            @CheckAccess @InjectProject IProject project, @RequestParam("projectId") String projectId) {
         ITransformedNetwork transformedNetwork = null;
         try {
             transformedNetwork = transformationManager.getTransformedNetwork(networkId);
         } catch (QuadrigaStorageException qse) {
 
-            logger.error("Error:" + qse);
+            logger.error("Error while retrieving networks for display:" + qse);
             return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         String json = null;

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
+import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -24,8 +25,8 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  * @author Kiran kumar
  *
  */
-@Service("projectAuthorization")
-public class ProjectAuthorization implements IAuthorization {
+@Service("objectAuthorization")
+public class ObjectAuthorization {
     @Autowired
     private IRetrieveProjectManager projectManager;
 
@@ -50,8 +51,7 @@ public class ProjectAuthorization implements IAuthorization {
      *             QuadrigaStorageException, QuadrigaAccessException
      * @return : hasAccess - true no Access - false
      */
-    @Override
-    public boolean chkAuthorization(String userName, String projectId, String[] userRoles)
+    public boolean chkAuthorization(String userName, Object projectObject, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
         boolean haveAccess;
         String projectOwner;
@@ -62,7 +62,8 @@ public class ProjectAuthorization implements IAuthorization {
         haveAccess = false;
 
         // fetch the details of the project
-        IProject project = projectManager.getProjectDetails(projectId);
+        IProject projectObj = (Project)projectObject;
+        IProject project = projectManager.getProjectDetails(projectObj.getProjectId());
 
         projectOwner = project.getOwner().getUserName();
         if (userName.equals(projectOwner)) {
@@ -114,7 +115,6 @@ public class ProjectAuthorization implements IAuthorization {
      *             QuadrigaStorageException, QuadrigaAccessException
      * @return : hasAccess - true no Access - false
      */
-    @Override
     public boolean chkAuthorization(String userName, List<String> projectIds, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
         boolean haveAccess;
@@ -141,7 +141,7 @@ public class ProjectAuthorization implements IAuthorization {
      *             QuadrigaStorageException, QuadrigaAccessException
      * @return : hasAccess - true no Access - false
      */
-    @Override
+
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
         boolean haveAccess;
