@@ -46,6 +46,10 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
+ *         &lt;element name="alternativeIds" maxOccurs="unbounded">
+ *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;/element>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -96,10 +100,19 @@ public class ConceptpowerReply {
     public void setConceptEntry(List<ConceptpowerReply.ConceptEntry> entries) {
         this.conceptEntry = entries;
     }
-
+    
     @XmlElement(required = true, namespace="http://www.digitalhps.org/")
     protected List<ConceptpowerReply.AlternativeIds> alternativeIds;
     
+    /**
+     * Gets the value of the alternativeIds property.
+     * 
+     * <p>
+     * This accessor method returns alternate ids of concept,
+     * provided in conceptEntry object
+     * 
+     * 
+     */
     public List<ConceptpowerReply.AlternativeIds> getAlternativeIds() {
         if (alternativeIds == null) {
             alternativeIds = new ArrayList<ConceptpowerReply.AlternativeIds>();
@@ -109,23 +122,6 @@ public class ConceptpowerReply {
 
     public void setAlternativeIds(List<ConceptpowerReply.AlternativeIds> alternativeIds) {
         this.alternativeIds = alternativeIds;
-    }
-    
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "")
-    public static class AlternativeIds {
-        
-        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
-        protected ArrayList<String> id;
-
-        public ArrayList<String> getId() {
-            return id;
-        }
-
-        public void setId(ArrayList<String> id) {
-            this.id = id;
-        }
-        
     }
 
     /**
@@ -348,6 +344,31 @@ public class ConceptpowerReply {
             this.type.setType(type);
         }
 
+    }
+    
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "")
+    public static class AlternativeIds {
+        
+        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
+        protected ArrayList<String> id;
+
+        /**
+         * Gets the arrayList of the id property.
+         *     
+         */
+        public ArrayList<String> getId() {
+            return id;
+        }
+
+        /**
+         * Sets the arrayList of the id property.
+         *     
+         */
+        public void setId(ArrayList<String> id) {
+            this.id = id;
+        }
+        
     }
 
 }

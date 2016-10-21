@@ -17,6 +17,7 @@ public class Node {
 	private String id;
 	private String eventId;
 	private List<Term> terms;
+	private List<String> alternativeIds;
 	
 		
 	public String getConcept() {
@@ -56,6 +57,12 @@ public class Node {
 	public void setEventId(String eventId) {
 		this.eventId = eventId;
 	}
+    public List<String> getAlternativeIds() {
+        return alternativeIds;
+    }
+    public void setAlternativeIds(List<String> alternativeIds) {
+        this.alternativeIds = alternativeIds;
+    }
 	
 	
 }

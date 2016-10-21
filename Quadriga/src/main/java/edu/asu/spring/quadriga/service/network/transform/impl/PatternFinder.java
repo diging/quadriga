@@ -78,8 +78,21 @@ public class PatternFinder {
 					return true;
 				}
 				if (graph.getConcept()!=null && pattern.getConcept() != null) {
-					if (!graph.getConcept().equals(pattern.getConcept()))
-						return false;
+					boolean isFound = false;
+					if (!graph.getConcept().equals(pattern.getConcept())) {
+					    // check for alternate ids
+					    if(graph.getAlternativeIds() != null) {
+					        for(String alternateId : graph.getAlternativeIds()) {
+					            if(alternateId.equals(pattern.getConcept())) {
+					                isFound = true;
+					                break;
+					            }
+					        }
+					    }
+					    if(!isFound) {
+					        return false;
+					    }
+					}
 					graph.setId(pattern.getId());
 					return true;
 				}

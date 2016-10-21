@@ -62,6 +62,7 @@ public class EventGraphMapper {
 				Node node = new Node();
 				node.setId(event.getId() + "");
 				node.setEventId(node.getId());
+				List<String> alternativeIds = new ArrayList<String>();
 				
 				TermType term = ((AppellationEventType) event).getTermType();
 				if (term != null) {
@@ -80,6 +81,12 @@ public class EventGraphMapper {
 						if (reply.getConceptEntry().size() > 0) {
     						node.setType(reply.getConceptEntry().get(0).getTypeUri());
 						}
+						if(reply.getAlternativeIds().size() > 0) {
+						    alternativeIds = reply.getAlternativeIds().get(0).getId();
+						    if(alternativeIds.size() > 0) {
+						        node.setAlternativeIds(alternativeIds);
+						    }
+						}
 					}
 				}
 				nodeMap.put(node.getId(), node);
@@ -90,6 +97,7 @@ public class EventGraphMapper {
 					Node node = new Node();
 					node.setId(((RelationEventType)event).getRelation().getId() + "" + ((RelationEventType)event).getRelation().getPredicateType().getAppellationEvent().getId() + "");
 					node.setEventId(node.getId());
+					List<String> alternativeIds = new ArrayList<String>();
 					
 					TermType term = ((RelationEventType) event).getRelation().getPredicateType().getAppellationEvent().getTermType();
 					if (term != null) {
@@ -107,6 +115,12 @@ public class EventGraphMapper {
 							ConceptpowerReply reply = conceptpower.getById(interpretation);
                             if (reply.getConceptEntry().size() > 0) {
                                 node.setType(reply.getConceptEntry().get(0).getTypeUri());
+                            }
+                            if(reply.getAlternativeIds().size() > 0) {
+                                alternativeIds = reply.getAlternativeIds().get(0).getId();
+                                if(alternativeIds.size() > 0) {
+                                    node.setAlternativeIds(alternativeIds);
+                                }
                             }
 						}
 					}
@@ -291,6 +305,10 @@ public class EventGraphMapper {
 			((Relation) copiedNode).setPredicate(copyGraph(predicate));
 			((Relation) copiedNode).setObject(copyGraph(object));
 		}
+		else {
+		    copiedNode.setAlternativeIds(start.getAlternativeIds());
+		}
+		
 		return copiedNode;
 	}
 }
