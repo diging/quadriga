@@ -132,6 +132,7 @@ $("input[type=button]").button().click(function(event) {
 				<form id='annot_form'
 					action="${pageContext.servletContext.contextPath}/auth/editing/saveAnnotation/${networkId}"
              method='POST'>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<textarea name='annotText' class='form-control' cols='15' rows='5'></textarea>
 					<input type='hidden' name='nodeid' id='nodeid' value="" /> <input
 						type='hidden' name='nodename' id='nodename' value="" />
@@ -163,6 +164,7 @@ $("input[type=button]").button().click(function(event) {
                 <form id='annot_form_rel'
                     action="${pageContext.servletContext.contextPath}/auth/editing/saveAnnotation/${networkId}"
              method='POST'>
+             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     What do you want to annotate?
 				    <div class="btn-group" data-toggle="buttons">
 					  <label class="btn btn-default btn-sm active">

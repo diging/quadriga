@@ -433,7 +433,9 @@ cursor: pointer;
 </div>
 <!-- /.modal -->
 
-<form style="display: hidden" action="" method="POST" id="hiddenform"></form>
+<form style="display: hidden" action="" method="POST" id="hiddenform">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 
 <script>
     $(document).ready(function() {

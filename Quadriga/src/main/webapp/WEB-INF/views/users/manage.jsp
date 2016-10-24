@@ -35,7 +35,7 @@
 					<form:form commandName="approveAccount" method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/users/access/handleRequest">
 						<form:input type="hidden" path="username" value="${userreq.userName}" />
-
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div>
 							<label class="radio-inline"><form:radiobutton
 									path="action" value="approve" /> Approve</label> <br> <span

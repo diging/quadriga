@@ -237,6 +237,7 @@
 				<c:when test="${not empty dictionaryItemList}">
 
 					<form method="POST">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <c:if test="${hasWrite}">
 						<a class="btn btn-primary btn-sm"
 							href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}"><i

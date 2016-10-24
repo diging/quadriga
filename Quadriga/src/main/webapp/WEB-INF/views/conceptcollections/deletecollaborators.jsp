@@ -43,6 +43,7 @@ $(function() {
 <article class="is-page-content">
 <form:form method="POST" commandName="collaboratorForm" 
 action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deleteCollaborator">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<c:choose>
 			<c:when test="${success == '0'}">
 					<c:if test="${not empty collaboratorForm.collaborators}">

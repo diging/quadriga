@@ -50,6 +50,7 @@ div.rolesError {
 </script>
 <form:form method="POST" name="myForm" commandName="ccCollaborator"
 	action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<h2>Add Collaborators to Concept Collection: ${collectionname}</h2>
 
 	<div class="back-nav">

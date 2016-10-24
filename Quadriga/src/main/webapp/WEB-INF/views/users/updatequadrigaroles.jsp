@@ -23,6 +23,7 @@
 <form:form commandName="userrolesform" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/users/updateroles"
 	id="updatequadrigarolesform">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<c:choose>
 		<c:when test="${success == '0'}">
 			<c:if test="${not empty userrolesform.users}">

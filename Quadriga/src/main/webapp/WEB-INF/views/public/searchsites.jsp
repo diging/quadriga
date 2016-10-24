@@ -20,6 +20,7 @@
 <form name='searchsites' id="sites1"
 	action="${pageContext.servletContext.contextPath}/sites/searchTerm"
 	method='POST'>
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<table width="100%">
 		<tr>
 			<td style="width: 85%"><input type="text" class="form-control"

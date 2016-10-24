@@ -56,11 +56,12 @@
 <form method="post"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/saveabout"
 	modelAttribute="AboutTextBackingBean">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 	<textarea path="title" name="title" id="title" 
 		style="width: 100%; font-weight: bold; font-size: 24px; vertical-align: middle; align: center; text-align: center"> ${aboutText.title}</textarea>
-	<div style="" path="description" name="description" id="description" class="editable"
-		 value=${aboutText.description} </textarea>
+	<textarea style="" path="description" name="description" id="description" class="editable"
+		 value=${aboutText.description}> </textarea>
 
 </form>
 

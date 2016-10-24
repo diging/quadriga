@@ -202,6 +202,7 @@
 	<c:choose>
 		<c:when test="${not empty dictionaryItemList}">
 			<form method="POST">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<c:choose>
 					<c:when test="${roleAccess=='1'}">
 

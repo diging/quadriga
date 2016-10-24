@@ -25,7 +25,6 @@
 	  });
   });
 </script>
-<!--  Issue fixed by QUAD-55 Bharat Srikantan and Ajay Modi -->
 <div style="margin-bottom: 20px;">
     <a href="${pageContext.servletContext.contextPath}/auth/workbench"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> All Projects </a>
 </div>
@@ -36,7 +35,7 @@
   </div>
   <div class="panel-body">
 	  <div id="projectDictionaries" style="margin-bottom: 10px;"></div>
-	  <c:if test="${owner=='1' || isProjectAdmin==true}">	  
+	  <c:if test="${owner==true || isProjectAdmin==true}">	  
 	  <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
 	  <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary"><i class="fa fa-times-circle"></i> Delete</a>
 	  </c:if>
@@ -49,7 +48,7 @@
   </div>
   <div class="panel-body">
     <div id="projectConceptCollections"></div>
-    <c:if test="${owner=='1' || isProjectAdmin==true}">    		
+    <c:if test="${owner==true || isProjectAdmin==true}">    		
     <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection"><i class="fa fa-plus-circle"></i> Add</a> &nbsp; &nbsp;
     <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections"><i class="fa fa-times-circle"></i> Delete</a>
     </c:if>
@@ -66,6 +65,6 @@ Project Resolver: ${project.resolver.projectName}
 </c:if>
 
 <hr>
-<c:if test="${owner=='1' || isProjectAdmin==true}">
+<c:if test="${owner==true || isProjectAdmin==true}">
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings"><i class="fa fa-cog"></i> Public Page Settings</a>
 </c:if>
