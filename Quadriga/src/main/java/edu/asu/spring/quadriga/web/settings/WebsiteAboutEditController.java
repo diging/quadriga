@@ -48,7 +48,7 @@ public class WebsiteAboutEditController {
     /**
      * Attach the custom validator to the Spring context
      */
-    @InitBinder("aboutTextBackingBean")
+    @InitBinder("boutTextBackingBean")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validator);
     }
@@ -63,9 +63,9 @@ public class WebsiteAboutEditController {
         IProject project = projectManager.getProjectDetails(projectId);
         model.addAttribute("project", project);
         if (aboutTextManager.getAboutTextByProjectId(projectId) == null) {
-            model.addAttribute("aboutTextBackingBean", new AboutTextBackingBean());
+            model.addAttribute("boutTextBackingBean", new AboutTextBackingBean());
         } else {
-            model.addAttribute("aboutTextBackingBean", aboutTextManager.getAboutTextByProjectId(projectId));
+            model.addAttribute("boutTextBackingBean", aboutTextManager.getAboutTextByProjectId(projectId));
         }
         return "auth/editabout";
     }
@@ -82,14 +82,15 @@ public class WebsiteAboutEditController {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/projects/{ProjectId}/settings/saveabout", method = RequestMethod.POST)
     public ModelAndView saveAbout(@PathVariable("ProjectId") String projectId,
-            @Validated @ModelAttribute("aboutTextBackingBean") AboutTextBackingBean formBean, ModelAndView model,
+            @Validated @ModelAttribute("boutTextBackingBean") AboutTextBackingBean formBean, ModelAndView model,
             BindingResult result, Principal principal) throws QuadrigaStorageException {
-        model = new ModelAndView("sites/auth/editabout");
+        model = new ModelAndView("auth/editabout");
         if (result.hasErrors()) {
             model.getModelMap().put("aboutTextBackingBean", formBean);
         } else {
             aboutTextManager.saveAbout(projectId, formBean.getTitle(), formBean.getDescription());
             IProject project = projectManager.getProjectDetails(projectId);
+            
             model.addObject("show_success_alert", true);
             model.addObject("success_alert_msg", "You successfully edited the about text");
             model.addObject("project", project);

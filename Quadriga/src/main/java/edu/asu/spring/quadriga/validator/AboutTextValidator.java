@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.web.settings.AboutTextBackingBean;
 @Service
 /**
  * This class acts as validator of form data coming from
- * <code>publicWebsiteEditAbout.jsp.jsp</code>
+ * <code>publicWebsiteEditAbout.jsp</code>
  * 
  * @author PawanMahalle
  *
@@ -19,7 +19,8 @@ public class AboutTextValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
-        return arg0.isAssignableFrom(AboutTextBackingBean.class);
+        System.out.println(arg0);
+        return AboutTextBackingBean.class.equals(arg0);
     }
 
     /**

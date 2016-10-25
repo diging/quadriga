@@ -73,7 +73,7 @@
 <span class="byline">Edit about text for ${project.unixName}</span>
 <form:form method="post"
     action="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/saveabout"
-    modelAttribute="aboutTextBackingBean">
+    modelAttribute="boutTextBackingBean">
     <input type="hidden" name="${_csrf.parameterName}"
         value="${_csrf.token}" />
 

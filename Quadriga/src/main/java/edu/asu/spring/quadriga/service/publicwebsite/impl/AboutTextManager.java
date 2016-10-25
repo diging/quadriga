@@ -43,5 +43,5 @@ public class AboutTextManager implements IAboutTextManager {
     public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException {
         return aboutTextDAO.getDTOByProjectId(projectId);
     }
-
+ 
 }
