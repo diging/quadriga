@@ -15,8 +15,8 @@ function performAction(obj, id, contextPath) {
     data['resolvedHandlePattern'] = $('#resolvedHandlePattern').val();
     data['handleExample'] = $('#handleExample').val();
     data['resolvedHandleExample'] = $('#resolvedHandleExample').val();
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+    var token = '${_csrf.token}';
+    var header = '${_csrf.headerName}';
     
     $
     .ajax({

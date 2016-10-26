@@ -11,8 +11,8 @@
 
 function d3init(graph, networkId, path,type) {
 	
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
+    var token = '${_csrf.token}';
+    var header = '${_csrf.headerName}';
 	
 	if(graph==null){
 		alert("no network");

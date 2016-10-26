@@ -13,10 +13,6 @@
 <link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/css/d3.css"
 	rel="stylesheet" />
-	
-<meta name="_csrf" content="${_csrf.token}"/>
-<!-- default header name is X-CSRF-TOKEN -->
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
 
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/d3/common_functions.js"></script>
@@ -53,8 +49,8 @@ $("input[type=button]").button().click(function(event) {
         var objecttype = "node";
         var dId = $('#nodeid').val();
         var dName = $("#nodename").val();
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
+        var token = '${_csrf.token}';
+        var header = '${_csrf.headerName}';
         $.ajax({
             url : $('#annot_form').attr("action"),
             type : "POST",
@@ -82,8 +78,8 @@ $("input[type=button]").button().click(function(event) {
         }
         var dId = $('#nodeidRel').val();
         var dName = $("#nodenameRel").val();
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
+        var token = '${_csrf.token}';
+        var header = '${_csrf.headerName}';
         $.ajax({
             url : $('#annot_form').attr("action"),
             type : "POST",

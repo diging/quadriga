@@ -2,9 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
-<meta name="_csrf" content="${_csrf.token}"/>
-<!-- default header name is X-CSRF-TOKEN -->
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.dataTable').dataTable({
@@ -69,8 +66,8 @@
 							buttons : {
 								Submit : function() {
 									$(this).dialog("close");
-									var token = $("meta[name='_csrf']").attr("content");
-									var header = $("meta[name='_csrf_header']").attr("content");
+									var token = '${_csrf.token}';
+									var header = '${_csrf.headerName}';
 									//$("#deletewsform")[0].submit();
 									$
 											.ajax({
@@ -119,8 +116,8 @@
 							buttons : {
 								Submit : function() {
 									$(this).dialog("close");
-									var token = $("meta[name='_csrf']").attr("content");
-									var header = $("meta[name='_csrf_header']").attr("content");
+									var token = '${_csrf.token}';
+									var header = '${_csrf.headerName}';
 									//$("#deletewsform")[0].submit();
 									$
 											.ajax({

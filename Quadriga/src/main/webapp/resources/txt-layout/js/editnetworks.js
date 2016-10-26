@@ -29,8 +29,8 @@ var Log = {
 
 function init(json, networkId, path) {
 	
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
+	var token = '${_csrf.token}';
+	var header = '${_csrf.headerName}';
     
 	console.log("init");
 	pathName = path;
