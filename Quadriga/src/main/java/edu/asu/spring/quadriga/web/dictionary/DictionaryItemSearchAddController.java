@@ -15,14 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.impl.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -70,8 +68,8 @@ public class DictionaryItemSearchAddController {
             RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN, RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE }) })
     @RequestMapping(value = "auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
     public String addDictionaryItem(HttpServletRequest req, @PathVariable("dictionaryid") String dictionaryId,
-            @ModelAttribute("SpringWeb") Item dictionaryItems, ModelMap model, Principal principal, Locale locale)
-                    throws QuadrigaStorageException, QuadrigaAccessException {
+            @ModelAttribute("SpringWeb") Item dictionaryItems, ModelMap model, Principal principal, Locale locale,
+            RedirectAttributes redirectAttrs) throws QuadrigaStorageException, QuadrigaAccessException {
 
         String[] values = req.getParameterValues("selected");
         String pos = req.getParameter("pos");
@@ -99,53 +97,11 @@ public class DictionaryItemSearchAddController {
         }
 
         dictionaryManager.addDictionaryItems(dictionaryItems, values, dictionaryId);
-        model.addAttribute("show_success_alert", true);
-        model.addAttribute("success_alert_msg",
+        redirectAttrs.addFlashAttribute("show_success_alert", true);
+        redirectAttrs.addFlashAttribute("success_alert_msg",
                 messageSource.getMessage("dictionary.items.add.success", new Object[] {}, locale));
 
-        List<IDictionaryItems> dictionaryItemList = dictionaryManager.getDictionaryItems(dictionaryId);
-        model.addAttribute("dictionaryItemList", dictionaryItemList);
-
-        IDictionary dictionaryObj = dictionaryManager.getDictionaryDetails(dictionaryId);
-
-        String userName = principal.getName();
-        boolean owner = dictionaryObj.getOwner().getUserName().equals(userName);
-
-        model.addAttribute("owner", owner);
-        if (owner) {
-            model.addAttribute("isAdmin", true);
-            model.addAttribute("hasWrite", true);
-            model.addAttribute("hasRead", true);
-        } else {
-            List<IDictionaryCollaborator> existingCollaborators = dictionaryManager
-                    .showCollaboratingUsers(dictionaryId);
-            setPermissions(model, userName, existingCollaborators);
-        }
-
-        return "auth/dictionary/dictionary";
-    }
-
-    private void setPermissions(ModelMap model, String userName, List<IDictionaryCollaborator> existingCollaborators) {
-        for (IDictionaryCollaborator collab : existingCollaborators) {
-            // if current user is a collaborator, lets get their role
-            if (collab.getCollaborator().getUserObj().getUserName().equals(userName)) {
-                List<IQuadrigaRole> roles = collab.getCollaborator().getCollaboratorRoles();
-                for (IQuadrigaRole role : roles) {
-                    if (role.getId().equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN)) {
-                        model.addAttribute("isAdmin", true);
-                        model.addAttribute("hasWrite", true);
-                        model.addAttribute("hasRead", true);
-                    }
-                    if (role.getId().equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)) {
-                        model.addAttribute("hasWrite", true);
-                        model.addAttribute("hasRead", true);
-                    }
-                    if (role.getId().equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ)) {
-                        model.addAttribute("hasRead", true);
-                    }
-                }
-            }
-        }
+        return "redirect:/auth/dictionaries/" + dictionaryId;
     }
 
     /**
