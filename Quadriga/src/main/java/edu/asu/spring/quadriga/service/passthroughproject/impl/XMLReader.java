@@ -68,7 +68,7 @@ public class XMLReader implements IXMLReader {
      * @param tagName
      * @return The id for the given tag.
      */
-    private String getTagId(Document document, String tagName) {
+    private String getTagId(Document document, String tagName) throws DocumentParserException {
 
         Node node = document.getElementsByTagName(tagName).item(0);
         if (node == null) {
@@ -76,6 +76,9 @@ public class XMLReader implements IXMLReader {
         }
         NamedNodeMap nodeAttributeMap = node.getAttributes();
         Node idNode = nodeAttributeMap.getNamedItem("id");
+        if(idNode == null) {
+            throw new DocumentParserException("Please provide a " + tagName + " id as a part of the XML");
+        }
         return idNode.getNodeValue();
     }
 
@@ -101,7 +104,7 @@ public class XMLReader implements IXMLReader {
         try {
             document = getXMLDocument(xml);
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new DocumentParserException(e);
+            throw new DocumentParserException(e.getMessage());
         }
 
         String externalProjectId = getTagId(document, "project");
