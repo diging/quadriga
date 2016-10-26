@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.web.settings.AboutTextBackingBean;
+import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 
 @Service
 /**
@@ -20,7 +20,7 @@ public class AboutTextValidator implements Validator {
     @Override
     public boolean supports(Class<?> arg0) {
         System.out.println(arg0);
-        return AboutTextBackingBean.class.equals(arg0);
+        return AboutText.class.equals(arg0);
     }
 
     /**

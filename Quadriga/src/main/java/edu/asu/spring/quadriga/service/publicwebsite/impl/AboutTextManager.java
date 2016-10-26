@@ -9,6 +9,8 @@ import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
+import edu.asu.spring.quadriga.service.publicwebsite.mapper.IAboutTextMapper;
+import edu.asu.spring.quadriga.service.publicwebsite.mapper.impl.AboutTextMapper;
 
 /**
  * Service to save title and description of public website about page form.
@@ -22,26 +24,27 @@ public class AboutTextManager implements IAboutTextManager {
     @Autowired
     private IAboutTextDAO aboutTextDAO;
 
+    @Autowired
+    private IAboutTextMapper abtTxtMapper;
+
     @Transactional
     @Override
-    public void saveAbout(String projectId, String title, String description) throws QuadrigaStorageException {
-
-        AboutTextDTO aboutTextDTO = aboutTextDAO.getDTOByProjectId(projectId);
-
-        if (aboutTextDTO == null) {
-            aboutTextDTO = new AboutTextDTO();
-            aboutTextDTO.setId(aboutTextDAO.generateUniqueID());
+    public void saveAbout(String projectId, IAboutText abtText) throws QuadrigaStorageException {
+        if (abtText.getId() == null) {
+            abtText.setId(aboutTextDAO.generateUniqueID());
         }
-        aboutTextDTO.setProjectId(projectId);
-        aboutTextDTO.setTitle(title);
-        aboutTextDTO.setDescription(description);
+        abtText.setProjectId(projectId);
+
+        AboutTextDTO aboutTextDTO = abtTxtMapper.aboutTextBeanToDTO(abtText);
+
         aboutTextDAO.saveOrUpdateDTO(aboutTextDTO);
     }
 
     @Transactional
     @Override
     public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException {
-        return aboutTextDAO.getDTOByProjectId(projectId);
+        AboutTextDTO abtDTO = aboutTextDAO.getDTOByProjectId(projectId);
+        return abtTxtMapper.aboutTextDTOtoBean(abtDTO);
     }
- 
+
 }

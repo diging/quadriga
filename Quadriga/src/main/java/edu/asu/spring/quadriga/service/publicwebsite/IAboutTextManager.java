@@ -12,6 +12,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public interface IAboutTextManager {
 
-	public void saveAbout(String projectId, String title, String description) throws QuadrigaStorageException;
+	public void saveAbout(String projectId, IAboutText abtText) throws QuadrigaStorageException;
 	public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException;
 }

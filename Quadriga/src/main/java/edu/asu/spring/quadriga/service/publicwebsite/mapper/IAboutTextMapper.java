@@ -6,7 +6,7 @@ import edu.asu.spring.quadriga.web.settings.AboutTextBackingBean;
 
 public interface IAboutTextMapper {
     
-    public AboutTextBackingBean aboutTextDTOtoBean(AboutTextDTO abtDTO);
-    public AboutTextDTO aboutTextBeanToDTO(AboutTextBackingBean abtText);
+    public IAboutText aboutTextDTOtoBean(AboutTextDTO abtDTO);
+    public AboutTextDTO aboutTextBeanToDTO(IAboutText abtText);
 
 }
