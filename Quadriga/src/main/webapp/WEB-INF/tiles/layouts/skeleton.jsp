@@ -40,7 +40,6 @@
     <link href="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/css/main.css" rel="stylesheet">
     <link href="${pageContext.servletContext.contextPath}/resources/css/base.css" rel="stylesheet">
 
-<!-- test -->    
 </head>
 <body data-spy="scroll" data-offset="0" data-target="#navigation">
     <tiles:importAttribute name="currentPage" scope="request" />

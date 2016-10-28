@@ -48,7 +48,6 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;/element>
  *         &lt;element name="alternativeIds" maxOccurs="unbounded">
  *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;/element>
  *       &lt;/sequence>
  *     &lt;/restriction>
