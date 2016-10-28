@@ -95,9 +95,6 @@ public class MatchGraphs {
                 
 
                 // Path of the transformation file that will be retrieved from db using DTO which is uploaded in quad-138
-                String orgFilePath = m.getPatternFilePath();
-                mapper.createGraph(orgFilePath);
-
                 eventMapper.buildGraphs(allEvents);
 
                 List<Node> foundNodes = finder.findPattern(eventMapper.getStartNodes(),

@@ -79,12 +79,8 @@ public class TransformationController {
 
         if (future.isDone()) {
             result = future.get();
-            /*
+            
             if (result == null) {
-                return "auth/transformation/emptyTransformation";
-            }*/
-            // check if any node or edge present in the result
-            if (!result.contains("node") && !result.contains("edge")) {
                 return "auth/transformation/emptyTransformation";
             }
             return "auth/transformation/successTransformation";
