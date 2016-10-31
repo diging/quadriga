@@ -12,21 +12,21 @@ import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
  * This class acts as validator of form data coming from
  * <code>publicWebsiteEditAbout.jsp</code>
  * 
- * @author PawanMahalle
+ * @author Nischal Samji
  *
  */
 public class AboutTextValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
-        System.out.println(arg0);
-        return AboutText.class.equals(arg0);
+        ;
+        return AboutText.class.isAssignableFrom(arg0);
     }
 
     /**
-     * This method validates the entered title, description of blog entry.
-     * Validates if the values are available or not. If values are not available
-     * error is thrown
+     * This method validates the entered title, description of a about text for
+     * a project. Validates if the values are available or not. If values are
+     * not available error is thrown
      * 
      * @param obj
      * @param err

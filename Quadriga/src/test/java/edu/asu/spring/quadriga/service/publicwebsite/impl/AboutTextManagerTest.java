@@ -21,6 +21,12 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.mapper.IAboutTextMapper;
 import edu.asu.spring.quadriga.service.publicwebsite.mapper.impl.AboutTextMapper;
 
+/**
+ * @author Nischal Samji
+ * 
+ *         Test class for the AboutText Manager
+ *
+ */
 public class AboutTextManagerTest {
 
     @InjectMocks

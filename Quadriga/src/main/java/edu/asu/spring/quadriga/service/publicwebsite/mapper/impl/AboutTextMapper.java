@@ -7,6 +7,12 @@ import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.service.publicwebsite.mapper.IAboutTextMapper;
 
+/**
+ * @author Nischal Samji
+ * 
+ *         Implementation class for {@link IAboutTextMapper}
+ *
+ */
 @Service
 public class AboutTextMapper implements IAboutTextMapper {
 

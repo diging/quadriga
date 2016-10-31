@@ -2,6 +2,10 @@ package edu.asu.spring.quadriga.domain.settings.impl;
 
 import edu.asu.spring.quadriga.domain.settings.IAboutText;
 
+/**
+ * @author Nischal Samji Implementation class for {@link IAboutText}
+ *
+ */
 public class AboutText implements IAboutText {
 
     private String id;
