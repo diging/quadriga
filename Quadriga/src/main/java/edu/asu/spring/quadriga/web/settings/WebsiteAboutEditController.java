@@ -21,10 +21,12 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.AboutTextValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * This controller manages public website's about page of a project. Information
@@ -42,6 +44,9 @@ public class WebsiteAboutEditController {
 
     @Autowired
     private IRetrieveProjectManager projectManager;
+
+    @Autowired
+    private INetworkManager nwManager;
 
     @Autowired
     private AboutTextValidator validator;
@@ -66,6 +71,7 @@ public class WebsiteAboutEditController {
         } else {
             model.addAttribute("aboutTextBean", aboutTextManager.getAboutTextByProjectId(projectId));
         }
+        model.addAttribute("networks", nwManager.getNetworksInProject(projectId, INetworkStatus.APPROVED));
         return "auth/editabout";
     }
 
