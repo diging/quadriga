@@ -73,15 +73,13 @@
 <span class="byline">Edit about text for ${project.unixName}</span>
 <form:form method="post"
     action="${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/saveabout"
-    modelAttribute="boutTextBackingBean">
+    modelAttribute="aboutTextBean">
     <input type="hidden" name="${_csrf.parameterName}"
         value="${_csrf.token}" />
 
     <table style="width: 100%">
         <tr>
-            <td style="color: red;"><form:errors path="title"
-                    class="ui-state-error-text" /> <br> <form:errors
-                    path="description" class="ui-state-error-text" /> <!-- Create project blog entry button at top right corner -->
+            <td style="color: red;"> <!-- Create project blog entry button at top right corner -->
             </td>
             <td style="width: 15%"><div style="text-align: right;">
                     <input class="btn btn-primary" type="submit"

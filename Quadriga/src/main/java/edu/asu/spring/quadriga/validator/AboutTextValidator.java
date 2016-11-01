@@ -34,7 +34,7 @@ public class AboutTextValidator implements Validator {
     @Override
     public void validate(Object obj, Errors err) {
         // validate all the input parameters
-        ValidationUtils.rejectIfEmptyOrWhitespace(err, "title", "blog_title.required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "blog_description.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(err, "title", "about_title.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "about_description.required");
     }
 }
