@@ -92,7 +92,6 @@ public class WebsiteAboutEditController {
         model.addObject("project", project);
         if (result.hasErrors()) {
             model.addObject("aboutTextBean", formBean);
-
         } else {
             aboutTextManager.saveAbout(projectId, formBean);
             model.addObject("show_success_alert", true);

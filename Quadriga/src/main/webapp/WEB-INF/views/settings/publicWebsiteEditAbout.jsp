@@ -76,7 +76,7 @@
     modelAttribute="aboutTextBean">
     <input type="hidden" name="${_csrf.parameterName}"
         value="${_csrf.token}" />
-
+    <form:input type="hidden" path="id"/>
     <table style="width: 100%">
         <tr>
             <td style="color: red;"> <!-- Create project blog entry button at top right corner -->

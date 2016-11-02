@@ -10,7 +10,6 @@ import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 import edu.asu.spring.quadriga.service.publicwebsite.mapper.IAboutTextMapper;
-import edu.asu.spring.quadriga.service.publicwebsite.mapper.impl.AboutTextMapper;
 
 /**
  * Service to save title and description of public website about page form.
@@ -44,7 +43,9 @@ public class AboutTextManager implements IAboutTextManager {
     @Override
     public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException {
         AboutTextDTO abtDTO = aboutTextDAO.getDTOByProjectId(projectId);
-        return abtTxtMapper.aboutTextDTOtoBean(abtDTO);
+        if (abtDTO != null) {
+            return abtTxtMapper.aboutTextDTOtoBean(abtDTO);
+        }
+        return null;
     }
-
 }

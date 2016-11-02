@@ -127,11 +127,12 @@ public class AboutTextManagerTest {
         assertEquals("Test1", result.getId());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testEmptyProject() throws QuadrigaStorageException {
 
         Mockito.when(mockedAboutTextDAO.getDTOByProjectId("test24")).thenReturn(null);
-        aboutTextManager.getAboutTextByProjectId("test24");
+        IAboutText abtText = aboutTextManager.getAboutTextByProjectId("test24");
+        assertEquals(null, abtText);
 
     }
 

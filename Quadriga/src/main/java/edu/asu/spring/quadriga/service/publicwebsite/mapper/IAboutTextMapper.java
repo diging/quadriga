@@ -26,8 +26,8 @@ public interface IAboutTextMapper {
      * mapped {@link IAboutText} Object.
      * 
      * @param abtText
-     *            DTO that needs to be mapped to a {@link AboutTextDTO} domain
-     *            object.
+     *            Domain Object that needs to be mapped to a
+     *            {@link AboutTextDTO}.
      * @return Return a {@link AboutTextDTO} object that is mapped from a Domain
      *         object.
      */
