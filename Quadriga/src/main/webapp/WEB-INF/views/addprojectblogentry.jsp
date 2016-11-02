@@ -123,7 +123,7 @@
         $.ajax({
             type : "GET",
             data : {
-                projectId : '${project.projectId}
+                projectId : '${project.projectId}'
             },
             contentType : "application/json",
             datatype : 'text',

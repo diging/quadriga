@@ -51,7 +51,7 @@ public class ProjectAuthorization implements IAuthorization {
      * @return : hasAccess - true no Access - false
      */
     @Override
-    public boolean chkAuthorization(String userName, String projectId, String[] userRoles)
+    public boolean chkAuthorization(String userName, Object accessObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
         boolean haveAccess;
         String projectOwner;
@@ -61,8 +61,17 @@ public class ProjectAuthorization implements IAuthorization {
         ArrayList<String> roles;
         haveAccess = false;
 
+        IProject project;
+        String projectId = null;
+        // fetch the details of the concept collection
+        if (accessObj.getClass().equals(String.class)) {
+            projectId = (String) accessObj;
+            project = projectManager.getProjectDetails(projectId);
+        } else {
+            project = (IProject) accessObj;
+        }
+
         // fetch the details of the project
-        IProject project = projectManager.getProjectDetails(projectId);
 
         projectOwner = project.getOwner().getUserName();
         if (userName.equals(projectOwner)) {

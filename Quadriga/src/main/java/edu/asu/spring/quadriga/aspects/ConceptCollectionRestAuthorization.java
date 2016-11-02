@@ -44,12 +44,19 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
      * @author Lohith Dwaraka.
      */
     @Override
-    public boolean chkAuthorization(String userName,
-            String conceptCollectionId, String[] userRoles)
+    public boolean chkAuthorization(String userName, Object conceptCollectionObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         // fetch the details of the concept collection
-        IConceptCollection collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
+        IConceptCollection collection;
+        String conceptCollectionId = null;
+        // fetch the details of the concept collection
+        if (conceptCollectionObj.getClass().equals(String.class)) {
+            conceptCollectionId = (String) conceptCollectionObj;
+            collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
+        } else {
+            collection = (IConceptCollection) conceptCollectionObj;
+        }
 
         // check if the user is a concept collection owner
         String conceptCollectionOwner = collection.getOwner().getUserName();
@@ -61,7 +68,7 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
         if (userRoles.length == 0) {
             return false;
         }
-        
+
         List<String> roles = Arrays.asList(userRoles);
 
         // fetch the collaborators of the concept collection
@@ -74,13 +81,11 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
         for (IConceptCollectionCollaborator ccCollaborator : ccCollaboratorList) {
             // check if he is the collaborator to the concept
             // collection
-            String collaboratorName = ccCollaborator.getCollaborator()
-                    .getUserObj().getUserName();
+            String collaboratorName = ccCollaborator.getCollaborator().getUserObj().getUserName();
 
             if (userName != null) {
                 if (userName.equals(collaboratorName)) {
-                    List<IQuadrigaRole> collaboratorRoles = ccCollaborator
-                            .getCollaborator().getCollaboratorRoles();
+                    List<IQuadrigaRole> collaboratorRoles = ccCollaborator.getCollaborator().getCollaboratorRoles();
                     if (collaboratorRoles != null) {
                         for (IQuadrigaRole collabRole : collaboratorRoles) {
                             String collaboratorRoleId = collabRole.getId();
@@ -106,7 +111,8 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
      * @param userName
      *            - User credentials entered for rest authentication.
      * @userRoles - Roles for which the user should be possessing for access.
-     * @throws - QuadrigaStorageException, QuadrigaAccessException
+     * @throws -
+     *             QuadrigaStorageException, QuadrigaAccessException
      * @author Lohith Dwaraka
      */
     @Override

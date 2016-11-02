@@ -25,8 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
-import edu.asu.spring.quadriga.aspects.annotations.CheckAccessById;
-import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
@@ -47,7 +45,6 @@ import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 import edu.asu.spring.quadriga.validator.AddProjectBlogEntryValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
-import edu.asu.spring.quadriga.web.workspace.ModifyWSController;
 
 /**
  * This controller is responsible for providing UI to create project blog entry
@@ -76,7 +73,7 @@ public class AddProjectBlogEntryController {
     @Autowired
     private IJsonCreator jsonCreator;
 
-    private static final Logger logger = LoggerFactory.getLogger(AddProjectBlogEntryController.class);
+    private final Logger logger = LoggerFactory.getLogger(AddProjectBlogEntryController.class);
 
     /**
      * Attach the custom validator to the Spring context
@@ -185,18 +182,19 @@ public class AddProjectBlogEntryController {
      *            logged in user.
      * @param project
      *            project instance obtained using @InjectProject annotation
-     *        
+     * 
      * @return Returns a JSON string as a response entity based on the network
      *         selected from the UI.
      * @throws QuadrigaStorageException
      * @throws JAXBException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 4, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "sites/{projectUnixName}/visualizenetwork/{networkId}", method = RequestMethod.GET, produces = "text/plain")
+    @InjectProjectByName
     public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, Principal principal,
-            @CheckAccess @InjectProject IProject project, @RequestParam("projectId") String projectId) {
+            @CheckAccess @InjectProject IProject project) {
         ITransformedNetwork transformedNetwork = null;
         try {
             transformedNetwork = transformationManager.getTransformedNetwork(networkId);
