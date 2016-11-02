@@ -18,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -57,9 +60,10 @@ public class WebsiteAboutEditController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/projects/{ProjectId}/settings/editabout", method = RequestMethod.GET)
-    public String editAbout(@PathVariable("ProjectId") String projectId, Model model, Principal principal)
-            throws QuadrigaStorageException {
-        IProject project = projectManager.getProjectDetails(projectId);
+    @InjectProjectById
+    public String editAbout(@ProjectIdentifier @PathVariable("ProjectId") String projectId,
+            @InjectProject IProject project, Model model, Principal principal) throws QuadrigaStorageException {
+
         model.addAttribute("project", project);
         if (aboutTextManager.getAboutTextByProjectId(projectId) == null) {
             model.addAttribute("aboutTextBean", new AboutText());
@@ -80,19 +84,20 @@ public class WebsiteAboutEditController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/projects/{ProjectId}/settings/saveabout", method = RequestMethod.POST)
-    public ModelAndView saveAbout(@PathVariable("ProjectId") String projectId,
-            @Validated @ModelAttribute("aboutTextBean") AboutText formBean, BindingResult result, ModelAndView model,
-            Principal principal) throws QuadrigaStorageException {
+    @InjectProjectById
+    public ModelAndView saveAbout(@ProjectIdentifier @PathVariable("ProjectId") String projectId,
+            @InjectProject IProject project, @Validated @ModelAttribute("aboutTextBean") AboutText formBean,
+            BindingResult result, ModelAndView model, Principal principal) throws QuadrigaStorageException {
         model = new ModelAndView("auth/editabout");
-        IProject project = projectManager.getProjectDetails(projectId);
+        model.addObject("project", project);
         if (result.hasErrors()) {
             model.addObject("aboutTextBean", formBean);
-            model.addObject("project", project);
+
         } else {
             aboutTextManager.saveAbout(projectId, formBean);
             model.addObject("show_success_alert", true);
             model.addObject("success_alert_msg", "You successfully edited the about text");
-            model.addObject("project", project);
+
         }
         return model;
     }

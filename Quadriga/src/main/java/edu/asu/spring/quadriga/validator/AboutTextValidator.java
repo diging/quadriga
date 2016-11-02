@@ -7,7 +7,6 @@ import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 
-@Service
 /**
  * This class acts as validator of form data coming from
  * <code>publicWebsiteEditAbout.jsp</code>
@@ -15,11 +14,11 @@ import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
  * @author Nischal Samji
  *
  */
+@Service
 public class AboutTextValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
-        ;
         return AboutText.class.isAssignableFrom(arg0);
     }
 
