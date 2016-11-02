@@ -112,7 +112,7 @@ public class UploadNetworkRestController {
             xmlInfo = xmlReader.getXMLInfo(xml);
         } catch (DocumentParserException e) {
             String errorMsg = errorMessageRest.getErrorMsg(e.getMessage());
-            return new ResponseEntity<String>(errorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
         
         String internalOrExternalProjectId = xmlInfo.getProjectId();
