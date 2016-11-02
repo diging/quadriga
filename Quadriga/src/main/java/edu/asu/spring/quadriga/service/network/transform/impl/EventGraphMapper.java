@@ -295,6 +295,7 @@ public class EventGraphMapper {
 		copiedNode.setEventId(start.getEventId());
 		copiedNode.setType(start.getType());
 		copiedNode.setTerms(start.getTerms());
+		copiedNode.setAlternativeIds(start.getAlternativeIds());
 
 		if (start instanceof Relation) {
 			Node subject = ((Relation) start).getSubject();
@@ -304,9 +305,6 @@ public class EventGraphMapper {
 			((Relation) copiedNode).setSubject(copyGraph(subject));
 			((Relation) copiedNode).setPredicate(copyGraph(predicate));
 			((Relation) copiedNode).setObject(copyGraph(object));
-		}
-		else {
-		    copiedNode.setAlternativeIds(start.getAlternativeIds());
 		}
 		
 		return copiedNode;
