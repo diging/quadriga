@@ -37,15 +37,23 @@ public class AboutTextValidator implements Validator {
     public void validate(Object obj, Errors err) {
 
         IAboutText abtText = (IAboutText) obj;
+
         String description = abtText.getDescription();
+        String title = abtText.getTitle();
+
         Whitelist whitelist = Whitelist.basicWithImages();
+        Whitelist titleWhitelist = Whitelist.simpleText();
 
         // validate all the input parameters
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "title", "about_title.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "about_description.required");
+
         if (!Jsoup.isValid(description, whitelist)) {
             err.rejectValue("description", "about_description.proper");
         }
 
+        if (!Jsoup.isValid(title, titleWhitelist)) {
+            err.rejectValue("title", "about_title.proper");
+        }
     }
 }

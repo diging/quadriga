@@ -42,7 +42,7 @@ public class AboutTextValidatorTest {
         improperabtText.setId("TESTID");
         improperabtText.setProjectId("PROJtest");
         improperabtText.setDescription("<script>hello</script>");
-        improperabtText.setTitle("TestTitle");
+        improperabtText.setTitle("<script>hello</script>");
 
         emptyabtText = new AboutText();
         emptyabtText.setId("TESTID");
@@ -65,6 +65,7 @@ public class AboutTextValidatorTest {
         ValidationUtils.invokeValidator(abtTxtValidator, improperabtText, errors);
         Assert.assertTrue(errors.hasErrors());
         Assert.assertEquals(errors.getFieldError("description").getCode(), "about_description.proper");
+        Assert.assertEquals(errors.getFieldError("title").getCode(), "about_title.proper");
 
     }
 
