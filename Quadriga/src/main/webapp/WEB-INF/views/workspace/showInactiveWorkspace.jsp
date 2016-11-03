@@ -39,4 +39,4 @@ $(document).ready(function() {
 <br>
 
 <a class="btn btn-primary"
-			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${deactivatedWSProjectId}">Cancel</a>
+    href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${deactivatedWSProjectId}">Cancel</a>
