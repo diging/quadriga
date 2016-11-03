@@ -37,6 +37,6 @@ $(document).ready(function() {
     </li>
 </c:forEach>
 <br>
-<input type="button" value="Go Back"
-    onclick="
-location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}'" />
+
+<a class="btn btn-primary"
+			href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${deactivatedWSProjectId}">Cancel</a>
