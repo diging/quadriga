@@ -102,7 +102,7 @@ public class AboutTextManagerTest {
     }
 
     @Test
-    public void getAboutTextByProjectId() throws QuadrigaStorageException {
+    public void test_getAboutTextByProjectId_existingProject() throws QuadrigaStorageException {
         AboutTextDTO dto = new AboutTextDTO();
         dto.setProjectId("test1");
         dto.setTitle("TestTitle");
