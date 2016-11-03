@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.validator;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 
 /**
@@ -32,8 +35,17 @@ public class AboutTextValidator implements Validator {
      */
     @Override
     public void validate(Object obj, Errors err) {
+
+        IAboutText abtText = (IAboutText) obj;
+        String description = abtText.getDescription();
+        Whitelist whitelist = Whitelist.basicWithImages();
+
         // validate all the input parameters
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "title", "about_title.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "about_description.required");
+        if (!Jsoup.isValid(description, whitelist)) {
+            err.rejectValue("description", "about_description.proper");
+        }
+
     }
 }

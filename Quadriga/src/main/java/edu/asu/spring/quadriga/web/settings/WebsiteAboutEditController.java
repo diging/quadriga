@@ -21,6 +21,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -68,7 +69,8 @@ public class WebsiteAboutEditController {
         if (aboutTextManager.getAboutTextByProjectId(projectId) == null) {
             model.addAttribute("aboutTextBean", new AboutText());
         } else {
-            model.addAttribute("aboutTextBean", aboutTextManager.getAboutTextByProjectId(projectId));
+            IAboutText abtText = aboutTextManager.getAboutTextByProjectId(projectId);
+            model.addAttribute("aboutTextBean", abtText);
         }
         return "auth/editabout";
     }

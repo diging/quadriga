@@ -44,13 +44,9 @@ public class AboutTextManagerTest {
 
     private IAboutText updateText;
 
-    private IAboutText nullText;
-
     @Before
     public void setUp() throws QuadrigaStorageException {
         MockitoAnnotations.initMocks(this);
-
-        // abtTxtMapper = new AboutTextMapper();
 
         saveText = new AboutText();
         saveText.setDescription("Save Description");
@@ -62,8 +58,6 @@ public class AboutTextManagerTest {
         updateText.setDescription("Update Description");
         updateText.setTitle("UpdateTitle");
         updateText.setProjectId("PROJxyzwqr");
-
-        nullText = new AboutText();
 
     }
 
