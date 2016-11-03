@@ -1,8 +1,9 @@
 package edu.asu.spring.quadriga.service.publicwebsite.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -10,34 +11,62 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import edu.asu.spring.quadriga.dao.publicwebsite.IAboutTextDAO;
 import edu.asu.spring.quadriga.dao.publicwebsite.impl.AboutTextDAO;
 import edu.asu.spring.quadriga.domain.settings.IAboutText;
+import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 import edu.asu.spring.quadriga.dto.AboutTextDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.publicwebsite.mapper.IAboutTextMapper;
+import edu.asu.spring.quadriga.service.publicwebsite.mapper.impl.AboutTextMapper;
 
+/**
+ * @author Nischal Samji
+ * 
+ *         Test class for the AboutText Manager
+ *
+ */
 public class AboutTextManagerTest {
 
     @InjectMocks
     private AboutTextManager aboutTextManager;
+
+    @Spy
+    private IAboutTextMapper abtTxtMapper = new AboutTextMapper();
 
     @Mock
     private IAboutTextDAO mockedAboutTextDAO = Mockito.mock(AboutTextDAO.class);
 
     private ArgumentCaptor<AboutTextDTO> argument;
 
+    private IAboutText saveText;
+
+    private IAboutText updateText;
+
     @Before
     public void setUp() throws QuadrigaStorageException {
         MockitoAnnotations.initMocks(this);
 
+        saveText = new AboutText();
+        saveText.setDescription("Save Description");
+        saveText.setTitle("SaveTitle");
+        saveText.setProjectId("PROJabscde");
+
+        updateText = new AboutText();
+        updateText.setId("testId1234");
+        updateText.setDescription("Update Description");
+        updateText.setTitle("UpdateTitle");
+        updateText.setProjectId("PROJxyzwqr");
+
     }
 
     @Test
-    public void testSaveAboutNewDTO() throws QuadrigaStorageException {
+    public void test_saveAbout_newDTO() throws QuadrigaStorageException {
 
         Mockito.when(mockedAboutTextDAO.generateUniqueID()).thenReturn("UniqueId1");
-        aboutTextManager.saveAbout("1st", "Title", "Description");
+        aboutTextManager.saveAbout("PROJabscde", saveText);
 
         Mockito.verify(mockedAboutTextDAO).generateUniqueID();
 
@@ -45,37 +74,35 @@ public class AboutTextManagerTest {
 
         Mockito.verify(mockedAboutTextDAO).saveOrUpdateDTO(argument.capture());
         assertEquals("UniqueId1", argument.getValue().getId());
-        assertEquals("1st", argument.getValue().getProjectId());
-        assertEquals("Title", argument.getValue().getTitle());
-        assertEquals("Description", argument.getValue().getDescription());
+        assertEquals("PROJabscde", argument.getValue().getProjectId());
+        assertEquals("SaveTitle", argument.getValue().getTitle());
+        assertEquals("Save Description", argument.getValue().getDescription());
 
     }
 
     @Test
-    public void testSaveAboutUpdateDTO() throws QuadrigaStorageException {
+    public void test_saveAbout_UpdateDTO() throws QuadrigaStorageException {
 
         AboutTextDTO dto = new AboutTextDTO();
         dto.setId("UniqueId2");
         dto.setProjectId("1st");
-        dto.setTitle("NewTitle");
-        dto.setDescription("NewDescription");
-        Mockito.when(mockedAboutTextDAO.getDTOByProjectId("1st")).thenReturn(dto);
+        dto.setTitle("UpdateTitle");
+        dto.setDescription("Update Description");
+        Mockito.when(mockedAboutTextDAO.getDTOByProjectId("PROJxyzwqr")).thenReturn(dto);
 
-        aboutTextManager.saveAbout("1st", "NewTitle2", "NewDescription2");
-
-        Mockito.verify(mockedAboutTextDAO, Mockito.times(0)).generateUniqueID();
+        aboutTextManager.saveAbout("PROJxyzwqr", updateText);
 
         argument = ArgumentCaptor.forClass(AboutTextDTO.class);
         Mockito.verify(mockedAboutTextDAO, Mockito.times(1)).saveOrUpdateDTO(argument.capture());
-        assertEquals("UniqueId2",argument.getValue().getId());
-        assertEquals("1st", argument.getValue().getProjectId());
-        assertEquals("NewTitle2", argument.getValue().getTitle());
-        assertEquals("NewDescription2", argument.getValue().getDescription());
+        assertEquals("testId1234", argument.getValue().getId());
+        assertEquals("PROJxyzwqr", argument.getValue().getProjectId());
+        assertEquals("UpdateTitle", argument.getValue().getTitle());
+        assertEquals("Update Description", argument.getValue().getDescription());
 
     }
 
     @Test
-    public void testGetAboutTextByProjectId() throws QuadrigaStorageException {
+    public void test_getAboutTextByProjectId_existingProject() throws QuadrigaStorageException {
         AboutTextDTO dto = new AboutTextDTO();
         dto.setProjectId("test1");
         dto.setTitle("TestTitle");
@@ -96,12 +123,11 @@ public class AboutTextManagerTest {
     }
 
     @Test
-    public void testAboutTextNull() throws QuadrigaStorageException {
-        Mockito.when(mockedAboutTextDAO.getDTOByProjectId("test24")).thenReturn(null);
-        IAboutText result = aboutTextManager.getAboutTextByProjectId("test24");
-        Mockito.verify(mockedAboutTextDAO, Mockito.times(1)).getDTOByProjectId("test24");
-        assertNull(result);
+    public void test_getAboutTextByProjectId_emptyProject() throws QuadrigaStorageException {
 
+        Mockito.when(mockedAboutTextDAO.getDTOByProjectId("test24")).thenReturn(null);
+        IAboutText abtText = aboutTextManager.getAboutTextByProjectId("test24");
+        assertNull(abtText);
     }
 
 }
