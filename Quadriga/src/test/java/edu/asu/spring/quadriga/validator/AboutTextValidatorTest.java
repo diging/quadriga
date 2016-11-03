@@ -53,14 +53,14 @@ public class AboutTextValidatorTest {
     }
 
     @Test
-    public void testProperAboutText() {
+    public void test_validate_properAboutText() {
         Errors errors = new BindException(properabtText, "properabtText");
         ValidationUtils.invokeValidator(abtTxtValidator, properabtText, errors);
         Assert.assertFalse(errors.hasErrors());
     }
 
     @Test
-    public void testImproperAboutText() {
+    public void test_validate_improperAboutText() {
         Errors errors = new BindException(improperabtText, "improperabtText");
         ValidationUtils.invokeValidator(abtTxtValidator, improperabtText, errors);
         Assert.assertTrue(errors.hasErrors());
@@ -70,7 +70,7 @@ public class AboutTextValidatorTest {
     }
 
     @Test
-    public void testEmptyAboutText() {
+    public void test_validate_emptyAboutText() {
         Errors errors = new BindException(emptyabtText, "emptyabtText");
         ValidationUtils.invokeValidator(abtTxtValidator, emptyabtText, errors);
         Assert.assertTrue(errors.hasErrors());

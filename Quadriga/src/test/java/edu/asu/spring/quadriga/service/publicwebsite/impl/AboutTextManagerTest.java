@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.publicwebsite.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -62,7 +63,7 @@ public class AboutTextManagerTest {
     }
 
     @Test
-    public void testSaveAboutNewDTO() throws QuadrigaStorageException {
+    public void test_saveAbout_newDTO() throws QuadrigaStorageException {
 
         Mockito.when(mockedAboutTextDAO.generateUniqueID()).thenReturn("UniqueId1");
         aboutTextManager.saveAbout("PROJabscde", saveText);
@@ -80,7 +81,7 @@ public class AboutTextManagerTest {
     }
 
     @Test
-    public void testSaveAboutUpdateDTO() throws QuadrigaStorageException {
+    public void test_saveAbout_UpdateDTO() throws QuadrigaStorageException {
 
         AboutTextDTO dto = new AboutTextDTO();
         dto.setId("UniqueId2");
@@ -101,7 +102,7 @@ public class AboutTextManagerTest {
     }
 
     @Test
-    public void testGetAboutTextByProjectId() throws QuadrigaStorageException {
+    public void getAboutTextByProjectId() throws QuadrigaStorageException {
         AboutTextDTO dto = new AboutTextDTO();
         dto.setProjectId("test1");
         dto.setTitle("TestTitle");
@@ -122,12 +123,11 @@ public class AboutTextManagerTest {
     }
 
     @Test
-    public void testEmptyProject() throws QuadrigaStorageException {
+    public void test_getAboutTextByProjectId_emptyProject() throws QuadrigaStorageException {
 
         Mockito.when(mockedAboutTextDAO.getDTOByProjectId("test24")).thenReturn(null);
         IAboutText abtText = aboutTextManager.getAboutTextByProjectId("test24");
-        assertEquals(null, abtText);
-
+        assertNull(abtText);
     }
 
 }
