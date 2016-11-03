@@ -109,7 +109,7 @@ public class ActivateWSController {
             QuadrigaAccessException {
         List<ModifyWorkspace> deactivatedWSList = workspaceFormManager
                 .getDeactivatedWorkspaceList(projectId, principal.getName());
-        model.addAttribute("deactivatedWSListList", deactivatedWSList);
+        model.addAttribute("deactivatedWSList", deactivatedWSList);
         model.addAttribute("deactivatedWSProjectId", projectId);
         return "auth/workbench/workspace/showInactiveWorkspace";
     }
