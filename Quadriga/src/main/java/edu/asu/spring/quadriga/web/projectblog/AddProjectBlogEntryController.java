@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
@@ -100,13 +99,12 @@ public class AddProjectBlogEntryController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 3, userRole = {
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 2, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.GET)
     public String addProjectBlogEntryForm(@ProjectIdentifier @PathVariable("ProjectUnixName") String projectUnixName,
-            @InjectProject IProject project, @RequestParam("projectId") String projectId, Model model)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+            @InjectProject IProject project, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
         List<INetwork> networks = networkmanager.getNetworksInProject(project.getProjectId(), INetworkStatus.APPROVED);
         // Add the critical data to model object
         model.addAttribute("projectBlogEntry", new ProjectBlogEntry());
@@ -140,15 +138,14 @@ public class AddProjectBlogEntryController {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 5, userRole = {
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 4, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/addprojectblogentry", method = RequestMethod.POST)
     public ModelAndView addProjectBlogEntryRequest(
             @Validated @ModelAttribute("projectBlogEntry") ProjectBlogEntry projectBlogEntry, BindingResult result,
             @ProjectIdentifier @PathVariable("ProjectUnixName") String projectUnixName, @InjectProject IProject project,
-            @RequestParam("projectId") String projectId, Principal principal)
-            throws QuadrigaStorageException, QuadrigaAccessException {
+            Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
 
         ModelAndView model;
 

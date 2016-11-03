@@ -47,10 +47,10 @@
         </table>
 
 
-        <input type="hidden" id="projectId" name="projectId"
-            value="${project.projectId}">
-        <input type="hidden" id="projectName"
+       <input type="hidden" id="projectName"
             value="${project.unixName}">
+       <input path="projectId" type="hidden" id="projectId" name="projectId"
+           value="${project.projectId}">
         <div id="networkTable" class="collapse">
             <c:choose>
                 <c:when test="${not empty networks}">
@@ -122,9 +122,6 @@
         var nwid = selectedNW.getAttribute('value');
         $.ajax({
             type : "GET",
-            data : {
-                projectId : '${project.projectId}'
-            },
             contentType : "application/json",
             datatype : 'text',
             url : "${pageContext.servletContext.contextPath}/sites/" +'${project.unixName}'
