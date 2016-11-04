@@ -33,10 +33,11 @@
 </c:if>
 
 <c:if test="${!isNetworkEmpty}">
+    <div class="row">
     <a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
         <i class="fa fa-arrows-alt"></i>
     </a>
-	
+    </div>	
 	<div class="row">
 		<div id="networkBox" class="col-sm-12"
 			style="min-height: 500px; height: 100%; text-align: left;"></div>

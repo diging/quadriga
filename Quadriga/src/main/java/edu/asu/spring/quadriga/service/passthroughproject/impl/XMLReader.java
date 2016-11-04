@@ -68,7 +68,7 @@ public class XMLReader implements IXMLReader {
      * @param tagName
      * @return The id for the given tag.
      */
-    private String getTagId(Document document, String tagName) {
+    private String getTagId(Document document, String tagName) throws DocumentParserException {
 
         Node node = document.getElementsByTagName(tagName).item(0);
         if (node == null) {
@@ -76,6 +76,9 @@ public class XMLReader implements IXMLReader {
         }
         NamedNodeMap nodeAttributeMap = node.getAttributes();
         Node idNode = nodeAttributeMap.getNamedItem("id");
+        if(idNode == null) {
+            throw new DocumentParserException("Please provide an id attribute for tag: " + tagName);
+        }
         return idNode.getNodeValue();
     }
 
