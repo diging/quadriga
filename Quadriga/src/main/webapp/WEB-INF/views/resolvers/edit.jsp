@@ -6,7 +6,7 @@
 <script>
 
 $(function() {
-	$("#testEdit").click(function(){performAction(this,this.id,'${pageContext.servletContext.contextPath}')});
+	$("#testEdit").click(function(){performAction(this,this.id,'${pageContext.servletContext.contextPath}','${_csrf.token}','${_csrf.headerName}')});
 });
 
 </script>
