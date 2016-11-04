@@ -23,7 +23,7 @@
 <script type="text/javascript">
 function changeLayout(json,networkid,path,type)
 {
-	d3init(json,networkid,path,type);
+	d3init(json,networkid,path,type,'${_csrf.token}','${_csrf.headerName}');
 }
 
 </script>
@@ -109,7 +109,7 @@ $("input[type=button]").button().click(function(event) {
 </script>
 
 <body
-	onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
+	onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force', <c:out value='"${_csrf.token}"'></c:out>,<c:out value='"${_csrf.headerName}"'></c:out>);" />
 
 
 

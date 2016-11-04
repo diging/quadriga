@@ -7,11 +7,8 @@
  * 
  */
 
-function d3init(graph, networkId, path, type) {
+function d3init(graph, networkId, path, type, token, header) {
 	
-	var token = '${_csrf.token}';
-	var header = '${_csrf.headerName}';
-    
 	if (graph == null) {
 		alert("no network");
 	}

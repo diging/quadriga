@@ -12,7 +12,7 @@
 <script type="text/javascript">
 function changeLayout(json,networkid,path,type)
 {
-	d3init(json,networkid,path,type);
+	d3init(json,networkid,path,type,'${_csrf.token}','${_csrf.headerName}');
 }
 </script>
 <script type="text/javascript">
@@ -28,7 +28,7 @@ function changeLayout(json,networkid,path,type)
   });
   </script>
 
-<body onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />  
+<body onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force', <c:out value='"${_csrf.token}"'></c:out>,<c:out value='"${_csrf.headerName}"'></c:out>);" />  
 
   <div class="ui-widget">
   <label for="tags"></label> 

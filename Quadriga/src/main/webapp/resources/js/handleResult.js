@@ -6,7 +6,7 @@ function handleResult(status, id) {
     }
 }
 
-function performAction(obj, id, contextPath) {
+function performAction(obj, id, contextPath, token, header) {
     var data = {};
     data['projectName'] = $("#projectName").val();
     data['projectDescription'] = $('#projectDescription').val();
@@ -15,9 +15,7 @@ function performAction(obj, id, contextPath) {
     data['resolvedHandlePattern'] = $('#resolvedHandlePattern').val();
     data['handleExample'] = $('#handleExample').val();
     data['resolvedHandleExample'] = $('#resolvedHandleExample').val();
-    var token = '${_csrf.token}';
-    var header = '${_csrf.headerName}';
-    
+
     $
     .ajax({
         type : "POST",

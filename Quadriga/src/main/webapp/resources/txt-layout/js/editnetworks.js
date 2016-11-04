@@ -27,10 +27,7 @@ var Log = {
 		}
 };
 
-function init(json, networkId, path) {
-	
-	var token = '${_csrf.token}';
-	var header = '${_csrf.headerName}';
+function init(json, networkId, path, token, header) {
     
 	console.log("init");
 	pathName = path;
