@@ -36,21 +36,6 @@ public class WorkspaceAuthorization implements IAuthorization {
     @Autowired
     private ProjectAuthorization projectAuthorization;
 
-    /**
-     * This checks the access permissions for the logged in user for the given
-     * workspace id
-     * 
-     * @param :
-     *            userName - logged in user
-     * @param :
-     *            userRoles - set of roles for which the user should be checked
-     *            for access.
-     * @param :
-     *            workspaceid
-     * @throws :
-     *             QuadrigaStorageException, QuadrigaAccessException
-     * @return : hasAccess - true no Access - false
-     */
     @Override
     @Transactional
     public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
@@ -125,19 +110,6 @@ public class WorkspaceAuthorization implements IAuthorization {
         return haveAccess;
     }
 
-    /**
-     * check if the user as a owner has any workspaces associated check if the
-     * user as the given role has any workspaces associated
-     * 
-     * @param :
-     *            userName - logged in user
-     * @param :
-     *            userRoles - set of roles for which the user should be checked
-     *            for access.
-     * @throws :
-     *             QuadrigaStorageException, QuadrigaAccessException
-     * @return : hasAccess - true no Access - false
-     */
     @Override
     @Transactional
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
@@ -167,12 +139,6 @@ public class WorkspaceAuthorization implements IAuthorization {
 
     }
 
-    /**
-     * This method converts the the string array into a list
-     * 
-     * @param userRoles
-     * @return ArrayList<String>
-     */
     public ArrayList<String> getAccessRoleList(String[] userRoles) {
         ArrayList<String> rolesList = new ArrayList<String>();
 

@@ -30,21 +30,6 @@ public class ConceptCollectionAuthorization implements IAuthorization {
     @Autowired
     private IConceptCollectionFactory collectionFactory;
 
-    /**
-     * This method checks the access permissions for the given ConceptCollection
-     * for the logged in user.
-     * 
-     * @param userName
-     *            - logged in user name.
-     * @param conceptCollectionId
-     *            - Concept Collection id.
-     * @param userRoles
-     *            - the roles for which the user should be checked against the
-     *            Concept Collection.
-     * @throws QuadrigaAccessException
-     *             ,QuadrigaStorageException
-     * @author Kiran Batna
-     */
     @Override
     public boolean chkAuthorization(String userName, Object conceptCollectionObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -104,19 +89,6 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         return false;
     }
 
-    /**
-     * This method checks the access permissions for logged in user against the
-     * concept collections present in the system.
-     * 
-     * @param userName
-     *            - logged in user name.
-     * @param userRoles
-     *            - the roles for which the user should be checked against the
-     *            Concept Collection.
-     * @throws QuadrigaAccessException
-     *             ,QuadrigaStorageException
-     * @author Kiran Batna
-     */
     @Override
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {

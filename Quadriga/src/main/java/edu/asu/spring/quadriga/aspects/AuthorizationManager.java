@@ -53,10 +53,6 @@ public class AuthorizationManager implements IAuthorizationManager {
     @Qualifier("networkAuthorization")
     private IAuthorization networkAuthorization;
 
-    @Autowired
-    @Qualifier("objectAuthorization")
-    private ObjectAuthorization objectAuthorization;
-
     private HashMap<CheckedElementType, IAuthorization> accessManager;
 
     /**
@@ -80,9 +76,6 @@ public class AuthorizationManager implements IAuthorizationManager {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IAuthorization getAuthorizationObject(CheckedElementType type) {
         return accessManager.get(type);

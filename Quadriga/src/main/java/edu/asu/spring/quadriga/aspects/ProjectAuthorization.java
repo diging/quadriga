@@ -35,21 +35,6 @@ public class ProjectAuthorization implements IAuthorization {
     @Autowired
     private IProjectSecurityChecker projectSecurityManager;
 
-    /**
-     * This checks the access permissions for the logged in user for the given
-     * project id
-     * 
-     * @param :
-     *            userName - logged in user
-     * @param :
-     *            userRoles - set of roles for which the user should be checked
-     *            for access.
-     * @param :
-     *            projectId
-     * @throws :
-     *             QuadrigaStorageException, QuadrigaAccessException
-     * @return : hasAccess - true no Access - false
-     */
     @Override
     public boolean chkAuthorization(String userName, Object accessObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -108,21 +93,6 @@ public class ProjectAuthorization implements IAuthorization {
         return haveAccess;
     }
 
-    /**
-     * This checks the access permissions for the logged in user for the given
-     * list of project ids
-     * 
-     * @param :
-     *            userName - logged in user
-     * @param :
-     *            userRoles - set of roles for which the user should be checked
-     *            for access.
-     * @param :
-     *            projectIds - list of projectId
-     * @throws :
-     *             QuadrigaStorageException, QuadrigaAccessException
-     * @return : hasAccess - true no Access - false
-     */
     @Override
     public boolean chkAuthorization(String userName, List<String> projectIds, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -137,19 +107,6 @@ public class ProjectAuthorization implements IAuthorization {
         return haveAccess;
     }
 
-    /**
-     * This checks if the logged in user is associated with any project and
-     * possess any of the specified roles.
-     * 
-     * @param :
-     *            userName - logged in user
-     * @param :
-     *            userRoles - set of roles for which the user should be checked
-     *            for access.
-     * @throws :
-     *             QuadrigaStorageException, QuadrigaAccessException
-     * @return : hasAccess - true no Access - false
-     */
     @Override
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
