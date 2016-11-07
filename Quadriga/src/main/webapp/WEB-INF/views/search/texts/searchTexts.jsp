@@ -105,7 +105,7 @@
      <div class="col-md-4" style="padding-top: 100px;">
         <div class="row">
             <div class="col-sm-12">
-            <c:if test="${jsonstring != '[]'}">
+            <c:if test="${not empty jsonstring and jsonstring != '[]'}">
                 <small>Click on a node to search for its concept.</small>
             </c:if>
             </div>
