@@ -8,6 +8,7 @@
 
 <form:form modelAttribute="dictionary" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/dictionaries/add">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<h2>Add Dictionary</h2>
 
 	<div class="back-nav">

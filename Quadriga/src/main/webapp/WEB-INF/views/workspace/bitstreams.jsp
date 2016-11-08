@@ -148,6 +148,7 @@
 		<c:choose>
 			<c:when test="${not empty bitList}">
 			<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/addbitstreams?communityid=${communityId}&collectionid=${collectionId}&itemid=${itemId}">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<span class="byline">Select files to add to workspace.</span>
 				<c:forEach var="bitstream" items="${bitList}">
 				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}">${bitstream.name}</c:when><c:otherwise><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>

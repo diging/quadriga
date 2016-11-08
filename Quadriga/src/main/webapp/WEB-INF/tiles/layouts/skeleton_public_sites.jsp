@@ -2,6 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles-extras"
+	prefix="tilesx"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +17,10 @@
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+<!-- Custom styles for this template -->
+<link href="${pageContext.servletContext.contextPath}/resources/public/css/footer.css" rel="stylesheet">
+<script
+	src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.9.1.min.js"></script>
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 
@@ -26,11 +32,11 @@
 	rel="stylesheet">
 
 <link
-    href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic'
-    rel='stylesheet' type='text/css'>
+	href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic'
+	rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700'
-    rel='stylesheet' type='text/css'>
-    
+	rel='stylesheet' type='text/css'>
+
 <!-- Custom styles for this template -->
 <link
 	href="${pageContext.servletContext.contextPath}/resources/css/public-sites.css"
@@ -38,6 +44,8 @@
 
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+	
+	
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script
 	src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
@@ -105,21 +113,79 @@
 </head>
 <body>
 	<tiles:importAttribute name="currentPage" scope="request" />
-	
-	 <div class="container-fluid">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav pull-right">
-            <tiles:insertAttribute name="navigation" />
-          </ul>
-        </nav>
-        <h3 class="text-muted"><a class="navbar-brand" href="${pageContext.servletContext.contextPath}/sites"><img
-                    src="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/img/QuadrigaLogo-grey.png"
-                    height="35px" style="margin-top: -5px;"></a></h3>
-      </div>
 
-		
-		<tiles:insertAttribute name="content" />
+	<div class="container-fluid" style="min-height:90vh">
+		<div class="header clearfix">
+			<div class="navbar-collapse collapse navbar-right">
+				<ul class="nav navbar-nav">
+					<tiles:insertAttribute name="navigation" />
+				</ul>
+			</div>
+			<h3 class="text-muted">
+				<a class="navbar-brand"
+					href="${pageContext.servletContext.contextPath}/sites"><img
+					src="${pageContext.servletContext.contextPath}/resources/bootstrap-theme/assets/img/QuadrigaLogo-grey.png"
+					height="35px" style="margin-top: -5px;"></a>
+			</h3>
+		</div>
+
+		<tilesx:useAttribute name="right-navigation" id="rightnavigation" />
+		<div <c:if test="${!empty rightnavigation}"> class="col-md-9"</c:if>
+			style="text-align: center">
+			<div class="content">
+				<!-- Content -->
+				<tiles:insertAttribute name="content" />
+				<!-- /Content -->
+			</div>
+		</div>
+
+		<c:if test="${!empty rightnavigation}">
+		<div class="col-md-3" style="text-align: center">
+			<!-- Sidebar -->
+			<!-- Recent Posts -->
+			<tiles:insertAttribute name="right-navigation" />
+			<!-- /Recent Posts -->
+			<!-- /Sidebar -->
+		</div>
+		</c:if>
 	</div>
+	
+    <div id="footerwrap">
+        <div class="container">
+            <div class="col-lg-5">
+                <h3>The Digital Innovation Group</h3>
+                <p>
+                Quadriga is being developed by the <a href="http://diging.asu.edu/">Digital Innovation Group</a> in the <a href="http://cbs.asu.edu/">Center for Biology and Society</a> at <a href="http://www.asu.edu/">Arizona State University</a>.
+                </p>
+            </div>
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-5">
+                <h3>Find us</h3>
+                <p>Quadriga is open-source software hosted on <a href="http://diging.github.io/quadriga/">GitHub</a>.
+            </div>
+        </div>
+    </div>
+    <div id="copyrightwrap">
+        <div class="container">
+            <div class="col-md-6" style="text-align: left;">
+            <c:set var="PR" value="${pullrequest}" />
+            Version: ${buildNumber}<c:if test="${not empty PR}">, Pull Request: ${pullrequest}</c:if> 
+            </div>
+            <div class="col-md-6">
+            <p>
+                Design by <a href="http://www.blacktie.co">BLACKTIE.CO</a>
+            </p>
+            </div>
+            
+        </div>
+    </div>
+	
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script 
+	      src="${pageContext.servletContext.contextPath}/resources/js/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>

@@ -11,6 +11,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <link rel="stylesheet"
 	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 
@@ -77,6 +78,8 @@
 							buttons : {
 								Submit : function() {
 									$(this).dialog("close");
+									var token = '${_csrf.token}';
+									var header = '${_csrf.headerName}';
 									//$("#deletewsform")[0].submit();
 									$
 											.ajax({
@@ -84,6 +87,9 @@
 														+ id
 														+ "/adddictionaries",
 												type : "POST",
+												beforeSend: function(xhr) {
+													xhr.setRequestHeader(header, token);
+												},
 												data : "selected="
 														+ $('#hidden').val(),
 												success : function() {
@@ -122,6 +128,8 @@
 							buttons : {
 								Submit : function() {
 									$(this).dialog("close");
+									var token = '${_csrf.token}';
+									var header = '${_csrf.headerName}';
 									//$("#deletewsform")[0].submit();
 									$
 											.ajax({
@@ -129,6 +137,9 @@
 														+ id
 														+ "/adddictionaries",
 												type : "POST",
+												beforeSend: function(xhr) {
+													xhr.setRequestHeader(header, token);
+												},
 												data : "selected="
 														+ $('#hidden').val(),
 												success : function() {
@@ -237,6 +248,7 @@
 				<c:when test="${not empty dictionaryItemList}">
 
 					<form method="POST">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <c:if test="${hasWrite}">
 						<a class="btn btn-primary btn-sm"
 							href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}"><i

@@ -29,6 +29,7 @@
 
 <form:form commandName="workspace" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/workspace/add">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<p>Please fill in the following information:</p>
 	<table style="width: 100%">
 		<tr>

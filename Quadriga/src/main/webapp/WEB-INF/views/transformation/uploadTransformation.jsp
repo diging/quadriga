@@ -11,10 +11,9 @@
 </style>
 
 <form name="selectTransformFiles" method="post" class="form-horizontal"
-	action="${pageContext.servletContext.contextPath}/auth/transformation/upload"
+	action="${pageContext.servletContext.contextPath}/auth/transformation/upload?${_csrf.parameterName}=${_csrf.token}"
 	enctype="multipart/form-data"
 	modelAttribute="UploadTransformationBackingBean">
-
 	<div class="form-group required">
 		<label for="title" class="col-md-2 control-label"
 			style="font-weight: bold;"> Title</label>

@@ -5,7 +5,7 @@
 
 <form method="POST"
         action="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/resolvers/add">
-   
+   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
    <div class="form-group">
       <label for="resolverId" class="col-sm-3 control-label control-label-left">Select Project Handle Resolver:</label>
       <div class="col-sm-9">

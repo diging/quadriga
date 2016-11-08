@@ -17,7 +17,7 @@
 
 <form:form commandName="textfile" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${myProjectId}/${workspaceId}/addtext">
-
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<table style="width: 100%">
 		<tr>
 			<td style="width: 170px; vertical-align:top;">File Name:</td>

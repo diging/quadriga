@@ -946,7 +946,7 @@
 	<definition name="base.definition.public.sites"
 		template="/WEB-INF/tiles/layouts/skeleton_public_sites.jsp">
 		<put-attribute name="title" value="" />
-		<put-attribute name="navigation" value="" />
+		<put-attribute name="navigation" value="/WEB-INF/views/public/sites/navbar.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="currentPage" value="sites" />
 	</definition>
@@ -954,18 +954,25 @@
 	<!-- Sites pages -->
 	<definition name="sites" extends="base.definition.public.sites">
 		<put-attribute name="title" value="Quadriga - Public Sites" />
-		<put-attribute name="navigation"
-			value="/WEB-INF/views/public/sitesnavbarleft.jsp" />
-		<put-attribute name="content" value="/WEB-INF/views/sites.jsp" />
+		<put-attribute name="currentPage" value="sites" />
+		<put-attribute name="content" value="/WEB-INF/views/public/sites/sites.jsp" />
+		<put-attribute name="right-navigation" value="" />
+	</definition>
+	
+	<definition name="sites/network" extends="base.definition.public.sites">
+		<put-attribute name="title" value="Quadriga - Public Networks" />
+		<put-attribute name="currentPage" value="network" />
+		<put-attribute name="right-navigation"
+			value="/WEB-INF/views/public/sites/nav-networkrightplane.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/public/sites/publicnetworks.jsp" />
 	</definition>
 
 	<!-- Search Sites pages -->
 	<definition name="searchsites" extends="base.definition.public.sites">
 		<put-attribute name="title" value="Quadriga - Public Sites" />
-		<put-attribute name="navigation"
-			value="/WEB-INF/views/public/sitesnavbarleft.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/public/searchsites.jsp" />
+		<put-attribute name="right-navigation" value="" />
 	</definition>
 	
 	

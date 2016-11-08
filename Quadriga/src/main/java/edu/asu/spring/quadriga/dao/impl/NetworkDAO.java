@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -38,9 +37,6 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
-import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -60,18 +56,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
     private NetworkDTOMapper networkMapper;
 
     @Autowired
-    private IProjectDeepMapper projectMapper;
-
-    @Autowired
     private WorkspaceDTOMapper workspaceMapper;
-
-    @Autowired
-    private IRetrieveProjectManager retrieveProjectDetails;
-
-    @Autowired
-    private IListWSManager wsManager;
-
-    private static final Logger logger = LoggerFactory.getLogger(NetworkDAO.class);
 
     /**
      * 
@@ -85,8 +70,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         try {
             networksDTO = (NetworksDTO) sessionFactory.getCurrentSession().get(NetworksDTO.class, networkId);
             return networksDTO;
-        } catch (Exception e) {
-            logger.error("getNetworksDTO error :", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -142,8 +126,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         try {
             sessionFactory.getCurrentSession().save(networksDTO);
             return networkid;
-        } catch (Exception e) {
-            logger.error("Error in adding a network request: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
 
@@ -184,8 +167,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         try {
             sessionFactory.getCurrentSession().save(networkStatementsDTO);
             return null;
-        } catch (Exception e) {
-            logger.error("Error in adding a network request: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -289,8 +271,24 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
              */
 
             return listNetworksDTO;
-        } catch (Exception e) {
-            logger.error("Error in fetching a network status: ", e);
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
+        }
+    }
+    
+    /**
+     * This would give the list of {@link INetwork} that are approved 
+     */
+    @Override
+    public List<NetworksDTO> getApprovedNetworkList() throws QuadrigaStorageException {
+        try {
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findApprovedNetworks");
+
+            @SuppressWarnings("unchecked")
+            List<NetworksDTO> listNetworksDTO = query.list();
+
+            return listNetworksDTO;
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -331,8 +329,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
              * }
              */
             return listNetworkStatementsDTO;
-        } catch (Exception e) {
-            logger.error("Error in fetching network nodes: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -393,11 +390,10 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             session.close();
 
             return "";
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             if (transaction != null)
                 transaction.rollback();
 
-            logger.error("Error in archiving a network: ", e);
             throw new QuadrigaStorageException(e);
         }
 
@@ -432,8 +428,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             sessionFactory.getCurrentSession().update(networksDTO);
 
             return "success";
-        } catch (Exception e) {
-            logger.error("Error in changing network status: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -552,8 +547,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             List<NetworksDTO> listNetworksDTO = query.list();
 
             return listNetworksDTO;
-        } catch (Exception e) {
-            logger.error("Error in fetching network list of editors: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -601,8 +595,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         try {
             sessionFactory.getCurrentSession().save(networkAssignedDTO);
             return "";
-        } catch (Exception e) {
-            logger.error("Error in assigning network to user: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -622,8 +615,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             sessionFactory.getCurrentSession().update(networksDTO);
 
             return "";
-        } catch (Exception e) {
-            logger.error("Error in changing network status: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -648,8 +640,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             sessionFactory.getCurrentSession().update(networkAssignedDTO);
 
             return "";
-        } catch (Exception e) {
-            logger.error("Error in changing network status: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -661,7 +652,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
     public String addAnnotationToNetwork(String networkId, String nodeId, String nodeName, String annotationText,
             String userName, String objectType) throws QuadrigaStorageException {
         try {
-            List<NetworkNodeAnnotationsDTO> networkNodeAnnotationList = null;
             String annotationId = generateUniqueID();
             NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId,
                     annotationText, objectType, userName);
@@ -673,9 +663,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             sessionFactory.getCurrentSession().save(networkAnnotation);
             sessionFactory.getCurrentSession().save(networkNodeAnnotation);
 
-        } catch (Exception e) {
-            logger.error("Error in annotating relation :", e);
-            throw new QuadrigaStorageException();
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
         }
         return "";
     }
@@ -699,8 +688,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             networkNodeAnnotationsDTOList = query.list();
             return networkNodeAnnotationsDTOList;
 
-        } catch (Exception e) {
-            logger.error("Error in fetching annotation: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -725,8 +713,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             networkEdgeAnnotationsDTOList = query.list();
             return networkEdgeAnnotationsDTOList;
 
-        } catch (Exception e) {
-            logger.error("Error in fetching annotation: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -748,8 +735,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             networkAnnotationsDTOList = query.list();
             return networkAnnotationsDTOList;
 
-        } catch (Exception e) {
-            logger.error("Error in fetching annotation: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -766,8 +752,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             annotation.setAnnotationText(annotationText);
             sessionFactory.getCurrentSession().update(annotation);
             return "";
-        } catch (Exception e) {
-            logger.error("Error in fetching annotation: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -835,8 +820,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             List<NetworksDTO> listNetworksDTO = query.list();
 
             return listNetworksDTO;
-        } catch (Exception e) {
-            logger.error("Error in fetching network of user: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -901,8 +885,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             }
 
             return networkList;
-        } catch (Exception e) {
-            logger.error("Error in fetching network of user: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -926,8 +909,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             // network.getWorkspaceid());
             sessionFactory.getCurrentSession().saveOrUpdate(networksDTO);
             return SUCCESS;
-        } catch (Exception e) {
-            logger.error("update network method :", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -980,8 +962,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         try {
             sessionFactory.getCurrentSession().save(networkEdgeAnnotationsDTO);
             return "";
-        } catch (Exception e) {
-            logger.error("Error in assigning network to user: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
 
@@ -1019,7 +1000,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             String predicateName, String subjectId, String subjectName, String objectId, String objectName,
             String userName, String annotedObjectType) throws QuadrigaStorageException {
         try {
-            List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList = null;
             String annotationId = generateUniqueID();
             NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId,
                     annotationText, annotedObjectType, userName);
@@ -1041,9 +1021,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             sessionFactory.getCurrentSession().save(networkAnnotation);
             sessionFactory.getCurrentSession().save(networkRelationAnnotation);
 
-        } catch (Exception e) {
-            logger.error("Error in annotating relation :", e);
-            throw new QuadrigaStorageException();
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
         }
 
     }
@@ -1072,7 +1051,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
     public void addAnnotationToNode(String annotationText, String networkId, String nodeId, String nodeName,
             String userName, String annotedObjectType) throws QuadrigaStorageException {
         try {
-            List<NetworkNodeAnnotationsDTO> networkNodeAnnotationList = null;
             String annotationId = "ANNOT_" + generateUniqueID();
             NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId,
                     annotationText, annotedObjectType, userName);
@@ -1093,9 +1071,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             sessionFactory.getCurrentSession().save(networkAnnotation);
             sessionFactory.getCurrentSession().save(networkNodeAnnotation);
 
-        } catch (Exception e) {
-            logger.error("Error in annotating relation :", e);
-            throw new QuadrigaStorageException();
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
         }
 
     }
@@ -1133,8 +1110,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             query.setParameter("predicateid", predicateId);
             query.setParameter("networkid", networkId);
             networkRelationAnnotations = query.list();
-        } catch (Exception ex) {
-            throw new QuadrigaStorageException();
+        } catch (HibernateException ex) {
+            throw new QuadrigaStorageException(ex);
         }
 
         return networkRelationAnnotations;

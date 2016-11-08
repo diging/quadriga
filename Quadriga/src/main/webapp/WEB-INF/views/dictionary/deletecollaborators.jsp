@@ -44,6 +44,7 @@
 
 <form:form method="POST" commandName="collaboratorForm"
 	action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/delete">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 	<c:if test="${not empty collaboratorForm.collaborators}">
 

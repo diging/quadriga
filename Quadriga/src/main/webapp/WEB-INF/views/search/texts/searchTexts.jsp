@@ -313,7 +313,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
         };
         var reqFail = function(err) {
             // triggered even when abort is called
-            //console.log(err);
+            console.log(err);
         };
         var reqAlways = function(obj) {
             // this triggered always
@@ -345,7 +345,6 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
             };
         })();
         var onChange = (function(ev) {
-        	
             // cancel the original request
             // and make a new request
             var $xhr;

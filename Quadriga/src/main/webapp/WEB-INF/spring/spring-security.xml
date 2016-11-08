@@ -17,7 +17,8 @@
 	<http auto-config="true" use-expressions="true" disable-url-rewriting="true">
 		<access-denied-handler error-page="/forbidden" />
 		<headers disabled="true"/>
-        <csrf disabled="true"/>
+        <!--<csrf disabled="true"/>-->
+       
         
 		<intercept-url pattern="/login*" access="permitAll" />
 		<intercept-url pattern="/register*" access="permitAll" />
