@@ -54,12 +54,14 @@ public class TextConceptSearchController {
     private IJsonCreator jsonCreator;
 
     @RequestMapping(value = "search/texts")
-    public String search(@RequestParam(defaultValue = "") String conceptId, Model model) throws Exception {
+    public String search(@RequestParam(value = "conceptid1", defaultValue = "") String conceptId1,
+            @RequestParam(value = "conceptid2", defaultValue = "") String conceptId2, Model model) throws Exception {
 
-        String conceptUri = conceptId;
+        System.out.println("In Concept Search");
+        String conceptUri = conceptId1;
 
-        if (!conceptId.isEmpty()) {
-            ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
+        if (!conceptId1.isEmpty()) {
+            ConceptpowerReply reply = conceptpowerConnector.getById(conceptId1);
             List<ConceptEntry> entries = reply.getConceptEntry();
 
             ConceptEntry entry = null;
@@ -68,12 +70,12 @@ public class TextConceptSearchController {
                 entry.setId(conceptUri);
             }
 
-            if (conceptId.startsWith("http://")) {
-                int lastIdx = conceptId.lastIndexOf("/");
-                conceptId = conceptId.substring(lastIdx + 1);
+            if (conceptId1.startsWith("http://")) {
+                int lastIdx = conceptId1.lastIndexOf("/");
+                conceptId1 = conceptId1.substring(lastIdx + 1);
             }
 
-            String results = qStoreConnector.searchNodesByConcept(conceptId);
+            String results = qStoreConnector.searchNodesByConcept(conceptId1);
 
             if (results != null && !results.isEmpty()) {
                 ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
@@ -129,9 +131,9 @@ public class TextConceptSearchController {
                 }
 
                 model.addAttribute("jsonstring", json);
-                
-            }            
-            
+
+            }
+
             model.addAttribute("concept", entry);
         }
 
