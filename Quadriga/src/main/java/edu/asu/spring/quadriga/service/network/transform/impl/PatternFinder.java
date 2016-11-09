@@ -77,14 +77,12 @@ public class PatternFinder {
 					graph.setId(pattern.getId());
 					return true;
 				}
-				if (graph.getConcept()!=null && pattern.getConcept() != null) {
-					if(graph.getAlternativeIds() != null) {
-					    if(graph.getAlternativeIds().contains(pattern.getConcept())) {
-					        graph.setId(pattern.getId());
-					        return true;
-					    }
-					}
-					return false;
+				if (graph.getConcept() != null && pattern.getConcept() != null && graph.getAlternativeIds() != null) {
+				    if (graph.getAlternativeIds().contains(pattern.getConcept())) {
+				        graph.setId(pattern.getId());
+				        return true;
+				    }
+				    return false;
 				}
 				else if (graph.getType()!=null && pattern.getType() != null) {
 					if (!graph.getType().equals(pattern.getType()))

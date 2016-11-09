@@ -41,13 +41,13 @@ import javax.xml.bind.annotation.XmlType;
  *                   &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;element name="conceptList" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
+ *                   &lt;element name="alternativeIds" maxOccurs="unbounded">
+ *                     &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                   &lt;/element>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="alternativeIds" maxOccurs="unbounded">
- *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;/element>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -59,7 +59,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "conceptEntry", "alternativeIds"
+    "conceptEntry"
 })
 @XmlRootElement(name = "conceptpowerReply")
 public class ConceptpowerReply {
@@ -100,29 +100,7 @@ public class ConceptpowerReply {
         this.conceptEntry = entries;
     }
     
-    @XmlElement(required = true, namespace="http://www.digitalhps.org/")
-    protected List<ConceptpowerReply.AlternativeIds> alternativeIds;
-    
-    /**
-     * Gets the value of the alternativeIds property.
-     * 
-     * <p>
-     * This accessor method returns alternate ids of concept,
-     * provided in conceptEntry object
-     * 
-     * 
-     */
-    public List<ConceptpowerReply.AlternativeIds> getAlternativeIds() {
-        if (alternativeIds == null) {
-            alternativeIds = new ArrayList<ConceptpowerReply.AlternativeIds>();
-        }
-        return this.alternativeIds;
-    }
-
-    public void setAlternativeIds(List<ConceptpowerReply.AlternativeIds> alternativeIds) {
-        this.alternativeIds = alternativeIds;
-    }
-
+  
     /**
      * <p>Java class for anonymous complex type.
      * 
@@ -139,6 +117,9 @@ public class ConceptpowerReply {
      *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="conceptList" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
+     *         &lt;element name="alternativeIds" maxOccurs="unbounded">
+     *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
+     *         &lt;/element>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -200,6 +181,9 @@ public class ConceptpowerReply {
         @XmlElement(namespace="http://www.digitalhps.org/", type=ConceptpowerType.class)
         protected ConceptpowerType type;
 
+        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
+        protected AlternativeIds alternativeIds;
+        
         /**
          * Gets the value of the id property.
          * 
@@ -343,31 +327,31 @@ public class ConceptpowerReply {
             this.type.setType(type);
         }
 
+        public AlternativeIds getAlternativeIds() {
+            return this.alternativeIds;
+        }
+
+        public void setAlternativeIds(AlternativeIds alternativeIds) {
+            this.alternativeIds = alternativeIds;
+        }     
+
     }
     
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "")
+    @XmlType(name = "")    
     public static class AlternativeIds {
         
-        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
-        protected ArrayList<String> id;
+        @XmlElement(name="id", namespace="http://www.digitalhps.org/")    
+        protected ArrayList<String> idList;
 
-        /**
-         * Gets the arrayList of the id property.
-         *     
-         */
-        public ArrayList<String> getId() {
-            return id;
+        public ArrayList<String> getIdList() {
+            return idList;
         }
 
-        /**
-         * Sets the arrayList of the id property.
-         *     
-         */
-        public void setId(ArrayList<String> id) {
-            this.id = id;
+        public void setIdList(ArrayList<String> idList) {
+            this.idList = idList;
         }
-        
+
     }
 
 }
