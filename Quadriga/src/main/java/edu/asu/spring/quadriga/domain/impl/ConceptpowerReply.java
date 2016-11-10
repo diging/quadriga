@@ -16,6 +16,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -180,10 +181,19 @@ public class ConceptpowerReply {
 
         @XmlElement(namespace="http://www.digitalhps.org/", type=ConceptpowerType.class)
         protected ConceptpowerType type;
+     
+        @XmlElementWrapper(name="alternativeIds", namespace="http://www.digitalhps.org/")
+        @XmlElement(name="id", namespace="http://www.digitalhps.org/")   
+        protected List<String> alternativeIdList;
 
-        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
-        protected AlternativeIds alternativeIds;
-        
+        public List<String> getAlternativeIdList() {
+            return alternativeIdList;
+        }
+
+        public void setAlternativeIdList(List<String> alternativeIdList) {
+            this.alternativeIdList = alternativeIdList;
+        }
+
         /**
          * Gets the value of the id property.
          * 
@@ -325,31 +335,6 @@ public class ConceptpowerReply {
                 this.type = new ConceptpowerType();
             }
             this.type.setType(type);
-        }
-
-        public AlternativeIds getAlternativeIds() {
-            return this.alternativeIds;
-        }
-
-        public void setAlternativeIds(AlternativeIds alternativeIds) {
-            this.alternativeIds = alternativeIds;
-        }     
-
-    }
-    
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "")    
-    public static class AlternativeIds {
-        
-        @XmlElement(name="id", namespace="http://www.digitalhps.org/")    
-        protected ArrayList<String> idList;
-
-        public ArrayList<String> getIdList() {
-            return idList;
-        }
-
-        public void setIdList(ArrayList<String> idList) {
-            this.idList = idList;
         }
 
     }

@@ -77,7 +77,7 @@ public class PatternFinder {
 					graph.setId(pattern.getId());
 					return true;
 				}
-				if (graph.getConcept() != null && pattern.getConcept() != null && graph.getAlternativeIds() != null) {
+				if (pattern.getConcept() != null && graph.getAlternativeIds() != null) {
 				    if (graph.getAlternativeIds().contains(pattern.getConcept())) {
 				        graph.setId(pattern.getId());
 				        return true;

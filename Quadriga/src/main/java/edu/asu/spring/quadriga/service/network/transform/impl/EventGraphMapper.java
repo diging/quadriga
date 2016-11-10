@@ -79,7 +79,7 @@ public class EventGraphMapper {
 					    ConceptpowerReply reply = conceptpower.getById(interpretation);
 					    if (reply.getConceptEntry().size() > 0) {
 					        node.setType(reply.getConceptEntry().get(0).getTypeUri());
-					        List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIds().getIdList();
+					        List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIdList();
 					        if (alternativeIds != null && alternativeIds.size() > 0) {
 					            node.setAlternativeIds(alternativeIds);
 					        }
@@ -111,7 +111,7 @@ public class EventGraphMapper {
 							ConceptpowerReply reply = conceptpower.getById(interpretation);
                             if (reply.getConceptEntry().size() > 0) {
                                 node.setType(reply.getConceptEntry().get(0).getTypeUri());
-                                List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIds().getIdList();
+                                List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIdList();
                                 if(alternativeIds != null && alternativeIds.size() > 0) {
                                     node.setAlternativeIds(alternativeIds);
                                 }
