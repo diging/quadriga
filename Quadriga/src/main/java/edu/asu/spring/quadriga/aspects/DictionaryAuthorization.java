@@ -3,12 +3,15 @@ package edu.asu.spring.quadriga.aspects;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
+import edu.asu.spring.quadriga.exceptions.InvalidCastException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -26,6 +29,7 @@ public class DictionaryAuthorization implements IAuthorization {
 
     @Autowired
     private IDictionaryManager dictonaryManager;
+    private final Logger logger = LoggerFactory.getLogger(DictionaryAuthorization.class);
 
     @Override
     public boolean chkAuthorization(String userName, Object accessObject, String[] userRoles)
@@ -38,11 +42,15 @@ public class DictionaryAuthorization implements IAuthorization {
         String dictionaryId = null;
 
         // fetch the details of the concept collection
-        if (accessObject.getClass().equals(String.class)) {
-            dictionaryId = (String) accessObject;
-            dictionary = dictonaryManager.getDictionaryDetails(dictionaryId);
-        } else {
-            dictionary = (IDictionary) accessObject;
+        try {
+            if (accessObject.getClass().equals(String.class)) {
+                dictionaryId = (String) accessObject;
+                dictionary = dictonaryManager.getDictionaryDetails(dictionaryId);
+            } else {
+                dictionary = (IDictionary) accessObject;
+            }
+        } catch (ClassCastException cce) {
+            throw new InvalidCastException(cce);
         }
         // fetch the details of the concept collection
 

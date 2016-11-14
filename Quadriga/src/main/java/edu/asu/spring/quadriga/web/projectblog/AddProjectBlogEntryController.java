@@ -197,7 +197,7 @@ public class AddProjectBlogEntryController {
             transformedNetwork = transformationManager.getTransformedNetwork(networkId);
         } catch (QuadrigaStorageException qse) {
 
-            logger.error("Error while retrieving networks for display:" + qse);
+            logger.error("Error while retrieving networks for display:", qse);
             return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         String json = null;

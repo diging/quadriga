@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.aspects;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.exceptions.InvalidCastException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
@@ -35,6 +38,8 @@ public class ProjectAuthorization implements IAuthorization {
     @Autowired
     private IProjectSecurityChecker projectSecurityManager;
 
+    private final Logger logger = LoggerFactory.getLogger(ProjectAuthorization.class);
+
     @Override
     public boolean chkAuthorization(String userName, Object accessObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -49,13 +54,16 @@ public class ProjectAuthorization implements IAuthorization {
         IProject project;
         String projectId = null;
         // fetch the details of the concept collection
-        if (accessObj.getClass().equals(String.class)) {
-            projectId = (String) accessObj;
-            project = projectManager.getProjectDetails(projectId);
-        } else {
-            project = (IProject) accessObj;
+        try {
+            if (accessObj.getClass().equals(String.class)) {
+                projectId = (String) accessObj;
+                project = projectManager.getProjectDetails(projectId);
+            } else {
+                project = (IProject) accessObj;
+            }
+        } catch (ClassCastException cce) {
+            throw new InvalidCastException(cce);
         }
-
         // fetch the details of the project
 
         projectOwner = project.getOwner().getUserName();

@@ -2,10 +2,14 @@ package edu.asu.spring.quadriga.aspects;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.network.INetwork;
+import edu.asu.spring.quadriga.exceptions.InvalidCastException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.editor.IEditorAccessManager;
@@ -24,31 +28,38 @@ public class NetworkAuthorization implements IAuthorization {
     @Autowired
     private IEditorAccessManager accessManager;
 
+    private final Logger logger = LoggerFactory.getLogger(NetworkAuthorization.class);
+
     @Override
     public boolean chkAuthorization(String userName, Object accessObject, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess;
-        haveAccess = false;
 
+        String networkId = null;
         // check if the user has a editor role for the network specified
-        String networkId = (String) accessObject;
+        try {
+            if (accessObject.getClass().equals(String.class)) {
+                networkId = (String) accessObject;
+            } else {
+                INetwork nwObj = (Network) accessObject;
+                networkId = nwObj.getNetworkId();
+            }
+        } catch (ClassCastException cce) {
+            // TODO Auto-generated catch block
+            throw new InvalidCastException(cce);
 
-        haveAccess = accessManager.checkIsNetworkEditor(networkId, userName);
+        }
 
-        return haveAccess;
+        return accessManager.checkIsNetworkEditor(networkId, userName);
+
     }
 
     @Override
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess;
-
-        haveAccess = false;
 
         // check if the user has a editor role associated
-        haveAccess = accessManager.checkIsEditor(userName);
+        return accessManager.checkIsEditor(userName);
 
-        return haveAccess;
     }
 
     @Override

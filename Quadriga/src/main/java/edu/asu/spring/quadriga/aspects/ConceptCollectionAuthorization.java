@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.aspects;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.exceptions.InvalidCastException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -30,6 +33,8 @@ public class ConceptCollectionAuthorization implements IAuthorization {
     @Autowired
     private IConceptCollectionFactory collectionFactory;
 
+    private final Logger logger = LoggerFactory.getLogger(ConceptCollectionAuthorization.class);
+
     @Override
     public boolean chkAuthorization(String userName, Object conceptCollectionObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
@@ -37,11 +42,15 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         IConceptCollection collection;
         String conceptCollectionId = null;
         // fetch the details of the concept collection
-        if (conceptCollectionObj.getClass().equals(String.class)) {
-            conceptCollectionId = (String) conceptCollectionObj;
-            collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
-        } else {
-            collection = (IConceptCollection) conceptCollectionObj;
+        try {
+            if (conceptCollectionObj.getClass().equals(String.class)) {
+                conceptCollectionId = (String) conceptCollectionObj;
+                collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
+            } else {
+                collection = (IConceptCollection) conceptCollectionObj;
+            }
+        } catch (ClassCastException cce) {
+            throw new InvalidCastException(cce);
         }
 
         // check if the user is a concept collection owner

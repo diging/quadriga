@@ -10,6 +10,7 @@ import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.exceptions.InvalidCastException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
@@ -48,11 +49,15 @@ public class WorkspaceRestAuthorization implements IAuthorization {
 
         String workspaceId = null;
 
-        if (workspaceObj.getClass().equals(String.class)) {
-            workspaceId = (String) workspaceObj;
-            workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
-        } else {
-            workspace = (IWorkSpace) workspaceObj;
+        try {
+            if (workspaceObj.getClass().equals(String.class)) {
+                workspaceId = (String) workspaceObj;
+                workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
+            } else {
+                workspace = (IWorkSpace) workspaceObj;
+            }
+        } catch (ClassCastException cce) {
+            throw new InvalidCastException(cce);
         }
 
         if (workspace == null) {

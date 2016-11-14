@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.aspects;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.exceptions.InvalidCastException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
@@ -36,6 +39,8 @@ public class WorkspaceAuthorization implements IAuthorization {
     @Autowired
     private ProjectAuthorization projectAuthorization;
 
+    private final Logger logger = LoggerFactory.getLogger(WorkspaceAuthorization.class);
+
     @Override
     @Transactional
     public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
@@ -47,11 +52,15 @@ public class WorkspaceAuthorization implements IAuthorization {
         IWorkSpace workspace;
         String workspaceId = null;
 
-        if (workspaceObj.getClass().equals(String.class)) {
-            workspaceId = (String) workspaceObj;
-            workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
-        } else {
-            workspace = (IWorkSpace) workspaceObj;
+        try {
+            if (workspaceObj.getClass().equals(String.class)) {
+                workspaceId = (String) workspaceObj;
+                workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
+            } else {
+                workspace = (IWorkSpace) workspaceObj;
+            }
+        } catch (ClassCastException cce) {
+            throw new InvalidCastException(cce);
         }
         IProject project = workspace.getProjectWorkspace().getProject();
         List<String> projects = new ArrayList<String>();
