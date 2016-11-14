@@ -34,7 +34,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess;
+
         String workspaceOwner;
         String collaboratorName = null;
         String collaboratorRoleId;
@@ -42,8 +42,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
         List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
         List<IQuadrigaRole> collaboratorRoles = null;
         ArrayList<String> roles;
-
-        haveAccess = false;
+        boolean haveAccess = false;
 
         // fetch the details of the workspace
 
@@ -111,9 +110,9 @@ public class WorkspaceRestAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess;
+
         ArrayList<String> roles;
-        haveAccess = false;
+        boolean haveAccess = false;
 
         // fetch the details of the project
         haveAccess = wsSecurityManager.checkIsWorkspaceAssociated(userName);

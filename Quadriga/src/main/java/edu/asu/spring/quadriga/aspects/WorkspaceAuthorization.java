@@ -123,9 +123,8 @@ public class WorkspaceAuthorization implements IAuthorization {
     @Transactional
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess;
+        boolean haveAccess = false;
         ArrayList<String> roles;
-        haveAccess = false;
 
         // fetch the details of the project
         haveAccess = wsSecurityManager.checkIsWorkspaceAssociated(userName);

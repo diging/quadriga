@@ -43,13 +43,12 @@ public class ProjectAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorization(String userName, Object accessObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess;
         String projectOwner;
         String collaboratorName;
         String collaboratorRoleId;
         List<IQuadrigaRole> collaboratorRoles;
         ArrayList<String> roles;
-        haveAccess = false;
+        boolean haveAccess = false;
 
         IProject project;
         String projectId = null;
@@ -104,8 +103,7 @@ public class ProjectAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorization(String userName, List<String> projectIds, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess;
-        haveAccess = false;
+        boolean haveAccess = false;
         for (String projectId : projectIds) {
             haveAccess = chkAuthorization(userName, projectId, userRoles);
             if (!haveAccess) {
