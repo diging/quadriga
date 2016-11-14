@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
-import edu.asu.spring.quadriga.exceptions.InvalidCastException;
+import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
@@ -35,28 +35,25 @@ public class WorkspaceRestAuthorization implements IAuthorization {
     public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        String workspaceOwner;
-        String collaboratorName = null;
         String collaboratorRoleId;
         IWorkSpace workspace;
         List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
         List<IQuadrigaRole> collaboratorRoles = null;
         ArrayList<String> roles;
-        boolean haveAccess = false;
 
         // fetch the details of the workspace
 
         String workspaceId = null;
 
         try {
-            if (workspaceObj.getClass().equals(String.class)) {
+            if (workspaceObj instanceof String) {
                 workspaceId = (String) workspaceObj;
                 workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
             } else {
                 workspace = (IWorkSpace) workspaceObj;
             }
         } catch (ClassCastException cce) {
-            throw new InvalidCastException(cce);
+            throw new IllegalObjectException(cce);
         }
 
         if (workspace == null) {
@@ -64,13 +61,12 @@ public class WorkspaceRestAuthorization implements IAuthorization {
         }
         // check if the logged in user is workspace owner
         if (workspace.getOwner() != null) {
-            workspaceOwner = workspace.getOwner().getUserName();
 
-            if (userName.equals(workspaceOwner)) {
-                haveAccess = true;
+            if (userName.equals(workspace.getOwner().getUserName())) {
+                return true;
             }
 
-            if (!haveAccess) {
+            else {
                 if (userRoles.length > 0) {
                     roles = getAccessRoleList(userRoles);
 
@@ -78,6 +74,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
                     if (workspaceCollaboratorList != null) {
                         for (IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList) {
                             // check if he is a collaborator to the project
+                            String collaboratorName = null;
                             if (workspaceCollaborator.getCollaborator() != null) {
                                 collaboratorName = workspaceCollaborator.getCollaborator().getUserObj().getUserName();
                             }
@@ -92,8 +89,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
                                         for (IQuadrigaRole collabRole : collaboratorRoles) {
                                             collaboratorRoleId = collabRole.getId();
                                             if (roles.contains(collaboratorRoleId)) {
-                                                haveAccess = true;
-                                                return haveAccess;
+                                                return true;
                                             }
                                         }
                                     }
@@ -104,7 +100,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
                 }
             }
         }
-        return haveAccess;
+        return false;
     }
 
     @Override
@@ -112,26 +108,25 @@ public class WorkspaceRestAuthorization implements IAuthorization {
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         ArrayList<String> roles;
-        boolean haveAccess = false;
 
         // fetch the details of the project
-        haveAccess = wsSecurityManager.checkIsWorkspaceAssociated(userName);
+        if (wsSecurityManager.checkIsWorkspaceAssociated(userName)) {
+            return true;
+        }
 
         // check the user roles if he is not a project owner
-        if (!haveAccess) {
+        else {
             if (userRoles.length > 0) {
                 roles = getAccessRoleList(userRoles);
 
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
-                    haveAccess = wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role);
-
-                    if (haveAccess)
-                        break;
+                    if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role))
+                        return true;
                 }
             }
         }
-        return haveAccess;
+        return false;
 
     }
 

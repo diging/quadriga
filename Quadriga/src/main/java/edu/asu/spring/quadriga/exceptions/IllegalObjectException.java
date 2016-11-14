@@ -4,29 +4,29 @@ package edu.asu.spring.quadriga.exceptions;
  * @author Nischal Samji Custom exception thrown when an object is improperly
  *         cast to either a string or a domain object.
  */
-public class InvalidCastException extends RuntimeException {
+public class IllegalObjectException extends RuntimeException {
 
     /**
      * 
      */
     private static final long serialVersionUID = -1150630721953424128L;
 
-    public InvalidCastException() {
+    public IllegalObjectException() {
         super();
 
     }
 
-    public InvalidCastException(String message, Throwable cause) {
+    public IllegalObjectException(String message, Throwable cause) {
         super(message, cause);
 
     }
 
-    public InvalidCastException(String message) {
+    public IllegalObjectException(String message) {
         super(message);
 
     }
 
-    public InvalidCastException(Throwable cause) {
+    public IllegalObjectException(Throwable cause) {
         super(cause);
 
     }

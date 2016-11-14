@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
-import edu.asu.spring.quadriga.exceptions.InvalidCastException;
+import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -34,9 +34,6 @@ public class DictionaryAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorization(String userName, Object accessObject, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        String collaboratorName;
-        String collaboratorRoleId;
-        List<IQuadrigaRole> collaboratorRoles;
 
         IDictionary dictionary;
         String dictionaryId = null;
@@ -50,7 +47,7 @@ public class DictionaryAuthorization implements IAuthorization {
                 dictionary = (IDictionary) accessObject;
             }
         } catch (ClassCastException cce) {
-            throw new InvalidCastException(cce);
+            throw new IllegalObjectException(cce);
         }
         // fetch the details of the concept collection
 
@@ -77,12 +74,12 @@ public class DictionaryAuthorization implements IAuthorization {
         for (IDictionaryCollaborator dictCollaborator : dictCollaboratorList) {
             // check if he is the collaborator to the concept
             // collection
-            collaboratorName = dictCollaborator.getCollaborator().getUserObj().getUserName();
+            String collaboratorName = dictCollaborator.getCollaborator().getUserObj().getUserName();
             if (userName != null && userName.equals(collaboratorName)) {
-                collaboratorRoles = dictCollaborator.getCollaborator().getCollaboratorRoles();
+                List<IQuadrigaRole> collaboratorRoles = dictCollaborator.getCollaborator().getCollaboratorRoles();
                 if (collaboratorRoles != null) {
                     for (IQuadrigaRole collabRole : collaboratorRoles) {
-                        collaboratorRoleId = collabRole.getId();
+                        String collaboratorRoleId = collabRole.getId();
                         if (roles != null) {
                             if (roles.contains(collaboratorRoleId)) {
                                 return true;

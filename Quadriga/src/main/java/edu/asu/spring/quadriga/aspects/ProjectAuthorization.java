@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
-import edu.asu.spring.quadriga.exceptions.InvalidCastException;
+import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
@@ -43,53 +43,45 @@ public class ProjectAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorization(String userName, Object accessObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        String projectOwner;
-        String collaboratorName;
-        String collaboratorRoleId;
-        List<IQuadrigaRole> collaboratorRoles;
-        ArrayList<String> roles;
-        boolean haveAccess = false;
 
         IProject project;
         String projectId = null;
         // fetch the details of the concept collection
         try {
-            if (accessObj.getClass().equals(String.class)) {
+            if (accessObj instanceof String) {
                 projectId = (String) accessObj;
                 project = projectManager.getProjectDetails(projectId);
             } else {
                 project = (IProject) accessObj;
             }
         } catch (ClassCastException cce) {
-            throw new InvalidCastException(cce);
+            throw new IllegalObjectException(cce);
         }
         // fetch the details of the project
 
-        projectOwner = project.getOwner().getUserName();
+        String projectOwner = project.getOwner().getUserName();
         if (userName.equals(projectOwner)) {
-            haveAccess = true;
+            return true;
         }
 
         // check the user roles if he is not a project owner
-        if (!haveAccess) {
+        else {
             if (userRoles.length > 0) {
-                roles = getAccessRoleList(userRoles);
+                ArrayList<String> roles = getAccessRoleList(userRoles);
                 List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
 
                 if (projectCollaborators != null) {
                     for (IProjectCollaborator projectCollaborator : projectCollaborators) {
                         ICollaborator collaborator = projectCollaborator.getCollaborator();
                         // check if he is a collaborator to the project
-                        collaboratorName = collaborator.getUserObj().getUserName();
+                        String collaboratorName = collaborator.getUserObj().getUserName();
 
                         if (userName.equals(collaboratorName)) {
-                            collaboratorRoles = collaborator.getCollaboratorRoles();
+                            List<IQuadrigaRole> collaboratorRoles = collaborator.getCollaboratorRoles();
 
                             for (IQuadrigaRole collabRole : collaboratorRoles) {
-                                collaboratorRoleId = collabRole.getId();
-                                if (roles.contains(collaboratorRoleId)) {
-                                    haveAccess = true;
-                                    return haveAccess;
+                                if (roles.contains(collabRole.getId())) {
+                                    return true;
                                 }
                             }
                         }
@@ -97,7 +89,7 @@ public class ProjectAuthorization implements IAuthorization {
                 }
             }
         }
-        return haveAccess;
+        return false;
     }
 
     @Override
@@ -116,9 +108,9 @@ public class ProjectAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess;
+
         ArrayList<String> roles;
-        haveAccess = false;
+        boolean haveAccess = false;
 
         // fetch the details of the project
         haveAccess = projectSecurityManager.ownsAtLeastOneProject(userName);

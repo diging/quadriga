@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
-import edu.asu.spring.quadriga.exceptions.InvalidCastException;
+import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
@@ -45,7 +45,6 @@ public class WorkspaceAuthorization implements IAuthorization {
     @Transactional
     public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess = false;
 
         // fetch the details of the workspace
 
@@ -53,14 +52,14 @@ public class WorkspaceAuthorization implements IAuthorization {
         String workspaceId = null;
 
         try {
-            if (workspaceObj.getClass().equals(String.class)) {
+            if (workspaceObj instanceof String) {
                 workspaceId = (String) workspaceObj;
                 workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
             } else {
                 workspace = (IWorkSpace) workspaceObj;
             }
         } catch (ClassCastException cce) {
-            throw new InvalidCastException(cce);
+            throw new IllegalObjectException(cce);
         }
         IProject project = workspace.getProjectWorkspace().getProject();
         List<String> projects = new ArrayList<String>();
@@ -77,10 +76,10 @@ public class WorkspaceAuthorization implements IAuthorization {
             String workspaceOwner = workspace.getOwner().getUserName();
 
             if (userName.equals(workspaceOwner)) {
-                haveAccess = true;
+                return true;
             }
 
-            if (!haveAccess) {
+            else {
                 if (userRoles.length > 0) {
                     ArrayList<String> roles = getAccessRoleList(userRoles);
 
@@ -104,8 +103,7 @@ public class WorkspaceAuthorization implements IAuthorization {
                                         for (IQuadrigaRole collabRole : collaboratorRoles) {
                                             String collaboratorRoleId = collabRole.getId();
                                             if (roles.contains(collaboratorRoleId)) {
-                                                haveAccess = true;
-                                                return haveAccess;
+                                                return true;
                                             }
                                         }
                                     }
@@ -116,34 +114,28 @@ public class WorkspaceAuthorization implements IAuthorization {
                 }
             }
         }
-        return haveAccess;
+        return false;
     }
 
     @Override
     @Transactional
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess = false;
-        ArrayList<String> roles;
-
-        // fetch the details of the project
-        haveAccess = wsSecurityManager.checkIsWorkspaceAssociated(userName);
 
         // check the user roles if he is not a project owner
-        if (!haveAccess) {
+        if (!wsSecurityManager.checkIsWorkspaceAssociated(userName)) {
             if (userRoles.length > 0) {
-                roles = getAccessRoleList(userRoles);
+                ArrayList<String> roles = getAccessRoleList(userRoles);
 
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
-                    haveAccess = wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role);
 
-                    if (haveAccess)
+                    if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role))
                         break;
                 }
             }
         }
-        return haveAccess;
+        return true;
 
     }
 

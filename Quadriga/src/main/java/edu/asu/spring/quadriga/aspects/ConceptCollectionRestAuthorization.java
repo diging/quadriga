@@ -12,7 +12,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.exceptions.InvalidCastException;
+import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -51,7 +51,7 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
                 collection = (IConceptCollection) conceptCollectionObj;
             }
         } catch (ClassCastException cce) {
-            throw new InvalidCastException(cce);
+            throw new IllegalObjectException(cce);
         }
 
         // check if the user is a concept collection owner
