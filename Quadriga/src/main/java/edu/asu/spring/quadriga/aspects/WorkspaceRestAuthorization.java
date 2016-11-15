@@ -35,15 +35,8 @@ public class WorkspaceRestAuthorization implements IAuthorization {
     public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        String collaboratorRoleId;
-        IWorkSpace workspace;
-        List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
-        List<IQuadrigaRole> collaboratorRoles = null;
-        ArrayList<String> roles;
-
-        // fetch the details of the workspace
-
         String workspaceId = null;
+        IWorkSpace workspace;
 
         try {
             if (workspaceObj instanceof String) {
@@ -68,9 +61,10 @@ public class WorkspaceRestAuthorization implements IAuthorization {
 
             else {
                 if (userRoles.length > 0) {
-                    roles = getAccessRoleList(userRoles);
+                    ArrayList<String> roles = getAccessRoleList(userRoles);
 
-                    workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
+                    List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
+                    List<IQuadrigaRole> collaboratorRoles = null;
                     if (workspaceCollaboratorList != null) {
                         for (IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList) {
                             // check if he is a collaborator to the project
@@ -87,7 +81,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
 
                                     if (collaboratorRoles != null) {
                                         for (IQuadrigaRole collabRole : collaboratorRoles) {
-                                            collaboratorRoleId = collabRole.getId();
+                                            String collaboratorRoleId = collabRole.getId();
                                             if (roles.contains(collaboratorRoleId)) {
                                                 return true;
                                             }
@@ -112,10 +106,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
         // fetch the details of the project
         if (wsSecurityManager.checkIsWorkspaceAssociated(userName)) {
             return true;
-        }
-
-        // check the user roles if he is not a project owner
-        else {
+        } else { // check the user roles if he is not a project owner
             if (userRoles.length > 0) {
                 roles = getAccessRoleList(userRoles);
 

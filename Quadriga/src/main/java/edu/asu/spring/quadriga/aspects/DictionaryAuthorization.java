@@ -40,7 +40,7 @@ public class DictionaryAuthorization implements IAuthorization {
 
         // fetch the details of the concept collection
         try {
-            if (accessObject.getClass().equals(String.class)) {
+            if (accessObject instanceof String) {
                 dictionaryId = (String) accessObject;
                 dictionary = dictonaryManager.getDictionaryDetails(dictionaryId);
             } else {

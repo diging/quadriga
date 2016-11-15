@@ -77,9 +77,7 @@ public class WorkspaceAuthorization implements IAuthorization {
 
             if (userName.equals(workspaceOwner)) {
                 return true;
-            }
-
-            else {
+            } else {
                 if (userRoles.length > 0) {
                     ArrayList<String> roles = getAccessRoleList(userRoles);
 
@@ -122,20 +120,19 @@ public class WorkspaceAuthorization implements IAuthorization {
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        // check the user roles if he is not a project owner
-        if (!wsSecurityManager.checkIsWorkspaceAssociated(userName)) {
+        if (wsSecurityManager.checkIsWorkspaceAssociated(userName)) {
+            return true;
+        } else {
             if (userRoles.length > 0) {
                 ArrayList<String> roles = getAccessRoleList(userRoles);
-
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
-
                     if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role))
-                        break;
+                        return true;
                 }
             }
         }
-        return true;
+        return false;
 
     }
 

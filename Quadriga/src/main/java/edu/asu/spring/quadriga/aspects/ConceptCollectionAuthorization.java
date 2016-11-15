@@ -43,7 +43,7 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         String conceptCollectionId = null;
         // fetch the details of the concept collection
         try {
-            if (conceptCollectionObj.getClass().equals(String.class)) {
+            if (conceptCollectionObj instanceof String) {
                 conceptCollectionId = (String) conceptCollectionObj;
                 collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
             } else {

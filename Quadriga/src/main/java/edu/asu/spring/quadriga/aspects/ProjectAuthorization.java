@@ -95,14 +95,13 @@ public class ProjectAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorization(String userName, List<String> projectIds, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess = false;
+
         for (String projectId : projectIds) {
-            haveAccess = chkAuthorization(userName, projectId, userRoles);
-            if (!haveAccess) {
-                break;
+            if (!chkAuthorization(userName, projectId, userRoles)) {
+                return false;
             }
         }
-        return haveAccess;
+        return true;
     }
 
     @Override
@@ -110,25 +109,27 @@ public class ProjectAuthorization implements IAuthorization {
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         ArrayList<String> roles;
-        boolean haveAccess = false;
 
         // fetch the details of the project
-        haveAccess = projectSecurityManager.ownsAtLeastOneProject(userName);
+        if (projectSecurityManager.ownsAtLeastOneProject(userName)) {
+            return true;
+        }
 
         // check the user roles if he is not a project owner
-        if (!haveAccess) {
+        else {
             if (userRoles.length > 0) {
                 roles = getAccessRoleList(userRoles);
 
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
-                    haveAccess = projectSecurityManager.collaboratesOnAtLeastOneProject(userName, role);
-                    if (haveAccess)
-                        break;
+                    if (projectSecurityManager.collaboratesOnAtLeastOneProject(userName, role)) {
+                        return true;
+                    }
+
                 }
             }
         }
-        return haveAccess;
+        return false;
     }
 
     /**
