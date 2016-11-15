@@ -102,5 +102,153 @@
                     class="ui-state-error-text" /></td>
 
         </tr>
+        <tr>
+                <td colspan="1"><button class="btn btn-primary"
+                        type="button" data-toggle="collapse"
+                        data-target="#networkTable">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        Add a Network<a></a>
+                    </button></td>
+            </tr>
     </table>
+    <div id="networkTable" class="collapse">
+            <c:choose>
+                <c:when test="${not empty networks}">
+                    <div class="table-responsive">
+                        <table class="table table-striped networks">
+                            <thead>
+                                <tr>
+                                    <th width="80%">Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <c:forEach var="network"
+                                    items="${networks}">
+                                    <tr>
+                                        <td>${network.networkName}</td>
+                                        <td><a
+                                            class="btn btn-primary"
+                                            href="#networkBox"
+                                            aria-expanded="false"
+                                            aria-controls="collapseExample"
+                                            value="${network.networkId}"
+                                            onclick="loadNetwork(this)">View
+                                                Network</a></td>
+
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                        <div id="addImage" style="display: none">
+                            <button class="btn btn-primary"
+                                type="button">
+                                <i class="fa fa-plus-circle"
+                                    aria-hidden="true"></i> Add This
+                                Network To Editor<a></a>
+                            </button>
+                        </div>
+                        <div id="networkBox"
+                            style="min-height: 500px; width: 100%; text-align: left;">
+
+
+                        </div>
+                    </div>
+                </c:when>
+                <c:when test="${empty networks}">
+                    <p>There are no networks in this project.</p>
+                </c:when>
+            </c:choose>
+        </div>
 </form:form>
+
+<script
+    src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.2/cytoscape-cose-bilkent.js"
+    type="text/javascript"></script>
+<script
+    src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/publicNetwork.js"
+    type="text/javascript"></script>
+<script
+    src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/dist/cytoscape.js"
+    type="text/javascript"></script>
+<script type="text/javascript">
+    function loadNetwork(selectedNW) {
+        var nwid = selectedNW.getAttribute('value');
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            datatype : 'text',
+            url : "${pageContext.servletContext.contextPath}/auth/workbench/projects/" +'${project.projectId}'
+                    + "/settings/editabout/visualize/" + nwid,
+            timeout : 100000,
+            success : function(data) {
+                if (data === '') {
+                    loadErrorMessage()
+                } else
+                    visualizeNetwork(data);
+            },
+            error : function(e) {
+                loadErrorMessage();
+            }
+        });
+    }
+    function loadErrorMessage() {
+        $('#networkBox')
+                .append(
+                        "<p>There was an error while loading this network. Please contact an administrator.</p>");
+    }
+    function visualizeNetwork(jsonString) {
+        $('#addImage').show();
+        var container = document.getElementById('networkBox');
+        var cy = cytoscape({
+            container : container, // container to render in
+            layout : {
+                name : 'cose',
+                idealEdgeLength : 5
+            },
+            elements : eval(jsonString),
+            style : [
+                    {
+                        selector : 'node',
+                        style : {
+                            'background-color' : 'mapData(group, 0, 1, #E1CE7A, #FDD692)',
+                            'border-color' : '#B98F88',
+                            'border-width' : 1,
+                            'font-family' : 'Open Sans',
+                            'font-size' : '12px',
+                            'font-weight' : 'bold',
+                            'color' : 'black',
+                            'label' : 'data(conceptName)',
+                            'width' : 'mapData(group, 0, 1, 40, 55)',
+                            "height" : "mapData(group, 0, 1, 40, 55)",
+                            'text-valign' : 'center',
+                        }
+                    },
+                    {
+                        selector : 'edge',
+                        style : {
+                            'width' : 1,
+                            'line-color' : '#754F44',
+                            'target-arrow-shape' : 'none'
+                        }
+                    } ]
+        });
+        defineListeners(cy, '${pageContext.servletContext.contextPath}',
+                '${unixName}');
+        $(document).ready(
+                function() {
+                    $('#addImage').on(
+                            'click',
+                            function() {
+                                var png = cy.png({
+                                    'scale' : 0.75
+                                });
+                                tinyMCE.execCommand('mceInsertContent', false,
+                                        '<img src="' + png + '"/>');
+                            });
+                });
+    }
+</script>
+<script src="/quadriga/resources/js/d3.min.js" charset="utf-8"
+    type="text/javascript"></script>
