@@ -38,18 +38,20 @@ public class WorkspaceRestAuthorization implements IAuthorization {
         String workspaceId = null;
         IWorkSpace workspace;
 
-        try {
-            if (workspaceObj instanceof String) {
-                workspaceId = (String) workspaceObj;
-                workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
-            } else {
+        if (workspaceObj instanceof String) {
+            workspaceId = (String) workspaceObj;
+            workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
+        } else {
+            try {
                 workspace = (IWorkSpace) workspaceObj;
+            } catch (ClassCastException cce) {
+                throw new IllegalObjectException(cce);
             }
-        } catch (ClassCastException cce) {
-            throw new IllegalObjectException(cce);
         }
 
-        if (workspace == null) {
+        if (workspace == null)
+
+        {
             throw new QuadrigaAccessException();
         }
         // check if the logged in user is workspace owner

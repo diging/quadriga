@@ -47,15 +47,16 @@ public class ProjectAuthorization implements IAuthorization {
         IProject project;
         String projectId = null;
         // fetch the details of the concept collection
-        try {
-            if (accessObj instanceof String) {
-                projectId = (String) accessObj;
-                project = projectManager.getProjectDetails(projectId);
-            } else {
+
+        if (accessObj instanceof String) {
+            projectId = (String) accessObj;
+            project = projectManager.getProjectDetails(projectId);
+        } else {
+            try {
                 project = (IProject) accessObj;
+            } catch (ClassCastException cce) {
+                throw new IllegalObjectException(cce);
             }
-        } catch (ClassCastException cce) {
-            throw new IllegalObjectException(cce);
         }
         // fetch the details of the project
 

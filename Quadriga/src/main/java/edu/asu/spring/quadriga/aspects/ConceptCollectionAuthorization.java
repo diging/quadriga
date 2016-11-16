@@ -42,15 +42,17 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         IConceptCollection collection;
         String conceptCollectionId = null;
         // fetch the details of the concept collection
-        try {
-            if (conceptCollectionObj instanceof String) {
-                conceptCollectionId = (String) conceptCollectionObj;
-                collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
-            } else {
+
+        if (conceptCollectionObj instanceof String) {
+            conceptCollectionId = (String) conceptCollectionObj;
+            collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
+        } else {
+            try {
                 collection = (IConceptCollection) conceptCollectionObj;
+            } catch (ClassCastException cce) {
+                throw new IllegalObjectException(cce);
             }
-        } catch (ClassCastException cce) {
-            throw new IllegalObjectException(cce);
+
         }
 
         // check if the user is a concept collection owner

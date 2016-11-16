@@ -51,15 +51,15 @@ public class WorkspaceAuthorization implements IAuthorization {
         IWorkSpace workspace;
         String workspaceId = null;
 
-        try {
-            if (workspaceObj instanceof String) {
-                workspaceId = (String) workspaceObj;
-                workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
-            } else {
+        if (workspaceObj instanceof String) {
+            workspaceId = (String) workspaceObj;
+            workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
+        } else {
+            try {
                 workspace = (IWorkSpace) workspaceObj;
+            } catch (ClassCastException cce) {
+                throw new IllegalObjectException(cce);
             }
-        } catch (ClassCastException cce) {
-            throw new IllegalObjectException(cce);
         }
         IProject project = workspace.getProjectWorkspace().getProject();
         List<String> projects = new ArrayList<String>();

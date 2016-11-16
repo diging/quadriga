@@ -39,19 +39,22 @@ public class DictionaryAuthorization implements IAuthorization {
         String dictionaryId = null;
 
         // fetch the details of the concept collection
-        try {
-            if (accessObject instanceof String) {
-                dictionaryId = (String) accessObject;
-                dictionary = dictonaryManager.getDictionaryDetails(dictionaryId);
-            } else {
+
+        if (accessObject instanceof String) {
+            dictionaryId = (String) accessObject;
+            dictionary = dictonaryManager.getDictionaryDetails(dictionaryId);
+        } else {
+            try {
                 dictionary = (IDictionary) accessObject;
+            } catch (ClassCastException cce) {
+                throw new IllegalObjectException(cce);
             }
-        } catch (ClassCastException cce) {
-            throw new IllegalObjectException(cce);
         }
         // fetch the details of the concept collection
 
-        if (dictionary == null) {
+        if (dictionary == null)
+
+        {
             throw new QuadrigaAccessException();
         }
         // check if the user is a dictionary owner

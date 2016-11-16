@@ -36,16 +36,17 @@ public class NetworkAuthorization implements IAuthorization {
 
         String networkId = null;
         // check if the user has a editor role for the network specified
-        try {
-            if (accessObject instanceof String) {
-                networkId = (String) accessObject;
-            } else {
+
+        if (accessObject instanceof String) {
+            networkId = (String) accessObject;
+        } else {
+            try {
                 INetwork nwObj = (Network) accessObject;
                 networkId = nwObj.getNetworkId();
-            }
-        } catch (ClassCastException cce) {
-            throw new IllegalObjectException(cce);
+            } catch (ClassCastException cce) {
+                throw new IllegalObjectException(cce);
 
+            }
         }
 
         return accessManager.checkIsNetworkEditor(networkId, userName);
