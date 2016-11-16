@@ -25,6 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
+import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
+import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -81,9 +84,9 @@ public class WebsiteAboutEditController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/projects/{ProjectId}/settings/editabout", method = RequestMethod.GET)
-    public String editAbout(@PathVariable("ProjectId") String projectId, Model model, Principal principal)
-            throws QuadrigaStorageException {
-        IProject project = projectManager.getProjectDetails(projectId);
+    @InjectProjectById
+    public String editAbout(@ProjectIdentifier @PathVariable("ProjectId") String projectId, Model model,
+            Principal principal, @InjectProject IProject project) throws QuadrigaStorageException {
         model.addAttribute("project", project);
         if (aboutTextManager.getAboutTextByProjectId(projectId) == null) {
             model.addAttribute("aboutTextBean", new AboutText());
@@ -105,11 +108,11 @@ public class WebsiteAboutEditController {
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/projects/{ProjectId}/settings/saveabout", method = RequestMethod.POST)
-    public ModelAndView saveAbout(@PathVariable("ProjectId") String projectId,
+    @InjectProjectById
+    public ModelAndView saveAbout(@ProjectIdentifier @PathVariable("ProjectId") String projectId,
             @Validated @ModelAttribute("aboutTextBean") AboutText formBean, BindingResult result, ModelAndView model,
-            Principal principal) throws QuadrigaStorageException {
+            Principal principal, @InjectProject IProject project) throws QuadrigaStorageException {
         model = new ModelAndView("auth/editabout");
-        IProject project = projectManager.getProjectDetails(projectId);
         List<INetwork> networks = nwManager.getNetworksInProject(projectId, INetworkStatus.APPROVED);
         if (result.hasErrors()) {
             model.addObject("aboutTextBean", formBean);
@@ -129,15 +132,13 @@ public class WebsiteAboutEditController {
      * This method is used to return a JSON string for visualizing a network
      * based on the Network id selected from the UI.
      * 
-     * @param unixName
+     * @param projectId
      *            Unix Name given for the Project
      * @param networkId
      *            Network Id for the network selected from the UI.
      * @param principal
      *            principal object which is required to fetch information about
      *            logged in user.
-     * @param project
-     *            project instance obtained using @InjectProject annotation
      * 
      * @return Returns a JSON string as a response entity based on the network
      *         selected from the UI.
