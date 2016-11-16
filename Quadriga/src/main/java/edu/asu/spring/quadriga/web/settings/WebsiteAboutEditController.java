@@ -114,16 +114,14 @@ public class WebsiteAboutEditController {
             Principal principal, @InjectProject IProject project) throws QuadrigaStorageException {
         model = new ModelAndView("auth/editabout");
         List<INetwork> networks = nwManager.getNetworksInProject(projectId, INetworkStatus.APPROVED);
+        model.addObject("project", project);
+        model.addObject("networks", networks);
         if (result.hasErrors()) {
             model.addObject("aboutTextBean", formBean);
-            model.addObject("project", project);
-            model.addObject("networks", networks);
         } else {
             aboutTextManager.saveAbout(projectId, formBean);
             model.addObject("show_success_alert", true);
             model.addObject("success_alert_msg", "You successfully edited the about text");
-            model.addObject("project", project);
-            model.addObject("networks", networks);
         }
         return model;
     }
