@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.settings;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -108,14 +110,17 @@ public class WebsiteAboutEditController {
             Principal principal) throws QuadrigaStorageException {
         model = new ModelAndView("auth/editabout");
         IProject project = projectManager.getProjectDetails(projectId);
+        List<INetwork> networks = nwManager.getNetworksInProject(projectId, INetworkStatus.APPROVED);
         if (result.hasErrors()) {
             model.addObject("aboutTextBean", formBean);
             model.addObject("project", project);
+            model.addObject("networks", networks);
         } else {
             aboutTextManager.saveAbout(projectId, formBean);
             model.addObject("show_success_alert", true);
             model.addObject("success_alert_msg", "You successfully edited the about text");
             model.addObject("project", project);
+            model.addObject("networks", networks);
         }
         return model;
     }
