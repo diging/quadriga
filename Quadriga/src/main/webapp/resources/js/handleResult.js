@@ -6,7 +6,7 @@ function handleResult(status, id) {
     }
 }
 
-function performAction(obj, id, contextPath) {
+function performAction(obj, id, contextPath, token, header) {
     var data = {};
     data['projectName'] = $("#projectName").val();
     data['projectDescription'] = $('#projectDescription').val();
@@ -15,7 +15,7 @@ function performAction(obj, id, contextPath) {
     data['resolvedHandlePattern'] = $('#resolvedHandlePattern').val();
     data['handleExample'] = $('#handleExample').val();
     data['resolvedHandleExample'] = $('#resolvedHandleExample').val();
-    
+
     $
     .ajax({
         type : "POST",
@@ -23,8 +23,9 @@ function performAction(obj, id, contextPath) {
         data : {
             data : JSON.stringify(data)
         },
-        beforeSend : function() {
-            $('#' + id).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+        beforeSend : function(xhr) {
+        	xhr.setRequestHeader(header, token);
+        	$('#' + id).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
         },
         success : function(data, status) {
             handleResult(data, id);

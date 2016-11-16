@@ -15,9 +15,10 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
- * This class intercepts the methods annotated by {@link InjectProjectById}
- * and retrieves the Project Id from the variable annotated by {@link ProjectIdentifier}
- * Inject the Project into the variable annotated by {@link InjectProject}
+ * This class intercepts the methods annotated by {@link InjectProjectById} and
+ * retrieves the Project Id from the variable annotated by
+ * {@link ProjectIdentifier} Inject the Project into the variable annotated by
+ * {@link InjectProject}
  * 
  * @author Nischal Samji
  *
@@ -41,8 +42,8 @@ public class InjectProjectByIdAspect extends InjectProjectAspect {
     }
 
     @Override
-    public IProject getProject(String proj) throws QuadrigaStorageException {
-        return projectManager.getProjectDetails(proj);
+    public IProject getProject(String projectId) throws QuadrigaStorageException {
+        return projectManager.getProjectDetails(projectId);
     }
 
 }

@@ -16,8 +16,10 @@ public interface IAboutTextMapper {
      * mapped {@link AboutTextDTO} Object.
      * 
      * @param abtDTO
-     *            Domain object that needs to be mapped to a DTO.
-     * @return Returns a DTO that is mapped from a {@link IAboutText}
+     *            {@link AboutTextDTO} that needs to be mapped to a
+     *            {@link IAboutText}
+     * @return Returns a {@link IAboutText} Object that is mapped from a
+     *         {@link AboutTextDTO}
      */
     public IAboutText aboutTextDTOtoBean(AboutTextDTO abtDTO);
 
@@ -27,7 +29,7 @@ public interface IAboutTextMapper {
      * 
      * @param abtText
      *            Domain Object that needs to be mapped to a
-     *            {@link AboutTextDTO} domain object.
+     *            {@link AboutTextDTO}.
      * @return Return a {@link AboutTextDTO} object that is mapped from a Domain
      *         object.
      */

@@ -27,7 +27,8 @@ var Log = {
 		}
 };
 
-function init(json, networkId, path) {
+function init(json, networkId, path, token, header) {
+    
 	console.log("init");
 	pathName = path;
 
@@ -348,6 +349,9 @@ function init(json, networkId, path) {
 									$.ajax({
 										url : $('#annot_form').attr("action"),
 										type : "POST",
+										beforeSend: function(xhr) {
+											xhr.setRequestHeader(header, token);
+										},
 										data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
 										success : function() {
 											alert("done");
@@ -413,6 +417,9 @@ function init(json, networkId, path) {
 									$.ajax({
 										url : $('#annot_form').attr("action"),
 										type : "POST",
+										beforeSend: function(xhr) {
+											xhr.setRequestHeader(header, token);
+										},
 										data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
 										success : function() {
 											alert("done");

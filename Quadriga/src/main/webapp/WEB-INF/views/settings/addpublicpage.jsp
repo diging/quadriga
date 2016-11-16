@@ -4,6 +4,7 @@
 <!-- Content -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
 <script>
 //@ sourceURL=filename.js
 	 
@@ -71,10 +72,15 @@
 		data["publicpageid"] = publicpageid;
 		data["linkTo"] = linkTo;
 		data["linkText"] = linkText;
+		var token = '${_csrf.token}';
+		var header = '${_csrf.headerName}';
 		$
 				.ajax({
 					type : "POST",
 					url : "${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(header, token);
+					},
 					data : {
 						data : JSON.stringify(data)
 					},

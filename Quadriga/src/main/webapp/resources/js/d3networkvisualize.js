@@ -7,7 +7,8 @@
  * 
  */
 
-function d3init(graph, networkId, path, type) {
+function d3init(graph, networkId, path, type, token, header) {
+	
 	if (graph == null) {
 		alert("no network");
 	}
@@ -495,11 +496,15 @@ function d3init(graph, networkId, path, type) {
 							+ "&targetid=" + targetid + "&targetname="
 							+ targetname + "&targettype=" + targettype
 							+ "&objecttype=" + objecttype;
+					
 					$.ajax({
 						url : path + "/auth/editing/saveAnnotationToEdge/"
 								+ networkId,
 						type : "POST",
 						data : input,
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader(header, token);
+						},
 						contentType : 'application/json; charset=utf-8',
 						success : function() {
 							$('#' + popupId + '').dialog('close');

@@ -19,7 +19,6 @@
                         this.getDoc().body.style.fontSize = '14px';
                     });
                 }
-
             });
 </script>
 <script type="text/javascript">
@@ -32,7 +31,6 @@
                 save_enablewhendirty : false,
                 toolbar : 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons | save'
             });
-
     $("#dlgConfirm")
             .dialog(
                     {

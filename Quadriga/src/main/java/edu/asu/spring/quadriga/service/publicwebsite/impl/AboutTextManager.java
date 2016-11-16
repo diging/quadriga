@@ -43,8 +43,10 @@ public class AboutTextManager implements IAboutTextManager {
     @Transactional
     @Override
     public IAboutText getAboutTextByProjectId(String projectId) throws QuadrigaStorageException {
-        AboutTextDTO abtDTO = aboutTextDAO.getDTOByProjectId(projectId);
-        return abtTxtMapper.aboutTextDTOtoBean(abtDTO);
+         AboutTextDTO abtDTO = aboutTextDAO.getDTOByProjectId(projectId);
+        if (abtDTO != null) {
+            return abtTxtMapper.aboutTextDTOtoBean(abtDTO);
+        }
+        return null;
     }
-
 }

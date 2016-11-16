@@ -1,13 +1,15 @@
 package edu.asu.spring.quadriga.validator;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
 
-@Service
 /**
  * This class acts as validator of form data coming from
  * <code>publicWebsiteEditAbout.jsp</code>
@@ -15,11 +17,11 @@ import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
  * @author Nischal Samji
  *
  */
+@Service
 public class AboutTextValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
-        ;
         return AboutText.class.isAssignableFrom(arg0);
     }
 
@@ -33,8 +35,25 @@ public class AboutTextValidator implements Validator {
      */
     @Override
     public void validate(Object obj, Errors err) {
+
+        IAboutText abtText = (IAboutText) obj;
+
+        String description = abtText.getDescription();
+        String title = abtText.getTitle();
+
+        Whitelist whitelist = Whitelist.basicWithImages();
+        Whitelist titleWhitelist = Whitelist.simpleText();
+
         // validate all the input parameters
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "title", "about_title.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "about_description.required");
+
+        if (!Jsoup.isValid(description, whitelist)) {
+            err.rejectValue("description", "about_description.proper");
+        }
+
+        if (!Jsoup.isValid(title, titleWhitelist)) {
+            err.rejectValue("title", "about_title.proper");
+        }
     }
 }

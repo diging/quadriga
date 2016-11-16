@@ -138,44 +138,45 @@
         </div>
         <div align="right">
             <c:if test="${owner}">
-
-
-
-                <a href="#" onclick="return confirmProjectDeletion()"><i
+                <a href="#" data-toggle="modal" data-target="#delete-project"><i
                     class="fa fa-trash" aria-hidden="true"></i> Delete Project</a>
             </c:if>
         </div>
-        <script>
-            function confirmProjectDeletion() {
-                // Define the Dialog and its properties.
-                $("#dialog-delete-project-confirm")
-                        .dialog(
-                                {
-                                    resizable : false,
-                                    modal : true,
-                                    title : "Delete Project",
-                                    position : 'top',
-                                    height : 300,
-                                    width : 500,
-                                    buttons : {
-                                        "Yes" : function() {
-                                            $(this).dialog('close');
-                                            location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteproject/${project.projectId}';
-                                            return false;
-                                        },
-                                        "No" : function() {
-                                            $(this).dialog('close');
-                                            return false;
-                                        }
-                                    }
-                                });
-            }
-        </script>
-        <div id="dialog-delete-project-confirm" title="Confirm Delete?"
-            style="display: none;">
-            You are about to delete a project, this is not reversible.</br> Do you
-            want to proceed?
+
+        <div class="modal fade" tabindex="-1" role="dialog"
+            id="delete-project">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Delete Project</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            You are about to delete a project, this is
+                            not reversible. </br> Do you want to proceed?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary"
+                            id="delete-project-btn">Yes</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <script>       
+            $('#delete-project-btn')
+            .click(
+                function(event) {
+                    location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deleteproject/${project.projectId}';
+                });
+        </script>
     </div>
 
     <!-- Display collaborators -->
