@@ -75,11 +75,15 @@ public class EventGraphMapper {
 					node.addTerm(nodeTerm);
 					String interpretation = term.getTermInterpertation();
 					if (interpretation != null) {
-						node.setConcept(interpretation);
-						ConceptpowerReply reply = conceptpower.getById(interpretation);
-						if (reply.getConceptEntry().size() > 0) {
-    						node.setType(reply.getConceptEntry().get(0).getTypeUri());
-						}
+					    node.setConcept(interpretation);
+					    ConceptpowerReply reply = conceptpower.getById(interpretation);
+					    if (reply.getConceptEntry().size() > 0) {
+					        node.setType(reply.getConceptEntry().get(0).getTypeUri());
+					        List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIdList();
+					        if (alternativeIds != null && alternativeIds.size() > 0) {
+					            node.setAlternativeIds(alternativeIds);
+					        }
+					    }
 					}
 				}
 				nodeMap.put(node.getId(), node);
@@ -107,6 +111,10 @@ public class EventGraphMapper {
 							ConceptpowerReply reply = conceptpower.getById(interpretation);
                             if (reply.getConceptEntry().size() > 0) {
                                 node.setType(reply.getConceptEntry().get(0).getTypeUri());
+                                List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIdList();
+                                if(alternativeIds != null && alternativeIds.size() > 0) {
+                                    node.setAlternativeIds(alternativeIds);
+                                }
                             }
 						}
 					}
@@ -281,6 +289,7 @@ public class EventGraphMapper {
 		copiedNode.setEventId(start.getEventId());
 		copiedNode.setType(start.getType());
 		copiedNode.setTerms(start.getTerms());
+		copiedNode.setAlternativeIds(start.getAlternativeIds());
 
 		if (start instanceof Relation) {
 			Node subject = ((Relation) start).getSubject();
@@ -291,6 +300,7 @@ public class EventGraphMapper {
 			((Relation) copiedNode).setPredicate(copyGraph(predicate));
 			((Relation) copiedNode).setObject(copyGraph(object));
 		}
+		
 		return copiedNode;
 	}
 }
