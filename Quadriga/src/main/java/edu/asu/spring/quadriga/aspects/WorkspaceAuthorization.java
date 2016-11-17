@@ -49,10 +49,9 @@ public class WorkspaceAuthorization implements IAuthorization {
         // fetch the details of the workspace
 
         IWorkSpace workspace;
-        String workspaceId = null;
 
         if (workspaceObj instanceof String) {
-            workspaceId = (String) workspaceObj;
+            String workspaceId = (String) workspaceObj;
             workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
         } else {
             try {
@@ -127,8 +126,9 @@ public class WorkspaceAuthorization implements IAuthorization {
                 ArrayList<String> roles = getAccessRoleList(userRoles);
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
-                    if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role))
+                    if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role)) {
                         return true;
+                    }
                 }
             }
         }

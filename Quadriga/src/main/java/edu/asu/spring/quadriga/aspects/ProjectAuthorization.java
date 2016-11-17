@@ -45,11 +45,10 @@ public class ProjectAuthorization implements IAuthorization {
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         IProject project;
-        String projectId = null;
         // fetch the details of the concept collection
 
         if (accessObj instanceof String) {
-            projectId = (String) accessObj;
+            String projectId = (String) accessObj;
             project = projectManager.getProjectDetails(projectId);
         } else {
             try {
@@ -63,23 +62,17 @@ public class ProjectAuthorization implements IAuthorization {
         String projectOwner = project.getOwner().getUserName();
         if (userName.equals(projectOwner)) {
             return true;
-        }
-
-        // check the user roles if he is not a project owner
-        else {
+        } else { // check the user roles if he is not a project owner
             if (userRoles.length > 0) {
                 ArrayList<String> roles = getAccessRoleList(userRoles);
                 List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
-
                 if (projectCollaborators != null) {
                     for (IProjectCollaborator projectCollaborator : projectCollaborators) {
                         ICollaborator collaborator = projectCollaborator.getCollaborator();
                         // check if he is a collaborator to the project
                         String collaboratorName = collaborator.getUserObj().getUserName();
-
                         if (userName.equals(collaboratorName)) {
                             List<IQuadrigaRole> collaboratorRoles = collaborator.getCollaboratorRoles();
-
                             for (IQuadrigaRole collabRole : collaboratorRoles) {
                                 if (roles.contains(collabRole.getId())) {
                                     return true;

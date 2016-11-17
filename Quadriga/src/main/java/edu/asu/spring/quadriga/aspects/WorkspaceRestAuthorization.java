@@ -35,11 +35,10 @@ public class WorkspaceRestAuthorization implements IAuthorization {
     public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        String workspaceId = null;
         IWorkSpace workspace;
 
         if (workspaceObj instanceof String) {
-            workspaceId = (String) workspaceObj;
+            String workspaceId = (String) workspaceObj;
             workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
         } else {
             try {
@@ -49,9 +48,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
             }
         }
 
-        if (workspace == null)
-
-        {
+        if (workspace == null) {
             throw new QuadrigaAccessException();
         }
         // check if the logged in user is workspace owner
@@ -64,7 +61,6 @@ public class WorkspaceRestAuthorization implements IAuthorization {
             else {
                 if (userRoles.length > 0) {
                     ArrayList<String> roles = getAccessRoleList(userRoles);
-
                     List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
                     List<IQuadrigaRole> collaboratorRoles = null;
                     if (workspaceCollaboratorList != null) {

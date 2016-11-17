@@ -157,10 +157,8 @@ public class AddProjectBlogEntryController {
             String username = principal.getName();
             IUser user = userManager.getUser(username);
             projectBlogEntry.setAuthor(user);
-
             projectBlogEntryManager.addNewProjectBlogEntry(projectBlogEntry);
             model = new ModelAndView("redirect:" + "/sites/" + project.getUnixName() + "/projectblog");
-
             model.getModelMap().put("project", project);
         }
         return model;
@@ -196,7 +194,6 @@ public class AddProjectBlogEntryController {
         try {
             transformedNetwork = transformationManager.getTransformedNetwork(networkId);
         } catch (QuadrigaStorageException qse) {
-
             logger.error("Error while retrieving networks for display:", qse);
             return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -204,9 +201,8 @@ public class AddProjectBlogEntryController {
         if (transformedNetwork != null) {
             json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         } else {
-            return new ResponseEntity<String>(json, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 }

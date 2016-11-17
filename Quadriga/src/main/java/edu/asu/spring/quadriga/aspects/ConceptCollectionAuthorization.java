@@ -49,6 +49,7 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         } else {
             try {
                 collection = (IConceptCollection) conceptCollectionObj;
+                conceptCollectionId = collection.getConceptCollectionId();
             } catch (ClassCastException cce) {
                 throw new IllegalObjectException(cce);
             }

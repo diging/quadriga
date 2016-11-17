@@ -34,8 +34,9 @@ public class NetworkAuthorization implements IAuthorization {
     public boolean chkAuthorization(String userName, Object accessObject, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        String networkId = null;
         // check if the user has a editor role for the network specified
+
+        String networkId = null;
 
         if (accessObject instanceof String) {
             networkId = (String) accessObject;
