@@ -73,9 +73,9 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
         List<IConceptCollectionCollaborator> ccCollaboratorList = conceptCollectionManager
                 .showCollaboratingUsers(conceptCollectionId);
 
-        if (ccCollaboratorList == null || ccCollaboratorList.isEmpty())
+        if (ccCollaboratorList == null || ccCollaboratorList.isEmpty()) {
             return false;
-
+        }
         for (IConceptCollectionCollaborator ccCollaborator : ccCollaboratorList) {
             // check if he is the collaborator to the concept
             // collection

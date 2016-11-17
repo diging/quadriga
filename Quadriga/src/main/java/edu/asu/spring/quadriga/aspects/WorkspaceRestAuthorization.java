@@ -56,9 +56,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
 
             if (userName.equals(workspace.getOwner().getUserName())) {
                 return true;
-            }
-
-            else {
+            } else {
                 if (userRoles.length > 0) {
                     ArrayList<String> roles = getAccessRoleList(userRoles);
                     List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
@@ -76,7 +74,6 @@ public class WorkspaceRestAuthorization implements IAuthorization {
                                         collaboratorRoles = workspaceCollaborator.getCollaborator()
                                                 .getCollaboratorRoles();
                                     }
-
                                     if (collaboratorRoles != null) {
                                         for (IQuadrigaRole collabRole : collaboratorRoles) {
                                             String collaboratorRoleId = collabRole.getId();

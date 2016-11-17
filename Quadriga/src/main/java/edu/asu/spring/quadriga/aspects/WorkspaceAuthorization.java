@@ -87,7 +87,6 @@ public class WorkspaceAuthorization implements IAuthorization {
                             if (workspaceCollaborator.getCollaborator() != null) {
                                 // check if he is a collaborator to the project
                                 collaboratorName = workspaceCollaborator.getCollaborator().getUserObj().getUserName();
-
                             }
                             if (collaboratorName != null) {
                                 if (userName.equals(collaboratorName)) {

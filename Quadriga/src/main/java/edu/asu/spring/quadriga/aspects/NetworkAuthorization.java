@@ -46,7 +46,6 @@ public class NetworkAuthorization implements IAuthorization {
                 networkId = nwObj.getNetworkId();
             } catch (ClassCastException cce) {
                 throw new IllegalObjectException(cce);
-
             }
         }
 
