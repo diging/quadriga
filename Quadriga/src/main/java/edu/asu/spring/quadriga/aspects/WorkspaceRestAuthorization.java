@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.aspects;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class WorkspaceRestAuthorization implements IAuthorization {
                 return true;
             } else {
                 if (userRoles.length > 0) {
-                    ArrayList<String> roles = getAccessRoleList(userRoles);
+                    List<String> roles = Arrays.asList(userRoles);
                     List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
                     List<IQuadrigaRole> collaboratorRoles = null;
                     if (workspaceCollaboratorList != null) {
@@ -96,34 +96,22 @@ public class WorkspaceRestAuthorization implements IAuthorization {
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        ArrayList<String> roles;
-
         // fetch the details of the project
         if (wsSecurityManager.checkIsWorkspaceAssociated(userName)) {
             return true;
         } else { // check the user roles if he is not a project owner
             if (userRoles.length > 0) {
-                roles = getAccessRoleList(userRoles);
-
+                List<String> roles = Arrays.asList(userRoles);
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
-                    if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role))
+                    if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role)) {
                         return true;
+                    }
                 }
             }
         }
         return false;
 
-    }
-
-    public ArrayList<String> getAccessRoleList(String[] userRoles) {
-        ArrayList<String> rolesList = new ArrayList<String>();
-
-        for (String role : userRoles) {
-            rolesList.add(role);
-        }
-
-        return rolesList;
     }
 
     @Override

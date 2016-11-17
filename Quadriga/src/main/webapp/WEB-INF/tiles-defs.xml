@@ -702,6 +702,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/exceptions/accessissue.jsp" />
 	</definition>
+	<definition name="auth/internalerror" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Internal Error" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/exceptions/internalerror.jsp" />
+	</definition>
 	<definition name="auth/404" extends="base.definition.nonav">
         <put-attribute name="title" value="Quadriga - Not Found" />
         <put-attribute name="content"

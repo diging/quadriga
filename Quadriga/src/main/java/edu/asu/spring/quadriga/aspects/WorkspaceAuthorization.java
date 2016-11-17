@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.aspects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -78,8 +79,7 @@ public class WorkspaceAuthorization implements IAuthorization {
                 return true;
             } else {
                 if (userRoles.length > 0) {
-                    ArrayList<String> roles = getAccessRoleList(userRoles);
-
+                    List<String> roles = Arrays.asList(userRoles);
                     List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
                     if (workspaceCollaboratorList != null) {
                         for (IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList) {
@@ -122,7 +122,7 @@ public class WorkspaceAuthorization implements IAuthorization {
             return true;
         } else {
             if (userRoles.length > 0) {
-                ArrayList<String> roles = getAccessRoleList(userRoles);
+                List<String> roles = Arrays.asList(userRoles);
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
                     if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role)) {
@@ -133,16 +133,6 @@ public class WorkspaceAuthorization implements IAuthorization {
         }
         return false;
 
-    }
-
-    public ArrayList<String> getAccessRoleList(String[] userRoles) {
-        ArrayList<String> rolesList = new ArrayList<String>();
-
-        for (String role : userRoles) {
-            rolesList.add(role);
-        }
-
-        return rolesList;
     }
 
     @Override

@@ -68,10 +68,9 @@ public class QuadrigaExceptionHandler {
     }
 
     @ExceptionHandler(value = { IllegalObjectException.class })
-    public ModelAndView handleInvalidCastException(IllegalObjectException ice) {
-        ModelAndView modelAndView = new ModelAndView("auth/404");
-        modelAndView.addObject("ex_msg", ice.getMessage());
-        logger.error(ice.getMessage(), ice);
+    public ModelAndView handleInvalidCastException(IllegalObjectException ioe) {
+        ModelAndView modelAndView = new ModelAndView("auth/internalerror");
+        logger.error(ioe.getMessage(), ioe);
         return modelAndView;
     }
 

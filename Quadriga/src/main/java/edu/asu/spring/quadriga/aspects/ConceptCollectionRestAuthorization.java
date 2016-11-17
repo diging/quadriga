@@ -41,16 +41,14 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
 
         // fetch the details of the concept collection
         IConceptCollection collection;
-        String conceptCollectionId = null;
         // fetch the details of the concept collection
 
         if (conceptCollectionObj instanceof String) {
-            conceptCollectionId = (String) conceptCollectionObj;
+            String conceptCollectionId = (String) conceptCollectionObj;
             collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
         } else {
             try {
                 collection = (IConceptCollection) conceptCollectionObj;
-                conceptCollectionId = collection.getConceptCollectionId();
             } catch (ClassCastException cce) {
                 throw new IllegalObjectException(cce);
             }
@@ -71,7 +69,7 @@ public class ConceptCollectionRestAuthorization implements IAuthorization {
 
         // fetch the collaborators of the concept collection
         List<IConceptCollectionCollaborator> ccCollaboratorList = conceptCollectionManager
-                .showCollaboratingUsers(conceptCollectionId);
+                .showCollaboratingUsers(collection.getConceptCollectionId());
 
         if (ccCollaboratorList == null || ccCollaboratorList.isEmpty()) {
             return false;

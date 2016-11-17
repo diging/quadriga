@@ -36,17 +36,14 @@ public class DictionaryAuthorization implements IAuthorization {
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         IDictionary dictionary;
-        String dictionaryId = null;
-
         // fetch the details of the concept collection
 
         if (accessObject instanceof String) {
-            dictionaryId = (String) accessObject;
+            String dictionaryId = (String) accessObject;
             dictionary = dictonaryManager.getDictionaryDetails(dictionaryId);
         } else {
             try {
                 dictionary = (IDictionary) accessObject;
-                dictionaryId = dictionary.getDictionaryId();
             } catch (ClassCastException cce) {
                 throw new IllegalObjectException(cce);
             }
@@ -67,7 +64,8 @@ public class DictionaryAuthorization implements IAuthorization {
         // check the collaborator roles if he is not owner
         List<String> roles = Arrays.asList(userRoles);
         // fetch the collaborators of the concept collection
-        List<IDictionaryCollaborator> dictCollaboratorList = dictonaryManager.showCollaboratingUsers(dictionaryId);
+        List<IDictionaryCollaborator> dictCollaboratorList = dictonaryManager
+                .showCollaboratingUsers(dictionary.getDictionaryId());
 
         if (dictCollaboratorList == null || dictCollaboratorList.isEmpty())
             return false;

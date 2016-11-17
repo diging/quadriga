@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.aspects;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -64,7 +64,7 @@ public class ProjectAuthorization implements IAuthorization {
             return true;
         } else { // check the user roles if he is not a project owner
             if (userRoles.length > 0) {
-                ArrayList<String> roles = getAccessRoleList(userRoles);
+                List<String> roles = Arrays.asList(userRoles);
                 List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
                 if (projectCollaborators != null) {
                     for (IProjectCollaborator projectCollaborator : projectCollaborators) {
@@ -102,8 +102,6 @@ public class ProjectAuthorization implements IAuthorization {
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        ArrayList<String> roles;
-
         // fetch the details of the project
         if (projectSecurityManager.ownsAtLeastOneProject(userName)) {
             return true;
@@ -112,8 +110,7 @@ public class ProjectAuthorization implements IAuthorization {
         // check the user roles if he is not a project owner
         else {
             if (userRoles.length > 0) {
-                roles = getAccessRoleList(userRoles);
-
+                List<String> roles = Arrays.asList(userRoles);
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
                     if (projectSecurityManager.collaboratesOnAtLeastOneProject(userName, role)) {
@@ -124,21 +121,5 @@ public class ProjectAuthorization implements IAuthorization {
             }
         }
         return false;
-    }
-
-    /**
-     * This method converts the the string array into a list
-     * 
-     * @param userRoles
-     * @return ArrayList<String>
-     */
-    public ArrayList<String> getAccessRoleList(String[] userRoles) {
-        ArrayList<String> rolesList = new ArrayList<String>();
-
-        for (String role : userRoles) {
-            rolesList.add(role);
-        }
-
-        return rolesList;
     }
 }

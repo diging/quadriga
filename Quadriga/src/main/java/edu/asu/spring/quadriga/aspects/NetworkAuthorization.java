@@ -56,10 +56,8 @@ public class NetworkAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-
         // check if the user has a editor role associated
         return accessManager.checkIsEditor(userName);
-
     }
 
     @Override

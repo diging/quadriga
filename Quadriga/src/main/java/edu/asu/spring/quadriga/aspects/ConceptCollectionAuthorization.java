@@ -40,16 +40,14 @@ public class ConceptCollectionAuthorization implements IAuthorization {
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         IConceptCollection collection;
-        String conceptCollectionId = null;
         // fetch the details of the concept collection
 
         if (conceptCollectionObj instanceof String) {
-            conceptCollectionId = (String) conceptCollectionObj;
+            String conceptCollectionId = (String) conceptCollectionObj;
             collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
         } else {
             try {
                 collection = (IConceptCollection) conceptCollectionObj;
-                conceptCollectionId = collection.getConceptCollectionId();
             } catch (ClassCastException cce) {
                 throw new IllegalObjectException(cce);
             }
@@ -69,10 +67,10 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         List<String> roles = Arrays.asList(userRoles);
         // fetch the collaborators of the concept collection
         List<IConceptCollectionCollaborator> ccCollaboratorList = conceptCollectionManager
-                .showCollaboratingUsers(conceptCollectionId);
+                .showCollaboratingUsers(collection.getConceptCollectionId());
 
         // if concept collection doesn't have collaborating users
-        // return false becuase the user can't be a collaborator then
+        // return false because the user can't be a collaborator then
         if (ccCollaboratorList == null || ccCollaboratorList.isEmpty())
             return false;
 
