@@ -27,29 +27,26 @@ public class DictionaryAuthorization implements IAuthorization {
     @Autowired
     private IDictionaryManager dictonaryManager;
 
-    /**
-     * This method checks the access permissions for logged in user for given
-     * dictionary id
-     * 
-     * @param - userName - logged in user
-     * @param - accessObjectId - dictionary id
-     * @param - userRoles - roles for which access permissions should be
-     *        checked.
-     * @return if has access - true if no access - false
-     */
     @Override
-    public boolean chkAuthorization(String userName, String accessObjectId,
-            String[] userRoles) throws QuadrigaStorageException,
-            QuadrigaAccessException {
+    public boolean chkAuthorization(String userName, Object accessObject, String[] userRoles)
+            throws QuadrigaStorageException, QuadrigaAccessException {
         String collaboratorName;
         String collaboratorRoleId;
         List<IQuadrigaRole> collaboratorRoles;
 
-        // fetch the details of the concept collection
-        IDictionary dictionary = dictonaryManager
-                .getDictionaryDetails(accessObjectId);
+        IDictionary dictionary;
+        String dictionaryId = null;
 
-        if(dictionary == null){
+        // fetch the details of the concept collection
+        if (accessObject.getClass().equals(String.class)) {
+            dictionaryId = (String) accessObject;
+            dictionary = dictonaryManager.getDictionaryDetails(dictionaryId);
+        } else {
+            dictionary = (IDictionary) accessObject;
+        }
+        // fetch the details of the concept collection
+
+        if (dictionary == null) {
             throw new QuadrigaAccessException();
         }
         // check if the user is a dictionary owner
@@ -64,8 +61,7 @@ public class DictionaryAuthorization implements IAuthorization {
         // check the collaborator roles if he is not owner
         List<String> roles = Arrays.asList(userRoles);
         // fetch the collaborators of the concept collection
-        List<IDictionaryCollaborator> dictCollaboratorList = dictonaryManager
-                .showCollaboratingUsers(accessObjectId);
+        List<IDictionaryCollaborator> dictCollaboratorList = dictonaryManager.showCollaboratingUsers(dictionaryId);
 
         if (dictCollaboratorList == null || dictCollaboratorList.isEmpty())
             return false;
@@ -73,11 +69,9 @@ public class DictionaryAuthorization implements IAuthorization {
         for (IDictionaryCollaborator dictCollaborator : dictCollaboratorList) {
             // check if he is the collaborator to the concept
             // collection
-            collaboratorName = dictCollaborator.getCollaborator().getUserObj()
-                    .getUserName();
+            collaboratorName = dictCollaborator.getCollaborator().getUserObj().getUserName();
             if (userName != null && userName.equals(collaboratorName)) {
-                collaboratorRoles = dictCollaborator.getCollaborator()
-                        .getCollaboratorRoles();
+                collaboratorRoles = dictCollaborator.getCollaborator().getCollaboratorRoles();
                 if (collaboratorRoles != null) {
                     for (IQuadrigaRole collabRole : collaboratorRoles) {
                         collaboratorRoleId = collabRole.getId();
@@ -94,17 +88,6 @@ public class DictionaryAuthorization implements IAuthorization {
         return false;
     }
 
-    /**
-     * This method checks if the logged in user has permissions for any of the
-     * dictionary present in the system.
-     * 
-     * @param - userName - logged in User
-     * @param - userRoles - roles for which the access permissions to be
-     *        checked.
-     * @return - if has access - true no access - false
-     * @throws QuadrigaStorageException
-     *             , QuadrigaAccessException
-     */
     @Override
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {

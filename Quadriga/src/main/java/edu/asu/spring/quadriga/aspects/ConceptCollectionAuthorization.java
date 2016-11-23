@@ -30,28 +30,19 @@ public class ConceptCollectionAuthorization implements IAuthorization {
     @Autowired
     private IConceptCollectionFactory collectionFactory;
 
-    /**
-     * This method checks the access permissions for the given ConceptCollection
-     * for the logged in user.
-     * 
-     * @param userName
-     *            - logged in user name.
-     * @param conceptCollectionId
-     *            - Concept Collection id.
-     * @param userRoles
-     *            - the roles for which the user should be checked against the
-     *            Concept Collection.
-     * @throws QuadrigaAccessException
-     *             ,QuadrigaStorageException
-     * @author Kiran Batna
-     */
     @Override
-    public boolean chkAuthorization(String userName,
-            String conceptCollectionId, String[] userRoles)
+    public boolean chkAuthorization(String userName, Object conceptCollectionObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        
+
+        IConceptCollection collection;
+        String conceptCollectionId = null;
         // fetch the details of the concept collection
-        IConceptCollection collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
+        if (conceptCollectionObj.getClass().equals(String.class)) {
+            conceptCollectionId = (String) conceptCollectionObj;
+            collection = conceptCollectionManager.getConceptCollection(conceptCollectionId);
+        } else {
+            collection = (IConceptCollection) conceptCollectionObj;
+        }
 
         // check if the user is a concept collection owner
         String conceptCollectionOwner = collection.getOwner().getUserName();
@@ -76,14 +67,12 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         for (IConceptCollectionCollaborator ccCollaborator : ccCollaboratorList) {
             // check if he is the collaborator to the concept
             // collection
-            String collaboratorName = ccCollaborator.getCollaborator().getUserObj()
-                    .getUserName();
+            String collaboratorName = ccCollaborator.getCollaborator().getUserObj().getUserName();
             // if the collaborator is not the logged in user continue
             if (userName == null || !userName.equals(collaboratorName))
                 continue;
 
-            List<IQuadrigaRole> collaboratorRoles = ccCollaborator.getCollaborator()
-                    .getCollaboratorRoles();
+            List<IQuadrigaRole> collaboratorRoles = ccCollaborator.getCollaborator().getCollaboratorRoles();
             if (collaboratorRoles != null) {
                 for (IQuadrigaRole collabRole : collaboratorRoles) {
                     String collaboratorRoleId = collabRole.getId();
@@ -100,19 +89,6 @@ public class ConceptCollectionAuthorization implements IAuthorization {
         return false;
     }
 
-    /**
-     * This method checks the access permissions for logged in user against the
-     * concept collections present in the system.
-     * 
-     * @param userName
-     *            - logged in user name.
-     * @param userRoles
-     *            - the roles for which the user should be checked against the
-     *            Concept Collection.
-     * @throws QuadrigaAccessException
-     *             ,QuadrigaStorageException
-     * @author Kiran Batna
-     */
     @Override
     public boolean chkAuthorizationByRole(String userName, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
