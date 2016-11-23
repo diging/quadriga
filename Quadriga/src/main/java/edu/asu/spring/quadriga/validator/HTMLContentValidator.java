@@ -9,6 +9,7 @@ import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.settings.IAboutText;
 import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
+import edu.asu.spring.quadriga.utilities.impl.ExtendedWhitelist;
 
 /**
  * This class acts as validator of form data coming from
@@ -18,7 +19,7 @@ import edu.asu.spring.quadriga.domain.settings.impl.AboutText;
  *
  */
 @Service
-public class AboutTextValidator implements Validator {
+public class HTMLContentValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> arg0) {
@@ -41,7 +42,7 @@ public class AboutTextValidator implements Validator {
         String description = abtText.getDescription();
         String title = abtText.getTitle();
 
-        Whitelist whitelist = Whitelist.basicWithImages();
+        Whitelist whitelist = ExtendedWhitelist.extendedWhiteListWithBase64();
         Whitelist titleWhitelist = Whitelist.simpleText();
 
         // validate all the input parameters

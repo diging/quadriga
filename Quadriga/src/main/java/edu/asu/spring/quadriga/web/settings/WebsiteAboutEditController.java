@@ -38,7 +38,7 @@ import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.validator.AboutTextValidator;
+import edu.asu.spring.quadriga.validator.HTMLContentValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -63,7 +63,7 @@ public class WebsiteAboutEditController {
     private INetworkManager nwManager;
 
     @Autowired
-    private AboutTextValidator validator;
+    private HTMLContentValidator validator;
 
     @Autowired
     private INetworkTransformationManager transformationManager;
