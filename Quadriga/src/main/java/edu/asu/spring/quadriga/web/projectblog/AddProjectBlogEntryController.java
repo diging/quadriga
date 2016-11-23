@@ -42,6 +42,7 @@ import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
 import edu.asu.spring.quadriga.validator.AddProjectBlogEntryValidator;
+import edu.asu.spring.quadriga.validator.HTMLContentValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -61,7 +62,7 @@ public class AddProjectBlogEntryController {
     private INetworkManager networkmanager;
 
     @Autowired
-    private AddProjectBlogEntryValidator validator;
+    private HTMLContentValidator validator;
 
     @Autowired
     private IProjectBlogEntryManager projectBlogEntryManager;
