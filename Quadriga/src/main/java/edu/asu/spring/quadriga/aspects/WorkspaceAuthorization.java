@@ -1,8 +1,11 @@
 package edu.asu.spring.quadriga.aspects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +15,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
@@ -36,26 +40,27 @@ public class WorkspaceAuthorization implements IAuthorization {
     @Autowired
     private ProjectAuthorization projectAuthorization;
 
-    /**
-     * This checks the access permissions for the logged in user for the given
-     * workspace id
-     * 
-     * @param : userName - logged in user
-     * @param : userRoles - set of roles for which the user should be checked
-     *        for access.
-     * @param : workspaceid
-     * @throws : QuadrigaStorageException, QuadrigaAccessException
-     * @return : hasAccess - true no Access - false
-     */
+    private final Logger logger = LoggerFactory.getLogger(WorkspaceAuthorization.class);
+
     @Override
     @Transactional
-    public boolean chkAuthorization(String userName, String workspaceId, String[] userRoles)
+    public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean haveAccess = false;
 
         // fetch the details of the workspace
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
 
+        IWorkSpace workspace;
+
+        if (workspaceObj instanceof String) {
+            String workspaceId = (String) workspaceObj;
+            workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
+        } else {
+            try {
+                workspace = (IWorkSpace) workspaceObj;
+            } catch (ClassCastException cce) {
+                throw new IllegalObjectException(cce);
+            }
+        }
         IProject project = workspace.getProjectWorkspace().getProject();
         List<String> projects = new ArrayList<String>();
         projects.add(project.getProjectId());
@@ -71,13 +76,10 @@ public class WorkspaceAuthorization implements IAuthorization {
             String workspaceOwner = workspace.getOwner().getUserName();
 
             if (userName.equals(workspaceOwner)) {
-                haveAccess = true;
-            }
-
-            if (!haveAccess) {
+                return true;
+            } else {
                 if (userRoles.length > 0) {
-                    ArrayList<String> roles = getAccessRoleList(userRoles);
-
+                    List<String> roles = Arrays.asList(userRoles);
                     List<IWorkspaceCollaborator> workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
                     if (workspaceCollaboratorList != null) {
                         for (IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList) {
@@ -85,7 +87,6 @@ public class WorkspaceAuthorization implements IAuthorization {
                             if (workspaceCollaborator.getCollaborator() != null) {
                                 // check if he is a collaborator to the project
                                 collaboratorName = workspaceCollaborator.getCollaborator().getUserObj().getUserName();
-
                             }
                             if (collaboratorName != null) {
                                 if (userName.equals(collaboratorName)) {
@@ -98,8 +99,7 @@ public class WorkspaceAuthorization implements IAuthorization {
                                         for (IQuadrigaRole collabRole : collaboratorRoles) {
                                             String collaboratorRoleId = collabRole.getId();
                                             if (roles.contains(collaboratorRoleId)) {
-                                                haveAccess = true;
-                                                return haveAccess;
+                                                return true;
                                             }
                                         }
                                     }
@@ -110,62 +110,29 @@ public class WorkspaceAuthorization implements IAuthorization {
                 }
             }
         }
-        return haveAccess;
+        return false;
     }
 
-    /**
-     * check if the user as a owner has any workspaces associated check if the
-     * user as the given role has any workspaces associated
-     * 
-     * @param : userName - logged in user
-     * @param : userRoles - set of roles for which the user should be checked
-     *        for access.
-     * @throws : QuadrigaStorageException, QuadrigaAccessException
-     * @return : hasAccess - true no Access - false
-     */
     @Override
     @Transactional
-    public boolean chkAuthorizationByRole(String userName, String[] userRoles) throws QuadrigaStorageException,
-            QuadrigaAccessException {
-        boolean haveAccess;
-        ArrayList<String> roles;
-        haveAccess = false;
+    public boolean chkAuthorizationByRole(String userName, String[] userRoles)
+            throws QuadrigaStorageException, QuadrigaAccessException {
 
-        // fetch the details of the project
-        haveAccess = wsSecurityManager.checkIsWorkspaceAssociated(userName);
-
-        // check the user roles if he is not a project owner
-        if (!haveAccess) {
+        if (wsSecurityManager.checkIsWorkspaceAssociated(userName)) {
+            return true;
+        } else {
             if (userRoles.length > 0) {
-                roles = getAccessRoleList(userRoles);
-
+                List<String> roles = Arrays.asList(userRoles);
                 // check if the user associated with the role has any projects
                 for (String role : roles) {
-                    haveAccess = wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role);
-
-                    if (haveAccess)
-                        break;
+                    if (wsSecurityManager.chkIsCollaboratorWorkspaceAssociated(userName, role)) {
+                        return true;
+                    }
                 }
             }
         }
-        return haveAccess;
+        return false;
 
-    }
-
-    /**
-     * This method converts the the string array into a list
-     * 
-     * @param userRoles
-     * @return ArrayList<String>
-     */
-    public ArrayList<String> getAccessRoleList(String[] userRoles) {
-        ArrayList<String> rolesList = new ArrayList<String>();
-
-        for (String role : userRoles) {
-            rolesList.add(role);
-        }
-
-        return rolesList;
     }
 
     @Override
