@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
@@ -38,7 +39,7 @@ import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.publicwebsite.IAboutTextManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.validator.AboutTextValidator;
+import edu.asu.spring.quadriga.validator.HTMLContentValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -63,7 +64,7 @@ public class WebsiteAboutEditController {
     private INetworkManager nwManager;
 
     @Autowired
-    private AboutTextValidator validator;
+    private HTMLContentValidator validator;
 
     @Autowired
     private INetworkTransformationManager transformationManager;
@@ -143,16 +144,17 @@ public class WebsiteAboutEditController {
      * @throws QuadrigaStorageException
      * @throws JAXBException
      */
-    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 1, userRole = {
+    @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, paramIndex = 4, userRole = {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/projects/{projectId}/settings/editabout/visualize/{networkId}", method = RequestMethod.GET, produces = "text/plain")
-    public ResponseEntity<String> visualizeNetworks(@PathVariable("projectId") String projectid,
-            @PathVariable("networkId") String networkId, Principal principal) {
+    @InjectProjectById
+    public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectId") String projectid,
+            @PathVariable("networkId") String networkId, Principal principal,
+            @CheckAccess @InjectProject IProject project) {
         ITransformedNetwork transformedNetwork = null;
         try {
             transformedNetwork = transformationManager.getTransformedNetwork(networkId);
         } catch (QuadrigaStorageException qse) {
-
             logger.error("Error while retrieving networks for display:", qse);
             return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
         }
