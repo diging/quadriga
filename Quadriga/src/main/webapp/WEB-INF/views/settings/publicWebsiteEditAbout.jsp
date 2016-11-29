@@ -101,7 +101,7 @@
 
         </tr>
         <tr>
-            <td colspan="1"><button class="btn btn-primary"
+            <td colspan="1" class="add-network"><button class="btn btn-primary"
                     type="button" data-toggle="collapse"
                     data-target="#networkTable">
                     <i class="fa fa-plus-circle" aria-hidden="true"></i>
