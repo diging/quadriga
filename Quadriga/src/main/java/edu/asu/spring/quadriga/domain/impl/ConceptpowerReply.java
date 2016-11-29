@@ -16,6 +16,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -41,6 +42,9 @@ import javax.xml.bind.annotation.XmlType;
  *                   &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;element name="conceptList" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
+ *                   &lt;element name="alternativeIds" maxOccurs="unbounded">
+ *                     &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                   &lt;/element>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -96,8 +100,8 @@ public class ConceptpowerReply {
     public void setConceptEntry(List<ConceptpowerReply.ConceptEntry> entries) {
         this.conceptEntry = entries;
     }
-
-
+    
+  
     /**
      * <p>Java class for anonymous complex type.
      * 
@@ -114,6 +118,9 @@ public class ConceptpowerReply {
      *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="conceptList" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}anyType"/>
+     *         &lt;element name="alternativeIds" maxOccurs="unbounded">
+     *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
+     *         &lt;/element>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -174,6 +181,18 @@ public class ConceptpowerReply {
 
         @XmlElement(namespace="http://www.digitalhps.org/", type=ConceptpowerType.class)
         protected ConceptpowerType type;
+     
+        @XmlElementWrapper(name="alternativeIds", namespace="http://www.digitalhps.org/")
+        @XmlElement(name="id", namespace="http://www.digitalhps.org/")   
+        protected List<String> alternativeIdList;
+
+        public List<String> getAlternativeIdList() {
+            return alternativeIdList;
+        }
+
+        public void setAlternativeIdList(List<String> alternativeIdList) {
+            this.alternativeIdList = alternativeIdList;
+        }
 
         /**
          * Gets the value of the id property.
