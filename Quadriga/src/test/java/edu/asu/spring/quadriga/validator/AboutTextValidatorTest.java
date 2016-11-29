@@ -21,7 +21,7 @@ import junit.framework.Assert;
 public class AboutTextValidatorTest {
 
     @InjectMocks
-    private AboutTextValidator abtTxtValidator;
+    private HTMLContentValidator abtTxtValidator;
 
     private IAboutText properabtText;
     private IAboutText improperabtText;
