@@ -36,11 +36,10 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.projectblog.IProjectBlogEntryManager;
+import edu.asu.spring.quadriga.utilities.INetworkUtils;
 import edu.asu.spring.quadriga.validator.AddProjectBlogEntryValidator;
 import edu.asu.spring.quadriga.validator.HTMLContentValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -71,7 +70,7 @@ public class AddProjectBlogEntryController {
     private INetworkTransformationManager transformationManager;
 
     @Autowired
-    private IJsonCreator jsonCreator;
+    private INetworkUtils nwUtils;
 
     private final Logger logger = LoggerFactory.getLogger(AddProjectBlogEntryController.class);
 
@@ -191,19 +190,19 @@ public class AddProjectBlogEntryController {
     public ResponseEntity<String> visualizeNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String unixName,
             @PathVariable("networkId") String networkId, Principal principal,
             @CheckAccess @InjectProject IProject project) {
-        ITransformedNetwork transformedNetwork = null;
+
+        boolean isValid = false;
         try {
-            transformedNetwork = transformationManager.getTransformedNetwork(networkId);
-        } catch (QuadrigaStorageException qse) {
-            logger.error("Error while retrieving networks for display:", qse);
+            isValid = networkmanager.getNetworkIdsInProject(project.getProjectId()).contains(networkId);
+        } catch (QuadrigaStorageException e) {
+            logger.error("Encountered an error while retrieving the json string", e);
             return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        String json = null;
-        if (transformedNetwork != null) {
-            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+
+        if (isValid) {
+            return nwUtils.sendNetworkAsResponseEntity(networkId);
         } else {
-            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("", HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 }
