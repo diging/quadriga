@@ -37,7 +37,8 @@ public class WebsiteAboutController {
     @InjectProjectByName
     @RequestMapping(value = "sites/{ProjectUnixName}/about", method = RequestMethod.GET)
     public String showAbout(@ProjectIdentifier @PathVariable("ProjectUnixName") String unixName,
-            @CheckAccess @InjectProject IProject project, Model model, Principal principal) throws QuadrigaStorageException {
+            @CheckAccess @InjectProject IProject project, Model model, Principal principal)
+            throws QuadrigaStorageException {
         String projectId = project.getProjectId();
         model.addAttribute("project", project);
         model.addAttribute("aboutText", aboutTextManager.getAboutTextByProjectId(projectId));

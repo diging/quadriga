@@ -281,7 +281,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             }
 
             occur.setProject(projectManager.getProjectDetails(txtFile.getProjectId()));
-            
+
             // there should only be one
             TermType term = ((AppellationEventType) event).getTermType();
 
@@ -305,7 +305,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                     }
                 }
             }
-            
+
             occurances.add(occur);
 
         }
@@ -342,13 +342,13 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException {
         return networkmapper.getListOfNetworksForUser(user);
     }
-    
+
     /**
-    * 
-    * {@inheritDoc}
-    * 
-    * This implementation uses the hibernate for dataaccess from the database
-    */
+     * 
+     * {@inheritDoc}
+     * 
+     * This implementation uses the hibernate for dataaccess from the database
+     */
     @Override
     @Transactional
     public List<INetwork> getApprovedNetworkList() throws QuadrigaStorageException {
@@ -1139,6 +1139,15 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             this.refId = refId;
         }
 
+    }
+
+    @Override
+    @Transactional
+    public List<String> getNetworkIdsInProject(String projectid) throws QuadrigaStorageException {
+        List<String> networkIdList = new ArrayList<>();
+        List<INetwork> networkList = getNetworksInProject(projectid, INetworkStatus.APPROVED);
+        networkList.forEach(network -> networkIdList.add(network.getNetworkId()));
+        return networkIdList;
     }
 
 }

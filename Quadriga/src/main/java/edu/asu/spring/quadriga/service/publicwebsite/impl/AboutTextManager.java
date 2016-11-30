@@ -33,9 +33,7 @@ public class AboutTextManager implements IAboutTextManager {
             abtText.setId(aboutTextDAO.generateUniqueID());
         }
         abtText.setProjectId(projectId);
-
         AboutTextDTO aboutTextDTO = abtTxtMapper.aboutTextBeanToDTO(abtText);
-
         aboutTextDAO.saveOrUpdateDTO(aboutTextDTO);
     }
 
