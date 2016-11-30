@@ -15,7 +15,7 @@ public interface INetworkUtils {
      * 
      * @param networkId
      *            Id of the network that needs to be returned.
-     * @return
+     * @return Returns a {@link ResponseEntity} with network json as a string
      */
     public ResponseEntity<String> sendNetworkAsResponseEntity(String networkId);
 }
