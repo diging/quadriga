@@ -165,7 +165,7 @@ public interface INetworkManager {
      * @return Returns a {@link List} of {@link INetwork} Ids in the project.
      * @throws QuadrigaStorageException
      */
-    public abstract List<String> getNetworkIdsInProject(String projectid) throws QuadrigaStorageException;
+    public abstract boolean isNetworkInProject(String projid, String nwid) throws QuadrigaStorageException;
 
     /**
      * This method should help in renaming the {@link INetwork}. We could use

@@ -1143,11 +1143,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Override
     @Transactional
-    public List<String> getNetworkIdsInProject(String projectid) throws QuadrigaStorageException {
-        List<String> networkIdList = new ArrayList<>();
-        List<INetwork> networkList = getNetworksInProject(projectid, INetworkStatus.APPROVED);
-        networkList.forEach(network -> networkIdList.add(network.getNetworkId()));
-        return networkIdList;
+    public boolean isNetworkInProject(String projid, String nwid) throws QuadrigaStorageException {
+        return projid.equals(getNetwork(nwid).getNetworkWorkspace().getWorkspace().getProject().getProjectId());
     }
 
 }

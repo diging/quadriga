@@ -147,7 +147,7 @@ public class WebsiteAboutEditController {
             @CheckAccess @InjectProject IProject project) throws QuadrigaStorageException {
         boolean isValid = false;
         try {
-            isValid = nwManager.getNetworkIdsInProject(project.getProjectId()).contains(networkId);
+            isValid = nwManager.isNetworkInProject(projectid, networkId);
         } catch (QuadrigaStorageException e) {
             logger.error("Encountered an error while retrieving the json string", e);
             return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
