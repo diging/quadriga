@@ -13,6 +13,12 @@ import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.utilities.INetworkUtils;
 
+/**
+ * Implementation class for {@link INetworkUtils}
+ * 
+ * @author Nischal Samji
+ *
+ */
 @Service
 public class NetworkUtils implements INetworkUtils {
 

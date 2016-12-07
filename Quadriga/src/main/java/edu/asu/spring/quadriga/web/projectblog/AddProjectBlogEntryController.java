@@ -193,7 +193,7 @@ public class AddProjectBlogEntryController {
 
         boolean isValid = false;
         try {
-            isValid = networkmanager.getNetworkIdsInProject(project.getProjectId()).contains(networkId);
+            isValid = networkmanager.isNetworkInProject(project.getProjectId(), networkId);
         } catch (QuadrigaStorageException e) {
             logger.error("Encountered an error while retrieving the json string", e);
             return new ResponseEntity<String>("", HttpStatus.INTERNAL_SERVER_ERROR);
