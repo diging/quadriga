@@ -246,30 +246,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             @SuppressWarnings("unchecked")
             List<NetworksDTO> listNetworksDTO = query.list();
 
-            // networkList = networkMapper.getListOfNetworks(listNetworksDTO);
-
-            // Update project and workspace name for the network
-            /*
-             * for (INetwork network : networkList) { // Get the project id
-             * associated with the workspace id query =
-             * sessionFactory.getCurrentSession().getNamedQuery(
-             * "ProjectWorkspaceDTO.findByWorkspaceid");
-             * query.setParameter("workspaceid", network.getWorkspaceid());
-             * ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO)
-             * query .uniqueResult();
-             * 
-             * if (projectWorkspaceDTO != null) { // Get the project details
-             * if(projectWorkspaceDTO.getProjectDTO() != null)
-             * network.setProjectWorkspace
-             * (projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
-             * 
-             * // Get the workspace details
-             * if(projectWorkspaceDTO.getWorkspaceDTO() != null)
-             * network.setWorkspace
-             * (workspaceMapper.getWorkSpace(projectWorkspaceDTO
-             * .getWorkspaceDTO())); } }
-             */
-
             return listNetworksDTO;
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
@@ -336,71 +312,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
-    }
-
-    /**
-     * This method should be called when network is reuploaded after admin has
-     * rejected the network. Archive the network, would mark the network
-     * statements with isarchived >0 isarchived = 0 the network is active.
-     * isarchived > 0 the network is archived with the version number (0 or 1 or
-     * 2 ..) when the same network is uploaded after admin has rejected the
-     * previous ones. The method uses Hibernate Framework to perform the
-     * database operations.
-     * 
-     * @param networkId
-     *            ID of network.
-     * @return Empty string if the operation was successful. Exception for all
-     *         other cases.
-     * @throws QuadrigaStorageException
-     *             Exception will be thrown when the input parameters do not
-     *             satisfy the system/database constraints or due to database
-     *             connection troubles.
-     */
-    @Override
-    public String archiveNetwork(String networkId) throws QuadrigaStorageException {
-        Transaction transaction = null;
-        try {
-            // Obtain a stateless session to overcome OutOfMemory Exception
-            StatelessSession session = sessionFactory.openStatelessSession();
-            transaction = session.beginTransaction();
-
-            int versionNumber = 0;
-
-            // Select only the rows matching the network id and obtain a
-            // scrollable list
-            Query query = session.getNamedQuery("NetworkStatementsDTO.findByNetworkid");
-            query.setParameter("networkid", networkId);
-            ScrollableResults scrollableDTO = query.scroll(ScrollMode.FORWARD_ONLY);
-
-            while (scrollableDTO.next()) {
-                // Update the network statements
-                NetworkStatementsDTO networkStatementDTO = (NetworkStatementsDTO) scrollableDTO.get(0);
-                versionNumber = networkStatementDTO.getVersion();
-                networkStatementDTO.setVersion(versionNumber + 1);
-                session.update(networkStatementDTO);
-            }
-
-            scrollableDTO = session.getNamedQuery("NetworkAssignedDTO.findByNetworkid")
-                    .setParameter("networkid", networkId).scroll(ScrollMode.FORWARD_ONLY);
-            while (scrollableDTO.next()) {
-                // update the network assigned rows
-                NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) scrollableDTO.get(0);
-                versionNumber = networkAssignedDTO.getVersion();
-                networkAssignedDTO.setVersion(versionNumber + 1);
-                session.update(networkAssignedDTO);
-            }
-
-            transaction.commit();
-            session.close();
-
-            return "";
-        } catch (HibernateException e) {
-            if (transaction != null)
-                transaction.rollback();
-
-            throw new QuadrigaStorageException(e);
-        }
-
     }
 
     /**
@@ -740,66 +651,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
 
     /**
      * {@inheritDoc}
-     */
-    @Override
-    public String updateAnnotationToNetwork(String annotationId, String annotationText)
-            throws QuadrigaStorageException {
-        try {
-            Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksAnnotationsDTO.findByAnnotationId");
-            query.setParameter("annotationid", annotationId);
-            NetworkAnnotationsDTO annotation = (NetworkAnnotationsDTO) query.uniqueResult();
-            annotation.setAnnotationText(annotationText);
-            sessionFactory.getCurrentSession().update(annotation);
-            return "";
-        } catch (HibernateException e) {
-            throw new QuadrigaStorageException(e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    /*
-     * @Override public List<INetwork> getNetworksOfUser(IUser user, String
-     * networkStatus) throws QuadrigaStorageException { List<INetwork>
-     * networkList = null;
-     * 
-     * try { Query query = sessionFactory.getCurrentSession().createQuery(
-     * "from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser ) and status = :status"
-     * ); query.setParameter("assigneduser", user.getUserName());
-     * query.setParameter("status", networkStatus);
-     * 
-     * @SuppressWarnings("unchecked") List<NetworksDTO> listNetworksDTO =
-     * query.list(); networkList =
-     * networkMapper.getListOfNetworks(listNetworksDTO);
-     * 
-     * // Update project name and workspace name of the network for (INetwork
-     * network : networkList) { // Get the project id associated with the
-     * workspace id query = sessionFactory.getCurrentSession().getNamedQuery(
-     * "ProjectWorkspaceDTO.findByWorkspaceid");
-     * query.setParameter("workspaceid", network.getWorkspaceid());
-     * ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO)
-     * query.uniqueResult();
-     * 
-     * if (projectWorkspaceDTO != null) { // Get the project details
-     * if(projectWorkspaceDTO.getProjectDTO() != null)
-     * network.setProjectWorkspace
-     * (projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
-     * 
-     * // Get the workspace details if(projectWorkspaceDTO.getWorkspaceDTO() !=
-     * null)
-     * network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO
-     * .getWorkspaceDTO()));
-     * 
-     * } }
-     * 
-     * return networkList; } catch (Exception e) { logger.error(
-     * "Error in fetching network of user: ", e); throw new
-     * QuadrigaStorageException(e); } }
-     */
-
-    /**
-     * {@inheritDoc}
      * 
      * @throws QuadrigaStorageException
      */
@@ -882,67 +733,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             throw new QuadrigaStorageException(e);
         }
     }
-
-    /**
-     * 
-     * @param network
-     * @param username
-     * @return
-     * @throws QuadrigaStorageException
-     */
-    public int updateNetwork(INetwork network, String username) throws QuadrigaStorageException {
-        if (network == null || username == null || username.equals(""))
-            return FAILURE;
-
-        try {
-            NetworksDTO networksDTO = new NetworksDTO(network.getNetworkId(), network.getNetworkName(), username,
-                    network.getStatus(), username, new Date(), username, new Date());
-            // networkMapper.getNetworksDTO(network.getNetworkId(),
-            // network.getNetworkName(), username, network.getStatus(),
-            // network.getWorkspaceid());
-            sessionFactory.getCurrentSession().saveOrUpdate(networksDTO);
-            return SUCCESS;
-        } catch (HibernateException e) {
-            throw new QuadrigaStorageException(e);
-        }
-    }
-
-    /*
-     * @Override public List<INetwork> getNetworkOfOwner(IUser user) throws
-     * QuadrigaStorageException { List<INetwork> networkList = null;
-     * 
-     * try { Query query = sessionFactory.getCurrentSession().createQuery(
-     * "from NetworksDTO n where n.networkowner = :owner )");
-     * query.setParameter("owner", user.getUserName());
-     * 
-     * @SuppressWarnings("unchecked") List<NetworksDTO> listNetworksDTO =
-     * query.list(); networkList =
-     * networkMapper.getListOfNetworks(listNetworksDTO);
-     * 
-     * // Update project name and workspace name of the network for (INetwork
-     * network : networkList) { // Get the project id associated with the
-     * workspace id query = sessionFactory.getCurrentSession().getNamedQuery(
-     * "ProjectWorkspaceDTO.findByWorkspaceid");
-     * query.setParameter("workspaceid", network.getWorkspaceid());
-     * ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO)
-     * query.uniqueResult();
-     * 
-     * if (projectWorkspaceDTO != null) { // Get the project details
-     * if(projectWorkspaceDTO.getProjectDTO() != null)
-     * network.setProjectWorkspace
-     * (projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
-     * 
-     * // Get the workspace details if(projectWorkspaceDTO.getWorkspaceDTO() !=
-     * null)
-     * network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO
-     * .getWorkspaceDTO()));
-     * 
-     * } }
-     * 
-     * return networkList; } catch (Exception e) { logger.error(
-     * "Error in fetching network of user: ", e); throw new
-     * QuadrigaStorageException(e); } }
-     */
 
     @Override
     public String addAnnotationToEdge(String networkId, String sourceId, String targetId, String sourceName,
@@ -1050,16 +840,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
                     userName, nodeId, nodeName);
             networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation);
 
-            // networkNodeAnnotationList =
-            // networkAnnotation.getNetworkNodeAnnotationList();
-            // if(networkNodeAnnotationList == null)
-            // {
-            // networkNodeAnnotationList = new
-            // ArrayList<NetworkNodeAnnotationsDTO>();
-            // }
-            // networkNodeAnnotationList.add(networkNodeAnnotation);
-            // networkAnnotation.setNetworkNodeAnnotationList(networkNodeAnnotationList);
-
             sessionFactory.getCurrentSession().save(networkAnnotation);
             sessionFactory.getCurrentSession().save(networkNodeAnnotation);
 
@@ -1109,7 +889,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         return networkRelationAnnotations;
 
     }
-
+    
     public NetworkEdgeAnnotationsDTO getNetworkEdgeAnnotationDTO(String networkId, String sourceId, String targetId,
             String sourceName, String targetName, String annotationText, String annotationId, String userName,
             String objectType, String targetNodeType) {

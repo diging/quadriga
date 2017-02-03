@@ -20,10 +20,6 @@ public interface IEditingNetworkAnnotationManager {
 			String nodeName, String annotationText, String userId,
 			String objectType) throws QuadrigaStorageException;
 
-	public abstract String updateAnnotationToNetwork(String annotationId,
-			String annotationText) throws QuadrigaStorageException;
-	
-
 	public abstract List<INetworkAnnotation> getAllAnnotationOfNetwork(String userId,
 			String networkId) throws QuadrigaStorageException;
 	public abstract String addAnnotationToEdge( String networkId,
