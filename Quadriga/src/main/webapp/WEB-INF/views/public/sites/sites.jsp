@@ -6,7 +6,6 @@
 	$(document).ready(function() {
 		$('#example').DataTable();
 	});
-
 	function handle(e) {
 		if (e.keyCode === 13) {
 			document.getElementById("sites").submit();
@@ -18,6 +17,7 @@
 <form name='sites' id="sites"
 	action="${pageContext.servletContext.contextPath}/sites/searchTerm"
 	method='POST'>
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<input type="text" class="form-control"
 		placeholder="Search Public Sites" name="searchTerm"
 		tabindex="1" onkeypress="handle(event)" autocapitalize="off">

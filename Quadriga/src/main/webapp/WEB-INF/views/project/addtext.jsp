@@ -17,6 +17,7 @@ function submitClick(id){
 <article class="is-page-content">
 	<form:form commandName="textfile" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/addtextfile">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<c:choose>
 		  <c:when test="${success == '0'}">
 				<header>

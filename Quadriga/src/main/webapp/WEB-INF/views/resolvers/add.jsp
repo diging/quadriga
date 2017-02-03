@@ -6,7 +6,7 @@
 <script>
 
 $(function() {
-	$("#testAdd").click(function(){performAction(this,this.id,'${pageContext.servletContext.contextPath}');});
+	$("#testAdd").click(function(){performAction(this,this.id,'${pageContext.servletContext.contextPath}','${_csrf.token}','${_csrf.headerName}');});
 });
 
 </script>
@@ -15,7 +15,7 @@ $(function() {
 
 <form:form commandName="resolver" method="POST" class="form-horizontal"
         action="${pageContext.servletContext.contextPath}/auth/resolvers/add">
-        
+   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>   
    <div class="form-group">
 	    <label for="projectName" class="col-sm-3 control-label control-label-left">Project Name *</label>
 	    <div class="col-sm-9">

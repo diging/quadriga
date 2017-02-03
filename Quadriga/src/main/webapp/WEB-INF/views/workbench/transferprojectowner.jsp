@@ -28,7 +28,7 @@
 
 <form:form commandName="user" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/projects/${myprojectId}/transfer">
-
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<c:if test="${not empty collaboratinguser}">
 		<div class="alert alert-info" role="alert">This project is
 			currently owned by: ${projectowner}</div>

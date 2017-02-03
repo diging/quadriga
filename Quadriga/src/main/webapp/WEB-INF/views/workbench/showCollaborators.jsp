@@ -57,7 +57,7 @@ $(document).ready(function() {
 
  <form:form name="myForm" commandName="collaborator" method="POST" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
-  
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
  	<c:if test="${not empty nonCollaboratingUsers}">
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>

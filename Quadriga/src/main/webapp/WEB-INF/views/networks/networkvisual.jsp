@@ -14,6 +14,7 @@
 <link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/css/d3.css"
 	rel="stylesheet" />
+	
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/d3networkvisualize.js"></script>
 <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>

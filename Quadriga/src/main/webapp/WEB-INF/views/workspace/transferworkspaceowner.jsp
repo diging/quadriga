@@ -32,7 +32,7 @@
 
 <form:form commandName="user" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/transfer">
-
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<c:if test="${not empty collaboratinguser}">
 		<div class="alert alert-info" role="alert">This workspace is
 			currently owned by: ${wsowner}</div>

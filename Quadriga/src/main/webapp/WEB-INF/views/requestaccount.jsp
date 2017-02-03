@@ -10,6 +10,7 @@
 	<form:form modelAttribute='accountRequest'
 		action="${pageContext.servletContext.contextPath}/submitCreateAccount"
 		method='POST'>
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<table>
 		<tr>
 			<td>Name: </td><td><form:input  path="name" /></td>

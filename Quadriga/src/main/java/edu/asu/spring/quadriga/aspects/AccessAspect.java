@@ -67,8 +67,8 @@ public class AccessAspect {
 
             // calling the object
             if (policy.paramIndex() > 0) {
-                String accessObjectId = pjp.getArgs()[policy.paramIndex() - 1].toString();
-                haveAccess = authorization.chkAuthorization(userName, accessObjectId, policy.userRole());
+                Object accessObject = pjp.getArgs()[policy.paramIndex() - 1];
+                haveAccess = authorization.chkAuthorization(userName, accessObject, policy.userRole());
             } else {
                 haveAccess = authorization.chkAuthorizationByRole(userName, policy.userRole());
             }

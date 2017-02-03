@@ -49,7 +49,7 @@
 <form:form id="target" commandName="project" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/editProjectPageURL/${project.projectId}">
 
-
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <p>Please enter a custom project URL. This defines the URL of your public project website. Please use only letters, numbers and the following characters: -_.+!*()$ </p>
 	<div class="form-group">
 		<label class="sr-only" for="exampleInputAmount">Custom Project URL</label>

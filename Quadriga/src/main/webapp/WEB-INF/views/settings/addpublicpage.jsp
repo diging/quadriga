@@ -4,6 +4,7 @@
 <!-- Content -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
 <script>
 //@ sourceURL=filename.js
 	 
@@ -71,10 +72,15 @@
 		data["publicpageid"] = publicpageid;
 		data["linkTo"] = linkTo;
 		data["linkText"] = linkText;
+		var token = '${_csrf.token}';
+		var header = '${_csrf.headerName}';
 		$
 				.ajax({
 					type : "POST",
 					url : "${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(header, token);
+					},
 					data : {
 						data : JSON.stringify(data)
 					},
@@ -95,6 +101,7 @@
 <article class="is-page-content">
 	<form:form commandName="publicpage" method="POST" 
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<header>
 			<h2>Editing Text Contents to be shown</h2>
 			<span class="byline">Please fill in the following information:</span>
@@ -154,6 +161,7 @@
 	</form:form>
 	<form:form commandName="publicpage" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="publicpageform">
 			<table style="width: 100%">
 
@@ -205,6 +213,7 @@
 	</form:form>
 	<form:form commandName="publicpage" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${publicpageprojectid}/addpublicpagesuccess">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="publicpageform">
 			<table style="width: 100%">
 				<tr>

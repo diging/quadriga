@@ -27,7 +27,7 @@
 
 <form:form commandName="collection" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${collection.conceptCollectionId}">
-
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<p>Modify the concept collection details and click "Update".</p>
 	<table style="width: 100%">
 		<tr>

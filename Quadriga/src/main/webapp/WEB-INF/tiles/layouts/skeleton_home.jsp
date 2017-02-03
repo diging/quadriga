@@ -35,7 +35,6 @@
 	src="${pageContext.servletContext.contextPath}/resources/js/jquery-alert.js"></script>
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/jquery.quick.pagination.min.js"></script>
-
 <!-- Datatables -->
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.datatables.net/u/bs/dt-1.10.12/datatables.min.css" />
@@ -99,6 +98,7 @@
 						<div class="form-group">
 							<a class="btn btn-info btn-sm" href="register">Sign up</a>
 						</div>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
 
 
@@ -116,8 +116,13 @@
 							property="principal.username" /></span>!
 				</div>
 				<div class="col-md-2">
-					<a class="pull-right" href="<c:url value='/logout' />"><i
-						class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+				<form action="<c:url value='/logout' />" method='POST' class="pull-right">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<div>
+						<button type="submit" class="btn btn-link" style="color:#800000"><i
+					class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+					</div>
+				</form>
 				</div>
 			</div>
 			<hr>

@@ -13,17 +13,17 @@
 <link type="text/css"
 	href="${pageContext.servletContext.contextPath}/resources/css/d3.css"
 	rel="stylesheet" />
+
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/d3/common_functions.js"></script>
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/d3networkvisualize.js"></script>
 <script src="https://d3js.org/d3.v3.js" charset="utf-8"></script>
 
-</head>
 <script type="text/javascript">
 function changeLayout(json,networkid,path,type)
 {
-	d3init(json,networkid,path,type);
+	d3init(json,networkid,path,type,'${_csrf.token}','${_csrf.headerName}');
 }
 
 </script>
@@ -49,10 +49,15 @@ $("input[type=button]").button().click(function(event) {
         var objecttype = "node";
         var dId = $('#nodeid').val();
         var dName = $("#nodename").val();
+        var token = '${_csrf.token}';
+        var header = '${_csrf.headerName}';
         $.ajax({
             url : $('#annot_form').attr("action"),
             type : "POST",
             data :"nodename="+dName+"&nodeid="+dId+"&annotText="+annottext+"&objecttype="+objecttype,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
             success : function() {
             	$('#annotationModal').modal('hide');
                 displayAllAnnotationsNew(${networkid}, '${pageContext.servletContext.contextPath}');
@@ -73,10 +78,15 @@ $("input[type=button]").button().click(function(event) {
         }
         var dId = $('#nodeidRel').val();
         var dName = $("#nodenameRel").val();
+        var token = '${_csrf.token}';
+        var header = '${_csrf.headerName}';
         $.ajax({
             url : $('#annot_form').attr("action"),
             type : "POST",
             data :"objecttype="+objecttype+"&nodename="+dName+"&nodeid="+dId+"&annotText="+annottext,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
             success : function() {
             	$('#annotationModalPredicate').modal('hide');
             	displayAllAnnotationsNew(${networkid}, '${pageContext.servletContext.contextPath}');
@@ -99,7 +109,7 @@ $("input[type=button]").button().click(function(event) {
 </script>
 
 <body
-	onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
+	onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force', <c:out value='"${_csrf.token}"'></c:out>,<c:out value='"${_csrf.headerName}"'></c:out>);" />
 
 
 
@@ -132,6 +142,7 @@ $("input[type=button]").button().click(function(event) {
 				<form id='annot_form'
 					action="${pageContext.servletContext.contextPath}/auth/editing/saveAnnotation/${networkId}"
              method='POST'>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<textarea name='annotText' class='form-control' cols='15' rows='5'></textarea>
 					<input type='hidden' name='nodeid' id='nodeid' value="" /> <input
 						type='hidden' name='nodename' id='nodename' value="" />
@@ -163,6 +174,7 @@ $("input[type=button]").button().click(function(event) {
                 <form id='annot_form_rel'
                     action="${pageContext.servletContext.contextPath}/auth/editing/saveAnnotation/${networkId}"
              method='POST'>
+             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     What do you want to annotate?
 				    <div class="btn-group" data-toggle="buttons">
 					  <label class="btn btn-default btn-sm active">

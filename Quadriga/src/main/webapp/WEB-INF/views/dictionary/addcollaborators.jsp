@@ -46,6 +46,7 @@ div.rolesError {
 
 <form:form method="POST" name="myForm" commandName="collaborator"
 	action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/collaborators/add">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<h2>Add collaborators to dictionary: ${dictionaryname}</h2>
 	<div class="back-nav">
 		<hr>

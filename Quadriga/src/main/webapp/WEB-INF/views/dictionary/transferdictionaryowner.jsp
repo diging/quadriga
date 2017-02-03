@@ -33,6 +33,7 @@
 
 <form:form commandName="user" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/dictionaries/changedictionaryowner/${dictionaryid}">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	
 			<c:if test="${not empty collaboratinguser}">
 			

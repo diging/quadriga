@@ -61,6 +61,14 @@ public interface INetworkDAO {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract List<NetworksDTO> getNetworkList(IUser user) throws QuadrigaStorageException;
+	
+	
+	/**
+	 * This would give the list of {@link INetwork} that are approved.
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract List<NetworksDTO> getApprovedNetworkList() throws QuadrigaStorageException;
 
 
 	/**
@@ -76,18 +84,6 @@ public interface INetworkDAO {
 	 */
 	public abstract List<NetworkStatementsDTO> getNetworkNodes(String networkId,int versionId)
 			throws QuadrigaStorageException;
-
-	/**
-	 * This method should be called when network is reuploaded after admin has rejected the network.
-	 * Archive the network, would mark the network statements with version =1 or version=2.
-	 * version = 1 is network is archived as is most recently archived
-	 * version = 2 is network is archived and never used again. kept in DB for future references.
-	 * @param networkId			ID of network
-	 * @return					returns success/error messages
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract String archiveNetwork(String networkId) throws QuadrigaStorageException;
-
 	
 	/**
 	 * Update network name, when vogon tries to re-upload the network with a different name

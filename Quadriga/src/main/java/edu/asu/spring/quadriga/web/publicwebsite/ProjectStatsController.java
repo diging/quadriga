@@ -130,7 +130,7 @@ public class ProjectStatsController {
 
         String projectId = project.getProjectId();
         model.addAttribute("project", project);
-
+        model.addAttribute("labelCount",'0');
         List<INetwork> networks = networkmanager.getNetworksInProject(projectId, null);
         List<IConceptStats> conceptsWithCount = null;
 
@@ -153,7 +153,7 @@ public class ProjectStatsController {
                         rejectedNetworkCount.length() > 0 ? rejectedNetworkCount.toString() : null);
                 model.addAttribute("workspaceData", workspaceCount.length() > 0 ? workspaceCount.toString() : null);
                 model.addAttribute("networks", networks);
-                model.addAttribute("labelCount", labelCount.length() > 0 ? labelCount.toString() : null);
+                model.addAttribute("labelCount", labelCount.length() > 0 ? labelCount.toString() : '0');
                 model.addAttribute("networkid", "\"\"");
             } catch (JSONException e) {
 

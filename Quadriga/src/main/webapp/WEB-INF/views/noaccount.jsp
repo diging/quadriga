@@ -16,6 +16,7 @@ $(function() {
 	<form id='requestForm'
 		action="${pageContext.servletContext.contextPath}/requests/submitAccountRequest"
 		method='POST'>
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<input type="submit" type="submit" value="Request Account">
 	</form>
 </section>

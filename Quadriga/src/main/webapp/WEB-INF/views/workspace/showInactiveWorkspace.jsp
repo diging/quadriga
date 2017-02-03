@@ -30,13 +30,17 @@ $(document).ready(function() {
 <h2>List of Inactive Workspaces</h2>
 <br>
 <c:forEach var="workspace" items="${deactivatedWSList}">
-    <li class="ws with-icon"><a
-        href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.id}">
-            <c:out value="${workspace.name}"></c:out>
-    </a> (Owner) <br> <c:out value="${workspace.description}"></c:out>
-    </li>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a
+                href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.id}"><i
+                class="ion-filing icons"></i> <c:out
+                    value="${workspace.name}"></c:out></a> (Owner) <br>
+            <c:out value="${workspace.description}"></c:out>
+        </div>
+    </div>
 </c:forEach>
 <br>
-<input type="button" value="Go Back"
-    onclick="
-location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}'" />
+
+<a class="btn btn-primary"
+    href="${pageContext.servletContext.contextPath}/auth/workbench/projects/${deactivatedWSProjectId}">Go Back</a>

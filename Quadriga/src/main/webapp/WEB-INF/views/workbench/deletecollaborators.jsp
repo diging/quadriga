@@ -48,6 +48,7 @@
 
 <form:form method="POST" commandName="collaboratorForm"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectId}/collaborators/delete">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<c:if test="${not empty collaboratorForm.collaborators}">
 		<p>Select project collaborators to be remove and click "Remove".</p>
 

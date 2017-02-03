@@ -54,7 +54,7 @@ $(document).ready(function() {
     </div>
 <form:form method="POST" name="myForm" commandName="collaborator" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${myprojectid}/addcollaborators">
-  
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <c:if test="${not empty notCollaboratingUsers}">
 
 <div class="row">

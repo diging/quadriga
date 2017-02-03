@@ -19,6 +19,7 @@
     <form
     action="${pageContext.servletContext.contextPath}/register-user"
     method='post' model='request'>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <table>
         <tr>
             <td>Username:</td>
