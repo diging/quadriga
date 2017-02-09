@@ -7,11 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.bind.JAXBException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
@@ -46,6 +50,20 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
 
         return transformer.transformNetwork(networkTopNodesList);
+    }
+
+    @Override
+    public ITransformedNetwork getAllTransformedNetworks() throws QStoreStorageException, JAXBException {
+
+        String xml = networkManager.getNetworkWithPopularTerms();
+
+        if (xml == null || xml.isEmpty()) {
+            return new TransformedNetwork(new HashMap<>(), new ArrayList<>());
+        }
+
+        List<CreationEvent> creationEventList = networkManager.getTopElementEvents(xml.trim());
+
+        return transformer.transformNetworkUsingCreationList(creationEventList);
     }
 
     @Override

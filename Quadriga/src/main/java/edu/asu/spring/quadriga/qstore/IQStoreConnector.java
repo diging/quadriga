@@ -1,25 +1,5 @@
 package edu.asu.spring.quadriga.qstore;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -32,8 +12,7 @@ public interface IQStoreConnector {
 
     public abstract String getQStoreGetPOSTURL();
 
-    public abstract String getCreationEvent(String id)
-            throws QStoreStorageException;
+    public abstract String getCreationEvent(String id) throws QStoreStorageException;
 
     public abstract String store(String xml) throws QStoreStorageException;
 
@@ -49,5 +28,16 @@ public interface IQStoreConnector {
     public abstract String searchNodesByConcept(String conceptId) throws Exception;
 
     String getAppellationEventsByConceptAndText(String conceptUri, String textUri) throws QuadrigaException;
+
+    String getQStoreGetQueryURL();
+
+    /**
+     * Execute the given query in Qstore and return the result
+     * @param query
+     * @param clas
+     * @return
+     * @throws QStoreStorageException
+     */
+    public abstract String executeQuery(String query, String clas) throws QStoreStorageException;
 
 }

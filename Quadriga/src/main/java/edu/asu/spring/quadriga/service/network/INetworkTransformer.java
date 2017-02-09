@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.network;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 
@@ -20,5 +21,12 @@ public interface INetworkTransformer {
 	 */
 	public abstract ITransformedNetwork transformNetwork(
 			List<INetworkNodeInfo> networkTopNodesList);
+
+	/**
+	 * This nodes and links from the given list of creation events
+	 * @param creationEventList
+	 * @return
+	 */
+    ITransformedNetwork transformNetworkUsingCreationList(List<CreationEvent> creationEventList);
 
 }
