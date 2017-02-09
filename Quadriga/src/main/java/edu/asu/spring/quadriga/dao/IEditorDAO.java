@@ -100,16 +100,6 @@ public interface IEditorDAO {
 	public abstract List<NetworkEdgeAnnotationsDTO> getAnnotationByEdgeId(String sourceId,String targetId,String userid,String networkId) throws QuadrigaStorageException;
 	
 	/**
-	 * This method should help in updating annotation of node based on the annotation ID.
-	 * 
-	 * @param annotationId									Annotation ID of the annotation belonging to some node in the network
-	 * @param annotationText								Changed Annotation text of type String
-	 * @return												Returns the success/failure status of the method
-	 * @throws QuadrigaStorageException						Throws Storage exception when there is a issue while getting any data from database
-	 */
-	public abstract String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException;
-
-	/**
 	 * This method should get all the {@link INetwork} of the {@link IUser} based on the status of the network.
 	 * 
 	 * @param user											{@link IUser} object

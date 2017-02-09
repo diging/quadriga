@@ -44,10 +44,15 @@
                             Submit : function() {
                                 $(this).dialog("close");
                                 //$("#deletewsform")[0].submit();
+                                var token = '${_csrf.token}';
+								var header = '${_csrf.headerName}';
                                 $
                                         .ajax({
                                             url : "${pageContext.servletContext.contextPath}/auth/workbench/projects/${project.projectId}/settings/saveabout",
                                             type : "POST",
+                                            beforeSend: function(xhr) {
+												xhr.setRequestHeader(header, token);
+											},
                                             data : "selected="
                                                     + $('#hidden').val(),
                                             success : function() {

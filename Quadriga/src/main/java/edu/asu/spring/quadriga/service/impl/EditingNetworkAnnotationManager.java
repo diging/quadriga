@@ -123,22 +123,6 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 		return msg;
 	}
 	
-
-	/**
-	 * This method updates the annotation associated to a node of network
-	 * @param annotationId - annotation id
-	 * @param annotationText - annotated script
-	 * @return String - message after updating annotation to a node if network.
-	 * @throws QuadrigaStorageException
-	 */
-	@Override
-	@Transactional
-	public String updateAnnotationToNetwork(String annotationId,String annotationText) throws QuadrigaStorageException{
-		String msg = dbConnectionEditManager.updateAnnotationToNetwork(annotationId, annotationText);
-		return msg;
-	}
-	
-
 	/**
 	 * This method gets all the annotation of the network.
 	 * @param networkId				Network id to fetch all the annotation related to that network

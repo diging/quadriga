@@ -152,7 +152,6 @@ var cy = cytoscape({
              }
            ]
 });
-
 defineListeners(cy, '${pageContext.servletContext.contextPath}', '${unixName}');
 
 $( document ).ready(function() {

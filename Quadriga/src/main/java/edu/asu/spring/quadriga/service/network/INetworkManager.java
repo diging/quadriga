@@ -5,16 +5,11 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
-import org.codehaus.jettison.json.JSONException;
-
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -35,6 +30,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 public interface INetworkManager {
 
     public static String RELATION_EVENT = "relationevent";
+
     // Constants to mention type of event in the QStore XML
     public static String RELATIONEVENT = "RE";
     public static String APPELLATIONEVENT = "AE";
@@ -106,30 +102,6 @@ public interface INetworkManager {
     public abstract List<INetworkNodeInfo> getNetworkTopNodes(String networkId) throws QuadrigaStorageException;
 
     /**
-     * Get All the statements of the the network. It could be used to delete,
-     * modify, archive a network.
-     * 
-     * @param networkId
-     *            {@link INetwork} ID of type {@link String}
-     * @return Returns {@link List} of {@link INetworkNodeInfo}
-     * @throws QuadrigaStorageException
-     *             Database storage exception thrown
-     */
-    public abstract List<INetworkNodeInfo> getAllNetworkNodes(String networkId) throws QuadrigaStorageException;
-
-    /**
-     * Archive {@link INetwork} statements in case a new INetwork has replaced
-     * it. We could use this method when a rejected {@link INetwork} is been
-     * replaced by new {@link INetwork}
-     * 
-     * @param networkId
-     *            {@link INetwork} ID of type {@link String}
-     * @throws QuadrigaStorageException
-     *             Database storage exception thrown
-     */
-    public abstract void archiveNetwork(String networkId) throws QuadrigaStorageException;
-
-    /**
      * This method should help in getting the network's previous version network
      * statements. We could use this to view different versions of the networks.
      * 
@@ -176,31 +148,6 @@ public interface INetworkManager {
     public abstract String updateNetworkName(String networkId, String networkName) throws QuadrigaStorageException;
 
     /**
-     * This method should help in getting the JSTree JSon for the a
-     * {@link IUser} name. This tree JSon would contain the {@link List} of
-     * {@link IProject}. Under each {@link IProject} there could a {@link List}
-     * of {@link IWorkSpace}. Under each {@link IWorkSpace} there could a
-     * {@link List} of {@link INetwork}
-     * 
-     * @param userName
-     *            {@link IUser} name of the logged in {@link IUser}
-     * @return Returns the JSTree JSon in the form of {@link String}
-     * @throws JSONException
-     *             Throws the JSon Exception in case we have any exception while
-     *             forming the JSon object
-     */
-    public abstract String getNetworkJSTreeJson(String userName) throws JSONException;
-
-    /**
-     * This method should help in returning the UUID in the form of
-     * {@link String}. Usually used to append to a String to make it more
-     * unique, as UUID gives a unique ID all the time.
-     * 
-     * @return Returns the UUID in form of {@link String}
-     */
-    public abstract String shortUUID();
-
-    /**
      * This method should help in getting the {@link ElementEventsType} object
      * using a {@link RelationEventType} ID. Usually the source of the data for
      * {@link RelationEventType} is QStore, We could get the XML from QStore and
@@ -218,25 +165,6 @@ public interface INetworkManager {
      */
     public abstract ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId)
             throws JAXBException, QStoreStorageException;
-
-    /**
-     * This method should help in checking if {@link RelationEventType} is
-     * already parsed earlier. We could have foreign reference to another
-     * {@link RelationEventType} in the {@link SubjectObjectType} part of the
-     * {@link RelationEventType}. We should not parse through the foreign
-     * reference since it would be redundant.
-     * 
-     * @param relationEventId
-     *            {@link RelationEventType} ID in the form of {@link String}
-     * @param relationEventPredicateMapping
-     *            {@link List} of {@link List} of {@link Object} to hold
-     *            {@link PredicateObject} in it to avoid redundancy in the
-     *            network.
-     * @return Returns {@link AppellationEventObject} if we have found earlier,
-     *         else it would return null
-     */
-    public abstract AppellationEventObject isRelationEventPresentInStack(String relationEventId,
-            List<List<Object>> relationEventPredicateMapping);
 
     /**
      * This method should help to store the Network XML from clients into QStore
@@ -331,11 +259,6 @@ public interface INetworkManager {
     public List<IWorkspaceNetwork> editWorkspaceNetworkStatusCode(List<IWorkspaceNetwork> workspaceNetworkList);
 
     public List<INetwork> editNetworkStatusCode(List<INetwork> networkList);
-
-    String getSourceReferenceURL(String networkId, int versionNo)
-            throws QuadrigaStorageException, JAXBException, QStoreStorageException;
-
-    String getSourceReferenceFromElementEventsType(ElementEventsType elementEventsType);
 
     public String storeNetworks(String xml) throws QStoreStorageException;
 

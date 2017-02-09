@@ -6,7 +6,7 @@
 <script>
 
 $(function() {
-	$("#testAdd").click(function(){performAction(this,this.id,'${pageContext.servletContext.contextPath}');});
+	$("#testAdd").click(function(){performAction(this,this.id,'${pageContext.servletContext.contextPath}','${_csrf.token}','${_csrf.headerName}');});
 });
 
 </script>
