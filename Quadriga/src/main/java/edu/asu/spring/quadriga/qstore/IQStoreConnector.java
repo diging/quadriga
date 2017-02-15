@@ -34,11 +34,11 @@ public interface IQStoreConnector {
     String getQStoreQueryURL();
 
     /**
-     * Execute the given query in Qstore and return the result
+     * Get all Networks from QStore with popular terms
      * 
      * @return
      * @throws QStoreStorageException
      */
-    public abstract String executeQuery() throws QStoreStorageException;
+    public abstract String getNetworkWithPopularTerms() throws QStoreStorageException;
 
 }

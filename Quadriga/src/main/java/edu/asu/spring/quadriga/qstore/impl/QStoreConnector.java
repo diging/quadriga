@@ -213,9 +213,8 @@ public class QStoreConnector implements IQStoreConnector {
      * {@inheritDoc}
      */
     @Override
-    public String executeQuery() throws QStoreStorageException {
+    public String getNetworkWithPopularTerms() throws QStoreStorageException {
         String query = env.getProperty("allNetworks");
-        String res = "";
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
@@ -227,11 +226,10 @@ public class QStoreConnector implements IQStoreConnector {
             // execute the query in Qstore and get the result
             String url = getQStoreQueryURL();
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
-            res = restTemplate.postForObject(builder.build().encode().toUri(), request, String.class);
+            return restTemplate.postForObject(builder.build().encode().toUri(), request, String.class);
         } catch (RestClientException e) {
             throw new QStoreStorageException(e);
         }
-        return res;
     }
 
     /*

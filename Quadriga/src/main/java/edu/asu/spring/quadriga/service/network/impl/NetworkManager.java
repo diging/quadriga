@@ -300,7 +300,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      */
     @Override
     public String getNetworkWithPopularTerms() throws QStoreStorageException {
-        return qStoreConnector.executeQuery();
+        return qStoreConnector.getNetworkWithPopularTerms();
     }
 
     /**
