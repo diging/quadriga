@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.network;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBException;
 
@@ -28,8 +29,6 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  *
  */
 public interface INetworkManager {
-
-    public static String RELATION_EVENT = "relationevent";
 
     // Constants to mention type of event in the QStore XML
     public static String RELATIONEVENT = "RE";
@@ -276,9 +275,10 @@ public interface INetworkManager {
      * Get Top Level Creation Events
      * 
      * @param xml
+     * @param topNodeIDStream
      * @return
      * @throws JAXBException
      */
-    List<CreationEvent> getTopElementEvents(String xml) throws JAXBException;
+    List<CreationEvent> getTopElementEvents(String xml, Stream<String> topNodeIDStream) throws JAXBException;
 
 }

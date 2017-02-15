@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,13 +77,13 @@ public class NetworkTransformer implements INetworkTransformer {
      * {@inheritDoc}
      */
     @Override
-    public ITransformedNetwork transformNetworkUsingCreationList(List<CreationEvent> creationEventList) {
+    public ITransformedNetwork transformNetworkUsingCreationList(Stream<CreationEvent> creationEventStream) {
 
         Map<String, Node> nodes = new HashMap<>();
         List<Link> links = new ArrayList<>();
 
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
-        parser.parseEvents(creationEventList, nodes, links);
+        parser.parseEvents(creationEventStream, nodes, links);
 
         return transformedNetwork;
     }

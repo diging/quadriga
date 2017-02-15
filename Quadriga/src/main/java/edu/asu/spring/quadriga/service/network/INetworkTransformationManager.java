@@ -43,5 +43,6 @@ public interface INetworkTransformationManager {
 
     ITransformedNetwork getTransformedApprovedNetworks(List<INetwork> networkList) throws QuadrigaStorageException;
 
-    ITransformedNetwork getAllTransformedNetworks() throws QStoreStorageException, JAXBException;
+    ITransformedNetwork getAllTransformedNetworks()
+            throws QStoreStorageException, JAXBException, QuadrigaStorageException;
 }

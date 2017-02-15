@@ -6,6 +6,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 
 public interface IQStoreConnector {
 
+    public static String RELATION_EVENT = "relationevent";
+
     public abstract String getQStoreAddURL();
 
     public abstract String getQStoreGetURL();
@@ -29,15 +31,14 @@ public interface IQStoreConnector {
 
     String getAppellationEventsByConceptAndText(String conceptUri, String textUri) throws QuadrigaException;
 
-    String getQStoreGetQueryURL();
+    String getQStoreQueryURL();
 
     /**
      * Execute the given query in Qstore and return the result
-     * @param query
-     * @param clas
+     * 
      * @return
      * @throws QStoreStorageException
      */
-    public abstract String executeQuery(String query, String clas) throws QStoreStorageException;
+    public abstract String executeQuery() throws QStoreStorageException;
 
 }

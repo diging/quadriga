@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,8 +54,8 @@ public class EventParser {
 
     }
 
-    public void parseEvents(List<CreationEvent> creationEventList, Map<String, Node> nodes, List<Link> links) {
-        creationEventList.forEach(event -> parseSubjectOrObjectEvent(event, event.getId(), nodes, links));
+    public void parseEvents(Stream<CreationEvent> creationEventStream, Map<String, Node> nodes, List<Link> links) {
+        creationEventStream.forEach(event -> parseSubjectOrObjectEvent(event, event.getId(), nodes, links));
     }
 
     private Node parseSubjectOrObjectEvent(CreationEvent event, String statementId, Map<String, Node> leafNodes,

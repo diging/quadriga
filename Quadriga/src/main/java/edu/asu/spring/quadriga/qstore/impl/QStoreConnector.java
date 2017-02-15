@@ -45,6 +45,7 @@ import edu.asu.spring.quadriga.velocity.impl.VelocityBuilder;
 
 @Service
 @PropertySource(value = "classpath:/settings.properties")
+@PropertySource(value = "classpath:/cypherqueries.properties")
 public class QStoreConnector implements IQStoreConnector {
 
     private static final Logger logger = LoggerFactory.getLogger(QStoreConnector.class);
@@ -131,7 +132,7 @@ public class QStoreConnector implements IQStoreConnector {
      * getQStoreGetQueryURL()
      */
     @Override
-    public String getQStoreGetQueryURL() {
+    public String getQStoreQueryURL() {
         return qStoreURL + qStoreURL_Query;
     }
 
@@ -212,7 +213,8 @@ public class QStoreConnector implements IQStoreConnector {
      * {@inheritDoc}
      */
     @Override
-    public String executeQuery(String query, String clas) throws QStoreStorageException {
+    public String executeQuery() throws QStoreStorageException {
+        String query = env.getProperty("allNetworks");
         String res = "";
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -223,8 +225,8 @@ public class QStoreConnector implements IQStoreConnector {
 
         try {
             // execute the query in Qstore and get the result
-            String url = getQStoreGetQueryURL();
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", clas);
+            String url = getQStoreQueryURL();
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
             res = restTemplate.postForObject(builder.build().encode().toUri(), request, String.class);
         } catch (RestClientException e) {
             throw new QStoreStorageException(e);

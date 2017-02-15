@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBException;
 
@@ -53,7 +54,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     }
 
     @Override
-    public ITransformedNetwork getAllTransformedNetworks() throws QStoreStorageException, JAXBException {
+    public ITransformedNetwork getAllTransformedNetworks()
+            throws QStoreStorageException, JAXBException, QuadrigaStorageException {
 
         String xml = networkManager.getNetworkWithPopularTerms();
 
@@ -61,9 +63,20 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             return new TransformedNetwork(new HashMap<>(), new ArrayList<>());
         }
 
-        List<CreationEvent> creationEventList = networkManager.getTopElementEvents(xml.trim());
+        List<INetwork> networkList = networkManager.getApprovedNetworkList();
 
-        return transformer.transformNetworkUsingCreationList(creationEventList);
+        List<INetworkNodeInfo> networkTopNodesList = new ArrayList<INetworkNodeInfo>();
+        for (INetwork curnetwork : networkList) {
+            List<INetworkNodeInfo> curTopNodesList = networkManager.getNetworkTopNodes(curnetwork.getNetworkId());
+            networkTopNodesList.addAll(curTopNodesList);
+        }
+
+        Stream<String> topNodeIDStream = networkTopNodesList.stream().map(networkNodeInfo -> networkNodeInfo.getId());
+
+        Stream<CreationEvent> creationEventStream = networkManager.getTopElementEvents(xml.trim(), topNodeIDStream)
+                .stream();
+
+        return transformer.transformNetworkUsingCreationList(creationEventStream);
     }
 
     @Override

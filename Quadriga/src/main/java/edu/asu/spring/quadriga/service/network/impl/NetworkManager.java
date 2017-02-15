@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -23,8 +24,6 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,7 +73,6 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  */
 
 @Service
-@PropertySource(value = "classpath:/cypherqueries.properties")
 public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkManager {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkManager.class);
@@ -102,9 +100,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private ITextFileManager txtManager;
-
-    @Autowired
-    private Environment env;
 
     /**
      * 
@@ -305,7 +300,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      */
     @Override
     public String getNetworkWithPopularTerms() throws QStoreStorageException {
-        return qStoreConnector.executeQuery(env.getProperty("allNetworks"), RELATION_EVENT);
+        return qStoreConnector.executeQuery();
     }
 
     /**
@@ -469,17 +464,10 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      * {@inheritDoc}
      */
     @Override
-    public List<CreationEvent> getTopElementEvents(String xml) throws JAXBException {
+    public List<CreationEvent> getTopElementEvents(String xml, Stream<String> topNodeIDStream) throws JAXBException {
         ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
-        NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
 
-        // Below code reads the top level Appellation events
-
-        newNetworkDetailCache = parseNewNetworkStatement(elementEventType, newNetworkDetailCache);
-
-        List<NetworkEntry> networkDetailsCache = newNetworkDetailCache.getEntries();
-        List<String> topIDs = networkDetailsCache.stream().filter(entry -> entry.isTop()).map(entry -> entry.getId())
-                .collect(Collectors.toList());
+        List<String> topIDs = topNodeIDStream.collect(Collectors.toList());
 
         List<CreationEvent> eventList = elementEventType.getRelationEventOrAppellationEvent();
 
