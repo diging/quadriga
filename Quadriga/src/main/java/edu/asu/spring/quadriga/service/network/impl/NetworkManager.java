@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
 import java.io.StringWriter;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -21,9 +19,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +43,6 @@ import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
@@ -166,58 +160,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         return relationEventPredicateMapping;
 
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public AppellationEventObject isRelationEventPresentInStack(String relationEventId,
-            List<List<Object>> relationEventPredicateMapping) {
-
-        Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
-        int flag = 0;
-        AppellationEventObject appellationEventObject = null;
-        while (I.hasNext()) {
-            List<Object> objectList = I.next();
-            Iterator<Object> I1 = objectList.iterator();
-
-            while (I1.hasNext()) {
-                Object object = I1.next();
-
-                if (object instanceof String[]) {
-                    String pairs[] = (String[]) object;
-                    if (pairs[0].equals(relationEventId)) {
-                        String predicateNameLocal = pairs[1];
-                        logger.debug(" relationEventId  :" + relationEventId + " id : " + pairs[0] + "predicate Name"
-                                + predicateNameLocal);
-                        flag = 1;
-                    }
-                }
-                if (object instanceof AppellationEventObject) {
-                    appellationEventObject = (AppellationEventObject) object;
-                }
-
-            }
-            if (flag == 1) {
-                return appellationEventObject;
-            }
-
-        }
-
-        return null;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     */
-    @Override
-    public String shortUUID() {
-        UUID uuid = UUID.randomUUID();
-        long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
-        return Long.toString(l, Character.MAX_RADIX);
     }
 
     @Override
@@ -363,29 +305,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      */
     @Override
     @Transactional
-    public List<INetworkNodeInfo> getAllNetworkNodes(String networkId) throws QuadrigaStorageException {
-        List<INetworkNodeInfo> networkNodeList = networkmapper.getNetworkNodes(networkId, INetworkManager.VERSION_ZERO);
-
-        if (networkNodeList != null) {
-            Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
-            while (iterator.hasNext()) {
-                INetworkNodeInfo networkNodeInfo = iterator.next();
-                if (networkNodeInfo.getVersion() != 0)
-                    iterator.remove();
-            }
-        }
-
-        return networkNodeList;
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
     public List<INetwork> getNetworksInProject(String projectid, String status) throws QuadrigaStorageException {
 
         List<NetworksDTO> networksDTO = dbConnect.getNetworkDTOList(projectid);
@@ -474,24 +393,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
      */
     @Override
     @Transactional
-    public void archiveNetwork(String networkId) throws QuadrigaStorageException {
-
-        try {
-            dbConnect.archiveNetwork(networkId);
-        } catch (QuadrigaStorageException e) {
-            throw new QuadrigaStorageException();
-        }
-
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
     public String updateNetworkName(String networkId, String networkName) throws QuadrigaStorageException {
         try {
             dbConnect.updateNetworkName(networkId, networkName);
@@ -499,77 +400,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             throw new QuadrigaStorageException();
         }
         return "success";
-    }
-
-    /**
-     * 
-     * {@inheritDoc}
-     * 
-     * This implementation uses the hibernate for dataaccess from the database
-     */
-    @Override
-    @Transactional
-    // TODO: delete this!!!
-    public String getNetworkJSTreeJson(String userName) throws JSONException {
-        List<IProject> projectList = null;
-        JSONObject core = new JSONObject();
-        try {
-            projectList = projectManager.getProjectList(userName);
-            JSONArray dataArray = new JSONArray();
-            if (projectList != null) {
-                for (IProject project : projectList) {
-                    // Each data
-                    JSONObject data = new JSONObject();
-                    data.put("id", project.getProjectId());
-                    data.put("parent", "#");
-                    data.put("text", project.getProjectName());
-                    dataArray.put(data);
-                    String wsParent = project.getProjectId();
-
-                    List<IWorkSpace> wsList = wsListManager.listActiveWorkspace(project.getProjectId(), userName);
-                    if (wsList != null) {
-                        for (IWorkSpace ws : wsList) {
-                            // workspace json
-                            JSONObject data1 = new JSONObject();
-                            data1.put("id", ws.getWorkspaceId());
-                            data1.put("parent", wsParent);
-                            data1.put("text", ws.getWorkspaceName());
-                            dataArray.put(data1);
-                            String networkParent = ws.getWorkspaceId();
-
-                            List<IWorkspaceNetwork> workspaceNnetworkList = workspaceManager
-                                    .getWorkspaceNetworkList(ws.getWorkspaceId());
-                            if (workspaceNnetworkList != null) {
-                                for (IWorkspaceNetwork workspaceNetwork : workspaceNnetworkList) {
-                                    JSONObject data2 = new JSONObject();
-                                    data2.put("id", workspaceNetwork.getNetwork().getNetworkId());
-                                    data2.put("parent", networkParent);
-                                    String networkLink = "<a href='#' id='"
-                                            + workspaceNetwork.getNetwork().getNetworkId() + "' name='"
-                                            + workspaceNetwork.getNetwork().getNetworkName()
-                                            + "' onclick='javascript:clicknetwork(this.id,this.name);' > "
-                                            + workspaceNetwork.getNetwork().getNetworkName() + "</a>";
-                                    data2.put("text", networkLink);
-                                    data2.put("href",
-                                            "networks/visualize/" + workspaceNetwork.getNetwork().getNetworkId());
-                                    JSONObject data2href = new JSONObject();
-                                    data2href.put("href",
-                                            "networks/visualize/" + workspaceNetwork.getNetwork().getNetworkId());
-                                    dataArray.put(data2);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            JSONObject dataList = new JSONObject();
-            dataList.put("data", dataArray);
-
-            core.put("core", dataList);
-        } catch (QuadrigaStorageException e) {
-            logger.error("DB Error while fetching project, Workspace and network details", e);
-        }
-        return core.toString(SUCCESS);
     }
 
     /**
@@ -1000,53 +830,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         }
 
         return networkList;
-    }
-
-    @Override
-    @Transactional
-    public String getSourceReferenceURL(String networkId, int versionNo)
-            throws QuadrigaStorageException, JAXBException, QStoreStorageException {
-        String sourceReferenceUrl = null;
-        List<INetworkNodeInfo> networkNodeInfoList = getNetworkTopNodesByVersion(networkId, versionNo);
-        if (networkNodeInfoList != null) {
-            INetworkNodeInfo someNetworkNodeInfo = networkNodeInfoList.get(0);
-            String statementID = someNetworkNodeInfo.getId();
-            ElementEventsType elementEventsType = getElementEventTypeFromCreationEventTypeID(statementID);
-            String url = getSourceReferenceFromElementEventsType(elementEventsType);
-            int indexSlash = url.lastIndexOf("/");
-            if (indexSlash == -1) {
-                indexSlash = url.lastIndexOf("\\");
-            }
-            String fileid = url.substring(indexSlash + 1, url.length());
-            // System.out.println(fileid);
-            return fileid;
-        }
-        return sourceReferenceUrl;
-    }
-
-    @Override
-    public String getSourceReferenceFromElementEventsType(ElementEventsType elementEventsType) {
-        String sourceReferenceUrl = null;
-
-        List<CreationEvent> creationEventList = elementEventsType.getRelationEventOrAppellationEvent();
-        Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
-
-        while (creationEventIterator.hasNext()) {
-            CreationEvent creationEvent = creationEventIterator.next();
-            // Check if event is Appellation event
-            if (creationEvent instanceof AppellationEventType) {
-                AppellationEventType appellationEventType = (AppellationEventType) creationEvent;
-                return appellationEventType.getSourceReference();
-            }
-            // Check if event is Relation event
-            if (creationEvent instanceof RelationEventType) {
-                RelationEventType relationEventType = (RelationEventType) creationEvent;
-
-                return relationEventType.getSourceReference();
-            }
-        }
-
-        return sourceReferenceUrl;
     }
 
     @Override
