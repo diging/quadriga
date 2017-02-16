@@ -467,7 +467,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     public List<CreationEvent> getTopElementEvents(String xml, Stream<String> topNodeIDStream) throws JAXBException {
         ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
 
-        List<String> topIDs = topNodeIDStream.collect(Collectors.toList());
+        Set<String> topIDs = topNodeIDStream.collect(Collectors.toSet());
 
         List<CreationEvent> eventList = elementEventType.getRelationEventOrAppellationEvent();
 
