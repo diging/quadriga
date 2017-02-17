@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
+import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
 import edu.asu.spring.quadriga.service.network.domain.impl.TextPhrase;
@@ -45,6 +46,9 @@ public class NodeInfoController {
                     && occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                 JSONObject occurance = new JSONObject();
                 occurance.append("text", occur.getTextUri());
+                occurance.append("textAuthor", occur.getAuthor());
+                occurance.append("textTitle", occur.getTitle());
+                occurance.append("textCreationDate", occur.getCreationDate());
                 JSONArray phraseArray = new JSONArray();
 
                 List<TextPhrase> phrases = occur.getTextPhrases();
@@ -97,6 +101,9 @@ public class NodeInfoController {
                 if (occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                     JSONObject occurance = new JSONObject();
                     occurance.append("text", occur.getTextUri());
+                    occurance.append("textAuthor", occur.getAuthor());
+                    occurance.append("textTitle", occur.getTitle());
+                    occurance.append("textCreationDate", occur.getCreationDate());
                     occurance.append("projectUnix", occur.getProject().getUnixName());
                     occurance.append("projectName", occur.getProject().getProjectName());
                     otherProjectsTexts.put(occurance);

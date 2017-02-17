@@ -218,6 +218,9 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             if (txtFile != null && txtFile.getAccessibility() == access) {
                 occur.setContents(txtManager.retrieveTextFileContent(txtFile.getTextId()));
                 occur.setTextId(txtFile.getTextId());
+                occur.setAuthor(txtFile.getAuthor());
+                occur.setTitle(txtFile.getTitle());
+                occur.setCreationDate(txtFile.getCreationDate());
             } else {
                 continue;
             }

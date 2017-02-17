@@ -8,6 +8,9 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 public class TextOccurance {
 
     private String textUri;
+    private String author;
+    private String title;
+    private String creationDate;
     private String textId;
     private String contents;
     private IProject project;
@@ -113,6 +116,39 @@ public class TextOccurance {
                 return false;
         } else if (!textUri.equals(other.textUri))
             return false;
+        if (author == null) {
+            if (other.author != null)
+                return false;
+        } else if (!author.equals(other.author))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (creationDate == null) {
+            if (other.creationDate != null)
+                return false;
+        } else if (!creationDate.equals(other.creationDate))
+            return false;
         return true;
+    }
+    public String getAuthor() {
+        return author;
+    }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getCreationDate() {
+        return creationDate;
+    }
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
     }
 }
