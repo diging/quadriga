@@ -79,6 +79,10 @@ public class QStoreConnector implements IQStoreConnector {
     private String qStoreURL_Query;
 
     @Autowired
+    @Qualifier("qStoreURL_Query_Status")
+    private String qStoreURL_Query_Status;
+
+    @Autowired
     @Qualifier("jaxbMarshaller")
     private Jaxb2Marshaller jaxbMarshaller;
 
@@ -134,6 +138,11 @@ public class QStoreConnector implements IQStoreConnector {
     @Override
     public String getQStoreQueryURL() {
         return qStoreURL + qStoreURL_Query;
+    }
+
+    @Override
+    public String getQStoreQueryStatusURL() {
+        return qStoreURL + qStoreURL_Query_Status;
     }
 
     protected String getQStoreSearchUrl() {
@@ -214,6 +223,25 @@ public class QStoreConnector implements IQStoreConnector {
      */
     @Override
     public String getNetworkWithPopularTerms() throws QStoreStorageException {
+        String res = executeQuery();
+        if (res.contains("element_events")) {
+            return res;
+        }
+
+        res = getQueryResult();
+        while (res != null && res.contains("<message>") && res.contains("RUNNING")) {
+            try {
+                Thread.sleep(10000);
+                res = getQueryResult();
+            } catch (InterruptedException e) {
+                throw new QStoreStorageException(e);
+            }
+        }
+
+        return res;
+    }
+
+    private String executeQuery() throws QStoreStorageException {
         String query = env.getProperty("allNetworks");
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -227,6 +255,27 @@ public class QStoreConnector implements IQStoreConnector {
             String url = getQStoreQueryURL();
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
             return restTemplate.postForObject(builder.build().encode().toUri(), request, String.class);
+
+        } catch (RestClientException e) {
+            throw new QStoreStorageException(e);
+        }
+
+    }
+
+    private String getQueryResult() throws QStoreStorageException {
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        try {
+            // execute the query in Qstore and get the result
+            String url = getQStoreQueryStatusURL();
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
+            return restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, request, String.class)
+                    .getBody();
+
         } catch (RestClientException e) {
             throw new QStoreStorageException(e);
         }

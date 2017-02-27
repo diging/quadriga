@@ -41,4 +41,6 @@ public interface IQStoreConnector {
      */
     public abstract String getNetworkWithPopularTerms() throws QStoreStorageException;
 
+    String getQStoreQueryStatusURL();
+
 }

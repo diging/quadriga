@@ -42,6 +42,11 @@
 			<value>/query</value>
 		</constructor-arg>
 	</bean>
+	<bean id="qStoreURL_Query_Status" class="java.lang.String">
+		<constructor-arg>
+			<value>/queryStatus</value>
+		</constructor-arg>
+	</bean>
 
 	<bean id="wordPowerURL" class="java.lang.String">
 		<constructor-arg>
