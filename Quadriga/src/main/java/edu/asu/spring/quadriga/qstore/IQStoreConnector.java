@@ -8,6 +8,8 @@ public interface IQStoreConnector {
 
     public static String RELATION_EVENT = "relationevent";
 
+    public static String RUNNING = "RUNNING";
+
     public abstract String getQStoreAddURL();
 
     public abstract String getQStoreGetURL();
@@ -41,6 +43,6 @@ public interface IQStoreConnector {
      */
     public abstract String getNetworkWithPopularTerms() throws QStoreStorageException;
 
-    String getQStoreQueryStatusURL();
+    String getQStoreAsyncQueryResultURL();
 
 }

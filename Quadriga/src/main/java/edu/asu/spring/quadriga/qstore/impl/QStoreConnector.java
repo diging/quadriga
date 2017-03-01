@@ -79,8 +79,8 @@ public class QStoreConnector implements IQStoreConnector {
     private String qStoreURL_Query;
 
     @Autowired
-    @Qualifier("qStoreURL_Query_Status")
-    private String qStoreURL_Query_Status;
+    @Qualifier("qStoreURL_Aysnc_Query_Result")
+    private String qStoreURL_Aysnc_Query_Result;
 
     @Autowired
     @Qualifier("jaxbMarshaller")
@@ -141,8 +141,8 @@ public class QStoreConnector implements IQStoreConnector {
     }
 
     @Override
-    public String getQStoreQueryStatusURL() {
-        return qStoreURL + qStoreURL_Query_Status;
+    public String getQStoreAsyncQueryResultURL() {
+        return qStoreURL + qStoreURL_Aysnc_Query_Result;
     }
 
     protected String getQStoreSearchUrl() {
@@ -222,17 +222,22 @@ public class QStoreConnector implements IQStoreConnector {
      * {@inheritDoc}
      */
     @Override
+    @Cacheable(value = "publicNetworks")
     public String getNetworkWithPopularTerms() throws QStoreStorageException {
-        String res = executeQuery();
+        String query = env.getProperty("allNetworks");
+        String queryID = env.getProperty("allNetworks_id");
+
+        String res = executeQuery(query, queryID);
         if (res.contains("element_events")) {
             return res;
         }
 
-        res = getQueryResult();
-        while (res != null && res.contains("<message>") && res.contains("RUNNING")) {
+        long delay = Long.parseLong(env.getProperty("qstore.rest.delay"));
+        res = getQueryResult(queryID);
+        while (res != null && res.contains("<message>") && res.contains(RUNNING)) {
             try {
-                Thread.sleep(10000);
-                res = getQueryResult();
+                Thread.sleep(delay);
+                res = getQueryResult(queryID);
             } catch (InterruptedException e) {
                 throw new QStoreStorageException(e);
             }
@@ -241,8 +246,8 @@ public class QStoreConnector implements IQStoreConnector {
         return res;
     }
 
-    private String executeQuery() throws QStoreStorageException {
-        String query = env.getProperty("allNetworks");
+    private String executeQuery(String query, String queryID) throws QStoreStorageException {
+
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
@@ -253,7 +258,8 @@ public class QStoreConnector implements IQStoreConnector {
         try {
             // execute the query in Qstore and get the result
             String url = getQStoreQueryURL();
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT)
+                    .queryParam("queryID", queryID);
             return restTemplate.postForObject(builder.build().encode().toUri(), request, String.class);
 
         } catch (RestClientException e) {
@@ -262,7 +268,7 @@ public class QStoreConnector implements IQStoreConnector {
 
     }
 
-    private String getQueryResult() throws QStoreStorageException {
+    private String getQueryResult(String queryID) throws QStoreStorageException {
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
 
@@ -271,8 +277,8 @@ public class QStoreConnector implements IQStoreConnector {
 
         try {
             // execute the query in Qstore and get the result
-            String url = getQStoreQueryStatusURL();
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
+            String url = getQStoreAsyncQueryResultURL();
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("queryID", queryID);
             return restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, request, String.class)
                     .getBody();
 

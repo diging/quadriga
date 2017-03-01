@@ -42,9 +42,9 @@
 			<value>/query</value>
 		</constructor-arg>
 	</bean>
-	<bean id="qStoreURL_Query_Status" class="java.lang.String">
+	<bean id="qStoreURL_Aysnc_Query_Result" class="java.lang.String">
 		<constructor-arg>
-			<value>/queryStatus</value>
+			<value>/asyncQueryResult</value>
 		</constructor-arg>
 	</bean>
 
