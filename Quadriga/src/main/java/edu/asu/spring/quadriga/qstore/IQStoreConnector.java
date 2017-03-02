@@ -36,12 +36,13 @@ public interface IQStoreConnector {
     String getQStoreQueryURL();
 
     /**
-     * Get all Networks from QStore with popular terms
+     * Get all Networks from QStore with popular terms. This will start an async
+     * task on QStore and will keep polling QStore until the query is executed
      * 
      * @return
      * @throws QStoreStorageException
      */
-    public abstract String getNetworkWithPopularTerms() throws QStoreStorageException;
+    String getNetworkWithPopularTerms() throws QStoreStorageException;
 
     String getQStoreAsyncQueryResultURL();
 

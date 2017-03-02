@@ -234,6 +234,8 @@ public class QStoreConnector implements IQStoreConnector {
 
         long delay = Long.parseLong(env.getProperty("qstore.rest.delay"));
         res = getQueryResult(queryID);
+
+        // Keep polling QStore until we get the result
         while (res != null && res.contains("<message>") && res.contains(RUNNING)) {
             try {
                 Thread.sleep(delay);
@@ -276,7 +278,6 @@ public class QStoreConnector implements IQStoreConnector {
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
         try {
-            // execute the query in Qstore and get the result
             String url = getQStoreAsyncQueryResultURL();
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("queryID", queryID);
             return restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, request, String.class)
