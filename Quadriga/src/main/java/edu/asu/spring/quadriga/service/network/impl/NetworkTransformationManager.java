@@ -54,10 +54,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     }
 
     @Override
-    public ITransformedNetwork getAllTransformedNetworks()
+    public ITransformedNetwork getAllTransformedNetworks(String xml)
             throws QStoreStorageException, JAXBException, QuadrigaStorageException {
-
-        String xml = networkManager.getNetworkWithPopularTerms();
 
         if (xml == null || xml.isEmpty()) {
             return new TransformedNetwork(new HashMap<>(), new ArrayList<>());

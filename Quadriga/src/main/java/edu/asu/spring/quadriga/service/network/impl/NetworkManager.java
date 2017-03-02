@@ -46,11 +46,9 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventO
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
@@ -61,7 +59,6 @@ import edu.asu.spring.quadriga.service.network.domain.impl.TextPhrase;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -94,9 +91,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
     @Autowired
     private IMarshallingService marshallingService;
-
-    @Autowired
-    private IWorkspaceManager workspaceManager;
 
     @Autowired
     private ITextFileManager txtManager;
@@ -296,14 +290,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getNetworkWithPopularTerms() throws QStoreStorageException {
-        return qStoreConnector.getNetworkWithPopularTerms();
-    }
-
-    /**
      * 
      * {@inheritDoc}
      * 
@@ -420,16 +406,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
             String uploadStatus, String networkId, int version, String networkStatus, String externalUserId)
                     throws JAXBException {
         ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
-
-        // Get Workspace details.
-        IWorkSpace workspace = null;
-        try {
-            workspace = workspaceManager.getWorkspaceDetails(workspaceId, user.getUserName());
-        } catch (QuadrigaStorageException e3) {
-            logger.error("Error while getting workspace details", e3);
-        } catch (QuadrigaAccessException e3) {
-            logger.error("User doesn't have access to workspace", e3);
-        }
 
         NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
 

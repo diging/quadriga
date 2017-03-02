@@ -1,11 +1,14 @@
 package edu.asu.spring.quadriga.qstore.impl;
 
+import static edu.asu.spring.quadriga.qstore.ExecutionStatus.RUNNING;
+
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import javax.annotation.PostConstruct;
 
@@ -32,6 +35,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -221,22 +226,19 @@ public class QStoreConnector implements IQStoreConnector {
     /**
      * {@inheritDoc}
      */
+    @Async
     @Override
-    @Cacheable(value = "publicNetworks")
-    public String getNetworkWithPopularTerms() throws QStoreStorageException {
+    public Future<String> loadNetworkWithPopularTerms() throws QStoreStorageException {
         String query = env.getProperty("allNetworks");
         String queryID = env.getProperty("allNetworks_id");
 
-        String res = executeQuery(query, queryID);
-        if (res.contains("element_events")) {
-            return res;
-        }
+        executeQuery(query, queryID);
 
         long delay = Long.parseLong(env.getProperty("qstore.rest.delay"));
-        res = getQueryResult(queryID);
+        String res = getQueryResult(queryID);
 
         // Keep polling QStore until we get the result
-        while (res != null && res.contains("<message>") && res.contains(RUNNING)) {
+        while (res != null && res.contains("<message>") && res.contains(RUNNING.name())) {
             try {
                 Thread.sleep(delay);
                 res = getQueryResult(queryID);
@@ -245,7 +247,7 @@ public class QStoreConnector implements IQStoreConnector {
             }
         }
 
-        return res;
+        return new AsyncResult<String>(res);
     }
 
     private String executeQuery(String query, String queryID) throws QStoreStorageException {

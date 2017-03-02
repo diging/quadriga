@@ -264,14 +264,6 @@ public interface INetworkManager {
     Set<TextOccurance> getTextsForConceptId(String conceptId, ETextAccessibility access) throws Exception;
 
     /**
-     * Get the network with terms that are used the most
-     * 
-     * @return
-     * @throws QStoreStorageException
-     */
-    String getNetworkWithPopularTerms() throws QStoreStorageException;
-
-    /**
      * Get Top Level Creation Events
      * 
      * @param xml
