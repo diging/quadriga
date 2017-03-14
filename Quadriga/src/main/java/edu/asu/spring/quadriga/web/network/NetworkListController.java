@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -94,19 +95,15 @@ public class NetworkListController {
 	 * @throws JAXBException
 	 */
 	@RequestMapping(value = "auth/networks/visualize/{networkId}", method = RequestMethod.GET)
-	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		
+	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {	
 	    // Identify the User
 	    String userId = principal.getName();
 	
 	    // Get network details using the networkId
 		INetwork network = networkManager.getNetwork(networkId);
 		
-		// Get network-workspace mapping details using the network details
-		IWorkspaceNetwork workspaceNetwork  =  network.getNetworkWorkspace();
-		
-		// Get details of workspace associated with the network
-		IWorkSpace workspace = workspaceNetwork.getWorkspace();
+		// Get details of workspace associated with the network using network-workspace mapping details
+		IWorkSpace workspace = network.getNetworkWorkspace().getWorkspace();
 		
 		// Get projectId of the project to which the workspace belongs
 		String projectId = workspaceManager.getProjectIdFromWorkspaceId(workspace.getWorkspaceId());
@@ -115,70 +112,49 @@ public class NetworkListController {
 		IProject project = projectManager.getProjectDetails(projectId);        
         
 		// Identify the access type of the project : PUBLIC or PRIVATE
-		String accessID = project.getProjectAccess().toString();
+		EProjectAccessibility projectAccess = project.getProjectAccess();
 		
 		// If the project is PRIVATE, check if the user is allowed to access the information associated with the project
 		// If the project is PUBLIC, allow access to the information associated with the project
-		if(accessID.equals("PRIVATE")){
+		if(projectAccess == EProjectAccessibility.PRIVATE){
 		    boolean authorizedAccess = false;
-	        
-	        if (projectSecurity.isProjectOwner(userId, projectId)) 
+		    
+	        if (projectSecurity.isProjectOwner(userId, projectId)){
 	            authorizedAccess = true;
+	        }
 	        else{
 	            List<String> collaboratorRoles = projectSecurity.getCollaboratorRoles(userId, projectId);
 	            if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR) || collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN) || collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR)) {
 	                authorizedAccess = true;
 	            }
-	            
 	        }
 	            
 	        if(authorizedAccess){
-	            network = networkManager.getNetwork(networkId);
-	            if(network==null){
-	                return "auth/404";
-	            }
-	            ITransformedNetwork transformedNetwork= transformationManager.getTransformedNetwork(networkId);
-	            
-	            String nwId = "\""+networkId+"\"";
-	            model.addAttribute("networkid",nwId);
-	            model.addAttribute("network", network);
-	            String json = null;
-	            if(transformedNetwork!=null){
-	                json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-	            }
-	            model.addAttribute("jsonstring",json);
-
-	            return "auth/networks/visualize";
+	            return networkVisualization(networkId, model);
 	        } 
 	        return "public/forbidden";
 		}
 		else {
-            network = networkManager.getNetwork(networkId);
-            if(network==null){
-                return "auth/404";
-            }
-            ITransformedNetwork transformedNetwork= transformationManager.getTransformedNetwork(networkId);
-            
-            String nwId = "\""+networkId+"\"";
-            model.addAttribute("networkid",nwId);
-            model.addAttribute("network", network);
-            String json = null;
-            if(transformedNetwork!=null){
-                json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-            }
-            model.addAttribute("jsonstring",json);
-
-            return "auth/networks/visualize";
-		    
+		    return networkVisualization(networkId, model);
 		}
-		
-		
-	
-
-		
-		
-		
-		
 	}
+	
+	private String networkVisualization(String networkId, ModelMap model) throws QuadrigaStorageException{
+	    INetwork network = networkManager.getNetwork(networkId);
+        if(network==null){
+            return "auth/404";
+        }
+        ITransformedNetwork transformedNetwork= transformationManager.getTransformedNetwork(networkId);
+        
+        String nwId = "\""+networkId+"\"";
+        model.addAttribute("networkid",nwId);
+        model.addAttribute("network", network);
+        String json = null;
+        if(transformedNetwork!=null){
+            json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+        }
+        model.addAttribute("jsonstring",json);
 
+        return "auth/networks/visualize";
+	}
 }
