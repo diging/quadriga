@@ -81,7 +81,7 @@ li.two-row-li {
 div.navbar-two-rows, div.navbar-two-rows a {
 	/* commented padding and margin to ensure the height of the navigation bar (navbar.jsp) remains consistent - 50px */
 	/* padding: 2px 0px 2px 0px; margin: 2px 0px 2px 0px; */
-	font-size: 11px;
+	font-size: 12px;
 	color: white;
 }
 
@@ -91,7 +91,7 @@ div.navbar-two-rows, div.navbar-two-rows a {
 	color: #ffffff !important;
 	padding-bottom: 2.5px;
 	padding-top: 2.5px;
-	
+	font-size: 12px;
 }
 
 
