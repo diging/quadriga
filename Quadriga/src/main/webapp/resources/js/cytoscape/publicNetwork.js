@@ -1,5 +1,15 @@
 var animationDuration = 200;
 
+$(".link").mousedown(function(event) {
+    switch (event.which) {
+        case 1:
+            window.open("https://www.google.com", '_blank');
+            break;
+    }
+    return false;
+});
+
+
 function defineListeners(cy, path, unixName) {
 	cy.on('mouseover', 'node', function(e) {
 		var ele = e.cyTarget;
@@ -168,11 +178,14 @@ function conceptDescription(path, node) {
 
 function getTexts(node, path, unixName) {
 	var conceptDesc = "";
+	var sample = "";
+	var temp = "";
 	$.ajax({
 		url : path + "/public/concept/texts?conceptId=" + encodeURIComponent(node.data("conceptId")) + "&projectUnix=" + unixName,
 		type : "GET",
 		beforeSend: function() { 
 			$('#texts').html("");
+			$('#check').html("");
 			$('#loading1').show(); 
 			},
 		success : function(data) {
@@ -184,11 +197,16 @@ function getTexts(node, path, unixName) {
 				var projects = parsedData['projects'];
 				projects.forEach(function(element, index, array) {
 					conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["text"] + "</p>";
-					conceptDesc += "... " + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
+					conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</p>";
+					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textTitle"] + "</p>";
+					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textCreationDate"] + "</p>";
+					sample = "<a href='#' target='_blank' class='link'>" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</a>";
+					conceptDesc += "..." + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
 				});
 			}
 			conceptDesc = "<p>" + conceptDesc + "</p>";
 			$('#texts').html(conceptDesc);
+			$('#check').html(sample);
 		},
 		error : function() {
 			$('#loading1').hide();
@@ -196,6 +214,7 @@ function getTexts(node, path, unixName) {
 		}
 	});
 }
+
 
 function hightlight(text, phrases) {
 	var highlightedText = "";
@@ -214,3 +233,4 @@ function hightlight(text, phrases) {
 	highlightedText += text.substring(lastIdx);
 	return highlightedText;
 }
+
