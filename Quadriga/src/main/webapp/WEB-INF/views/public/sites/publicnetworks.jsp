@@ -19,14 +19,10 @@
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/dist/cytoscape.js"></script>
 
-<c:if test="${isNetworkEmpty}">
-	<div class="row">
-		<div class="alert alert-info">Could not find any nodes for the
-			search term in the project</div>
-	</div>
-</c:if>
+<div class="row" id="message" style="display: none;">
+</div>
 
-<c:if test="${!isNetworkEmpty}">
+<div id="network" style="display: none;">
     <a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
         <i class="fa fa-arrows-alt"></i>
     </a>
@@ -42,8 +38,12 @@
 			<table id="annotationsTable"></table>
 		</div>
 	</div>
-</c:if>
+</div>
 <div id="log" class="row"></div>
+
+<div id="loading">
+  <p>Please wait while the data is loading... </p>
+</div>
 <script type="text/javascript">
 //# sourceURL=dynamicScript.js 
 
@@ -105,46 +105,98 @@ function exitHandler()
 <script type="text/javascript">
 //# sourceURL=test.js
 
-var container = document.getElementById('networkBox');
+var cy;
 
-var cy = cytoscape({
-    container: container, // container to render in
+function buildCytoscape(jsonstring) {
+	var container = document.getElementById('networkBox');
 
-    elements: ${jsonstring},
-    layout: {
-        name: 'cose',
-        idealEdgeLength: 5
-      },
-    style: [ // the stylesheet for the graph
-             {
-               selector: 'node',
-               style: {
-                 'background-color': 'mapData(group, 0, 1, #E1CE7A, #FDD692)',
-                 'border-color' : '#B98F88',
-                 'border-width' : 1,
-                 'font-family': 'Open Sans',
-                 'font-size': '12px',
-                 'font-weight' : 'bold',
-                 'color': 'mapData(group, 0, 1, #666, #333)',
-                 'label': 'data(conceptName)',
-                 'width':'mapData(group, 0, 1, 40, 55)',
-                 "height":"mapData(group, 0, 1, 40, 55)",
-                 'text-valign' : 'center',
-               }
-             },
+	cy = cytoscape({
+	    container: container, // container to render in
 
-             {
-               selector: 'edge',
-               style: {
-                 'width': 1,
-                 'line-color': '#754F44',
-                 'target-arrow-shape': 'none'
-               }
-             }
-           ]
+	    elements: jsonstring,
+	    layout: {
+	        name: 'cose',
+	        idealEdgeLength: 5
+	      },
+	    style: [ // the stylesheet for the graph
+	             {
+	               selector: 'node',
+	               style: {
+	                 'background-color': 'mapData(group, 0, 1, #E1CE7A, #FDD692)',
+	                 'border-color' : '#B98F88',
+	                 'border-width' : 1,
+	                 'font-family': 'Open Sans',
+	                 'font-size': '12px',
+	                 'font-weight' : 'bold',
+	                 'color': 'mapData(group, 0, 1, #666, #333)',
+	                 'label': 'data(conceptName)',
+	                 'width':'mapData(group, 0, 1, 40, 55)',
+	                 "height":"mapData(group, 0, 1, 40, 55)",
+	                 'text-valign' : 'center',
+	               }
+	             },
+
+	             {
+	               selector: 'edge',
+	               style: {
+	                 'width': 1,
+	                 'line-color': '#754F44',
+	                 'target-arrow-shape': 'none'
+	               }
+	             }
+	           ]
+	});
+
+	defineListeners(cy, '${pageContext.servletContext.contextPath}', '');
+}
+
+
+$( document ).ready(function() { 
+	$('#loading').show();
+	$.ajax({
+		url: "${pageContext.servletContext.contextPath}/public/rest/loadnetworks",
+		type: "GET",
+		success: function(result) {
+			checkStatus();
+		},
+		error: function(error) {
+			$('#loading').hide();
+			$("#message").html("<div class='alert alert-danger'>"+error+"</div>");
+			$("#message").show();
+		}
+	});
 });
 
-defineListeners(cy, '${pageContext.servletContext.contextPath}', '');
+function checkStatus() {
+	$.ajax({
+		url: "${pageContext.servletContext.contextPath}/public/rest/networkloadstatus",
+		type: "GET",
+		success: function(result) {
+			if("RUNNING" === result) {
+				setTimeout(checkStatus, 5000);
+			} else if("COMPLETED" === result){
+				buildNetwork();
+				$('#loading').hide();
+			}
+		}
+	});
+}
+
+function buildNetwork() {
+	$.ajax({
+		url: "${pageContext.servletContext.contextPath}/public/rest/networks",
+		type: "GET",
+		success: function(result) {
+				if(!result) {
+					$("#message").html("<div class='alert alert-info'>Could not find any nodes for the search term in the project</div>");
+					$("#message").show();
+				} else {
+					buildCytoscape(result);
+					$("#network").show();
+				}
+			}
+		});
+}
 
 $( document ).ready(function() {
 	$('#exportJson').on('click', function() {

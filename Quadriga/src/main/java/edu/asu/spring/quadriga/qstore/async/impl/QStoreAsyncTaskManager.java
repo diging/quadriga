@@ -27,7 +27,7 @@ public class QStoreAsyncTaskManager implements IQStoreAsyncTaskManager {
     @Override
     @Cacheable(value = "publicNetworksStatus")
     public String startLoadingPublicNetworks() throws QStoreStorageException {
-        qStoreConnector.loadNetworkWithPopularTerms();
+        publicNetworks = qStoreConnector.loadNetworkWithPopularTerms();
         return RUNNING.name();
     }
 

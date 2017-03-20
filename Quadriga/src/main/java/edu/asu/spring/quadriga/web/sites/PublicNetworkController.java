@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -34,32 +33,36 @@ public class PublicNetworkController {
     private IQStoreAsyncTaskManager qStoreAsyncTaskManager;
 
     /**
-     * This method loads all the public networks and navigates to the public
-     * networks page to display the graph
+     * This method navigates to the public networks page to display the graph
      * 
-     * @param model
      * @return
-     * @throws QuadrigaStorageException
-     * @throws QStoreStorageException
-     * @throws JAXBException
      */
     @RequestMapping(value = "sites/network", method = RequestMethod.GET)
-    public String showPublicNetworks(Model model)
-            throws QuadrigaStorageException, QStoreStorageException, JAXBException {
+    public String showPublicNetworks() {
 
+        return "sites/network";
+    }
+
+    /**
+     * This method returns a JSON String that represents all the public networks
+     * 
+     * @throws QStoreStorageException
+     * @throws JAXBException
+     * @throws QuadrigaStorageException
+     * 
+     */
+    @RequestMapping(value = "public/rest/networks", method = RequestMethod.GET)
+    public ResponseEntity<String> getPublicNetwork()
+            throws QStoreStorageException, QuadrigaStorageException, JAXBException {
         String xml = qStoreAsyncTaskManager.getNetworkWithPopularTerms();
         ITransformedNetwork transformedNetwork = transformationManager.getAllTransformedNetworks(xml);
 
         String json = null;
         if (transformedNetwork != null && transformedNetwork.getNodes().size() != 0) {
             json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-        } else {
-            model.addAttribute("isNetworkEmpty", true);
         }
 
-        model.addAttribute("jsonstring", json);
-
-        return "sites/network";
+        return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
     /**
@@ -67,7 +70,7 @@ public class PublicNetworkController {
      * 
      * @return
      */
-    @RequestMapping(value = "rest/loadnetworks", method = RequestMethod.GET)
+    @RequestMapping(value = "public/rest/loadnetworks", method = RequestMethod.GET)
     public ResponseEntity<String> loadNetworks() {
         try {
             qStoreAsyncTaskManager.startLoadingPublicNetworks();
@@ -83,7 +86,7 @@ public class PublicNetworkController {
      * 
      * @return
      */
-    @RequestMapping(value = "rest/publicnetworkloadstatus", method = RequestMethod.GET)
+    @RequestMapping(value = "public/rest/networkloadstatus", method = RequestMethod.GET)
     public ResponseEntity<String> getPublicNetworkLoadStatus() {
         if (qStoreAsyncTaskManager.getPublicNetworkStatus()) {
             return new ResponseEntity<>(COMPLETED.name(), HttpStatus.OK);
