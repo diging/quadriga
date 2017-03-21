@@ -66,7 +66,7 @@
 	</div>
 </div>
 
-<div class="modal text-modal" id="#txtModal" tabindex="-1" role="dialog"
+<div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog"
     aria-labelledby="txtModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content ">

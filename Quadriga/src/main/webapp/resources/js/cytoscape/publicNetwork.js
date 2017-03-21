@@ -1,13 +1,5 @@
 var animationDuration = 200;
 
-$(".link").mousedown(function(event) {
-    switch (event.which) {
-        case 1:
-            window.open("https://www.google.com", '_blank');
-            break;
-    }
-    return false;
-});
 
 
 function defineListeners(cy, path, unixName) {
@@ -31,7 +23,7 @@ function defineListeners(cy, path, unixName) {
 function defineFadeListenersSearch(cy, path) {
 	cy.on('mouseover', 'node', function(e) {
 		var ele = e.cyTarget;
-		var statementIds = ele.data('statementIds');
+		var statementIds = ele.data('statementIds')
 		fadeOut(statementIds, 45, 30);
 	})
 	
@@ -197,10 +189,9 @@ function getTexts(node, path, unixName) {
 				var projects = parsedData['projects'];
 				projects.forEach(function(element, index, array) {
 					conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["text"] + "</p>";
-					conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</p>";
+					conceptDesc += "<a href='#' data-toggle='modal' data-target='#txtModal'>" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</a>";
 					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textTitle"] + "</p>";
 					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textCreationDate"] + "</p>";
-					sample = "<a href='#' target='_blank' class='link'>" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</a>";
 					conceptDesc += "..." + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
 				});
 			}
