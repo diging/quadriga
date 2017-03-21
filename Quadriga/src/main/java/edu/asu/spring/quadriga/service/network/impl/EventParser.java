@@ -98,59 +98,62 @@ public class EventParser {
             return null;
         } else if (event instanceof RelationEventType) {
             RelationType relation = ((RelationEventType) event).getRelation();
+            
+            if(relation != null){
+                // create node for predicate
+                PredicateType pred = relation.getPredicateType();
+                PredicateNode predNode = parsePredicateEvent(
+                        pred.getAppellationEvent(), statementId);
+                leafNodes.put(predNode.getId(), predNode);
 
-            // create node for predicate
-            PredicateType pred = relation.getPredicateType();
-            PredicateNode predNode = parsePredicateEvent(
-                    pred.getAppellationEvent(), statementId);
-            leafNodes.put(predNode.getId(), predNode);
-
-            Node subjectNode = parseSubjectOrObjectEvent(relation
-                    .getSubjectType().getAppellationEvent(), statementId,
-                    leafNodes, links);
-            if (subjectNode == null) {
-                subjectNode = parseSubjectOrObjectEvent(relation
-                        .getSubjectType().getRelationEvent(), statementId,
+                Node subjectNode = parseSubjectOrObjectEvent(relation
+                        .getSubjectType().getAppellationEvent(), statementId,
                         leafNodes, links);
-            }
+                if (subjectNode == null) {
+                    subjectNode = parseSubjectOrObjectEvent(relation
+                            .getSubjectType().getRelationEvent(), statementId,
+                            leafNodes, links);
+                }
 
-            Node objectNode = parseSubjectOrObjectEvent(
-                    relation.getObjectType().getAppellationEvent(),
-                    statementId, leafNodes, links);
-            if (objectNode == null) {
-                objectNode = parseSubjectOrObjectEvent(
-                        relation.getObjectType().getRelationEvent(),
+                Node objectNode = parseSubjectOrObjectEvent(
+                        relation.getObjectType().getAppellationEvent(),
                         statementId, leafNodes, links);
+                if (objectNode == null) {
+                    objectNode = parseSubjectOrObjectEvent(
+                            relation.getObjectType().getRelationEvent(),
+                            statementId, leafNodes, links);
+                }
+
+                // source reference from relation type
+                String sourceReference = relation.getSourceReference();
+
+                if (subjectNode != null) {
+                    Link link = new Link();
+                    // add the statement id to the link
+                    link.setStatementId(statementId);
+                    link.setSubject(predNode);
+                    link.setObject(subjectNode);
+                    link.setLabel("has subject");
+                    links.add(link);
+                    // set the source reference to the link
+                    link.setSourceReference(sourceReference);
+                }
+
+                if (objectNode != null) {
+                    Link link = new Link();
+                    // add the statement id to the link
+                    link.setStatementId(statementId);
+                    link.setSubject(predNode);
+                    link.setObject(objectNode);
+                    link.setLabel("has object");
+                    links.add(link);
+                    // set the source reference to the link
+                    link.setSourceReference(sourceReference);
+                }
+
+                return predNode;
             }
-
-            // source reference from relation type
-            String sourceReference = relation.getSourceReference();
-
-            if (subjectNode != null) {
-                Link link = new Link();
-                // add the statement id to the link
-                link.setStatementId(statementId);
-                link.setSubject(predNode);
-                link.setObject(subjectNode);
-                link.setLabel("has subject");
-                links.add(link);
-                // set the source reference to the link
-                link.setSourceReference(sourceReference);
-            }
-
-            if (objectNode != null) {
-                Link link = new Link();
-                // add the statement id to the link
-                link.setStatementId(statementId);
-                link.setSubject(predNode);
-                link.setObject(objectNode);
-                link.setLabel("has object");
-                links.add(link);
-                // set the source reference to the link
-                link.setSourceReference(sourceReference);
-            }
-
-            return predNode;
+            return null;
         }
 
         return null;
