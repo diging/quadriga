@@ -30,7 +30,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
@@ -64,6 +66,9 @@ public class SearchNetworkRestController {
 
     @Autowired
     private INetworkTransformationManager transformationManager;
+    
+    @Autowired
+    private IConceptpowerConnector conceptpowerConnector;
 
     /**
      * Rest interface to search concept in list of projects http://<<URL>:
@@ -108,10 +113,19 @@ public class SearchNetworkRestController {
             return new ResponseEntity<String>(errorMsg, HttpStatus.NOT_FOUND);
         }
 
+        // Fetch ConceptPower entries related to the conceptId
+        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
+        List<String> alternativeIdsForConcept = null;
+        if (reply != null && reply.getConceptEntry().size() > 0) {
+            alternativeIdsForConcept = reply.getConceptEntry().get(0).getAlternativeIdList();
+        }
+        if(alternativeIdsForConcept == null){
+            alternativeIdsForConcept = new ArrayList<String>();
+        }  
         ITransformedNetwork transformedNetwork;
         try {
             transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds,
-                    conceptId, INetworkStatus.APPROVED);
+                    conceptId, alternativeIdsForConcept, INetworkStatus.APPROVED);
         } catch (QuadrigaStorageException e) {
             throw new RestException(403, e);
         }

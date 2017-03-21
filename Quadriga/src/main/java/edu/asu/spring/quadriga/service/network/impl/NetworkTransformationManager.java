@@ -86,19 +86,18 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @author suraj nilapwar
      */
     @Override
-    public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId, String status)
+    public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId, List<String> alternativeIdsForConcept, String status)
             throws QuadrigaStorageException {
         // get the transformed network and search for the concept id
         List<INetwork> networkList = getNetworkList(projectId, status);
-
         if (networkList == null) {
             return null;
         }
 
         // get the transformed network of all the networks in a project
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
-        // create finalnetwork using conceptId
-        return getFinalTransformedNetwork(transformedNetwork, conceptId);
+        // create final network using conceptId and alternativeIds
+        return getFinalTransformedNetwork(transformedNetwork, conceptId, alternativeIdsForConcept);
 
     }
 
@@ -120,8 +119,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @author suraj nilapwar
      */
     @Override
-    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId,
-            String status) throws QuadrigaStorageException {
+    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId, List<String> alternativeIdsForConcept, String status) throws QuadrigaStorageException {
         // get the transformed network and search for the concept id
         List<INetwork> networkList = new ArrayList<>();
 
@@ -139,7 +137,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // get the transformed network of all the networks in projects
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
         // create finalnetwork using conceptId
-        return getFinalTransformedNetwork(transformedNetwork, conceptId);
+        return getFinalTransformedNetwork(transformedNetwork, conceptId, alternativeIdsForConcept);
 
     }
 
@@ -198,16 +196,33 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // return new network with updated nodes and links
         return new TransformedNetwork(updatedNodes, links);
     }
-
-    private ITransformedNetwork getFinalTransformedNetwork(ITransformedNetwork transformedNetwork, String conceptId) {
-        // Filter the nodes with the concept id
+    /**
+     * Filter the nodes in the network using the concept id and the alternative id of the concept
+     * @param transformedNetwork 
+     * @param conceptId
+     * @param alternativeIdsForConcept
+     * @return ITransformedNetwork
+     */
+    private ITransformedNetwork getFinalTransformedNetwork(ITransformedNetwork transformedNetwork, String conceptId, List<String> alternativeIdsForConcept) {
+        // Filter the nodes with the concept id and alternative id of the concept
         // add all the statement ids to a set
         Set<String> statementIdSearchSet = new HashSet<String>();
         List<Node> searchedNodes = new ArrayList<Node>();
         for (Node node : transformedNetwork.getNodes().values()) {
+            // check if the node's concept id matches the searched concept id
             if (conceptId.equals(node.getConceptId())) {
                 searchedNodes.add(node);
                 statementIdSearchSet.addAll(node.getStatementIds());
+            }
+            // check if the node's concept id matches the alternative id of the concept
+            else{
+                for(String alternativeId : alternativeIdsForConcept){
+                    if(alternativeId.equals(node.getConceptId())){
+                        searchedNodes.add(node);
+                        statementIdSearchSet.addAll(node.getStatementIds());
+                        break;
+                    }
+                }
             }
         }
 
