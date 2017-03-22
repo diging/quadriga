@@ -22,7 +22,7 @@
 <div class="row" id="message" style="display: none;">
 </div>
 
-<div id="network" style="display: none;">
+<p id="network" style="display: none;">
     <a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
         <i class="fa fa-arrows-alt"></i>
     </a>
@@ -38,7 +38,7 @@
 			<table id="annotationsTable"></table>
 		</div>
 	</div>
-</div>
+</p>
 <div id="log" class="row"></div>
 
 <div id="loading">
@@ -191,7 +191,7 @@ function buildNetwork() {
 					$("#message").html("<div class='alert alert-info'>Could not find any nodes for the search term in the project</div>");
 					$("#message").show();
 				} else {
-					buildCytoscape(result);
+					buildCytoscape(JSON.parse(result));
 					$("#network").show();
 				}
 			}
