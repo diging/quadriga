@@ -150,17 +150,15 @@ public class NetworkSearchController {
         
         // Fetch ConceptPower entries related to the conceptId
         ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
-        List<String> alternativeIdsForConcept = null;
+   
         if (reply != null && reply.getConceptEntry().size() > 0) {
             searchNodeLabel = reply.getConceptEntry().get(0).getLemma();
             lemma = reply.getConceptEntry().get(0).getDescription();
-            alternativeIdsForConcept = reply.getConceptEntry().get(0).getAlternativeIdList();
+           
         }
-        if(alternativeIdsForConcept == null){
-            alternativeIdsForConcept = new ArrayList<String>();
-        }   
+     
         ITransformedNetwork transformedNetwork = transformationManager
-                .getSearchTransformedNetwork(project.getProjectId(), conceptId, alternativeIdsForConcept, INetworkStatus.APPROVED);
+                .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
 
         String json = null;
         if (transformedNetwork != null) {
