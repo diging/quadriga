@@ -1,8 +1,6 @@
 package edu.asu.spring.quadriga.web.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,22 +33,24 @@ public class TextHelper {
         List<CreationEvent> appellationEvents = creationEvents.stream()
                 .filter(event -> event instanceof AppellationEventType && hasPosition((AppellationEventType) event))
                 .collect(Collectors.toList());
-        
-        List<TermPartType> termParts = new ArrayList<>();
-        
-        appellationEvents.forEach(event -> termParts.addAll(((AppellationEventType)event).getTermType().getPrintedRepresentation().getTermParts()));
-        
-        Collections.sort(termParts, new Comparator<TermPartType>() {
 
-            @Override
-            public int compare(TermPartType o1, TermPartType o2) {
-                return new Integer(o1.getPosition()).compareTo(new Integer(o2.getPosition()));
+        List<TermPartType> termParts = new ArrayList<>();
+
+        appellationEvents.forEach(event -> termParts
+                .addAll(((AppellationEventType) event).getTermType().getPrintedRepresentation().getTermParts()));
+
+        termParts.sort((o1, o2) -> {
+            if (o1.getPosition() == null || o1.getPosition().equals("null")) {
+                o1.setPosition("-1");
             }
-            
+            if (o2.getPosition() == null || o2.getPosition().equals("null")) {
+                o2.setPosition("-1");
+            }
+            return new Integer(o1.getPosition()).compareTo(new Integer(o2.getPosition()));
         });
-        
+
         StringBuffer finalText = new StringBuffer();
-        
+
         int lastIdx = 0;
         TermPartType previousTermPart = null;
         for (TermPartType termPart : termParts) {
@@ -61,7 +61,7 @@ public class TextHelper {
                 }
             }
             previousTermPart = termPart;
-            
+
             int highlightBegin = new Integer(termPart.getPosition());
             // if we have appellations that are in positions that are greater
             // than text length, exit the loop
@@ -74,7 +74,7 @@ public class TextHelper {
             }
             finalText.append(text.substring(lastIdx, highlightBegin));
             finalText.append("<span class=\"highlight-phrase\">");
-            
+
             int hightlightEnd = highlightBegin + termPart.getExpression().length();
             // if we have an appellation that is longer than the text,
             // exit the loop.
@@ -86,22 +86,22 @@ public class TextHelper {
             finalText.append("</span>");
             lastIdx = hightlightEnd;
         }
-        
+
         if (lastIdx < text.length()) {
             finalText.append(text.substring(lastIdx));
         }
-        
-        
+
         return finalText.toString();
     }
 
     private boolean isTheSame(TermPartType termPart1, TermPartType termPart2) {
-        if (termPart1.getExpression().equals(termPart2.getExpression()) && termPart1.getPosition().equals(termPart2.getPosition())) {
+        if (termPart1.getExpression().equals(termPart2.getExpression())
+                && termPart1.getPosition().equals(termPart2.getPosition())) {
             return true;
         }
-        return false;            
+        return false;
     }
-    
+
     private boolean hasPosition(AppellationEventType appEvent) {
         TermType term = appEvent.getTermType();
         if (term == null) {
