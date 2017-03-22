@@ -23,5 +23,9 @@
     <cache name="conceptSearch" eternal="false" maxElementsInMemory="2000"
         overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
         timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" />
+        
+	<cache name="publicNetworksStatus" eternal="false" maxElementsInMemory="1000"
+        overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+        timeToLiveSeconds="86400000" memoryStoreEvictionPolicy="LRU" />
 
 </ehcache>

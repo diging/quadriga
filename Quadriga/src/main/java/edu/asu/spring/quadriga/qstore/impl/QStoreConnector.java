@@ -1,11 +1,14 @@
 package edu.asu.spring.quadriga.qstore.impl;
 
+import static edu.asu.spring.quadriga.qstore.ExecutionStatus.RUNNING;
+
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import javax.annotation.PostConstruct;
 
@@ -32,6 +35,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -77,6 +82,10 @@ public class QStoreConnector implements IQStoreConnector {
     @Autowired
     @Qualifier("qStoreURL_Query")
     private String qStoreURL_Query;
+
+    @Autowired
+    @Qualifier("qStoreURL_Aysnc_Query_Result")
+    private String qStoreURL_Aysnc_Query_Result;
 
     @Autowired
     @Qualifier("jaxbMarshaller")
@@ -134,6 +143,11 @@ public class QStoreConnector implements IQStoreConnector {
     @Override
     public String getQStoreQueryURL() {
         return qStoreURL + qStoreURL_Query;
+    }
+
+    @Override
+    public String getQStoreAsyncQueryResultURL() {
+        return qStoreURL + qStoreURL_Aysnc_Query_Result;
     }
 
     protected String getQStoreSearchUrl() {
@@ -212,9 +226,32 @@ public class QStoreConnector implements IQStoreConnector {
     /**
      * {@inheritDoc}
      */
+    @Async
     @Override
-    public String getNetworkWithPopularTerms() throws QStoreStorageException {
+    public Future<String> loadNetworkWithPopularTerms() throws QStoreStorageException {
         String query = env.getProperty("allNetworks");
+        String queryID = env.getProperty("allNetworks_id");
+
+        executeQuery(query, queryID);
+
+        long delay = Long.parseLong(env.getProperty("qstore.rest.delay"));
+        String res = getQueryResult(queryID);
+
+        // Keep polling QStore until we get the result
+        while (res != null && res.contains("<message>") && res.contains(RUNNING.name())) {
+            try {
+                Thread.sleep(delay);
+                res = getQueryResult(queryID);
+            } catch (InterruptedException e) {
+                throw new QStoreStorageException(e);
+            }
+        }
+
+        return new AsyncResult<String>(res);
+    }
+
+    private String executeQuery(String query, String queryID) throws QStoreStorageException {
+
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
@@ -225,8 +262,29 @@ public class QStoreConnector implements IQStoreConnector {
         try {
             // execute the query in Qstore and get the result
             String url = getQStoreQueryURL();
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT)
+                    .queryParam("queryID", queryID);
             return restTemplate.postForObject(builder.build().encode().toUri(), request, String.class);
+
+        } catch (RestClientException e) {
+            throw new QStoreStorageException(e);
+        }
+
+    }
+
+    private String getQueryResult(String queryID) throws QStoreStorageException {
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        try {
+            String url = getQStoreAsyncQueryResultURL();
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("queryID", queryID);
+            return restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, request, String.class)
+                    .getBody();
+
         } catch (RestClientException e) {
             throw new QStoreStorageException(e);
         }

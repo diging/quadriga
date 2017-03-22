@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.qstore;
 
+import java.util.concurrent.Future;
+
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -33,12 +35,15 @@ public interface IQStoreConnector {
 
     String getQStoreQueryURL();
 
+    String getQStoreAsyncQueryResultURL();
+
     /**
-     * Get all Networks from QStore with popular terms
+     * Get all Networks from QStore with popular terms. This will start an async
+     * task on QStore and will keep polling QStore until the query is executed
      * 
      * @return
      * @throws QStoreStorageException
      */
-    public abstract String getNetworkWithPopularTerms() throws QStoreStorageException;
+    Future<String> loadNetworkWithPopularTerms() throws QStoreStorageException;
 
 }
