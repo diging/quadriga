@@ -22,7 +22,9 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -82,7 +84,7 @@ public class RetrieveProjectController {
             }
         }
 
-        // Fetch all the projects for which the user is collaborator
+        // Fetch all the projects for which the user is collaborator.
         List<IProject> projectListAsCollaborator = projectManager.getCollaboratorProjectList(userName);
         if (projectListAsCollaborator != null) {
             for (IProject p : projectListAsCollaborator) {
@@ -94,8 +96,7 @@ public class RetrieveProjectController {
             }
         }
 
-        // Fetch all the projects for which the user is associated workspace
-        // owner
+        // Fetch all the projects for which the user is associated workspace owner.
         List<IProject> projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(userName);
         if (projectListAsWorkspaceOwner != null) {
             for (IProject p : projectListAsWorkspaceOwner) {
@@ -106,16 +107,38 @@ public class RetrieveProjectController {
                 }
             }
         }
-
-        // Fetch all the projects for which the user is associated workspace
-        // collaborator
+    
+        // Fetch all the projects for which the user is associated workspace collaborator.
         List<IProject> projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
+        IProject tempProject = null;;
+        List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
+        List<IWorkspaceCollaborator> tempWorkspaceCollaborators;
         if (projectListAsWSCollaborator != null) {
             for (IProject p : projectListAsWSCollaborator) {
+               // Process the project details if it has not been evaluated.
                 if (!projectIds.contains(p.getProjectId())) {
-                    fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));
+                    // Get details of the project using the project id.
+                    tempProject = projectManager.getProjectDetails(p.getProjectId());
+                    if(tempProject != null){
+                        // Examine the workspace details associated with the project. Include details of only those workspaces, where the user is a collaborator.
+                        for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
+                            tempWorkspaceCollaborators = projectWorkspace.getWorkspace().getWorkspaceCollaborators();
+                            if(tempWorkspaceCollaborators != null){
+                                for(IWorkspaceCollaborator workspaceCollaborator : tempWorkspaceCollaborators){
+                                    if(userName.equals(workspaceCollaborator.getCollaborator().getUserObj().getUserName())){
+                                        tempProjectWorkspaces.add(projectWorkspace);
+                                        break;
+                                    }  
+                                }
+                            }
+                               
+                        }
+                        tempProject.setProjectWorkspaces(tempProjectWorkspaces);
+                        fullProjects.add(tempProject);
+                       
+                    }
                     projectIds.add(p.getProjectId());
-                    accessibleProjects.put(p.getProjectId(), false);
+                    accessibleProjects.put(p.getProjectId(), false);  
                 }
             }
         }
