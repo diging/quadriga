@@ -37,7 +37,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     
     /**
      * This method returns the transformed network based on networkId and versionID.
-     * 
      * @param networkId
      * @param versionID
      * @return ITransformedNetwork
@@ -50,30 +49,24 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
         List<INetworkNodeInfo> oldNetworkTopNodesList = networkManager.getNetworkTopNodesByVersion(networkId,
                 Integer.parseInt(versionID));
-
         return transformer.transformNetwork(oldNetworkTopNodesList);
     }
-
     
     /**
      * This method returns the transformed network based on networkId.
-     * 
      * @param networkId
      * @return ITransformedNetwork
      * @throws QuadrigaStorageException
      */
     @Override
     public ITransformedNetwork getTransformedNetwork(String networkId) throws QuadrigaStorageException {
-
+        
         List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
-
-        return transformer.transformNetwork(networkTopNodesList);
+        return transformer.transformNetwork(networkTopNodesList);  
     }
-
     
     /**
      * This method returns the approved transformed network for a list of networks.
-     * 
      * @param networkList
      * @return ITransformedNetwork
      * @throws QuadrigaStorageException
@@ -87,14 +80,11 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             List<INetworkNodeInfo> curTopNodesList = networkManager.getNetworkTopNodes(curnetwork.getNetworkId());
             networkTopNodesList.addAll(curTopNodesList);
         }
-
         return transformer.transformNetwork(networkTopNodesList);
     }
-
     
     /**
      * This method returns the transformed network of a project based on projectId and status.
-     * 
      * @param projectId
      * @param status
      * @return ITransformedNetwork
@@ -114,7 +104,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     /**
      * This method returns a network that consists of all the statements in the
      * given projects that contain the provided concept id.
-     * 
      * @param projectIds
      * @param conceptId
      * @return ITransformedNetwork
@@ -136,16 +125,13 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         
         // Create final network using alternativeIdsForConcept.
         return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConcept);
-
     }
     
     /**
-     * This method fetches ConceptPower entries related to the conceptId and return alternative id for the concept.
-     * 
+     * This method fetches ConceptPower entries related to the conceptId and return alternative ids for the concept.
      * @param conceptId
      * @return List<String>
      */
-   
     private List<String> getAlternativeIdsForConcept(String conceptId){
         List<String> alternativeIdsForConcept = null;
         ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
@@ -166,7 +152,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * This method searches for concept specified by conceptId in the networks
      * of projects specified by project Ids and returns transformed networks of
      * all projects specified by projectIds containing given conceptId.
-     * 
      * @param projectIds
      *            : List of projectIds for projects to search under
      * @param conceptId
@@ -198,7 +183,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         
         // create final network using alternativeIdsForConcept
         return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConcept);
-
     }
 
     @Override
@@ -256,6 +240,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // return new network with updated nodes and links
         return new TransformedNetwork(updatedNodes, links);
     }
+    
     /**
      * Filter the nodes in the network using the concept id and the alternative ids of the concept.
      * @param transformedNetwork 
