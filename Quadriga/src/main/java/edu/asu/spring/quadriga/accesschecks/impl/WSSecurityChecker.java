@@ -121,10 +121,11 @@ public class WSSecurityChecker implements IWSSecurityChecker
 
 		//fetch the collaborators associated with the workspace
 		workspaceCollaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
-
+		
 		if(workspaceCollaboratorList != null){
 			for(IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList)
 			{
+			   
 				//check if the user is one of the collaborators
 				if(workspaceCollaborator.getCollaborator() != null){
 					if(workspaceCollaborator.getCollaborator().getUserObj().getUserName().equals(userName))
@@ -134,8 +135,8 @@ public class WSSecurityChecker implements IWSSecurityChecker
 						if(collaboratorRoles != null){
 							//check if the collaborator is the supplied collaborator role
 							for(IQuadrigaRole role : collaboratorRoles)
-							{
-								if(role.getId() == collaboratorRole)
+							{   
+								if(role.getId().equals(collaboratorRole))
 								{
 									chkAccess = true;
 									break;

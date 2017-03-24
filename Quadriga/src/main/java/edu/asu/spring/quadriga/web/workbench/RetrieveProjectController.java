@@ -18,18 +18,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
+import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.passthroughproject.IPassThroughProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -50,8 +49,8 @@ public class RetrieveProjectController {
     private IListWSManager wsManager;
 
     @Autowired
-    private IProjectCollaboratorManager projectCollaboratorManager;
-
+    private IWSSecurityChecker securityChecker;
+    
     /**
      * this method acts as a controller for handling all the activities on the
      * workbench home page
@@ -110,9 +109,10 @@ public class RetrieveProjectController {
     
         // Fetch all the projects for which the user is associated workspace collaborator.
         List<IProject> projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
-        IProject tempProject = null;;
+        IProject tempProject = null;
+        String workspaceId;
         List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
-        List<IWorkspaceCollaborator> tempWorkspaceCollaborators;
+        boolean hasWorkspaceAccess = false;
         if (projectListAsWSCollaborator != null) {
             for (IProject p : projectListAsWSCollaborator) {
                // Process the project details if it has not been evaluated.
@@ -122,16 +122,14 @@ public class RetrieveProjectController {
                     if(tempProject != null){
                         // Examine the workspace details associated with the project. Include details of only those workspaces, where the user is a collaborator.
                         for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
-                            tempWorkspaceCollaborators = projectWorkspace.getWorkspace().getWorkspaceCollaborators();
-                            if(tempWorkspaceCollaborators != null){
-                                for(IWorkspaceCollaborator workspaceCollaborator : tempWorkspaceCollaborators){
-                                    if(userName.equals(workspaceCollaborator.getCollaborator().getUserObj().getUserName())){
-                                        tempProjectWorkspaces.add(projectWorkspace);
-                                        break;
-                                    }  
-                                }
+                            workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
+                            if(securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)){
+                                hasWorkspaceAccess = true;
                             }
-                               
+                            if(hasWorkspaceAccess){
+                                tempProjectWorkspaces.add(projectWorkspace);
+                                hasWorkspaceAccess = false;
+                            } 
                         }
                         tempProject.setProjectWorkspaces(tempProjectWorkspaces);
                         fullProjects.add(tempProject);
