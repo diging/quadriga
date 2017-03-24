@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.qstore.ExecutionStatus;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.qstore.async.IQStoreAsyncTaskManager;
 
@@ -26,9 +27,9 @@ public class QStoreAsyncTaskManager implements IQStoreAsyncTaskManager {
      */
     @Override
     @Cacheable(value = "publicNetworksStatus")
-    public String startLoadingPublicNetworks() throws QStoreStorageException {
+    public ExecutionStatus startLoadingPublicNetworks() throws QStoreStorageException {
         publicNetworks = qStoreConnector.loadNetworkWithPopularTerms();
-        return RUNNING.name();
+        return RUNNING;
     }
 
     /**

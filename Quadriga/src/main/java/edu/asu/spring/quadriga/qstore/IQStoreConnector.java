@@ -35,8 +35,6 @@ public interface IQStoreConnector {
 
     String getQStoreQueryURL();
 
-    String getQStoreAsyncQueryResultURL();
-
     /**
      * Get all Networks from QStore with popular terms. This will start an async
      * task on QStore and will keep polling QStore until the query is executed

@@ -154,7 +154,7 @@ function buildCytoscape(jsonstring) {
 $( document ).ready(function() { 
 	$('#loading').show();
 	$.ajax({
-		url: "${pageContext.servletContext.contextPath}/public/rest/loadnetworks",
+		url: "${pageContext.servletContext.contextPath}/public/loadnetworks",
 		type: "GET",
 		success: function(result) {
 			checkStatus();
@@ -169,7 +169,7 @@ $( document ).ready(function() {
 
 function checkStatus() {
 	$.ajax({
-		url: "${pageContext.servletContext.contextPath}/public/rest/networkloadstatus",
+		url: "${pageContext.servletContext.contextPath}/public/networkloadstatus",
 		type: "GET",
 		success: function(result) {
 			if("RUNNING" === result) {
@@ -184,7 +184,7 @@ function checkStatus() {
 
 function buildNetwork() {
 	$.ajax({
-		url: "${pageContext.servletContext.contextPath}/public/rest/networks",
+		url: "${pageContext.servletContext.contextPath}/public/networks",
 		type: "GET",
 		success: function(result) {
 				if(!result) {

@@ -51,7 +51,7 @@ public class PublicNetworkController {
      * @throws QuadrigaStorageException
      * 
      */
-    @RequestMapping(value = "public/rest/networks", method = RequestMethod.GET)
+    @RequestMapping(value = "public/networks", method = RequestMethod.GET)
     public ResponseEntity<String> getPublicNetwork()
             throws QStoreStorageException, QuadrigaStorageException, JAXBException {
         String xml = qStoreAsyncTaskManager.getNetworkWithPopularTerms();
@@ -70,7 +70,7 @@ public class PublicNetworkController {
      * 
      * @return
      */
-    @RequestMapping(value = "public/rest/loadnetworks", method = RequestMethod.GET)
+    @RequestMapping(value = "public/loadnetworks", method = RequestMethod.GET)
     public ResponseEntity<String> loadNetworks() {
         try {
             qStoreAsyncTaskManager.startLoadingPublicNetworks();
@@ -86,7 +86,7 @@ public class PublicNetworkController {
      * 
      * @return
      */
-    @RequestMapping(value = "public/rest/networkloadstatus", method = RequestMethod.GET)
+    @RequestMapping(value = "public/networkloadstatus", method = RequestMethod.GET)
     public ResponseEntity<String> getPublicNetworkLoadStatus() {
         if (qStoreAsyncTaskManager.getPublicNetworkStatus()) {
             return new ResponseEntity<>(COMPLETED.name(), HttpStatus.OK);

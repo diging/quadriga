@@ -37,17 +37,11 @@
 			<value>/get</value>
 		</constructor-arg>
 	</bean>
-	<bean id="qStoreURL_Query" class="java.lang.String">
+	<bean id="qStoreURLQuery" class="java.lang.String">
 		<constructor-arg>
 			<value>/query</value>
 		</constructor-arg>
 	</bean>
-	<bean id="qStoreURL_Aysnc_Query_Result" class="java.lang.String">
-		<constructor-arg>
-			<value>/asyncQueryResult</value>
-		</constructor-arg>
-	</bean>
-
 	<bean id="wordPowerURL" class="java.lang.String">
 		<constructor-arg>
 			<value>${profile.wordpower.url}</value>

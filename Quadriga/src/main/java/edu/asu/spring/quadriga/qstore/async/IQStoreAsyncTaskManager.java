@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.qstore.async;
 
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.qstore.ExecutionStatus;
 
 public interface IQStoreAsyncTaskManager {
 
@@ -11,7 +12,7 @@ public interface IQStoreAsyncTaskManager {
      * @return
      * @throws QStoreStorageException
      */
-    String startLoadingPublicNetworks() throws QStoreStorageException;
+    ExecutionStatus startLoadingPublicNetworks() throws QStoreStorageException;
 
     /**
      * This method will return all the public networks that are connected to
