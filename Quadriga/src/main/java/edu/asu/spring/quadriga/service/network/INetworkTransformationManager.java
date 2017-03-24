@@ -31,7 +31,7 @@ public interface INetworkTransformationManager {
 			throws QuadrigaStorageException;
 
 	ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId, String status)
-			throws QuadrigaStorageException;
+            throws QuadrigaStorageException;
 	
 	ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId, String status)
 			throws QuadrigaStorageException;

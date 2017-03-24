@@ -128,13 +128,35 @@ public class NetworkSearchController {
         return new ResponseEntity<String>(defaultJsonErrorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * This method returns a display of the network that consists of all the statements in the
+     * given projects that contain the provided concept id.
+     * @param projectUnixName Unix name of the project whose networks will be searched for the concept
+     * @param conceptId Id of the concept
+     * @param project
+     * @param model
+     * @return relative path to the web-page that displays the network
+     * @throws QuadrigaStorageException
+     */
     @CheckPublicAccess
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
     public String getSearchTransformedNetwork(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
             @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project, Model model)
                     throws QuadrigaStorageException {
-
+        
+        String lemma = "";
+        String searchNodeLabel = "";
+        
+        // Fetch ConceptPower entries related to the conceptId
+        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
+   
+        if (reply != null && reply.getConceptEntry().size() > 0) {
+            searchNodeLabel = reply.getConceptEntry().get(0).getLemma();
+            lemma = reply.getConceptEntry().get(0).getDescription();
+           
+        }
+     
         ITransformedNetwork transformedNetwork = transformationManager
                 .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
 
@@ -145,14 +167,6 @@ public class NetworkSearchController {
 
         if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
             model.addAttribute("isNetworkEmpty", true);
-        }
-
-        String lemma = "";
-        String searchNodeLabel = "";
-        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
-        if (reply != null && reply.getConceptEntry().size() > 0) {
-            searchNodeLabel = reply.getConceptEntry().get(0).getLemma();
-            lemma = reply.getConceptEntry().get(0).getDescription();
         }
 
         model.addAttribute("jsonstring", json);
