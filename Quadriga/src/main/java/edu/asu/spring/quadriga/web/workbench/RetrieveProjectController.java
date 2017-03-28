@@ -109,31 +109,24 @@ public class RetrieveProjectController {
     
         // Fetch all the projects for which the user is associated workspace collaborator.
         List<IProject> projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
-        IProject tempProject = null;
-        String workspaceId;
-        List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
-        boolean hasWorkspaceAccess = false;
+     
         if (projectListAsWSCollaborator != null) {
             for (IProject p : projectListAsWSCollaborator) {
                // Process the project details if it has not been evaluated.
                 if (!projectIds.contains(p.getProjectId())) {
                     // Get details of the project using the project id.
-                    tempProject = projectManager.getProjectDetails(p.getProjectId());
+                    IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
                     if(tempProject != null){
+                        List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
                         // Examine the workspace details associated with the project. Include details of only those workspaces, where the user is a collaborator.
                         for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
-                            workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
+                            String workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
                             if(securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)){
-                                hasWorkspaceAccess = true;
-                            }
-                            if(hasWorkspaceAccess){
                                 tempProjectWorkspaces.add(projectWorkspace);
-                                hasWorkspaceAccess = false;
-                            } 
+                            }
                         }
                         tempProject.setProjectWorkspaces(tempProjectWorkspaces);
-                        fullProjects.add(tempProject);
-                       
+                        fullProjects.add(tempProject);                    
                     }
                     projectIds.add(p.getProjectId());
                     accessibleProjects.put(p.getProjectId(), false);  
