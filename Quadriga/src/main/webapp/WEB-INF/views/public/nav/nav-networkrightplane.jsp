@@ -80,52 +80,6 @@
 </div>
 
 
-                
-<script>
-
-// text modal
-$(document).ready(function() {
-	$('#txtModal').on('show.bs.modal', function(event) {
-                                            var link = $(event.relatedTarget);
-
-                                            var txtid = link.data('${texts}.textId');
-                                            var txtname = link.data('${texts}.txtname');
-                                            var title = link.data('${texts}.txttitle');
-                                            var author = link.data('${texts}.txtauthor');
-                                            var date = link.data('${texts}txtdate');
-                                            
-                                            var header = "No author and title information provided."
-                                            if (title != '' || author != '' || date != '') {
-                                                header = '';
-                                                if (author != null) {
-                                                    header += author + ", ";
-                                                }
-                                                if (title != null) {
-                                                    header += "<em>" + title + "</em> ";
-                                                }
-                                                if (date != null) {
-                                                    header += "(" + date + ")";
-                                                }
-                                            }
-                                            header += "<br><small>" + txtname + "</small>";
-                                            $
-                                                    .ajax({
-                                                        type : "GET",
-                                                        url : "${pageContext.servletContext.contextPath}/public/text/view?conceptUri=${concept.id}&txtid="
-                                                                + txtid,
-                                                        contentType : "text/plain",
-                                                        success : function(details) {
-                                                            $('.modal-title')
-                                                                    .html(header);
-                                                            $('.modal-body')
-                                                                    .html(details);
-                                                        },
-                                                    });
-
-                                        });
-                    });
-</script>
-
 
 <div class="text-left">
 <h5><a href="#" id="exportJson"><i class="fa fa-download" aria-hidden="true"

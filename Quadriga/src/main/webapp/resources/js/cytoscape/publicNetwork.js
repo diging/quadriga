@@ -177,7 +177,6 @@ function getTexts(node, path, unixName) {
 		type : "GET",
 		beforeSend: function() { 
 			$('#texts').html("");
-			$('#check').html("");
 			$('#loading1').show(); 
 			},
 		success : function(data) {
@@ -189,7 +188,7 @@ function getTexts(node, path, unixName) {
 				var projects = parsedData['projects'];
 				projects.forEach(function(element, index, array) {
 					conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["text"] + "</p>";
-					conceptDesc += "<a href='#' data-toggle='modal' data-target='#txtModal'>" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</a>";
+					conceptDesc += "<a href='#' data-toggle='modal' data-target='#txtModal' data-txtid="+ element["textId"] + " data-txttitle=" + element["textTitle"] + " data-txtauthor=" + element["textAuthor"] + " data-txtdate=" + element["textCreationDate"] + ">" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</a>";
 					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textTitle"] + "</p>";
 					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textCreationDate"] + "</p>";
 					conceptDesc += "..." + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
@@ -197,7 +196,6 @@ function getTexts(node, path, unixName) {
 			}
 			conceptDesc = "<p>" + conceptDesc + "</p>";
 			$('#texts').html(conceptDesc);
-			$('#check').html(sample);
 		},
 		error : function() {
 			$('#loading1').hide();
@@ -206,6 +204,42 @@ function getTexts(node, path, unixName) {
 	});
 }
 
+
+$(document).ready(function() {
+    $('#txtModal').on('show.bs.modal',function(event){
+    	var link = $(event.relatedTarget);
+    	var txtid = link.data('txtid');
+        var title = link.data('txttitle');
+        var author = link.data('txtauthor');
+        var date = link.data('txtdate');
+        var header = "No author and title information provided."
+            if (title != '' || author != '' || date != '') {
+                header = '';
+                if (author != null) {
+                    header += author + ", ";
+                }
+                if (title != null) {
+                    header += "<em>" + title + "</em> ";
+                }
+                if (date != null) {
+                    header += "(" + date + ")";
+                }
+            }            
+            //header += "<br><small>" + txtname + "</small>";
+        $.ajax({ 
+        	method: 'GET',
+            url: "${pageContext.servletContext.contextPath}/public/text/view?conceptUri=${concept.id}&txtid="+txtid,
+          success: function(details){ 
+        	  $('.modal-title')
+              .html(header);
+        	  $('.modal-body')
+              .html(details);
+          }
+        });
+
+        return false;
+    });
+});
 
 function hightlight(text, phrases) {
 	var highlightedText = "";

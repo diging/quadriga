@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +36,7 @@ public class NodeInfoController {
     private Environment env;
 
     @RequestMapping(value = "public/concept/texts", method = RequestMethod.GET)
-    public ResponseEntity<String> getTextsForConcepts(@RequestParam String conceptId, @RequestParam String projectUnix)
+    public ResponseEntity<String> getTextsForConcepts(@RequestParam String conceptId, @RequestParam String projectUnix, Model model)
             throws Exception {
         Set<TextOccurance> occurances = networkManager.getTextsForConceptId(conceptId, ETextAccessibility.PUBLIC);
         JSONArray projectTexts = new JSONArray();
@@ -45,6 +46,7 @@ public class NodeInfoController {
             if ((occur.getProject().getUnixName().equals(projectUnix.trim()) || projectUnix.trim().isEmpty())
                     && occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                 JSONObject occurance = new JSONObject();
+                occurance.append("textId", occur.getTextId());
                 occurance.append("text", occur.getTextUri());
                 occurance.append("textAuthor", occur.getAuthor());
                 occurance.append("textTitle", occur.getTitle());
@@ -100,6 +102,7 @@ public class NodeInfoController {
             } else {
                 if (occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                     JSONObject occurance = new JSONObject();
+                    occurance.append("textId", occur.getTextId());
                     occurance.append("text", occur.getTextUri());
                     occurance.append("textAuthor", occur.getAuthor());
                     occurance.append("textTitle", occur.getTitle());
@@ -111,6 +114,7 @@ public class NodeInfoController {
             }
 
         }
+        //model.addAttribute()
 
         JSONObject result = new JSONObject();
         result.put("projects", projectTexts);
