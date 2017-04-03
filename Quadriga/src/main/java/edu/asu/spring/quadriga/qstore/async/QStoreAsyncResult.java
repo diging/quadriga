@@ -1,14 +1,19 @@
 package edu.asu.spring.quadriga.qstore.async;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "message")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class QStoreAsyncResult {
 
     private String queryStatus;
 
     private String pollurl;
 
+    @XmlAnyElement(value = QueryResultHandler.class)
     private String result;
 
     public String getQueryStatus() {
