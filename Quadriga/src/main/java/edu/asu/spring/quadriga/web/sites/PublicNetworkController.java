@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.qstore.async.IQStoreAsyncTaskManager;
@@ -74,8 +75,9 @@ public class PublicNetworkController {
     public ResponseEntity<String> loadNetworks() {
         try {
             qStoreAsyncTaskManager.startLoadingPublicNetworks();
-        } catch (QStoreStorageException e) {
-            return new ResponseEntity<>(FAILED.name(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (AsyncExecutionException e) {
+            return new ResponseEntity<>(FAILED.name() + " with exception" + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(RUNNING.name(), HttpStatus.OK);
     }

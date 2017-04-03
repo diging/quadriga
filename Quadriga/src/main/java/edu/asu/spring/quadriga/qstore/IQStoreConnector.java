@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.qstore;
 import java.util.concurrent.Future;
 
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
+import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 
@@ -40,8 +41,8 @@ public interface IQStoreConnector {
      * task on QStore and will keep polling QStore until the query is executed
      * 
      * @return
-     * @throws QStoreStorageException
+     * @throws AsyncExecutionException
      */
-    Future<String> loadNetworkWithPopularTerms() throws QStoreStorageException;
+    Future<String> loadNetworkWithPopularTerms() throws AsyncExecutionException;
 
 }

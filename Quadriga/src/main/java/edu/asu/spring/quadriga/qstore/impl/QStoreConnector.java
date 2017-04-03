@@ -48,6 +48,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
@@ -222,10 +223,12 @@ public class QStoreConnector implements IQStoreConnector {
 
     /**
      * {@inheritDoc}
+     * 
+     * @throws QStoreStorageException
      */
     @Async
     @Override
-    public Future<String> loadNetworkWithPopularTerms() throws QStoreStorageException {
+    public Future<String> loadNetworkWithPopularTerms() throws AsyncExecutionException {
         String query = env.getProperty("allNetworks");
 
         ResponseEntity<String> response = executeQuery(query);
@@ -233,7 +236,7 @@ public class QStoreConnector implements IQStoreConnector {
         String resbody = response.getBody();
         if (status == HttpStatus.BAD_REQUEST || status == HttpStatus.INTERNAL_SERVER_ERROR) {
             String errorMessage = resbody.substring(resbody.indexOf("<message>"), resbody.indexOf("</message>"));
-            throw new QStoreStorageException(errorMessage);
+            throw new AsyncExecutionException(errorMessage);
         }
 
         QStoreAsyncResult asyncResult = getResponse(resbody);
@@ -249,14 +252,14 @@ public class QStoreConnector implements IQStoreConnector {
                 res = getQueryResult(pollURL);
                 asyncResult = getResponse(res);
             } catch (InterruptedException e) {
-                throw new QStoreStorageException(e);
+                throw new AsyncExecutionException(e);
             }
         }
 
         return new AsyncResult<String>(asyncResult.getResult());
     }
 
-    private QStoreAsyncResult getResponse(String res) throws QStoreStorageException {
+    private QStoreAsyncResult getResponse(String res) throws AsyncExecutionException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(QStoreAsyncResult.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -264,12 +267,12 @@ public class QStoreConnector implements IQStoreConnector {
             StringReader reader = new StringReader(res);
             return (QStoreAsyncResult) unmarshaller.unmarshal(reader);
         } catch (JAXBException ex) {
-            throw new QStoreStorageException("Invalid response xml from QStore " + res, ex);
+            throw new AsyncExecutionException("Invalid response xml from QStore " + res, ex);
         }
 
     }
 
-    private ResponseEntity<String> executeQuery(String query) throws QStoreStorageException {
+    private ResponseEntity<String> executeQuery(String query) throws AsyncExecutionException {
 
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -284,12 +287,12 @@ public class QStoreConnector implements IQStoreConnector {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
             return restTemplate.postForEntity(builder.build().encode().toUri(), request, String.class);
         } catch (RestClientException e) {
-            throw new QStoreStorageException(e);
+            throw new AsyncExecutionException(e);
         }
 
     }
 
-    private String getQueryResult(String pollURL) throws QStoreStorageException {
+    private String getQueryResult(String pollURL) throws AsyncExecutionException {
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
 
@@ -301,7 +304,7 @@ public class QStoreConnector implements IQStoreConnector {
             return restTemplate.exchange(url, HttpMethod.GET, request, String.class).getBody();
 
         } catch (RestClientException e) {
-            throw new QStoreStorageException(e);
+            throw new AsyncExecutionException(e);
         }
     }
 
