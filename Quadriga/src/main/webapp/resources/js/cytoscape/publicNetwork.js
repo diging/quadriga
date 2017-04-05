@@ -17,6 +17,7 @@ function defineListeners(cy, path, unixName) {
 		var node = e.cyTarget;
 		conceptDescription(path, node);
 		getTexts(node, path, unixName);
+		getEntireText(node,path);
 	});
 }
 
@@ -204,9 +205,9 @@ function getTexts(node, path, unixName) {
 	});
 }
 
-
-$(document).ready(function() {
-    $('#txtModal').on('show.bs.modal',function(event){
+function getEntireText(node,path){
+	$(document).ready(function() {
+	$('#txtModal').on('show.bs.modal',function(event){
     	var link = $(event.relatedTarget);
     	var txtid = link.data('txtid');
         var title = link.data('txttitle');
@@ -227,19 +228,20 @@ $(document).ready(function() {
             }            
             //header += "<br><small>" + txtname + "</small>";
         $.ajax({ 
-        	method: 'GET',
-            url: "${pageContext.servletContext.contextPath}/public/text/view?conceptUri=${concept.id}&txtid="+txtid,
-          success: function(details){ 
+        	type: "GET",
+            url: path + "/public/text/view?conceptUri=" + encodeURIComponent(node.data("conceptUri")) + "&txtid=" + txtid,
+          success: function(data){ 
         	  $('.modal-title')
               .html(header);
         	  $('.modal-body')
-              .html(details);
+              .html(data);
           }
         });
 
-        return false;
+        return true;
     });
-});
+	});
+}
 
 function hightlight(text, phrases) {
 	var highlightedText = "";
