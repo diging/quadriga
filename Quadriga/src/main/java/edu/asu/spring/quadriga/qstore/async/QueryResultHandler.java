@@ -28,8 +28,7 @@ public class QueryResultHandler implements DomHandler<String, StreamResult> {
 
     @Override
     public String getElement(StreamResult res) {
-        String xml = res.getWriter().toString().replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;",
-                "&");
+        String xml = res.getWriter().toString();
         int beginIndex = xml.indexOf(PARAMETERS_START_TAG) + PARAMETERS_START_TAG.length();
         int endIndex = xml.indexOf(PARAMETERS_END_TAG);
         return xml.substring(beginIndex, endIndex);
@@ -37,9 +36,7 @@ public class QueryResultHandler implements DomHandler<String, StreamResult> {
 
     @Override
     public Source marshal(String res, ValidationEventHandler errorHandler) {
-        String xml = PARAMETERS_START_TAG
-                + res.trim().replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&")
-                + PARAMETERS_END_TAG;
+        String xml = PARAMETERS_START_TAG + res.trim() + PARAMETERS_END_TAG;
         StringReader xmlReader = new StringReader(xml);
         return new StreamSource(xmlReader);
     }

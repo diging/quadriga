@@ -2,10 +2,11 @@ package edu.asu.spring.quadriga.qstore.impl;
 
 import static edu.asu.spring.quadriga.qstore.ExecutionStatus.RUNNING;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
@@ -239,18 +242,19 @@ public class QStoreConnector implements IQStoreConnector {
             throw new AsyncExecutionException(errorMessage);
         }
 
-        QStoreAsyncResult asyncResult = getResponse(resbody);
+        QStoreAsyncResult asyncResult = getResponseFromXML(resbody);
         String pollURL = asyncResult.getPollurl();
         long delay = Long.parseLong(env.getProperty("qstore.rest.delay"));
         String res = getQueryResult(pollURL);
 
-        asyncResult = getResponse(res);
+        //TODO Change back to XML
+        asyncResult = getResponseFromJSON(res);
         // Keep polling QStore until we get the result
         while (asyncResult != null && asyncResult.getQueryStatus().equals(RUNNING.name())) {
             try {
                 Thread.sleep(delay);
                 res = getQueryResult(pollURL);
-                asyncResult = getResponse(res);
+                asyncResult = getResponseFromXML(res);
             } catch (InterruptedException e) {
                 throw new AsyncExecutionException(e);
             }
@@ -259,7 +263,7 @@ public class QStoreConnector implements IQStoreConnector {
         return new AsyncResult<String>(asyncResult.getResult());
     }
 
-    private QStoreAsyncResult getResponse(String res) throws AsyncExecutionException {
+    private QStoreAsyncResult getResponseFromXML(String res) throws AsyncExecutionException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(QStoreAsyncResult.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -267,7 +271,17 @@ public class QStoreConnector implements IQStoreConnector {
             StringReader reader = new StringReader(res);
             return (QStoreAsyncResult) unmarshaller.unmarshal(reader);
         } catch (JAXBException ex) {
-            throw new AsyncExecutionException("Invalid response xml from QStore " + res, ex);
+            throw new AsyncExecutionException("Invalid response XML from QStore " + res, ex);
+        }
+
+    }
+
+    private QStoreAsyncResult getResponseFromJSON(String res) throws AsyncExecutionException {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(res, QStoreAsyncResult.class);
+        } catch (IOException ex) {
+            throw new AsyncExecutionException("Invalid response JSON from QStore " + res, ex);
         }
 
     }
@@ -297,6 +311,8 @@ public class QStoreConnector implements IQStoreConnector {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
         try {
@@ -418,7 +434,7 @@ public class QStoreConnector implements IQStoreConnector {
 
     private String getAuthHeader() {
         String auth = env.getProperty("qstore.admin.username") + ":" + env.getProperty("qstore.admin.password");
-        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes());
         return "Basic " + new String(encodedAuth);
     }
 }
