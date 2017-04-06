@@ -116,12 +116,14 @@ public class RetrieveProjectController {
                 if (!projectIds.contains(p.getProjectId())) {
                     // Get details of the project using the project id.
                     IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
-                    if(tempProject != null){
+                    if(tempProject != null && tempProject.getProjectWorkspaces() != null){
                         List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
                         // Examine the workspace details associated with the project. Include details of only those workspaces, where the user is a collaborator.
                         for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
                             String workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
-                            if(securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)){
+                            if(securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || 
+                               securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || 
+                               securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)){
                                 tempProjectWorkspaces.add(projectWorkspace);
                             }
                         }
