@@ -23,6 +23,8 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -247,8 +249,7 @@ public class QStoreConnector implements IQStoreConnector {
         long delay = Long.parseLong(env.getProperty("qstore.rest.delay"));
         String res = getQueryResult(pollURL);
 
-        //TODO Change back to XML
-        asyncResult = getResponseFromJSON(res);
+        asyncResult = getResponseFromXML(res);
         // Keep polling QStore until we get the result
         while (asyncResult != null && asyncResult.getQueryStatus().equals(RUNNING.name())) {
             try {
@@ -278,9 +279,10 @@ public class QStoreConnector implements IQStoreConnector {
 
     private QStoreAsyncResult getResponseFromJSON(String res) throws AsyncExecutionException {
         try {
+            JSONObject json = new JSONObject(res);
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(res, QStoreAsyncResult.class);
-        } catch (IOException ex) {
+            return mapper.readValue(json.getString("message"), QStoreAsyncResult.class);
+        } catch (IOException | JSONException ex) {
             throw new AsyncExecutionException("Invalid response JSON from QStore " + res, ex);
         }
 
@@ -293,6 +295,7 @@ public class QStoreConnector implements IQStoreConnector {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
         HttpEntity<String> request = new HttpEntity<String>(query, headers);
 
         try {
@@ -311,7 +314,7 @@ public class QStoreConnector implements IQStoreConnector {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
 
         HttpEntity<String> request = new HttpEntity<String>(headers);
 

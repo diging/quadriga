@@ -5,11 +5,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.FIELD)
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class QStoreAsyncResult {
 
     private String queryStatus;
@@ -17,6 +16,7 @@ public class QStoreAsyncResult {
     private String pollurl;
 
     @XmlAnyElement(value = QueryResultHandler.class)
+    @JsonDeserialize(using = QueryResultHandler.class)
     private String result;
 
     public String getQueryStatus() {

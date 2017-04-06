@@ -193,6 +193,7 @@ function buildNetwork() {
 				} else {
 					buildCytoscape(JSON.parse(result));
 					$("#network").show();
+					$("#rightpanel").show();
 				}
 			}
 		});
