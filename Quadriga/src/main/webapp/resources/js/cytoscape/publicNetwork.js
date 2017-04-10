@@ -171,6 +171,7 @@ function conceptDescription(path, node) {
 
 function getTexts(node, path, unixName) {
 	var conceptDesc = "";
+	var handler = "";
 	var sample = "";
 	var temp = "";
 	$.ajax({
@@ -188,14 +189,21 @@ function getTexts(node, path, unixName) {
 				parsedData = JSON.parse(data);
 				var projects = parsedData['projects'];
 				projects.forEach(function(element, index, array) {
-					conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["text"] + "</p>";
+					handler += "<a href="+ "'" + element["text"] + "'" + "target='_blank'>" + element["text"] + "</a>";
 					conceptDesc += "<a href='#' data-toggle='modal' data-target='#txtModal' data-txtid="+ element["textId"] + " data-txttitle=" + element["textTitle"] + " data-txtauthor=" + element["textAuthor"] + " data-txtdate=" + element["textCreationDate"] + ">" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</a>";
 					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textTitle"] + "</p>";
 					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textCreationDate"] + "</p>";
 					conceptDesc += "..." + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
+
+					if(element["textTitle"] != null && element["textAuthor"] != null && element["textCreationDate"] != null){
+						conceptDesc = "<p>" + conceptDesc + "</p>";
+					}
+					else{
+						conceptDesc = "<p>" + handler + "</p>";
+					}
 				});
 			}
-			conceptDesc = "<p>" + conceptDesc + "</p>";
+
 			$('#texts').html(conceptDesc);
 		},
 		error : function() {
