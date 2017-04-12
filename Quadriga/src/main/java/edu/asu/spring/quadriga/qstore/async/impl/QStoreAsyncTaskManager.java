@@ -10,7 +10,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.qstore.ExecutionStatus;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.qstore.async.IQStoreAsyncTaskManager;
@@ -37,11 +36,11 @@ public class QStoreAsyncTaskManager implements IQStoreAsyncTaskManager {
      * {@inheritDoc}
      */
     @Override
-    public String getNetworkWithPopularTerms() throws QStoreStorageException {
+    public String getNetworkWithPopularTerms() throws AsyncExecutionException {
         try {
             return publicNetworks.get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new QStoreStorageException(e);
+            throw new AsyncExecutionException(e);
         }
     }
 

@@ -50,11 +50,12 @@ public class PublicNetworkController {
      * @throws QStoreStorageException
      * @throws JAXBException
      * @throws QuadrigaStorageException
+     * @throws AsyncExecutionException
      * 
      */
     @RequestMapping(value = "public/networks", method = RequestMethod.GET)
     public ResponseEntity<String> getPublicNetwork()
-            throws QStoreStorageException, QuadrigaStorageException, JAXBException {
+            throws AsyncExecutionException, QStoreStorageException, QuadrigaStorageException, JAXBException {
         String xml = qStoreAsyncTaskManager.getNetworkWithPopularTerms();
         ITransformedNetwork transformedNetwork = transformationManager.getAllTransformedNetworks(xml);
 

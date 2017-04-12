@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.qstore.impl;
 
 import static edu.asu.spring.quadriga.qstore.ExecutionStatus.RUNNING;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -23,8 +22,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +46,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
@@ -277,6 +272,7 @@ public class QStoreConnector implements IQStoreConnector {
 
     }
 
+    /*
     private QStoreAsyncResult getResponseFromJSON(String res) throws AsyncExecutionException {
         try {
             JSONObject json = new JSONObject(res);
@@ -287,6 +283,7 @@ public class QStoreConnector implements IQStoreConnector {
         }
 
     }
+    */
 
     private ResponseEntity<String> executeQuery(String query) throws AsyncExecutionException {
 

@@ -43,6 +43,9 @@
 
 <div id="loading">
   <p>Please wait while the data is loading... </p>
+  <center>
+  	<img src="${pageContext.servletContext.contextPath}/resources/public/imgs/ajax-loader.gif" />
+  </center>
 </div>
 <script type="text/javascript">
 //# sourceURL=dynamicScript.js 

@@ -15,8 +15,8 @@ public class QStoreAsyncResult {
 
     private String pollurl;
 
-    @XmlAnyElement(value = QueryResultHandler.class)
-    @JsonDeserialize(using = QueryResultHandler.class)
+    @XmlAnyElement(value = QueryXMLResultHandler.class)
+    @JsonDeserialize(using = QueryJSONResultHandler.class)
     private String result;
 
     public String getQueryStatus() {

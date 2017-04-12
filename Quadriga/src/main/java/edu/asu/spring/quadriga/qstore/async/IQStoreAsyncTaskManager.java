@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.qstore.async;
 
 import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.qstore.ExecutionStatus;
 
 public interface IQStoreAsyncTaskManager {
@@ -20,9 +19,9 @@ public interface IQStoreAsyncTaskManager {
      * popular terms
      * 
      * @return
-     * @throws QStoreStorageException
+     * @throws AsyncExecutionException
      */
-    String getNetworkWithPopularTerms() throws QStoreStorageException;
+    String getNetworkWithPopularTerms() throws AsyncExecutionException;
 
     /**
      * This method tells if the asynchronous query has loaded the public
