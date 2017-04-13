@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -13,14 +14,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
-import edu.asu.spring.quadriga.domain.impl.projectblog.ProjectBlogEntry;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
 import edu.asu.spring.quadriga.service.network.domain.impl.TextPhrase;
@@ -36,7 +35,7 @@ public class NodeInfoController {
     private Environment env;
 
     @RequestMapping(value = "public/concept/texts", method = RequestMethod.GET)
-    public ResponseEntity<String> getTextsForConcepts(@RequestParam String conceptId, @RequestParam String projectUnix, Model model)
+    public ResponseEntity<String> getTextsForConcepts(@RequestParam String conceptId, @RequestParam String projectUnix)
             throws Exception {
         Set<TextOccurance> occurances = networkManager.getTextsForConceptId(conceptId, ETextAccessibility.PUBLIC);
         JSONArray projectTexts = new JSONArray();
@@ -46,11 +45,8 @@ public class NodeInfoController {
             if ((occur.getProject().getUnixName().equals(projectUnix.trim()) || projectUnix.trim().isEmpty())
                     && occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                 JSONObject occurance = new JSONObject();
-                occurance.append("textId", occur.getTextId());
                 occurance.append("text", occur.getTextUri());
-                occurance.append("textAuthor", occur.getAuthor());
-                occurance.append("textTitle", occur.getTitle());
-                occurance.append("textCreationDate", occur.getCreationDate());
+                appendCall(occurance, occur);
                 JSONArray phraseArray = new JSONArray();
 
                 List<TextPhrase> phrases = occur.getTextPhrases();
@@ -102,11 +98,8 @@ public class NodeInfoController {
             } else {
                 if (occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                     JSONObject occurance = new JSONObject();
-                    occurance.append("textId", occur.getTextId());
                     occurance.append("text", occur.getTextUri());
-                    occurance.append("textAuthor", occur.getAuthor());
-                    occurance.append("textTitle", occur.getTitle());
-                    occurance.append("textCreationDate", occur.getCreationDate());
+                    appendCall(occurance, occur);
                     occurance.append("projectUnix", occur.getProject().getUnixName());
                     occurance.append("projectName", occur.getProject().getProjectName());
                     otherProjectsTexts.put(occurance);
@@ -114,12 +107,18 @@ public class NodeInfoController {
             }
 
         }
-        //model.addAttribute()
 
         JSONObject result = new JSONObject();
         result.put("projects", projectTexts);
         result.put("otherProjects", otherProjectsTexts);
         return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
 
+    }
+
+    public void appendCall(JSONObject occurance, TextOccurance occur) throws JSONException {
+        occurance.append("textId", occur.getTextId());
+        occurance.append("textAuthor", occur.getAuthor());
+        occurance.append("textTitle", occur.getTitle());
+        occurance.append("textCreationDate", occur.getCreationDate());
     }
 }

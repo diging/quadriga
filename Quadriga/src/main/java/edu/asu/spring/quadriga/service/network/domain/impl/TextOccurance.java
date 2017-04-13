@@ -55,6 +55,24 @@ public class TextOccurance {
     public void setContents(String contents) {
         this.contents = contents;
     }
+    public String getAuthor() {
+        return author;
+    }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getCreationDate() {
+        return creationDate;
+    }
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
    
     
     @Override
@@ -132,23 +150,5 @@ public class TextOccurance {
         } else if (!creationDate.equals(other.creationDate))
             return false;
         return true;
-    }
-    public String getAuthor() {
-        return author;
-    }
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getCreationDate() {
-        return creationDate;
-    }
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
     }
 }

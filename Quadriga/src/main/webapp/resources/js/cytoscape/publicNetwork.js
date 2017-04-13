@@ -243,11 +243,10 @@ function getEntireText(node,path){
               .html(header);
         	  $('.modal-body')
               .html(data);
-          }
+          	}
         });
-
         return true;
-    });
+    	});
 	});
 }
 

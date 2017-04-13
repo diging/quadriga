@@ -2,8 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import = "edu.asu.spring.quadriga.domain.impl.workspace.TextFile" %>
 
-<script src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/publicNetwork.js" ></script>
-
 
 <c:if test="${not empty network}">
     <div class="panel-group" id="info" role="tablist" aria-multiselectable="true">
