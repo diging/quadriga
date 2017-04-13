@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.service.network.INetworkTransformer;
@@ -38,8 +40,7 @@ public class NetworkTransformer implements INetworkTransformer {
      * {@inheritDoc}
      */
     @Override
-    public ITransformedNetwork transformNetwork(
-            List<INetworkNodeInfo> networkNodeInfoList) {
+    public ITransformedNetwork transformNetwork(List<INetworkNodeInfo> networkNodeInfoList) {
         Map<String, Node> nodes = new HashMap<>();
         List<Link> links = new ArrayList<>();
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
@@ -57,7 +58,7 @@ public class NetworkTransformer implements INetworkTransformer {
         // have same size.
 
         int index = 0;
-        for (INetworkNodeInfo networkNodeInfo: networkNodeInfoList) {
+        for (INetworkNodeInfo networkNodeInfo : networkNodeInfoList) {
             ElementEventsType elementEventsType = elementEventsTypeList.get(index++);
             // Do not proceed if the elementEventsType is null
             // null implies there is some exception while retrieving the dataj
@@ -69,6 +70,21 @@ public class NetworkTransformer implements INetworkTransformer {
 
         // Instead of sending null
         // send an empty transformed network
+        return transformedNetwork;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ITransformedNetwork transformNetworkUsingCreationList(Stream<CreationEvent> creationEventStream) {
+
+        Map<String, Node> nodes = new HashMap<>();
+        List<Link> links = new ArrayList<>();
+
+        ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
+        parser.parseEvents(creationEventStream, nodes, links);
+
         return transformedNetwork;
     }
 }
