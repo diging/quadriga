@@ -41,17 +41,19 @@ public class QStoreConnectorTest {
 
     private RestTemplate template = mock(RestTemplate.class);
 
+    private String res = "";
+
+    private String qStoreURL = "http://localhost:8080/qstore";
+    private String qStoreURLQuery = "/query";
+
+    private String url = qStoreURL + qStoreURLQuery;
+
     @Before
     public void setup() throws Exception {
 
         PowerMockito.whenNew(RestTemplate.class).withNoArguments().thenReturn(template);
 
-        String qStoreURL = "http://localhost:8080/qstore";
-        String qStoreURLQuery = "/query";
-
-        String url = qStoreURL + qStoreURLQuery;
-
-        String res = "<message><queryStatus>COMPLETED</queryStatus><pollurl>/query/123</pollurl><result><test>test</test></result></message>";
+        res = "<message><queryStatus>COMPLETED</queryStatus><pollurl>/query/123</pollurl><result><test>test</test></result></message>";
 
         when(template.postForEntity(
                 eq(UriComponentsBuilder.fromHttpUrl(url).queryParam("class", "relationevent").build().encode().toUri()),
@@ -75,5 +77,14 @@ public class QStoreConnectorTest {
         Future<String> futureres = connector.loadNetworkWithPopularTerms();
         Assert.assertEquals("<test>test</test>", futureres.get());
 
+    }
+
+    @Test(expected = AsyncExecutionException.class)
+    public void test_loadNetworkWihPopularTerms_exception() throws AsyncExecutionException {
+        res = "<message><badxml>";
+        when(template.postForEntity(
+                eq(UriComponentsBuilder.fromHttpUrl(url).queryParam("class", "relationevent").build().encode().toUri()),
+                any(), eq(String.class))).thenReturn(new ResponseEntity<String>(res, HttpStatus.OK));
+        connector.loadNetworkWithPopularTerms();
     }
 }
