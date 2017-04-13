@@ -146,10 +146,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-    		<groupId>org.powermock</groupId>
-    		<artifactId>powermock-mockito-release-full</artifactId>
-    		<version>1.5.3</version>
-    		<scope>test</scope>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-mockito-release-full</artifactId>
+			<version>1.5.3</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- MySQL database driver -->
