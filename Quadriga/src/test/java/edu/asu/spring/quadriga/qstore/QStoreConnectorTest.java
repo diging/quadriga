@@ -41,25 +41,23 @@ public class QStoreConnectorTest {
 
     private RestTemplate template = mock(RestTemplate.class);
 
-    private String res = "";
-
     private String qStoreURL = "http://localhost:8080/qstore";
     private String qStoreURLQuery = "/query";
 
     private String url = qStoreURL + qStoreURLQuery;
+
+    String queryUrl = url + "/123";
 
     @Before
     public void setup() throws Exception {
 
         PowerMockito.whenNew(RestTemplate.class).withNoArguments().thenReturn(template);
 
-        res = "<message><queryStatus>COMPLETED</queryStatus><pollurl>/query/123</pollurl><result><test>test</test></result></message>";
+        String res = "<message><queryStatus>COMPLETED</queryStatus><pollurl>/query/123</pollurl><result><test>test</test></result></message>";
 
         when(template.postForEntity(
                 eq(UriComponentsBuilder.fromHttpUrl(url).queryParam("class", "relationevent").build().encode().toUri()),
                 any(), eq(String.class))).thenReturn(new ResponseEntity<String>(res, HttpStatus.OK));
-
-        String queryUrl = url + "/123";
 
         when(template.exchange(eq(queryUrl), eq(HttpMethod.GET), any(), eq(String.class),
                 Matchers.<Object> anyVararg())).thenReturn(new ResponseEntity<String>(res, HttpStatus.OK));
@@ -81,10 +79,31 @@ public class QStoreConnectorTest {
 
     @Test(expected = AsyncExecutionException.class)
     public void test_loadNetworkWihPopularTerms_exception() throws AsyncExecutionException {
-        res = "<message><badxml>";
+        String res = "<message><badxml>";
         when(template.postForEntity(
                 eq(UriComponentsBuilder.fromHttpUrl(url).queryParam("class", "relationevent").build().encode().toUri()),
                 any(), eq(String.class))).thenReturn(new ResponseEntity<String>(res, HttpStatus.OK));
         connector.loadNetworkWithPopularTerms();
+    }
+
+    @Test
+    public void test_loadNetworkWihPopularTerms_polling() throws AsyncExecutionException {
+        String res = "<message><queryStatus>RUNNING</queryStatus><pollurl>/query/123</pollurl><result><test>test</test></result></message>";
+        String res2 = "<message><queryStatus>COMPLETED</queryStatus><pollurl>/query/123</pollurl><result><test>test</test></result></message>";
+
+        // This is an array and not a variable because lamdas accept only final
+        // variables and a variable's value cannot be changed in a lamda
+        final int[] counter = new int[1];
+
+        when(template.exchange(eq(queryUrl), eq(HttpMethod.GET), any(), eq(String.class),
+                Matchers.<Object> anyVararg())).then(invocation -> {
+                    if (counter[0]++ == 0) {
+                        return new ResponseEntity<String>(res, HttpStatus.OK);
+                    }
+                    return new ResponseEntity<String>(res2, HttpStatus.OK);
+
+                });
+        connector.loadNetworkWithPopularTerms();
+        Assert.assertTrue(counter[0] == 2);
     }
 }
