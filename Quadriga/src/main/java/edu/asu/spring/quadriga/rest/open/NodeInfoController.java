@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -45,6 +46,7 @@ public class NodeInfoController {
                     && occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                 JSONObject occurance = new JSONObject();
                 occurance.append("text", occur.getTextUri());
+                appendCall(occurance, occur);
                 JSONArray phraseArray = new JSONArray();
 
                 List<TextPhrase> phrases = occur.getTextPhrases();
@@ -97,6 +99,7 @@ public class NodeInfoController {
                 if (occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                     JSONObject occurance = new JSONObject();
                     occurance.append("text", occur.getTextUri());
+                    appendCall(occurance, occur);
                     occurance.append("projectUnix", occur.getProject().getUnixName());
                     occurance.append("projectName", occur.getProject().getProjectName());
                     otherProjectsTexts.put(occurance);
@@ -110,5 +113,12 @@ public class NodeInfoController {
         result.put("otherProjects", otherProjectsTexts);
         return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
 
+    }
+
+    public void appendCall(JSONObject occurance, TextOccurance occur) throws JSONException {
+        occurance.append("textId", occur.getTextId());
+        occurance.append("textAuthor", occur.getAuthor());
+        occurance.append("textTitle", occur.getTitle());
+        occurance.append("textCreationDate", occur.getCreationDate());
     }
 }

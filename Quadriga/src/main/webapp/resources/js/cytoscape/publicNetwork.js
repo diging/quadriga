@@ -1,5 +1,7 @@
 var animationDuration = 200;
 
+
+
 function defineListeners(cy, path, unixName) {
 	cy.on('mouseover', 'node', function(e) {
 		var ele = e.cyTarget;
@@ -15,13 +17,14 @@ function defineListeners(cy, path, unixName) {
 		var node = e.cyTarget;
 		conceptDescription(path, node);
 		getTexts(node, path, unixName);
+		getEntireText(node,path);
 	});
 }
 
 function defineFadeListenersSearch(cy, path) {
 	cy.on('mouseover', 'node', function(e) {
 		var ele = e.cyTarget;
-		var statementIds = ele.data('statementIds');
+		var statementIds = ele.data('statementIds')
 		fadeOut(statementIds, 45, 30);
 	})
 	
@@ -168,6 +171,9 @@ function conceptDescription(path, node) {
 
 function getTexts(node, path, unixName) {
 	var conceptDesc = "";
+	var handler = "";
+	var sample = "";
+	var temp = "";
 	$.ajax({
 		url : path + "/public/concept/texts?conceptId=" + encodeURIComponent(node.data("conceptId")) + "&projectUnix=" + unixName,
 		type : "GET",
@@ -183,17 +189,64 @@ function getTexts(node, path, unixName) {
 				parsedData = JSON.parse(data);
 				var projects = parsedData['projects'];
 				projects.forEach(function(element, index, array) {
-					conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["text"] + "</p>";
-					conceptDesc += "... " + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
+					handler += "<a href="+ "'" + element["text"] + "'" + "target='_blank'>" + element["text"] + "</a>";
+					conceptDesc += "<a href='#' data-toggle='modal' data-target='#txtModal' data-txtid="+ element["textId"] + " data-txttitle=" + element["textTitle"] + " data-txtauthor=" + element["textAuthor"] + " data-txtdate=" + element["textCreationDate"] + ">" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</a>";
+					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textTitle"] + "</p>";
+					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textCreationDate"] + "</p>";
+					conceptDesc += "..." + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
+
+					if(element["textTitle"] != null && element["textAuthor"] != null && element["textCreationDate"] != null){
+						conceptDesc = "<p>" + conceptDesc + "</p>";
+					}
+					else{
+						conceptDesc = "<p>" + handler + "</p>";
+					}
 				});
 			}
-			conceptDesc = "<p>" + conceptDesc + "</p>";
+
 			$('#texts').html(conceptDesc);
 		},
 		error : function() {
 			$('#loading1').hide();
 			// do nothing
 		}
+	});
+}
+
+function getEntireText(node,path){
+	$(document).ready(function() {
+	$('#txtModal').on('show.bs.modal',function(event){
+    	var link = $(event.relatedTarget);
+    	var txtid = link.data('txtid');
+        var title = link.data('txttitle');
+        var author = link.data('txtauthor');
+        var date = link.data('txtdate');
+        var header = "No author and title information provided."
+            if (title != '' || author != '' || date != '') {
+                header = '';
+                if (author != null) {
+                    header += author + ", ";
+                }
+                if (title != null) {
+                    header += "<em>" + title + "</em> ";
+                }
+                if (date != null) {
+                    header += "(" + date + ")";
+                }
+            }            
+            //header += "<br><small>" + txtname + "</small>";
+        $.ajax({ 
+        	type: "GET",
+            url: path + "/public/text/view?conceptUri=" + encodeURIComponent(node.data("conceptUri")) + "&txtid=" + txtid,
+          success: function(data){ 
+        	  $('.modal-title')
+              .html(header);
+        	  $('.modal-body')
+              .html(data);
+          	}
+        });
+        return true;
+    	});
 	});
 }
 
@@ -214,3 +267,4 @@ function hightlight(text, phrases) {
 	highlightedText += text.substring(lastIdx);
 	return highlightedText;
 }
+
