@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html;"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ page import = "edu.asu.spring.quadriga.domain.impl.workspace.TextFile" %>
 
 
 <c:if test="${not empty network}">
@@ -56,10 +56,28 @@
 	</div>
 	</center>
 	<small>
-    <div id="texts" class="text-left">Select node to display text.</div>
+    <div id="texts" class="text-left">Select node to display text.</div>        
+    </div>   
     </small>
 	</div>
 </div>
+
+<div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog"
+    aria-labelledby="txtModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" style="height: 500px; overflow-y: scroll;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div class="text-left">
 <h5><a href="#" id="exportJson"><i class="fa fa-download" aria-hidden="true"

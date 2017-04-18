@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -44,7 +45,7 @@ public class NodeInfoController {
             if ((occur.getProject().getUnixName().equals(projectUnix.trim()) || projectUnix.trim().isEmpty())
                     && occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                 JSONObject occurance = new JSONObject();
-                occurance.append("text", occur.getTextUri());
+                jsonKeyValueAppend(occurance, occur);
                 JSONArray phraseArray = new JSONArray();
 
                 List<TextPhrase> phrases = occur.getTextPhrases();
@@ -95,8 +96,8 @@ public class NodeInfoController {
                 projectTexts.put(occurance);
             } else {
                 if (occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
-                    JSONObject occurance = new JSONObject();
-                    occurance.append("text", occur.getTextUri());
+                    JSONObject occurance = new JSONObject();                    
+                    jsonKeyValueAppend(occurance, occur);
                     occurance.append("projectUnix", occur.getProject().getUnixName());
                     occurance.append("projectName", occur.getProject().getProjectName());
                     otherProjectsTexts.put(occurance);
@@ -110,5 +111,13 @@ public class NodeInfoController {
         result.put("otherProjects", otherProjectsTexts);
         return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
 
+    }
+
+    public void jsonKeyValueAppend(JSONObject occurance, TextOccurance occur) throws JSONException {
+        occurance.append("text", occur.getTextUri());
+        occurance.append("textId", occur.getTextId());
+        occurance.append("textAuthor", occur.getAuthor());
+        occurance.append("textTitle", occur.getTitle());
+        occurance.append("textCreationDate", occur.getCreationDate());
     }
 }
