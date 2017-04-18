@@ -45,8 +45,7 @@ public class NodeInfoController {
             if ((occur.getProject().getUnixName().equals(projectUnix.trim()) || projectUnix.trim().isEmpty())
                     && occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
                 JSONObject occurance = new JSONObject();
-                occurance.append("text", occur.getTextUri());
-                appendCall(occurance, occur);
+                jsonKeyValueAppend(occurance, occur);
                 JSONArray phraseArray = new JSONArray();
 
                 List<TextPhrase> phrases = occur.getTextPhrases();
@@ -97,9 +96,8 @@ public class NodeInfoController {
                 projectTexts.put(occurance);
             } else {
                 if (occur.getProject().getProjectAccess() == EProjectAccessibility.PUBLIC) {
-                    JSONObject occurance = new JSONObject();
-                    occurance.append("text", occur.getTextUri());
-                    appendCall(occurance, occur);
+                    JSONObject occurance = new JSONObject();                    
+                    jsonKeyValueAppend(occurance, occur);
                     occurance.append("projectUnix", occur.getProject().getUnixName());
                     occurance.append("projectName", occur.getProject().getProjectName());
                     otherProjectsTexts.put(occurance);
@@ -115,7 +113,8 @@ public class NodeInfoController {
 
     }
 
-    public void appendCall(JSONObject occurance, TextOccurance occur) throws JSONException {
+    public void jsonKeyValueAppend(JSONObject occurance, TextOccurance occur) throws JSONException {
+        occurance.append("text", occur.getTextUri());
         occurance.append("textId", occur.getTextId());
         occurance.append("textAuthor", occur.getAuthor());
         occurance.append("textTitle", occur.getTitle());

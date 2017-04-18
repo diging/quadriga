@@ -17,7 +17,6 @@ function defineListeners(cy, path, unixName) {
 		var node = e.cyTarget;
 		conceptDescription(path, node);
 		getTexts(node, path, unixName);
-		getEntireText(node,path);
 	});
 }
 
@@ -171,8 +170,6 @@ function conceptDescription(path, node) {
 
 function getTexts(node, path, unixName) {
 	var conceptDesc = "";
-	var handler = "";
-	var sample = "";
 	var temp = "";
 	$.ajax({
 		url : path + "/public/concept/texts?conceptId=" + encodeURIComponent(node.data("conceptId")) + "&projectUnix=" + unixName,
@@ -189,12 +186,9 @@ function getTexts(node, path, unixName) {
 				parsedData = JSON.parse(data);
 				var projects = parsedData['projects'];
 				projects.forEach(function(element, index, array) {
-					handler += "<a href="+ "'" + element["text"] + "'" + "target='_blank'>" + element["text"] + "</a>";
+					var handler = "<a href="+ "'" + element["text"] + "'" + " target='_blank'>" + element["text"] + "</a>";
 					conceptDesc += "<a href='#' data-toggle='modal' data-target='#txtModal' data-txtid="+ element["textId"] + " data-txttitle=" + element["textTitle"] + " data-txtauthor=" + element["textAuthor"] + " data-txtdate=" + element["textCreationDate"] + ">" + element["textAuthor"] + ", " + element["textTitle"] + ":" + "(" + element["textCreationDate"] + ")" + "</a>";
-					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textTitle"] + "</p>";
-					//conceptDesc += "<p class='text-muted' style='margin-bottom:2px'>" + element["textCreationDate"] + "</p>";
-					conceptDesc += "..." + hightlight(element["textContent"][0], element["phrases"]) + "..." + "<br>";
-
+					conceptDesc += "..." + hightlight(element["textContent"][0], element["phrases"]) + getEntireText(node,path) + "..." + "<br>";
 					if(element["textTitle"] != null && element["textAuthor"] != null && element["textCreationDate"] != null){
 						conceptDesc = "<p>" + conceptDesc + "</p>";
 					}
@@ -214,7 +208,6 @@ function getTexts(node, path, unixName) {
 }
 
 function getEntireText(node,path){
-	$(document).ready(function() {
 	$('#txtModal').on('show.bs.modal',function(event){
     	var link = $(event.relatedTarget);
     	var txtid = link.data('txtid');
@@ -246,8 +239,7 @@ function getEntireText(node,path){
           	}
         });
         return true;
-    	});
-	});
+    });
 }
 
 function hightlight(text, phrases) {
