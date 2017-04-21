@@ -115,13 +115,7 @@ public class UserDeepMapper implements IUserDeepMapper {
                 rolesList.add(quadrigaRole);
             }
             user.setQuadrigaRoles(rolesList);
-        } else {
-            user = userFactory.createUserObject();
-            quadrigaRole = roleManager
-                    .getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
-            rolesList.add(quadrigaRole);
-            user.setQuadrigaRoles(rolesList);
-        }
+        } 
 
         return user;
     }

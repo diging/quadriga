@@ -20,6 +20,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -55,9 +56,13 @@ public final class SimpleSignInAdapter implements SignInAdapter {
 
             try {
                 userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
+                logger.info("Added User Account Request: tbl_quadriga_user_requests");
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
                 user = null;
+            } catch (UsernameExistsException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         } else {
            
@@ -77,6 +82,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
                 request.getNativeResponse(HttpServletResponse.class));
 
         if (savedRequest != null) {
+            logger.info("Saved Request Redirect URL: "+savedRequest.getRedirectUrl());
             return savedRequest.getRedirectUrl();
         }
         return null;

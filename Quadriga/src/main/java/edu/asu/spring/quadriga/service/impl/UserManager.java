@@ -341,9 +341,34 @@ public class UserManager implements IUserManager {
         return success;
     }
     
-    
-    public boolean addSocialUser(String username, String fullname, String email, String provider, String userIdOfProvider) throws QuadrigaStorageException {
-        return usermanagerDAO.addNewSocialUserAccountRequest(username,  fullname,  email,  provider,  userIdOfProvider);
+    @Override
+    @Transactional
+    public boolean addSocialUser(String username, String fullname, String email, String provider, String userIdOfProvider) throws QuadrigaStorageException, UsernameExistsException {
+        QuadrigaUserDTO userDTO = usermanagerDAO.getUserDTO(username);
+        
+        // Check if username is already in use
+        if (userDTO != null)
+            throw new UsernameExistsException("Username already in use.");
+
+        QuadrigaUserRequestsDTO userRequest = usermanagerDAO.getUserRequestDTO(username);
+        if (userRequest != null)
+            throw new UsernameExistsException("Username already in use.");
+        
+        boolean success =  usermanagerDAO.addNewSocialUserAccountRequest(username,  fullname,  email,  provider,  userIdOfProvider);
+        if (success) {
+            IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
+            List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
+            for (QuadrigaUserDTO admin : admins) {
+                try {
+                    emailManager.sendAccountCreatedEmail(fullname, username, admin.getFullname(), admin.getEmail());
+                } catch (QuadrigaNotificationException e) {
+                    // let's log error but keep on going
+                    logger.error("Email to " + admin.getUsername() + " could not be sent.", e);
+                }
+            }
+        }
+        
+        return success;
     }
     
     

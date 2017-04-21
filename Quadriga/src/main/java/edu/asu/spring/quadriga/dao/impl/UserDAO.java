@@ -422,8 +422,13 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
             
             if(resultList != null){
                 System.out.println("resultList.size() : "+resultList.size());
-                userDTO = (QuadrigaUserDTO)(resultList.get(0));
+                if(resultList.size() > 0)
+                    userDTO = (QuadrigaUserDTO)(resultList.get(0));
+                else 
+                    userDTO = null;
             }
+            else
+                return null;
             
             return  userDTO;
         } catch (Exception e) {
