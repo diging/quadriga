@@ -44,5 +44,8 @@ public interface IUserDeepMapper {
 	 * @throws QuadrigaStorageException				Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	public abstract List<IUser> getUsersByRoleId(String roleId) throws QuadrigaStorageException;
+	
+	public abstract IUser findUserByProviderUserId(String userId, String provider)
+            throws QuadrigaStorageException; 
 
 }

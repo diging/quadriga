@@ -100,7 +100,14 @@
 						</div>
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
-
+					<form action="<c:url value="/signin/github" />" class="navbar-form navbar-right" method="POST">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<div class="form-group">
+								<button class="btn btn-primary btn-sm" type="submit">
+									<i class="fa fa-github" aria-hidden="true"></i> Login with GitHub
+								</button>
+							</div>
+					</form>
 
 				</sec:authorize>
 			</div>

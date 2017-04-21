@@ -3,14 +3,18 @@ package edu.asu.spring.quadriga.service.user.mapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
+import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -30,6 +34,7 @@ public class UserDeepMapper implements IUserDeepMapper {
     @Autowired
     private IQuadrigaRoleManager roleManager;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserDeepMapper.class);
     /**
      * {@inheritDoc}
      */
@@ -38,7 +43,54 @@ public class UserDeepMapper implements IUserDeepMapper {
     public IUser getUser(String userName)
             throws QuadrigaStorageException {
         IUser user = null;
+        logger.info("Start: getUserDTO");
         QuadrigaUserDTO userDTO = dbConnect.getUserDTO(userName);
+        logger.info("End: getUserDTO");
+        List<IQuadrigaRole> userRole = null;
+        IQuadrigaRole quadrigaRole = null;
+        List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
+
+        if (userDTO != null) {
+            
+            user = mapUser(userDTO);
+        }
+        if (user != null) {
+            userRole = user.getQuadrigaRoles();
+
+            for (int i = 0; i < userRole.size(); i++) {
+                quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
+                        .getDBid());
+
+                // If user account is deactivated remove other roles
+                if (quadrigaRole.getId().equals(
+                        RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
+                    rolesList.clear();
+                    rolesList.add(quadrigaRole);
+                    break;
+                }
+                rolesList.add(quadrigaRole);
+            }
+            user.setQuadrigaRoles(rolesList);
+        } else {
+            logger.info("userDTO is null");
+            user = userFactory.createUserObject();
+            quadrigaRole = roleManager
+                    .getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+            rolesList.add(quadrigaRole);
+            user.setQuadrigaRoles(rolesList);
+            logger.info("Factory User : Name: "+ user.getName()+ " , Username: "+user.getUserName()+" , Quadriga Roles: "+user.getQuadrigaRolesAsString());
+        }
+
+        return user;
+    }
+
+    
+    
+    @Transactional
+    public IUser findUserByProviderUserId(String userId, String provider)
+            throws QuadrigaStorageException {
+        IUser user = null;
+        QuadrigaUserDTO userDTO = dbConnect.findUserByProviderUserId(userId, provider);
         List<IQuadrigaRole> userRole = null;
         IQuadrigaRole quadrigaRole = null;
         List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
@@ -73,7 +125,20 @@ public class UserDeepMapper implements IUserDeepMapper {
 
         return user;
     }
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * {@inheritDoc}
      */
@@ -161,8 +226,9 @@ public class UserDeepMapper implements IUserDeepMapper {
         user.setName(userDTO.getFullname());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPasswd());
-        user.setQuadrigaRoles(listQuadrigaUserRoles(userDTO
-                .getQuadrigarole()));
+        user.setQuadrigaRoles(listQuadrigaUserRoles(userDTO.getQuadrigarole()));
+        user.setProvider(userDTO.getProvider());
+        user.setUserIdOfProvider(userDTO.getUserIdOfProvider());
         return user;
     }
 

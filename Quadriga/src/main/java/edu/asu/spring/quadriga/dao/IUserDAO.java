@@ -153,5 +153,10 @@ public interface IUserDAO extends IBaseDAO<QuadrigaUserDTO>
 
 
     QuadrigaUserDeniedDTO getDeniedUser(String id);
+    
+    
+    public QuadrigaUserDTO findUserByProviderUserId(String userId, String provider) throws QuadrigaStorageException;
+    
+    public boolean addNewSocialUserAccountRequest(String username, String fullname, String email, String provider, String userIdOfProvider)  throws QuadrigaStorageException;
 
 }

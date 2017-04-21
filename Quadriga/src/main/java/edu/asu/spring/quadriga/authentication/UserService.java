@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.authentication;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +16,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
+import edu.asu.spring.quadriga.web.LoginController;
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 
 @Service("userService")
@@ -21,13 +24,15 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private IUserManager userManager;
-	
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	@Override
 	public UserDetails loadUserByUsername(String arg0)
 			throws UsernameNotFoundException {
 		IUser user;
 		try {
+		    logger.debug("UserService: arg0: "+arg0);
 			user = userManager.getUser(arg0);
+			logger.debug("UserService: user: "+user);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

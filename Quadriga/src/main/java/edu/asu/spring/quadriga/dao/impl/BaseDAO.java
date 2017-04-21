@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.SynthesizedAnnotation;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IBaseDAO;
@@ -80,6 +81,7 @@ public abstract class BaseDAO<T> implements IBaseDAO<T> {
 	 */
 	@Override
 	public QuadrigaUserDTO getUserDTO(String userName) {
+	    logger.info(userName);
 		return (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
 	}
 

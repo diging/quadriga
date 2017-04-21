@@ -46,7 +46,7 @@ public class ProjectDeepMapper extends ProjectDTOMapper implements
         // Set Project Workspaces
         project.setProjectWorkspaces(wsShallowMapper
                 .getProjectWorkspaceList(project, projectDTO.getProjectWorkspaceDTOList()));
-
+        System.out.println("Inside ProjectDeepMapper");
         return project;
     }
 

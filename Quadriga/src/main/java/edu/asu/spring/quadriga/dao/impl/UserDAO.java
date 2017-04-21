@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.persistence.TypedQuery;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -29,6 +31,7 @@ import edu.asu.spring.quadriga.mapper.UserDTOMapper;
  * @author Ram Kumar Kumaresan
  *
  */
+@Transactional
 @Repository
 public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
 
@@ -113,6 +116,24 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
         } catch (Exception e) {
             throw new QuadrigaStorageException(e);
         }
+    }
+    
+    
+    public boolean addNewSocialUserAccountRequest(String username, String fullname, String email, String provider, String userIdOfProvider)  throws QuadrigaStorageException{
+        QuadrigaUserRequestsDTO userRequestDTO = new QuadrigaUserRequestsDTO(username, username, new Date(), username,
+                new Date());
+        userRequestDTO.setEmail(email);
+        userRequestDTO.setFullname(fullname);
+        userRequestDTO.setProvider(provider);
+        userRequestDTO.setUserIdOfProvider(userIdOfProvider);
+        try {
+            sessionFactory.getCurrentSession().save(userRequestDTO);
+            sessionFactory.getCurrentSession().flush();
+            return true;
+        } catch (Exception e) {
+            throw new QuadrigaStorageException(e);
+        }
+        
     }
 
     /**
@@ -388,5 +409,33 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
     public QuadrigaUserDeniedDTO getDeniedUser(String id) {
         return (QuadrigaUserDeniedDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDeniedDTO.class, id);
     }
+    
+    
+    public QuadrigaUserDTO findUserByProviderUserId(String userId, String provider) throws QuadrigaStorageException {
+        QuadrigaUserDTO userDTO  = null;
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(
+                    " from QuadrigaUserDTO user where user.userIdOfProvider=:userId AND user.provider=:provider");
+            query.setParameter("userId", userId);
+            query.setParameter("provider", provider);
+            List resultList = query.list();
+            
+            if(resultList != null){
+                System.out.println("resultList.size() : "+resultList.size());
+                userDTO = (QuadrigaUserDTO)(resultList.get(0));
+            }
+            
+            return  userDTO;
+        } catch (Exception e) {
+            logger.error("Error in adding an account request: ", e);
+            throw new QuadrigaStorageException(e);
+        }
+    }
+    
+    
+    
+    
+    
+    
     
 }

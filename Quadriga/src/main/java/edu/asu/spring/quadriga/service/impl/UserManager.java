@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -73,7 +75,10 @@ public class UserManager implements IUserManager {
     @Override
     @Transactional
     public IUser getUser(String sUserId) throws QuadrigaStorageException {
-        return userDeepMapper.getUser(sUserId);
+        logger.info("Start userDeepMapper.getUser");
+        IUser user = userDeepMapper.getUser(sUserId);
+        logger.info("End userDeepMapper.getUser");
+        return user;
     }
 
     /**
@@ -335,6 +340,13 @@ public class UserManager implements IUserManager {
         
         return success;
     }
+    
+    
+    public boolean addSocialUser(String username, String fullname, String email, String provider, String userIdOfProvider) throws QuadrigaStorageException {
+        return usermanagerDAO.addNewSocialUserAccountRequest(username,  fullname,  email,  provider,  userIdOfProvider);
+    }
+    
+    
 
     private String encryptPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
@@ -458,5 +470,55 @@ public class UserManager implements IUserManager {
     public void setUserFactory(IUserFactory userFactory) {
         this.userFactory = userFactory;
     }
+    
+    public String getUniqueUsername(String providerId) {
+        String id = null;
+        while (true) {
+            id = "USR" + generateUniqueId() + "_" + providerId;
+            Object existingFile = null;
+            try {
+                existingFile = getUser(id);
+            } catch (QuadrigaStorageException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (existingFile == null) {
+                break;
+            }
+        }
+        return id;
+    }
 
+   public IUser findUserByProviderUserId(String userId, String provider) throws QuadrigaStorageException {
+       try {
+           return userDeepMapper.findUserByProviderUserId(userId, provider);
+       } catch (Exception ex) {
+           throw new QuadrigaStorageException();
+       }
+   }
+   
+   
+   /**
+    * This methods generates a new 6 character long id. Note that this method
+    * does not assure that the id isn't in use yet.
+    * 
+    * Adapted from
+    * http://stackoverflow.com/questions/9543715/generating-human-readable
+    * -usable-short-but-unique-ids
+    * 
+    * @return 12 character id
+    */
+   protected String generateUniqueId() {
+       char[] chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+               .toCharArray();
+
+       Random random = new Random();
+       StringBuilder builder = new StringBuilder();
+       for (int i = 0; i < 12; i++) {
+           builder.append(chars[random.nextInt(62)]);
+       }
+
+       return builder.toString();
+   }
+    
 }

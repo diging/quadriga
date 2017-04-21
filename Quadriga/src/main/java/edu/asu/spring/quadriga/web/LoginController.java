@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.web.config.SocialContext;
 
 /**
  * The controller to manage the login step performed by every user in Quadriga Database
@@ -32,6 +35,9 @@ public class LoginController {
 	
 	@Autowired
 	private IRetrieveProjectManager retrieveProjectManager;
+	
+	
+	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
 	/**
 	 * A valid authenticated user is redirected to the home page.
@@ -60,6 +66,7 @@ public class LoginController {
 	@NoAuthorizationCheck
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(ModelMap model) throws QuadrigaStorageException {
+	    logger.info("Inside Login: GET request");
 	    List<IProject> projectList = retrieveProjectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
         Collections.sort(projectList, new Comparator<IProject>() {
 

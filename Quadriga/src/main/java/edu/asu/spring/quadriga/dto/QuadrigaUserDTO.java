@@ -48,6 +48,10 @@ public class QuadrigaUserDTO implements Serializable {
     private String passwd;
     @Column(name = "email")
     private String email;
+    @Column(name = "provider")
+    private String provider;
+    @Column(name = "provideruserid")
+    private String userIdOfProvider;
     @Basic(optional = false)
     @Column(name = "quadrigarole")
     private String quadrigarole;
@@ -106,6 +110,19 @@ public class QuadrigaUserDTO implements Serializable {
         this.createdby = createdby;
         this.createddate = createddate;
     }
+	
+	   public QuadrigaUserDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby, Date createddate, String provider, String userIdOfProvider) {
+	        this.username = username;
+	        this.quadrigarole = quadrigarole;
+	        this.updatedby = updatedby;
+	        this.updateddate = updateddate;
+	        this.createdby = createdby;
+	        this.createddate = createddate;
+	        this.provider = provider;
+	        this.userIdOfProvider = userIdOfProvider;
+	    }
+	    
+	
 	
 	   @XmlTransient
 	   public List<NetworkAnnotationsDTO> getNetworkAnnotaionList() {
@@ -237,6 +254,24 @@ public class QuadrigaUserDTO implements Serializable {
         this.createddate = createddate;
     }
 
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getUserIdOfProvider() {
+        return userIdOfProvider;
+    }
+
+    public void setUserIdOfProvider(String userIdOfProvider) {
+        this.userIdOfProvider = userIdOfProvider;
+    }
+    
+    
+    
     @XmlTransient
     public List<ConceptCollectionCollaboratorDTO> getConceptcollectionsCollaboratorDTOList() {
         return conceptcollectionsCollaboratorDTOList;
