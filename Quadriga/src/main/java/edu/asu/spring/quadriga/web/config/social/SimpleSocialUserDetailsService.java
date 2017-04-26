@@ -20,5 +20,6 @@ public class SimpleSocialUserDetailsService implements SocialUserDetailsService 
             throws UsernameNotFoundException, DataAccessException {
         UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
         return (SocialUserDetails) userDetails;
+        
     }
 }

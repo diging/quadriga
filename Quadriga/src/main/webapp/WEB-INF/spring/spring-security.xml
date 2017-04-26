@@ -51,10 +51,13 @@
 		<intercept-url pattern="/search/**" access="permitAll" />
 		<intercept-url pattern="/**" access="denyAll" />
 		
-		<!-- <form-login login-processing-url="/login/authenticate" login-page="/login" default-target-url="/auth/welcome"
-			authentication-failure-url="/loginfailed" authentication-success-handler-ref="authSuccessHandler" />
+		<!--  <form-login login-processing-url="/login/authenticate" login-page="/login" default-target-url="/auth/welcome"
+			authentication-failure-url="/loginfailed" authentication-success-handler-ref="authSuccessHandler" /> 
 		<logout logout-success-url="/login" invalidate-session="true" /> -->
-		<form-login login-processing-url="/login" login-page="/login" default-target-url="/auth/welcome"
+		<!-- <form-login login-processing-url="/login" login-page="/login" default-target-url="/auth/welcome"
+			authentication-failure-url="/loginfailed" authentication-success-handler-ref="authSuccessHandler" /> 
+		<logout logout-success-url="/login" invalidate-session="true" /> -->
+		<form-login login-page="/login" default-target-url="/auth/welcome"
 			authentication-failure-url="/loginfailed" authentication-success-handler-ref="authSuccessHandler" />
 		<logout logout-success-url="/login" invalidate-session="true" />
 	</http>

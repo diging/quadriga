@@ -24,23 +24,20 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
 
+import edu.asu.spring.quadriga.authentication.UserService;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.utilities.IPropertiesManager;
 import edu.asu.spring.quadriga.web.config.social.LocalUserDetailsService;
 import edu.asu.spring.quadriga.web.config.social.SimpleSocialUserDetailsService;
 
 
-//@Configuration
-//@EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 public class SecurityContext extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private IPropertiesManager propertiesManager;
-  
-    /*
-    @Autowired
-    @Qualifier("adminDetailsService")
-    private IAdminUserDetailsService adminUserDetailsService; */ 
+
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityContext.class);
     
@@ -94,7 +91,8 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
         
         // Configures form login
         config.and().formLogin()
-                .loginPage("/")
+                //.loginPage("/")
+                .loginPage("/login")
                 .loginProcessingUrl("/login/authenticate")
                 .failureUrl("/?error=bad_credentials")
                 // Configures the logout function
@@ -123,8 +121,7 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
-        /* auth.userDetailsService(adminUserDetailsService).passwordEncoder(
-                passwordEncoder()); */ 
+
         auth.userDetailsService(userDetailsService()).passwordEncoder(
                 passwordEncoder());
     }
@@ -136,18 +133,13 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SocialUserDetailsService socialUserDetailsService() {
-        logger.info("SocialUserDetailsService Bean Creation");
-       
         return new SimpleSocialUserDetailsService(userDetailsService());
     }
 
-//    @Bean(name = "adminDetailsService")
-//    public UserDetailsService adminDetailsService() {
-//        return new AdminUserDetailsService();
-//    }
+
     
     @Bean
     public UserDetailsService userDetailsService() {
-        return new LocalUserDetailsService();
+        return new UserService();
     }
 }

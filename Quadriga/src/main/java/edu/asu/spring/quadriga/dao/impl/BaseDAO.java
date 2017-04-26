@@ -81,7 +81,6 @@ public abstract class BaseDAO<T> implements IBaseDAO<T> {
 	 */
 	@Override
 	public QuadrigaUserDTO getUserDTO(String userName) {
-	    logger.info(userName);
 		return (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
 	}
 

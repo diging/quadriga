@@ -24,24 +24,14 @@ public class QuadrigaConnectionSignUp implements ConnectionSignUp{
     }
  
     public String execute(Connection<?> connection) {
-        logger.info("Start: Execute");
-        logger.info("Start Call: userHelper.createUser");
         User user = userHelper.createUser(connection);
-        logger.info("End Call: userHelper.createUser");
         try {
-            logger.info("Start Call: userManager.addSocialUser");
-            try {
-                userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
-            } catch (UsernameExistsException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            logger.info("End Call: userManager.addSocialUser");
-        } catch (QuadrigaStorageException e) {
+             userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
+         
+        } catch (QuadrigaStorageException | UsernameExistsException e) {
             logger.error("Could not store user.", e);
             return null;
         }
-        logger.info("End: Execute");
         return user.getUserName();
         
     }

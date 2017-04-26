@@ -75,9 +75,7 @@ public class UserManager implements IUserManager {
     @Override
     @Transactional
     public IUser getUser(String sUserId) throws QuadrigaStorageException {
-        logger.info("Start userDeepMapper.getUser");
         IUser user = userDeepMapper.getUser(sUserId);
-        logger.info("End userDeepMapper.getUser");
         return user;
     }
 

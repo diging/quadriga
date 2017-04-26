@@ -22,6 +22,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -43,7 +44,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
 
         IUser user = null;
         try {
-            user = userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(), connection.getKey().getProviderId());
+            user = (IUser)userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(), connection.getKey().getProviderId());
         } catch (QuadrigaStorageException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -51,12 +52,12 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         
         if (user == null) {
             authorities.add(new QuadrigaGrantedAuthority(
-                    RoleNames.ROLE_QUADRIGA_USER_STANDARD));
+                    RoleNames.ROLE_QUADRIGA_RESTRICTED));
             user = userHelper.createUser(connection);
 
             try {
                 userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
-                logger.info("Added User Account Request: tbl_quadriga_user_requests");
+               
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
                 user = null;
@@ -73,16 +74,20 @@ public final class SimpleSignInAdapter implements SignInAdapter {
                  }
             }
         }
+        
+        QuadrigaUserDetails userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null, user.getEmail());
+        
         SecurityContextHolder.getContext()
                 .setAuthentication(
-                        new UsernamePasswordAuthenticationToken(user, null,
+                        new UsernamePasswordAuthenticationToken(userDetails, null,
                                 authorities));
+        
+        
         SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(
                 request.getNativeRequest(HttpServletRequest.class),
                 request.getNativeResponse(HttpServletResponse.class));
 
         if (savedRequest != null) {
-            logger.info("Saved Request Redirect URL: "+savedRequest.getRedirectUrl());
             return savedRequest.getRedirectUrl();
         }
         return null;

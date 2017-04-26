@@ -42,10 +42,9 @@ public class UserDeepMapper implements IUserDeepMapper {
     @Transactional
     public IUser getUser(String userName)
             throws QuadrigaStorageException {
+        
         IUser user = null;
-        logger.info("Start: getUserDTO");
         QuadrigaUserDTO userDTO = dbConnect.getUserDTO(userName);
-        logger.info("End: getUserDTO");
         List<IQuadrigaRole> userRole = null;
         IQuadrigaRole quadrigaRole = null;
         List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
@@ -72,13 +71,11 @@ public class UserDeepMapper implements IUserDeepMapper {
             }
             user.setQuadrigaRoles(rolesList);
         } else {
-            logger.info("userDTO is null");
             user = userFactory.createUserObject();
             quadrigaRole = roleManager
                     .getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
             rolesList.add(quadrigaRole);
-            user.setQuadrigaRoles(rolesList);
-            logger.info("Factory User : Name: "+ user.getName()+ " , Username: "+user.getUserName()+" , Quadriga Roles: "+user.getQuadrigaRolesAsString());
+            user.setQuadrigaRoles(rolesList); 
         }
 
         return user;

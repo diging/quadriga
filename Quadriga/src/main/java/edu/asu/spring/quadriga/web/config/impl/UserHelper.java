@@ -33,18 +33,14 @@ public class UserHelper implements IUserHelper{
         // make sure someone else didn't change their username to this one
         IUser userWithUsername = null;
         try {
-            logger.info("Start userManager.getUser(username) : "+username);
             userWithUsername = userManager.getUser(username);
-            logger.info("End userManager.getUser(username) : "+username);
         } catch (QuadrigaStorageException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         if (userWithUsername.getUserName() == null) {
-            logger.info("userWithUsername "+username+" does not exist in the database");
             user.setUserName(username);
         } else {
-            logger.info("userWithUsername "+username+" exists in the database");
             user.setUserName(userManager.getUniqueUsername(connection.getKey().getProviderId()));
         }
 
@@ -52,7 +48,6 @@ public class UserHelper implements IUserHelper{
         user.setEmail(profile.getEmail());
         user.setProvider(connection.getKey().getProviderId());
         user.setUserIdOfProvider(connection.getKey().getProviderUserId());
-        logger.info("username: "+user.getUserName()+" , name: "+user.getName()+" , email: "+user.getEmail()+" , provider: "+user.getProvider()+" , userIdOfProvider: "+user.getUserIdOfProvider());
         return user;
     }
 

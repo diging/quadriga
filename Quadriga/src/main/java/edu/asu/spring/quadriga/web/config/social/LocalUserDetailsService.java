@@ -33,7 +33,6 @@ public class LocalUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         IUser user = null;
         try {
-            logger.info("loadUserByUsername: "+arg0);
             user = userManager.getUser(arg0);
         } catch (QuadrigaStorageException e) {
             // TODO Auto-generated catch block

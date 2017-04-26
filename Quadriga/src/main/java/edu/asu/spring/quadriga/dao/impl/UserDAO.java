@@ -267,6 +267,8 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
                 userDTO.setCreateddate(new Date());
                 userDTO.setUpdatedby(sAdminId);
                 userDTO.setUpdateddate(new Date());
+                userDTO.setProvider(userRequestDTO.getProvider());
+                userDTO.setUserIdOfProvider(userRequestDTO.getUserIdOfProvider());
 
                 Session session = sessionFactory.getCurrentSession();
                 session.save(userDTO);

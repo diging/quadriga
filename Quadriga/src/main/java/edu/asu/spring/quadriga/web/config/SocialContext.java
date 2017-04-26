@@ -25,9 +25,11 @@ import edu.asu.spring.quadriga.utilities.IPropertiesManager;
 import edu.asu.spring.quadriga.web.config.social.AdjustableGithubConnectionFactory;
 import edu.asu.spring.quadriga.aspects.access.tokens.impl.GitHubChecker;
 
+
 @Configuration
+//@PropertySource("classpath:/social.properties") 
 @EnableSocial
-@PropertySource("classpath:/social.properties") 
+
 public class SocialContext implements SocialConfigurer  {
   
     @Autowired
@@ -55,9 +57,9 @@ public class SocialContext implements SocialConfigurer  {
             Environment env) {
 
         String githubClientId = propertyManager.getProperty(SocialProperties.GITHUB_CLIENT_ID);
+        
         String githubSecret = propertyManager.getProperty(SocialProperties.GITHUB_SECRET);
-//        GitHubConnectionFactory githubFactory = new GitHubConnectionFactory(
-//              githubClientId, githubSecret);
+        //GitHubConnectionFactory githubFactory = new GitHubConnectionFactory( githubClientId, githubSecret);
         AdjustableGithubConnectionFactory githubFactory = new AdjustableGithubConnectionFactory(githubClientId, githubSecret);
         
         cfConfig.addConnectionFactory(githubFactory);
@@ -88,7 +90,6 @@ public class SocialContext implements SocialConfigurer  {
                 connectionFactoryLocator, usersConnectionRepository,
                 new SimpleSignInAdapter(userManager, userHelper));
         
-        logger.info("Inside ProviderSignInController");
         return controller;
     } 
 }
