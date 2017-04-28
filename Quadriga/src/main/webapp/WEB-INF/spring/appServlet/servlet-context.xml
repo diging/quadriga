@@ -62,7 +62,4 @@
 
 	<resources mapping="/resources/**" location="/resources/" />
 
-     <context:property-placeholder location="classpath*:social.properties" />
-
-
 </beans:beans>

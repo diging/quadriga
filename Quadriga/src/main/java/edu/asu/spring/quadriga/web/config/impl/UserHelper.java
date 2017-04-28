@@ -14,7 +14,12 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.LoginController;
 import edu.asu.spring.quadriga.web.config.IUserHelper;
 
-
+/**
+ * This class creates a user using the user name used to access the social provider (e.g. user name used to access Github).
+ * 
+ * @author Chiraag Subramanian
+ *
+ */
 @Service
 public class UserHelper implements IUserHelper{
     
@@ -35,7 +40,6 @@ public class UserHelper implements IUserHelper{
         try {
             userWithUsername = userManager.getUser(username);
         } catch (QuadrigaStorageException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         if (userWithUsername.getUserName() == null) {

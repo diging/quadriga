@@ -2,12 +2,10 @@ package edu.asu.spring.quadriga.web.config;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.UserIdSource;
@@ -25,11 +23,15 @@ import edu.asu.spring.quadriga.utilities.IPropertiesManager;
 import edu.asu.spring.quadriga.web.config.social.AdjustableGithubConnectionFactory;
 import edu.asu.spring.quadriga.aspects.access.tokens.impl.GitHubChecker;
 
+/**
+ * This class is used to configure Quadriga application to use Github for user authentication and authorization. 
+ * 
+ * @author Chiraag Subramanian
+ *
+ */
 
 @Configuration
-//@PropertySource("classpath:/social.properties") 
 @EnableSocial
-
 public class SocialContext implements SocialConfigurer  {
   
     @Autowired
@@ -50,8 +52,9 @@ public class SocialContext implements SocialConfigurer  {
     @Autowired
     private IReloadService reloadService;
 
-    private static final Logger logger = LoggerFactory.getLogger(SocialContext.class);
-    
+    /**
+     * This method configures Github as a connection factory using Quadriga's Github client id and secret
+     */
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer cfConfig,
             Environment env) {
@@ -59,7 +62,6 @@ public class SocialContext implements SocialConfigurer  {
         String githubClientId = propertyManager.getProperty(SocialProperties.GITHUB_CLIENT_ID);
         
         String githubSecret = propertyManager.getProperty(SocialProperties.GITHUB_SECRET);
-        //GitHubConnectionFactory githubFactory = new GitHubConnectionFactory( githubClientId, githubSecret);
         AdjustableGithubConnectionFactory githubFactory = new AdjustableGithubConnectionFactory(githubClientId, githubSecret);
         
         cfConfig.addConnectionFactory(githubFactory);

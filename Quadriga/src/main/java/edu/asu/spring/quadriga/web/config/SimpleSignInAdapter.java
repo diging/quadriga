@@ -26,6 +26,12 @@ import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
+/**
+ * 
+ * This class authorizes (assigns appropriate roles) to users authenticated by Github.
+ * @author Chiraag Subramanian 
+ *
+ */
 public final class SimpleSignInAdapter implements SignInAdapter {
     
     private final Logger logger = LoggerFactory.getLogger(getClass());            
@@ -38,6 +44,13 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         this.userHelper = userHelper;
     }
 
+    /**
+     * This method checks if Quadriga contains details of the user authenticated by Github.
+     * If the user details are present (which indicates the user is an authorized user), appropriate roles are assigned,
+     * Else if the user details are not present (which indicates the user is an unregistered / not approved user, restricted access is assigned)
+     */
+    
+    @Override
     public String signIn(String userId, Connection<?> connection,
             NativeWebRequest request) {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -46,15 +59,14 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         try {
             user = (IUser)userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(), connection.getKey().getProviderId());
         } catch (QuadrigaStorageException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        
+        // if user details is not present in the database, create a database record for the user and assign restricted access to the user.
         if (user == null) {
+            
+            user = userHelper.createUser(connection);
             authorities.add(new QuadrigaGrantedAuthority(
                     RoleNames.ROLE_QUADRIGA_RESTRICTED));
-            user = userHelper.createUser(connection);
-
             try {
                 userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
                
@@ -62,10 +74,11 @@ public final class SimpleSignInAdapter implements SignInAdapter {
                 logger.error("Could not add user.", e);
                 user = null;
             } catch (UsernameExistsException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        } else {
+        } 
+        // if user details is present in the database, assign appropriate roles to the user.
+        else {
            
             List<IQuadrigaRole> quadrigaRoles = user.getQuadrigaRoles();
             if(quadrigaRoles != null){
@@ -76,13 +89,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         }
         
         QuadrigaUserDetails userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null, user.getEmail());
-        
-        SecurityContextHolder.getContext()
-                .setAuthentication(
-                        new UsernamePasswordAuthenticationToken(userDetails, null,
-                                authorities));
-        
-        
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null,authorities));
         SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(
                 request.getNativeRequest(HttpServletRequest.class),
                 request.getNativeResponse(HttpServletResponse.class));

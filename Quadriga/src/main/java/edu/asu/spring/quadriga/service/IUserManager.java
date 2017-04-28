@@ -130,8 +130,38 @@ public interface IUserManager {
     
     public abstract String getUniqueUsername(String providerId);
     
+    
+    /**
+     * This method adds a new request to access quadriga for the user authenticated by a social provider e.g. github, facebook etc.
+     * 
+     * @param username
+     *            The user name of the user who needs access to quadriga
+     * @param fullname
+     *            The full name of the user who needs access to quadriga     
+     * @param email
+     *            The email id of the user who needs access to quadriga
+     * @param provider
+     *            The name of the social provider that authenticated the user for quadriga
+     * @param userIdOfProvider
+     *            The user id of the user in the domain of the social provider that authenticated the user for quadriga
+     * @return true if the user approval request was placed successfully , 
+     *         false if the user approval request could not be placed or the user request already exists (avoid duplicate requests)
+     * 
+     * @author Chiraag Subramanian
+     * @throws QuadrigaStorageException, UsernameExistsException
+     */
     public abstract boolean addSocialUser(String username, String fullname, String email, String provider, String userIdOfProvider) throws QuadrigaStorageException, UsernameExistsException;
     
+   
+    
+    /**
+     * This method is used to search the user based on the userId and the social provider that authenticates the user (e.g. github, facebook etc.)
+     * @param userId  user's id in the social provider e.g. username in github.
+     * @param provider social provider used for user authentication (e.g. github, facebook etc.)
+     * @return user information
+     * @throws QuadrigaStorageException
+     * @author chiraag subramanian
+     */
     public abstract IUser findUserByProviderUserId(String userId, String provider) throws QuadrigaStorageException;
     
 }

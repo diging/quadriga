@@ -18,10 +18,8 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
-import edu.asu.spring.quadriga.email.impl.EmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
@@ -339,6 +337,26 @@ public class UserManager implements IUserManager {
         return success;
     }
     
+    
+    /**
+     * This method adds a new request to access quadriga for the user authenticated by a social provider e.g. github, facebook etc.
+     * 
+     * @param username
+     *            The user name of the user who needs access to quadriga
+     * @param fullname
+     *            The full name of the user who needs access to quadriga     
+     * @param email
+     *            The email id of the user who needs access to quadriga
+     * @param provider
+     *            The name of the social provider that authenticated the user for quadriga
+     * @param userIdOfProvider
+     *            The user id of the user in the domain of the social provider that authenticated the user for quadriga
+     * @return true if the user approval request was placed successfully , 
+     *         false if the user approval request could not be placed or the user request already exists (avoid duplicate requests)
+     * 
+     * @author Chiraag Subramanian
+     * @throws QuadrigaStorageException, UsernameExistsException
+     */
     @Override
     @Transactional
     public boolean addSocialUser(String username, String fullname, String email, String provider, String userIdOfProvider) throws QuadrigaStorageException, UsernameExistsException {
@@ -511,7 +529,15 @@ public class UserManager implements IUserManager {
         }
         return id;
     }
-
+    
+    /**
+     * This method is used to search the user based on the userId and the social provider that authenticates the user (e.g. github, facebook etc.)
+     * @param userId  user's id in the social provider e.g. username in github.
+     * @param provider social provider used for user authentication (e.g. github, facebook etc.)
+     * @return user information
+     * @throws QuadrigaStorageException
+     * @author chiraag subramanian
+     */
    public IUser findUserByProviderUserId(String userId, String provider) throws QuadrigaStorageException {
        try {
            return userDeepMapper.findUserByProviderUserId(userId, provider);
