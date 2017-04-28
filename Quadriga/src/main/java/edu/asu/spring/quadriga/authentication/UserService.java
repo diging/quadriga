@@ -24,24 +24,24 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private IUserManager userManager;
-	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	
+	private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
 	@Override
 	public UserDetails loadUserByUsername(String arg0)
 			throws UsernameNotFoundException {
 		IUser user;
 		try {
-		    logger.debug("UserService: arg0: "+arg0);
 			user = userManager.getUser(arg0);
-			logger.debug("UserService: user: "+user);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		    logger.error("Error while retrieving user details", e);
 			throw new UsernameNotFoundException("Error getting user details.", e);
 		}
 		
-		if (user == null)
-			throw new UsernameNotFoundException("Couldn't find username.");
-		
+		if (user == null){
+		    throw new UsernameNotFoundException("Couldn't find username.");
+		}
+
 		List<QuadrigaGrantedAuthority> roles = new ArrayList<QuadrigaGrantedAuthority>();
 		for (IQuadrigaRole role : user.getQuadrigaRoles()) {
 			roles.add(new QuadrigaGrantedAuthority(role.getId()));

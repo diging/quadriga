@@ -17,6 +17,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import edu.asu.spring.quadriga.dao.impl.UserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -28,14 +29,14 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * 
- * This class authorizes (assigns appropriate roles) to users authenticated by Github.
+ * This class authorizes (assigns appropriate roles) users authenticated by Github.
  * @author Chiraag Subramanian 
  *
  */
 public final class SimpleSignInAdapter implements SignInAdapter {
     
-    private final Logger logger = LoggerFactory.getLogger(getClass());            
-
+    private final Logger logger = LoggerFactory.getLogger(SignInAdapter.class);
+    
     private IUserManager userManager;
     private IUserHelper userHelper;
 
@@ -56,25 +57,19 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         IUser user = null;
-        try {
             user = (IUser)userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(), connection.getKey().getProviderId());
-        } catch (QuadrigaStorageException e1) {
-            e1.printStackTrace();
-        }
-        // if user details is not present in the database, create a database record for the user and assign restricted access to the user.
+      
+        // if user details is not present in the database, create a database record for the user.
         if (user == null) {
             
             user = userHelper.createUser(connection);
-            authorities.add(new QuadrigaGrantedAuthority(
-                    RoleNames.ROLE_QUADRIGA_RESTRICTED));
             try {
                 userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
                
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
-                user = null;
             } catch (UsernameExistsException e) {
-                e.printStackTrace();
+                logger.error("Could not add user.", e);
             }
         } 
         // if user details is present in the database, assign appropriate roles to the user.

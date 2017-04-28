@@ -91,12 +91,7 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
                             "Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.collaboratorDTOPK.collaboratoruser = :collaboratoruser)");
             query.setParameter("collaboratoruser", sUserName);
             projectDTOList = query.list();
-            for(ProjectDTO projectDTO :projectDTOList){
-                System.out.println("Project ID: "+projectDTO.getId()+" , Project Name: "+projectDTO.getProjectname()+" , "+projectDTO.getProjectWorkspaceDTOList().size());
-            }
-
         } catch (Exception e) {
-            logger.info("getProjectListAsWorkspaceCollaborator method :" + e.getMessage());
             throw new QuadrigaStorageException(e);
         }
         return projectDTOList;
@@ -119,7 +114,7 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
             projectDTOList = query.list();
 
         } catch (Exception e) {
-            logger.info("getCollaboratorProjectList method :" + e.getMessage());
+
             throw new QuadrigaStorageException(e);
         }
         return projectDTOList;

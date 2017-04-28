@@ -40,7 +40,7 @@ import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 @Service
 public class UserManager implements IUserManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
+    private final Logger logger = LoggerFactory.getLogger(UserManager.class);
 
     @Autowired
     private IQuadrigaRoleManager rolemanager;
@@ -73,8 +73,7 @@ public class UserManager implements IUserManager {
     @Override
     @Transactional
     public IUser getUser(String sUserId) throws QuadrigaStorageException {
-        IUser user = userDeepMapper.getUser(sUserId);
-        return user;
+        return userDeepMapper.getUser(sUserId);
     }
 
     /**
@@ -319,7 +318,7 @@ public class UserManager implements IUserManager {
 
         String plainPassword = request.getPassword();
         boolean success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
-                request.getName(), request.getEmail());
+                request.getName(), request.getEmail(), null, null);
         
         if (success) {
             IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
@@ -342,17 +341,17 @@ public class UserManager implements IUserManager {
      * This method adds a new request to access quadriga for the user authenticated by a social provider e.g. github, facebook etc.
      * 
      * @param username
-     *            The user name of the user who needs access to quadriga
+     *            The user name of the user who needs access to quadriga.
      * @param fullname
-     *            The full name of the user who needs access to quadriga     
+     *            The full name of the user who needs access to quadriga.    
      * @param email
-     *            The email id of the user who needs access to quadriga
+     *            The email id of the user who needs access to quadriga.
      * @param provider
-     *            The name of the social provider that authenticated the user for quadriga
+     *            The name of the social provider that authenticated the user for quadriga.
      * @param userIdOfProvider
-     *            The user id of the user in the domain of the social provider that authenticated the user for quadriga
-     * @return true if the user approval request was placed successfully , 
-     *         false if the user approval request could not be placed or the user request already exists (avoid duplicate requests)
+     *            The user id of the user in the domain of the social provider that authenticated the user for quadriga.
+     * @return true if the user approval request was placed successfully, 
+     *         false if the user approval request could not be placed.
      * 
      * @author Chiraag Subramanian
      * @throws QuadrigaStorageException, UsernameExistsException
@@ -370,7 +369,7 @@ public class UserManager implements IUserManager {
         if (userRequest != null)
             throw new UsernameExistsException("Username already in use.");
         
-        boolean success =  usermanagerDAO.addNewSocialUserAccountRequest(username,  fullname,  email,  provider,  userIdOfProvider);
+        boolean success =  usermanagerDAO.addNewUserAccountRequest(username,  null, fullname,  email,  provider,  userIdOfProvider);
         if (success) {
             IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
             List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
@@ -521,7 +520,7 @@ public class UserManager implements IUserManager {
                 existingFile = getUser(id);
             } catch (QuadrigaStorageException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("Error while retrieving user details",e);
             }
             if (existingFile == null) {
                 break;
@@ -538,12 +537,8 @@ public class UserManager implements IUserManager {
      * @throws QuadrigaStorageException
      * @author chiraag subramanian
      */
-   public IUser findUserByProviderUserId(String userId, String provider) throws QuadrigaStorageException {
-       try {
+   public IUser findUserByProviderUserId(String userId, String provider)  {
            return userDeepMapper.findUserByProviderUserId(userId, provider);
-       } catch (Exception ex) {
-           throw new QuadrigaStorageException();
-       }
    }
    
    

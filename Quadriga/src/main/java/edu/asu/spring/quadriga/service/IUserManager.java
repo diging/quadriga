@@ -127,7 +127,11 @@ public interface IUserManager {
     public abstract boolean addNewUser(AccountRequest request)
             throws QuadrigaStorageException, UsernameExistsException, QuadrigaNotificationException;
 
-    
+    /**
+     * This method generates a unique user name. It is used by the system when the user name chosen by a new user already exists in the database.
+     * @param providerId Id of the social provider
+     * @return String unique user name.
+     */
     public abstract String getUniqueUsername(String providerId);
     
     
@@ -162,7 +166,7 @@ public interface IUserManager {
      * @throws QuadrigaStorageException
      * @author chiraag subramanian
      */
-    public abstract IUser findUserByProviderUserId(String userId, String provider) throws QuadrigaStorageException;
+    public abstract IUser findUserByProviderUserId(String userId, String provider);
     
 }
 

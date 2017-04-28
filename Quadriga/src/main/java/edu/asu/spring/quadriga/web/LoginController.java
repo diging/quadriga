@@ -66,7 +66,7 @@ public class LoginController {
 	@NoAuthorizationCheck
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(ModelMap model) throws QuadrigaStorageException {
-	    logger.info("Inside Login: GET request");
+
 	    List<IProject> projectList = retrieveProjectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
         Collections.sort(projectList, new Comparator<IProject>() {
 

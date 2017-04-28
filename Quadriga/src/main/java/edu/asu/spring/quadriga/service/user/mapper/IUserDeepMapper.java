@@ -45,7 +45,6 @@ public interface IUserDeepMapper {
 	 */
 	public abstract List<IUser> getUsersByRoleId(String roleId) throws QuadrigaStorageException;
 	
-	public abstract IUser findUserByProviderUserId(String userId, String provider)
-            throws QuadrigaStorageException; 
+	public abstract IUser findUserByProviderUserId(String userId, String provider); 
 
 }

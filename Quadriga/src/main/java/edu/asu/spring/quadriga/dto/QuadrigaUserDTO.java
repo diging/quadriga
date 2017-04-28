@@ -102,69 +102,48 @@ public class QuadrigaUserDTO implements Serializable {
     public QuadrigaUserDTO() {
     }
 
-	public QuadrigaUserDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.username = username;
-        this.quadrigarole = quadrigarole;
-        this.updatedby = updatedby;
-        this.updateddate = updateddate;
-        this.createdby = createdby;
-        this.createddate = createddate;
-    }
-	
-	   public QuadrigaUserDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby, Date createddate, String provider, String userIdOfProvider) {
-	        this.username = username;
-	        this.quadrigarole = quadrigarole;
-	        this.updatedby = updatedby;
-	        this.updateddate = updateddate;
-	        this.createdby = createdby;
-	        this.createddate = createddate;
-	        this.provider = provider;
-	        this.userIdOfProvider = userIdOfProvider;
-	    }
-	    
-	
-	
-	   @XmlTransient
-	   public List<NetworkAnnotationsDTO> getNetworkAnnotaionList() {
-			return networkAnnotaionList;
-		}
 
-		public void setNetworkAnnotaionList(
-				List<NetworkAnnotationsDTO> networkAnnotaionList) {
-			this.networkAnnotaionList = networkAnnotaionList;
-		}
+	@XmlTransient
+	public List<NetworkAnnotationsDTO> getNetworkAnnotaionList() {
+		return networkAnnotaionList;
+	}
 
-		@XmlTransient
-		public List<QuadrigaUserprofileDTO> getQuadrigaUserprofileDTOList() {
-			return quadrigaUserprofileDTOList;
-		}
+	public void setNetworkAnnotaionList(
+		List<NetworkAnnotationsDTO> networkAnnotaionList) {
+		this.networkAnnotaionList = networkAnnotaionList;
+	}
 
-		public void setQuadrigaUserprofileDTOList(
-				List<QuadrigaUserprofileDTO> quadrigaUserprofileDTOList) {
-			this.quadrigaUserprofileDTOList = quadrigaUserprofileDTOList;
-		}
+	@XmlTransient
+	public List<QuadrigaUserprofileDTO> getQuadrigaUserprofileDTOList() {
+		return quadrigaUserprofileDTOList;
+	}
 
-		@XmlTransient
-		public List<QuadrigaUserDeniedDTO> getQuadrigaUserDeniedDTOList() {
-			return quadrigaUserDeniedDTOList;
-		}
+	public void setQuadrigaUserprofileDTOList(
+		List<QuadrigaUserprofileDTO> quadrigaUserprofileDTOList) {
+		this.quadrigaUserprofileDTOList = quadrigaUserprofileDTOList;
+	}
 
-		public void setQuadrigaUserDeniedDTOList(
-				List<QuadrigaUserDeniedDTO> quadrigaUserDeniedDTOList) {
-			this.quadrigaUserDeniedDTOList = quadrigaUserDeniedDTOList;
-		}
+	@XmlTransient
+	public List<QuadrigaUserDeniedDTO> getQuadrigaUserDeniedDTOList() {
+		return quadrigaUserDeniedDTOList;
+	}
 
-		@XmlTransient
-		public List<QuadrigaUserRoleDTO> getQuadrigaUserRoleDTOList() {
-			return quadrigaUserRoleDTOList;
-		}
+	public void setQuadrigaUserDeniedDTOList(
+		List<QuadrigaUserDeniedDTO> quadrigaUserDeniedDTOList) {
+	    this.quadrigaUserDeniedDTOList = quadrigaUserDeniedDTOList;
+	}
 
-		public void setQuadrigaUserRoleDTOList(
-				List<QuadrigaUserRoleDTO> quadrigaUserRoleDTOList) {
-			this.quadrigaUserRoleDTOList = quadrigaUserRoleDTOList;
-		}
+	@XmlTransient
+	public List<QuadrigaUserRoleDTO> getQuadrigaUserRoleDTOList() {
+		return quadrigaUserRoleDTOList;
+	}
 
-		@XmlTransient
+	public void setQuadrigaUserRoleDTOList(
+		List<QuadrigaUserRoleDTO> quadrigaUserRoleDTOList) {
+	    this.quadrigaUserRoleDTOList = quadrigaUserRoleDTOList;
+	}
+
+	@XmlTransient
     public List<NetworkAssignedDTO> getNetworkAssignedList() {
 		return networkAssignedList;
 	}

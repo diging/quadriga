@@ -40,7 +40,7 @@ public class UserHelper implements IUserHelper{
         try {
             userWithUsername = userManager.getUser(username);
         } catch (QuadrigaStorageException e) {
-            e.printStackTrace();
+            logger.error("Error while fetching user details", e);
         }
         if (userWithUsername.getUserName() == null) {
             user.setUserName(username);

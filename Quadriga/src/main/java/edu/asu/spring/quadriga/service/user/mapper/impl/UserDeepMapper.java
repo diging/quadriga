@@ -34,7 +34,6 @@ public class UserDeepMapper implements IUserDeepMapper {
     @Autowired
     private IQuadrigaRoleManager roleManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserDeepMapper.class);
     /**
      * {@inheritDoc}
      */
@@ -84,8 +83,7 @@ public class UserDeepMapper implements IUserDeepMapper {
     
     
     @Transactional
-    public IUser findUserByProviderUserId(String userId, String provider)
-            throws QuadrigaStorageException {
+    public IUser findUserByProviderUserId(String userId, String provider){
         IUser user = null;
         QuadrigaUserDTO userDTO = dbConnect.findUserByProviderUserId(userId, provider);
         List<IQuadrigaRole> userRole = null;
