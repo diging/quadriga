@@ -1,10 +1,11 @@
 package edu.asu.spring.quadriga.web.config;
 
-import javax.servlet.http.HttpServletRequest;
 
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -14,7 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
 import edu.asu.spring.quadriga.authentication.UserService;
@@ -24,7 +25,7 @@ import edu.asu.spring.quadriga.web.config.social.SimpleSocialUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityContext extends WebSecurityConfigurerAdapter {
-    
+    //private AuthenticationManager authManager;
     @Override
     public void configure(WebSecurity web) throws Exception {
         web
@@ -35,56 +36,79 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        HeadersConfigurer<HttpSecurity> config = http.antMatcher("**").csrf().requireCsrfProtectionMatcher(new RequestMatcher() {
-         
-            @Override
-            public boolean matches(HttpServletRequest arg0) {
-                // don't require CSRF for REST calls
-                if (arg0.getRequestURI().indexOf("/rest/") > -1) {
-                    return false;
-                }   
-                if (arg0.getMethod().equals("GET")) {
-                    return false;
-                }
-                return true;
-            } 
-        }).and().headers().frameOptions().sameOrigin();
+       /*
+        Refer: http://stackoverflow.com/questions/29595098/why-doesnt-my-custom-login-page-show-with-spring-security-4
+        http
+        .csrf().disable();
+        http
+        .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         
+         http
+        .authorizeRequests()
+        .antMatchers("/login*").anonymous()
+        .anyRequest().authenticated()
+        .and()
+        .formLogin()
+        .loginPage("/login")
+        .defaultSuccessUrl("/auth/welcome")
+        .failureUrl("/loginfailed")
+        //.successHandler(successHandler())
+        .and()
+        .logout().logoutSuccessUrl("/login")
+        .invalidateHttpSession(true);
+         
+        */
+        
+        HeadersConfigurer<HttpSecurity> config = http.antMatcher("**").headers().frameOptions().sameOrigin();
+        System.out.println("Inside HTTP Configure");
     
         // Configures form login
-        config.and().formLogin()
-                //.loginPage("/")
-                .loginPage("/login")
-                .loginProcessingUrl("/login/authenticate")
-                .failureUrl("/?error=bad_credentials")
-                // Configures the logout function
-                .and()
-                .logout()
-                .deleteCookies("JSESSIONID")
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .and().exceptionHandling().accessDeniedPage("/403")
+        config.and().exceptionHandling().accessDeniedPage("/403")
                 // Configures url based authorization
                 .and()
                 .authorizeRequests()
                 // Anyone can access the urls
                 .antMatchers("/auth/**", "/signin/**", "/", "/connect/**",
                         "/signup/**", "/user/register/**", "/resources/**",
-                        "/rest/**").permitAll()
+                        "/rest/**","/register*","/login*","/logout*","/createaccount*","/sites/**", "/public/**","/search/**","/home/**").permitAll()
                 // The rest of the our application is protected.
                 .antMatchers("/users/**", "/admin/**").hasRole("QUADRIGA_USER_ADMIN")
+                .antMatchers("/auth/welcome**", "/auth/home**","/auth/about**","/auth/profile/**").hasAnyRole("QUADRIGA_USER_ADMIN","QUADRIGA_USER_STANDARD","QUADRIGA_USER_COLLABORATOR")
+                .antMatchers("/auth/workbench/**", "/auth/rest/**","/auth/conceptcollections/**","/auth/conceptdetails/**","/auth/transformation/**","/auth/searchitems/**","/auth/dictionaries/**","/auth/editing/**","/auth/networks/**").hasAnyRole("QUADRIGA_USER_STANDARD","QUADRIGA_USER_COLLABORATOR")
+                .antMatchers("/users/**", "/admin/**","/auth/users/**","/checks/**").hasRole("QUADRIGA_USER_ADMIN")
+                .antMatchers("/users/**", "/admin/**").hasRole("QUADRIGA_USER_ADMIN")
+                //.antMatchers("/**").denyAll()
                 .anyRequest().hasAnyRole("QUADRIGA_USER_ADMIN","QUADRIGA_USER_STANDARD","QUADRIGA_USER_COLLABORATOR")
+                
                 // Adds the SocialAuthenticationFilter to Spring Security's
                 // filter chain.
                 .and().apply(new SpringSocialConfigurer());
     }
-
-    @Override
+  
+    
+   @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
+        auth.authenticationProvider(daoAuthProvider());
+        //auth.authenticationProvider(new AdminAuthenticationProvider());
+        //authManager = auth.getObject();
+        
+    }
+    
+  /*  @Bean(name=BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception{
+        return authManager ;
+    }
+    */
+  
 
-        auth.userDetailsService(userDetailsService()).passwordEncoder(
-                passwordEncoder());
+    @Bean
+    public SavedRequestAwareAuthenticationSuccessHandler successHandler() {
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        successHandler.setTargetUrlParameter("authSuccessHandler");
+        return successHandler;
     }
 
     @Bean
@@ -101,4 +125,13 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
         return new UserService();
     }
+    
+    @Bean
+    public DaoAuthenticationProvider daoAuthProvider() throws Exception {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userDetailsService());
+        return provider;
+    }
+
 }
