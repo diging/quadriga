@@ -65,34 +65,72 @@ public class RetrieveProjectController {
     public ModelAndView getProjectList(Principal principal) throws QuadrigaStorageException, JSONException {
         String userName;
         ModelAndView model;
-
         userName = principal.getName();
-
-        List<IProject> projectListAsOwner = projectManager.getProjectList(userName);
         List<IProject> fullProjects = new ArrayList<IProject>();
-
         model = new ModelAndView("auth/workbench");
         List<String> projectIds = new ArrayList<String>();
         Map<String, Boolean> accessibleProjects = new HashMap<String, Boolean>();
-
+        
+        // Fetch all the projects for which the user is the owner.
+        List<IProject> projectListAsOwner = projectManager.getProjectList(userName);
         if (projectListAsOwner != null) {
             for (IProject p : projectListAsOwner) {
-                fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));
-                projectIds.add(p.getProjectId());
-                accessibleProjects.put(p.getProjectId(), true);
-            }
-        }
+                 if (!projectIds.contains(p.getProjectId())) {
+                     // Get details of the project using the project id.
+                     IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
+                     if(tempProject != null && tempProject.getProjectWorkspaces() != null){
+                         List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
+                         List<IWorkSpace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(p.getProjectId(), userName);
+                         // Examine the workspace details associated with the project. Include details of only active workspaces.
+                         List<String> deactivatedWorkspaceIds = new ArrayList<String>();
+                         for(IWorkSpace deactivatedWorkspace : deactivatedWorkspaces){
+                             deactivatedWorkspaceIds.add(deactivatedWorkspace.getWorkspaceId());
+                         }
+                         
+                         for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
+                             String workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
+                             if(!deactivatedWorkspaceIds.contains(workspaceId)){
+                                         tempProjectWorkspaces.add(projectWorkspace);
+                             }
+                         }
+                         tempProject.setProjectWorkspaces(tempProjectWorkspaces);
+                         fullProjects.add(tempProject);                    
+                     }
+                     projectIds.add(p.getProjectId());
+                     accessibleProjects.put(p.getProjectId(), true);  
+                 }
+           }
+       }
 
         // Fetch all the projects for which the user is collaborator.
         List<IProject> projectListAsCollaborator = projectManager.getCollaboratorProjectList(userName);
         if (projectListAsCollaborator != null) {
             for (IProject p : projectListAsCollaborator) {
                 if (!projectIds.contains(p.getProjectId())) {
-                    fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));
+                    // Get details of the project using the project id.
+                    IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
+                    if(tempProject != null && tempProject.getProjectWorkspaces() != null){
+                        List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
+                        List<IWorkSpace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(p.getProjectId(), userName);
+                        // Examine the workspace details associated with the project. Include details of only active workspaces.
+                        List<String> deactivatedWorkspaceIds = new ArrayList<String>();
+                        for(IWorkSpace deactivatedWorkspace : deactivatedWorkspaces){
+                            deactivatedWorkspaceIds.add(deactivatedWorkspace.getWorkspaceId());
+                        }
+                        
+                        for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
+                            String workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
+                            if(!deactivatedWorkspaceIds.contains(workspaceId)){
+                                        tempProjectWorkspaces.add(projectWorkspace);
+                            }
+                        }
+                        tempProject.setProjectWorkspaces(tempProjectWorkspaces);
+                        fullProjects.add(tempProject);                    
+                    }
                     projectIds.add(p.getProjectId());
-                    accessibleProjects.put(p.getProjectId(), true);
+                    accessibleProjects.put(p.getProjectId(), true);  
                 }
-            }
+          }
         }
 
         // Fetch all the projects for which the user is associated workspace owner.
@@ -100,9 +138,28 @@ public class RetrieveProjectController {
         if (projectListAsWorkspaceOwner != null) {
             for (IProject p : projectListAsWorkspaceOwner) {
                 if (!projectIds.contains(p.getProjectId())) {
-                    fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));
+                    // Get details of the project using the project id. 
+                    IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
+                    if(tempProject != null && tempProject.getProjectWorkspaces() != null){
+                        List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
+                        List<IWorkSpace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(p.getProjectId(), userName);
+                        List<String> deactivatedWorkspaceIds = new ArrayList<String>();
+                        for(IWorkSpace deactivatedWorkspace : deactivatedWorkspaces){
+                            deactivatedWorkspaceIds.add(deactivatedWorkspace.getWorkspaceId());
+                        }
+                        
+                        // Examine the workspace details associated with the project. Include details of only active workspaces.
+                        for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
+                            String workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
+                            if(!deactivatedWorkspaceIds.contains(workspaceId)){
+                                        tempProjectWorkspaces.add(projectWorkspace);
+                            }
+                        }
+                        tempProject.setProjectWorkspaces(tempProjectWorkspaces);
+                        fullProjects.add(tempProject);                    
+                    }
                     projectIds.add(p.getProjectId());
-                    accessibleProjects.put(p.getProjectId(), false);
+                    accessibleProjects.put(p.getProjectId(), false);  
                 }
             }
         }
@@ -118,13 +175,21 @@ public class RetrieveProjectController {
                     IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
                     if(tempProject != null && tempProject.getProjectWorkspaces() != null){
                         List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
-                        // Examine the workspace details associated with the project. Include details of only those workspaces, where the user is a collaborator.
+                        List<IWorkSpace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(p.getProjectId(), userName);
+                        List<String> deactivatedWorkspaceIds = new ArrayList<String>();
+                        for(IWorkSpace deactivatedWorkspace : deactivatedWorkspaces){
+                            deactivatedWorkspaceIds.add(deactivatedWorkspace.getWorkspaceId());
+                        }
+
+                        // Examine the workspace details associated with the project. Include details of only those active workspaces, where the user is a collaborator.
                         for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
                             String workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
-                            if(securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || 
-                               securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || 
-                               securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)){
-                                tempProjectWorkspaces.add(projectWorkspace);
+                            if(!deactivatedWorkspaceIds.contains(workspaceId)){
+                                if(securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || 
+                                        securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || 
+                                        securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)){
+                                        tempProjectWorkspaces.add(projectWorkspace);
+                                }
                             }
                         }
                         tempProject.setProjectWorkspaces(tempProjectWorkspaces);
