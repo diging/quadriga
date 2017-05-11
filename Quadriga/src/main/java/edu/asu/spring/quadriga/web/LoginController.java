@@ -37,7 +37,7 @@ public class LoginController {
 	private IRetrieveProjectManager retrieveProjectManager;
 	
 	
-	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+	private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
 	/**
 	 * A valid authenticated user is redirected to the home page.

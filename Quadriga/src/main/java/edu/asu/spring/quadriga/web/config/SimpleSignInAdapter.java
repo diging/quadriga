@@ -20,12 +20,14 @@ import org.springframework.web.context.request.NativeWebRequest;
 import edu.asu.spring.quadriga.dao.impl.UserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
 /**
  * 
@@ -33,6 +35,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * @author Chiraag Subramanian 
  *
  */
+
 public final class SimpleSignInAdapter implements SignInAdapter {
     
     private final Logger logger = LoggerFactory.getLogger(SignInAdapter.class);
@@ -61,15 +64,24 @@ public final class SimpleSignInAdapter implements SignInAdapter {
       
         // if user details is not present in the database, create a database record for the user.
         if (user == null) {
-            
             user = userHelper.createUser(connection);
+            AccountRequest accountRequest = new AccountRequest();
+            accountRequest.setUsername(user.getUserName());
+            accountRequest.setName( user.getName());
+            accountRequest.setEmail(user.getEmail());
+            accountRequest.setSocialSignIn(true);
+            accountRequest.setProvider(user.getProvider());
+            accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
             try {
-                userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
-               
+                //userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
+                userManager.addNewUser(accountRequest);
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
             } catch (UsernameExistsException e) {
                 logger.error("Could not add user.", e);
+            } catch (QuadrigaNotificationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         } 
         // if user details is present in the database, assign appropriate roles to the user.
@@ -92,7 +104,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         if (savedRequest != null) {
             return savedRequest.getRedirectUrl();
         }
-        return null;
+        return "/login";
     }
 
 }

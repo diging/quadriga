@@ -43,17 +43,15 @@ public class UserDeepMapper implements IUserDeepMapper {
             throws QuadrigaStorageException {
         
         IUser user = null;
-        QuadrigaUserDTO userDTO = dbConnect.getUserDTO(userName);
-        List<IQuadrigaRole> userRole = null;
         IQuadrigaRole quadrigaRole = null;
         List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
+        QuadrigaUserDTO userDTO = dbConnect.getUserDTO(userName);
 
         if (userDTO != null) {
-            
             user = mapUser(userDTO);
         }
         if (user != null) {
-            userRole = user.getQuadrigaRoles();
+            List<IQuadrigaRole> userRole = user.getQuadrigaRoles();
 
             for (int i = 0; i < userRole.size(); i++) {
                 quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
@@ -85,21 +83,19 @@ public class UserDeepMapper implements IUserDeepMapper {
     @Transactional
     public IUser findUserByProviderUserId(String userId, String provider){
         IUser user = null;
+        
         QuadrigaUserDTO userDTO = dbConnect.findUserByProviderUserId(userId, provider);
-        List<IQuadrigaRole> userRole = null;
-        IQuadrigaRole quadrigaRole = null;
-        List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-
+        
         if (userDTO != null) {
             user = mapUser(userDTO);
         }
         if (user != null) {
-            userRole = user.getQuadrigaRoles();
-
+            List<IQuadrigaRole> userRole = user.getQuadrigaRoles();
+            List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
             for (int i = 0; i < userRole.size(); i++) {
-                quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
+                IQuadrigaRole quadrigaRole  = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
                         .getDBid());
-
+                
                 // If user account is deactivated remove other roles
                 if (quadrigaRole.getId().equals(
                         RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
@@ -114,19 +110,7 @@ public class UserDeepMapper implements IUserDeepMapper {
 
         return user;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     /**
      * {@inheritDoc}

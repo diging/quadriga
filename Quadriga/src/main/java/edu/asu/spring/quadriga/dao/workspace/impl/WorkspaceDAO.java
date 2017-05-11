@@ -197,6 +197,7 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceDAO
             query.setParameter("isdeactivated", false);
             query.setParameter("isarchived", true);
             workspaceDTOList = query.list();
+            
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
@@ -212,6 +213,7 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceDAO
             throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = null;
         try {
+
             String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid"
                     + " AND projWork.workspaceDTO.isdeactivated =:isdeactivated "
                     + " AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN ("
@@ -219,9 +221,9 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceDAO
             Query query = sessionFactory.getCurrentSession().createQuery(value);
             query.setParameter("username", username);
             query.setParameter("projectid", projectid);
-            query.setParameter("isdeactivated", true);
+            query.setParameter("isdeactivated", new Boolean(true));
             workspaceDTOList = query.list();
-
+        
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }

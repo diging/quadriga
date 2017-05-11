@@ -317,65 +317,21 @@ public class UserManager implements IUserManager {
             throw new UsernameExistsException("Username already in use.");
 
         String plainPassword = request.getPassword();
-        boolean success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
-                request.getName(), request.getEmail(), null, null);
-        
+        boolean success = false;
+        if(request.isSocialSignIn()){
+            success =  usermanagerDAO.addNewUserAccountRequest(request.getUsername(),  null, request.getName(),  request.getEmail(),  request.getProvider(),  request.getUserIdOfProvider());
+        }
+        else{
+            success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
+                    request.getName(), request.getEmail(), null, null);
+        }
+
         if (success) {
             IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
             List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
             for (QuadrigaUserDTO admin : admins) {
                 try {
                     emailManager.sendAccountCreatedEmail(request.getName(), request.getUsername(), admin.getFullname(), admin.getEmail());
-                } catch (QuadrigaNotificationException e) {
-                    // let's log error but keep on going
-                    logger.error("Email to " + admin.getUsername() + " could not be sent.", e);
-                }
-            }
-        }
-        
-        return success;
-    }
-    
-    
-    /**
-     * This method adds a new request to access quadriga for the user authenticated by a social provider e.g. github, facebook etc.
-     * 
-     * @param username
-     *            The user name of the user who needs access to quadriga.
-     * @param fullname
-     *            The full name of the user who needs access to quadriga.    
-     * @param email
-     *            The email id of the user who needs access to quadriga.
-     * @param provider
-     *            The name of the social provider that authenticated the user for quadriga.
-     * @param userIdOfProvider
-     *            The user id of the user in the domain of the social provider that authenticated the user for quadriga.
-     * @return true if the user approval request was placed successfully, 
-     *         false if the user approval request could not be placed.
-     * 
-     * @author Chiraag Subramanian
-     * @throws QuadrigaStorageException, UsernameExistsException
-     */
-    @Override
-    @Transactional
-    public boolean addSocialUser(String username, String fullname, String email, String provider, String userIdOfProvider) throws QuadrigaStorageException, UsernameExistsException {
-        QuadrigaUserDTO userDTO = usermanagerDAO.getUserDTO(username);
-        
-        // Check if username is already in use
-        if (userDTO != null)
-            throw new UsernameExistsException("Username already in use.");
-
-        QuadrigaUserRequestsDTO userRequest = usermanagerDAO.getUserRequestDTO(username);
-        if (userRequest != null)
-            throw new UsernameExistsException("Username already in use.");
-        
-        boolean success =  usermanagerDAO.addNewUserAccountRequest(username,  null, fullname,  email,  provider,  userIdOfProvider);
-        if (success) {
-            IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
-            List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
-            for (QuadrigaUserDTO admin : admins) {
-                try {
-                    emailManager.sendAccountCreatedEmail(fullname, username, admin.getFullname(), admin.getEmail());
                 } catch (QuadrigaNotificationException e) {
                     // let's log error but keep on going
                     logger.error("Email to " + admin.getUsername() + " could not be sent.", e);

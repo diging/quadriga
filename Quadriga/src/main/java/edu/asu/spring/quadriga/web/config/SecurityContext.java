@@ -61,7 +61,6 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
         */
         
         HeadersConfigurer<HttpSecurity> config = http.antMatcher("**").headers().frameOptions().sameOrigin();
-        System.out.println("Inside HTTP Configure");
     
         // Configures form login
         config.and().exceptionHandling().accessDeniedPage("/403")

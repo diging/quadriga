@@ -8,6 +8,9 @@ public class AccountRequest {
 	private String email;
 	private String password;
 	private String repeatedPassword;
+	private String provider;
+	private String userIdOfProvider;
+	private boolean socialSignIn;
 	
 	public String getName() {
 		return name;
@@ -39,5 +42,22 @@ public class AccountRequest {
 	public void setRepeatedPassword(String repeatedPassword) {
 		this.repeatedPassword = repeatedPassword;
 	}
-	
+    public String getProvider() {
+        return provider;
+    }
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+    public String getUserIdOfProvider() {
+        return userIdOfProvider;
+    }
+    public void setUserIdOfProvider(String userIdOfProvider) {
+        this.userIdOfProvider = userIdOfProvider;
+    }
+    public boolean isSocialSignIn() {
+        return socialSignIn;
+    }
+    public void setSocialSignIn(boolean socialSignIn) {
+        this.socialSignIn = socialSignIn;
+    }
 }

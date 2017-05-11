@@ -393,31 +393,20 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
     
     
     public QuadrigaUserDTO findUserByProviderUserId(String userId, String provider){
-        QuadrigaUserDTO userDTO  = null;
-      
+
             Query query = sessionFactory.getCurrentSession().createQuery(
                     " from QuadrigaUserDTO user where user.userIdOfProvider=:userId AND user.provider=:provider");
             query.setParameter("userId", userId);
             query.setParameter("provider", provider);
             List resultList = query.list();
             
-            if(resultList != null){
-                if(resultList.size() > 0){ 
-                    userDTO = (QuadrigaUserDTO)(resultList.get(0));
-                }    
-                else{
-                    userDTO = null;
-                }     
+            if(resultList != null && resultList.size() > 0){
+                return (QuadrigaUserDTO)(resultList.get(0));   
             }
-            
-            return  userDTO;
-       
+            else{
+                return null; 
+            }
+                
     }
-    
-    
-    
-    
-    
-    
     
 }

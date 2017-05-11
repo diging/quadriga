@@ -16,7 +16,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
-import edu.asu.spring.quadriga.web.LoginController;
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 
 @Service("userService")
