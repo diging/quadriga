@@ -10,7 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.impl.ModifyConceptCollectionManager;
@@ -32,7 +33,7 @@ public class ModifyConceptCollectionManagerTest {
     public void updateCollectionDetailsTest() throws QuadrigaStorageException {
         ConceptCollectionDTO conceptCollection = new ConceptCollectionDTO();
 
-        ConceptCollection collection = new ConceptCollection();
+        IConceptCollection collection = new ConceptCollection();
         collection.setConceptCollectionName("conceptCollectionName");
         collection.setConceptCollectionId("id");
 

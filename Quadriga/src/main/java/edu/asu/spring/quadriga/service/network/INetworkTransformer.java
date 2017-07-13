@@ -3,8 +3,8 @@ package edu.asu.spring.quadriga.service.network;
 import java.util.List;
 import java.util.stream.Stream;
 
-import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 
 /**

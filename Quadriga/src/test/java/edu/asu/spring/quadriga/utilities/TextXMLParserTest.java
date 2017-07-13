@@ -12,8 +12,8 @@ import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
-import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
+import edu.asu.spring.quadriga.domain.workspace.impl.TextFile;
 import edu.asu.spring.quadriga.exceptions.TextFileParseException;
 import edu.asu.spring.quadriga.utilities.ITextXMLParser;
 import edu.asu.spring.quadriga.utilities.impl.TextXMLParser;

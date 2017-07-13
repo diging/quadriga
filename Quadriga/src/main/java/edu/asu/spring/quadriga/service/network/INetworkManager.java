@@ -8,14 +8,13 @@ import javax.xml.bind.JAXBException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
-import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
-import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
-import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
+import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
@@ -178,7 +177,7 @@ public interface INetworkManager {
      * @param networkName
      *            {@link INetwork} name of type {@link String}
      * @param workspaceId
-     *            {@link IWorkSpace} ID of type {@link String}
+     *            {@link IWorkspace} ID of type {@link String}
      * @param uploadStatus
      *            Upload status of the network - NEW or UPDATE
      * @param networkId
@@ -254,8 +253,6 @@ public interface INetworkManager {
      * @return Returns the network status code.
      */
     public abstract int getNetworkStatusCode(String status);
-
-    public List<IWorkspaceNetwork> editWorkspaceNetworkStatusCode(List<IWorkspaceNetwork> workspaceNetworkList);
 
     public List<INetwork> editNetworkStatusCode(List<INetwork> networkList);
 

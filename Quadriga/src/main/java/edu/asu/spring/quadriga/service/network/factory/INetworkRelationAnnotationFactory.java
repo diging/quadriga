@@ -1,8 +1,8 @@
 package edu.asu.spring.quadriga.service.network.factory;
 
 
-import edu.asu.spring.quadriga.domain.impl.networks.NetworkRelationAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetworkRelationAnnotation;
+import edu.asu.spring.quadriga.domain.network.impl.NetworkRelationAnnotation;
 
 public interface INetworkRelationAnnotationFactory {
 	/**

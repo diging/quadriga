@@ -83,7 +83,7 @@
 </div>
 
 <c:choose>
-	<c:when test="${not empty dicitonaryList}">
+	<c:when test="${not empty dicitonaries}">
 		<form method="POST">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="panel panel-default" style="margin-top: 20px;">
@@ -109,16 +109,16 @@
 					</thead>
 
 					<tbody>
-						<c:forEach var="projectDictionary" items="${dicitonaryList}">
+						<c:forEach var="dictionary" items="${dicitonaries}">
 							<tr>
 								<td width="10%"><input type="checkbox" class="selected"
 									name="selected"
-									value='<c:out value="${projectDictionary.dictionary.dictionaryId}"></c:out>' /></td>
+									value='<c:out value="${dictionary.dictionaryId}"></c:out>' /></td>
 								<td width="30%"><input name="items" type="hidden"
-									value="<c:out value="${projectDictionary.dictionary.dictionaryName}"></c:out>" />
-									<c:out value="${projectDictionary.dictionary.dictionaryName}"></c:out></td>
+									value="<c:out value="${dictionary.dictionaryName}"></c:out>" />
+									<c:out value="${dictionary.dictionaryName}"></c:out></td>
 								<td><c:out
-										value="${projectDictionary.dictionary.description}"></c:out></td>
+										value="${dictionary.description}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>

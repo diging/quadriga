@@ -26,10 +26,6 @@ public interface IConcept
 
 	public abstract void setLemma(String lemma);
 	
-	public abstract List<IConceptCollectionConcepts> getConceptCollectionConcepts();
-	
-	public abstract void setConceptCollectionConcepts(List<IConceptCollectionConcepts> conceptCollections);
-	
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);
@@ -45,4 +41,8 @@ public interface IConcept
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updatedDate);
+
+    void setConceptCollections(List<IConceptCollection> conceptCollections);
+
+    List<IConceptCollection> getConceptCollections();
 }

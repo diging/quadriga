@@ -60,8 +60,6 @@ import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItem;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItemList;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.QuadrigaDictDetailsReply;
-import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -178,7 +176,7 @@ public class DictionaryRestController {
         try {
             VelocityEngine engine = restVelocityFactory.getVelocityEngine();
             engine.init();
-            List<IWorkspaceDictionary> dictionaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId,
+            List<IDictionary> dictionaryList = workspaceDictionaryManager.getDictionaries(workspaceId,
                     user.getUsername());
             Template template = engine.getTemplate("velocitytemplates/workspacedictionarylist.vm");
             VelocityContext context = new VelocityContext();
@@ -221,10 +219,10 @@ public class DictionaryRestController {
             @PathVariable("workspaceid") String workspaceId, Model model, Principal principal) {
         String userId = principal.getName();
 
-        List<IWorkspaceDictionary> dicitonaryList = null;
+        List<IDictionary> dictionaries = null;
 
         try {
-            dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
+            dictionaries = workspaceDictionaryManager.getDictionaries(workspaceId, userId);
         } catch (QuadrigaStorageException e) {
             logger.error("QuadrigaStorageException:", e);
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -232,14 +230,13 @@ public class DictionaryRestController {
 
         JSONArray ja = new JSONArray();
 
-        if (dicitonaryList != null) {
-            for (IWorkspaceDictionary dictionary : dicitonaryList) {
+        if (dictionaries != null) {
+            for (IDictionary dictionary : dictionaries) {
                 JSONObject j = new JSONObject();
                 try {
-                    j.put("id", dictionary.getDictionary().getDictionaryId());
-                    j.put("name", dictionary.getDictionary().getDictionaryName());
+                    j.put("id", dictionary.getDictionaryId());
+                    j.put("name", dictionary.getDictionaryName());
                     ja.put(j);
-
                 } catch (JSONException e) {
                     logger.error("JSONException:", e);
                     return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -264,8 +261,6 @@ public class DictionaryRestController {
     @RequestMapping(value = "rest/dictionaryDetails/{dictionaryId}", method = RequestMethod.GET, produces = "application/xml")
     public ResponseEntity<String> listDictionaryItems(@PathVariable("dictionaryId") String dictionaryId,
             ModelMap model, HttpServletRequest req) throws RestException {
-
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // TODO details not getting retrieved
 
@@ -491,12 +486,11 @@ public class DictionaryRestController {
     @RequestMapping(value = "auth/rest/{projectid}/dictionaries.json", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> listProjectDictionaryJson(HttpServletRequest req,
             @PathVariable("projectid") String projectid, Model model, Principal principal) {
-        String userId = principal.getName();
-        List<IProjectDictionary> dictionaryList = null;
+        List<IDictionary> dictionaries = null;
         // TODO: listProjectDictionary() is to be changed according to
         // mapper
         try {
-            dictionaryList = projectDictionaryManager.listProjectDictionary(projectid);
+            dictionaries = projectDictionaryManager.getDictionaries(projectid);
         } catch (QuadrigaStorageException e) {
             // TODO Auto-generated catch block
             logger.error("QuadrigaStorageException:", e);
@@ -505,12 +499,12 @@ public class DictionaryRestController {
 
         JSONArray ja = new JSONArray();
 
-        if (dictionaryList != null) {
-            for (IProjectDictionary dictionary : dictionaryList) {
+        if (dictionaries != null) {
+            for (IDictionary dictionary : dictionaries) {
                 JSONObject j = new JSONObject();
                 try {
-                    j.put("id", dictionary.getDictionary().getDictionaryId());
-                    j.put("name", dictionary.getDictionary().getDictionaryName());
+                    j.put("id", dictionary.getDictionaryId());
+                    j.put("name", dictionary.getDictionaryName());
                     ja.put(j);
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block

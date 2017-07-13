@@ -6,89 +6,57 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceDictionaryFactory;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.dictionary.IDictionaryShallowMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDictionaryShallowMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceShallowMapper;
-import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryShallowMapper;
 
 @Service
 public class WorkspaceDictionaryShallowMapper implements IWorkspaceDictionaryShallowMapper {
-	@Autowired
-	private IRetrieveProjectDAO dbConnect;
+    
+    @Autowired
+    private IDictionaryShallowMapper dictionaryShallowMapper;
 
-	@Autowired
-	private IDictionaryManager dictionaryManager;
+    @Autowired
+    private IWorkspaceShallowMapper workspaceShallowMapper;
 
-	@Autowired
-	private IDictionaryShallowMapper dictionaryShallowMapper;
+    @Override
+    public List<IDictionary> getDictionaries(IWorkspace workspace, WorkspaceDTO workspaceDTO)
+            throws QuadrigaStorageException {
+        List<IDictionary> dictionaries = new ArrayList<IDictionary>();
+        
+        if (workspace != null) {
+            List<WorkspaceDictionaryDTO> wsDictionaryDTOList = workspaceDTO.getWorkspaceDictionaryDTOList();
+            if (wsDictionaryDTOList != null) {
+                for (WorkspaceDictionaryDTO wsDictionaryDTO : wsDictionaryDTOList) {
+                    IDictionary dictionaryProxy = dictionaryShallowMapper
+                            .getDictionaryDetails(wsDictionaryDTO.getDictionaryDTO());
+                    dictionaries.add(dictionaryProxy);
+                }
+            }
+        }
+        return dictionaries;
+    }
 
-	@Autowired
-	private IWorkspaceShallowMapper workspaceShallowMapper;
+    @Override
+    public List<IWorkspace> getWorkspaces(IDictionary dictionary, DictionaryDTO dictionaryDTO)
+            throws QuadrigaStorageException {
+        List<IWorkspace> workspaces = new ArrayList<IWorkspace>();
+        List<WorkspaceDictionaryDTO> workspaceDictionaryDTOList = dictionaryDTO.getWsDictionaryDTOList();
+        
+        if (workspaceDictionaryDTOList != null) {
+            for (WorkspaceDictionaryDTO workspaceDictionaryDTO : workspaceDictionaryDTOList) {
+                IWorkspace workspace = workspaceShallowMapper.mapWorkspaceDTO(workspaceDictionaryDTO.getWorkspaceDTO());
+                workspaces.add(workspace);
+            }
+        }
 
-	@Autowired
-	private IWorkspaceDictionaryFactory wsDictionaryFactory;
-
-	@Override
-	public List<IWorkspaceDictionary> getWorkspaceDictionaryList(
-			IWorkSpace workspace, WorkspaceDTO workspaceDTO)
-					throws QuadrigaStorageException {
-		List<IWorkspaceDictionary> workspaceDictionaryList = null;
-		if(workspace != null){
-			workspaceDictionaryList = new ArrayList<IWorkspaceDictionary>();
-			List<WorkspaceDictionaryDTO> wsDictionaryDTOList = workspaceDTO.getWorkspaceDictionaryDTOList();
-			if(wsDictionaryDTOList != null){
-				for(WorkspaceDictionaryDTO wsDictionaryDTO : wsDictionaryDTOList){
-					IDictionary dictionaryProxy = dictionaryShallowMapper.getDictionaryDetails(wsDictionaryDTO.getDictionaryDTO());
-					IWorkspaceDictionary wsDictioanry = wsDictionaryFactory.createWorkspaceDictionaryObject();
-					wsDictioanry.setWorkspace(workspace);
-					wsDictioanry.setDictionary(dictionaryProxy);
-					wsDictioanry.setCreatedBy(wsDictionaryDTO.getCreatedby());
-					wsDictioanry.setCreatedDate(wsDictionaryDTO.getCreateddate());
-					wsDictioanry.setUpdatedBy(wsDictionaryDTO.getUpdatedby());
-					wsDictioanry.setUpdatedDate(wsDictionaryDTO.getUpdateddate());
-					workspaceDictionaryList.add(wsDictioanry);
-				}
-			}
-		}
-		return workspaceDictionaryList;
-	}
-
-
-	@Override
-	public List<IWorkspaceDictionary> getWorkspaceDictionaryList(
-			IDictionary dictionary, DictionaryDTO  dictionaryDTO)
-					throws QuadrigaStorageException {
-		List<IWorkspaceDictionary> workspaceDictionaryList = null;
-		List<WorkspaceDictionaryDTO> workspaceDictionaryDTOList = dictionaryDTO.getWsDictionaryDTOList();
-		if(workspaceDictionaryDTOList != null){
-			for( WorkspaceDictionaryDTO workspaceDictionaryDTO : workspaceDictionaryDTOList){
-				if(workspaceDictionaryList == null){
-					workspaceDictionaryList = new ArrayList<IWorkspaceDictionary>();
-				}
-
-				IWorkSpace workspace = workspaceShallowMapper.mapWorkspaceDTO(workspaceDictionaryDTO.getWorkspaceDTO());
-				IWorkspaceDictionary wsDictioanry = wsDictionaryFactory.createWorkspaceDictionaryObject();
-				wsDictioanry.setWorkspace(workspace);
-				wsDictioanry.setDictionary(dictionary);
-				wsDictioanry.setCreatedBy(workspaceDictionaryDTO.getCreatedby());
-				wsDictioanry.setCreatedDate(workspaceDictionaryDTO.getCreateddate());
-				wsDictioanry.setUpdatedBy(workspaceDictionaryDTO.getUpdatedby());
-				wsDictioanry.setUpdatedDate(workspaceDictionaryDTO.getUpdateddate());
-				workspaceDictionaryList.add(wsDictioanry);
-
-			}
-		}
-
-		return workspaceDictionaryList;
-	}
+        return workspaces;
+    }
 
 }

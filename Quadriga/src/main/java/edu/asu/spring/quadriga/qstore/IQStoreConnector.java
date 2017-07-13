@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.qstore;
 
 import java.util.concurrent.Future;
 
-import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
 import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;

@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -155,13 +155,13 @@ public class RetrieveProjectController {
         IProject project = projectManager.getProjectDetails(projectid);
 
         // retrieve all the workspaces associated with the project
-        List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectid, userName);
+        List<IWorkspace> workspaceList = wsManager.listActiveWorkspace(projectid, userName);
 
-        List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
+        List<IWorkspace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
-        List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
+        List<IWorkspace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
 
-        List<IWorkSpace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
+        List<IWorkspace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
 
         int deactivatedWSSize = deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
 

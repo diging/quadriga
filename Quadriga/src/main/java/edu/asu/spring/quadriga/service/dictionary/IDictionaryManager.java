@@ -7,8 +7,8 @@ import org.codehaus.jettison.json.JSONException;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.dictionary.impl.Item;
 import edu.asu.spring.quadriga.domain.impl.WordpowerReply.DictionaryEntry;
-import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 

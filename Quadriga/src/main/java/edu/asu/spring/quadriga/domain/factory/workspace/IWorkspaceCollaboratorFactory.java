@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.domain.factory.workspace;
 
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkspaceCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.domain.workspace.impl.WorkspaceCollaborator;
 
 public interface IWorkspaceCollaboratorFactory {
 

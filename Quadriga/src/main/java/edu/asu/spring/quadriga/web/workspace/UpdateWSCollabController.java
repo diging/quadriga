@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -116,7 +116,7 @@ public class UpdateWSCollabController {
         // create model view
         model = new ModelAndView("auth/workbench/workspace/updatecollaborators");
         String userName = principal.getName();
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
 
         // retrieve the list of Collaborators and their roles.
         collaboratorList = collaboratorFormManager.modifyWorkspaceCollaboratorManager(workspaceid);
@@ -160,7 +160,7 @@ public class UpdateWSCollabController {
         // create model view
         if (result.hasErrors()) {
             // add the workspace details
-            IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, principal.getName());
+            IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceid, principal.getName());
             model.addAttribute("workspacename", workspace.getWorkspaceName());
             model.addAttribute("workspacedesc", workspace.getDescription());
 

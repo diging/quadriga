@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -42,7 +41,7 @@ public class NetworkAuthorization implements IAuthorization {
             networkId = (String) accessObject;
         } else {
             try {
-                INetwork nwObj = (Network) accessObject;
+                INetwork nwObj = (INetwork) accessObject;
                 networkId = nwObj.getNetworkId();
             } catch (ClassCastException cce) {
                 throw new IllegalObjectException(cce);
