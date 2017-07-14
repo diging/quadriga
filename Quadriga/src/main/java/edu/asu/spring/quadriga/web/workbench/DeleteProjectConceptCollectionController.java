@@ -19,19 +19,15 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class DeleteProjectConceptCollectionController {
-
-    @Autowired
-    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private IProjectConceptCollectionManager projectConceptCollectionManager;
@@ -42,10 +38,10 @@ public class DeleteProjectConceptCollectionController {
     @InjectProjectById
     public String deleteProjectConceptCollection(@ProjectIdentifier @PathVariable("projectid") String projectid, Model model,@InjectProject IProject project,
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
-        List<IProjectConceptCollection> projectConceptCollectionList = projectConceptCollectionManager
-                .listProjectConceptCollection(projectid);
+        List<IConceptCollection> collections = projectConceptCollectionManager
+                .getConceptCollections(projectid);
 
-        model.addAttribute("projectConceptCollectionList", projectConceptCollectionList);
+        model.addAttribute("collections", collections);
         model.addAttribute("project", project);
         model.addAttribute("projectid", projectid);
         return "auth/workbench/project/deleteconceptcollections";

@@ -21,19 +21,19 @@ import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.Concept;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workbench.impl.Project;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
+import edu.asu.spring.quadriga.domain.workspace.impl.Workspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.conceptcollection.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.impl.ConceptCollectionManager;
-import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 public class ConceptCollectionManagerTest {
@@ -63,7 +63,7 @@ public class ConceptCollectionManagerTest {
     @InjectMocks
     private ConceptCollectionManager conceptCollectionManagerUnderTest;
 
-    private Concept concept;
+    private IConcept concept;
 
     @Before
     public void setUp() throws QuadrigaStorageException {
@@ -96,18 +96,18 @@ public class ConceptCollectionManagerTest {
         Mockito.when(cpConnector.search("item", "pos")).thenReturn(rep);
         Mockito.when(cpConnector.getById("id")).thenReturn(rep);
 
-        IWorkSpace workspace = new WorkSpace();
+        IWorkspace workspace = new Workspace();
         workspace.setWorkspaceId("w-id");
         workspace.setWorkspaceName("w-name");
 
-        IWorkSpace workspace2 = new WorkSpace();
+        IWorkspace workspace2 = new Workspace();
         workspace2.setWorkspaceId("w-id2");
         workspace2.setWorkspaceName("w-name2");
 
-        List<IWorkSpace> ccWorkspaceList = new ArrayList<IWorkSpace>();
+        List<IWorkspace> ccWorkspaceList = new ArrayList<IWorkspace>();
         ccWorkspaceList.add(workspace);
 
-        List<IWorkSpace> ccWorkspaceList2 = new ArrayList<IWorkSpace>();
+        List<IWorkspace> ccWorkspaceList2 = new ArrayList<IWorkspace>();
         ccWorkspaceList2.add(workspace);
         ccWorkspaceList2.add(workspace2);
         Mockito.when(mockedwsManager.listActiveWorkspace("id", "username")).thenReturn(ccWorkspaceList2);
@@ -156,7 +156,7 @@ public class ConceptCollectionManagerTest {
 
     @Test
     public void showCollaboratingUsersTest() throws QuadrigaStorageException {
-        ConceptCollection conceptCollection = new ConceptCollection();
+        IConceptCollection conceptCollection = new ConceptCollection();
         List<IConceptCollectionCollaborator> collabList = new ArrayList<IConceptCollectionCollaborator>();
 
         ConceptCollectionCollaborator col = new ConceptCollectionCollaborator();
@@ -182,7 +182,7 @@ public class ConceptCollectionManagerTest {
     @Test
     public void updateTest() throws QuadrigaStorageException {
 
-        ConceptCollection conceptCollection = new ConceptCollection();
+        IConceptCollection conceptCollection = new ConceptCollection();
         conceptCollection.setConceptCollectionId("id");
         conceptCollectionManagerUnderTest.update(new String[] { "id" }, conceptCollection, "username");
         assertEquals("test-lemma", concept.getLemma());

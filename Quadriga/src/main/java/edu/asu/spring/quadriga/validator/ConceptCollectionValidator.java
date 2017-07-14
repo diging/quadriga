@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollection;
 
 /**
  * This class verifies if the concept collection name and description are empty. 

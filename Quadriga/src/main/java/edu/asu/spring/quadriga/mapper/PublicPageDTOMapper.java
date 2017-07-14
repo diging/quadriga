@@ -2,8 +2,8 @@ package edu.asu.spring.quadriga.mapper;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.impl.workbench.PublicPage;
 import edu.asu.spring.quadriga.domain.workbench.IPublicPage;
+import edu.asu.spring.quadriga.domain.workbench.impl.PublicPage;
 import edu.asu.spring.quadriga.dto.PublicPageDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 

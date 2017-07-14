@@ -18,18 +18,14 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ListProjectDictionaryController {
-
-    @Autowired
-    IRetrieveProjectManager projectManager;
 
     @Autowired
     private IProjectDictionaryManager projectDictionaryManager;
@@ -42,8 +38,8 @@ public class ListProjectDictionaryController {
     public String listProjectDictionary(HttpServletRequest req,
             @ProjectIdentifier @PathVariable("projectid") String projectid, @InjectProject IProject project,
             Model model, Principal principal) throws QuadrigaStorageException {
-        List<IProjectDictionary> dicitonaryList = projectDictionaryManager.listProjectDictionary(projectid);
-        model.addAttribute("dicitonaryList", dicitonaryList);
+        List<IDictionary> dictionaries = projectDictionaryManager.getDictionaries(projectid);
+        model.addAttribute("dictionaries", dictionaries);
         model.addAttribute("project", project);
         return "auth/workbench/project/dictionaries";
     }

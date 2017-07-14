@@ -10,11 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
-import edu.asu.spring.quadriga.domain.impl.networks.PrintedRepresentationType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermPartType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermType;
+import edu.asu.spring.quadriga.domain.network.impl.AppellationEventType;
+import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
+import edu.asu.spring.quadriga.domain.network.impl.PrintedRepresentationType;
+import edu.asu.spring.quadriga.domain.network.impl.TermPartType;
+import edu.asu.spring.quadriga.domain.network.impl.TermType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 
 @Service

@@ -16,8 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
@@ -47,10 +47,10 @@ public class DeleteWorkspaceDictionaryController {
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
-        List<IWorkspaceDictionary> dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId,
+        List<IDictionary> dictionaries = workspaceDictionaryManager.getDictionaries(workspaceId,
                 userId);
-        model.addAttribute("dicitonaryList", dicitonaryList);
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
+        model.addAttribute("dictionaries", dictionaries);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("workspaceId", workspaceId);
         return "auth/workbench/workspace/deletedictionaries";

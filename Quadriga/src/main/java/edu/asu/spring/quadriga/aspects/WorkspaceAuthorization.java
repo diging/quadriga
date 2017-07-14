@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -22,9 +22,9 @@ import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
- * Service level Implementation of {@link IAuthorization} for {@link IWorkSpace}
+ * Service level Implementation of {@link IAuthorization} for {@link IWorkspace}
  * . This class specifically works on authorization check of user for
- * {@link IWorkSpace} access.
+ * {@link IWorkspace} access.
  * 
  * @author Kiran kumar
  *
@@ -49,19 +49,19 @@ public class WorkspaceAuthorization implements IAuthorization {
 
         // fetch the details of the workspace
 
-        IWorkSpace workspace;
+        IWorkspace workspace;
 
         if (workspaceObj instanceof String) {
             String workspaceId = (String) workspaceObj;
             workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
         } else {
             try {
-                workspace = (IWorkSpace) workspaceObj;
+                workspace = (IWorkspace) workspaceObj;
             } catch (ClassCastException cce) {
                 throw new IllegalObjectException(cce);
             }
         }
-        IProject project = workspace.getProjectWorkspace().getProject();
+        IProject project = workspace.getProject();
         List<String> projects = new ArrayList<String>();
         projects.add(project.getProjectId());
         boolean isProjectOwnerOrAdmin = projectAuthorization.chkAuthorization(userName, projects,

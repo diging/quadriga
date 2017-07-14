@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.transform.ITransformFilesDAO;
-import edu.asu.spring.quadriga.domain.impl.networks.Transformation;
+import edu.asu.spring.quadriga.domain.network.impl.Transformation;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
 import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;

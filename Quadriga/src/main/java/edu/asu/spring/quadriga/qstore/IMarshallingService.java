@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.qstore;
 
 import javax.xml.bind.JAXBException;
 
-import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
 
 public interface IMarshallingService {
 

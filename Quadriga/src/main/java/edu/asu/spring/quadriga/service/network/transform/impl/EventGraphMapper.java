@@ -8,14 +8,14 @@ import java.util.Set;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
-import edu.asu.spring.quadriga.domain.impl.networks.PrintedRepresentationType;
-import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
-import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermPartType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermType;
+import edu.asu.spring.quadriga.domain.network.impl.AppellationEventType;
+import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
+import edu.asu.spring.quadriga.domain.network.impl.PrintedRepresentationType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationType;
+import edu.asu.spring.quadriga.domain.network.impl.SubjectObjectType;
+import edu.asu.spring.quadriga.domain.network.impl.TermPartType;
+import edu.asu.spring.quadriga.domain.network.impl.TermType;
 
 /**
  * This class takes Event-based graphs created with Vogon and

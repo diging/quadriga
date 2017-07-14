@@ -21,7 +21,6 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
@@ -40,24 +39,16 @@ public class TransformProjectsController {
     @Autowired
     private ITransformationManager transformManager;
 
-    
     @Autowired
     private INetworkManager networkManager;
-    
+
     @Autowired
     private IRetrieveProjectManager retrieveProjectManager;
 
     @Autowired
-    private IEditorManager editorManager;
-
-    @Autowired
     private IUserManager userManager;
 
-    @Autowired
-    private IProject projectManager;
-
-    private static final Logger logger = LoggerFactory
-            .getLogger(TransformProjectsController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransformProjectsController.class);
 
     /**
      * List networks assigned to a User
@@ -67,49 +58,44 @@ public class TransformProjectsController {
      * @return
      * @throws QuadrigaStorageException
      */
-    @RequestMapping(value = "auth/transformation", method = RequestMethod.GET )
-    public String listTransformations(ModelMap model, Principal principal)
-            throws QuadrigaStorageException {
+    @RequestMapping(value = "auth/transformation", method = RequestMethod.GET)
+    public String listTransformations(ModelMap model, Principal principal) throws QuadrigaStorageException {
         IUser user = userManager.getUser(principal.getName());
         Set<IProject> projects = new HashSet<>();
         Map<String, List<INetwork>> networkMap = new HashMap<>();
-        List<IProject> retrievedProjects=new ArrayList<IProject>();
+        List<IProject> retrievedProjects = new ArrayList<IProject>();
         try {
-            retrievedProjects=retrieveProjectManager.getProjectList(user.getUserName());
+            retrievedProjects = retrieveProjectManager.getProjectList(user.getUserName());
             if (retrievedProjects == null) {
                 retrievedProjects = new ArrayList<IProject>();
             }
         } catch (QuadrigaStorageException e) {
             logger.error("Error fetching list of approved networks", e);
             model.addAttribute("show_error_alert", true);
-            model.addAttribute("error_alert_msg",
-                    "There was an error retrieving the list of approved networks.");
+            model.addAttribute("error_alert_msg", "There was an error retrieving the list of approved networks.");
             return "auth/transformation";
         }
         List<INetwork> networks = new ArrayList<INetwork>();
-        for(IProject retrievedProj: retrievedProjects){
-        	networks.addAll(networkManager.getNetworksInProject(retrievedProj.getProjectId(), INetworkStatus.APPROVED));
+        for (IProject retrievedProj : retrievedProjects) {
+            networks.addAll(networkManager.getNetworksInProject(retrievedProj.getProjectId(), INetworkStatus.APPROVED));
         }
-        
+
         List<INetwork> allNetworkList = new ArrayList<INetwork>();
-        for(INetwork individualNetworks: networks){
-          	if(individualNetworks.getStatus().equalsIgnoreCase("APPROVED")){
-        		allNetworkList.add(individualNetworks);
-          	}
+        for (INetwork individualNetworks : networks) {
+            if (individualNetworks.getStatus().equalsIgnoreCase("APPROVED")) {
+                allNetworkList.add(individualNetworks);
+            }
         }
-        
+
         for (INetwork network : allNetworkList) {
-            IProject project = network.getNetworkWorkspace().getWorkspace()
-                    .getProjectWorkspace().getProject();
+            IProject project = network.getWorkspace().getProject();
             if (networkMap.get(project.getProjectName()) == null) {
-                networkMap.put(project.getProjectName(),
-                        new ArrayList<INetwork>());
+                networkMap.put(project.getProjectName(), new ArrayList<INetwork>());
                 projects.add(project);
             }
             networkMap.get(project.getProjectName()).add(network);
         }
-        List<TransformFilesDTO> transformationsList = transformManager
-                .getTransformationsList();
+        List<TransformFilesDTO> transformationsList = transformManager.getTransformationsList();
         model.addAttribute("projects", projects);
         model.addAttribute("networkMap", networkMap);
         model.addAttribute("transformationsList", transformationsList);

@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.impl.Workspace;
 
 /**
  * This method validates if the workspace name and description
@@ -18,7 +18,7 @@ public class WorkspaceValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
-		return arg0.isAssignableFrom(WorkSpace.class);
+		return arg0.isAssignableFrom(Workspace.class);
 	}
 
 	@Override

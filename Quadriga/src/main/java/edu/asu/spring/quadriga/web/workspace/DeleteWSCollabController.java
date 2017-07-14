@@ -20,7 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -59,7 +59,7 @@ public class DeleteWSCollabController {
         model = new ModelAndView("auth/workbench/workspace/deletecollaborators");
 
         String userName = principal.getName();
-        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceid, userName);
+        IWorkspace workspace = workspaceManager.getWorkspaceDetails(workspaceid, userName);
 
         // fetch all the collaborating users and their roles
         collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
@@ -91,7 +91,7 @@ public class DeleteWSCollabController {
             throws QuadrigaStorageException, QuadrigaAccessException {
 
         String loggedInUser = principal.getName();
-        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceid, loggedInUser);
+        IWorkspace workspace = workspaceManager.getWorkspaceDetails(workspaceid, loggedInUser);
 
         // fetch the selected values
         String[] values = req.getParameterValues("wscollabchecked");

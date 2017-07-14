@@ -34,7 +34,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -132,7 +132,7 @@ public class AddWSCollabController {
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addcollaborators");
         String userName = principal.getName();
 
-        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceid, userName);
+        IWorkspace workspace = workspaceManager.getWorkspaceDetails(workspaceid, userName);
 
         // adding the collaborator model
         ICollaborator collaborator = collaboratorFactory.createCollaborator();
@@ -199,7 +199,7 @@ public class AddWSCollabController {
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addcollaborators");
         String userName = principal.getName();
 
-        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceid, userName);
+        IWorkspace workspace = workspaceManager.getWorkspaceDetails(workspaceid, userName);
         model.getModelMap().put("workspacename", workspace.getWorkspaceName());
         model.getModelMap().put("workspacedesc", workspace.getDescription());
 

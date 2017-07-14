@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.conceptcollection.mapper.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,20 +19,18 @@ import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.Concept;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionCollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionConceptFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
 import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.User;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionConcepts;
-import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
@@ -40,6 +39,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.conceptcollection.impl.ConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceCCShallowMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -75,10 +75,6 @@ public class ConceptCollectionDeepMapperTest {
 
     @Mock
     private IConceptFactory mockedConceptFactory = Mockito.mock(IConceptFactory.class);
-
-    @Mock
-    private IConceptCollectionConceptFactory mockedccConceptsFactory = Mockito
-            .mock(IConceptCollectionConceptFactory.class);
 
     @InjectMocks
     private ConceptCollectionDeepMapper conceptCollectionDeepMapperUnderTest;
@@ -135,8 +131,8 @@ public class ConceptCollectionDeepMapperTest {
         assertEquals("collectionname", col.getConceptCollectionName());
         assertEquals("test@gmail.com", col.getOwner().getEmail());
         assertEquals("username", col.getOwner().getUserName());
-        assertEquals("lemma", col.getConceptCollectionConcepts().get(0).getConcept().getLemma());
-        assertEquals("concept", col.getConceptCollectionConcepts().get(0).getConcept().getConceptId());
+        assertEquals("lemma", col.getConcepts().get(0).getLemma());
+        assertEquals("concept", col.getConcepts().get(0).getConceptId());
 
     }
 
@@ -154,13 +150,11 @@ public class ConceptCollectionDeepMapperTest {
         Mockito.when(mockedUserDeepMapper.getUser("test name")).thenReturn(user);
         Mockito.when(mockedProjectCCShallowMapper.getProjectConceptCollectionList(
                 Matchers.any(ConceptCollectionDTO.class), Matchers.any(IConceptCollection.class)))
-                .thenReturn(new ArrayList<IProjectConceptCollection>());
-        Mockito.when(mockedWorkspaceCCShallowMapper.getWorkspaceConceptCollectionList(
+                .thenReturn(new ArrayList<IProject>());
+        Mockito.when(mockedWorkspaceCCShallowMapper.getWorkspaces(
                 Matchers.any(IConceptCollection.class), Matchers.any(ConceptCollectionDTO.class)))
-                .thenReturn(new ArrayList<IWorkspaceConceptCollection>());
+                .thenReturn(new ArrayList<IWorkspace>());
         Mockito.when(mockedConceptFactory.createConceptObject()).thenReturn(new Concept());
-        Mockito.when(mockedccConceptsFactory.createConceptCollectionConceptsObject())
-                .thenReturn(new ConceptCollectionConcepts());
     }
 
     @Test
@@ -209,7 +203,7 @@ public class ConceptCollectionDeepMapperTest {
         setMockConditionsCollaboratorListTest(collaboratorRole);
 
         ccDTO.setConceptCollectionCollaboratorDTOList(collabList);
-        ConceptCollection conceptCollection = new ConceptCollection();
+        IConceptCollection conceptCollection = new ConceptCollection();
         conceptCollection.setConceptCollectionId(ccDTO.getConceptCollectionid());
         conceptCollection.setConceptCollectionName(ccDTO.getCollectionname());
         conceptCollection.setDescription(ccDTO.getDescription());
