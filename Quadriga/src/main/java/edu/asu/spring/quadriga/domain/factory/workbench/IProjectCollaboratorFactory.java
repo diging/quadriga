@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.domain.factory.workbench;
 
-import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.domain.workbench.impl.ProjectCollaborator;
 
 public interface IProjectCollaboratorFactory {
 

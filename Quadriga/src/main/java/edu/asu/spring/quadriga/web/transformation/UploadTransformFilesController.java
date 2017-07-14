@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.impl.workspace.TransformationFile;
+import edu.asu.spring.quadriga.domain.workspace.impl.TransformationFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -44,8 +42,6 @@ public class UploadTransformFilesController {
 
     @Autowired
     private TransfomationFilesValidator validator;
-
-    private static final Logger logger = LoggerFactory.getLogger(UploadTransformFilesController.class);
 
     @InitBinder("transformationFilesBackingBean")
     protected void initBinder(WebDataBinder binder) {

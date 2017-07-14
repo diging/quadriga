@@ -82,7 +82,7 @@
 </div>
 
 <c:choose>
-	<c:when test="${not empty projectConceptCollectionList}">
+	<c:when test="${not empty collections}">
 		<form method="POST">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="panel panel-default" style="margin-top: 20px;">
@@ -109,18 +109,17 @@
 					</thead>
 
 					<tbody>
-						<c:forEach var="projectConceptCollection"
-							items="${projectConceptCollectionList}">
+						<c:forEach var="collection"
+							items="${collections}">
 							<tr>
-								<td width="10%"><input type="checkbox" class="selected"
-									name="selected"
-									value='<c:out value="${projectConceptCollection.conceptCollection.conceptCollectionId}"></c:out>' /></td>
+								<td width="10%"><input type="checkbox" class="selected" name="selected"
+									value='<c:out value="${collection.conceptCollectionId}"></c:out>' /></td>
 								<td width="30%"><input name="items" type="hidden"
-									value="<c:out value="${projectConceptCollection.conceptCollection.conceptCollectionName}"></c:out>" />
+									value="<c:out value="${collection.conceptCollectionName}"></c:out>" />
 									<c:out
-										value="${projectConceptCollection.conceptCollection.conceptCollectionName}"></c:out></td>
+										value="${collection.conceptCollectionName}"></c:out></td>
 								<td><c:out
-										value="${projectConceptCollection.conceptCollection.description}"></c:out></td>
+										value="${collection.description}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 /**
  * Interface to implement Dictionary.
@@ -40,14 +40,6 @@ public interface IDictionary
 		
 	public abstract void setDictionaryItems(List<IDictionaryItems> dictionaryItems) throws QuadrigaStorageException;
 	
-	public abstract List<IProjectDictionary> getDictionaryProjects() throws QuadrigaStorageException;
-	
-	public abstract void setDictionaryProjects(List<IProjectDictionary> dictionaryProjects) throws QuadrigaStorageException;
-	
-	public abstract List<IWorkspaceDictionary> getDictionaryWorkspaces() throws QuadrigaStorageException;
-	
-	public abstract void setDictionaryWorkspaces(List<IWorkspaceDictionary> dictionaryWorkspaces) throws QuadrigaStorageException;
-	
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);
@@ -63,4 +55,12 @@ public interface IDictionary
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updatedDate);
+
+    void setWorkspaces(List<IWorkspace> workspaces);
+
+    List<IWorkspace> getWorkspaces();
+
+    void setProjects(List<IProject> projects);
+
+    List<IProject> getProjects();
 }

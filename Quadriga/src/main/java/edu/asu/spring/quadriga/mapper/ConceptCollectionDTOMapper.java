@@ -23,89 +23,82 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 
 @Service
-public class ConceptCollectionDTOMapper extends BaseMapper
-{
-	
-	@Autowired
-	private IConceptCollectionFactory conceptCollectionFactory;
-	
-	@Autowired
-	private IConceptFactory conceptFactory;
-	
-	@Autowired
-	private ICollaboratorFactory collaboratorFactory;
-	
-	@Autowired
-	private UserDTOMapper userDTOMapper;
-	
-	@Autowired
-	private IQuadrigaRoleManager roleManager;
-	
-	public IConcept getConceptCollectionItems(ConceptsDTO conceptDTO)
-	{
-		IConcept concept = null;
-		concept = conceptFactory.createConceptObject();
-		concept.setConceptId(conceptDTO.getItem());
-		concept.setDescription(conceptDTO.getDescription());
-		concept.setLemma(conceptDTO.getLemma());
-		concept.setPos(conceptDTO.getPos());
-		return concept;
-	}
-	public List<IConcept> getConceptCollectionItemList(List<ConceptsDTO> conceptsList)
-	{
-		List<IConcept> conceptList = new ArrayList<IConcept>();
-		if(conceptsList != null && conceptsList.size() > 0)
-		{
-			Iterator<ConceptsDTO> ccItemsIterator = conceptsList.iterator();
-			while(ccItemsIterator.hasNext())
-			{
-				conceptList.add(getConceptCollectionItems(ccItemsIterator.next()));
-			}	
-		}
-		return conceptList;
-	}
-	
-	public ICollaborator getConceptCollectionCollaborators(ConceptCollectionCollaboratorDTO conceptCollectionCollaborator)
-	{
-		ICollaborator collaborator = null;
-		List<IQuadrigaRole> collaboratorRoles = null;
-		
-		collaborator = collaboratorFactory.createCollaborator();
-		collaboratorRoles = new ArrayList<IQuadrigaRole>();
-		
-		QuadrigaUserDTO userName = conceptCollectionCollaborator.getQuadrigaUserDTO();
-		String role = conceptCollectionCollaborator.getCollaboratorDTOPK().getCollaboratorrole();
-		
-		collaboratorRoles.add(roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, role));     
-		
-		collaborator.setUserObj(userDTOMapper.getUser(userName));
-		collaborator.setCollaboratorRoles(collaboratorRoles);
-        //TODO : add collaborator description
-		
-		return collaborator;
-	}
-	
-	/**
-	 * 
-	 * Returns ConceptcollectionsDTO mapped to Conceptcollection
-	 * @param conceptCollection
-	 * @return ConceptcollectionsDTO
-	 * @author Karthik Jayaraman
-	 * 
-	 */
-	public ConceptCollectionDTO getConceptCollectionDTO(IConceptCollection conceptCollection) throws QuadrigaStorageException
-	{
-		ConceptCollectionDTO conceptcollectionsDTO = new ConceptCollectionDTO();
-		conceptcollectionsDTO.setUpdatedby(conceptCollection.getOwner().getUserName());
-		conceptcollectionsDTO.setUpdateddate(new Date());
-		conceptcollectionsDTO.setCreatedby(conceptCollection.getOwner().getUserName());
-		conceptcollectionsDTO.setCreateddate(new Date());
-		conceptcollectionsDTO.setCollectionname(conceptCollection.getConceptCollectionName());
-		conceptcollectionsDTO.setDescription(conceptCollection.getDescription());
-		conceptcollectionsDTO.setCollectionname(conceptCollection.getConceptCollectionName());
-		conceptcollectionsDTO.setCollectionowner(getUserDTO(conceptCollection.getOwner().getUserName()));
-		conceptcollectionsDTO.setAccessibility(Boolean.FALSE);
-		return conceptcollectionsDTO;
-	}
-	
+public class ConceptCollectionDTOMapper extends BaseMapper {
+
+    @Autowired
+    private IConceptFactory conceptFactory;
+
+    @Autowired
+    private ICollaboratorFactory collaboratorFactory;
+
+    @Autowired
+    private UserDTOMapper userDTOMapper;
+
+    @Autowired
+    private IQuadrigaRoleManager roleManager;
+
+    public IConcept getConcept(ConceptsDTO conceptDTO) {
+        IConcept concept = conceptFactory.createConceptObject();
+        concept.setConceptId(conceptDTO.getItem());
+        concept.setDescription(conceptDTO.getDescription());
+        concept.setLemma(conceptDTO.getLemma());
+        concept.setPos(conceptDTO.getPos());
+        return concept;
+    }
+
+    public List<IConcept> getConceptCollectionItemList(List<ConceptsDTO> conceptsList) {
+        List<IConcept> conceptList = new ArrayList<IConcept>();
+        if (conceptsList != null && conceptsList.size() > 0) {
+            Iterator<ConceptsDTO> ccItemsIterator = conceptsList.iterator();
+            while (ccItemsIterator.hasNext()) {
+                conceptList.add(getConcept(ccItemsIterator.next()));
+            }
+        }
+        return conceptList;
+    }
+
+    public ICollaborator getConceptCollectionCollaborators(
+            ConceptCollectionCollaboratorDTO conceptCollectionCollaborator) {
+        ICollaborator collaborator = null;
+        List<IQuadrigaRole> collaboratorRoles = null;
+
+        collaborator = collaboratorFactory.createCollaborator();
+        collaboratorRoles = new ArrayList<IQuadrigaRole>();
+
+        QuadrigaUserDTO userName = conceptCollectionCollaborator.getQuadrigaUserDTO();
+        String role = conceptCollectionCollaborator.getCollaboratorDTOPK().getCollaboratorrole();
+
+        collaboratorRoles.add(roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, role));
+
+        collaborator.setUserObj(userDTOMapper.getUser(userName));
+        collaborator.setCollaboratorRoles(collaboratorRoles);
+        // TODO : add collaborator description
+
+        return collaborator;
+    }
+
+    /**
+     * 
+     * Returns ConceptcollectionsDTO mapped to Conceptcollection
+     * 
+     * @param conceptCollection
+     * @return ConceptcollectionsDTO
+     * @author Karthik Jayaraman
+     * 
+     */
+    public ConceptCollectionDTO getConceptCollectionDTO(IConceptCollection conceptCollection)
+            throws QuadrigaStorageException {
+        ConceptCollectionDTO conceptcollectionsDTO = new ConceptCollectionDTO();
+        conceptcollectionsDTO.setUpdatedby(conceptCollection.getOwner().getUserName());
+        conceptcollectionsDTO.setUpdateddate(new Date());
+        conceptcollectionsDTO.setCreatedby(conceptCollection.getOwner().getUserName());
+        conceptcollectionsDTO.setCreateddate(new Date());
+        conceptcollectionsDTO.setCollectionname(conceptCollection.getConceptCollectionName());
+        conceptcollectionsDTO.setDescription(conceptCollection.getDescription());
+        conceptcollectionsDTO.setCollectionname(conceptCollection.getConceptCollectionName());
+        conceptcollectionsDTO.setCollectionowner(getUserDTO(conceptCollection.getOwner().getUserName()));
+        conceptcollectionsDTO.setAccessibility(Boolean.FALSE);
+        return conceptcollectionsDTO;
+    }
+
 }

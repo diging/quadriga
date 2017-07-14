@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
-import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.mapper.conceptcollection.IConceptCollectionShallowMapper;
 
 /**
  * @author karthik

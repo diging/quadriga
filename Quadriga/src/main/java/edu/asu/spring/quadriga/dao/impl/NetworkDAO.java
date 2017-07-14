@@ -6,11 +6,7 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
 import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
-import org.hibernate.Transaction;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,11 +14,9 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.IEditorDAO;
 import edu.asu.spring.quadriga.dao.INetworkDAO;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkspaceNetwork;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
@@ -689,14 +683,13 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             query.setParameter("assigneduser", user.getUserName());
             query.setParameterList("status", networkStatus);
 
-            @SuppressWarnings("unchecked")
             List<NetworksDTO> listNetworksDTO = query.list();
             for (NetworksDTO networkDto : listNetworksDTO) {
                 INetwork network = networkMapper.getNetwork(networkDto);
                 NetworkWorkspaceDTO nwDto = networkDto.getNetworkWorkspace();
                 WorkspaceDTO wsDto = nwDto.getWorkspaceDTO();
-                IWorkSpace workspace = workspaceMapper.getWorkSpace(wsDto);
-                networkMapper.mapWorkspaceNetworkDTO(nwDto, network, workspace);
+                IWorkspace workspace = workspaceMapper.getWorkSpace(wsDto);
+                network.setWorkspace(workspace);
                 networkList.add(network);
             }
 
@@ -708,23 +701,8 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
                 query.setParameter("networkid", network.getNetworkId());
                 query.setParameter("status", INetworkStatus.ASSIGNED);
                 NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query.uniqueResult();
-                if (networkAssignedDTO != null)
+                if (networkAssignedDTO != null) {
                     network.setAssignedUser(networkAssignedDTO.getNetworkAssignedDTOPK().getAssigneduser());
-
-                // Get the project id associated with the workspace id
-                query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
-                query.setParameter("workspaceid", network.getNetworkWorkspace().getWorkspace().getWorkspaceId());
-                ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
-
-                if (projectWorkspaceDTO != null) {
-                    if (projectWorkspaceDTO.getWorkspaceDTO() != null) {
-                        IWorkspaceNetwork workspaceNetwork = new WorkspaceNetwork();
-                        workspaceNetwork
-                                .setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
-                        workspaceNetwork.setNetwork(network);
-                        network.setNetworkWorkspace(workspaceNetwork);
-                    }
-
                 }
             }
 

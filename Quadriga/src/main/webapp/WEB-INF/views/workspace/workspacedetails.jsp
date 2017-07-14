@@ -223,7 +223,7 @@ cursor: pointer;
         <hr>
         <!-- Display Networks -->
         <c:choose>
-            <c:when test="${not empty networkList}">
+            <c:when test="${not empty networks}">
                 <h4>Networks belonging to this workspace:</h4>
 
                 <div class="panel panel-default">
@@ -237,15 +237,15 @@ cursor: pointer;
                         </thead>
 
                         <tbody>
-                            <c:forEach var="network" items="${networkList}">
+                            <c:forEach var="network" items="${networks}">
                                 <tr>
                                     <td width="25%"><a
-                                        href="${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.network.networkId}"><i
+                                        href="${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.networkId}"><i
                                             class="fa fa-star"></i> <c:out
-                                                value="${network.network.networkName}"></c:out></a></td>
+                                                value="${network.networkName}"></c:out></a></td>
                                     <td width="25%"><c:out
-                                            value="${network.network.creator.userName}"></c:out></td>
-                                    <td width="25%"><c:out value="${network.network.status}"></c:out></td>
+                                            value="${network.creator.userName}"></c:out></td>
+                                    <td width="25%"><c:out value="${network.status}"></c:out></td>
 
                                 </tr>
                             </c:forEach>

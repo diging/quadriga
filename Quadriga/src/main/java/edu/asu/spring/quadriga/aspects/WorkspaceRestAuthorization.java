@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.IllegalObjectException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -16,9 +16,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 
 /**
- * Service level Implementation of {@link IAuthorization} for {@link IWorkSpace}
+ * Service level Implementation of {@link IAuthorization} for {@link IWorkspace}
  * for REST APIs. This class specifically works on authorization check of user
- * for {@link IWorkSpace} access.
+ * for {@link IWorkspace} access.
  * 
  * @author Kiran kumar
  *
@@ -35,14 +35,14 @@ public class WorkspaceRestAuthorization implements IAuthorization {
     public boolean chkAuthorization(String userName, Object workspaceObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
 
-        IWorkSpace workspace;
+        IWorkspace workspace;
 
         if (workspaceObj instanceof String) {
             String workspaceId = (String) workspaceObj;
             workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
         } else {
             try {
-                workspace = (IWorkSpace) workspaceObj;
+                workspace = (IWorkspace) workspaceObj;
             } catch (ClassCastException cce) {
                 throw new IllegalObjectException(cce);
             }

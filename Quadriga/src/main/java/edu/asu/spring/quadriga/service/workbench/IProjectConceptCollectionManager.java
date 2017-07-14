@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.service.workbench;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IProjectConceptCollectionManager {
@@ -28,7 +28,7 @@ public interface IProjectConceptCollectionManager {
      * @throws QuadrigaStorageException
      */
 
-    public abstract List<IProjectConceptCollection> listProjectConceptCollection(String projectId)
+    public List<IConceptCollection> getConceptCollections(String projectId)
             throws QuadrigaStorageException;
 
     /**
@@ -39,7 +39,7 @@ public interface IProjectConceptCollectionManager {
      * @return
      * @throws QuadrigaStorageException
      */
-    public abstract void deleteProjectConceptCollection(String projectId, String userId, String conceptCollectionId)
+    public void deleteProjectConceptCollection(String projectId, String userId, String conceptCollectionId)
             throws QuadrigaStorageException;
 
 }

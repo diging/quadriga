@@ -32,31 +32,30 @@ import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
-import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
-import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
-import edu.asu.spring.quadriga.domain.impl.networks.PrintedRepresentationType;
-import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
-import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermPartType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermType;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.impl.AppellationEventType;
+import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
+import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
+import edu.asu.spring.quadriga.domain.network.impl.PredicateType;
+import edu.asu.spring.quadriga.domain.network.impl.PrintedRepresentationType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationType;
+import edu.asu.spring.quadriga.domain.network.impl.SubjectObjectType;
+import edu.asu.spring.quadriga.domain.network.impl.TermPartType;
+import edu.asu.spring.quadriga.domain.network.impl.TermType;
+import edu.asu.spring.quadriga.domain.network.json.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.mapper.networks.INetworkMapper;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.impl.TextOccurance;
 import edu.asu.spring.quadriga.service.network.domain.impl.TextPhrase;
-import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -404,7 +403,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Transactional
     public String storeNetworkDetails(String xml, IUser user, String networkName, String workspaceId,
             String uploadStatus, String networkId, int version, String networkStatus, String externalUserId)
-                    throws JAXBException {
+            throws JAXBException {
         ElementEventsType elementEventType = marshallingService.unMarshalXmlToElementEventsType(xml);
 
         NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
@@ -797,36 +796,17 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     }
 
     @Override
-    public List<IWorkspaceNetwork> editWorkspaceNetworkStatusCode(List<IWorkspaceNetwork> workspaceNetworkList) {
+    public List<INetwork> editNetworkStatusCode(List<INetwork> networks) {
 
-        if (workspaceNetworkList == null) {
-            return workspaceNetworkList;
+        if (networks == null) {
+            return networks;
         }
 
-        Iterator<IWorkspaceNetwork> workspaceNetworkListIterator = workspaceNetworkList.iterator();
-        while (workspaceNetworkListIterator.hasNext()) {
-            IWorkspaceNetwork workspaceNetwork = workspaceNetworkListIterator.next();
-            workspaceNetwork.getNetwork()
-                    .setStatus(getNetworkStatusCode(workspaceNetwork.getNetwork().getStatus()) + "");
-        }
-
-        return workspaceNetworkList;
-    }
-
-    @Override
-    public List<INetwork> editNetworkStatusCode(List<INetwork> networkList) {
-
-        if (networkList == null) {
-            return networkList;
-        }
-
-        Iterator<INetwork> networkListIterator = networkList.iterator();
-        while (networkListIterator.hasNext()) {
-            INetwork network = networkListIterator.next();
+        for (INetwork network : networks) {
             network.setStatus(getNetworkStatusCode(network.getStatus()) + "");
         }
 
-        return networkList;
+        return networks;
     }
 
     @Override

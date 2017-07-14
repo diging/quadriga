@@ -22,8 +22,8 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.dictionary.impl.Item;
 import edu.asu.spring.quadriga.domain.impl.WordpowerReply.DictionaryEntry;
-import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -412,7 +412,6 @@ public class DictionaryItemCollabController {
             @RequestParam("posdropdown") String pos, ModelMap model,
             Principal principal) throws QuadrigaStorageException,
             QuadrigaAccessException {
-        IUser user = usermanager.getUser(principal.getName());
         try {
             List<DictionaryEntry> dictionaryEntryList = null;
             if (!item.equals("")) {
