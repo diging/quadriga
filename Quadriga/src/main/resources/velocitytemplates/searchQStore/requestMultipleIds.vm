@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element_events xmlns="http://digitalhps.org/creationEvents-model"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://digitalhps.org/creationEvents-model QStore4S-GET-schema">
+    #foreach( $id in $ids )
+    <id>$id</id>
+    #end
+</element_events>
