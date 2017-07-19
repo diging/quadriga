@@ -196,6 +196,7 @@ public class QStoreConnector implements IQStoreConnector {
     }
     
     @Override
+    @Cacheable(value = "creationEvents")
     public String getCreationEvents(List<String> ids) throws QuadrigaException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_XML);
