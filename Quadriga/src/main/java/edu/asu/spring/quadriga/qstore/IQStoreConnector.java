@@ -1,6 +1,19 @@
 package edu.asu.spring.quadriga.qstore;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
+
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 
 import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
 import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
@@ -44,5 +57,7 @@ public interface IQStoreConnector {
      * @throws AsyncExecutionException
      */
     Future<String> loadNetworkWithPopularTerms() throws AsyncExecutionException;
+
+    String getCreationEvents(List<String> ids) throws QuadrigaException;
 
 }

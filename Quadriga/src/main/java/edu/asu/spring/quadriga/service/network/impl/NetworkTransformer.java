@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,8 @@ public class NetworkTransformer implements INetworkTransformer {
 
     @Autowired
     private NetworkDownloadService networkDownloadService;
+    
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * 
@@ -52,20 +56,27 @@ public class NetworkTransformer implements INetworkTransformer {
 
         List<ElementEventsType> elementEventsTypeList = networkDownloadService
                 .getElementEventTypes(networkNodeInfoList);
+        
+        
+        Map<String, List<CreationEvent>> eventsById = new HashMap<>();
+        for (ElementEventsType type : elementEventsTypeList) {
+            List<CreationEvent> events = type.getRelationEventOrAppellationEvent();
+            for (CreationEvent event : events) {
+                if (eventsById.get(event.getId()) == null) {
+                    eventsById.put(event.getId(), new ArrayList<>());
+                }
+                eventsById.get(event.getId()).add(event);
+            }
+        }
 
-        // loop through all the elementEventsTypeList and parse the staement
-        // We made sure that networkNodeInfoList and elementEventsTypeList
-        // have same size.
-
-        int index = 0;
         for (INetworkNodeInfo networkNodeInfo : networkNodeInfoList) {
-            ElementEventsType elementEventsType = elementEventsTypeList.get(index++);
-            // Do not proceed if the elementEventsType is null
+            List<CreationEvent> events = eventsById.get(networkNodeInfo.getId());
+            // Do not proceed if there are no events
             // null implies there is some exception while retrieving the dataj
-            if (elementEventsType == null) {
+            if (events == null || events.size() == 0) {
                 continue;
             }
-            parser.parseStatement(networkNodeInfo.getId(), elementEventsType, nodes, links);
+            parser.parseStatement(networkNodeInfo.getId(), events, nodes, links);
         }
 
         // Instead of sending null

@@ -1,11 +1,14 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
@@ -35,12 +38,14 @@ import edu.asu.spring.quadriga.transform.PredicateNode;
 @Service
 public class EventParser {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    
     @Autowired
     private IConceptpowerConnector conceptPowerConnector;
 
     @Autowired
     @Qualifier("jaxbMarshaller")
-    private Jaxb2Marshaller jaxbMarshaller;
+    private Jaxb2Marshaller jaxbMarshaller;    
 
     public void parseStatement(String relationEventId, ElementEventsType elementEventType, Map<String, Node> nodes,
             List<Link> links) {
@@ -52,6 +57,16 @@ public class EventParser {
             parseSubjectOrObjectEvent(event, relationEventId, nodes, links);
         }
 
+    }
+    
+    public void parseStatement(String relationEventId, List<CreationEvent> creationEventList, Map<String, Node> nodes,
+            List<Link> links) {
+        Iterator<CreationEvent> creationEventIterator = creationEventList.iterator();
+
+        while (creationEventIterator.hasNext()) {
+            CreationEvent event = creationEventIterator.next();
+            parseSubjectOrObjectEvent(event, relationEventId, nodes, links);
+        }
     }
 
     public void parseEvents(Stream<CreationEvent> creationEventStream, Map<String, Node> nodes, List<Link> links) {
@@ -172,7 +187,6 @@ public class EventParser {
                 node.setLabel(id);
                 node.setDescription("");
             }
-
         }
         node.getStatementIds().add(statementId);
     }

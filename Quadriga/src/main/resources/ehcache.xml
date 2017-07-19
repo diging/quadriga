@@ -14,7 +14,7 @@
 
 	<cache name="creationEvent" eternal="false" maxElementsInMemory="1000"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
-		timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" />
+		timeToLiveSeconds="1" memoryStoreEvictionPolicy="LRU" /> <!--  21600  -->
 
 	<cache name="appellationEvents" eternal="false"
 		maxElementsInMemory="1000" overflowToDisk="false" diskPersistent="false"

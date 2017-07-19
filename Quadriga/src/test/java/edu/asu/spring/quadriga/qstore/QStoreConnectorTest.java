@@ -34,7 +34,7 @@ import edu.asu.spring.quadriga.qstore.impl.QStoreConnector;
 public class QStoreConnectorTest {
 
     @InjectMocks
-    private QStoreConnector connector;
+    private IQStoreConnector connector;
 
     @Mock
     private Environment env;

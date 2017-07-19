@@ -194,6 +194,48 @@ public class QStoreConnector implements IQStoreConnector {
 
         return response.getBody().toString();
     }
+    
+    @Override
+    public String getCreationEvents(List<String> ids) throws QuadrigaException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_XML);
+
+        // set media types
+        List<MediaType> mediaTypes = new ArrayList<MediaType>();
+        mediaTypes.add(MediaType.APPLICATION_XML);
+        headers.setAccept(mediaTypes);
+
+        String authHeader = getAuthHeader();
+        headers.set("Authorization", authHeader);
+        ResponseEntity<String> response = null;
+
+        logger.debug("URL : " + getQStoreGetURL() + ids.size());
+        
+        Map<String, Object> props = new HashMap<String, Object>();
+        props.put("ids", ids);
+        
+        String payload;
+        try {
+            payload = velocityBuilder.getRenderedTemplate("velocitytemplates/searchQStore/requestMultipleIds.vm", props);
+        } catch (ResourceNotFoundException e1) {
+            throw new QuadrigaException(e1);
+        } catch (ParseErrorException e1) {
+            throw new QuadrigaException(e1);
+        } catch (Exception e1) {
+            // the velocity engine actually throws 'Exception'
+            throw new QuadrigaException(e1);
+        }
+        
+        try {
+            logger.debug("Requesting: " + getQStoreGetURL());
+            HttpEntity<String> body = new HttpEntity<String>(payload, headers);
+            response = restTemplate.exchange(getQStoreGetURL(), HttpMethod.POST, body, String.class);
+        } catch (RestClientException ex) {
+            throw new QStoreStorageException(ex);
+        }
+
+        return response.getBody().toString();
+    }
 
     /*
      * (non-Javadoc)
@@ -204,13 +246,13 @@ public class QStoreConnector implements IQStoreConnector {
      */
     @Override
     public String store(String xml) throws QStoreStorageException {
-        String res = "";
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = buildRestHeader(messageConverters, restTemplate);
         HttpEntity<String> request = new HttpEntity<String>(xml, headers);
 
+        String res = "";
         try {
             // add xml in QStore
             String url = getQStoreAddURL();
