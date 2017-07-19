@@ -4,7 +4,7 @@
 	<defaultCache maxElementsInMemory="50" eternal="false"
 		overflowToDisk="false" memoryStoreEvictionPolicy="LFU" />
 
-	<cache name="concepts" eternal="false" maxElementsInMemory="500"
+	<cache name="concepts" eternal="false" maxElementsInMemory="1000"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
 		timeToLiveSeconds="86400" memoryStoreEvictionPolicy="LRU" />
 
@@ -14,7 +14,11 @@
 
 	<cache name="creationEvent" eternal="false" maxElementsInMemory="1000"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
-		timeToLiveSeconds="1" memoryStoreEvictionPolicy="LRU" /> <!--  21600  -->
+		timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" /> <!--  21600  -->
+	
+	<cache name="creationEvent" eternal="false" maxElementsInMemory="1000"
+        overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+        timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" /> <!--  21600  -->
 
 	<cache name="appellationEvents" eternal="false"
 		maxElementsInMemory="1000" overflowToDisk="false" diskPersistent="false"
