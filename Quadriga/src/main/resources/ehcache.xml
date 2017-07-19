@@ -16,7 +16,7 @@
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
 		timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" /> <!--  21600  -->
 	
-	<cache name="creationEvent" eternal="false" maxElementsInMemory="1000"
+	<cache name="creationEvents" eternal="false" maxElementsInMemory="500"
         overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
         timeToLiveSeconds="21600" memoryStoreEvictionPolicy="LRU" /> <!--  21600  -->
 
