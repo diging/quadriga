@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import = "edu.asu.spring.quadriga.domain.impl.workspace.TextFile" %>
+<%@ page import = "edu.asu.spring.quadriga.domain.workspace.impl.TextFile" %>
 
 <script
     src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/dist/cytoscape.js"></script>
