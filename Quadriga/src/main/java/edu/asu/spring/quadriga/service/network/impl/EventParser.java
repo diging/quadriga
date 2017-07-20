@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.network.impl.AppellationEventType;
@@ -36,12 +39,16 @@ import edu.asu.spring.quadriga.transform.PredicateNode;
  */
 @PropertySource(value = "classpath:/settings.properties")
 @Service
+@Transactional
 public class EventParser {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
     @Autowired
     private IConceptpowerConnector conceptPowerConnector;
+    
+    @Autowired
+    private IConceptpowerCache conceptpowerCache;
 
     @Autowired
     @Qualifier("jaxbMarshaller")
@@ -179,14 +186,23 @@ public class EventParser {
 
         if (node.getConceptId() != null) {
             String id = node.getConceptId();
-            ConceptpowerReply re = conceptPowerConnector.getById(id);
-            if (re != null && re.getConceptEntry().size() != 0) {
-                node.setLabel(getLemma(re));
-                node.setDescription(getDescription(re));
+//            ConceptpowerReply re = conceptPowerConnector.getById(id);
+            IConcept concept = conceptpowerCache.getConceptByUri(id);
+            if (concept != null) {
+                node.setLabel(concept.getWord());
+                node.setDescription(concept.getDescription());
             } else {
                 node.setLabel(id);
                 node.setDescription("");
             }
+            
+//            if (re != null && re.getConceptEntry().size() != 0) {
+//                node.setLabel(getLemma(re));
+//                node.setDescription(getDescription(re));
+//            } else {
+//                node.setLabel(id);
+//                node.setDescription("");
+//            }
         }
         node.getStatementIds().add(statementId);
     }

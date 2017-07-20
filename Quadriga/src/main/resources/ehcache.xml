@@ -4,9 +4,9 @@
 	<defaultCache maxElementsInMemory="50" eternal="false"
 		overflowToDisk="false" memoryStoreEvictionPolicy="LFU" />
 
-	<cache name="concepts" eternal="false" maxElementsInMemory="1000"
+	<cache name="concepts" eternal="false" maxElementsInMemory="500"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
-		timeToLiveSeconds="86400" memoryStoreEvictionPolicy="LRU" />
+		timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" /><!-- 24hrs = 86400 -->
 
 	<cache name="statements" eternal="false" maxElementsInMemory="1000"
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
