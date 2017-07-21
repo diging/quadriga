@@ -20,6 +20,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaGeneratorException;
@@ -33,7 +35,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaGeneratorException;
 public class Generator {
 
 	@Autowired
-    private IConceptpowerConnector connector;
+    private IConceptpowerCache connector;
 	
 	private VelocityEngine engine;
 	
@@ -206,43 +208,35 @@ public class Generator {
 						continue;
 					
 					if (link.getOccurTime() != null) {
-						ConceptpowerReply concept = connector.getById(link
+						IConcept concept = connector.getConceptByUri(link
 								.getOccurTime());
 						if(concept!=null)
-							link.setOccurTime(concept.getConceptEntry().get(0).getLemma());
+							link.setOccurTime(concept.getWord());
 					}
-//					else
-//						link.setOccurTime("");
 					
 					if (link.getStartTime() != null) {
-					    ConceptpowerReply concept = connector.getById(link
+					    IConcept concept = connector.getConceptByUri(link
 								.getStartTime());
 						if(concept!=null) {
-						    link.setStartTime(concept.getConceptEntry().get(0).getLemma());
+						    link.setStartTime(concept.getWord());
 						}
 					}
-//					else
-//						link.setStartTime("");
 					
 					if (link.getEndTime() != null) {
-					    ConceptpowerReply concept = connector.getById(link
+					    IConcept concept = connector.getConceptByUri(link
 								.getEndTime());
 						if(concept!=null) {
-						    link.setEndTime(concept.getConceptEntry().get(0).getLemma());
+						    link.setEndTime(concept.getWord());
 						}
 					}
-//					else
-//						link.setEndTime("");
 					
 					if (link.getPlace() != null) {
-					    ConceptpowerReply concept = connector.getById(link
+					    IConcept concept = connector.getConceptByUri(link
 								.getPlace());
 						if(concept!=null) {
-						    link.setPlace(concept.getConceptEntry().get(0).getLemma());
+						    link.setPlace(concept.getWord());
 						}
 					}
-//					else
-//						link.setPlace("");
 					
 					links.add(link);
 					createList(link.getObject(), nodeList, links, existingIds, mergeConcepts);

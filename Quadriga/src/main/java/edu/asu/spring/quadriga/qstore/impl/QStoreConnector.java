@@ -6,6 +6,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -229,8 +230,10 @@ public class QStoreConnector implements IQStoreConnector {
         
         try {
             logger.debug("Requesting: " + getQStoreGetURL());
+            logger.debug("Starting at: " + new Date().getTime());
             HttpEntity<String> body = new HttpEntity<String>(payload, headers);
             response = restTemplate.exchange(getQStoreGetURL(), HttpMethod.POST, body, String.class);
+            logger.debug("Got response at: " + new Date().getTime());
         } catch (RestClientException ex) {
             throw new QStoreStorageException(ex);
         }

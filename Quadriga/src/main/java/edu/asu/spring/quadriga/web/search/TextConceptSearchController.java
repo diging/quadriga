@@ -11,11 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -33,7 +32,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 public class TextConceptSearchController {
 
     @Autowired
-    private IConceptpowerConnector conceptpowerConnector;
+    private IConceptpowerCache cpCache;
 
     @Autowired
     private IQStoreConnector qStoreConnector;
@@ -59,13 +58,10 @@ public class TextConceptSearchController {
         String conceptUri = conceptId;
 
         if (!conceptId.isEmpty()) {
-            ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
-            List<ConceptEntry> entries = reply.getConceptEntry();
-
-            ConceptEntry entry = null;
-            if (entries != null && !entries.isEmpty()) {
-                entry = entries.get(0);
-                entry.setId(conceptUri);
+            IConcept concept = cpCache.getConceptByUri(conceptId);
+            
+            if (concept != null) {
+                concept.setId(conceptUri);
             }
 
             if (conceptId.startsWith("http://")) {
@@ -80,8 +76,8 @@ public class TextConceptSearchController {
 
                 List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
 
-                if (entry.getWordnetId() != null && !entry.getWordnetId().isEmpty()) {
-                    results = qStoreConnector.searchNodesByConcept(entry.getWordnetId());
+                if (concept.getWordnetIds() != null && !concept.getWordnetIds().isEmpty()) {
+                    results = qStoreConnector.searchNodesByConcept(concept.getWordnetIds().get(0));
                     events = marshallingService.unMarshalXmlToElementEventsType(results);
                     eventList.addAll(events.getRelationEventOrAppellationEvent());
                 }
@@ -132,7 +128,7 @@ public class TextConceptSearchController {
                 
             }            
             
-            model.addAttribute("concept", entry);
+            model.addAttribute("concept", concept);
         }
 
         return "search/texts";

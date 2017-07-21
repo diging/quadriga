@@ -13,6 +13,8 @@ import javax.xml.bind.JAXBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -38,7 +40,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     private NetworkTransformer transformer;
 
     @Autowired
-    private IConceptpowerConnector conceptpowerConnector;
+    private IConceptpowerCache cpCache;
 
     /**
      * This method returns the transformed network based on networkId and
@@ -173,9 +175,9 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      */
     private List<String> getAlternativeIdsForConcept(String conceptId) {
         List<String> alternativeIdsForConcept = null;
-        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
-        if (reply != null && reply.getConceptEntry().size() > 0) {
-            alternativeIdsForConcept = reply.getConceptEntry().get(0).getAlternativeIdList();
+        IConcept reply = cpCache.getConceptByUri(conceptId);
+        if (reply != null) {
+            alternativeIdsForConcept = reply.getAlternativeUris();
         }
         if (alternativeIdsForConcept == null) {
             alternativeIdsForConcept = new ArrayList<String>();
@@ -256,7 +258,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 updatedNodes.put(entry.getKey(), node);
                 continue;
             }
-
+            
             // node is subject or object
             // If the concept id is already present in the
             // updated nodes map - dont add it

@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
@@ -59,6 +60,9 @@ public class ConceptCollectionManagerTest {
 
     @Mock
     private IConceptCollectionDAO mockedccDao = Mockito.mock(IConceptCollectionDAO.class);
+    
+    @Mock
+    private IConceptpowerCache mockedCpCache = Mockito.mock(IConceptpowerCache.class);
 
     @InjectMocks
     private ConceptCollectionManager conceptCollectionManagerUnderTest;
@@ -75,6 +79,10 @@ public class ConceptCollectionManagerTest {
         conceptEntries.add(entry);
         ConceptpowerReply rep = new ConceptpowerReply();
         rep.setConceptEntry(conceptEntries);
+        
+        edu.asu.spring.quadriga.conceptpower.IConcept cpConcept = new edu.asu.spring.quadriga.conceptpower.impl.Concept();
+        cpConcept.setId("id");
+        cpConcept.setWord("test-lemma");
 
         IProject project = new Project();
         project.setCreatedBy("createdBy");
@@ -95,6 +103,7 @@ public class ConceptCollectionManagerTest {
 
         Mockito.when(cpConnector.search("item", "pos")).thenReturn(rep);
         Mockito.when(cpConnector.getById("id")).thenReturn(rep);
+        Mockito.when(mockedCpCache.getConceptByUri("id")).thenReturn(cpConcept);
 
         IWorkspace workspace = new Workspace();
         workspace.setWorkspaceId("w-id");

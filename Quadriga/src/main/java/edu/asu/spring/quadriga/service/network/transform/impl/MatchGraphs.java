@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
@@ -32,7 +33,10 @@ public class MatchGraphs {
 	private PatternFinder finder;
     
     @Autowired
-    private IConceptpowerConnector cpConnector;
+    private IConceptpowerCache cpCache;
+    
+    @Autowired
+    private IConceptpowerConnector connector;
     
     @Autowired
     private INetworkManager networkManager;
@@ -86,7 +90,7 @@ public class MatchGraphs {
         if (fileMappings != null && allEvents != null) {
             for (ITransformation m : fileMappings) {
                 GraphMapper mapper = new GraphMapper();
-                EventGraphMapper eventMapper = new EventGraphMapper(cpConnector);
+                EventGraphMapper eventMapper = new EventGraphMapper(cpCache);
 
                 List<TransformNode> nodes = new ArrayList<TransformNode>();
                 
@@ -102,7 +106,7 @@ public class MatchGraphs {
                 String mappingFilePath = m.getTransformationFilePath();
                 mapper.createMapping(mappingFilePath);
 
-                Transformer transformer = new Transformer(cpConnector);
+                Transformer transformer = new Transformer(connector);
                 nodes = transformer.transform(foundNodes,
                         mapper.getStartNodeOfMapping());
                 
