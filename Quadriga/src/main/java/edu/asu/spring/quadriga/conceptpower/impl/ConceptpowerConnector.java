@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.web.workbench.AddCollaboratorController;
 
 /**
  * This class provides functionality to search Conceptpower.
@@ -48,7 +48,7 @@ public class ConceptpowerConnector implements IConceptpowerConnector {
     @Autowired
     @Qualifier("updateConceptPowerURLPath")
     private String idUrl;
-
+    
     /*
      * (non-Javadoc)
      * 
@@ -95,11 +95,10 @@ public class ConceptpowerConnector implements IConceptpowerConnector {
     @Cacheable(value = "concepts", key = "#id")
     public ConceptpowerReply getById(String id) {
         Map<String, String> vars = new HashMap<String, String>();
-        // vars.put("name", id);
         String url = conceptURL + idUrl + id.trim();
         try {
             return restTemplate.getForObject(url, ConceptpowerReply.class, vars);
-        } catch (Exception ex) {
+        } catch (RestClientException ex) {
             logger.error("Offending id: " + id);
             logger.error("Could not get concept", ex);
 

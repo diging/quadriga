@@ -170,6 +170,10 @@ public class ConceptpowerReply {
         protected String conceptList;
         @XmlElement(name="wordnet_id", namespace="http://www.digitalhps.org/")
         protected String wordnetId;
+        @XmlElement(name="creator_id", namespace="http://www.digitalhps.org/")
+        protected String creatorId;
+        @XmlElement(name="equal_to", namespace="http://www.digitalhps.org/")
+        protected String equalTo;
         
         public String getWordnetId() {
             return wordnetId;
@@ -336,7 +340,20 @@ public class ConceptpowerReply {
             }
             this.type.setType(type);
         }
-
+        
+        public void setCreatorId(String creatorId) {
+            this.creatorId = creatorId;
+        }
+        
+        public String getCreatorId() {
+            return creatorId;
+        }
+        public void setEqualTo(String equalTo) {
+            this.equalTo = equalTo;
+        }
+        public String getEqualTo() {
+            return equalTo;
+        }
     }
 
 }

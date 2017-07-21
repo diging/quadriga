@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.domain.network.impl.AppellationEventType;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.impl.PrintedRepresentationType;
@@ -27,13 +27,13 @@ import edu.asu.spring.quadriga.domain.network.impl.TermType;
  */
 public class EventGraphMapper {
     
-    private IConceptpowerConnector conceptpower;
+    private IConceptpowerCache cpCache;
 
 	private List<Node> startNodes;
 
-	public EventGraphMapper(IConceptpowerConnector conceptpower) {
+	public EventGraphMapper(IConceptpowerCache cache) {
 		startNodes = new ArrayList<Node>();
-		this.conceptpower = conceptpower;
+		this.cpCache = cache;
 	}
 	
 	public List<Node> getStartNodes() {
@@ -76,10 +76,10 @@ public class EventGraphMapper {
 					String interpretation = term.getTermInterpertation();
 					if (interpretation != null) {
 					    node.setConcept(interpretation);
-					    ConceptpowerReply reply = conceptpower.getById(interpretation);
-					    if (reply.getConceptEntry().size() > 0) {
-					        node.setType(reply.getConceptEntry().get(0).getTypeUri());
-					        List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIdList();
+					    IConcept concept = cpCache.getConceptByUri(interpretation);
+					    if (concept != null) {
+					        node.setType(concept.getType() != null ? concept.getType().getUri() : "");
+					        List<String> alternativeIds = concept.getAlternativeUris();
 					        if (alternativeIds != null && alternativeIds.size() > 0) {
 					            node.setAlternativeIds(alternativeIds);
 					        }
@@ -108,10 +108,10 @@ public class EventGraphMapper {
 					    String interpretation = term.getTermInterpertation();
 						if (interpretation != null) {
 							node.setConcept(interpretation);
-							ConceptpowerReply reply = conceptpower.getById(interpretation);
-                            if (reply.getConceptEntry().size() > 0) {
-                                node.setType(reply.getConceptEntry().get(0).getTypeUri());
-                                List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIdList();
+							IConcept concept = cpCache.getConceptByUri(interpretation);
+                            if (concept != null) {
+                                node.setType(concept.getType() != null ? concept.getType().getUri() : "");
+                                List<String> alternativeIds = concept.getAlternativeUris();
                                 if(alternativeIds != null && alternativeIds.size() > 0) {
                                     node.setAlternativeIds(alternativeIds);
                                 }

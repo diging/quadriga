@@ -19,6 +19,7 @@ public class Node {
     private String conceptId;
     private String conceptIdShort;
     private String sourceReference;
+    private List<String> alternativeIds;
     
     public Node() {
         statementIds = new ArrayList<String>();
@@ -73,5 +74,15 @@ public class Node {
 
     public void setConceptIdShort(String conceptIdShort) {
         this.conceptIdShort = conceptIdShort;
+    }
+
+
+    public List<String> getAlternativeIds() {
+        return alternativeIds;
+    }
+
+
+    public void setAlternativeIds(List<String> alternativeIds) {
+        this.alternativeIds = alternativeIds;
     }
 }
