@@ -96,6 +96,13 @@ public class EventParser {
                     Node node = new Node();
                     parseNode((AppellationEventType) event, node, statementId);
                     leafNodes.put(conceptId, node);
+                    if (node.getAlternativeIds() != null) {
+                        for (String altId : node.getAlternativeIds()) {
+                            if (!altId.equals(conceptId)) {
+                                leafNodes.put(altId, node);
+                            }
+                        }
+                    }
                 }
                 return leafNodes.get(conceptId);
             }
@@ -186,32 +193,23 @@ public class EventParser {
 
         if (node.getConceptId() != null) {
             String id = node.getConceptId();
-//            ConceptpowerReply re = conceptPowerConnector.getById(id);
             IConcept concept = conceptpowerCache.getConceptByUri(id);
             if (concept != null) {
+                if (!concept.getUri().trim().equals(node.getConceptId().trim())) {
+                    node.setConceptId(concept.getUri());
+                    int lastSlash = concept.getUri().lastIndexOf("/");
+                    if (lastSlash > -1) {
+                        node.setConceptIdShort(concept.getUri().substring(lastSlash + 1));
+                    }
+                }
                 node.setLabel(concept.getWord());
                 node.setDescription(concept.getDescription());
+                node.setAlternativeIds(concept.getAlternativeUris());
             } else {
                 node.setLabel(id);
                 node.setDescription("");
             }
-            
-//            if (re != null && re.getConceptEntry().size() != 0) {
-//                node.setLabel(getLemma(re));
-//                node.setDescription(getDescription(re));
-//            } else {
-//                node.setLabel(id);
-//                node.setDescription("");
-//            }
         }
         node.getStatementIds().add(statementId);
-    }
-
-    private String getLemma(ConceptpowerReply re) {
-        return re.getConceptEntry().get(0).getLemma();
-    }
-
-    private String getDescription(ConceptpowerReply re) {
-        return re.getConceptEntry().get(0).getDescription();
     }
 }

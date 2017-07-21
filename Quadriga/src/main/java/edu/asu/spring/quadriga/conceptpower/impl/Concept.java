@@ -6,6 +6,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -13,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptType;
@@ -31,6 +34,7 @@ public class Concept implements IConcept {
     private boolean deleted;
     
     @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     @CollectionTable(name="tbl_conceptpower_alternativeuris", joinColumns=@JoinColumn(name="id"))
     @Column(name="alternativeUris")
     private List<String> alternativeUris;
@@ -38,11 +42,13 @@ public class Concept implements IConcept {
     private String creatorId;
     
     @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     @CollectionTable(name="tbl_conceptpower_equalto", joinColumns=@JoinColumn(name="id"))
     @Column(name="equalto")
     private List<String> equalTo;
     
     @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     @CollectionTable(name="tbl_conceptpower_wordnetids", joinColumns=@JoinColumn(name="id"))
     @Column(name="wordnetids")
     private List<String> wordnetIds;
