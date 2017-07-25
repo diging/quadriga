@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptMapper;
 import edu.asu.spring.quadriga.conceptpower.IConceptType;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 
 @Component
 public class ConceptMapper implements IConceptMapper {
@@ -25,7 +25,11 @@ public class ConceptMapper implements IConceptMapper {
         concept.setPos(reply.getPos());
         concept.setTypeId(reply.getTypeUri() != null ? reply.getTypeUri() : "");
         concept.setUri(reply.getId());
-        concept.setId(reply.getId());
+        // get last part of URI = id
+        int idx = reply.getId().lastIndexOf("/");
+        if (idx > -1) {
+            concept.setId(reply.getId().substring(idx+1));
+        }
         concept.setCreatorId(reply.getCreatorId());
         concept.setWord(reply.getLemma());
         if (reply.getWordnetId() != null) {

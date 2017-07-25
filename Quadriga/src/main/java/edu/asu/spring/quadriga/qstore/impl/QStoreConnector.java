@@ -275,9 +275,20 @@ public class QStoreConnector implements IQStoreConnector {
     @Async
     @Override
     public Future<String> loadNetworkWithPopularTerms() throws AsyncExecutionException {
-        String query = env.getProperty("allNetworks");
-
-        ResponseEntity<String> response = executeQuery(query);
+        return new AsyncResult<String>(executeNeo4jQuery("allNetworks", null, RELATION_EVENT));
+    }
+    
+    @Override
+    public String executeNeo4jQuery(String queryName, Map<String, String> parameters, String returnType) throws AsyncExecutionException {
+        String query = env.getProperty(queryName);
+        
+        if (parameters != null) {
+            for (String paraName : parameters.keySet()) {
+                query = query.replace("{" + paraName + "}", parameters.get(paraName));
+            }
+        }
+        logger.debug("Running query: " + query);
+        ResponseEntity<String> response = executeQuery(query, returnType);
         HttpStatus status = response.getStatusCode();
         String resbody = response.getBody();
         if (status == HttpStatus.BAD_REQUEST || status == HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -302,7 +313,7 @@ public class QStoreConnector implements IQStoreConnector {
             }
         }
 
-        return new AsyncResult<String>(asyncResult.getResult());
+        return asyncResult.getResult();
     }
 
     private QStoreAsyncResult getResponseFromXML(String res) throws AsyncExecutionException {
@@ -331,7 +342,7 @@ public class QStoreConnector implements IQStoreConnector {
     }
     */
 
-    private ResponseEntity<String> executeQuery(String query) throws AsyncExecutionException {
+    private ResponseEntity<String> executeQuery(String query, String returnType) throws AsyncExecutionException {
 
         // add message converters
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -344,7 +355,7 @@ public class QStoreConnector implements IQStoreConnector {
         try {
             // execute the query in Qstore and get the result
             String url = getQStoreQueryURL();
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", RELATION_EVENT);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("class", returnType);
             return restTemplate.postForEntity(builder.build().encode().toUri(), request, String.class);
         } catch (RestClientException e) {
             throw new AsyncExecutionException(e);

@@ -12,6 +12,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 

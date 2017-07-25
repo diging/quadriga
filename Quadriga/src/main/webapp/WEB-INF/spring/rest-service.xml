@@ -152,13 +152,13 @@
 
 
 	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-		<property name="classesToBeBound">
+	   <property name="classesToBeBound">
 			<list>
 				<value>edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList
 				</value>
 				<value>edu.asu.spring.quadriga.domain.impl.WordpowerReply
 				</value>
-				<value>edu.asu.spring.quadriga.domain.impl.ConceptpowerReply
+				<value>edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply
 				</value>
 				<value>edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType
 				</value>

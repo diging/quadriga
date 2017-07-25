@@ -5,7 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.conceptpower.db.IConceptDatabaseConnection;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 
 @Service
 public class AsyncConceptUpdater implements IAsyncConceptUpdater {

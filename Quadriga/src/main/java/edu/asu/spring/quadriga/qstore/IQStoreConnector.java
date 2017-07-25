@@ -1,19 +1,8 @@
 package edu.asu.spring.quadriga.qstore;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
-
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
 
 import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
 import edu.asu.spring.quadriga.exceptions.AsyncExecutionException;
@@ -23,6 +12,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 public interface IQStoreConnector {
 
     public static String RELATION_EVENT = "relationevent";
+    public static String APPELLATION_EVENT = "appellationevent";
 
     public abstract String getQStoreAddURL();
 
@@ -59,5 +49,7 @@ public interface IQStoreConnector {
     Future<String> loadNetworkWithPopularTerms() throws AsyncExecutionException;
 
     String getCreationEvents(List<String> ids) throws QuadrigaException;
+
+    String executeNeo4jQuery(String queryName, Map<String, String> parameters, String clazzType) throws AsyncExecutionException;
 
 }

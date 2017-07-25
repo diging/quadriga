@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.conceptpower;
 
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 
 public interface IConceptpowerConnector {
 

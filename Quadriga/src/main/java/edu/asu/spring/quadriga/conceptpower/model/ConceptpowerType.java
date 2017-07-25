@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.impl;
+package edu.asu.spring.quadriga.conceptpower.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
