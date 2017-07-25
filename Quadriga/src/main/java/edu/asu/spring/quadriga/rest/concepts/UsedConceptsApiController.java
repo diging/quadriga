@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.print.DocFlavor.STRING;
 import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
@@ -40,7 +39,7 @@ public class UsedConceptsApiController {
     @Autowired
     private INetworkConceptManager networkConceptManager;
 
-    @RequestMapping("/rest/concepts")
+    @RequestMapping("/public/concepts")
     public List<IConcept> getUsedConcepts(@RequestParam(value = "projects", defaultValue="") String projectIds,
             @RequestParam(value = "types", defaultValue="") String typeIds) throws QuadrigaStorageException, JAXBException {
        
@@ -73,7 +72,8 @@ public class UsedConceptsApiController {
         
         final List<String> typeIdList = Arrays.asList(typeIds.split(",")).stream().map(t -> t.trim()).filter(t -> !t.isEmpty()).collect(Collectors.toList());
         
-        List<IConcept> concepts = networkConceptManager.getConceptsOfStatements(nodeIds);
+        List<IConcept> concepts = networkConceptManager.getConceptsOfStatements(nodeIds).stream().distinct().collect(Collectors.toList());
+        
         // return all concepts if they shouldn't be filtered by type
         if (typeIdList.isEmpty()) {
             return concepts;
