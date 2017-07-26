@@ -119,8 +119,9 @@ public interface INetworkManager {
      * the {@link IProject}. We could use this to list Networks belonging to a
      * {@link IProject}.
      * 
-     * @param projectid
-     *            {@link IProject} ID of type {@link String}
+     * @param projectid {@link IProject} ID of type {@link String}
+     * @param status Status of requested networks, use {@link INetworkStatus}
+     * 
      * @return Returns {@link List} of {@link INetwork}
      * @throws QuadrigaStorageException
      *             Database storage exception thrown

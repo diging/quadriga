@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 
 /**
  * This class transformes graphs that were found by the {@link PatternFinder}

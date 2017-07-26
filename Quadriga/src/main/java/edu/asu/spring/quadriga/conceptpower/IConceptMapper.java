@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.conceptpower;
 
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 
 public interface IConceptMapper {
 

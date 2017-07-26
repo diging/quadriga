@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.conceptpower.IConceptMapper;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.conceptpower.db.IConceptDatabaseConnection;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 
 @Service
 public class ConceptpowerCache implements IConceptpowerCache {
