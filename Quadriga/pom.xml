@@ -30,8 +30,11 @@
 		<quadriga.admin.username>admin</quadriga.admin.username>
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
+		
 		<textfiles.location></textfiles.location>
 		<transformationfiles.location></transformationfiles.location>
+		<tempfiles.dir.location></tempfiles.dir.location>
+		
 		<email.host></email.host>
 		<email.port></email.port>
 		<email.username></email.username>

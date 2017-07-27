@@ -60,25 +60,17 @@ public class Generator {
 	}
 
 	public String generateText(List<List<TransformNode>> listOfNodeList,
-			String chosenTemplate, boolean isMergeDuplicateNodes) throws QuadrigaGeneratorException {
-
-	    Resource templateRes = new ClassPathResource("transformation/xgmml-time.vm");
-        String templatePath;
-        try {
-            templatePath = templateRes.getFile().getAbsolutePath();
-        } catch (IOException e1) {
-           throw new QuadrigaGeneratorException(e1);
+            String chosenTemplate, boolean isMergeDuplicateNodes) throws QuadrigaGeneratorException {
+        if (chosenTemplate == null) {
+            chosenTemplate = "transformation/xgmml-time.vm";
         }
+        return generateFromTemplate(listOfNodeList, chosenTemplate, isMergeDuplicateNodes);
+    }
 
-		Template template = null;
-
-		/*
-		 * if User selects a different template, override default template with
-		 * chosen template.
-		 */
-		if (chosenTemplate != null || ("").equalsIgnoreCase(chosenTemplate))
-			templatePath = chosenTemplate;
-
+    protected String generateFromTemplate(List<List<TransformNode>> listOfNodeList, String chosenTemplate,
+            boolean isMergeDuplicateNodes) throws QuadrigaGeneratorException {
+       
+		
 		List<TransformNode> nodes = new ArrayList<TransformNode>();
 		List<String> nodeIds = new ArrayList<String>();
 		List<TransformLink> links = new ArrayList<TransformLink>();
@@ -100,8 +92,9 @@ public class Generator {
 			realignLinks(nodes, links);
 		}
 		
+		Template template = null;
 		try {
-				template = engine.getTemplate("transformation/xgmml-time.vm");
+				template = engine.getTemplate(chosenTemplate);
 		} catch (ResourceNotFoundException e) {
 			throw new QuadrigaGeneratorException(e);
 		} catch (ParseErrorException e) {
@@ -129,7 +122,7 @@ public class Generator {
 			}
 		}
 		return writer.toString();
-	}
+    }
 
 	/**
 	 * This method realigns link to point to the

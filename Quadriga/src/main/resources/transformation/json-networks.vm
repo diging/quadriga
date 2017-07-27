@@ -1,0 +1,21 @@
+{
+    "nodes": [
+    #foreach ($node in $nodes)
+        {
+            "id": "$node.id",
+            "uri": "$node.concept",
+            "label": "$node.conceptName"
+        }
+    #end
+    ],
+    "edges": [
+    #foreach ($link in $links)
+        {
+            "source": "$link.subject.id",
+            "target": "$link.object.id",
+            "label": "$link.conceptName",
+            "concept": "$link.concept"
+        }
+    #end
+    ]
+}

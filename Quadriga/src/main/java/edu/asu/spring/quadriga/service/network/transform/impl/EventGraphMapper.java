@@ -239,8 +239,10 @@ public class EventGraphMapper {
 				TermPart termPart = new TermPart();
 				if (part.getExpression() != null) {
 					termPart.setExpression(part.getExpression());
-					termPart.setStartPosition(new Integer(part.getPosition()));
-					termPart.setEndPosition(new Integer(part.getPosition() + part.getExpression().length()));
+					if (part.getPosition() != null && !part.getPosition().trim().equals("null")) {
+					    termPart.setStartPosition(new Integer(part.getPosition()));
+					    termPart.setEndPosition(new Integer(part.getPosition() + part.getExpression().length()));
+					}
 					nodeTerm.addTermPart(termPart);
 				}
 			}
