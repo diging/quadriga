@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.rest.open;
 
 import java.io.IOException;
-import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.List;
 

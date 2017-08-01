@@ -30,11 +30,11 @@
 		<quadriga.admin.username>admin</quadriga.admin.username>
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
-		
+
 		<textfiles.location></textfiles.location>
 		<transformationfiles.location></transformationfiles.location>
 		<tempfiles.dir.location></tempfiles.dir.location>
-		
+
 		<email.host></email.host>
 		<email.port></email.port>
 		<email.username></email.username>
@@ -262,11 +262,8 @@
 			<artifactId>spring-web</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.2.12</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>javax.xml.bind</groupId> <artifactId>jaxb-api</artifactId> 
+			<version>2.2.12</version> </dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.eclipse.persistence/eclipselink -->
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -279,10 +276,11 @@
 			<artifactId>spring-aop</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.velocity/velocity -->
 		<dependency>
-			<groupId>velocity</groupId>
+			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
-			<version>1.5</version>
+			<version>1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
