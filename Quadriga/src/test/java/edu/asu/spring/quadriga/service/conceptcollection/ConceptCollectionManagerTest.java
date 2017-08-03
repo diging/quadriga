@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
@@ -26,7 +27,6 @@ import edu.asu.spring.quadriga.domain.conceptcollection.impl.Concept;
 import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.impl.Project;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspace;

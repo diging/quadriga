@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;

@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Controller

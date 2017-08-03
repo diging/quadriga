@@ -1,11 +1,15 @@
-package edu.asu.spring.quadriga.conceptpower;
+package edu.asu.spring.quadriga.conceptpower.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.conceptpower.IAsyncConceptUpdater;
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptMapper;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.conceptpower.db.IConceptDatabaseConnection;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 
 @Service
 public class AsyncConceptUpdater implements IAsyncConceptUpdater {

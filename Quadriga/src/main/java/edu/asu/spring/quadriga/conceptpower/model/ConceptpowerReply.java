@@ -6,7 +6,7 @@
 //
 
 
-package edu.asu.spring.quadriga.domain.impl;
+package edu.asu.spring.quadriga.conceptpower.model;
 /**
  * This is used to get the response from conceptpower
  */
@@ -159,8 +159,8 @@ public class ConceptpowerReply {
 		}
 
 		@XmlElement(required = true, namespace="http://www.digitalhps.org/")
-        protected String id;
-        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
+		protected String id;
+		@XmlElement(required = true, namespace="http://www.digitalhps.org/")
         protected String lemma;
         @XmlElement(required = true, namespace="http://www.digitalhps.org/")
         protected String pos;

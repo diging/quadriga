@@ -1,7 +1,11 @@
 package edu.asu.spring.quadriga.utilities;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
+
+import org.apache.commons.io.FileUtils;
 
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 
@@ -39,4 +43,6 @@ public interface IFileSaveUtility {
     public String readFileContent(String fileName, String dirName) throws FileStorageException;
 
     public String getFileLocation();
+
+    String saveFileInRoot(String fileName, String content) throws IOException;
 }
