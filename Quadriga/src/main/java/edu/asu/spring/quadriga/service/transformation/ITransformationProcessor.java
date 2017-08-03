@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
@@ -24,7 +24,7 @@ public interface ITransformationProcessor {
     Future<String> runTransformationAsync(List<ITransformation> transformations, List<String> networkIdList)
             throws QuadrigaGeneratorException;
 
-    String runTransformation(String pattern, String transformation, List<String> networkIdList)
+    ListenableFuture<String> runTransformationAsync(String pattern, String transformation, List<String> networkIdList)
             throws FileStorageException, IOException, QuadrigaGeneratorException;
 
 }

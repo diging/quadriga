@@ -66,6 +66,39 @@ public class Generator {
         }
         return generateFromTemplate(listOfNodeList, chosenTemplate, isMergeDuplicateNodes);
     }
+	
+	public String generateError(String errorCode, String errorMsg) throws QuadrigaGeneratorException {
+	    Template template = null;
+        try {
+                template = engine.getTemplate("transformation/transformation_failure.vm");
+        } catch (ResourceNotFoundException e) {
+            throw new QuadrigaGeneratorException(e);
+        } catch (ParseErrorException e) {
+            throw new QuadrigaGeneratorException(e);
+        } catch (Exception e) {
+            throw new QuadrigaGeneratorException(e);
+        }
+        
+        VelocityContext context = new VelocityContext();
+        context.put("error", errorCode);
+        context.put("errorMsg", errorMsg);
+        StringWriter writer = new StringWriter();
+
+        if (template != null) {
+            try {
+                template.merge(context, writer);
+            } catch (ResourceNotFoundException e) {
+                throw new QuadrigaGeneratorException(e);
+            } catch (ParseErrorException e) {
+                throw new QuadrigaGeneratorException(e);
+            } catch (MethodInvocationException e) {
+                throw new QuadrigaGeneratorException(e);
+            } catch (Exception e) {
+                throw new QuadrigaGeneratorException(e);
+            }
+        }
+        return writer.toString();
+	}
 
     protected String generateFromTemplate(List<List<TransformNode>> listOfNodeList, String chosenTemplate,
             boolean isMergeDuplicateNodes) throws QuadrigaGeneratorException {

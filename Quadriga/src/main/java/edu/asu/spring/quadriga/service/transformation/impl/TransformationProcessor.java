@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import edu.asu.spring.quadriga.domain.network.impl.Transformation;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
@@ -60,7 +61,8 @@ public class TransformationProcessor implements ITransformationProcessor {
      * @see edu.asu.spring.quadriga.service.transformation.impl.ITransformationProcessor#runTransformation(java.lang.String, java.lang.String, java.util.List)
      */
     @Override
-    public String runTransformation(String pattern, String transformation, List<String> networkIdList) throws FileStorageException, IOException, QuadrigaGeneratorException {
+    @Async
+    public ListenableFuture<String> runTransformationAsync(String pattern, String transformation, List<String> networkIdList) throws FileStorageException, IOException, QuadrigaGeneratorException {
         String patternFileName = null;
         String transformationFileName = null;
         
@@ -86,7 +88,8 @@ public class TransformationProcessor implements ITransformationProcessor {
         List<ITransformation> transformations = Arrays.asList(new ITransformation[] { transformationObj });
         List<List<TransformNode>> results = matchGraphs.matchGraphs(transformations, networkIdList);
         
-        return generator.generateText(results, "transformation/json-networks.vm", true);
+        String result = generator.generateText(results, "transformation/json-networks.vm", true);
+        return new AsyncResult<>(result);
     }
     
     private String generateId(String prefix) {

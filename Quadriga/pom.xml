@@ -14,7 +14,9 @@
 		<org.aspectj-version>1.7.3</org.aspectj-version>
 		<org.slf4j-version>1.7.25</org.slf4j-version>
 		<spring-security-version>4.0.4.RELEASE</spring-security-version>
+		
 		<!-- Deploy Properties -->
+		<deploy.quadriga.baseurl>http://localhost:8080/quadriga/</deploy.quadriga.baseurl>
 		<tomcat.deploy.path>http://localhost:8080/manager/</tomcat.deploy.path>
 		<deploy.path.test>quadriga-test</deploy.path.test>
 		<deploy.path.dev>quadriga</deploy.path.dev>
@@ -41,7 +43,6 @@
 		<email.pw></email.pw>
 		<email.from></email.from>
 		<email.enabled>true</email.enabled>
-		<quadriga.baseurl></quadriga.baseurl>
 	</properties>
 
 	<dependencies>
@@ -386,7 +387,7 @@
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-			<version>2.10.1</version>
+			<version>2.10.4</version>
 			<exclusions>
 				<!-- Exclude oder version of SLF4j -->
 				<exclusion>
