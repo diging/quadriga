@@ -502,10 +502,6 @@ public class ConceptCollectionRestController {
             throw new RestException(500, e);
         } catch (MethodInvocationException e) {
             throw new RestException(500, e);
-        } catch (QuadrigaStorageException e) {
-            throw new RestException(500, e);
-        } catch (QuadrigaAccessException e) {
-            throw new RestException(403, e);
         } catch (Exception e) {
             throw new RestException(500, e);
         }

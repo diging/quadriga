@@ -62,7 +62,8 @@ public class EventGraphMapper {
 				Node node = new Node();
 				node.setId(event.getId() + "");
 				node.setEventId(node.getId());
-				
+				node.setSourceURI(event.getSourceReference());
+                
 				TermType term = ((AppellationEventType) event).getTermType();
 				if (term != null) {
 					Term nodeTerm = new Term();
@@ -70,7 +71,6 @@ public class EventGraphMapper {
 					fillTermWithTermParts(nodeTerm, term);
 					
 					nodeTerm.setSourceUri(term.getSourceReference());
-					
 					
 					node.addTerm(nodeTerm);
 					String interpretation = term.getTermInterpertation();
@@ -94,6 +94,7 @@ public class EventGraphMapper {
 					Node node = new Node();
 					node.setId(((RelationEventType)event).getRelation().getId() + "" + ((RelationEventType)event).getRelation().getPredicateType().getAppellationEvent().getId() + "");
 					node.setEventId(node.getId());
+					node.setSourceURI(event.getSourceReference());
 					
 					TermType term = ((RelationEventType) event).getRelation().getPredicateType().getAppellationEvent().getTermType();
 					if (term != null) {
@@ -239,8 +240,10 @@ public class EventGraphMapper {
 				TermPart termPart = new TermPart();
 				if (part.getExpression() != null) {
 					termPart.setExpression(part.getExpression());
-					termPart.setStartPosition(new Integer(part.getPosition()));
-					termPart.setEndPosition(new Integer(part.getPosition() + part.getExpression().length()));
+					if (part.getPosition() != null && !part.getPosition().trim().equals("null")) {
+					    termPart.setStartPosition(new Integer(part.getPosition()));
+					    termPart.setEndPosition(new Integer(part.getPosition() + part.getExpression().length()));
+					}
 					nodeTerm.addTermPart(termPart);
 				}
 			}
@@ -290,6 +293,7 @@ public class EventGraphMapper {
 		copiedNode.setType(start.getType());
 		copiedNode.setTerms(start.getTerms());
 		copiedNode.setAlternativeIds(start.getAlternativeIds());
+		copiedNode.setSourceURI(start.getSourceURI());
 
 		if (start instanceof Relation) {
 			Node subject = ((Relation) start).getSubject();

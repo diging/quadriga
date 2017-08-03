@@ -144,6 +144,7 @@ public class Transformer {
 						mappedLink.setConcept(corrNode.getConcept());
 						mappedLink.setType(corrNode.getType());
 						mappedLink.setCorrespondingId(corrId);
+						mappedLink.setSourceUri(corrNode.getSourceURI());
 						
 						ConceptpowerReply reply = conceptpower.getById(corrNode.getConcept());
 	                    if (reply != null) {
@@ -153,7 +154,7 @@ public class Transformer {
 	                    }
 					}
 				}
-					
+				
 				// map start time
 				String startTimeId = link.getStartTime();
 				if (startTimeId != null) {

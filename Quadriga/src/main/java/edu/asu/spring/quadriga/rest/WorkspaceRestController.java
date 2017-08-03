@@ -167,8 +167,6 @@ public class WorkspaceRestController {
             throw new RestException(500, e);
         } catch (MethodInvocationException e) {
             throw new RestException(500, e);
-        } catch (QuadrigaStorageException e) {
-            throw new RestException(500, e);
         } catch (Exception e) {
             throw new RestException(500, e);
         }

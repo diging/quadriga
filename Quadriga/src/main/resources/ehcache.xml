@@ -33,5 +33,9 @@
 		maxElementsInMemory="1000" overflowToDisk="false" diskPersistent="false"
 		timeToIdleSeconds="0" timeToLiveSeconds="86400"
 		memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="transformedNetworks" eternal="false" maxElementsInMemory="50"
+        overflowToDisk="false" diskPersistent="true" timeToIdleSeconds="0"
+        timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" />
 
 </ehcache>
