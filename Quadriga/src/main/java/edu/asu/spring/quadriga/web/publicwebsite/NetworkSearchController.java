@@ -24,10 +24,12 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.conceptpower.POS;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
@@ -54,7 +56,7 @@ public class NetworkSearchController {
     private INetworkTransformationManager transformationManager;
 
     @Autowired
-    private IConceptpowerConnector conceptpowerConnector;
+    private IConceptpowerCache cpCache;
 
     private static String defaultJsonErrorMsg = "{\"status\" : 500,"
             + " \"message\": \"Unable to get the search terms\"}";
@@ -149,11 +151,11 @@ public class NetworkSearchController {
         String searchNodeLabel = "";
         
         // Fetch ConceptPower entries related to the conceptId
-        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
+        IConcept concept = cpCache.getConceptByUri(conceptId);
    
-        if (reply != null && reply.getConceptEntry().size() > 0) {
-            searchNodeLabel = reply.getConceptEntry().get(0).getLemma();
-            lemma = reply.getConceptEntry().get(0).getDescription();
+        if (concept != null) {
+            searchNodeLabel = concept.getWord();
+            lemma = concept.getDescription();
            
         }
      

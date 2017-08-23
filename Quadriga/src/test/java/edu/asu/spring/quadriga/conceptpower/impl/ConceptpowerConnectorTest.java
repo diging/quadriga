@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 
 public class ConceptpowerConnectorTest {
 

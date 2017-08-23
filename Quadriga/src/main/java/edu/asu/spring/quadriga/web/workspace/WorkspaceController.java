@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.IAuthorization;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
+import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.Quadriga404Exception;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -93,7 +93,7 @@ public class WorkspaceController {
     public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal,
             ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, Quadriga404Exception {
         String userName = principal.getName();
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
 
         if (workspace == null) {
             throw new Quadriga404Exception("Workspace with ID " + workspaceid + " does not exist.");
@@ -108,7 +108,7 @@ public class WorkspaceController {
 
         List<ITextFile> tfList = tfManager.retrieveTextFiles(workspaceid);
 
-        List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceid);
+        List<INetwork> networks = wsManager.getNetworks(workspaceid);
 
         List<IProjectCollaborator> projectCollaborators = projectCollaboratorManager.getProjectCollaborators(projectId);
 
@@ -127,7 +127,7 @@ public class WorkspaceController {
 
         model.addAttribute("projectAdmins", projectAdmins);
         model.addAttribute("projectOwner", project.getOwner());
-        model.addAttribute("networkList", workspaceNetworkList);
+        model.addAttribute("networks", networks);
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("textFileList", tfList);
 

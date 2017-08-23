@@ -15,21 +15,21 @@ import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.networks.IWorkspaceNetworkMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceCCShallowMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.network.mapper.IWorkspaceNetworkMapper;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 
 /**
- * This class would help in mapping {@link IWorkSpace} object with all the variables in it using {@link WorkspaceDTO}.
+ * This class would help in mapping {@link IWorkspace} object with all the variables in it using {@link WorkspaceDTO}.
  * @author Lohith Dwaraka
  *
  */
@@ -72,9 +72,9 @@ public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspa
 	 */
 	@Override
 	@Transactional
-	public IWorkSpace mapWorkspaceDTO(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException{
+	public IWorkspace mapWorkspaceDTO(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException{
 
-		IWorkSpace workspace = null;
+		IWorkspace workspace = null;
 
 		if(workspaceDTO != null){
 			workspace = workspaceFactory.createWorkspaceObject();
@@ -87,7 +87,7 @@ public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspa
 
 
     @Override
-    public void fillWorkspace(WorkspaceDTO workspaceDTO, IWorkSpace workspace) throws QuadrigaStorageException {
+    public void fillWorkspace(WorkspaceDTO workspaceDTO, IWorkspace workspace) throws QuadrigaStorageException {
         workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
         workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
         workspace.setDescription(workspaceDTO.getDescription());
@@ -100,15 +100,15 @@ public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspa
         // Set Workspace Collaborators
         workspace.setWorkspaceCollaborators(getWorkspaceCollaboratorList(workspaceDTO, workspace));
         // Set Workspace Concept Collations
-        workspace.setWorkspaceConceptCollections(workspaceCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO));
+        workspace.setConceptCollections(workspaceCCShallowMapper.getConceptCollections(workspace, workspaceDTO));
         // Set Workspace Dictionaries
-        workspace.setWorkspaceDictionaries(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO));
+        workspace.setDictionaries(workspaceDictionaryShallowMapper.getDictionaries(workspace, workspaceDTO));
 
         // Set Project Workspace 
-        workspace.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
+        workspace.setProject(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
 
         //Set network workspace
-        workspace.setWorkspaceNetworks(workspaceNetworkMapper.getNetworkWorkspaceByWorkSpaceDTO(workspaceDTO, workspace));
+        workspace.setNetworks(workspaceNetworkMapper.getNetworks(workspaceDTO, workspace));
              
         if (workspaceDTO instanceof ExternalWorkspaceDTO) {
             workspace.setExternalWorkspaceId(((ExternalWorkspaceDTO) workspaceDTO).getExternalWorkspaceid());
@@ -122,7 +122,7 @@ public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspa
 	 * @return													Returns a {@link List} of {@link IWorkspaceCollaborator} objects
 	 * @throws QuadrigaStorageException							Throws a storage exception when method has issue to fetch data from database
 	 */
-	private List<IWorkspaceCollaborator> getWorkspaceCollaboratorList(WorkspaceDTO workspaceDTO,IWorkSpace workspace) throws QuadrigaStorageException
+	private List<IWorkspaceCollaborator> getWorkspaceCollaboratorList(WorkspaceDTO workspaceDTO,IWorkspace workspace) throws QuadrigaStorageException
 	{
 		List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
 		if(workspaceDTO.getWorkspaceCollaboratorDTOList() != null && workspaceDTO.getWorkspaceCollaboratorDTOList().size() > 0)
@@ -140,13 +140,13 @@ public class WorkspaceDeepMapper extends BaseWorkspaceMapper implements IWorkspa
 	}
 
 	/**
-	 * This class should map workspace collaborators based on user id using {@link WorkspaceDTO} and {@link IWorkSpace} object.
+	 * This class should map workspace collaborators based on user id using {@link WorkspaceDTO} and {@link IWorkspace} object.
 	 * @param workspaceDTO									{@link WorkspaceDTO} object for mapping collaborator
-	 * @param workspace										{@link IWorkSpace} object 
+	 * @param workspace										{@link IWorkspace} object 
 	 * @return												Returns {@link HashMap} of {@link String} and {@link IWorkspaceCollaborator}
 	 * @throws QuadrigaStorageException 
 	 */
-	private HashMap<String,IWorkspaceCollaborator> mapUserWorkspaceCollaborator(WorkspaceDTO workspaceDTO,IWorkSpace workspace) throws QuadrigaStorageException
+	private HashMap<String,IWorkspaceCollaborator> mapUserWorkspaceCollaborator(WorkspaceDTO workspaceDTO,IWorkspace workspace) throws QuadrigaStorageException
 	{		
 
 		HashMap<String, IWorkspaceCollaborator> userWorkspaceCollaboratorMap = new HashMap<String, IWorkspaceCollaborator>();

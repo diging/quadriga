@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.asu.spring.quadriga.domain.impl.networks.Transformation;
+import edu.asu.spring.quadriga.domain.network.impl.Transformation;
 import edu.asu.spring.quadriga.domain.network.tranform.ITransformation;
 import edu.asu.spring.quadriga.exceptions.QuadrigaGeneratorException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

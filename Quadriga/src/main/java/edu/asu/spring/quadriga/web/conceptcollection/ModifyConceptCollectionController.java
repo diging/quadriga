@@ -22,8 +22,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
-import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -33,9 +32,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ModifyConceptCollectionController {
-    @Autowired
-    private IConceptCollectionFactory collectionFactory;
-
+    
     @Autowired
     private IConceptCollectionManager conceptControllerManager;
 

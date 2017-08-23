@@ -8,7 +8,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 
 /**
@@ -66,7 +66,7 @@ public interface IEmailNotificationManager {
      * @param workspace
      *            The workspace object which was added to the project.
      */
-    public void sendNewWorkspaceAddedToProject(IProject project, IWorkSpace workspace);
+    public void sendNewWorkspaceAddedToProject(IProject project, IWorkspace workspace);
 
     void sendAccountCreatedEmail(String name, String username, String adminName, String adminEmail)
             throws QuadrigaNotificationException;

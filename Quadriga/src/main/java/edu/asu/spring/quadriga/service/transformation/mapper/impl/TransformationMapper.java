@@ -2,8 +2,8 @@ package edu.asu.spring.quadriga.service.transformation.mapper.impl;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.impl.workspace.TransformationFile;
 import edu.asu.spring.quadriga.domain.workspace.ITransformationFile;
+import edu.asu.spring.quadriga.domain.workspace.impl.TransformationFile;
 import edu.asu.spring.quadriga.dto.TransformFilesDTO;
 import edu.asu.spring.quadriga.service.transformation.mapper.ITransformationMapper;
 

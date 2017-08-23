@@ -7,7 +7,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 
 public class Network implements INetwork 
 {
@@ -21,7 +21,7 @@ public class Network implements INetwork
 	private int versionNumber;
 	private List<INetworkNodeInfo> networkNodes;
 	private String assignedUser;
-	private IWorkspaceNetwork networkWorkspace;
+	private IWorkspace workspace;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
@@ -126,17 +126,6 @@ public class Network implements INetwork
 	public void setAssignedUser(String assignedUser) {
         this.assignedUser = assignedUser;
 	}
-	
-	@Override
-	public IWorkspaceNetwork getNetworkWorkspace() {
-		return networkWorkspace;
-	}
-
-	@Override
-	public void setNetworkWorkspace(IWorkspaceNetwork networkWorkspace) {
-           this.networkWorkspace = networkWorkspace;		
-	}
-
 
 	@Override
 	public String getCreatedBy() {
@@ -177,6 +166,14 @@ public class Network implements INetwork
 	public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
 	}
+	
+    public void setWorkspace(IWorkspace workspace) {
+        this.workspace = workspace;
+    }
+
+    public IWorkspace getWorkspace() {
+        return workspace;
+    }
 
 	@Override
 	public int hashCode() {
@@ -197,9 +194,6 @@ public class Network implements INetwork
 				+ ((networkName == null) ? 0 : networkName.hashCode());
 		result = prime * result
 				+ ((networkNodes == null) ? 0 : networkNodes.hashCode());
-		result = prime
-				* result
-				+ ((networkWorkspace == null) ? 0 : networkWorkspace.hashCode());
 		result = prime * result
 				+ ((networksAccess == null) ? 0 : networksAccess.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -261,11 +255,6 @@ public class Network implements INetwork
 				return false;
 		} else if (!networkNodes.equals(other.networkNodes))
 			return false;
-		if (networkWorkspace == null) {
-			if (other.networkWorkspace != null)
-				return false;
-		} else if (!networkWorkspace.equals(other.networkWorkspace))
-			return false;
 		if (networksAccess != other.networksAccess)
 			return false;
 		if (status == null) {
@@ -294,7 +283,4 @@ public class Network implements INetwork
 	}
 
 
-
-
-	
 }

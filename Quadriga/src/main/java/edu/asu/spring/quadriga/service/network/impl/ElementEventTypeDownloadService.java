@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
+import java.util.List;
 import java.util.concurrent.Future;
 
 import javax.xml.bind.JAXBException;
@@ -11,8 +12,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 
@@ -25,7 +27,7 @@ import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 @Service
 public class ElementEventTypeDownloadService {
     
-    Logger logger = LoggerFactory.getLogger(ElementEventTypeDownloadService.class);
+    private Logger logger = LoggerFactory.getLogger(ElementEventTypeDownloadService.class);
 
     @Autowired
     private IMarshallingService marshallingService;
@@ -44,6 +46,7 @@ public class ElementEventTypeDownloadService {
     public Future<ElementEventsType> getElementEventTypeAsync(String relationEventId) {
         String xml;
         try {
+            logger.debug("getting creation event with " + relationEventId);
             xml = qstoreConnector.getCreationEvent(relationEventId);
         } catch (QStoreStorageException e) {
             logger.error("Error retrieving element " + relationEventId + " from QStore.", e);
@@ -53,6 +56,33 @@ public class ElementEventTypeDownloadService {
         if (xml == null) {
            logger.error("Unable to download data from QStore for" +
                     " relation event id: " + relationEventId);
+           return new AsyncResult<ElementEventsType>(null);
+           
+        }
+        // convert the xml to ElementEventsType object
+        ElementEventsType elementEventsType = null;
+        try {
+            elementEventsType = marshallingService.unMarshalXmlToElementEventsType(xml);
+        } catch (JAXBException e) {
+            logger.error("Could not unmarshal XML.", e);
+        }
+        // asyn task ends here
+        return new AsyncResult<>(elementEventsType);
+    }
+    
+    @Async
+    public Future<ElementEventsType> getElementEventTypeAsync(List<String> ids) throws QuadrigaException {
+        String xml;
+        try {
+            xml = qstoreConnector.getCreationEvents(ids);
+        } catch (QStoreStorageException e) {
+            logger.error("Error retrieving element " + ids + " from QStore.", e);
+            return new AsyncResult<ElementEventsType>(null);
+        }
+
+        if (xml == null) {
+           logger.error("Unable to download data from QStore for" +
+                    " relation event id: " + ids);
            return new AsyncResult<ElementEventsType>(null);
            
         }

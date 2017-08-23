@@ -24,8 +24,8 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
-import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
+import edu.asu.spring.quadriga.domain.workspace.impl.TextFile;
 import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -82,7 +82,7 @@ public class AddTextController {
     public ModelAndView addTextFileForm(@PathVariable("workspaceid") String workspaceid,
             @PathVariable("projectid") String projid) throws QuadrigaStorageException, QuadrigaAccessException {
 
-        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceid);
+        IWorkspace workspace = workspaceManager.getWorkspaceDetails(workspaceid);
 
         ModelAndView model = new ModelAndView("auth/workbench/workspace/addtext");
         model.getModelMap().put("textfile", textFileFactory.createTextFileObject());

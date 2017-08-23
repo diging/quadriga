@@ -50,14 +50,14 @@
 
 <div class="container">
 	<c:choose>
-		<c:when test="${not empty dicitonaryList}">
+		<c:when test="${not empty dictionaries}">
 				
 				<ul class="style2 pagination1">
-					<c:forEach var="projectDictionary" items="${dicitonaryList}">
+					<c:forEach var="dictionary" items="${dictionaries}">
 						<li><a
-							href="${pageContext.servletContext.contextPath}/auth/dictionaries/${projectDictionary.dictionary.dictionaryId}"><c:out
-									value="${projectDictionary.dictionary.dictionaryName}"></c:out></a> <br> <c:out
-								value="${projectDictionary.dictionary.description}"></c:out></li>
+							href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}"><c:out
+									value="${dictionary.dictionaryName}"></c:out></a> <br> <c:out
+								value="${dictionary.description}"></c:out></li>
 					</c:forEach>
 				</ul>
 		</c:when>

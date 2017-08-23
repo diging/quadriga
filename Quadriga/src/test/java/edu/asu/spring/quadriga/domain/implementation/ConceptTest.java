@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.Concept;
 public class ConceptTest {
 
 	IConcept concept;

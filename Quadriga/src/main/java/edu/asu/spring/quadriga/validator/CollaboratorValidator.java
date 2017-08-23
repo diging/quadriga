@@ -10,8 +10,8 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
+import edu.asu.spring.quadriga.domain.dictionary.impl.DictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
-import edu.asu.spring.quadriga.domain.impl.dictionary.DictionaryCollaborator;
 /**
  * This class checks if the collaborator user name and roles are empty
  * @author kiran batna

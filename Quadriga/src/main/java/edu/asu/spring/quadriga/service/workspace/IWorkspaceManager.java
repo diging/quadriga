@@ -2,28 +2,28 @@ package edu.asu.spring.quadriga.service.workspace;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.domain.network.INetwork;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IWorkspaceManager {
 
-    IWorkSpace getWorkspaceDetails(String workspaceId, String username)
+    IWorkspace getWorkspaceDetails(String workspaceId, String username)
             throws QuadrigaStorageException, QuadrigaAccessException;
 
-    List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceid)
+    List<INetwork> getNetworks(String workspaceid)
             throws QuadrigaStorageException;
 
     String getWorkspaceName(String workspaceId) throws QuadrigaStorageException;
 
-    List<IWorkspaceNetwork> getWorkspaceRejectedNetworkList(String workspaceid)
+    List<INetwork> getWorkspaceRejectedNetworkList(String workspaceid)
             throws QuadrigaStorageException;
     
-    List<IWorkspaceNetwork> getWorkspaceApprovedNetworkList(String workspaceid)
+    List<INetwork> getWorkspaceApprovedNetworkList(String workspaceid)
             throws QuadrigaStorageException;
 
-    IWorkSpace getWorkspaceDetails(String workspaceId)
+    IWorkspace getWorkspaceDetails(String workspaceId)
             throws QuadrigaStorageException, QuadrigaAccessException;
 
     String getProjectIdFromWorkspaceId(String workspaceId)

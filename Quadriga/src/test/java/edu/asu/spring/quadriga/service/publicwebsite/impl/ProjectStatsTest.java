@@ -16,8 +16,8 @@ import org.mockito.MockitoAnnotations;
 
 import edu.asu.spring.quadriga.domain.IConceptStats;
 import edu.asu.spring.quadriga.domain.impl.ConceptStats;
-import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.network.INetwork;
+import edu.asu.spring.quadriga.domain.network.impl.Network;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
@@ -40,11 +40,11 @@ public class ProjectStatsTest {
     public void setUp() throws QuadrigaStorageException {
         MockitoAnnotations.initMocks(this);
 
-        Network network1 = new Network();
+        INetwork network1 = new Network();
         network1.setNetworkId("id");
         network1.setNetworkName("test network");
 
-        Network network2 = new Network();
+        INetwork network2 = new Network();
         network2.setNetworkId("id2");
         network2.setNetworkName("test network2");
 

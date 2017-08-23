@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.proxy.WorkSpaceProxy;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceShallowMapper;
@@ -43,7 +43,7 @@ public class ListWSManager implements IListWSManager {
      */
     @Override
     @Transactional
-    public List<IWorkSpace> listWorkspace(String projectId, String user) throws QuadrigaStorageException {
+    public List<IWorkspace> listWorkspace(String projectId, String user) throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = wsDao.listWorkspaceDTO(projectId, user);
         return mapWorkspaceDTOs(workspaceDTOList);
     }
@@ -60,7 +60,7 @@ public class ListWSManager implements IListWSManager {
      */
     @Override
     @Transactional
-    public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid, String user) throws QuadrigaStorageException {
+    public List<IWorkspace> listWorkspaceOfCollaborator(String projectid, String user) throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = wsDao.listWorkspaceDTOofCollaborator(projectid, user);
         return mapWorkspaceDTOs(workspaceDTOList);
     }
@@ -76,14 +76,14 @@ public class ListWSManager implements IListWSManager {
      */
     @Override
     @Transactional
-    public List<IWorkSpace> listActiveWorkspace(String projectId, String user) throws QuadrigaStorageException {
+    public List<IWorkspace> listActiveWorkspace(String projectId, String user) throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = wsDao.listActiveWorkspaceDTOofOwner(projectId, user);
         return mapWorkspaceDTOs(workspaceDTOList);
     }
 
     @Override
     @Transactional
-    public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectId, String user)
+    public List<IWorkspace> listActiveWorkspaceByCollaborator(String projectId, String user)
             throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = wsDao.listActiveWorkspaceDTOofCollaborator(projectId, user);
         return mapWorkspaceDTOs(workspaceDTOList);
@@ -100,7 +100,7 @@ public class ListWSManager implements IListWSManager {
      */
     @Override
     @Transactional
-    public List<IWorkSpace> listArchivedWorkspace(String projectId, String user) throws QuadrigaStorageException {
+    public List<IWorkspace> listArchivedWorkspace(String projectId, String user) throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = wsDao.listArchivedWorkspaceDTO(projectId, user);
         return mapWorkspaceDTOs(workspaceDTOList);
     }
@@ -117,7 +117,7 @@ public class ListWSManager implements IListWSManager {
      */
     @Override
     @Transactional
-    public List<IWorkSpace> listDeactivatedWorkspace(String projectId, String user) throws QuadrigaStorageException {
+    public List<IWorkspace> listDeactivatedWorkspace(String projectId, String user) throws QuadrigaStorageException {
         List<WorkspaceDTO> workspaceDTOList = wsDao.listDeactivatedWorkspaceDTO(projectId, user);
         return mapWorkspaceDTOs(workspaceDTOList);
     }
@@ -130,8 +130,8 @@ public class ListWSManager implements IListWSManager {
      * @return A list of Workspace proxies ({@link WorkSpaceProxy}).
      * @throws QuadrigaStorageException
      */
-    private List<IWorkSpace> mapWorkspaceDTOs(List<WorkspaceDTO> workspaceDTOList) throws QuadrigaStorageException {
-        List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();;
+    private List<IWorkspace> mapWorkspaceDTOs(List<WorkspaceDTO> workspaceDTOList) throws QuadrigaStorageException {
+        List<IWorkspace> workspaceList = new ArrayList<IWorkspace>();;
         if(workspaceDTOList != null){   
             for(WorkspaceDTO workspaceDTO : workspaceDTOList){
                 workspaceList.add(workspaceShallowMapper.mapWorkspaceDTO(workspaceDTO));

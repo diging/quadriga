@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
+import edu.asu.spring.quadriga.domain.workbench.impl.Project;
 
 @Service
 public class ProjectValidator implements Validator {

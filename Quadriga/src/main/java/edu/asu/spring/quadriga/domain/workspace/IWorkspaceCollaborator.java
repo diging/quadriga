@@ -6,9 +6,9 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 
 public interface IWorkspaceCollaborator 
 {
-	public abstract IWorkSpace getWorkspace();
+	public abstract IWorkspace getWorkspace();
 	
-	public abstract void setWorkspace(IWorkSpace workspace);
+	public abstract void setWorkspace(IWorkspace workspace);
 	
 	public abstract ICollaborator getCollaborator();
 	

@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="edu.asu.spring">
+	<logger name="edu.asu.spring.quadriga">
 		<level value="debug" />
 	</logger>
 	
@@ -20,6 +20,10 @@
 		<level value="info" />
 	</logger>
 	
+	<logger name="org.springframework.security">
+        <level value="debug" />
+    </logger>
+    
 	<logger name="org.springframework.beans">
 		<level value="info" />
 	</logger>
@@ -37,7 +41,7 @@
 	</logger>
 	
 	<logger name="net.sf.ehcache">
-	   <level value="info"/> 
+	   <level value="warning"/> 
 	</logger>
 
 	<!-- Root Logger -->

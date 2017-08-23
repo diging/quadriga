@@ -171,14 +171,14 @@
 
 		<hr>
 		<c:choose>
-			<c:when test="${not empty concept.conceptCollectionConcepts}">
+			<c:when test="${not empty collection.concepts}">
 				<p>These are all the concepts in this collection.</p>
 				<form method="post"
-					action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/deleteitems">
+					action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collection.conceptCollectionId}/deleteitems">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<c:if test="${isAdmin || hasReadWrite}">
 					<button type="button" class="btn btn-primary btn-sm"
-						onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'">
+						onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collection.conceptCollectionId}/searchitems'">
 						<span class="fa fa-plus"></span> Add Entry
 					</button>
 
@@ -200,21 +200,21 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="conceptItem"
-								items="${concept.conceptCollectionConcepts}">
+							<c:forEach var="concept"
+								items="${collection.concepts}">
 								<tr>
 								<c:if test="${isAdmin || hasReadWrite}">
 									<td><input type="checkbox" class="selected"
-										name="selected" value="${conceptItem.concept.conceptId}" /></td>
+										name="selected" value="${concept.conceptId}" /></td>
 								</c:if>
 									<td><font size="2"><c:out
-												value="${conceptItem.concept.lemma}"></c:out></font></td>
+												value="${concept.lemma}"></c:out></font></td>
 									<td width="25%"><font size="2"><c:out
-												value="${conceptItem.concept.conceptId}"></c:out></font></td>
+												value="${concept.conceptId}"></c:out></font></td>
 									<td class="center"><font size="2"><c:out
-												value="${conceptItem.concept.pos}"></c:out></font></td>
+												value="${concept.pos}"></c:out></font></td>
 									<td width="30%"><font size="2"><c:out
-												value="${conceptItem.concept.description}"></c:out></font></td>
+												value="${concept.description}"></c:out></font></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -231,7 +231,7 @@
 					</c:if>
 				<c:if test="${isAdmin || hasReadWrite}">
 				<input type=button class="btn btn-primary"
-					onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'"
+					onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collection.conceptCollectionId}/searchitems'"
 					value='Add Items' />
 				</c:if>
 			</c:otherwise>

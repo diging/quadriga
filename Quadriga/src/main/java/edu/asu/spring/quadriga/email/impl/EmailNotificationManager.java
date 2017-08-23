@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.velocity.IVelocityBuilder;
@@ -85,7 +85,7 @@ public class EmailNotificationManager implements IEmailNotificationManager {
      * {@inheritDoc}
      */
     @Override
-    public void sendNewWorkspaceAddedToProject(IProject project, IWorkSpace workspace) {
+    public void sendNewWorkspaceAddedToProject(IProject project, IWorkspace workspace) {
         IUser projectOwner = project.getOwner();
         if (projectOwner.getEmail() != null && !projectOwner.getEmail().equals("")) {
             // Build the message to be sent to the user
