@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,10 +227,12 @@ public class RetrieveProjectController {
         List<IWorkSpace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(tempProject.getProjectId(), userName);
         
         // Examine the workspace details associated with the project. Include details of only active workspaces.
-        List<String> deactivatedWorkspaceIds = new ArrayList<String>();
-        for(IWorkSpace deactivatedWorkspace : deactivatedWorkspaces){
+        /*List<String> deactivatedWorkspaceIds = new ArrayList<String>();
+          for(IWorkSpace deactivatedWorkspace : deactivatedWorkspaces){
             deactivatedWorkspaceIds.add(deactivatedWorkspace.getWorkspaceId());
-        }
+          }*/
+        
+        List<String> deactivatedWorkspaceIds = deactivatedWorkspaces.stream().map (u -> u.getWorkspaceId()).collect (Collectors.toList());
         
         if(!isWorkspaceCollaborator){
             for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
