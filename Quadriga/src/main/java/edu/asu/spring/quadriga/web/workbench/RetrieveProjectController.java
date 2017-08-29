@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.codehaus.jettison.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +53,8 @@ public class RetrieveProjectController {
 
     @Autowired
     private IWSSecurityChecker securityChecker;
+    
+    private final Logger logger = LoggerFactory.getLogger(RetrieveProjectController.class);
     
     /**
      * this method acts as a controller for handling all the activities on the
@@ -223,38 +227,29 @@ public class RetrieveProjectController {
     
     
     private void includeActiveProjectWorkspaceDetails(IProject tempProject, String userName, boolean isWorkspaceCollaborator) throws QuadrigaStorageException{
-        List<IProjectWorkspace> tempProjectWorkspaces = new ArrayList<IProjectWorkspace>();
-        List<IWorkSpace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(tempProject.getProjectId(), userName);
-        
-        // Examine the workspace details associated with the project. Include details of only active workspaces.
-        /*List<String> deactivatedWorkspaceIds = new ArrayList<String>();
-          for(IWorkSpace deactivatedWorkspace : deactivatedWorkspaces){
-            deactivatedWorkspaceIds.add(deactivatedWorkspace.getWorkspaceId());
-          }*/
-        
+        List<IProjectWorkspace> tempProjectWorkspaces;
+        List<IWorkSpace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(tempProject.getProjectId(), userName);    
         List<String> deactivatedWorkspaceIds = deactivatedWorkspaces.stream().map (u -> u.getWorkspaceId()).collect (Collectors.toList());
         
         if(!isWorkspaceCollaborator){
-            for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
-                String workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
-                if(!deactivatedWorkspaceIds.contains(workspaceId)){
-                            tempProjectWorkspaces.add(projectWorkspace);
-                }
-            }
+            tempProjectWorkspaces = tempProject.getProjectWorkspaces().stream().filter(u -> !deactivatedWorkspaceIds.contains(u.getWorkspace().getWorkspaceId())).collect(Collectors.toList());
         }
         else{
-            for(IProjectWorkspace projectWorkspace : tempProject.getProjectWorkspaces()){
-                String workspaceId = projectWorkspace.getWorkspace().getWorkspaceId();
-                    if(!deactivatedWorkspaceIds.contains(workspaceId) && (securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || 
-                            securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || 
-                            securityChecker.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR))){
-                            tempProjectWorkspaces.add(projectWorkspace);
-                    }
-            }
+            
+            tempProjectWorkspaces = tempProject.getProjectWorkspaces().stream().filter(u -> {
+                try {
+                    return (!deactivatedWorkspaceIds.contains(u.getWorkspace().getWorkspaceId()) && 
+                            (securityChecker.chkCollabWorkspaceAccess(userName,u.getWorkspace().getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || 
+                            securityChecker.chkCollabWorkspaceAccess(userName, u.getWorkspace().getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || 
+                            securityChecker.chkCollabWorkspaceAccess(userName, u.getWorkspace().getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)));
+                } catch (QuadrigaStorageException e) {
+                        logger.error("Error while checking collaborator workspace access :" + e.getMessage());
+                        return false;
+                }
+            }).collect(Collectors.toList());
+
         }
-        
-        
-        
+
         tempProject.setProjectWorkspaces(tempProjectWorkspaces);
     }
 }
