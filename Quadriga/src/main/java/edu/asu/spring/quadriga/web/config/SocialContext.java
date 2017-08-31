@@ -17,11 +17,9 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
-
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.utilities.IPropertiesManager;
 import edu.asu.spring.quadriga.web.config.social.AdjustableGithubConnectionFactory;
-import edu.asu.spring.quadriga.aspects.access.tokens.impl.GitHubChecker;
 
 /**
  * This class is used to configure Quadriga application to use Github for user authentication and authorization. 
@@ -47,9 +45,6 @@ public class SocialContext implements SocialConfigurer  {
     private IPropertiesManager propertyManager;
     
     @Autowired
-    private IIdentityProviderRegistry identityProviderRegistry;
-    
-    @Autowired
     private IReloadService reloadService;
 
     /**
@@ -60,14 +55,10 @@ public class SocialContext implements SocialConfigurer  {
             Environment env) {
 
         String githubClientId = propertyManager.getProperty(SocialProperties.GITHUB_CLIENT_ID);
-        
         String githubSecret = propertyManager.getProperty(SocialProperties.GITHUB_SECRET);
         AdjustableGithubConnectionFactory githubFactory = new AdjustableGithubConnectionFactory(githubClientId, githubSecret);
-        
         cfConfig.addConnectionFactory(githubFactory);
         reloadService.addFactory(IReloadService.GITHUB, githubFactory);
-        identityProviderRegistry.addProvider(githubFactory.getProviderId());
-        identityProviderRegistry.addProviderTokenChecker(githubFactory.getProviderId(), GitHubChecker.ID);
     }
     
     @Override

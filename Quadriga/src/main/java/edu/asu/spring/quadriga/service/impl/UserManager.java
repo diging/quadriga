@@ -3,15 +3,12 @@ package edu.asu.spring.quadriga.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -318,14 +315,13 @@ public class UserManager implements IUserManager {
 
         String plainPassword = request.getPassword();
         boolean success = false;
+        
         if(request.isSocialSignIn()){
             success =  usermanagerDAO.addNewUserAccountRequest(request.getUsername(),  null, request.getName(),  request.getEmail(),  request.getProvider(),  request.getUserIdOfProvider());
+        }else{
+            success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword), request.getName(), request.getEmail(), null, null);
         }
-        else{
-            success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
-                    request.getName(), request.getEmail(), null, null);
-        }
-
+        
         if (success) {
             IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
             List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
@@ -471,14 +467,14 @@ public class UserManager implements IUserManager {
         String id = null;
         while (true) {
             id = "USR" + generateUniqueId() + "_" + providerId;
-            Object existingFile = null;
+            Object existingUser = null;
             try {
-                existingFile = getUser(id);
+                existingUser = getUser(id);
             } catch (QuadrigaStorageException e) {
-                // TODO Auto-generated catch block
                 logger.error("Error while retrieving user details",e);
+                break;
             }
-            if (existingFile == null) {
+            if (existingUser == null) {
                 break;
             }
         }

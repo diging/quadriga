@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.exceptions.PropertiesStorageException;
 import edu.asu.spring.quadriga.utilities.IPropertiesManager;
 
 
-@PropertySource("classpath:/social.properties")
+@PropertySource("classpath:/settings.properties")
 @Service
 public class PropertiesManager extends Observable implements IPropertiesManager {
     

@@ -25,43 +25,19 @@ import edu.asu.spring.quadriga.web.config.social.SimpleSocialUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityContext extends WebSecurityConfigurerAdapter {
-    //private AuthenticationManager authManager;
+    
     @Override
     public void configure(WebSecurity web) throws Exception {
         web
-        // Spring Security ignores request to static resources such as CSS or JS
-        // files.
+        // Spring Security ignores request to static resources such as CSS or JS files.
         .ignoring().antMatchers("/static/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-       /*
-        Refer: http://stackoverflow.com/questions/29595098/why-doesnt-my-custom-login-page-show-with-spring-security-4
-        http
-        .csrf().disable();
-        http
-        .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         
-         http
-        .authorizeRequests()
-        .antMatchers("/login*").anonymous()
-        .anyRequest().authenticated()
-        .and()
-        .formLogin()
-        .loginPage("/login")
-        .defaultSuccessUrl("/auth/welcome")
-        .failureUrl("/loginfailed")
-        //.successHandler(successHandler())
-        .and()
-        .logout().logoutSuccessUrl("/login")
-        .invalidateHttpSession(true);
-         
-        */
-        
+        http.csrf().disable();
         HeadersConfigurer<HttpSecurity> config = http.antMatcher("**").headers().frameOptions().sameOrigin();
-    
         // Configures form login
         config.and().exceptionHandling().accessDeniedPage("/403")
                 // Configures url based authorization
@@ -76,33 +52,17 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/welcome**", "/auth/home**","/auth/about**","/auth/profile/**").hasAnyRole("QUADRIGA_USER_ADMIN","QUADRIGA_USER_STANDARD","QUADRIGA_USER_COLLABORATOR")
                 .antMatchers("/auth/workbench/**", "/auth/rest/**","/auth/conceptcollections/**","/auth/conceptdetails/**","/auth/transformation/**","/auth/searchitems/**","/auth/dictionaries/**","/auth/editing/**","/auth/networks/**").hasAnyRole("QUADRIGA_USER_STANDARD","QUADRIGA_USER_COLLABORATOR")
                 .antMatchers("/users/**", "/admin/**","/auth/users/**","/checks/**").hasRole("QUADRIGA_USER_ADMIN")
-                .antMatchers("/users/**", "/admin/**").hasRole("QUADRIGA_USER_ADMIN")
-                //.antMatchers("/**").denyAll()
                 .anyRequest().hasAnyRole("QUADRIGA_USER_ADMIN","QUADRIGA_USER_STANDARD","QUADRIGA_USER_COLLABORATOR")
-                
-                // Adds the SocialAuthenticationFilter to Spring Security's
-                // filter chain.
+                // Adds the SocialAuthenticationFilter to Spring Security's filter chain.
                 .and().apply(new SpringSocialConfigurer());
     }
   
     
-   @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.authenticationProvider(daoAuthProvider());
-        //auth.authenticationProvider(new AdminAuthenticationProvider());
-        //authManager = auth.getObject();
-        
-    }
-    
-  /*  @Bean(name=BeanIds.AUTHENTICATION_MANAGER)
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
-        return authManager ;
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthProvider());
     }
-    */
   
-
     @Bean
     public SavedRequestAwareAuthenticationSuccessHandler successHandler() {
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();

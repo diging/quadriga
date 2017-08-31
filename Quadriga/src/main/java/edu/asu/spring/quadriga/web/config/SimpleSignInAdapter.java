@@ -59,8 +59,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
             NativeWebRequest request) {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        IUser user = null;
-            user = (IUser)userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(), connection.getKey().getProviderId());
+        IUser user = (IUser)userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(), connection.getKey().getProviderId());
       
         // if user details is not present in the database, create a database record for the user.
         if (user == null) {
@@ -73,15 +72,13 @@ public final class SimpleSignInAdapter implements SignInAdapter {
             accountRequest.setProvider(user.getProvider());
             accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
             try {
-                //userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
                 userManager.addNewUser(accountRequest);
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
             } catch (UsernameExistsException e) {
                 logger.error("Could not add user.", e);
             } catch (QuadrigaNotificationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("Could not notify admin about the new user.", e);
             }
         } 
         // if user details is present in the database, assign appropriate roles to the user.

@@ -35,7 +35,6 @@ public class QuadrigaConnectionSignUp implements ConnectionSignUp{
         accountRequest.setProvider(user.getProvider());
         accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
         try {
-             //userManager.addSocialUser(user.getUserName(), user.getName(), user.getEmail(), user.getProvider(), user.getUserIdOfProvider());
              userManager.addNewUser(accountRequest);
         } catch (QuadrigaStorageException | UsernameExistsException | QuadrigaNotificationException e) {
             logger.error("Could not store user.", e);

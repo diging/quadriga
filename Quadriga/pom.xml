@@ -14,6 +14,8 @@
 		<org.aspectj-version>1.7.3</org.aspectj-version>
 		<org.slf4j-version>1.7.25</org.slf4j-version>
 		<spring-security-version>4.0.4.RELEASE</spring-security-version>
+		<spring-social.version>1.1.4.RELEASE</spring-social.version>
+        <spring-social-github.version>1.0.0.BUILD-SNAPSHOT</spring-social-github.version>
 		
 		<!-- Deploy Properties -->
 		<deploy.quadriga.baseurl>http://localhost:8080/quadriga/</deploy.quadriga.baseurl>
@@ -38,14 +40,13 @@
 		<tempfiles.dir.location></tempfiles.dir.location>
 
 		<email.host></email.host>
-		<email.port>25</email.port>
+		<email.port></email.port>
 		<email.username></email.username>
 		<email.pw></email.pw>
 		<email.from></email.from>
 		<email.enabled>true</email.enabled>
 		<quadriga.baseurl/>
-		<spring-social.version>1.1.4.RELEASE</spring-social.version>
-        <spring-social-github.version>1.0.0.BUILD-SNAPSHOT</spring-social-github.version>
+		
         
 	</properties>
 
@@ -448,8 +449,6 @@
             <artifactId>spring-social-github</artifactId>
             <version>${spring-social-github.version}</version>
         </dependency>
-		
-
 	</dependencies>
 
 	<profiles>

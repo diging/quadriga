@@ -39,20 +39,17 @@ public class UserDeepMapper implements IUserDeepMapper {
      */
     @Override
     @Transactional
-    public IUser getUser(String userName)
-            throws QuadrigaStorageException {
-        
+    public IUser getUser(String userName) throws QuadrigaStorageException {
         IUser user = null;
-        IQuadrigaRole quadrigaRole = null;
-        List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
         QuadrigaUserDTO userDTO = dbConnect.getUserDTO(userName);
-
+        
         if (userDTO != null) {
             user = mapUser(userDTO);
         }
         if (user != null) {
             List<IQuadrigaRole> userRole = user.getQuadrigaRoles();
-
+            IQuadrigaRole quadrigaRole = null;
+            List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
             for (int i = 0; i < userRole.size(); i++) {
                 quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
                         .getDBid());
@@ -69,8 +66,9 @@ public class UserDeepMapper implements IUserDeepMapper {
             user.setQuadrigaRoles(rolesList);
         } else {
             user = userFactory.createUserObject();
-            quadrigaRole = roleManager
+            IQuadrigaRole quadrigaRole  = roleManager
                     .getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+            List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
             rolesList.add(quadrigaRole);
             user.setQuadrigaRoles(rolesList); 
         }
@@ -83,7 +81,6 @@ public class UserDeepMapper implements IUserDeepMapper {
     @Transactional
     public IUser findUserByProviderUserId(String userId, String provider){
         IUser user = null;
-        
         QuadrigaUserDTO userDTO = dbConnect.findUserByProviderUserId(userId, provider);
         
         if (userDTO != null) {
