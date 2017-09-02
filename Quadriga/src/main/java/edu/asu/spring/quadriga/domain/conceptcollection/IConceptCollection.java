@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 
 /**
  * @description   : interface to implement ConceptCollection.
@@ -36,18 +36,6 @@ public interface IConceptCollection
 	public abstract void setConceptCollectionCollaborators(List<IConceptCollectionCollaborator> 
 	conceptCollectionCollaborators);
 	
-	public abstract List<IConceptCollectionConcepts> getConceptCollectionConcepts();
-	
-	public abstract void setConceptCollectionConcepts(List<IConceptCollectionConcepts> conceptCollectionConcepts);
-	
-    public abstract List<IProjectConceptCollection> getConceptCollectionProjects();
-    
-    public abstract void setConceptCollectionProjects(List<IProjectConceptCollection> conceptCollectionProjects);
-    
-    public abstract List<IWorkspaceConceptCollection> getConceptCollectionWorkspaces();
-    
-    public abstract void setConceptCollectionWorkspaces(List<IWorkspaceConceptCollection> conceptCollectionWorkspaces);
-	
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);
@@ -63,5 +51,17 @@ public interface IConceptCollection
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updatedDate);
+
+    void setWorkspaces(List<IWorkspace> workspaces);
+
+    List<IWorkspace> getWorkspaces();
+
+    void setProjects(List<IProject> projects);
+
+    List<IProject> getProjects();
+
+    void setConcepts(List<IConcept> concepts);
+
+    List<IConcept> getConcepts();
 
 }

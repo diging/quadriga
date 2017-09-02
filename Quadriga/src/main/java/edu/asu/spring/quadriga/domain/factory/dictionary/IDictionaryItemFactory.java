@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.factory.dictionary;
 
-import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
+import edu.asu.spring.quadriga.domain.dictionary.impl.Item;
 
 /**
  * Factory interface for DictionaryItems factories.

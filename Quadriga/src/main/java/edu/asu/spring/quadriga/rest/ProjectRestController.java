@@ -40,16 +40,10 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 public class ProjectRestController {
 
 	@Autowired
-	IUserManager usermanager;
+	private IRetrieveProjectManager projectManager;
 
 	@Autowired
-	IProject project;
-
-	@Autowired
-	IRetrieveProjectManager projectManager;
-
-	@Autowired
-	IRestVelocityFactory restVelocityFactory;
+	private IRestVelocityFactory restVelocityFactory;
 
 	/**
 	 * Rest interface to List projects for a @userId

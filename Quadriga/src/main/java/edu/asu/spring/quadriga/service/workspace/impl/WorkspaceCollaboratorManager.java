@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCollaboratorDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.impl.WorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
@@ -77,7 +77,7 @@ public class WorkspaceCollaboratorManager extends CollaboratorManager<WorkspaceC
 		List<IQuadrigaRole> roleList;
 
 		WorkspaceDTO workspaceDTO  = workspaceDao.getDTO(workspaceId);
-        IWorkSpace workspace = workspaceDeepMapper.mapWorkspaceDTO(workspaceDTO);
+        IWorkspace workspace = workspaceDeepMapper.mapWorkspaceDTO(workspaceDTO);
 		//retrieve the collaborators associated with project
 		if(workspace != null){
 			workspaceCollaboratorList = workspace.getWorkspaceCollaborators();

@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.conceptcollection.impl.ConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 

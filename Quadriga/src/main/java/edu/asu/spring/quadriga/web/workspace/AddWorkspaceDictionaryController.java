@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
@@ -52,7 +52,7 @@ public class AddWorkspaceDictionaryController {
         List<IDictionary> dictionaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(workspaceId);
         model.addAttribute("dictinarylist", dictionaryList);
         model.addAttribute("workspaceId", workspaceId);
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
         return "auth/workbench/workspace/adddictionaries";
     }

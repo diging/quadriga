@@ -12,13 +12,14 @@
     	<property name="hibernateProperties">
     		<value>
     			hibernate.dialect=org.hibernate.dialect.MySQLDialect
-           		hibernate.show_sql=true
+           		hibernate.show_sql=false
            		hibernate.hbm2ddl.auto = update
     		</value>
     	</property>
     	<property name="packagesToScan">
     		<list>	
     			<value>edu.asu.spring.quadriga.dto</value>
+    			<value>edu.asu.spring.quadriga.conceptpower</value>
     		</list>
     	</property>
     </bean>

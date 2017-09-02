@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.factory.workspace.ITextFileFactory;
-import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
+import edu.asu.spring.quadriga.domain.workspace.impl.TextFile;
 import edu.asu.spring.quadriga.dto.TextFileDTO;
 import edu.asu.spring.quadriga.service.textfile.mapper.ITextFileMapper;
 

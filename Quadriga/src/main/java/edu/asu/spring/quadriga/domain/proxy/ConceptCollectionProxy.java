@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
-import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollection;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 
@@ -259,87 +259,29 @@ public class ConceptCollectionProxy implements IConceptCollection {
 		}
 		this.conceptCollection.setConceptCollectionCollaborators(conceptCollectionCollaborators);
 	}
-	/**
-	 * {@inheritDoc}
-	 * This method checks if local {@link IConceptCollection} object is null. 
-	 * If its null it would use concept collection manager object to fetch full concept collection object and then return {@link List} of {@link IConceptCollectionConcepts}
-	 * else if local {@link IConceptCollection} is not null, just returns {@link List} of {@link IConceptCollectionConcepts} from local {@link IConceptCollection}
-	 */
-	@Override
-	public List<IConceptCollectionConcepts> getConceptCollectionConcepts() {
-		if(this.conceptCollection == null){
-			setConceptCollectionDetails();
-		}
-		return this.conceptCollection.getConceptCollectionConcepts();
-	}
 
-	/**
-	 * {@inheritDoc}
-	 * This method also checks if local {@link IConceptCollection} object is null. 
-	 * If its null it would use manager object to fetch full concept collection object and then set {@link List} of {@link IConceptCollectionConcepts}
-	 * else if local {@link IConceptCollection} is not null, just set {@link List} of {@link IConceptCollectionConcepts}
-	 */
-	@Override
-	public void setConceptCollectionConcepts(
-			List<IConceptCollectionConcepts> conceptCollectionConcepts) {
-		if(this.conceptCollection == null){
-			setConceptCollectionDetails();
-		}
-		this.conceptCollection.setConceptCollectionConcepts(conceptCollectionConcepts);
-	}
-	/**
-	 * {@inheritDoc}
-	 * This method checks if local {@link IConceptCollection} object is null. 
-	 * If its null it would use concept collection manager object to fetch full concept collection object and then return {@link List} of {@link IProjectConceptCollection}
-	 * else if local {@link IConceptCollection} is not null, just returns {@link List} of {@link IProjectConceptCollection} from local {@link IConceptCollection}
-	 */
-	@Override
-	public List<IProjectConceptCollection> getConceptCollectionProjects() {
-		if(this.conceptCollection == null){
-			setConceptCollectionDetails();
-		}
-		return this.conceptCollection.getConceptCollectionProjects();
-	}
-	/**
-	 * {@inheritDoc}
-	 * This method also checks if local {@link IConceptCollection} object is null. 
-	 * If its null it would use manager object to fetch full concept collection object and then set {@link List} of {@link IProjectConceptCollection}
-	 * else if local {@link IConceptCollection} is not null, just set {@link List} of {@link IProjectConceptCollection}
-	 */
-	@Override
-	public void setConceptCollectionProjects(
-			List<IProjectConceptCollection> conceptCollectionProjects) {
-		if(this.conceptCollection == null){
-			setConceptCollectionDetails();
-		}
-		this.conceptCollection.setConceptCollectionProjects(conceptCollectionProjects);
-	}
-	/**
-	 * {@inheritDoc}
-	 * This method checks if local {@link IConceptCollection} object is null. 
-	 * If its null it would use concept collection manager object to fetch full concept collection object and then return {@link List} of {@link IWorkspaceConceptCollection}
-	 * else if local {@link IConceptCollection} is not null, just returns {@link List} of {@link IWorkspaceConceptCollection} from local {@link IConceptCollection}
-	 */
-	@Override
-	public List<IWorkspaceConceptCollection> getConceptCollectionWorkspaces() {
-		if(this.conceptCollection == null){
-			setConceptCollectionDetails();
-		}
-		return this.conceptCollection.getConceptCollectionWorkspaces();
-	}
-	/**
-	 * {@inheritDoc}
-	 * This method also checks if local {@link IConceptCollection} object is null. 
-	 * If its null it would use manager object to fetch full concept collection object and then set {@link List} of {@link IWorkspaceConceptCollection}
-	 * else if local {@link IConceptCollection} is not null, just set {@link List} of {@link IWorkspaceConceptCollection}
-	 */
-	@Override
-	public void setConceptCollectionWorkspaces(
-			List<IWorkspaceConceptCollection> conceptCollectionWorkspaces) {
-		if(this.conceptCollection == null){
-			setConceptCollectionDetails();
-		}
-		this.conceptCollection.setConceptCollectionWorkspaces(conceptCollectionWorkspaces);
-	}
+    public void setWorkspaces(List<IWorkspace> workspaces) {
+        conceptCollection.setWorkspaces(workspaces);
+    }
+
+    public List<IWorkspace> getWorkspaces() {
+        return conceptCollection.getWorkspaces();
+    }
+
+    public void setProjects(List<IProject> projects) {
+        conceptCollection.setProjects(projects);
+    }
+
+    public List<IProject> getProjects() {
+        return conceptCollection.getProjects();
+    }
+
+    public void setConcepts(List<IConcept> concepts) {
+        conceptCollection.setConcepts(concepts);
+    }
+
+    public List<IConcept> getConcepts() {
+        return conceptCollection.getConcepts();
+    }
 
 }

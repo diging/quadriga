@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.User;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -90,7 +90,7 @@ public class TransferWSOwnerController {
         String owner = principal.getName();
 
         // retrieve the workspace details
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, owner);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceid, owner);
 
         // retrieve the collaborators associated with the workspace
         List<IWorkspaceCollaborator> collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
@@ -135,7 +135,7 @@ public class TransferWSOwnerController {
         String userName = principal.getName();
 
         // retrieve the workspace details
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
 
         // retrieve the collaborators associated with the workspace
         List<IWorkspaceCollaborator> collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);

@@ -4,8 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 
 /**
  * @description   : interface to implement Project class.
@@ -43,18 +46,6 @@ public interface IProject
 	
 	public abstract void setProjectCollaborators(List<IProjectCollaborator> projectCollaborators);
 	
-	public abstract List<IProjectWorkspace> getProjectWorkspaces();
-	
-	public abstract void setProjectWorkspaces(List<IProjectWorkspace> projectWorkspaces);
-	
-	public abstract List<IProjectDictionary> getProjectDictionaries();
-	
-	public abstract void setProjectDictionaries(List<IProjectDictionary> projectDictionaries);
-	
-	public abstract List<IProjectConceptCollection> getProjectConceptCollections();
-	
-	public abstract void setProjectConceptCollections(List<IProjectConceptCollection> projectConceptCollections);
-	
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);
@@ -74,5 +65,17 @@ public interface IProject
     void setResolver(IProjectHandleResolver resolver);
 
     IProjectHandleResolver getResolver();
+
+    void setDictionaries(List<IDictionary> dictionaries);
+
+    List<IDictionary> getDictionaries();
+
+    void setConceptCollections(List<IConceptCollection> conceptCollections);
+
+    List<IConceptCollection> getConceptCollections();
+
+    void setWorkspaces(List<IWorkspace> workspaces);
+
+    List<IWorkspace> getWorkspaces();
 	
 }

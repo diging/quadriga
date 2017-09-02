@@ -15,6 +15,7 @@ public class Node {
     private String type;
     private String id;
     private String eventId;
+    private String sourceURI;
     private List<Term> terms;
     private List<String> alternativeIds;
 
@@ -63,6 +64,14 @@ public class Node {
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
+    }
+
+    public String getSourceURI() {
+        return sourceURI;
+    }
+
+    public void setSourceURI(String sourceURI) {
+        this.sourceURI = sourceURI;
     }
 
     public List<String> getAlternativeIds() {

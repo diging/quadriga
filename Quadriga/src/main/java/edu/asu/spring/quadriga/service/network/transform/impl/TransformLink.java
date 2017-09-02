@@ -21,6 +21,7 @@ public class TransformLink {
 	private String occurTime;
 	private String place;
 	private String conceptName;
+	private String sourceUri;
 	private String id;
 	private HashMap<String, Integer> terms = new HashMap<String, Integer>();
 	private String representedStatement;
@@ -102,7 +103,15 @@ public class TransformLink {
 		this.conceptName = conceptName;
 	}
 
-	public String getId() {
+	public String getSourceUri() {
+        return sourceUri;
+    }
+
+    public void setSourceUri(String sourceUri) {
+        this.sourceUri = sourceUri;
+    }
+
+    public String getId() {
 		return id;
 	}
 

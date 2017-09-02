@@ -13,10 +13,8 @@ import edu.asu.spring.quadriga.mapper.workbench.IProjectDictionaryShallowMapper;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceShallowMapper;
 
 @Service
-public class ProjectDeepMapper extends ProjectDTOMapper implements
-        IProjectDeepMapper {
+public class ProjectDeepMapper extends ProjectDTOMapper implements IProjectDeepMapper {
 
-    
     @Autowired
     private IProjectConceptCollectionShallowMapper projectConceptCollectionShallowMapper;
 
@@ -26,30 +24,21 @@ public class ProjectDeepMapper extends ProjectDTOMapper implements
     @Autowired
     private IWorkspaceShallowMapper wsShallowMapper;
 
-    
     /**
      * {@inheritDoc}
      */
     @Override
     @Transactional
-    public IProject getProject(ProjectDTO projectDTO)
-            throws QuadrigaStorageException {
+    public IProject getProject(ProjectDTO projectDTO) throws QuadrigaStorageException {
         IProject project = super.getProject(projectDTO);
 
-        // Set Project Concept Collections
-        project.setProjectConceptCollections(projectConceptCollectionShallowMapper
-                .getProjectConceptCollectionList(project,
-                        projectDTO.getProjectConceptCollectionDTOList()));
-        // Set Project Dictionaries
-        project.setProjectDictionaries(projectDictionaryShallowMapper
-                .getProjectDictionaryList(project, projectDTO));
-        // Set Project Workspaces
-        project.setProjectWorkspaces(wsShallowMapper
-                .getProjectWorkspaceList(project, projectDTO.getProjectWorkspaceDTOList()));
+        project.setConceptCollections(projectConceptCollectionShallowMapper.getConceptCollections(project,
+                projectDTO.getProjectConceptCollectionDTOList()));
+        project.setDictionaries(projectDictionaryShallowMapper.getDictionaries(project, projectDTO));
+        project.setWorkspaces(
+                wsShallowMapper.getProjectWorkspaceList(project, projectDTO.getProjectWorkspaceDTOList()));
 
         return project;
     }
-
-    
 
 }

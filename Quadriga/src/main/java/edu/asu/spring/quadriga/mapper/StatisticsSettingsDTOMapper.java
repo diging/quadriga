@@ -6,7 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IStatisticsSettings;
-import edu.asu.spring.quadriga.domain.impl.workbench.StatisticsSettings;
+import edu.asu.spring.quadriga.domain.workbench.impl.StatisticsSettings;
 import edu.asu.spring.quadriga.dto.StatisticsSettingsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 

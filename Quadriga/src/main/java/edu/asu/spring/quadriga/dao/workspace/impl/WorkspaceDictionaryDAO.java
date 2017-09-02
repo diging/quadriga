@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
@@ -21,7 +21,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
-import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
+import edu.asu.spring.quadriga.mapper.dictionary.IDictionaryDeepMapper;
 
 @Repository
 public class WorkspaceDictionaryDAO extends BaseDAO<WorkspaceDictionaryDTO> implements IWorkspaceDictionaryDAO {
@@ -123,7 +123,7 @@ public class WorkspaceDictionaryDAO extends BaseDAO<WorkspaceDictionaryDTO> impl
             List<DictionaryDTO> dictionaryDTOList = query.list();
 
             for (DictionaryDTO dictionaryDTO : dictionaryDTOList) {
-                IDictionary dictionary = dictionaryDeepMapper.getDictionaryDetails(dictionaryDTO);
+                IDictionary dictionary = dictionaryDeepMapper.getDictionary(dictionaryDTO);
                 dictionaryList.add(dictionary);
             }
 
@@ -166,9 +166,9 @@ public class WorkspaceDictionaryDAO extends BaseDAO<WorkspaceDictionaryDTO> impl
     }
 
     @Override
-    public List<IWorkSpace> getWorkspaceByDictId(String dictionaryId) throws QuadrigaStorageException {
+    public List<IWorkspace> getWorkspaceByDictId(String dictionaryId) throws QuadrigaStorageException {
 
-        List<IWorkSpace> workspaces = new ArrayList<IWorkSpace>();
+        List<IWorkspace> workspaces = new ArrayList<IWorkspace>();
 
         DictionaryDTO dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class,
                 dictionaryId);
@@ -179,7 +179,7 @@ public class WorkspaceDictionaryDAO extends BaseDAO<WorkspaceDictionaryDTO> impl
             WorkspaceDTO workspaceDTO = workspaceDictionaryDTO.getWorkspaceDTO();
 
             if (workspaceDTO != null) {
-                IWorkSpace workSpace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
+                IWorkspace workSpace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
                 workspaces.add(workSpace);
             }
         }

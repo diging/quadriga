@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dictionary.impl.Dictionary;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;

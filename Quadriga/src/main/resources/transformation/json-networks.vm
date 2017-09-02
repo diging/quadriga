@@ -1,0 +1,26 @@
+{
+    "nodes": [
+    #foreach ($node in $nodes)
+        {
+            "id": "$node.id",
+            "uri": "$node.concept",
+            "label": "$node.conceptName",
+            "type": "$node.type"
+        }#if( $foreach.hasNext ), #end
+    #end
+    ],
+    "edges": [
+    #foreach ($link in $links)
+        {
+            "source": "$link.subject.id",
+            "target": "$link.object.id",
+            "label": "$link.conceptName",
+            "concept": "$link.concept",
+            "sourceUri": "$link.sourceUri",
+            "startTime": "#if ( $link.startTime )$link.startTime #end",
+            "endTime": "#if ( $link.endTime )$link.endTime #end",
+            "occurred": "#if ( $link.occurTime )$link.occurTime #end"
+        }#if( $foreach.hasNext ), #end
+    #end
+    ]
+}

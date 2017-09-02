@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.domain.impl.passthroughproject;
 
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
+import edu.asu.spring.quadriga.domain.workbench.impl.Project;
 
 /**
  * @description PassThroughProject class describing the properties of a

@@ -26,8 +26,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -83,7 +82,7 @@ public class RetrieveProjectController {
                  if (!projectIds.contains(p.getProjectId())) {
                      // Get details of the project using the project id.
                      IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
-                     if(tempProject != null && tempProject.getProjectWorkspaces() != null){
+                     if(tempProject != null && tempProject.getWorkspaces() != null){
                          includeActiveProjectWorkspaceDetails(tempProject, userName, false);
                          fullProjects.add(tempProject);                    
                      }
@@ -100,7 +99,7 @@ public class RetrieveProjectController {
                 if (!projectIds.contains(p.getProjectId())) {
                     // Get details of the project using the project id.
                     IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
-                    if(tempProject != null && tempProject.getProjectWorkspaces() != null){
+                    if(tempProject != null && tempProject.getWorkspaces() != null){
                         includeActiveProjectWorkspaceDetails(tempProject, userName, false);
                         fullProjects.add(tempProject);                    
                     }
@@ -112,12 +111,12 @@ public class RetrieveProjectController {
 
         // Fetch all the projects for which the user is associated workspace owner.
         List<IProject> projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(userName);
-        if (projectListAsWorkspaceOwner != null) {
+        if (projectListAsWorkspaceOwner != null) {       
             for (IProject p : projectListAsWorkspaceOwner) {
                 if (!projectIds.contains(p.getProjectId())) {
                     // Get details of the project using the project id. 
                     IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
-                    if(tempProject != null && tempProject.getProjectWorkspaces() != null){
+                    if(tempProject != null && tempProject.getWorkspaces() != null){
                         includeActiveProjectWorkspaceDetails(tempProject, userName, false);
                         fullProjects.add(tempProject);                    
                     }
@@ -136,7 +135,7 @@ public class RetrieveProjectController {
                 if (!projectIds.contains(p.getProjectId())) {
                     // Get details of the project using the project id.
                     IProject tempProject = projectManager.getProjectDetails(p.getProjectId());
-                    if(tempProject != null && tempProject.getProjectWorkspaces() != null){
+                    if(tempProject != null && tempProject.getWorkspaces() != null){
                         includeActiveProjectWorkspaceDetails(tempProject, userName, true);
                         fullProjects.add(tempProject);                    
                     }
@@ -181,13 +180,13 @@ public class RetrieveProjectController {
         IProject project = projectManager.getProjectDetails(projectid);
 
         // retrieve all the workspaces associated with the project
-        List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectid, userName);
+        List<IWorkspace> workspaceList = wsManager.listActiveWorkspace(projectid, userName);
 
-        List<IWorkSpace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
+        List<IWorkspace> collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 
-        List<IWorkSpace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
+        List<IWorkspace> deactiveWorkspaceList = wsManager.listDeactivatedWorkspace(projectid, userName);
 
-        List<IWorkSpace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
+        List<IWorkspace> archivedWorkspaceList = wsManager.listArchivedWorkspace(projectid, userName);
 
         int deactivatedWSSize = deactiveWorkspaceList == null ? 0 : deactiveWorkspaceList.size();
 
@@ -227,21 +226,21 @@ public class RetrieveProjectController {
     
     
     private void includeActiveProjectWorkspaceDetails(IProject tempProject, String userName, boolean isWorkspaceCollaborator) throws QuadrigaStorageException{
-        List<IProjectWorkspace> tempProjectWorkspaces;
-        List<IWorkSpace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(tempProject.getProjectId(), userName);    
+        List<IWorkspace> tempProjectWorkspaces;
+        List<IWorkspace> deactivatedWorkspaces = wsManager.listDeactivatedWorkspace(tempProject.getProjectId(), userName);    
         List<String> deactivatedWorkspaceIds = deactivatedWorkspaces.stream().map (u -> u.getWorkspaceId()).collect (Collectors.toList());
         
         if(!isWorkspaceCollaborator){
-            tempProjectWorkspaces = tempProject.getProjectWorkspaces().stream().filter(u -> !deactivatedWorkspaceIds.contains(u.getWorkspace().getWorkspaceId())).collect(Collectors.toList());
+            tempProjectWorkspaces = tempProject.getWorkspaces().stream().filter(u -> !deactivatedWorkspaceIds.contains(u.getWorkspaceId())).collect(Collectors.toList());
         }
         else{
             
-            tempProjectWorkspaces = tempProject.getProjectWorkspaces().stream().filter(u -> {
+            tempProjectWorkspaces = tempProject.getWorkspaces().stream().filter(u -> {
                 try {
-                    return (!deactivatedWorkspaceIds.contains(u.getWorkspace().getWorkspaceId()) && 
-                            (securityChecker.chkCollabWorkspaceAccess(userName,u.getWorkspace().getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || 
-                            securityChecker.chkCollabWorkspaceAccess(userName, u.getWorkspace().getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || 
-                            securityChecker.chkCollabWorkspaceAccess(userName, u.getWorkspace().getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)));
+                    return (!deactivatedWorkspaceIds.contains(u.getWorkspaceId()) && 
+                            (securityChecker.chkCollabWorkspaceAccess(userName,u.getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN) || 
+                            securityChecker.chkCollabWorkspaceAccess(userName, u.getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR) || 
+                            securityChecker.chkCollabWorkspaceAccess(userName, u.getWorkspaceId(), RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR)));
                 } catch (QuadrigaStorageException e) {
                         logger.error("Error while checking collaborator workspace access :" + e.getMessage());
                         return false;
@@ -250,6 +249,6 @@ public class RetrieveProjectController {
 
         }
 
-        tempProject.setProjectWorkspaces(tempProjectWorkspaces);
+        tempProject.setWorkspaces(tempProjectWorkspaces);
     }
 }

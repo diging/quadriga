@@ -13,8 +13,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
-import edu.asu.spring.quadriga.domain.impl.workspace.TextFile;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
+import edu.asu.spring.quadriga.domain.workspace.impl.TextFile;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
 import edu.asu.spring.quadriga.service.textfile.impl.TextFileManager;
 import edu.asu.spring.quadriga.validator.AddTextValidator;

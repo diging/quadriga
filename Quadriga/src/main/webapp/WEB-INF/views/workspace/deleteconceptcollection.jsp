@@ -90,7 +90,7 @@
 </div>
 
 <c:choose>
-	<c:when test="${not empty conceptCollectionList}">
+	<c:when test="${not empty collections}">
 		<form method="POST">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="panel panel-default" style="margin-top: 20px;">
@@ -116,18 +116,18 @@
 					</thead>
 
 					<tbody>
-						<c:forEach var="workspaceConceptCollection"
-							items="${conceptCollectionList}">
+						<c:forEach var="conceptCollection"
+							items="${collections}">
 							<tr>
 								<td width="15%"><input type="checkbox" class="selected"
 									name="selected"
-									value='<c:out value="${workspaceConceptCollection.conceptCollection.conceptCollectionId}"></c:out>' /></td>
+									value='<c:out value="${conceptCollection.conceptCollectionId}"></c:out>' /></td>
 								<td width="30%"><input name="items" type="hidden"
-									value="<c:out value="${workspaceConceptCollection.conceptCollection.conceptCollectionName}"></c:out>" />
+									value="<c:out value="${conceptCollection.conceptCollectionName}"></c:out>" />
 									<c:out
-										value="${workspaceConceptCollection.conceptCollection.conceptCollectionName}"></c:out></td>
+										value="${conceptCollection.conceptCollectionName}"></c:out></td>
 								<td width="45%"><c:out
-										value="${workspaceConceptCollection.conceptCollection.description}"></c:out></td>
+										value="${conceptCollection.description}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>

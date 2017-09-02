@@ -44,7 +44,7 @@ import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.QuadrigaWorkspaceDetailsReply;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.Workspace;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.WorkspacesList;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
@@ -101,7 +101,7 @@ public class WorkspaceRestController {
             engine.init();
             // will use in future list workspaces need to be modified
             String userId = principal.getName();
-            List<IWorkSpace> workspaceList = wsManager.listWorkspace(project_id, userId);
+            List<IWorkspace> workspaceList = wsManager.listWorkspace(project_id, userId);
 
             Template template = engine.getTemplate("velocitytemplates/workspaces.vm");
             VelocityContext context = new VelocityContext();
@@ -167,8 +167,6 @@ public class WorkspaceRestController {
             throw new RestException(500, e);
         } catch (MethodInvocationException e) {
             throw new RestException(500, e);
-        } catch (QuadrigaStorageException e) {
-            throw new RestException(500, e);
         } catch (Exception e) {
             throw new RestException(500, e);
         }
@@ -215,7 +213,7 @@ public class WorkspaceRestController {
             String errorMsg = errorMessageRest.getErrorMsg("Workspace XML is not valid", request);
             return new ResponseEntity<String>(errorMsg, HttpStatus.BAD_REQUEST);
         }
-        IWorkSpace workspaceNew = workspaceFactory.createWorkspaceObject();
+        IWorkspace workspaceNew = workspaceFactory.createWorkspaceObject();
         for (Workspace workspace : workspaceList) {
             workspaceNew.setDescription(workspace.getDescription().trim());
             workspaceNew.setWorkspaceName(workspace.getName().trim());
