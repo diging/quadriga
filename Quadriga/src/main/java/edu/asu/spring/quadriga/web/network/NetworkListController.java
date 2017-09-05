@@ -33,7 +33,8 @@ import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
- * This class will handle list {@link INetwork} of the {@link IUser} and fetch the {@link INetwork} details from DB and QStore.
+ * This class will handle list {@link INetwork} of the {@link IUser} and fetch
+ * the {@link INetwork} details from DB and QStore.
  * 
  * @author : Lohith Dwaraka
  * 
@@ -41,120 +42,123 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Controller
 public class NetworkListController {
 
-	@Autowired
-	private INetworkManager networkManager;
-	
-	@Autowired
+    @Autowired
+    private INetworkManager networkManager;
+
+    @Autowired
     private INetworkTransformationManager transformationManager;
-    
+
     @Autowired
     private ID3Creator d3Creator;
 
-	@Autowired
-	private IUserManager userManager;
-	
-	@Autowired
-	private IProjectSecurityChecker projectSecurity;
-	
-	@Autowired
-	private IWorkspaceManager workspaceManager;
-	
-	@Autowired
-	private IRetrieveProjectManager projectManager;
+    @Autowired
+    private IUserManager userManager;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(NetworkListController.class);
+    @Autowired
+    private IProjectSecurityChecker projectSecurity;
 
-	/**
-	 * This method helps in listing of network belonging to the user in tree view. 
-	 * @author Lohith Dwaraka
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws JSONException 
-	 */
-	@RequestMapping(value = "auth/networks", method = RequestMethod.GET)
+    @Autowired
+    private IWorkspaceManager workspaceManager;
+
+    @Autowired
+    private IRetrieveProjectManager projectManager;
+
+    private static final Logger logger = LoggerFactory.getLogger(NetworkListController.class);
+
+    /**
+     * This method helps in listing of network belonging to the user in tree
+     * view.
+     * 
+     * @author Lohith Dwaraka
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws JSONException
+     */
+    @RequestMapping(value = "auth/networks", method = RequestMethod.GET)
     public String listNetworks(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUser(principal.getName());
-		List<INetwork> networkList=networkManager.getNetworkList(user);
-		model.addAttribute("userId", user.getUserName());
-		model.addAttribute("networkList", networkList);
-		return "auth/networks";
-	}
+        IUser user = userManager.getUser(principal.getName());
+        List<INetwork> networkList = networkManager.getNetworkList(user);
+        model.addAttribute("userId", user.getUserName());
+        model.addAttribute("networkList", networkList);
+        return "auth/networks";
+    }
 
+    /**
+     * Get the network displayed on to JSP by passing JSON string
+     * 
+     * @author Lohith Dwaraka, Chiraag Subramanian
+     * @param networkId
+     * @param model
+     * @param principal
+     * @return
+     * @throws QuadrigaStorageException
+     * @throws JAXBException
+     */
+    @RequestMapping(value = "auth/networks/visualize/{networkId}", method = RequestMethod.GET)
+    public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal)
+            throws QuadrigaStorageException, JAXBException {
+        // Identify the User
+        String userId = principal.getName();
 
-	/**
-	 * Get the network displayed on to JSP by passing JSON string
-	 * @author Lohith Dwaraka, Chiraag Subramanian
-	 * @param networkId
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws JAXBException
-	 */
-	@RequestMapping(value = "auth/networks/visualize/{networkId}", method = RequestMethod.GET)
-	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {	
-	    // Identify the User
-	    String userId = principal.getName();
-	
-	    // Get network details using the networkId
-		INetwork network = networkManager.getNetwork(networkId);
-		
-		// Get details of workspace associated with the network using network-workspace mapping details
-		IWorkSpace workspace = network.getNetworkWorkspace().getWorkspace();
-		
-		// Get projectId of the project to which the workspace belongs
-		String projectId = workspaceManager.getProjectIdFromWorkspaceId(workspace.getWorkspaceId());
-		
-		// Get project details using projectId
-		IProject project = projectManager.getProjectDetails(projectId);        
-        
-		// Identify the access type of the project : PUBLIC or PRIVATE
-		EProjectAccessibility projectAccess = project.getProjectAccess();
-		
-		// If the project is PRIVATE, check if the user is allowed to access the information associated with the project
-		// If the project is PUBLIC, allow access to the information associated with the project
-		if(projectAccess == EProjectAccessibility.PRIVATE){
-		    boolean authorizedAccess = false;
-		    
-	        if (projectSecurity.isProjectOwner(userId, projectId)){
-	            authorizedAccess = true;
-	        }
-	        else{
-	            List<String> collaboratorRoles = projectSecurity.getCollaboratorRoles(userId, projectId);
-	            if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR) || collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN) || collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR)) {
-	                authorizedAccess = true;
-	            }
-	        }
-	            
-	        if(authorizedAccess){
-	            return networkVisualization(networkId, model);
-	        } 
-	        return "public/forbidden";
-		}
-		else {
-		    return networkVisualization(networkId, model);
-		}
-	}
-	
-	private String networkVisualization(String networkId, ModelMap model) throws QuadrigaStorageException{
-	    INetwork network = networkManager.getNetwork(networkId);
-        if(network==null){
+        // Get network details using the networkId
+        INetwork network = networkManager.getNetwork(networkId);
+
+        // Get details of workspace associated with the network using
+        // network-workspace mapping details
+        IWorkSpace workspace = network.getNetworkWorkspace().getWorkspace();
+
+        // Get projectId of the project to which the workspace belongs
+        String projectId = workspaceManager.getProjectIdFromWorkspaceId(workspace.getWorkspaceId());
+
+        // Get project details using projectId
+        IProject project = projectManager.getProjectDetails(projectId);
+
+        // Identify the access type of the project : PUBLIC or PRIVATE
+        EProjectAccessibility projectAccess = project.getProjectAccess();
+
+        // If the project is PRIVATE, check if the user is allowed to access the
+        // information associated with the project
+        // If the project is PUBLIC, allow access to the information associated
+        // with the project
+        if (projectAccess == EProjectAccessibility.PRIVATE) {
+            boolean authorizedAccess = false;
+
+            if (projectSecurity.isProjectOwner(userId, projectId)) {
+                authorizedAccess = true;
+            } else {
+                List<String> collaboratorRoles = projectSecurity.getCollaboratorRoles(userId, projectId);
+                if (collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR)
+                        || collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN)
+                        || collaboratorRoles.contains(RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR)) {
+                    authorizedAccess = true;
+                }
+            }
+
+            if (authorizedAccess) {
+                return networkVisualization(networkId, model);
+            }
+            return "public/forbidden";
+        } else {
+            return networkVisualization(networkId, model);
+        }
+    }
+
+    private String networkVisualization(String networkId, ModelMap model) throws QuadrigaStorageException {
+        INetwork network = networkManager.getNetwork(networkId);
+        if (network == null) {
             return "auth/404";
         }
-        ITransformedNetwork transformedNetwork= transformationManager.getTransformedNetwork(networkId);
-        
-        String nwId = "\""+networkId+"\"";
-        model.addAttribute("networkid",nwId);
+        ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
+        String nwId = "\"" + networkId + "\"";
+        model.addAttribute("networkid", nwId);
         model.addAttribute("network", network);
         String json = null;
-        if(transformedNetwork!=null){
+        if (transformedNetwork != null) {
             json = d3Creator.getD3JSON(transformedNetwork.getNodes(), transformedNetwork.getLinks());
         }
-        model.addAttribute("jsonstring",json);
-
+        model.addAttribute("jsonstring", json);
         return "auth/networks/visualize";
-	}
+    }
 }
