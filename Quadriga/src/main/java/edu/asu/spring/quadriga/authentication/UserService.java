@@ -21,32 +21,31 @@ import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 @Service("userService")
 public class UserService implements UserDetailsService {
 
-	@Autowired
-	private IUserManager userManager;
-	
-	private final Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Autowired
+    private IUserManager userManager;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-	@Override
-	public UserDetails loadUserByUsername(String arg0)
-			throws UsernameNotFoundException {
-		IUser user;
-		try {
-			user = userManager.getUser(arg0);
-		} catch (QuadrigaStorageException e) {
-		    logger.error("Error while retrieving user details", e);
-			throw new UsernameNotFoundException("Error getting user details.", e);
-		}
-		
-		if (user == null){
-		    throw new UsernameNotFoundException("Couldn't find username.");
-		}
+    @Override
+    public UserDetails loadUserByUsername(String arg0) throws UsernameNotFoundException {
+        IUser user;
+        try {
+            user = userManager.getUser(arg0);
+        } catch (QuadrigaStorageException e) {
+            logger.error("Error while retrieving user details", e);
+            throw new UsernameNotFoundException("Error getting user details.", e);
+        }
 
-		List<QuadrigaGrantedAuthority> roles = new ArrayList<QuadrigaGrantedAuthority>();
-		for (IQuadrigaRole role : user.getQuadrigaRoles()) {
-			roles.add(new QuadrigaGrantedAuthority(role.getId()));
-		}
-		
-		UserDetails details = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), roles, user.getEmail());
-		return details;
-	}
+        if (user == null) {
+            throw new UsernameNotFoundException("Couldn't find username.");
+        }
+
+        List<QuadrigaGrantedAuthority> roles = new ArrayList<QuadrigaGrantedAuthority>();
+        for (IQuadrigaRole role : user.getQuadrigaRoles()) {
+            roles.add(new QuadrigaGrantedAuthority(role.getId()));
+        }
+
+        UserDetails details = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), roles,
+                user.getEmail());
+        return details;
+    }
 }
