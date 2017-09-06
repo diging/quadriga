@@ -96,6 +96,10 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
      *            Full name of new user.
      * @param email
      *            Email of new user.
+     * @param provider
+     *            Social provider (e.g. github).                 
+     * @param userIdOfProvider
+     *            User Id in the Social provider e.g.(User Id in Github)          
      * @return true if request was stored successfully; otherwise false.
      * @throws QuadrigaStorageException
      *             in case there is a DB error.
@@ -110,10 +114,14 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
         userRequestDTO.setFullname(fullname);
         userRequestDTO.setProvider(provider);
         userRequestDTO.setUserIdOfProvider(userIdOfProvider);
-        sessionFactory.getCurrentSession().save(userRequestDTO);
-        sessionFactory.getCurrentSession().flush();
+        try{
+            sessionFactory.getCurrentSession().save(userRequestDTO);
+            sessionFactory.getCurrentSession().flush();
+        }catch(Exception e){
+            logger.error("Error in adding an account request: ", e);
+            throw new QuadrigaStorageException(e);
+        }
         return true;
-       
     }
     
     

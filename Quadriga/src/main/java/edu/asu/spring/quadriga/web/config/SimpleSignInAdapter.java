@@ -82,7 +82,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
                 logger.error("Could not add user.", e);
                 storageException = true;
             } catch (UsernameExistsException e) {
-                logger.error("User account needs to be approved by the admin.", e);
+                logger.error("Username already in use or user account needs to be approved by the admin.", e);
             } catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
             }
