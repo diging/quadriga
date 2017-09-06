@@ -116,15 +116,10 @@ public class WSSecurityChecker implements IWSSecurityChecker {
     @Transactional
     public boolean chkCollabWorkspaceAccess(String userName, String workspaceId, String collaboratorRole)
             throws QuadrigaStorageException {
-        List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
-        List<IQuadrigaRole> collaboratorRoles = null;
-        boolean chkAccess;
-
-        // initialize the local variable
-        chkAccess = false;
+        boolean chkAccess = false;
 
         // fetch the collaborators associated with the workspace
-        workspaceCollaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
+        List<IWorkspaceCollaborator> workspaceCollaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
 
         if (workspaceCollaboratorList != null) {
             for (IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList) {
@@ -132,7 +127,7 @@ public class WSSecurityChecker implements IWSSecurityChecker {
                 // check if the user is one of the collaborators
                 if (workspaceCollaborator.getCollaborator() != null) {
                     if (workspaceCollaborator.getCollaborator().getUserObj().getUserName().equals(userName)) {
-                        collaboratorRoles = workspaceCollaborator.getCollaborator().getCollaboratorRoles();
+                        List<IQuadrigaRole> collaboratorRoles = workspaceCollaborator.getCollaborator().getCollaboratorRoles();
 
                         if (collaboratorRoles != null) {
                             // check if the collaborator is the supplied
@@ -165,13 +160,7 @@ public class WSSecurityChecker implements IWSSecurityChecker {
     @Override
     @Transactional
     public boolean chkModifyWorkspaceAccess(String userName, String workspaceId) throws QuadrigaStorageException {
-        boolean chkAccess;
-
-        // initialize the variable
-        chkAccess = false;
-
-        // check if the user is Workspace owner
-        chkAccess = dbConnect.chkWorkspaceOwner(userName, workspaceId);
+        boolean chkAccess = dbConnect.chkWorkspaceOwner(userName, workspaceId);
 
         if (!chkAccess) {
             // check if the user has collaborator role SINGLE WORKSPACE ADMIN
@@ -185,37 +174,21 @@ public class WSSecurityChecker implements IWSSecurityChecker {
     @Override
     @Transactional
     public boolean checkWorkspaceOwner(String userName, String workspaceId) throws QuadrigaStorageException {
-        boolean chkAccess;
-
-        // initialize check Access variable
-        chkAccess = false;
-
-        // check if the user is project owner
-        chkAccess = dbConnect.chkWorkspaceOwner(userName, workspaceId);
-
-        return chkAccess;
+        return dbConnect.chkWorkspaceOwner(userName, workspaceId);
 
     }
 
     @Override
     @Transactional
     public boolean checkIsWorkspaceAssociated(String userName) throws QuadrigaStorageException {
-        boolean isAssociated;
-        isAssociated = false;
-
-        isAssociated = dbConnect.chkIsWorkspaceAssocaited(userName);
-        return isAssociated;
+        return dbConnect.chkIsWorkspaceAssocaited(userName);
     }
 
     @Override
     @Transactional
     public boolean chkIsCollaboratorWorkspaceAssociated(String userName, String role)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        boolean isAssociated;
-        isAssociated = false;
-
-        isAssociated = dbConnect.chkIsCollaboratorWorkspaceAssociated(userName, role);
-        return isAssociated;
+        return dbConnect.chkIsCollaboratorWorkspaceAssociated(userName, role);
     }
 
     /**
@@ -232,14 +205,7 @@ public class WSSecurityChecker implements IWSSecurityChecker {
     @Transactional
     public boolean checkWorkspaceOwnerEditorAccess(String userName, String workspaceId)
             throws QuadrigaStorageException {
-        boolean chkAccess;
-
-        // initialize chkAccess variable
-        chkAccess = false;
-
-        // check if the user is project owner
-        chkAccess = dbConnect.chkWorkspaceOwnerEditorRole(userName, workspaceId);
-        return chkAccess;
+        return dbConnect.chkWorkspaceOwnerEditorRole(userName, workspaceId);
     }
 
     /**
@@ -256,26 +222,12 @@ public class WSSecurityChecker implements IWSSecurityChecker {
     @Transactional
     public boolean checkWorkspaceProjectInheritOwnerEditorAccess(String userName, String workspaceId)
             throws QuadrigaStorageException {
-        boolean chkAccess;
-
-        // initialize chkAccess variable
-        chkAccess = false;
-
-        // check if the user is project owner
-        chkAccess = dbConnect.chkWorkspaceProjectInheritOwnerEditorRole(userName, workspaceId);
-        return chkAccess;
+        return dbConnect.chkWorkspaceProjectInheritOwnerEditorRole(userName, workspaceId);
     }
 
     @Override
     @Transactional
     public boolean checkIsWorkspaceExists(String workspaceId) throws QuadrigaStorageException {
-        boolean chkAccess;
-
-        // initialize the chkAccess variable
-        chkAccess = false;
-
-        // check if the workspace exists
-        chkAccess = dbConnect.chkWorkspaceExists(workspaceId);
-        return chkAccess;
+        return dbConnect.chkWorkspaceExists(workspaceId);
     }
 }
