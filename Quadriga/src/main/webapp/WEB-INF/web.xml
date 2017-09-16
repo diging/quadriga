@@ -12,7 +12,6 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring/root-context.xml
-			/WEB-INF/spring/spring-security.xml
 			/WEB-INF/hibernate/hibernate.cfg.xml
 		</param-value>
 	</context-param>
