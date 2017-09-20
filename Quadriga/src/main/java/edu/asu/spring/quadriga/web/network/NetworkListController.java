@@ -97,7 +97,7 @@ public class NetworkListController {
      * @throws JAXBException
      */
     @RequestMapping(value = "auth/networks/visualize/{networkId}", method = RequestMethod.GET)
-    public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal)
+    public String visualizeNetwork(@PathVariable("networkId") String networkId, ModelMap model, Principal principal)
             throws QuadrigaStorageException, JAXBException {
         // Identify the User
         String userId = principal.getName();
