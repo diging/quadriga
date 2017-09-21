@@ -12,6 +12,11 @@
 		<!-- <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" /> -->
 		<csrf disabled="true"/>
 	</http>
+	<http pattern="/public/**" auto-config="true" use-expressions="true" create-session="stateless">
+	   <intercept-url pattern="/public/**" access="permitAll"/>
+	   <http-basic/>       
+       <csrf disabled="true"/>
+	</http>
 	<global-method-security pre-post-annotations="enabled"/>
 	
 	<http auto-config="true" use-expressions="true" disable-url-rewriting="true">
@@ -45,7 +50,7 @@
 		<intercept-url pattern="/checks/**" access="hasRole('ROLE_QUADRIGA_USER_ADMIN')"/>
 		<intercept-url pattern="/auth/profile/**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/sites/**" access="permitAll" />
-		<intercept-url pattern="/public/**" access="permitAll" />
+		<!-- <intercept-url pattern="/public/**" access="permitAll" /> -->
 		<intercept-url pattern="/search/**" access="permitAll" />
 		<intercept-url pattern="/**" access="denyAll" />
 		

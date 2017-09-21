@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
@@ -50,9 +50,9 @@ public class AddWorkspaceConceptCollectionController {
         String userId = principal.getName();
 
         List<IConceptCollection> conceptCollectionList = workspaceCCManager
-                .getNonAssociatedWorkspaceConcepts(workspaceId);
+                .getNotAssociatedConceptCollectins(workspaceId);
         model.addAttribute("conceptCollectionList", conceptCollectionList);
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("workspaceId", workspaceId);
         return "auth/workbench/workspace/addconceptcollections";

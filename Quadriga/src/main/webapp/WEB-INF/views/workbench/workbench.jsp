@@ -59,12 +59,12 @@
 	
 	<div style="display: none" class="toggled">
 	<ul class="workspaceToggleList">
-	<c:forEach items="${project.projectWorkspaces}" var="ws">
-		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${ws.workspace.workspaceId}"><i class="ion-filing icons"></i> ${ws.workspace.workspaceName}</a>
-			<br>${ws.workspace.description}
+	<c:forEach items="${project.workspaces}" var="workspace">
+		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspace.workspaceId}"><i class="ion-filing icons"></i> ${workspace.workspaceName}</a>
+			<br>${workspace.description}
 		</li>
 	</c:forEach>
-	<c:if test="${empty  project.projectWorkspaces}">
+	<c:if test="${empty  project.workspaces}">
 		There are no workspaces.
 	</c:if>
 	</ul>

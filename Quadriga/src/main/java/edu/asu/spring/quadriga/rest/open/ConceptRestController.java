@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Controller
@@ -29,18 +31,17 @@ public class ConceptRestController {
     
     @Autowired
     private IConceptpowerConnector connector;
+    
+    @Autowired
+    private IConceptpowerCache cache;
 
     
     @RequestMapping(value = "/public/concept", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> getConceptById(@RequestParam String id) {
-        ConceptpowerReply reply = connector.getById(id);
-        List<ConceptEntry> conceptList = reply.getConceptEntry();
-        Iterator<ConceptEntry> conceptListIterator = conceptList.iterator();
-        while (conceptListIterator.hasNext()) {
-
-            ConceptEntry ce = conceptListIterator.next();
-            return new ResponseEntity<String>(ce.getDescription(), HttpStatus.OK);
+        IConcept reply = cache.getConceptByUri(id);
+        if (reply != null) {
+            return new ResponseEntity<String>(reply.getDescription(), HttpStatus.OK);
         }
         return new ResponseEntity<String>("", HttpStatus.OK);
     }

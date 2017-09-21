@@ -20,8 +20,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaGeneratorException;
 
 /**
@@ -33,7 +35,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaGeneratorException;
 public class Generator {
 
 	@Autowired
-    private IConceptpowerConnector connector;
+    private IConceptpowerCache connector;
 	
 	private VelocityEngine engine;
 	
@@ -58,25 +60,50 @@ public class Generator {
 	}
 
 	public String generateText(List<List<TransformNode>> listOfNodeList,
-			String chosenTemplate, boolean isMergeDuplicateNodes) throws QuadrigaGeneratorException {
-
-	    Resource templateRes = new ClassPathResource("transformation/xgmml-time.vm");
-        String templatePath;
-        try {
-            templatePath = templateRes.getFile().getAbsolutePath();
-        } catch (IOException e1) {
-           throw new QuadrigaGeneratorException(e1);
+            String chosenTemplate, boolean isMergeDuplicateNodes) throws QuadrigaGeneratorException {
+        if (chosenTemplate == null) {
+            chosenTemplate = "transformation/xgmml-time.vm";
         }
+        return generateFromTemplate(listOfNodeList, chosenTemplate, isMergeDuplicateNodes);
+    }
+	
+	public String generateError(String errorCode, String errorMsg) throws QuadrigaGeneratorException {
+	    Template template = null;
+        try {
+                template = engine.getTemplate("transformation/transformation_failure.vm");
+        } catch (ResourceNotFoundException e) {
+            throw new QuadrigaGeneratorException(e);
+        } catch (ParseErrorException e) {
+            throw new QuadrigaGeneratorException(e);
+        } catch (Exception e) {
+            throw new QuadrigaGeneratorException(e);
+        }
+        
+        VelocityContext context = new VelocityContext();
+        context.put("error", errorCode);
+        context.put("errorMsg", errorMsg);
+        StringWriter writer = new StringWriter();
 
-		Template template = null;
+        if (template != null) {
+            try {
+                template.merge(context, writer);
+            } catch (ResourceNotFoundException e) {
+                throw new QuadrigaGeneratorException(e);
+            } catch (ParseErrorException e) {
+                throw new QuadrigaGeneratorException(e);
+            } catch (MethodInvocationException e) {
+                throw new QuadrigaGeneratorException(e);
+            } catch (Exception e) {
+                throw new QuadrigaGeneratorException(e);
+            }
+        }
+        return writer.toString();
+	}
 
-		/*
-		 * if User selects a different template, override default template with
-		 * chosen template.
-		 */
-		if (chosenTemplate != null || ("").equalsIgnoreCase(chosenTemplate))
-			templatePath = chosenTemplate;
-
+    protected String generateFromTemplate(List<List<TransformNode>> listOfNodeList, String chosenTemplate,
+            boolean isMergeDuplicateNodes) throws QuadrigaGeneratorException {
+       
+		
 		List<TransformNode> nodes = new ArrayList<TransformNode>();
 		List<String> nodeIds = new ArrayList<String>();
 		List<TransformLink> links = new ArrayList<TransformLink>();
@@ -98,8 +125,9 @@ public class Generator {
 			realignLinks(nodes, links);
 		}
 		
+		Template template = null;
 		try {
-				template = engine.getTemplate("transformation/xgmml-time.vm");
+				template = engine.getTemplate(chosenTemplate);
 		} catch (ResourceNotFoundException e) {
 			throw new QuadrigaGeneratorException(e);
 		} catch (ParseErrorException e) {
@@ -127,7 +155,7 @@ public class Generator {
 			}
 		}
 		return writer.toString();
-	}
+    }
 
 	/**
 	 * This method realigns link to point to the
@@ -206,43 +234,35 @@ public class Generator {
 						continue;
 					
 					if (link.getOccurTime() != null) {
-						ConceptpowerReply concept = connector.getById(link
+						IConcept concept = connector.getConceptByUri(link
 								.getOccurTime());
 						if(concept!=null)
-							link.setOccurTime(concept.getConceptEntry().get(0).getLemma());
+							link.setOccurTime(concept.getWord());
 					}
-//					else
-//						link.setOccurTime("");
 					
 					if (link.getStartTime() != null) {
-					    ConceptpowerReply concept = connector.getById(link
+					    IConcept concept = connector.getConceptByUri(link
 								.getStartTime());
 						if(concept!=null) {
-						    link.setStartTime(concept.getConceptEntry().get(0).getLemma());
+						    link.setStartTime(concept.getWord());
 						}
 					}
-//					else
-//						link.setStartTime("");
 					
 					if (link.getEndTime() != null) {
-					    ConceptpowerReply concept = connector.getById(link
+					    IConcept concept = connector.getConceptByUri(link
 								.getEndTime());
 						if(concept!=null) {
-						    link.setEndTime(concept.getConceptEntry().get(0).getLemma());
+						    link.setEndTime(concept.getWord());
 						}
 					}
-//					else
-//						link.setEndTime("");
 					
 					if (link.getPlace() != null) {
-					    ConceptpowerReply concept = connector.getById(link
+					    IConcept concept = connector.getConceptByUri(link
 								.getPlace());
 						if(concept!=null) {
-						    link.setPlace(concept.getConceptEntry().get(0).getLemma());
+						    link.setPlace(concept.getWord());
 						}
 					}
-//					else
-//						link.setPlace("");
 					
 					links.add(link);
 					createList(link.getObject(), nodeList, links, existingIds, mergeConcepts);

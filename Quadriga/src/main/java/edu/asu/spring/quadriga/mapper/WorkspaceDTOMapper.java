@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
@@ -36,7 +36,7 @@ public class WorkspaceDTOMapper extends BaseMapper {
 	@Autowired
     private IUserManager userManager;
 	
-	public WorkspaceDTO getWorkspaceDTO(IWorkSpace iWorkSpace) {
+	public WorkspaceDTO getWorkspaceDTO(IWorkspace iWorkSpace) {
 		WorkspaceDTO workspaceDTO = new WorkspaceDTO();
 		workspaceDTO.setWorkspacename(iWorkSpace.getWorkspaceName());
 		workspaceDTO.setDescription(iWorkSpace.getDescription());
@@ -50,9 +50,9 @@ public class WorkspaceDTOMapper extends BaseMapper {
 		return workspaceDTO;
 	}
 	
-	public IWorkSpace getWorkSpace(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException
+	public IWorkspace getWorkSpace(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException
 	{
-		IWorkSpace workSpace = workspaceFactory.createWorkspaceObject();
+		IWorkspace workSpace = workspaceFactory.createWorkspaceObject();
 		workSpace.setWorkspaceName(workspaceDTO.getWorkspacename());
 		workSpace.setDescription(workspaceDTO.getDescription());
 		workSpace.setWorkspaceId(workspaceDTO.getWorkspaceid());
@@ -62,10 +62,10 @@ public class WorkspaceDTOMapper extends BaseMapper {
 		return workSpace;
 	}
 	
-	public List<IWorkSpace> getWorkSpaceList(List<WorkspaceDTO> workspaceDTOList) throws QuadrigaStorageException
+	public List<IWorkspace> getWorkSpaceList(List<WorkspaceDTO> workspaceDTOList) throws QuadrigaStorageException
 	{
 		Iterator<WorkspaceDTO> workspaceItr = workspaceDTOList.listIterator();
-		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
+		List<IWorkspace> workspaceList = new ArrayList<IWorkspace>();
 		while(workspaceItr.hasNext())
 		{
 			WorkspaceDTO workspaceDTO = workspaceItr.next();

@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.mapper.conceptcollection.IConceptCollectionShallowMapper;
 
 @Repository
 public class WorkspaceCCDAO extends BaseDAO<WorkspaceConceptcollectionDTO> implements IWorkspaceCCDAO {

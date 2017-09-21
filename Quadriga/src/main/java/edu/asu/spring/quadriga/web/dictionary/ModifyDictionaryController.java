@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.web.dictionary;
 import java.security.Principal;
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -24,7 +22,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
+import edu.asu.spring.quadriga.domain.dictionary.impl.Dictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -41,8 +39,6 @@ public class ModifyDictionaryController {
     
     @Autowired
     private MessageSource messageSource;
-
-    private static final Logger logger = LoggerFactory.getLogger(ModifyDictionaryController.class);
 
     @InitBinder
     protected void initBinder(WebDataBinder validateBinder) {

@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
+import edu.asu.spring.quadriga.domain.workspace.impl.Workspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
@@ -38,9 +38,6 @@ public class AddWSController {
     
     @Autowired
     private IModifyWSManager modifyWSManger;
-
-    @Autowired
-    private IWSSecurityChecker workspaceSecurity;
 
     @Autowired
     private WorkspaceValidator validator;
@@ -98,7 +95,7 @@ public class AddWSController {
             RoleNames.ROLE_COLLABORATOR_OWNER, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,
             RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR }) })
     @RequestMapping(value = "auth/workbench/{projectid}/workspace/add", method = RequestMethod.POST)
-    public String addWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
+    public String addWorkSpaceRequest(@Validated @ModelAttribute("workspace") Workspace workspace,
             BindingResult result, @PathVariable("projectid") String projectid, Model model, Principal principal,
             RedirectAttributes redirectAttrs, Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
 
@@ -111,7 +108,7 @@ public class AddWSController {
             return "auth/workbench/workspace/addworkspace";
         }
 
-        modifyWSManger.addWorkspaceToProject(workspace, projectid, principal.getName());
+        modifyWSManger.addWorkspaceToProject((IWorkspace)workspace, projectid, principal.getName());
         redirectAttrs.addFlashAttribute("show_success_alert", true);
         redirectAttrs.addFlashAttribute("success_alert_msg", "Workspace was successfully added.");
 

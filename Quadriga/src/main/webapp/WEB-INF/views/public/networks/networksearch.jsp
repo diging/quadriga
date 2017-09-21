@@ -155,7 +155,8 @@
 					dataType: 'json',
 					url: url,
 					data: {
-						searchTerm: searchVal
+						searchTerm: searchVal,
+					   ${_csrf.parameterName}: '${_csrf.token}',
 					}
 				}).done(done).fail(fail).always(always);
 			};

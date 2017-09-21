@@ -9,7 +9,7 @@ import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.impl.ConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**

@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
+import edu.asu.spring.quadriga.domain.dictionary.impl.Dictionary;
 
 /**
  * This class validates if the dictionary name and description are empty.

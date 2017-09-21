@@ -2,27 +2,26 @@ package edu.asu.spring.quadriga.service.conceptcollection.impl;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.dao.conceptcollection.IConceptCollectionDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.conceptcollection.IConceptCollectionDeepMapper;
+import edu.asu.spring.quadriga.mapper.conceptcollection.IConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
-import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
 
 /**
  * 
@@ -35,9 +34,6 @@ import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollecti
 @Service
 public class ConceptCollectionManager implements IConceptCollectionManager {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(ConceptCollectionManager.class);
-
     @Autowired
     private IConceptCollectionDAO ccDao;
 
@@ -49,6 +45,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 
     @Autowired
     private IConceptpowerConnector conceptpowerConnector;
+    
+    @Autowired
+    private IConceptpowerCache cpCache;
 
     @Autowired
     private IQuadrigaRoleManager roleMapper;
@@ -131,16 +130,17 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
             String username) throws QuadrigaStorageException {
         for (String id : ids) {
             if ((id != null && !id.isEmpty())) {
-                ConceptpowerReply rep = conceptpowerConnector.getById(id);
+                edu.asu.spring.quadriga.conceptpower.IConcept cpConcept = cpCache.getConceptByUri(id);
 
-                IConcept concept = conceptFactory.createConceptObject();
-                concept.setConceptId(id);
-                concept.setDescription(rep.getConceptEntry().get(0)
-                        .getDescription());
-                concept.setLemma(rep.getConceptEntry().get(0).getLemma());
-                concept.setPos(rep.getConceptEntry().get(0).getPos());
-                ccDao.updateItem(concept, collection.getConceptCollectionId(),
-                        username);
+                if (cpConcept != null) {
+                    IConcept concept = conceptFactory.createConceptObject();
+                    concept.setConceptId(id);
+                    concept.setDescription(cpConcept.getDescription());
+                    concept.setLemma(cpConcept.getWord());
+                    concept.setPos(cpConcept.getPos());
+                    ccDao.updateItem(concept, collection.getConceptCollectionId(),
+                            username);
+                }
             }
         }
     }
@@ -154,13 +154,11 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
      */
     @Override
     public String getConceptLemmaFromConceptId(String id) {
-
-        String lemma = id;
-        ConceptpowerReply rep = conceptpowerConnector.getById(id);
-        if (rep.getConceptEntry().size() == 0) {
-            return lemma;
+        edu.asu.spring.quadriga.conceptpower.IConcept concept = cpCache.getConceptByUri(id);
+        if (concept == null) {
+            return id;
         }
-        return rep.getConceptEntry().get(0).getLemma();
+        return concept.getWord();
     }
 
     /**
@@ -174,11 +172,11 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
     public String getConceptDescriptionFromConceptId(String id) {
 
         String desc = "";
-        ConceptpowerReply rep = conceptpowerConnector.getById(id);
-        if (rep.getConceptEntry().size() == 0) {
+        edu.asu.spring.quadriga.conceptpower.IConcept concept = cpCache.getConceptByUri(id);
+        if (concept == null) {
             return desc;
         }
-        return rep.getConceptEntry().get(0).getDescription();
+        return concept.getDescription();
     }
 
     /**

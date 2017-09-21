@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
+import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
 import edu.asu.spring.quadriga.service.network.INetworkTransformer;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
@@ -32,14 +36,15 @@ public class NetworkTransformer implements INetworkTransformer {
 
     @Autowired
     private NetworkDownloadService networkDownloadService;
+    
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * 
      * {@inheritDoc}
      */
     @Override
-    public ITransformedNetwork transformNetwork(
-            List<INetworkNodeInfo> networkNodeInfoList) {
+    public ITransformedNetwork transformNetwork(List<INetworkNodeInfo> networkNodeInfoList) {
         Map<String, Node> nodes = new HashMap<>();
         List<Link> links = new ArrayList<>();
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
@@ -51,24 +56,46 @@ public class NetworkTransformer implements INetworkTransformer {
 
         List<ElementEventsType> elementEventsTypeList = networkDownloadService
                 .getElementEventTypes(networkNodeInfoList);
+        
+        
+        Map<String, List<CreationEvent>> eventsById = new HashMap<>();
+        for (ElementEventsType type : elementEventsTypeList) {
+            List<CreationEvent> events = type.getRelationEventOrAppellationEvent();
+            for (CreationEvent event : events) {
+                if (eventsById.get(event.getId()) == null) {
+                    eventsById.put(event.getId(), new ArrayList<>());
+                }
+                eventsById.get(event.getId()).add(event);
+            }
+        }
 
-        // loop through all the elementEventsTypeList and parse the staement
-        // We made sure that networkNodeInfoList and elementEventsTypeList
-        // have same size.
-
-        int index = 0;
-        for (INetworkNodeInfo networkNodeInfo: networkNodeInfoList) {
-            ElementEventsType elementEventsType = elementEventsTypeList.get(index++);
-            // Do not proceed if the elementEventsType is null
+        for (INetworkNodeInfo networkNodeInfo : networkNodeInfoList) {
+            List<CreationEvent> events = eventsById.get(networkNodeInfo.getId());
+            // Do not proceed if there are no events
             // null implies there is some exception while retrieving the dataj
-            if (elementEventsType == null) {
+            if (events == null || events.size() == 0) {
                 continue;
             }
-            parser.parseStatement(networkNodeInfo.getId(), elementEventsType, nodes, links);
+            parser.parseStatement(networkNodeInfo.getId(), events, nodes, links);
         }
 
         // Instead of sending null
         // send an empty transformed network
+        return transformedNetwork;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ITransformedNetwork transformNetworkUsingCreationList(Stream<CreationEvent> creationEventStream) {
+
+        Map<String, Node> nodes = new HashMap<>();
+        List<Link> links = new ArrayList<>();
+
+        ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
+        parser.parseEvents(creationEventStream, nodes, links);
+
         return transformedNetwork;
     }
 }

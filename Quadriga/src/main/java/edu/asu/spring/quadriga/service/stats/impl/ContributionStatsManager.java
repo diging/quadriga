@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.service.stats.IContributionStatsManager;
 
 /**
@@ -55,7 +55,7 @@ public class ContributionStatsManager implements IContributionStatsManager {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         HashMap<String, Integer> contributionCount = new HashMap<String, Integer>();
 
-        for(IProjectWorkspace ws : project.getProjectWorkspaces()) {
+        for(IWorkspace ws : project.getWorkspaces()) {
             String workspaceCreationDate = sdf.format(ws.getCreatedDate());
             if(contributionCount.containsKey(workspaceCreationDate)) {
                 contributionCount.put(workspaceCreationDate, contributionCount.get(workspaceCreationDate)+1);

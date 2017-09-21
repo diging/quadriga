@@ -25,6 +25,7 @@ import edu.asu.spring.quadriga.exceptions.FileStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaGeneratorException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.transformation.ITransformationManager;
+import edu.asu.spring.quadriga.service.transformation.ITransformationProcessor;
 
 @Controller
 @Scope("session")
@@ -38,7 +39,7 @@ public class TransformationController {
     private ITransformationManager transformationManager;
 
     @Autowired
-    private TransformationProcessor transformProcessor;
+    private ITransformationProcessor transformProcessor;
 
     /**
      * Gets transformation-request,networks from the User and returns

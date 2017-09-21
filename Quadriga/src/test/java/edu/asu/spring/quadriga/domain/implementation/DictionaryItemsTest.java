@@ -16,9 +16,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dictionary.impl.Item;
 import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
-import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
-import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
+import edu.asu.spring.quadriga.domain.factory.dictionary.impl.DictionaryItemFactory;
 
 public class DictionaryItemsTest {
 

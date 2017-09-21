@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.service.workspace;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IWorkspaceCCManager {
@@ -30,7 +29,7 @@ public interface IWorkspaceCCManager {
      */
     void deleteWorkspaceCC(String workspaceId, String userId, String CCId) throws QuadrigaStorageException;
 
-    List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId) throws QuadrigaStorageException;
+    List<IConceptCollection> getNotAssociatedConceptCollectins(String workspaceId) throws QuadrigaStorageException;
 
-    List<IWorkspaceConceptCollection> listWorkspaceCC(String workspaceId) throws QuadrigaStorageException;
+    List<IConceptCollection> getConceptCollections(String workspaceId) throws QuadrigaStorageException;
 }

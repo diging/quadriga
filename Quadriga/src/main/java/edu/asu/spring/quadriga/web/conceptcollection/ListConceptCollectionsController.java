@@ -77,7 +77,7 @@ public class ListConceptCollectionsController {
         } else {
             model.addAttribute("hasReadWrite", false);
         }
-        model.addAttribute("concept", collection);
+        model.addAttribute("collection", collection);
         conceptControllerManager.getCollaborators(collection);
         model.addAttribute("collectionid", collectionId);
 

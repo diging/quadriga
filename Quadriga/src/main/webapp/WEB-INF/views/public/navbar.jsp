@@ -29,7 +29,7 @@
 			class="pull-right">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div>
-				<button type="submit" class="btn btn-link" style="color:#800000"><i
+				<button type="submit" class="btn btn-link logout-button"><i
 			class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
 			</div>
 		</form>

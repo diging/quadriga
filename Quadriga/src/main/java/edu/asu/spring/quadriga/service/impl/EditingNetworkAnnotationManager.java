@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IEditorDAO;
 import edu.asu.spring.quadriga.dao.impl.NetworkDAO;
-import edu.asu.spring.quadriga.domain.impl.networks.NetworkEdgeAnnotation;
-import edu.asu.spring.quadriga.domain.impl.networks.NetworkNodeAnnotation;
-import edu.asu.spring.quadriga.domain.impl.networks.NetworkRelationAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetworkEdgeAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetworkRelationAnnotation;
+import edu.asu.spring.quadriga.domain.network.impl.NetworkEdgeAnnotation;
+import edu.asu.spring.quadriga.domain.network.impl.NetworkNodeAnnotation;
+import edu.asu.spring.quadriga.domain.network.impl.NetworkRelationAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;

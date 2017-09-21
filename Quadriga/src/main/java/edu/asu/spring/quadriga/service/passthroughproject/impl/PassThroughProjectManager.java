@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.workbench.passthroughproject.IPassThroughProjectDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
@@ -19,7 +18,7 @@ import edu.asu.spring.quadriga.domain.impl.passthroughproject.PassThroughProject
 import edu.asu.spring.quadriga.domain.impl.passthroughproject.XMLInfo;
 import edu.asu.spring.quadriga.domain.passthroughproject.IPassThroughProject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.PassThroughProjectDTO;
 import edu.asu.spring.quadriga.exceptions.NoSuchRoleException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -50,9 +49,6 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
     @Autowired
     private IPassThroughProjectDAO projectDao;
 
-    @Autowired
-    private IProjectSecurityChecker projectSecurityChecker;
-    
     @Autowired
     private IPassThroughProjectFactory projectFactory;
 
@@ -156,9 +152,9 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         String workspaceId = passThroughProjectInfo.getExternalWorkspaceId();
         String externalWorkspaceName = passThroughProjectInfo.getWorkspaceName();
         
-        IWorkSpace workspace = workspaceManager.getWorkspaceDetails(workspaceId);
+        IWorkspace workspace = workspaceManager.getWorkspaceDetails(workspaceId);
         // is there a workspace in the project with that id?
-        if (workspace != null && !workspace.getProjectWorkspace().getProject().getProjectId().equals(projectId)) {
+        if (workspace != null && !workspace.getProject().getProjectId().equals(projectId)) {
             workspace = null;
         }
         
@@ -167,7 +163,7 @@ public class PassThroughProjectManager extends BaseManager implements IPassThrou
         }
         
         // is there a workspace with the given id as external ws id?
-        if (workspace != null && !workspace.getProjectWorkspace().getProject().getProjectId().equals(projectId)) {
+        if (workspace != null && !workspace.getProject().getProjectId().equals(projectId)) {
             workspace = null;
         }
 

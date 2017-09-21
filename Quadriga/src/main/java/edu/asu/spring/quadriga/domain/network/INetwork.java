@@ -5,7 +5,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 
 /**
  * @description   : interface to implement Network class.
@@ -56,10 +56,6 @@ public interface INetwork
 
 	public abstract void setAssignedUser(String assignedUser);
 
-    public abstract IWorkspaceNetwork getNetworkWorkspace();
-    
-    public abstract void setNetworkWorkspace(IWorkspaceNetwork networkWorkspace);
-    
     public abstract String getCreatedBy();
     
     public abstract void setCreatedBy(String createdBy);
@@ -75,4 +71,8 @@ public interface INetwork
     public abstract Date getUpdatedDate();
     
     public abstract void setUpdatedDate(Date updatedDate);
+
+    void setWorkspace(IWorkspace workspace);
+
+    IWorkspace getWorkspace();
 }

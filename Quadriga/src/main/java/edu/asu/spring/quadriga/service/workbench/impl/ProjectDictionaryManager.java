@@ -10,7 +10,6 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
@@ -55,10 +54,10 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public List<IProjectDictionary> listProjectDictionary(String projectId) throws QuadrigaStorageException {
+	public List<IDictionary> getDictionaries(String projectId) throws QuadrigaStorageException {
 		ProjectDTO projectDTO = projManager.getDTO(projectId);
 		IProject project = projDeepMapper.getProject(projectDTO);
-        return projDictShallowMapper.getProjectDictionaryList(project, projectDTO);
+        return projDictShallowMapper.getDictionaries(project, projectDTO);
 	}
 
 	/**

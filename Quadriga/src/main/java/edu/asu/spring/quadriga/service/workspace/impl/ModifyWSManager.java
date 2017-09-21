@@ -11,7 +11,7 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceEditorDAO;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
@@ -69,7 +69,7 @@ public class ModifyWSManager implements IModifyWSManager {
      * @author Julia Damerow, kiranbatna
      */
     @Override
-    public void addWorkspaceToProject(IWorkSpace workspace, String projectId, String username) throws QuadrigaStorageException {
+    public void addWorkspaceToProject(IWorkspace workspace, String projectId, String username) throws QuadrigaStorageException {
         IUser user = userManager.getUser(username);
         workspace.setOwner(user);
         
@@ -106,7 +106,7 @@ public class ModifyWSManager implements IModifyWSManager {
      */
     @Override
     @Transactional
-    public void updateWorkspace(IWorkSpace workspace) throws QuadrigaStorageException {
+    public void updateWorkspace(IWorkspace workspace) throws QuadrigaStorageException {
         WorkspaceDTO workspaceDTO = workspaceDao.getDTO(workspace.getWorkspaceId());
         workspaceDTO.setWorkspacename(workspace.getWorkspaceName());
         workspaceDTO.setDescription(workspace.getDescription());

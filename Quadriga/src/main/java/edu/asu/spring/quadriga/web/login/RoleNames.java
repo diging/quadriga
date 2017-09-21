@@ -74,7 +74,7 @@ public interface RoleNames {
 	/**
      * Workspace role: editor on a workspace.
      */
-	public static final String ROLE_WORKSPACE_COLLABORATOR_EDITOR = "EDITOR";
+	public static final String ROLE_WORKSPACE_COLLABORATOR_EDITOR = "WORKSPACE_EDITOR";
 	
 	//dictionary collaborator roles constants
 	/**
