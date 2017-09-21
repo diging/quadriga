@@ -63,7 +63,7 @@ public class NetworkListController {
     @Autowired
     private IRetrieveProjectManager projectManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(NetworkListController.class);
+    private final Logger logger = LoggerFactory.getLogger(NetworkListController.class);
 
     /**
      * This method helps in listing of network belonging to the user in tree
@@ -151,8 +151,7 @@ public class NetworkListController {
             return "auth/404";
         }
         ITransformedNetwork transformedNetwork = transformationManager.getTransformedNetwork(networkId);
-        String nwId = "\"" + networkId + "\"";
-        model.addAttribute("networkid", nwId);
+        model.addAttribute("networkid", networkId);
         model.addAttribute("network", network);
         String json = null;
         if (transformedNetwork != null) {
