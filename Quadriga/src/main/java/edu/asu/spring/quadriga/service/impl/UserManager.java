@@ -313,15 +313,10 @@ public class UserManager implements IUserManager {
         if (userRequest != null)
             throw new UsernameExistsException("Username already in use.");
 
-        String plainPassword = request.getPassword();
-        boolean success = false;
+        String password = (request.getPassword() != null) ? encryptPassword(request.getPassword()) : null ;
         
-        if(request.isSocialSignIn()){
-            success =  usermanagerDAO.addNewUserAccountRequest(request.getUsername(),  null, request.getName(),  request.getEmail(),  request.getProvider(),  request.getUserIdOfProvider());
-        }else{
-            success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword), request.getName(), request.getEmail(), null, null);
-        }
-        
+        boolean success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), password, request.getName(), request.getEmail(), request.getProvider() , request.getUserIdOfProvider());
+  
         if (success) {
             IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
             List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());

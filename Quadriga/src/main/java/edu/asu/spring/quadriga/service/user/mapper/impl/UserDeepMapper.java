@@ -48,10 +48,9 @@ public class UserDeepMapper implements IUserDeepMapper {
         }
         if (user != null) {
             List<IQuadrigaRole> userRole = user.getQuadrigaRoles();
-            IQuadrigaRole quadrigaRole = null;
             List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
             for (int i = 0; i < userRole.size(); i++) {
-                quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
+                IQuadrigaRole quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
                         .getDBid());
 
                 // If user account is deactivated remove other roles

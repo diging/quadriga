@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.web.config.social.SimpleSocialUserDetailsService;
 public class SecurityContext {
     
     @Configuration
-    @Order(2)
+    @Order(3)
     public static class StatefulSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Autowired
         @Qualifier("userService")
@@ -122,16 +122,36 @@ public class SecurityContext {
     // Security Configuration for REST end-points
     @Configuration
     @Order(1)
-    public static class StatelessSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    public static class RESTSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             HeadersConfigurer<HttpSecurity> restConfig = http.antMatcher("/rest/**").headers().frameOptions()
                     .sameOrigin();
             restConfig.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-            restConfig.and().authorizeRequests().antMatchers("/rest/**").hasAnyRole("QUADRIGA_USER_ADMIN",
+            restConfig.and().authorizeRequests().antMatchers("/**").hasAnyRole("QUADRIGA_USER_ADMIN",
                     "QUADRIGA_USER_STANDARD", "QUADRIGA_USER_COLLABORATOR");
             restConfig.and().httpBasic();
             restConfig.and().csrf().disable();
+            
+            
+        }
+    }
+    
+    
+    // Security Configuration for Public end-points
+    @Configuration
+    @Order(2)
+    public static class PublicSecurityConfiguration extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            HeadersConfigurer<HttpSecurity> restConfig = http.antMatcher("/public/**").headers().frameOptions()
+                    .sameOrigin();
+            restConfig.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            restConfig.and().authorizeRequests().antMatchers("/**").permitAll();
+            restConfig.and().httpBasic();
+            restConfig.and().csrf().disable();
+            
+            
         }
 
     }
