@@ -20,8 +20,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.ID3Creator;
@@ -107,11 +106,11 @@ public class NetworkListController {
 
         // Get details of workspace associated with the network using
         // network-workspace mapping details
-        IWorkSpace workspace = network.getNetworkWorkspace().getWorkspace();
-
+        IWorkspace workspace = network.getWorkspace();             
+        
         // Get projectId of the project to which the workspace belongs
-        String projectId = workspaceManager.getProjectIdFromWorkspaceId(workspace.getWorkspaceId());
-
+        String projectId = (workspace.getProject() != null) ? workspace.getProject().getProjectId() : workspaceManager.getProjectIdFromWorkspaceId(workspace.getWorkspaceId());
+   
         // Get project details using projectId
         IProject project = projectManager.getProjectDetails(projectId);
 
