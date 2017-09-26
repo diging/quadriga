@@ -22,7 +22,7 @@ textarea {
 }
 </style>
 
-<c:if test="${!isNetworkEmpty}">
+<div id="rightpanel" style="display: none;">
 	<br>
 
 	<div class="panel panel-default" id="concept" role="tablist"
@@ -97,4 +97,4 @@ textarea {
 		</h5>
 	</div>
 
-</c:if>
+</div>

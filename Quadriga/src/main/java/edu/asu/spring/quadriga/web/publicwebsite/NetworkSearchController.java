@@ -24,10 +24,12 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectByName;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.conceptpower.POS;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
@@ -54,7 +56,7 @@ public class NetworkSearchController {
     private INetworkTransformationManager transformationManager;
 
     @Autowired
-    private IConceptpowerConnector conceptpowerConnector;
+    private IConceptpowerCache cpCache;
 
     private static String defaultJsonErrorMsg = "{\"status\" : 500,"
             + " \"message\": \"Unable to get the search terms\"}";
@@ -128,13 +130,35 @@ public class NetworkSearchController {
         return new ResponseEntity<String>(defaultJsonErrorMsg, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * This method returns a display of the network that consists of all the statements in the
+     * given projects that contain the provided concept id.
+     * @param projectUnixName Unix name of the project whose networks will be searched for the concept
+     * @param conceptId Id of the concept
+     * @param project
+     * @param model
+     * @return relative path to the web-page that displays the network
+     * @throws QuadrigaStorageException
+     */
     @CheckPublicAccess
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
     public String getSearchTransformedNetwork(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
             @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project, Model model)
                     throws QuadrigaStorageException {
-
+        
+        String lemma = "";
+        String searchNodeLabel = "";
+        
+        // Fetch ConceptPower entries related to the conceptId
+        IConcept concept = cpCache.getConceptByUri(conceptId);
+   
+        if (concept != null) {
+            searchNodeLabel = concept.getWord();
+            lemma = concept.getDescription();
+           
+        }
+     
         ITransformedNetwork transformedNetwork = transformationManager
                 .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
 
@@ -145,14 +169,6 @@ public class NetworkSearchController {
 
         if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
             model.addAttribute("isNetworkEmpty", true);
-        }
-
-        String lemma = "";
-        String searchNodeLabel = "";
-        ConceptpowerReply reply = conceptpowerConnector.getById(conceptId);
-        if (reply != null && reply.getConceptEntry().size() > 0) {
-            searchNodeLabel = reply.getConceptEntry().get(0).getLemma();
-            lemma = reply.getConceptEntry().get(0).getDescription();
         }
 
         model.addAttribute("jsonstring", json);

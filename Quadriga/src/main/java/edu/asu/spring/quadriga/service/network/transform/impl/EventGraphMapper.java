@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
-import edu.asu.spring.quadriga.domain.impl.networks.PrintedRepresentationType;
-import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.RelationType;
-import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermPartType;
-import edu.asu.spring.quadriga.domain.impl.networks.TermType;
+import edu.asu.spring.quadriga.conceptpower.IConcept;
+import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
+import edu.asu.spring.quadriga.domain.network.impl.AppellationEventType;
+import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
+import edu.asu.spring.quadriga.domain.network.impl.PrintedRepresentationType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationType;
+import edu.asu.spring.quadriga.domain.network.impl.SubjectObjectType;
+import edu.asu.spring.quadriga.domain.network.impl.TermPartType;
+import edu.asu.spring.quadriga.domain.network.impl.TermType;
 
 /**
  * This class takes Event-based graphs created with Vogon and
@@ -27,13 +27,13 @@ import edu.asu.spring.quadriga.domain.impl.networks.TermType;
  */
 public class EventGraphMapper {
     
-    private IConceptpowerConnector conceptpower;
+    private IConceptpowerCache cpCache;
 
 	private List<Node> startNodes;
 
-	public EventGraphMapper(IConceptpowerConnector conceptpower) {
+	public EventGraphMapper(IConceptpowerCache cache) {
 		startNodes = new ArrayList<Node>();
-		this.conceptpower = conceptpower;
+		this.cpCache = cache;
 	}
 	
 	public List<Node> getStartNodes() {
@@ -62,7 +62,8 @@ public class EventGraphMapper {
 				Node node = new Node();
 				node.setId(event.getId() + "");
 				node.setEventId(node.getId());
-				
+				node.setSourceURI(event.getSourceReference());
+                
 				TermType term = ((AppellationEventType) event).getTermType();
 				if (term != null) {
 					Term nodeTerm = new Term();
@@ -71,15 +72,14 @@ public class EventGraphMapper {
 					
 					nodeTerm.setSourceUri(term.getSourceReference());
 					
-					
 					node.addTerm(nodeTerm);
 					String interpretation = term.getTermInterpertation();
 					if (interpretation != null) {
 					    node.setConcept(interpretation);
-					    ConceptpowerReply reply = conceptpower.getById(interpretation);
-					    if (reply.getConceptEntry().size() > 0) {
-					        node.setType(reply.getConceptEntry().get(0).getTypeUri());
-					        List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIdList();
+					    IConcept concept = cpCache.getConceptByUri(interpretation);
+					    if (concept != null) {
+					        node.setType(concept.getType() != null ? concept.getType().getUri() : "");
+					        List<String> alternativeIds = concept.getAlternativeUris();
 					        if (alternativeIds != null && alternativeIds.size() > 0) {
 					            node.setAlternativeIds(alternativeIds);
 					        }
@@ -94,6 +94,7 @@ public class EventGraphMapper {
 					Node node = new Node();
 					node.setId(((RelationEventType)event).getRelation().getId() + "" + ((RelationEventType)event).getRelation().getPredicateType().getAppellationEvent().getId() + "");
 					node.setEventId(node.getId());
+					node.setSourceURI(event.getSourceReference());
 					
 					TermType term = ((RelationEventType) event).getRelation().getPredicateType().getAppellationEvent().getTermType();
 					if (term != null) {
@@ -108,10 +109,10 @@ public class EventGraphMapper {
 					    String interpretation = term.getTermInterpertation();
 						if (interpretation != null) {
 							node.setConcept(interpretation);
-							ConceptpowerReply reply = conceptpower.getById(interpretation);
-                            if (reply.getConceptEntry().size() > 0) {
-                                node.setType(reply.getConceptEntry().get(0).getTypeUri());
-                                List<String> alternativeIds = reply.getConceptEntry().get(0).getAlternativeIdList();
+							IConcept concept = cpCache.getConceptByUri(interpretation);
+                            if (concept != null) {
+                                node.setType(concept.getType() != null ? concept.getType().getUri() : "");
+                                List<String> alternativeIds = concept.getAlternativeUris();
                                 if(alternativeIds != null && alternativeIds.size() > 0) {
                                     node.setAlternativeIds(alternativeIds);
                                 }
@@ -239,8 +240,10 @@ public class EventGraphMapper {
 				TermPart termPart = new TermPart();
 				if (part.getExpression() != null) {
 					termPart.setExpression(part.getExpression());
-					termPart.setStartPosition(new Integer(part.getPosition()));
-					termPart.setEndPosition(new Integer(part.getPosition() + part.getExpression().length()));
+					if (part.getPosition() != null && !part.getPosition().trim().equals("null")) {
+					    termPart.setStartPosition(new Integer(part.getPosition()));
+					    termPart.setEndPosition(new Integer(part.getPosition() + part.getExpression().length()));
+					}
 					nodeTerm.addTermPart(termPart);
 				}
 			}
@@ -290,6 +293,7 @@ public class EventGraphMapper {
 		copiedNode.setType(start.getType());
 		copiedNode.setTerms(start.getTerms());
 		copiedNode.setAlternativeIds(start.getAlternativeIds());
+		copiedNode.setSourceURI(start.getSourceURI());
 
 		if (start instanceof Relation) {
 			Node subject = ((Relation) start).getSubject();

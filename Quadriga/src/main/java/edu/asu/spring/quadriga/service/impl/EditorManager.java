@@ -15,9 +15,9 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factory.networks.INetworkFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.networks.INetworkMapper;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**

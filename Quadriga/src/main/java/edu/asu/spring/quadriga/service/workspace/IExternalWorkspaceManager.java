@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.service.workspace;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -17,7 +17,7 @@ public interface IExternalWorkspaceManager {
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
-    IWorkSpace getExternalWorkspace(String externalWorkspaceId, String projectId)
+    IWorkspace getExternalWorkspace(String externalWorkspaceId, String projectId)
             throws QuadrigaStorageException, QuadrigaAccessException;
 
     /**

@@ -5,9 +5,9 @@ package edu.asu.spring.quadriga.service.conceptcollection;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
-import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 

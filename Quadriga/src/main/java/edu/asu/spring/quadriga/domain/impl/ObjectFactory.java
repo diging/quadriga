@@ -10,6 +10,8 @@ package edu.asu.spring.quadriga.domain.impl;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
+import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
+
 
 /**
  * This object contains factory methods for each 

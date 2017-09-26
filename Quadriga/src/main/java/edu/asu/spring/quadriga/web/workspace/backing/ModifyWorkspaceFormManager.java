@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -28,9 +28,9 @@ public class ModifyWorkspaceFormManager
 	public List<ModifyWorkspace> getActiveWorkspaceList(String projectId,String userName) throws QuadrigaStorageException
 	{
 		List<ModifyWorkspace> modifyWorkspaceList = new ArrayList<ModifyWorkspace>();
-		List<IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
+		List<IWorkspace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
 		
-		for(IWorkSpace workspace : workspaceList)
+		for(IWorkspace workspace : workspaceList)
 		{
 		    ModifyWorkspace modifyWorkspace = new ModifyWorkspace();
 			modifyWorkspace.setId(workspace.getWorkspaceId());
@@ -52,7 +52,7 @@ public class ModifyWorkspaceFormManager
 	 */
 	public List<ModifyWorkspace> getDeactivatedWorkspaceList(String projectId,String userName) throws QuadrigaStorageException
 	{
-		List<IWorkSpace> workspaceList;
+		List<IWorkspace> workspaceList;
 		List<ModifyWorkspace> modifyWorkspaceList;
 		ModifyWorkspace modifyWorkspace;
 		
@@ -62,7 +62,7 @@ public class ModifyWorkspaceFormManager
 		
 		if(workspaceList != null)
 		{
-			for(IWorkSpace workspace : workspaceList)
+			for(IWorkspace workspace : workspaceList)
 			{
 				modifyWorkspace = new ModifyWorkspace();
 				modifyWorkspace.setId(workspace.getWorkspaceId());
@@ -84,7 +84,7 @@ public class ModifyWorkspaceFormManager
 	 */
 	public List<ModifyWorkspace> getArchivedWorkspaceList(String projectId,String userName) throws QuadrigaStorageException
 	{
-		List<IWorkSpace> workspaceList;
+		List<IWorkspace> workspaceList;
 		List<ModifyWorkspace> modifyWorkspaceList;
 		ModifyWorkspace modifyWorkspace;
 		
@@ -97,7 +97,7 @@ public class ModifyWorkspaceFormManager
 			return modifyWorkspaceList;
 		}
 		
-		for(IWorkSpace workspace : workspaceList)
+		for(IWorkspace workspace : workspaceList)
 		{
 			modifyWorkspace = new ModifyWorkspace();
 			modifyWorkspace.setId(workspace.getWorkspaceId());

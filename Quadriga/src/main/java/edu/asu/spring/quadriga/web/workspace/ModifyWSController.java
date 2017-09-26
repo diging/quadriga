@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.web.workspace;
 import java.security.Principal;
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -21,29 +19,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.asu.spring.quadriga.accesschecks.IWSSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
+import edu.asu.spring.quadriga.domain.workspace.impl.Workspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
-import edu.asu.spring.quadriga.service.workspace.IWorkspaceCollaboratorManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceManager;
 import edu.asu.spring.quadriga.validator.WorkspaceValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ModifyWSController {
-
-    @Autowired
-    private IWSSecurityChecker workspaceSecurity;
 
     @Autowired
     private IUserManager userManager;
@@ -58,12 +51,7 @@ public class ModifyWSController {
     private WorkspaceValidator validator;
 
     @Autowired
-    private IWorkspaceCollaboratorManager wsCollabManager;
-
-    @Autowired
     private MessageSource messageSource;
-
-    private static final Logger logger = LoggerFactory.getLogger(ModifyWSController.class);
 
     /**
      * Attach the custom validator to the Spring context
@@ -89,7 +77,7 @@ public class ModifyWSController {
             throws QuadrigaStorageException, QuadrigaAccessException {
         // fetch the workspace details
         String userName = principal.getName();
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
         ModelAndView model = new ModelAndView("auth/workbench/workspace/updateworkspace");
         model.getModelMap().put("workspace", workspace);
         return model;
@@ -106,7 +94,7 @@ public class ModifyWSController {
      */
     @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE, paramIndex = 4, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN }) })
     @RequestMapping(value = "auth/workbench/workspace/{workspaceid}/update", method = RequestMethod.POST)
-    public String updateWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
+    public String updateWorkSpaceRequest(@Validated @ModelAttribute("workspace") Workspace workspace,
             BindingResult result, Model model, @PathVariable("workspaceid") String workspaceid, Principal principal, Locale locale, RedirectAttributes redirectAttrs)
             throws QuadrigaStorageException, QuadrigaAccessException {
         

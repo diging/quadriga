@@ -20,18 +20,18 @@ import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
+import edu.asu.spring.quadriga.domain.dictionary.impl.Item;
+import edu.asu.spring.quadriga.domain.factory.dictionary.impl.DictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.WordpowerReply;
-import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.dictionary.IDictionaryDeepMapper;
+import edu.asu.spring.quadriga.mapper.dictionary.IDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
-import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -250,7 +250,7 @@ public class DictionaryManager implements IDictionaryManager {
             throws QuadrigaStorageException {
         DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryid);
         
-        IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryDTO);
+        IDictionary dictionary = dictDeepMapper.getDictionary(dictionaryDTO);
         return dictionary.getDictionaryItems();
     }
 
@@ -258,7 +258,7 @@ public class DictionaryManager implements IDictionaryManager {
     @Transactional
     public List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
         DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryid);
-        IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryDTO);
+        IDictionary dictionary = dictDeepMapper.getDictionary(dictionaryDTO);
         return dictionary.getDictionaryItems();
     }
 
@@ -400,7 +400,7 @@ public class DictionaryManager implements IDictionaryManager {
 
         List<IDictionaryCollaborator> dictionaryCollaboratorList = null;
         DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryId);
-        IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryDTO);
+        IDictionary dictionary = dictDeepMapper.getDictionary(dictionaryDTO);
         if (dictionary != null) {
             dictionaryCollaboratorList = dictionary.getDictionaryCollaborators();
         }
@@ -431,7 +431,7 @@ public class DictionaryManager implements IDictionaryManager {
         JSONArray dataArray = new JSONArray();
 
         List<IProject> dictProjectList = connectProjectDictionary.getprojectsByDictId(dictionaryId);
-        List<IWorkSpace> dictWorkspaceList = connectWorkspaceDictionary.getWorkspaceByDictId(dictionaryId);
+        List<IWorkspace> dictWorkspaceList = connectWorkspaceDictionary.getWorkspaceByDictId(dictionaryId);
 
         if (projectList == null)
             return "";
@@ -454,9 +454,9 @@ public class DictionaryManager implements IDictionaryManager {
             dataArray.put(data);
 
             String wsParent = project.getProjectId();
-            List<IWorkSpace> wsList = wsManager.listActiveWorkspace(wsParent, userName);
+            List<IWorkspace> wsList = wsManager.listActiveWorkspace(wsParent, userName);
             if (wsList != null) {
-                for (IWorkSpace workSpace : wsList) {
+                for (IWorkspace workSpace : wsList) {
 
                     JSONObject data1 = new JSONObject();
                     data1.put("id", workSpace.getWorkspaceId());
@@ -490,7 +490,7 @@ public class DictionaryManager implements IDictionaryManager {
     @Transactional
     public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException {
         DictionaryDTO dictionaryDTO = dictDao.getDTO(dictionaryId);
-        return dictDeepMapper.getDictionaryDetails(dictionaryDTO);
+        return dictDeepMapper.getDictionary(dictionaryDTO);
     }
 
     /**

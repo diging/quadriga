@@ -21,8 +21,8 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
 import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.User;
-import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.domain.workbench.impl.ProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 

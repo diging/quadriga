@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web.workbench;
 
 import java.security.Principal;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,7 +19,6 @@ import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
@@ -42,8 +40,7 @@ public class DeleteProjectDictionaryController {
     @InjectProjectById
     public String deleteProjectDictionary(@ProjectIdentifier @PathVariable("projectid") String projectid,@InjectProject IProject project, Model model, Principal principal)
             throws QuadrigaStorageException, QuadrigaAccessException {
-        List<IProjectDictionary> dicitonaryList = projectDictionaryManager.listProjectDictionary(projectid);
-        model.addAttribute("dicitonaryList", dicitonaryList);
+        model.addAttribute("dicitonaries", projectDictionaryManager.getDictionaries(projectid));
         model.addAttribute("project", project);
         return "auth/workbench/project/deletedictionaries";
     }

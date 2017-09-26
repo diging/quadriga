@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDictionaryDAO;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.workspace.IWorkspaceDeepMapper;
@@ -72,38 +71,16 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
      */
     @Override
     @Transactional
-    public List<IWorkspaceDictionary> listWorkspaceDictionary(IWorkSpace workspace, String userId)
+    public List<IDictionary> getDictionaries(String workspaceId, String userId)
             throws QuadrigaStorageException {
-
-        List<IWorkspaceDictionary> wsDictionaryList = null;
-        WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspace.getWorkspaceId(), userId);
-        wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);
-        return wsDictionaryList;
-    }
-
-    /**
-     * List the dictionary in a project for a user - userId
-     * 
-     * @param workspaceId
-     * @param userId
-     * @return
-     * @throws QuadrigaStorageException
-     */
-    @Override
-    @Transactional
-    public List<IWorkspaceDictionary> listWorkspaceDictionary(String workspaceId, String userId)
-            throws QuadrigaStorageException {
-
-        List<IWorkspaceDictionary> wsDictionaryList = null;
 
         // FIXME: what's up with all of this?:
         WorkspaceDTO wsDto = wsDao.getDTO(workspaceId);
-        IWorkSpace workspace = wsDeepMapper.mapWorkspaceDTO(wsDto);
+        IWorkspace workspace = wsDeepMapper.mapWorkspaceDTO(wsDto);
 
         WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspaceId, userId);
 
-        wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);
-        return wsDictionaryList;
+        return wsDictShallowMapper.getDictionaries(workspace, workspaceDTO);
     }
 
     /**

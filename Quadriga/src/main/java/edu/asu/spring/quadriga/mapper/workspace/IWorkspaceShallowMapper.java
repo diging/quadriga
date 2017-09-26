@@ -2,12 +2,11 @@ package edu.asu.spring.quadriga.mapper.workspace;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.domain.proxy.WorkSpaceProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workbench.impl.Project;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
+import edu.asu.spring.quadriga.domain.workspace.impl.Workspace;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -23,22 +22,22 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface IWorkspaceShallowMapper extends IBaseWorkspaceMapper {
 
     /**
-     * This class should get a {@link IWorkSpace} of domain class type
-     * {@link WorkSpaceProxy} for a {@link IWorkSpace} ID.
+     * This class should get a {@link IWorkspace} of domain class type
+     * {@link WorkSpaceProxy} for a {@link IWorkspace} ID.
      * 
      * @param workspaceDTO
      *            {@link WorkspaceDTO} object
-     * @return Returns {@link IWorkSpace} object of domain class typ
+     * @return Returns {@link IWorkspace} object of domain class typ
      *         {@link WorkSpaceProxy}
      * @throws QuadrigaStorageException
      *             Throws the storage exception when the method has issues to
      *             access the database
      */
-    IWorkSpace mapWorkspaceDTO(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException;
+    IWorkspace mapWorkspaceDTO(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException;
 
     /**
      * Given a list of {@link ProjectWorkspaceDTO}s, this method create a list of {@link IProjectWorkspace}s
-     * that connect {@link Project}s with {@link WorkSpace}s. The {@link WorkSpace}s that are
+     * that connect {@link Project}s with {@link Workspace}s. The {@link Workspace}s that are
      * referenced in the {@link IProjectWorkspace}s are {@link WorkSpaceProxy}s.
      * 
      * @param project The project that the {@link IProjectWorkspace}s link to.
@@ -47,7 +46,7 @@ public interface IWorkspaceShallowMapper extends IBaseWorkspaceMapper {
      * @return
      * @throws QuadrigaStorageException
      */
-    List<IProjectWorkspace> getProjectWorkspaceList(IProject project, List<ProjectWorkspaceDTO> projectWorkspaceDTOList)
+    List<IWorkspace> getProjectWorkspaceList(IProject project, List<ProjectWorkspaceDTO> projectWorkspaceDTOList)
             throws QuadrigaStorageException;
 
 }

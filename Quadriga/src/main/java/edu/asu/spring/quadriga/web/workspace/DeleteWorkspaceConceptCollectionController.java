@@ -16,8 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
@@ -50,9 +50,9 @@ public class DeleteWorkspaceConceptCollectionController {
             Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
         String userId = principal.getName();
 
-        List<IWorkspaceConceptCollection> conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId);
-        model.addAttribute("conceptCollectionList", conceptCollectionList);
-        IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
+        List<IConceptCollection> collections = workspaceCCManager.getConceptCollections(workspaceId);
+        model.addAttribute("collections", collections);
+        IWorkspace workspace = wsManager.getWorkspaceDetails(workspaceId, userId);
         model.addAttribute("workspacedetails", workspace);
         model.addAttribute("projectid", workspaceId);
         return "auth/workbench/workspace/deleteconceptcollections";

@@ -28,8 +28,8 @@ import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.impl.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -135,7 +135,7 @@ public class ModifyProjectController {
     @RequestMapping(value = "auth/workbench/assignownereditor/{projectid}", method = RequestMethod.GET)
     @InjectProjectById
     public String assignOwnerEditorRole(@ProjectIdentifier @PathVariable("projectid") String projectId,
-            @InjectProject IProject project, ModelMap model, Principal principal, RedirectAttributes redirectAttrs,
+            @InjectProject Project project, ModelMap model, Principal principal, RedirectAttributes redirectAttrs,
             Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
         IUser user = userManager.getUser(principal.getName());
         String userName = user.getUserName();
@@ -162,7 +162,7 @@ public class ModifyProjectController {
     @RequestMapping(value = "auth/workbench/deleteownereditor/{projectid}", method = RequestMethod.GET)
     @InjectProjectById
     public String deleteOwnerEditorRole(@ProjectIdentifier @PathVariable("projectid") String projectId,
-            @InjectProject IProject project, ModelMap model, Principal principal, RedirectAttributes redirectAttrs,
+            @InjectProject Project project, ModelMap model, Principal principal, RedirectAttributes redirectAttrs,
             Locale locale) throws QuadrigaStorageException, QuadrigaAccessException {
         String userName = principal.getName();
         projectManager.removeEditorRole(projectId, userName);

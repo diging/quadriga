@@ -6,8 +6,6 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -28,8 +26,8 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProject;
 import edu.asu.spring.quadriga.aspects.annotations.InjectProjectById;
 import edu.asu.spring.quadriga.aspects.annotations.ProjectIdentifier;
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.impl.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
@@ -50,8 +48,6 @@ public class EditProjectUrlController {
     
     @Autowired
     private MessageSource messageSource;
-
-    private static final Logger logger = LoggerFactory.getLogger(EditProjectUrlController.class);
 
     /**
      * Attach the custom validator to the Spring context

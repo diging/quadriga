@@ -12,8 +12,8 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workspace.IExternalWorkspaceDAO;
 import edu.asu.spring.quadriga.dao.workspace.IWorkspaceDAO;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspace;
+import edu.asu.spring.quadriga.domain.workspace.impl.Workspace;
 import edu.asu.spring.quadriga.dto.ExternalWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
@@ -58,13 +58,13 @@ public class ExternalWorkspaceManager implements IExternalWorkspaceManager {
      * {@inheritDoc}
      */
     @Override
-    public IWorkSpace getExternalWorkspace(String externalWorkspaceId, String projectId)
+    public IWorkspace getExternalWorkspace(String externalWorkspaceId, String projectId)
             throws QuadrigaStorageException, QuadrigaAccessException {
         List<ExternalWorkspaceDTO> externalWorkspaceDTOs = externalWorkspaceDAO.getExternalWorkspace(externalWorkspaceId);
         for (ExternalWorkspaceDTO wsDto : externalWorkspaceDTOs) {
-            IWorkSpace workspace = new WorkSpace();
+            IWorkspace workspace = new Workspace();
             workspaceMapper.fillWorkspace(wsDto, workspace);
-            if (workspace.getProjectWorkspace().getProject().getProjectId().equals(projectId))
+            if (workspace.getProject().getProjectId().equals(projectId))
                 return workspace;
         }
         
