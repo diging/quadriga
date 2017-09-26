@@ -34,7 +34,10 @@
 		<quadriga.admin.username>admin</quadriga.admin.username>
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
-
+		
+		<github.clientId></github.clientId>
+        <github.secret></github.secret>
+        
 		<textfiles.location></textfiles.location>
 		<transformationfiles.location></transformationfiles.location>
 		<tempfiles.dir.location></tempfiles.dir.location>
@@ -45,8 +48,6 @@
 		<email.pw></email.pw>
 		<email.from></email.from>
 		<email.enabled>true</email.enabled>
-		<quadriga.baseurl />
-
 
 	</properties>
 
