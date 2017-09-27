@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.domain.network.impl.AppellationEventType;
@@ -42,30 +44,33 @@ public class NetworkConceptManager implements INetworkConceptManager {
      */
     @Override
     public List<IConcept> getConceptsOfStatements(List<String> allNodes) throws JAXBException {
-        String idList = "\"" + String.join("\",\"", allNodes) + "\"";
-        Map<String, String> paras = new HashMap<>();
-        paras.put("nodes.id.list", idList);
-        String result;
-        try {
-            result = qstoreConnector.executeNeo4jQuery("concepts.of.statements", paras, IQStoreConnector.APPELLATION_EVENT);
-        } catch (AsyncExecutionException e) {
-            logger.error("Could not execute query.", e);
-            return null;
-        }
-        ElementEventsType eventsType = marshallingService.unMarshalXmlToElementEventsType(result);
-        List<CreationEvent> events = eventsType.getRelationEventOrAppellationEvent();
+        // QUAD-261, break up long queries
         List<IConcept> concepts = new ArrayList<>();
-        events.forEach(e -> {
-            if (e instanceof AppellationEventType) {
-               TermType term = ((AppellationEventType) e).getTermType();
-               String conceptUri = term.getTermInterpertation();
-               IConcept concept = conceptpowerCache.getConceptByUri(conceptUri);
-               if (concept != null) {
-                   concepts.add(concept);
-               }
+        for (List<String> partition : Lists.partition(allNodes, 200)) {
+            String idList = "\"" + String.join("\",\"", partition) + "\"";
+            Map<String, String> paras = new HashMap<>();
+            paras.put("nodes.id.list", idList);
+            String result;
+            try {
+                result = qstoreConnector.executeNeo4jQuery("concepts.of.statements", paras, IQStoreConnector.APPELLATION_EVENT);
+            } catch (AsyncExecutionException e) {
+                logger.error("Could not execute query.", e);
+                return null;
             }
-        });
-        
+            ElementEventsType eventsType = marshallingService.unMarshalXmlToElementEventsType(result);
+            List<CreationEvent> events = eventsType.getRelationEventOrAppellationEvent();
+            events.forEach(e -> {
+                if (e instanceof AppellationEventType) {
+                   TermType term = ((AppellationEventType) e).getTermType();
+                   String conceptUri = term.getTermInterpertation();
+                   IConcept concept = conceptpowerCache.getConceptByUri(conceptUri);
+                   if (concept != null) {
+                       concepts.add(concept);
+                   }
+                }
+            });
+        }
+
         return concepts;
     }
 }
