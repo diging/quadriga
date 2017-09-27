@@ -63,7 +63,7 @@ public class UsedConceptsApiController {
             networksInProject.forEach(n -> {
                 try {
                     List<INetworkNodeInfo> nodes = n.getNetworkNodes();
-                    nodes.forEach(tp -> nodeIds.add(tp.getId()));
+                    nodes.stream().filter(node -> node.getStatementType().equals(INetworkManager.APPELLATIONEVENT)).forEach(tp -> nodeIds.add(tp.getId()));
                 } catch (Exception e) {
                     logger.error("Could not get nodes.", e);
                 }
