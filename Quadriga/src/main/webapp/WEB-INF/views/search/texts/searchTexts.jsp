@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import = "edu.asu.spring.quadriga.domain.workspace.impl.TextFile" %>
+<%@ page import="edu.asu.spring.quadriga.domain.workspace.impl.TextFile"%>
 
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/dist/cytoscape.js"></script>
@@ -24,9 +24,9 @@
 							<div class="input-group row" style="width: 100%;">
 								<button type="button" class="btn btn-default"
 									onclick="addSearchBox()">
-									<span class="glyphicon glyphicon-plus">
+									<span class="glyphicon glyphicon-plus"></span>
 								</button>
-								</span> <input placeholder="Enter search term" type="text"
+								<input placeholder="Enter search term" type="text"
 									onkeyup="clickedevent(this)"
 									class="form-control search-control width90" id="search-term"
 									autocomplete="off"> <input
@@ -66,14 +66,15 @@
 
 				<div class="row">
 					<div class="col-sm-12">
-
-						<c:if test="${not empty concept}">
-							<h3 style="margin-bottom: 0px;">Results for:</h3>
-							<h4 style="margin-bottom: 20px;">${concept.lemma}
-								<small><span class="label label-default">${concept.type}</span>
-									<br>${concept.description} </small>
-							</h4>
-						</c:if>
+						<c:forEach items="${concepts}" var="concept">
+							<c:if test="${not empty concept}">
+								<h3 style="margin-bottom: 0px;">Results for:</h3>
+								<h4 style="margin-bottom: 20px;">${concept.lemma}
+									<small><span class="label label-default">${concept.type}</span>
+										<br>${concept.description} </small>
+								</h4>
+							</c:if>
+						</c:forEach>
 						<div class="list-group">
 							<c:if
 								test="${empty texts and empty references and not empty concept}">
