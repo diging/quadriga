@@ -1,12 +1,12 @@
 package edu.asu.spring.quadriga.conceptpower.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -22,8 +22,12 @@ import edu.asu.spring.quadriga.conceptpower.IConceptType;
 
 @Entity
 @Table(name = "tbl_conceptpower_concept")
-public class Concept implements IConcept {
+public class Concept implements IConcept, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4663816920819960578L;
     @Id @Index(name="uri_idx") private String uri;
     private String id;
     private String word;
