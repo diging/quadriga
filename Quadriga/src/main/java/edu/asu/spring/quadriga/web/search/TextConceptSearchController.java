@@ -56,10 +56,13 @@ public class TextConceptSearchController {
     @RequestMapping(value = "search/texts")
     public String search(@RequestParam(value = "conceptid1", defaultValue = "") String conceptId1,
             @RequestParam(value = "conceptid2", defaultValue = "") String conceptId2, Model model) throws Exception {
-        Set<String> references = new HashSet<String>();
+        
         ArrayList<String> concepts = new ArrayList<>();
-        List<ITextFile> texts = new ArrayList<ITextFile>();
-        List<String> handles = new ArrayList<String>();
+        //List<ITextFile> texts = new ArrayList<ITextFile>();
+        //List<String> handles = new ArrayList<String>();
+        List<List<ITextFile>> texts = new ArrayList<List<ITextFile>>();
+        List<List<String>> handles = new ArrayList<List<String>>();
+        List<String> conceptUriSearchList = new ArrayList<String>();
         List<ConceptEntry> conceptEntries = new ArrayList<ConceptEntry>();
         concepts.add(conceptId1);
         concepts.add(conceptId2);
@@ -67,7 +70,10 @@ public class TextConceptSearchController {
             if (!conceptUri.isEmpty()) {
                 ConceptpowerReply reply = conceptpowerConnector.getById(conceptUri);
                 List<ConceptEntry> entries = reply.getConceptEntry();
-
+                Set<String> references = new HashSet<String>();
+                List<ITextFile> conceptTexts = new ArrayList<ITextFile>();
+                List<String> conceptHandles = new ArrayList<String>();
+                
                 ConceptEntry entry = null;
                 if (entries != null && !entries.isEmpty()) {
                     entry = entries.get(0);
@@ -83,7 +89,7 @@ public class TextConceptSearchController {
                 ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
                 List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
 
-                if (entry.getWordnetId() != null && !entry.getWordnetId().isEmpty()) {
+                if (entry != null && entry.getWordnetId() != null && !entry.getWordnetId().isEmpty()) {
                     results = qStoreConnector.searchNodesByConcept(entry.getWordnetId());
                     events = marshallingService.unMarshalXmlToElementEventsType(results);
                     eventList.addAll(events.getRelationEventOrAppellationEvent());
@@ -98,47 +104,59 @@ public class TextConceptSearchController {
                 for (CreationEvent event : eventList) {
 
                     String sourceRef = event.getSourceReference();
+                    //System.out.println("Source Ref: "+sourceRef);
                     // if we haven't seen the reference yet
                     if (references.add(sourceRef)) {
                         ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
                         if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
-                            handles.add(sourceRef);
+                            conceptHandles.add(sourceRef);
                         } else {
                             if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
-                                texts.add(txtFile);
+                                conceptTexts.add(txtFile);
                                 textFileManager.loadFile(txtFile);
                                 txtFile.setSnippetLength(40);
                             }
                         }
                     }
                 }
+                
+               // System.out.println("Concept Text Size: "+conceptTexts.size());
+                //System.out.println("Concept Handle Size: "+conceptHandles.size());
 
                 // model.addAttribute("references", handles);
-                model.addAttribute("concept", entry);
+                //model.addAttribute("concept", entry);
                 conceptEntries.add(entry);
+                handles.add(conceptHandles);
+                texts.add(conceptTexts);
+                conceptUriSearchList.add(conceptUri);
                 // model.addAttribute("texts", texts);
 
-                List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
-
-                List<String> projectIds = new ArrayList<String>();
-                projects.forEach(p -> projectIds.add(p.getProjectId()));
-
-                ITransformedNetwork transformedNetwork = transformationManager
-                        .getSearchTransformedNetworkMultipleProjects(projectIds, conceptUri, INetworkStatus.APPROVED);
-
-                String json = null;
-                if (transformedNetwork != null) {
-                    json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-                }
-
-                if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-                    model.addAttribute("isNetworkEmpty", true);
-                }
-                System.out.println("json: " + json);
-                model.addAttribute("jsonstring", json);
+               
 
             }
         }
+        List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
+
+        List<String> projectIds = new ArrayList<String>();
+        projects.forEach(p -> projectIds.add(p.getProjectId()));
+
+        ITransformedNetwork transformedNetwork = transformationManager
+                .getSearchTransformedNetworkMultipleProjects(projectIds, conceptUriSearchList, INetworkStatus.APPROVED);
+
+        String json = null;
+        if (transformedNetwork != null) {
+            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
+        }
+
+        if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+            model.addAttribute("isNetworkEmpty", true);
+        }
+        
+        //System.out.println("Text Size: "+texts.size());
+       // System.out.println("Handle Size: "+handles.size());
+        //System.out.println("json: " + json);
+        
+        model.addAttribute("jsonstring", json);
         model.addAttribute("references", handles);
         model.addAttribute("texts", texts);
         model.addAttribute("concepts", conceptEntries);

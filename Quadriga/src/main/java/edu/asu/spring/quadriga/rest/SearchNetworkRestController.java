@@ -110,8 +110,10 @@ public class SearchNetworkRestController {
 
         ITransformedNetwork transformedNetwork;
         try {
+            List<String> conceptIdList = new ArrayList<String>();
+            conceptIdList.add(conceptId);
             transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds,
-                    conceptId, INetworkStatus.APPROVED);
+                    conceptIdList, INetworkStatus.APPROVED);
         } catch (QuadrigaStorageException e) {
             throw new RestException(403, e);
         }

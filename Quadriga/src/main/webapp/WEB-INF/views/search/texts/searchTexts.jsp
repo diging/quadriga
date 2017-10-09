@@ -66,71 +66,72 @@
 
 				<div class="row">
 					<div class="col-sm-12">
-						<c:forEach items="${concepts}" var="concept">
+						<c:forEach items="${concepts}" var="concept" varStatus="loop">
 							<c:if test="${not empty concept}">
 								<h3 style="margin-bottom: 0px;">Results for:</h3>
 								<h4 style="margin-bottom: 20px;">${concept.lemma}
 									<small><span class="label label-default">${concept.type}</span>
 										<br>${concept.description} </small>
 								</h4>
+								<div class="list-group">
+									<c:if
+										test="${empty texts.get(loop.index) and empty references.get(loop.index) and not empty concept}">
+										<div class="panel panel-default">
+											<div class="panel-body">Your search has no results.</div>
+										</div>
+									</c:if>
+									<c:forEach items="${texts.get(loop.index)}" var="textfile">
+										<div class="list-group-item">
+											<p class="pull-right">
+												<a href="${textfile.refId}" title="Go to original"
+													target="_blank"> <i class="fa fa-share"></i>
+												</a>
+												<c:if test="${not empty textfile.presentationUrl}">
+													<a href="${textfile.presentationUrl}"
+														title="Go to text webpage" target="_blank"> <i
+														class="fa fa-globe"></i>
+													</a>
+												</c:if>
+											</p>
+											<h4>
+												<a href="#" data-toggle="modal" data-target="#txtModal"
+													data-txtid="${textfile.textId}"
+													data-txtname="${textfile.fileName}"
+													data-txttitle="${textfile.title}"
+													data-txtauthor="${textfile.author}"
+													data-txtdate="${textfile.creationDate}"> <i
+													class="fa fa-file-text-o" aria-hidden="true"></i> <c:if
+														test="${not empty textfile.author}">${textfile.author}, </c:if>
+													<c:if test="${not empty textfile.title}">
+														<em>${textfile.title}</em>
+													</c:if> <c:if test="${not empty textfile.creationDate}"> (${textfile.creationDate})</c:if>
+													<c:if
+														test="${empty textfile.author and empty textfile.title and empty textfile.creationDate}">No author and title information provided.</c:if>
+												</a>
+											</h4>
+
+											<p style="margin-bottom: 0px; line-height: 1.3">
+												<small>${textfile.snippet}</small>
+											</p>
+										</div>
+									</c:forEach>
+
+									<c:if test="${not empty references.get(loop.index)}">
+										<h4 style="margin-top: 30px;">External Resources</h4>
+										<c:forEach items="${references.get(loop.index)}" var="ref">
+											<div class="list-group-item">
+												<h4>
+													<a href="${ref}" target="_blank"><i class="fa fa-share"
+														aria-hidden="true"></i> ${ref}</a>
+												</h4>
+											</div>
+										</c:forEach>
+									</c:if>
+
+								</div>
 							</c:if>
 						</c:forEach>
-						<div class="list-group">
-							<c:if
-								test="${empty texts and empty references and not empty concept}">
-								<div class="panel panel-default">
-									<div class="panel-body">Your search has no results.</div>
-								</div>
-							</c:if>
-							<c:forEach items="${texts}" var="textfile">
-								<div class="list-group-item">
-									<p class="pull-right">
-										<a href="${textfile.refId}" title="Go to original"
-											target="_blank"> <i class="fa fa-share"></i>
-										</a>
-										<c:if test="${not empty textfile.presentationUrl}">
-											<a href="${textfile.presentationUrl}"
-												title="Go to text webpage" target="_blank"> <i
-												class="fa fa-globe"></i>
-											</a>
-										</c:if>
-									</p>
-									<h4>
-										<a href="#" data-toggle="modal" data-target="#txtModal"
-											data-txtid="${textfile.textId}"
-											data-txtname="${textfile.fileName}"
-											data-txttitle="${textfile.title}"
-											data-txtauthor="${textfile.author}"
-											data-txtdate="${textfile.creationDate}"> <i
-											class="fa fa-file-text-o" aria-hidden="true"></i> <c:if
-												test="${not empty textfile.author}">${textfile.author}, </c:if>
-											<c:if test="${not empty textfile.title}">
-												<em>${textfile.title}</em>
-											</c:if> <c:if test="${not empty textfile.creationDate}"> (${textfile.creationDate})</c:if>
-											<c:if
-												test="${empty textfile.author and empty textfile.title and empty textfile.creationDate}">No author and title information provided.</c:if>
-										</a>
-									</h4>
 
-									<p style="margin-bottom: 0px; line-height: 1.3">
-										<small>${textfile.snippet}</small>
-									</p>
-								</div>
-							</c:forEach>
-
-							<c:if test="${not empty references}">
-								<h4 style="margin-top: 30px;">External Resources</h4>
-								<c:forEach items="${references}" var="ref">
-									<div class="list-group-item">
-										<h4>
-											<a href="${ref}" target="_blank"><i class="fa fa-share"
-												aria-hidden="true"></i> ${ref}</a>
-										</h4>
-									</div>
-								</c:forEach>
-							</c:if>
-
-						</div>
 					</div>
 				</div>
 			</div>
