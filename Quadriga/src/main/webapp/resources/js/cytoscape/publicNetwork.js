@@ -37,7 +37,7 @@ function defineDoubleClickSearch(cy, path) {
 		var uri = node.data('conceptUri');
 		$('#nodeName').html(name);
 		$('#searchForNode').css({'display':'inline'});
-		$('#searchNodeLink').attr('href', path + "/search/texts?conceptId=" + uri);
+		$('#searchNodeLink').attr('href', path + "/search/texts?conceptid1=" + uri);
 	});
 }
 

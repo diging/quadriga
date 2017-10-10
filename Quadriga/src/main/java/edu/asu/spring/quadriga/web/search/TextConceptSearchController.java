@@ -58,8 +58,6 @@ public class TextConceptSearchController {
             @RequestParam(value = "conceptid2", defaultValue = "") String conceptId2, Model model) throws Exception {
         
         ArrayList<String> concepts = new ArrayList<>();
-        //List<ITextFile> texts = new ArrayList<ITextFile>();
-        //List<String> handles = new ArrayList<String>();
         List<List<ITextFile>> texts = new ArrayList<List<ITextFile>>();
         List<List<String>> handles = new ArrayList<List<String>>();
         List<String> conceptUriSearchList = new ArrayList<String>();
@@ -95,16 +93,10 @@ public class TextConceptSearchController {
                     eventList.addAll(events.getRelationEventOrAppellationEvent());
                 }
 
-                /*
-                 * Set<String> references = new HashSet<String>();
-                 * List<ITextFile> texts = new ArrayList<ITextFile>();
-                 * List<String> handles = new ArrayList<String>();
-                 */
 
                 for (CreationEvent event : eventList) {
 
                     String sourceRef = event.getSourceReference();
-                    //System.out.println("Source Ref: "+sourceRef);
                     // if we haven't seen the reference yet
                     if (references.add(sourceRef)) {
                         ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
@@ -120,18 +112,12 @@ public class TextConceptSearchController {
                     }
                 }
                 
-               // System.out.println("Concept Text Size: "+conceptTexts.size());
-                //System.out.println("Concept Handle Size: "+conceptHandles.size());
 
-                // model.addAttribute("references", handles);
-                //model.addAttribute("concept", entry);
+                model.addAttribute("concept", entry);
                 conceptEntries.add(entry);
                 handles.add(conceptHandles);
                 texts.add(conceptTexts);
-                conceptUriSearchList.add(conceptUri);
-                // model.addAttribute("texts", texts);
-
-               
+                conceptUriSearchList.add(conceptUri);           
 
             }
         }
@@ -152,10 +138,7 @@ public class TextConceptSearchController {
             model.addAttribute("isNetworkEmpty", true);
         }
         
-        //System.out.println("Text Size: "+texts.size());
-       // System.out.println("Handle Size: "+handles.size());
-        //System.out.println("json: " + json);
-        
+
         model.addAttribute("jsonstring", json);
         model.addAttribute("references", handles);
         model.addAttribute("texts", texts);

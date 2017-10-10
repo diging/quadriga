@@ -135,53 +135,51 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="col-md-4" style="padding-top: 100px;">
-				<div class="row">
-					<div class="col-sm-12">
-						<c:if test="${jsonstring != '[]'}">
-							<small>Click on a node to search for its concept.</small>
-						</c:if>
-					</div>
-					<div class="col-sm-12" style="min-height: 45px;">
-						<small>
-							<div id="searchForNode" style="display: none;">
-								Search for concept <em id="nodeName"></em>?&nbsp;&nbsp; <a
-									id="searchNodeLink"><strong>Yes, search!</strong></a>
-							</div>
-						</small>
-					</div>
-					<div class="col-sm-12">
-						<div id="networkBox"
-							style="min-height: 500px; width: 100%; text-align: left;"></div>
-					</div>
-				</div>
-			</div>
-
 		</div>
-	</div>
-
-	<div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog"
-		aria-labelledby="txtModal" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content ">
-				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel"></h4>
+		<div class="col-md-4" style="padding-top: 100px;">
+			<div class="row">
+				<div class="col-sm-12">
+					<c:if test="${jsonstring != '[]'}">
+						<small>Click on a node to search for its concept.</small>
+					</c:if>
 				</div>
-				<div class="modal-body" style="height: 500px; overflow-y: scroll;"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<div class="col-sm-12" style="min-height: 45px;">
+					<small>
+						<div id="searchForNode" style="display: none;">
+							Search for concept <em id="nodeName"></em>?&nbsp;&nbsp; <a
+								id="searchNodeLink"><strong>Yes, search!</strong></a>
+						</div>
+					</small>
+				</div>
+				<div class="col-sm-12">
+					<div id="networkBox"
+						style="min-height: 500px; width: 100%; text-align: left;"></div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal text-modal" id="txtModal" tabindex="-1" role="dialog"
+	aria-labelledby="txtModal" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content ">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel"></h4>
+			</div>
+			<div class="modal-body" style="height: 500px; overflow-y: scroll;"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 
-	<script>
+<script>
 function addSearchBox(){
 	$("#search-term2").css('display','block');
 }
 </script>
-	<script>
+<script>
 function loadResults(){
 	var conceptid1 = $("#concept1").val();
 	var conceptid2 = $("#concept2").val();
@@ -190,7 +188,7 @@ function loadResults(){
 	window.location.href = url;
 }
 </script>
-	<script>
+<script>
 var container = document.getElementById('networkBox');
 var cy = cytoscape({
     container: container, // container to render in
@@ -232,7 +230,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 </script>
 
 
-	<script>
+<script>
 //# sourceURL=loader.js
     $('.list-group').on("click",".list-group-item",function(){
         var title = $(this).find('.search-name strong').text();
@@ -251,7 +249,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 		});
     function clickedevent(selected) {
         // ajax loader
-        var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId=';
+        var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId1=';
         var $searchInput = $("#"+selected.id);
         var $resWrapper = $('#search-results-wrapper');
         var $items = $('#search-results-items');
