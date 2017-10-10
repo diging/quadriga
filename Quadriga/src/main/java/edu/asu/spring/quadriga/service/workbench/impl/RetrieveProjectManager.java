@@ -203,7 +203,12 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
             throws QuadrigaStorageException {
         ProjectDTO projectDto = projectDao.getDTO(projectId);
         if(projectDto != null) {
-            IProjectBaseMapper mapper = projectMappers.get(projectDto.getClass());
+            IProjectBaseMapper mapper;
+            if (projectDto instanceof PassThroughProjectDTO) {
+                mapper = projectMappers.get(PassThroughProjectDTO.class);
+            } else {
+                mapper = projectMappers.get(ProjectDTO.class);
+            }
             return mapper.getProject(projectDto);
         }
         
