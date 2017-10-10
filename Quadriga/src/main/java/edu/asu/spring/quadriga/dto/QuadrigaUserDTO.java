@@ -19,8 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This table represents the column mappings for quadriga user table.
@@ -29,7 +27,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_quadriga_user")
-@XmlRootElement
 @NamedQueries({ @NamedQuery(name = "QuadrigaUserDTO.findAll", query = "SELECT q FROM QuadrigaUserDTO q"),
         @NamedQuery(name = "QuadrigaUserDTO.findByFullname", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.fullname = :fullname"),
         @NamedQuery(name = "QuadrigaUserDTO.findByUsername", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.username = :username"),
@@ -101,7 +98,6 @@ public class QuadrigaUserDTO implements Serializable {
     public QuadrigaUserDTO() {
     }
 
-    @XmlTransient
     public List<NetworkAnnotationsDTO> getNetworkAnnotaionList() {
         return networkAnnotaionList;
     }
@@ -110,7 +106,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.networkAnnotaionList = networkAnnotaionList;
     }
 
-    @XmlTransient
     public List<QuadrigaUserprofileDTO> getQuadrigaUserprofileDTOList() {
         return quadrigaUserprofileDTOList;
     }
@@ -119,7 +114,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.quadrigaUserprofileDTOList = quadrigaUserprofileDTOList;
     }
 
-    @XmlTransient
     public List<QuadrigaUserDeniedDTO> getQuadrigaUserDeniedDTOList() {
         return quadrigaUserDeniedDTOList;
     }
@@ -128,7 +122,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.quadrigaUserDeniedDTOList = quadrigaUserDeniedDTOList;
     }
 
-    @XmlTransient
     public List<QuadrigaUserRoleDTO> getQuadrigaUserRoleDTOList() {
         return quadrigaUserRoleDTOList;
     }
@@ -137,7 +130,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.quadrigaUserRoleDTOList = quadrigaUserRoleDTOList;
     }
 
-    @XmlTransient
     public List<NetworkAssignedDTO> getNetworkAssignedList() {
         return networkAssignedList;
     }
@@ -146,7 +138,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.networkAssignedList = networkAssignedList;
     }
 
-    @XmlTransient
     public List<NetworksDTO> getNetworkDTOList() {
         return networkDTOList;
     }
@@ -243,7 +234,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.userIdOfProvider = userIdOfProvider;
     }
 
-    @XmlTransient
     public List<ConceptCollectionCollaboratorDTO> getConceptcollectionsCollaboratorDTOList() {
         return conceptcollectionsCollaboratorDTOList;
     }
@@ -253,7 +243,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.conceptcollectionsCollaboratorDTOList = conceptcollectionsCollaboratorDTOList;
     }
 
-    @XmlTransient
     public List<ProjectDTO> getProjectDTOList() {
         return projectDTOList;
     }
@@ -262,7 +251,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.projectDTOList = projectDTOList;
     }
 
-    @XmlTransient
     public List<WorkspaceDTO> getWorkspaceDTOList() {
         return workspaceDTOList;
     }
@@ -271,7 +259,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.workspaceDTOList = workspaceDTOList;
     }
 
-    @XmlTransient
     public List<WorkspaceCollaboratorDTO> getWorkspaceCollaboratorDTOList() {
         return workspaceCollaboratorDTOList;
     }
@@ -280,7 +267,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.workspaceCollaboratorDTOList = workspaceCollaboratorDTOList;
     }
 
-    @XmlTransient
     public List<ProjectCollaboratorDTO> getProjectCollaboratorDTOList() {
         return projectCollaboratorDTOList;
     }
@@ -289,7 +275,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.projectCollaboratorDTOList = projectCollaboratorDTOList;
     }
 
-    @XmlTransient
     public List<ConceptCollectionDTO> getConceptcollectionsDTOList() {
         return conceptcollectionsDTOList;
     }
@@ -298,7 +283,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.conceptcollectionsDTOList = conceptcollectionsDTOList;
     }
 
-    @XmlTransient
     public List<DictionaryCollaboratorDTO> getDictionaryCollaboratorDTOList() {
         return dictionaryCollaboratorDTOList;
     }
@@ -307,7 +291,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.dictionaryCollaboratorDTOList = dictionaryCollaboratorDTOList;
     }
 
-    @XmlTransient
     public List<DictionaryDTO> getDictionaryDTOList() {
         return dictionaryDTOList;
     }
