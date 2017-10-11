@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents the column mappings for statistics settings table.
@@ -22,7 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_project_statistics_settings")
-@XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "StatisticsSettingsDTO.findAll", query = "SELECT p FROM StatisticsSettingsDTO p"),
         @NamedQuery(name = "StatisticsSettingsDTO.findByProjectid", query = "SELECT p FROM StatisticsSettingsDTO p WHERE p.projectid = :projectid"),

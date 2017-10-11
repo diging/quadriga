@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents the column mappings for
@@ -27,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_workspace_dictionary")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkspaceDictionaryDTO.findAll", query = "SELECT w FROM WorkspaceDictionaryDTO w"),
     @NamedQuery(name = "WorkspaceDictionaryDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceDictionaryDTO w WHERE w.workspaceDictionaryDTOPK.workspaceid = :workspaceid"),

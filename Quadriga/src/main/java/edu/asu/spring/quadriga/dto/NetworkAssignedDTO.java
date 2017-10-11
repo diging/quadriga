@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This class represents the column mappings for network assigned 
@@ -27,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_network_assigned")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "NetworkAssignedDTO.findAll", query = "SELECT n FROM NetworkAssignedDTO n"),
     @NamedQuery(name = "NetworkAssignedDTO.findByNetworkid", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid"),

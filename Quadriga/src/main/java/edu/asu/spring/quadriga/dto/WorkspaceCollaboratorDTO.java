@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This class represents the column mappings for workspace collaborator table.
@@ -20,7 +19,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_workspace_collaborator")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkspaceCollaboratorDTO.findAll", query = "SELECT w FROM WorkspaceCollaboratorDTO w"),
     @NamedQuery(name = "WorkspaceCollaboratorDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.collaboratorDTOPK.workspaceid = :workspaceid"),
