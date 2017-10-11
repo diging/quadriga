@@ -81,7 +81,7 @@ public class Generator {
         
         VelocityContext context = new VelocityContext();
         context.put("error", errorCode);
-        context.put("errorMsg", errorMsg);
+        context.put("errorMsg", errorMsg != null ? errorMsg : "");
         StringWriter writer = new StringWriter();
 
         if (template != null) {

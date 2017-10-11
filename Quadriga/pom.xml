@@ -34,16 +34,16 @@
 		<quadriga.admin.username>admin</quadriga.admin.username>
 		<quadriga.admin.password>admin</quadriga.admin.password>
 		<pullrequest></pullrequest>
-		
+
 		<github.clientId></github.clientId>
-        <github.secret></github.secret>
-        
+		<github.secret></github.secret>
+
 		<textfiles.location></textfiles.location>
 		<transformationfiles.location></transformationfiles.location>
 		<tempfiles.dir.location></tempfiles.dir.location>
 
 		<email.host></email.host>
-		<email.port></email.port>
+		<email.port>25</email.port>
 		<email.username></email.username>
 		<email.pw></email.pw>
 		<email.from></email.from>
@@ -417,12 +417,6 @@
 			<version>2.6.0</version>
 		</dependency>
 
-		<!-- JSoup -->
-		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.9.2</version>
-		</dependency>
 
 		<!-- Spring Social -->
 		<dependency>
@@ -450,6 +444,22 @@
 			<artifactId>spring-social-github</artifactId>
 			<version>${spring-social-github.version}</version>
 		</dependency>
+
+		<!-- Utils -->
+		<!-- JSoup -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>23.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<profiles>
@@ -663,3 +673,4 @@
 		</plugins>
 	</reporting>
 </project>
+
