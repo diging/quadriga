@@ -43,7 +43,7 @@
 		<tempfiles.dir.location></tempfiles.dir.location>
 
 		<email.host></email.host>
-		<email.port>25</email.port>
+		<email.port></email.port>
 		<email.username></email.username>
 		<email.pw></email.pw>
 		<email.from></email.from>
@@ -673,4 +673,3 @@
 		</plugins>
 	</reporting>
 </project>
-
