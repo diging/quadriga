@@ -14,6 +14,7 @@
         <org.aspectj-version>1.7.3</org.aspectj-version>
         <org.slf4j-version>1.7.25</org.slf4j-version>
         <spring-security-version>4.0.4.RELEASE</spring-security-version>
+        <hibernate.version>5.2.11.Final</hibernate.version>
 
         <!-- Deploy Properties -->
         <deploy.quadriga.baseurl>http://localhost:8080/quadriga/</deploy.quadriga.baseurl>
@@ -318,7 +319,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.2.13.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
 
         <!-- Hibernate library dependecy start -->

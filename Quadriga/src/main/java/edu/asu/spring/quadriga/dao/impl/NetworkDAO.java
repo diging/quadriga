@@ -445,7 +445,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
                     + "where pw.projectWorkspaceDTOPK.projectid in "
                     + "(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) "
                     + "or n.networkWorkspace.workspaceDTO.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we "
-                    + "where we.workspaceEditorDTOPK.editor = :username)))))" + "";
+                    + "where we.workspaceEditorDTOPK.editor = :username))" + "";
             System.out.println("Testing query :" + query1);
 
             query = sessionFactory.getCurrentSession().createQuery(query1);
