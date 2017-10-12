@@ -34,7 +34,7 @@ $("input[type=button]").button().click(function(event) {
 
 
 <body
-	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
+	onload="d3visualize(<c:out value='${jsonstring}'></c:out>,<c:out value='\"${networkid}\"'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />
 
 <button class="btn btn-default" type="submit" onclick="goFullscreen('chart')" style="float: left">
     <i class="fa fa-arrows-alt"></i> 

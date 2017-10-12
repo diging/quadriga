@@ -69,8 +69,8 @@
 						<c:forEach items="${concepts}" var="concept" varStatus="loop">
 							<c:if test="${not empty concept}">
 								<h3 style="margin-bottom: 0px;">Results for:</h3>
-								<h4 style="margin-bottom: 20px;">${concept.lemma}
-									<small><span class="label label-default">${concept.type}</span>
+								<h4 style="margin-bottom: 20px;">${concept.word}
+									<small><span class="label label-default">${concept.type.name}</span>
 										<br>${concept.description} </small>
 								</h4>
 								<div class="list-group">
@@ -139,7 +139,7 @@
 		<div class="col-md-4" style="padding-top: 100px;">
 			<div class="row">
 				<div class="col-sm-12">
-					<c:if test="${jsonstring != '[]'}">
+					<c:if test="${not empty jsonstring and jsonstring != '[]'}">
 						<small>Click on a node to search for its concept.</small>
 					</c:if>
 				</div>

@@ -89,6 +89,7 @@ public class TransformationSupervisor implements ITransformationSupervisor {
             @Override
             public void onFailure(Throwable arg0) {
                 try {
+                    logger.error("Thread finished with exception.", arg0);
                     resultCache.add(finalId, generator.generateError("500", arg0.getMessage()));
                 } catch (QuadrigaGeneratorException e) {
                     logger.error("Could not generate error message.", e);

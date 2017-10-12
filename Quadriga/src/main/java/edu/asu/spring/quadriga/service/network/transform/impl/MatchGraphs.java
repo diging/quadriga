@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ import edu.asu.spring.quadriga.service.network.impl.NetworkDownloadService;
  */
 @Service
 public class MatchGraphs {
+    
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
 	private PatternFinder finder;
@@ -62,6 +66,7 @@ public class MatchGraphs {
 	        try {
 	            networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
 	        } catch (QuadrigaStorageException e) {
+	            logger.error("Could not retrieve top nodes.", e);
 	            return null;
 	        }
 	        
@@ -171,6 +176,10 @@ public class MatchGraphs {
 	    }
 	    if (eventToAdd instanceof RelationEventType) {
 	        // add subject
+	        if(((RelationEventType) eventToAdd).getRelation() == null) {
+	            return;
+	        }
+	        
 	        CreationEvent subject = ((RelationEventType) eventToAdd).getRelation().getSubjectType().getAppellationEvent();
 	        if (subject == null) {
 	            subject = ((RelationEventType) eventToAdd).getRelation().getSubjectType().getRelationEvent();
