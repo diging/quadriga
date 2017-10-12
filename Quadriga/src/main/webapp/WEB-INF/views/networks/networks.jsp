@@ -47,10 +47,10 @@ $(document).ready(function() {
 										value="${network.networkName}"></c:out>
 							</a></td>
 							<td width="25%"><c:out
-									value="${network.networkWorkspace.workspace.projectWorkspace.project.projectName}"></c:out>
+									value="${network.workspace.project.projectName}"></c:out>
 							</td>
 							<td width="25%"><c:out
-									value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
+									value="${network.workspace.workspaceName}"></c:out></td>
 							<td width="25%"><c:out value="${network.status}"></c:out></td>
 
 						</tr>
