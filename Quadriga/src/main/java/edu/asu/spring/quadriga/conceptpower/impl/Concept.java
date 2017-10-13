@@ -18,6 +18,8 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptType;
 
@@ -39,7 +41,7 @@ public class Concept implements IConcept, Serializable {
     private String conceptList;
     private String typeId;
     private boolean deleted;
-    private OffsetDateTime lastUpdated;
+    @JsonIgnore private OffsetDateTime lastUpdated;
     
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
