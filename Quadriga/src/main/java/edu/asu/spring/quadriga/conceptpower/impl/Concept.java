@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.conceptpower.impl;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -8,27 +9,31 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Index;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptType;
 
 @Entity
-@Table(name = "tbl_conceptpower_concept")
+@Table(name = "tbl_conceptpower_concept", indexes= {
+        @Index(columnList="uri", name="IDX_URI")
+})
 public class Concept implements IConcept, Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = -4663816920819960578L;
-    @Id @Index(name="uri_idx") private String uri;
+    @Id private String uri;
     private String id;
     private String word;
     private String pos;
@@ -36,6 +41,7 @@ public class Concept implements IConcept, Serializable {
     private String conceptList;
     private String typeId;
     private boolean deleted;
+    @JsonIgnore private OffsetDateTime lastUpdated;
     
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -263,5 +269,13 @@ public class Concept implements IConcept, Serializable {
         } else if (!uri.equals(other.uri))
             return false;
         return true;
+    }
+    @Override
+    public OffsetDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+    @Override
+    public void setLastUpdated(OffsetDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

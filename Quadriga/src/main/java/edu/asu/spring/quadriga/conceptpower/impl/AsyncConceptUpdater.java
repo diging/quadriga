@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.conceptpower.impl;
 
+import java.time.OffsetDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,11 @@ public class AsyncConceptUpdater implements IAsyncConceptUpdater {
     @Override
     @Async
     public void updateConcept(String uri) {
+        IConcept storedConcept = conceptDB.getConcept(uri);
+        if (storedConcept.getLastUpdated() != null && storedConcept.getLastUpdated().plusDays(2).isAfter(OffsetDateTime.now())) {
+            // only update a concept every 2 days
+            return;
+        }
         ConceptpowerReply reply = connector.getById(uri);
         if (reply.getConceptEntry() != null && !reply.getConceptEntry().isEmpty()) {
             IConcept concept = conceptMapper.mapConceptpowerReplyToConcept(reply.getConceptEntry().get(0));

@@ -45,8 +45,8 @@
                 
                 <c:if test="${not empty concept}">
                     <h3 style="margin-bottom: 0px;">Results for:</h3>
-                    <h4 style="margin-bottom: 20px;">${concept.lemma}
-                    <small><span class="label label-default">${concept.type}</span>
+                    <h4 style="margin-bottom: 20px;">${concept.word}
+                    <c:if test="${not empty concept.type}"><small><span class="label label-default">${concept.type.name}</span></c:if>
                     <br>${concept.description}
                     </small>
                     </h4>
