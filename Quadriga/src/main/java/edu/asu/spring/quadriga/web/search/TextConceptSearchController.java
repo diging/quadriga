@@ -127,7 +127,6 @@ public class TextConceptSearchController {
                }
             }
         }
-
         List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
         List<String> projectIds = new ArrayList<String>();
         projects.forEach(p -> projectIds.add(p.getProjectId()));

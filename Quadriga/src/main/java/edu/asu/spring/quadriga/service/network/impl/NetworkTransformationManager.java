@@ -13,6 +13,8 @@ import javax.xml.bind.JAXBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Sets;
+
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
@@ -304,20 +306,28 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // Add all the statement id of the selected node to a set.
         // The alternative id list if not empty, is sure to contain the concept
         // id corresponding to the searched concept.
-        Set<String> statementIdSearchSet = new HashSet<String>();
+        List<Set<String>> statementIdSearchSetList = new ArrayList<Set<String>>();
+        Set<String> statementIdSet = new HashSet<String>();
         List<Node> searchedNodes = new ArrayList<Node>();
         for (Node node : transformedNetwork.getNodes().values()) {
             // Check if the node's concept id is present in the alternative id
             // list of the concept.
+            Set<String> statementIdSearchSet = new HashSet<String>();
             for (String alternativeId : alternativeIdsForConcept) {
                 if (alternativeId.equals(node.getConceptId())) {
                     searchedNodes.add(node);
                     statementIdSearchSet.addAll(node.getStatementIds());
+                    statementIdSearchSetList.add(statementIdSearchSet);
                     break;
                 }
             }
         }
-
+        if(statementIdSearchSetList.size() >= 1){
+            statementIdSet = statementIdSearchSetList.get(0);
+            for(int i = 1; i < statementIdSearchSetList.size() ; i++){
+                statementIdSet = Sets.intersection(statementIdSet, statementIdSearchSetList.get(i));
+            }
+        } 
         // Include only those links which have statement ids in the search set.
         List<Link> finalLinks = new ArrayList<Link>();
         // Final nodes.
@@ -326,7 +336,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // duplicate nodes.
         Set<Node> addedNodes = new HashSet<Node>();
         for (Link link : transformedNetwork.getLinks()) { 
-            if (statementIdSearchSet.contains(link.getStatementId())) {
+            if (statementIdSet.contains(link.getStatementId())) {
                 // Statement id match, add to the final link list.
                 finalLinks.add(link);
 

@@ -66,21 +66,27 @@
 
 				<div class="row">
 					<div class="col-sm-12">
+						<c:if test="${not empty concepts}"> 
+						<h3 style="margin-bottom: 0px;">Results for:</h3>
 						<c:forEach items="${concepts}" var="concept" varStatus="loop">
 							<c:if test="${not empty concept}">
-								<h3 style="margin-bottom: 0px;">Results for:</h3>
+								<!--<h3 style="margin-bottom: 0px;">Results for:</h3>-->
 								<h4 style="margin-bottom: 20px;">${concept.word}
 									<small><span class="label label-default">${concept.type.name}</span>
 										<br>${concept.description} </small>
 								</h4>
-								<div class="list-group">
+							
+							</c:if>
+						</c:forEach>
+						</c:if>
+						<div class="list-group">
 									<c:if
-										test="${empty texts.get(loop.index) and empty references.get(loop.index) and not empty concept}">
+										test="${empty texts and empty references and not empty concepts}">
 										<div class="panel panel-default">
 											<div class="panel-body">Your search has no results.</div>
 										</div>
 									</c:if>
-									<c:forEach items="${texts.get(loop.index)}" var="textfile">
+									<c:forEach items="${texts}" var="textfile">
 										<div class="list-group-item">
 											<p class="pull-right">
 												<a href="${textfile.refId}" title="Go to original"
@@ -116,9 +122,9 @@
 										</div>
 									</c:forEach>
 
-									<c:if test="${not empty references.get(loop.index)}">
+									<c:if test="${not empty references}">
 										<h4 style="margin-top: 30px;">External Resources</h4>
-										<c:forEach items="${references.get(loop.index)}" var="ref">
+										<c:forEach items="${references}" var="ref">
 											<div class="list-group-item">
 												<h4>
 													<a href="${ref}" target="_blank"><i class="fa fa-share"
@@ -127,10 +133,7 @@
 											</div>
 										</c:forEach>
 									</c:if>
-
-								</div>
-							</c:if>
-						</c:forEach>
+							</div> 
 
 					</div>
 				</div>
