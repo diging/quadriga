@@ -17,8 +17,6 @@ import com.google.common.collect.Sets;
 
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
-import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
@@ -225,12 +223,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
         
         List<String> alternativeIdsForConcepts = new ArrayList<String>();
+        conceptIds.forEach((conceptId) -> alternativeIdsForConcepts.addAll(getAlternativeIdsForConcept(conceptId)));
         
-        for(String conceptId : conceptIds){
-            List<String> alternativeIdsForConcept = getAlternativeIdsForConcept(conceptId);
-            alternativeIdsForConcepts.addAll(alternativeIdsForConcept);
-        }
-
         // create final network using alternativeIdsForConcept
         return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConcepts);
     }

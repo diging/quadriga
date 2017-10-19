@@ -187,7 +187,7 @@ function loadResults(){
 	var conceptid1 = $("#concept1").val();
 	var conceptid2 = $("#concept2").val();
 	var networkURL = '${pageContext.servletContext.contextPath}/search/texts?'
-	var url = networkURL + "conceptid1=" + conceptid1 + "&conceptid2=" + conceptid2;
+	var url = networkURL + "conceptid=" + conceptid1 + "&conceptid=" + conceptid2;
 	window.location.href = url;
 }
 </script>

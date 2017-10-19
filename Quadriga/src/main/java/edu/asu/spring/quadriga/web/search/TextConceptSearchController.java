@@ -56,21 +56,18 @@ public class TextConceptSearchController {
     private IJsonCreator jsonCreator;
 
     @RequestMapping(value = "search/texts")
-    public String search(@RequestParam(value = "conceptid1", defaultValue = "") String conceptId1,
-            @RequestParam(value = "conceptid2", defaultValue = "") String conceptId2, Model model) throws Exception {
+    public String search(@RequestParam(value = "conceptid", defaultValue = "") String[] conceptIds, Model model)
+            throws Exception {
 
-        ArrayList<String> searchedConcepts = new ArrayList<>();
         List<String> conceptUriSearchList = new ArrayList<String>();
         List<IConcept> concepts = new ArrayList<IConcept>();
         List<Set<String>> referencesList = new ArrayList<Set<String>>();
-        
+
         List<ITextFile> texts = new ArrayList<ITextFile>();
         List<String> handles = new ArrayList<String>();
-        
-        searchedConcepts.add(conceptId1);
-        searchedConcepts.add(conceptId2);
-        for (String conceptUri : searchedConcepts) {
-            
+
+        for (String conceptUri : conceptIds) {
+
             if (!conceptUri.isEmpty()) {
 
                 IConcept concept = cpCache.getConceptByUri(conceptUri);
@@ -88,12 +85,12 @@ public class TextConceptSearchController {
                 if (results != null && !results.isEmpty()) {
                     ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
                     List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
-                    if (concept.getWordnetIds() != null && !concept.getWordnetIds().isEmpty()) {  
+                    if (concept.getWordnetIds() != null && !concept.getWordnetIds().isEmpty()) {
                         results = qStoreConnector.searchNodesByConcept(concept.getWordnetIds().get(0));
                         events = marshallingService.unMarshalXmlToElementEventsType(results);
                         eventList.addAll(events.getRelationEventOrAppellationEvent());
                     }
-  
+
                     Set<String> references = new HashSet<String>();
                     for (CreationEvent event : eventList) {
                         String sourceRef = event.getSourceReference();
@@ -106,25 +103,25 @@ public class TextConceptSearchController {
 
             }
         }
-        
-        if(referencesList.size() >= 1){
-            Set<String> resultSet  = referencesList.get(0);
-            for(int i = 1; i < referencesList.size() ; i++){
+
+        if (referencesList.size() >= 1) {
+            Set<String> resultSet = referencesList.get(0);
+            for (int i = 1; i < referencesList.size(); i++) {
                 resultSet = Sets.intersection(resultSet, referencesList.get(i));
             }
             Iterator<String> it = resultSet.iterator();
-            while(it.hasNext()){
-               String sourceRef = it.next(); 
-               ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
-               if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
-                   handles.add(sourceRef);
-               } else {
-                   if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
-                       texts.add(txtFile);
-                       textFileManager.loadFile(txtFile);
-                       txtFile.setSnippetLength(40);
-                   }
-               }
+            while (it.hasNext()) {
+                String sourceRef = it.next();
+                ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
+                if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
+                    handles.add(sourceRef);
+                } else {
+                    if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
+                        texts.add(txtFile);
+                        textFileManager.loadFile(txtFile);
+                        txtFile.setSnippetLength(40);
+                    }
+                }
             }
         }
         List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
@@ -147,6 +144,4 @@ public class TextConceptSearchController {
         return "search/texts";
     }
 
-
 }
-
