@@ -1,9 +1,7 @@
 package edu.asu.spring.quadriga.rest.open;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -35,9 +33,9 @@ public class SearchConceptController {
         // FIXME once the new Conceptpower is release, this should be replace
         // with
         // one call to the search api
-
         ConceptpowerReply reply = connector.search(searchTerm, POS.NOUN);
         List<ConceptEntry> conceptList = reply.getConceptEntry();
+
         reply = connector.search(searchTerm, POS.VERB);
         conceptList.addAll(reply.getConceptEntry());
 
@@ -49,13 +47,8 @@ public class SearchConceptController {
 
         List<JSONObject> jsonResults = new ArrayList<JSONObject>();
 
-        CopyOnWriteArrayList<ConceptEntry> cowConceptList = new CopyOnWriteArrayList<>(conceptList);
-        Iterator<ConceptEntry> conceptIterator = cowConceptList.iterator();
-        
         if (conceptList != null) {
-            while (conceptIterator.hasNext()) {
-
-                ConceptEntry result = conceptIterator.next();
+            for (ConceptEntry result : conceptList) {
                 try {
                     JSONObject jsonResult = new JSONObject();
                     jsonResult.put("id", result.getId());
@@ -69,7 +62,6 @@ public class SearchConceptController {
                     logger.error("Json exception while adding the results", e);
                 }
             }
-
         }
 
         JSONObject jsonResponse = new JSONObject();
