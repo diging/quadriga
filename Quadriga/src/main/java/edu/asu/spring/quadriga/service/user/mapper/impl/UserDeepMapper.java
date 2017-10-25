@@ -10,11 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
-import edu.asu.spring.quadriga.dao.impl.BaseDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -42,59 +40,42 @@ public class UserDeepMapper implements IUserDeepMapper {
     public IUser getUser(String userName) throws QuadrigaStorageException {
         IUser user = null;
         QuadrigaUserDTO userDTO = dbConnect.getUserDTO(userName);
-        
-        if (userDTO != null) {
-            user = mapUser(userDTO);
-        }
-        if (user != null) {
-            List<IQuadrigaRole> userRole = user.getQuadrigaRoles();
-            List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-            for (int i = 0; i < userRole.size(); i++) {
-                IQuadrigaRole quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
-                        .getDBid());
-
-                // If user account is deactivated remove other roles
-                if (quadrigaRole.getId().equals(
-                        RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
-                    rolesList.clear();
-                    rolesList.add(quadrigaRole);
-                    break;
-                }
-                rolesList.add(quadrigaRole);
-            }
-            user.setQuadrigaRoles(rolesList);
-        } else {
+        user = constructUserWithRoles(userDTO);
+        if (user == null) {
             user = userFactory.createUserObject();
-            IQuadrigaRole quadrigaRole  = roleManager
-                    .getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+            IQuadrigaRole quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES,
+                    RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
             List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
             rolesList.add(quadrigaRole);
-            user.setQuadrigaRoles(rolesList); 
+            user.setQuadrigaRoles(rolesList);
         }
 
         return user;
     }
 
-    
-    
     @Transactional
-    public IUser findUserByProviderUserId(String userId, String provider){
+    public IUser findUserByProviderUserId(String userId, String provider) {
         IUser user = null;
         QuadrigaUserDTO userDTO = dbConnect.findUserByProviderUserId(userId, provider);
-        
+        user = constructUserWithRoles(userDTO);
+        return user;
+    }
+
+    private IUser constructUserWithRoles(QuadrigaUserDTO userDTO) {
+        IUser user = null;
         if (userDTO != null) {
             user = mapUser(userDTO);
         }
+
         if (user != null) {
             List<IQuadrigaRole> userRole = user.getQuadrigaRoles();
             List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
             for (int i = 0; i < userRole.size(); i++) {
-                IQuadrigaRole quadrigaRole  = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
-                        .getDBid());
-                
+                IQuadrigaRole quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES,
+                        userRole.get(i).getDBid());
+
                 // If user account is deactivated remove other roles
-                if (quadrigaRole.getId().equals(
-                        RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
+                if (quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
                     rolesList.clear();
                     rolesList.add(quadrigaRole);
                     break;
@@ -102,12 +83,10 @@ public class UserDeepMapper implements IUserDeepMapper {
                 rolesList.add(quadrigaRole);
             }
             user.setQuadrigaRoles(rolesList);
-        } 
-
+        }
         return user;
     }
 
-    
     /**
      * {@inheritDoc}
      */
@@ -117,11 +96,10 @@ public class UserDeepMapper implements IUserDeepMapper {
         List<IUser> listUsers = null;
 
         // Find the ROLEDBID for Deactivated account
-        String sDeactiveRoleDBId = roleManager
-                .getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+        String sDeactiveRoleDBId = roleManager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES,
+                RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
-        List<QuadrigaUserDTO> usersDTOList = dbConnect
-                .getUserDTOListNotInRole(sDeactiveRoleDBId);
+        List<QuadrigaUserDTO> usersDTOList = dbConnect.getUserDTOListNotInRole(sDeactiveRoleDBId);
 
         listUsers = getUserListFromQuadrigaUsersDTOList(usersDTOList);
 
@@ -137,11 +115,10 @@ public class UserDeepMapper implements IUserDeepMapper {
         List<IUser> listUsers = null;
 
         // Find the ROLEDBID for Deactivated account
-        String sDeactiveRoleDBId = roleManager
-                .getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+        String sDeactiveRoleDBId = roleManager.getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES,
+                RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
-        List<QuadrigaUserDTO> usersDTOList = dbConnect
-                .getUserDTOList(sDeactiveRoleDBId);
+        List<QuadrigaUserDTO> usersDTOList = dbConnect.getUserDTOList(sDeactiveRoleDBId);
 
         listUsers = getUserListFromQuadrigaUsersDTOList(usersDTOList);
 
@@ -153,8 +130,7 @@ public class UserDeepMapper implements IUserDeepMapper {
      */
     @Override
     @Transactional
-    public List<IUser> getUsersByRoleId(String roleId)
-            throws QuadrigaStorageException {
+    public List<IUser> getUsersByRoleId(String roleId) throws QuadrigaStorageException {
         List<QuadrigaUserDTO> usersDTOList = dbConnect.getUserDTOList(roleId);
 
         List<IUser> listUsers = getUserListFromQuadrigaUsersDTOList(usersDTOList);
@@ -170,15 +146,13 @@ public class UserDeepMapper implements IUserDeepMapper {
     public List<IUser> getUserRequests() throws QuadrigaStorageException {
         List<IUser> listUsers = null;
 
-        List<QuadrigaUserRequestsDTO> userRequestDTOList = dbConnect
-                .getUserRequestDTOList();
+        List<QuadrigaUserRequestsDTO> userRequestDTOList = dbConnect.getUserRequestDTOList();
         listUsers = getUserRequestListFromQuadrigaUserRequestDTOList(userRequestDTOList);
 
         return listUsers;
     }
 
-    public List<IUser> getUserListFromQuadrigaUsersDTOList(
-            List<QuadrigaUserDTO> usersDTOList) {
+    public List<IUser> getUserListFromQuadrigaUsersDTOList(List<QuadrigaUserDTO> usersDTOList) {
         List<IUser> userList = null;
         if (usersDTOList != null) {
             userList = new ArrayList<IUser>();
@@ -188,7 +162,7 @@ public class UserDeepMapper implements IUserDeepMapper {
         }
         return userList;
     }
-    
+
     private IUser mapUser(QuadrigaUserDTO userDTO) {
         IUser user = userFactory.createUserObject();
         user.setUserName(userDTO.getUsername());
@@ -201,8 +175,7 @@ public class UserDeepMapper implements IUserDeepMapper {
         return user;
     }
 
-    public List<IUser> getUserRequestListFromQuadrigaUserRequestDTOList(
-            List<QuadrigaUserRequestsDTO> userRequestsDTO) {
+    public List<IUser> getUserRequestListFromQuadrigaUserRequestDTOList(List<QuadrigaUserRequestsDTO> userRequestsDTO) {
         List<IUser> userList = null;
         if (userRequestsDTO != null) {
             userList = new ArrayList<IUser>();

@@ -61,10 +61,9 @@ public final class SimpleSignInAdapter implements SignInAdapter {
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        boolean storageException = false;
+        String errorType = null;
         IUser user = (IUser) userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(),
                 connection.getKey().getProviderId());
-
         // if user details is not present in the database, create a database
         // record for the user.
         if (user == null) {
@@ -80,9 +79,10 @@ public final class SimpleSignInAdapter implements SignInAdapter {
                 userManager.addNewUser(accountRequest);
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
-                storageException = true;
+                errorType = "1";
             } catch (UsernameExistsException e) {
                 logger.error("Username already in use or user account needs to be approved by the admin.", e);
+                errorType = "2";
             } catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
             }
@@ -100,9 +100,12 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         }
 
         QuadrigaUserDetails userDetails = null;
-        if (!storageException) {
+        if (errorType == null) {
             userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null,
                     user.getEmail());
+        }
+        else{
+            return "/socialloginfailed?type="+errorType;
         }
 
         SecurityContextHolder.getContext()
@@ -110,9 +113,11 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(
                 request.getNativeRequest(HttpServletRequest.class),
                 request.getNativeResponse(HttpServletResponse.class));
+        
         if (savedRequest != null) {
             return savedRequest.getRedirectUrl();
         }
+        
         return "/login";
     }
 
