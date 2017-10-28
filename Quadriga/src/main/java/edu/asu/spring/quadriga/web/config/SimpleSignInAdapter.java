@@ -61,7 +61,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        String errorType = null;
+        String messageType = null;
         IUser user = (IUser) userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(),
                 connection.getKey().getProviderId());
         // if user details is not present in the database, create a database
@@ -75,14 +75,15 @@ public final class SimpleSignInAdapter implements SignInAdapter {
             accountRequest.setSocialSignIn(true);
             accountRequest.setProvider(user.getProvider());
             accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
+            messageType = "1";
             try {
                 userManager.addNewUser(accountRequest);
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
-                errorType = "1";
+                messageType = "2";
             } catch (UsernameExistsException e) {
                 logger.error("Username already in use or user account needs to be approved by the admin.", e);
-                errorType = "2";
+                messageType = "3";
             } catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
             }
@@ -100,12 +101,12 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         }
 
         QuadrigaUserDetails userDetails = null;
-        if (errorType == null) {
+        if (messageType == null) {
             userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null,
                     user.getEmail());
         }
         else{
-            return "/socialloginfailed?type="+errorType;
+            return "/sociallogin?type="+messageType;
         }
 
         SecurityContextHolder.getContext()

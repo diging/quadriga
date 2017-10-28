@@ -27,13 +27,22 @@
                         ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
                     </div>
 				</c:if>
-				<c:if test="${not empty socialsigninerror}">
+				<c:if test="${not empty socialsigninmessage && type == '1'}">
+				<div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        ${socialsigninmessage}
+                    </div>
+				</c:if>
+				<c:if test="${not empty socialsigninmessage && type != '1'}">
 				<div class="alert alert-danger alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert"
                             aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        ${socialsigninerror}
+                        ${socialsigninmessage}
                     </div>
 				</c:if>
 				<h1>

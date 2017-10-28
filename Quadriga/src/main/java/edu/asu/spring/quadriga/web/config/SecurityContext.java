@@ -57,7 +57,7 @@ public class SecurityContext {
                     // Anyone can access the urls
                     .antMatchers("/auth/**", "/signin/**", "/", "/connect/**", "/signup/**", "/user/register/**",
                             "/resources/**", "/register*", "/login*", "/logout*", "/createaccount*", "/sites/**",
-                            "/public/**", "/search/**", "/home/**", "/socialloginfailed*")
+                            "/public/**", "/search/**", "/home/**", "/sociallogin*")
                     .permitAll()
                     // The rest of the our application is protected.
                     .antMatchers("/users/**", "/admin/**").hasRole("QUADRIGA_USER_ADMIN")

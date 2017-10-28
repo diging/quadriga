@@ -93,19 +93,22 @@ public class LoginController {
 	}
 
     @NoAuthorizationCheck
-	@RequestMapping(value = "/socialloginfailed", method = RequestMethod.GET)
-	    public String socialloginerror(@RequestParam(value="type", required = false) String socialSignInError,ModelMap model) {
+	@RequestMapping(value = "/sociallogin", method = RequestMethod.GET)
+	    public String socialloginerror(@RequestParam(value="type", required = false) String type,ModelMap model) {
             String socialSignInErrorMessage = "Social Login Failed. Please try again later";
-	        if(socialSignInError != null){
+	        if(type != null){
 	            
-	            switch(socialSignInError){
-	                case "1": socialSignInErrorMessage = "System error. Could not complete the sign-up. Please try again later";
-	                break;
-	                case "2": socialSignInErrorMessage = "Admin approval pending";
-	                break;
+	            switch(type){
+	                case "1": socialSignInErrorMessage = "Account request successfully placed. The Admin will approve your request to complete the registration process.";
+	                    break;
+	                case "2": socialSignInErrorMessage = "System error. Could not complete the sign-up. Please try again later.";
+	                    break;
+	                case "3": socialSignInErrorMessage = "Admin approval of your account request is pending. Please try again later";
+	                    break;
 	            }
 	        }
-	        model.addAttribute("socialsigninerror", socialSignInErrorMessage);
+	        model.addAttribute("socialsigninmessage", socialSignInErrorMessage);
+	        model.addAttribute("type", type);
 	        return "login";
 	    }
 }
