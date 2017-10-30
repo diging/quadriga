@@ -174,7 +174,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
         this.workspaceowner = workspaceowner;
     }
     
-    @XmlTransient
     public List<WorkspaceDictionaryDTO> getWorkspaceDictionaryDTOList() {
 		return workspaceDictionaryDTOList;
 	}
@@ -184,7 +183,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
 		this.workspaceDictionaryDTOList = workspaceDictionaryDTOList;
 	}
 
-	@XmlTransient
 	public List<WorkspaceEditorDTO> getWorkspaceEditorDTOList() {
 		return workspaceEditorDTOList;
 	}
@@ -194,7 +192,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
 		this.workspaceEditorDTOList = workspaceEditorDTOList;
 	}
 
-	@XmlTransient
     public List<WorkspaceConceptcollectionDTO> getWorkspaceConceptCollectionDTOList() {
   		return workspaceConceptCollectionDTOList;
   	}
@@ -204,7 +201,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
   		this.workspaceConceptCollectionDTOList = workspaceConceptCollectionDTOList;
   	}
 
-    @XmlTransient
     public List<WorkspaceCollaboratorDTO> getWorkspaceCollaboratorDTOList() {
         return workspaceCollaboratorDTOList;
     }
@@ -221,7 +217,6 @@ public class WorkspaceDTO extends CollaboratingDTO<WorkspaceCollaboratorDTOPK, W
         this.projectWorkspaceDTO = projectWorkspaceDTO;
     }
     
-    @XmlTransient
 	public List<NetworkWorkspaceDTO> getWorkspaceNetworkDTOList() {
 		return workspaceNetworkDTOList;
 	}
