@@ -22,8 +22,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class represents the column mappings for networks table.
@@ -31,7 +29,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_networks")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "NetworksDTO.findAll", query = "SELECT n FROM NetworksDTO n"),
     @NamedQuery(name = "NetworksDTO.findByNetworkid", query = "SELECT n FROM NetworksDTO n WHERE n.networkid = :networkid"),
@@ -98,7 +95,6 @@ public class NetworksDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    @XmlTransient
     public List<NetworkAssignedDTO> getNetworksAssignedDTOList() {
 		return networksAssignedDTOList;
 	}
@@ -108,7 +104,6 @@ public class NetworksDTO implements Serializable {
 		this.networksAssignedDTOList = networksAssignedDTOList;
 	}
 
-	@XmlTransient
 	public List<NetworkAnnotationsDTO> getNetworksAnnotationsDTOList() {
 		return networksAnnotationsDTOList;
 	}
@@ -118,7 +113,6 @@ public class NetworksDTO implements Serializable {
 		this.networksAnnotationsDTOList = networksAnnotationsDTOList;
 	}
 
-	@XmlTransient
 	public List<NetworkStatementsDTO> getNetworkStamentesDTOList() {
 		return networkStamentesDTOList;
 	}

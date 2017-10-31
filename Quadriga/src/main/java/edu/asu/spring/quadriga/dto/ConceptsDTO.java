@@ -20,8 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -30,7 +28,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_concepts")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConceptsDTO.findAll", query = "SELECT c FROM ConceptsDTO c"),
     @NamedQuery(name = "ConceptsDTO.findByLemma", query = "SELECT c FROM ConceptsDTO c WHERE c.lemma = :lemma"),
@@ -69,7 +66,6 @@ public class ConceptsDTO implements Serializable {
     	this.item = item;
     }
 
-	@XmlTransient
     public List<ConceptCollectionItemsDTO> getConceptItemsDTOList() {
 		return conceptItemsDTOList;
 	}

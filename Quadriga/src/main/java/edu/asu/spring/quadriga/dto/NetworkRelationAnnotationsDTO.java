@@ -14,11 +14,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "tbl_network_annotations_relation")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "NetworkRelationAnnotationsDTO.findAll", query = "SELECT n FROM NetworkRelationAnnotationsDTO n"),
     @NamedQuery(name = "NetworkRelationAnnotationsDTO.findBySubjectId", query = "SELECT n FROM NetworkRelationAnnotationsDTO n WHERE n.subjectId = :subjectid"),
