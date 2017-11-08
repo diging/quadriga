@@ -19,7 +19,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This class represents the column mappings for 
@@ -28,7 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_network_statements")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "NetworkStatementsDTO.findAll", query = "SELECT n FROM NetworkStatementsDTO n"),
     @NamedQuery(name = "NetworkStatementsDTO.findByRowId", query = "SELECT n FROM NetworkStatementsDTO n WHERE n.rowid = :rowid"),

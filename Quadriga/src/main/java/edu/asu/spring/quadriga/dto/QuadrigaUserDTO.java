@@ -98,6 +98,16 @@ public class QuadrigaUserDTO implements Serializable {
     public QuadrigaUserDTO() {
     }
 
+    public QuadrigaUserDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby,
+            Date createddate) {
+        this.username = username;
+        this.quadrigarole = quadrigarole;
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
+    }
+
     public List<NetworkAnnotationsDTO> getNetworkAnnotaionList() {
         return networkAnnotaionList;
     }

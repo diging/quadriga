@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This class represents the column mappings for project concept collection table.
@@ -26,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_project_conceptcollection")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProjectConceptCollectionDTO.findAll", query = "SELECT p FROM ProjectConceptCollectionDTO p"),
     @NamedQuery(name = "ProjectConceptCollectionDTO.findByProjectid", query = "SELECT p FROM ProjectConceptCollectionDTO p WHERE p.projectConceptcollectionDTOPK.projectid = :projectid"),
