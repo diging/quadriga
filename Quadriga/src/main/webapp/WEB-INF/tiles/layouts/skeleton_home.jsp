@@ -119,7 +119,7 @@
 		<div class="container">
 			<div class="row" style="padding-top: 15px;">
 				 <div class="col-md-10">
-				Welcome <i class="fa fa-user"></i><span style="margin-left: 5px;"><sec:authentication
+					Welcome <i class="fa fa-user"></i><span style="margin-left: 5px;"><sec:authentication
 							property="principal.username" /></span>!	
 				</div>
 				<div class="col-md-2">
