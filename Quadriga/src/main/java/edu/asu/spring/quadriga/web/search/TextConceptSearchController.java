@@ -1,9 +1,11 @@
 package edu.asu.spring.quadriga.web.search;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,45 +67,42 @@ public class TextConceptSearchController {
 
         List<ITextFile> texts = new ArrayList<ITextFile>();
         List<String> handles = new ArrayList<String>();
-
+        
         for (String conceptUri : conceptIds) {
-
+           // System.out.println("Concept URI: "+conceptUri);
             if (!conceptUri.isEmpty()) {
 
                 IConcept concept = cpCache.getConceptByUri(conceptUri);
                 if (concept != null) {
                     concept.setId(conceptUri);
                 }
-
-                String conceptId = null;
-                if (conceptUri.startsWith("http://")) {
-                    int lastIdx = conceptUri.lastIndexOf("/");
-                    conceptId = conceptUri.substring(lastIdx + 1);
-                }
-
-                String results = qStoreConnector.searchNodesByConcept(conceptId);
-                if (results != null && !results.isEmpty()) {
-                    ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
-                    List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
-                    if (concept.getWordnetIds() != null && !concept.getWordnetIds().isEmpty()) {
-                        results = qStoreConnector.searchNodesByConcept(concept.getWordnetIds().get(0));
-                        events = marshallingService.unMarshalXmlToElementEventsType(results);
-                        eventList.addAll(events.getRelationEventOrAppellationEvent());
-                    }
-
-                    Set<String> references = new HashSet<String>();
-                    for (CreationEvent event : eventList) {
-                        String sourceRef = event.getSourceReference();
-                        references.add(sourceRef);
-                    }
-                    referencesList.add(references);
-                }
+               
                 concepts.add(concept);
                 conceptUriSearchList.add(conceptUri);
 
             }
         }
-
+        String results = null;
+        if(conceptUriSearchList.size() == 1){
+            results = qStoreConnector.searchNodesByConcept(conceptUriSearchList.get(0));
+        }
+        else if(conceptUriSearchList.size() == 2){
+           results =  qStoreConnector.loadNetworkWithConceptsBelongingToSameStatements(conceptUriSearchList);
+        }
+        
+        if (results != null && !results.isEmpty()) {
+            ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
+            List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
+            Set<String> references = new HashSet<String>();
+            for (CreationEvent event : eventList) {
+                String sourceRef = event.getSourceReference();
+                System.out.print("Id: "+event.getId()+" , RefId: "+event.getRefId()+" , Source Reference: "+event.getSourceReference());
+                references.add(sourceRef);
+            }
+            referencesList.add(references);
+        }
+        
+        
         if (referencesList.size() >= 1) {
             Set<String> resultSet = referencesList.get(0);
             for (int i = 1; i < referencesList.size(); i++) {
@@ -112,6 +111,7 @@ public class TextConceptSearchController {
             Iterator<String> it = resultSet.iterator();
             while (it.hasNext()) {
                 String sourceRef = it.next();
+                //System.out.println("sourceRef: "+sourceRef);
                 ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
                 if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
                     handles.add(sourceRef);
@@ -137,6 +137,7 @@ public class TextConceptSearchController {
         if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
             model.addAttribute("isNetworkEmpty", true);
         }
+        System.out.println("handles size: "+handles.size()+" , texts: "+texts.size()+ " , concepts.size(): "+concepts.size());
         model.addAttribute("jsonstring", json);
         model.addAttribute("references", handles);
         model.addAttribute("texts", texts);

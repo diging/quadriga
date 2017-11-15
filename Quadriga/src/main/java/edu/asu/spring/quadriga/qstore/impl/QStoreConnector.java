@@ -281,12 +281,22 @@ public class QStoreConnector implements IQStoreConnector {
     }
     
     @Override
+    public String loadNetworkWithConceptsBelongingToSameStatements(List<String> conceptUriSearchList) throws AsyncExecutionException {
+        Map<String, String> parameters = null;
+        parameters =  new HashMap<String, String>();
+        for(int i = 0; i < conceptUriSearchList.size(); i++){
+                parameters.put("ti"+(i+1), conceptUriSearchList.get(i));
+        }       
+        return executeNeo4jQuery("concepts.belonging.to.same.statement", parameters, RELATION_EVENT);
+    }
+    
+    @Override
     public String executeNeo4jQuery(String queryName, Map<String, String> parameters, String returnType) throws AsyncExecutionException {
         String query = env.getProperty(queryName);
         
         if (parameters != null) {
             for (String paraName : parameters.keySet()) {
-                query = query.replace("{" + paraName + "}", parameters.get(paraName));
+                query = query.replace("{" + paraName + "}", "'"+parameters.get(paraName)+"'");
             }
         }
         logger.debug("Running query: " + query);
@@ -496,4 +506,6 @@ public class QStoreConnector implements IQStoreConnector {
         byte[] encodedAuth = Base64.encodeBase64(auth.getBytes());
         return "Basic " + new String(encodedAuth);
     }
+
+ 
 }
