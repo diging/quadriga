@@ -157,13 +157,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         if (networkList == null) {
             return null;
         }
+        List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
         List<String> alternativeIdsForConcept = getAlternativeIdsForConcept(conceptId);
-
+        alternativeIdsForConceptsList.add(alternativeIdsForConcept);
         // Get the transformed network of all the networks in a project.
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
 
         // Create final network using alternativeIdsForConcept.
-        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConcept);
+        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
     }
 
     /**
@@ -207,7 +208,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             String status) throws QuadrigaStorageException {
         // get the transformed network and search for the concept id
         List<INetwork> networkList = new ArrayList<>();
-
+        
         for (String projectId : projectIds) {
             List<INetwork> networks = getNetworkList(projectId, status);
             if (networks != null) {
@@ -221,12 +222,17 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
         // get the transformed network of all the networks in projects
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
+        List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
+        List<String> alternativeIdsForConcepts;
         
-        List<String> alternativeIdsForConcepts = new ArrayList<String>();
-        conceptIds.forEach((conceptId) -> alternativeIdsForConcepts.addAll(getAlternativeIdsForConcept(conceptId)));
+        for(String conceptId : conceptIds){
+            alternativeIdsForConcepts = new ArrayList<String>();
+            alternativeIdsForConcepts.addAll(getAlternativeIdsForConcept(conceptId));
+            alternativeIdsForConceptsList.add(alternativeIdsForConcepts);
+        }
         
         // create final network using alternativeIdsForConcept
-        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConcepts);
+        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
     }
 
     @Override
@@ -294,7 +300,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @return ITransformedNetwork
      */
     private ITransformedNetwork getFinalTransformedNetwork(ITransformedNetwork transformedNetwork,
-            List<String> alternativeIdsForConcept) {
+            List<List<String>> alternativeIdsForConceptList) {
         // Select the nodes with the concept id that is present in the list of
         // alternative id for a concept.
         // Add all the statement id of the selected node to a set.
@@ -303,17 +309,32 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         List<Set<String>> statementIdSearchSetList = new ArrayList<Set<String>>();
         Set<String> statementIdSet = new HashSet<String>();
         List<Node> searchedNodes = new ArrayList<Node>();
+        
+        for(int i = 0; i < alternativeIdsForConceptList.size(); i++){
+            statementIdSearchSetList.add(new HashSet<String>());
+        }
+        
+        
         for (Node node : transformedNetwork.getNodes().values()) {
             // Check if the node's concept id is present in the alternative id
             // list of the concept.
-            Set<String> statementIdSearchSet = new HashSet<String>();
-            for (String alternativeId : alternativeIdsForConcept) {
+           
+            /*for (String alternativeId : alternativeIdsForConcept) {
                 if (alternativeId.equals(node.getConceptId())) {
                     searchedNodes.add(node);
                     statementIdSearchSet.addAll(node.getStatementIds());
                     statementIdSearchSetList.add(statementIdSearchSet);
                     break;
                 }
+            }*/
+            int index = 0;
+            for(List<String> alternativeIdsForConcept : alternativeIdsForConceptList){
+                    if(alternativeIdsForConcept.contains(node.getConceptId())){
+                        searchedNodes.add(node);
+                        statementIdSearchSetList.get(index).addAll(node.getStatementIds());
+                        break;
+                    }
+                    index += 1;
             }
         }
         if(statementIdSearchSetList.size() >= 1){

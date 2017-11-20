@@ -63,7 +63,7 @@ public class TextConceptSearchController {
 
         List<String> conceptUriSearchList = new ArrayList<String>();
         List<IConcept> concepts = new ArrayList<IConcept>();
-        List<Set<String>> referencesList = new ArrayList<Set<String>>();
+        List<String> referencesList = new ArrayList<String>();
 
         List<ITextFile> texts = new ArrayList<ITextFile>();
         List<String> handles = new ArrayList<String>();
@@ -84,13 +84,20 @@ public class TextConceptSearchController {
         }
         String results = null;
         if(conceptUriSearchList.size() == 1){
-            results = qStoreConnector.searchNodesByConcept(conceptUriSearchList.get(0));
+            String conceptId = null;
+            if (conceptUriSearchList.get(0).startsWith("http://")) {
+                int lastIdx = conceptUriSearchList.get(0).lastIndexOf("/");
+                conceptId = conceptUriSearchList.get(0).substring(lastIdx + 1);
+            }
+            results = qStoreConnector.searchNodesByConcept(conceptId);
         }
         else if(conceptUriSearchList.size() == 2){
            results =  qStoreConnector.loadNetworkWithConceptsBelongingToSameStatements(conceptUriSearchList);
         }
         
         if (results != null && !results.isEmpty()) {
+            
+            System.out.println("Result: "+results);
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
             Set<String> references = new HashSet<String>();
@@ -99,31 +106,23 @@ public class TextConceptSearchController {
                 System.out.print("Id: "+event.getId()+" , RefId: "+event.getRefId()+" , Source Reference: "+event.getSourceReference());
                 references.add(sourceRef);
             }
-            referencesList.add(references);
+            referencesList.addAll(references);
         }
         
         
-        if (referencesList.size() >= 1) {
-            Set<String> resultSet = referencesList.get(0);
-            for (int i = 1; i < referencesList.size(); i++) {
-                resultSet = Sets.intersection(resultSet, referencesList.get(i));
-            }
-            Iterator<String> it = resultSet.iterator();
-            while (it.hasNext()) {
-                String sourceRef = it.next();
-                //System.out.println("sourceRef: "+sourceRef);
-                ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
-                if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
-                    handles.add(sourceRef);
-                } else {
-                    if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
-                        texts.add(txtFile);
-                        textFileManager.loadFile(txtFile);
-                        txtFile.setSnippetLength(40);
-                    }
+        for(String sourceRef : referencesList){
+            ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
+            if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
+                handles.add(sourceRef);
+            } else {
+                if (txtFile.getAccessibility() == ETextAccessibility.PUBLIC) {
+                    texts.add(txtFile);
+                    textFileManager.loadFile(txtFile);
+                    txtFile.setSnippetLength(40);
                 }
             }
         }
+       
         List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
         List<String> projectIds = new ArrayList<String>();
         projects.forEach(p -> projectIds.add(p.getProjectId()));
