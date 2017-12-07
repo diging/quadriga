@@ -69,9 +69,7 @@ public class TextConceptSearchController {
         List<String> handles = new ArrayList<String>();
         
         for (String conceptUri : conceptIds) {
-           // System.out.println("Concept URI: "+conceptUri);
             if (!conceptUri.isEmpty()) {
-
                 IConcept concept = cpCache.getConceptByUri(conceptUri);
                 if (concept != null) {
                     concept.setId(conceptUri);
@@ -92,24 +90,19 @@ public class TextConceptSearchController {
             results = qStoreConnector.searchNodesByConcept(conceptId);
         }
         else if(conceptUriSearchList.size() == 2){
-           results =  qStoreConnector.loadNetworkWithConceptsBelongingToSameStatements(conceptUriSearchList);
+            results =  qStoreConnector.loadNetworkWithConceptsBelongingToSameStatements(conceptUriSearchList);
         }
-        
         if (results != null && !results.isEmpty()) {
-            
-            System.out.println("Result: "+results);
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
             Set<String> references = new HashSet<String>();
             for (CreationEvent event : eventList) {
                 String sourceRef = event.getSourceReference();
-                System.out.print("Id: "+event.getId()+" , RefId: "+event.getRefId()+" , Source Reference: "+event.getSourceReference());
                 references.add(sourceRef);
             }
             referencesList.addAll(references);
         }
-        
-        
+      
         for(String sourceRef : referencesList){
             ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
             if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
@@ -122,13 +115,15 @@ public class TextConceptSearchController {
                 }
             }
         }
-       
-        List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
-        List<String> projectIds = new ArrayList<String>();
-        projects.forEach(p -> projectIds.add(p.getProjectId()));
 
-        ITransformedNetwork transformedNetwork = transformationManager
-                .getSearchTransformedNetworkMultipleProjects(projectIds, conceptUriSearchList, INetworkStatus.APPROVED);
+        List<String> projectIds = new ArrayList<String>();
+        ITransformedNetwork transformedNetwork = null;
+        if(conceptUriSearchList.size() >= 1){
+            List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
+            projects.forEach(p -> projectIds.add(p.getProjectId()));
+            transformedNetwork= transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds, conceptUriSearchList, INetworkStatus.APPROVED);
+        }
+
         String json = null;
         if (transformedNetwork != null) {
             json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
@@ -136,7 +131,7 @@ public class TextConceptSearchController {
         if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
             model.addAttribute("isNetworkEmpty", true);
         }
-        System.out.println("handles size: "+handles.size()+" , texts: "+texts.size()+ " , concepts.size(): "+concepts.size());
+
         model.addAttribute("jsonstring", json);
         model.addAttribute("references", handles);
         model.addAttribute("texts", texts);

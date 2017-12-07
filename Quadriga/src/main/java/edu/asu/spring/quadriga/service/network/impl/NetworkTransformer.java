@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.ldap.authentication.SpringSecurityAuthenticationSource;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
@@ -50,13 +51,12 @@ public class NetworkTransformer implements INetworkTransformer {
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
 
         if (networkNodeInfoList == null || networkNodeInfoList.size() == 0) {
-            // return the trasnformed network
+            // return the transformed network
             return transformedNetwork;
         }
 
         List<ElementEventsType> elementEventsTypeList = networkDownloadService
                 .getElementEventTypes(networkNodeInfoList);
-        
         
         Map<String, List<CreationEvent>> eventsById = new HashMap<>();
         for (ElementEventsType type : elementEventsTypeList) {

@@ -208,7 +208,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             String status) throws QuadrigaStorageException {
         // get the transformed network and search for the concept id
         List<INetwork> networkList = new ArrayList<>();
-        
         for (String projectId : projectIds) {
             List<INetwork> networks = getNetworkList(projectId, status);
             if (networks != null) {
@@ -222,6 +221,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
         // get the transformed network of all the networks in projects
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
+
         List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
         List<String> alternativeIdsForConcepts;
         
@@ -246,14 +246,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 networkNodeInfoList.addAll(localNetworkNodeInfoList);
             }
         }
-
+        
         ITransformedNetwork transformedNetwork = transformer.transformNetwork(networkNodeInfoList);
 
         // combine all the nodes except predicate nodes
 
         Map<String, Node> nodes = transformedNetwork.getNodes();
         List<Link> links = transformedNetwork.getLinks();
-
+       
         Map<String, Node> updatedNodes = new HashMap<String, Node>();
         for (Map.Entry<String, Node> entry : nodes.entrySet()) {
             Node node = entry.getValue();
@@ -309,7 +309,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         List<Set<String>> statementIdSearchSetList = new ArrayList<Set<String>>();
         Set<String> statementIdSet = new HashSet<String>();
         List<Node> searchedNodes = new ArrayList<Node>();
-        
+      
         for(int i = 0; i < alternativeIdsForConceptList.size(); i++){
             statementIdSearchSetList.add(new HashSet<String>());
         }
@@ -318,15 +318,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         for (Node node : transformedNetwork.getNodes().values()) {
             // Check if the node's concept id is present in the alternative id
             // list of the concept.
-           
-            /*for (String alternativeId : alternativeIdsForConcept) {
-                if (alternativeId.equals(node.getConceptId())) {
-                    searchedNodes.add(node);
-                    statementIdSearchSet.addAll(node.getStatementIds());
-                    statementIdSearchSetList.add(statementIdSearchSet);
-                    break;
-                }
-            }*/
             int index = 0;
             for(List<String> alternativeIdsForConcept : alternativeIdsForConceptList){
                     if(alternativeIdsForConcept.contains(node.getConceptId())){
@@ -337,14 +328,17 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                     index += 1;
             }
         }
+        // Find the common statement ids among hte searched concepts
         if(statementIdSearchSetList.size() >= 1){
             statementIdSet = statementIdSearchSetList.get(0);
             for(int i = 1; i < statementIdSearchSetList.size() ; i++){
                 statementIdSet = Sets.intersection(statementIdSet, statementIdSearchSetList.get(i));
             }
         } 
+
         // Include only those links which have statement ids in the search set.
         List<Link> finalLinks = new ArrayList<Link>();
+        Set<Link> finalLinksSet = new HashSet<Link>();
         // Final nodes.
         Map<String, Node> finalNodes = new HashMap<String, Node>();
         // To store already added nodes to the final nodes map this would avoid
@@ -353,8 +347,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         for (Link link : transformedNetwork.getLinks()) { 
             if (statementIdSet.contains(link.getStatementId())) {
                 // Statement id match, add to the final link list.
-                finalLinks.add(link);
-
+                //finalLinks.add(link);
+                finalLinksSet.add(link);
                 Node subjectNode = link.getSubject();
                 Node objectNode = link.getObject();
                 // If node already added then do not add it.
@@ -378,6 +372,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 finalNodes.put(node.getId(), node);
             }
         }
+        finalLinks.addAll(finalLinksSet);
         return new TransformedNetwork(finalNodes, finalLinks);
     }
 }
