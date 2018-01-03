@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This class represents dictionary items table 
@@ -27,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_dictionary_items")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DictionaryItemsDTO.findAll", query = "SELECT d FROM DictionaryItemsDTO d"),
     @NamedQuery(name = "DictionaryItemsDTO.findById", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.dictionaryItemsDTOPK.dictionaryid = :dictionaryid"),

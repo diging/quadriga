@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents the column mappings for <code>tbl_projectblogentry</code>
@@ -24,7 +23,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "tbl_projectblogentry")
-@XmlRootElement
 @NamedQueries({ @NamedQuery(name = "ProjectBlogEntryDTO.findAll", query = "SELECT pb FROM ProjectBlogEntryDTO pb"),
         @NamedQuery(name = "ProjectBlogEntryDTO.findByProjectId", query = "SELECT p FROM ProjectBlogEntryDTO p WHERE p.projectid = :projectId order by createdDate desc"), })
 public class ProjectBlogEntryDTO implements Serializable {

@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This class represent the column mappings for
@@ -27,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_quadriga_user_role")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "QuadrigaUserRoleDTO.findAll", query = "SELECT q FROM QuadrigaUserRoleDTO q"),
     @NamedQuery(name = "QuadrigaUserRoleDTO.findByUsername", query = "SELECT q FROM QuadrigaUserRoleDTO q WHERE q.quadrigaUserRoleDTOPK.username = :username"),

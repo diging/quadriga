@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This class represents the column mappings for project dictionary table.
@@ -26,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_project_dictionary")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProjectDictionaryDTO.findAll", query = "SELECT p FROM ProjectDictionaryDTO p"),
     @NamedQuery(name = "ProjectDictionaryDTO.findByProjectid", query = "SELECT p FROM ProjectDictionaryDTO p WHERE p.projectDictionaryDTOPK.projectid = :projectid"),

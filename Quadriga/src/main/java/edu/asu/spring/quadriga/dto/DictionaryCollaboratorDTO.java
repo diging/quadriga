@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This contains the column mappings for 
@@ -21,7 +20,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_dictionary_collaborator")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DictionaryCollaboratorDTO.findAll", query = "SELECT d FROM DictionaryCollaboratorDTO d"),
     @NamedQuery(name = "DictionaryCollaboratorDTO.findById", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.collaboratorDTOPK.dictionaryid = :dictionaryid"),

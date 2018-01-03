@@ -20,8 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class represents the column mappings for project table.
@@ -31,7 +29,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "tbl_project")
 @Inheritance(strategy = InheritanceType.JOINED)
-@XmlRootElement
 
 @NamedQueries({ @NamedQuery(name = "ProjectDTO.findAll", query = "SELECT p FROM ProjectDTO p"),
         @NamedQuery(name = "ProjectDTO.findByProjectname", query = "SELECT p FROM ProjectDTO p WHERE p.projectname = :projectname"),
@@ -181,7 +178,6 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
         this.projectowner = projectowner;
     }
 
-    @XmlTransient
     public List<ProjectDictionaryDTO> getProjectDictionaryDTOList() {
         return projectDictionaryDTOList;
     }
@@ -190,7 +186,6 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
         this.projectDictionaryDTOList = projectDictionaryDTOList;
     }
 
-    @XmlTransient
     public List<ProjectConceptCollectionDTO> getProjectConceptCollectionDTOList() {
         return projectConceptCollectionDTOList;
     }
@@ -199,7 +194,6 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
         this.projectConceptCollectionDTOList = projectConceptCollectionDTOList;
     }
 
-    @XmlTransient
     public List<ProjectEditorDTO> getProjectEditorDTOList() {
         return projectEditorDTOList;
     }
@@ -208,7 +202,6 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
         this.projectEditorDTOList = projectEditorDTOList;
     }
 
-    @XmlTransient
     public List<ProjectWorkspaceDTO> getProjectWorkspaceDTOList() {
         return projectWorkspaceDTOList;
     }
@@ -217,7 +210,6 @@ public class ProjectDTO extends CollaboratingDTO<ProjectCollaboratorDTOPK, Proje
         this.projectWorkspaceDTOList = projectWorkspaceDTOList;
     }
 
-    @XmlTransient
     public List<ProjectCollaboratorDTO> getProjectCollaboratorDTOList() {
         return projectCollaboratorDTOList;
     }
