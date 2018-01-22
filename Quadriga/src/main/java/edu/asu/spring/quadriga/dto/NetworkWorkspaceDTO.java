@@ -17,14 +17,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "tbl_network_workspace", indexes={
         @Index(columnList="workspaceid", name="IDX_WS_ID"),
         @Index(columnList="networkid", name="IDX_NW_ID"),
 })
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "NetworkWorkspaceDTO.findAll", query = "SELECT n FROM NetworkWorkspaceDTO n"),
     @NamedQuery(name = "NetworkWorkspaceDTO.findByNetworkid", query = "SELECT n FROM NetworkWorkspaceDTO n WHERE n.networkWorkspaceDTOPK.networkid = :networkid"),

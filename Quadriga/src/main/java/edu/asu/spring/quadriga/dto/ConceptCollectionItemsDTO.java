@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This is the hibernate mapping class for concept 
@@ -27,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_conceptcollection_items")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConceptCollectionItemsDTO.findAll", query = "SELECT c FROM ConceptCollectionItemsDTO c"),
     @NamedQuery(name = "ConceptCollectionItemsDTO.findById", query = "SELECT c FROM ConceptCollectionItemsDTO c WHERE c.conceptCollectionItemsDTOPK.concept = :concept"),

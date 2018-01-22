@@ -19,23 +19,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *This table represents the column mappings for quadriga user table.
+ * This table represents the column mappings for quadriga user table.
+ * 
  * @author Karthik
  */
 @Entity
 @Table(name = "tbl_quadriga_user")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "QuadrigaUserDTO.findAll", query = "SELECT q FROM QuadrigaUserDTO q"),
-    @NamedQuery(name = "QuadrigaUserDTO.findByFullname", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.fullname = :fullname"),
-    @NamedQuery(name = "QuadrigaUserDTO.findByUsername", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.username = :username"),
-    @NamedQuery(name = "QuadrigaUserDTO.findByEmail", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.email = :email"),
-    @NamedQuery(name = "QuadrigaUserDTO.findByQuadrigarole", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.quadrigarole = :quadrigarole"),
-    })
+@NamedQueries({ @NamedQuery(name = "QuadrigaUserDTO.findAll", query = "SELECT q FROM QuadrigaUserDTO q"),
+        @NamedQuery(name = "QuadrigaUserDTO.findByFullname", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.fullname = :fullname"),
+        @NamedQuery(name = "QuadrigaUserDTO.findByUsername", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.username = :username"),
+        @NamedQuery(name = "QuadrigaUserDTO.findByEmail", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.email = :email"),
+        @NamedQuery(name = "QuadrigaUserDTO.findByQuadrigarole", query = "SELECT q FROM QuadrigaUserDTO q WHERE q.quadrigarole = :quadrigarole"), })
 public class QuadrigaUserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name = "fullname")
@@ -65,7 +61,7 @@ public class QuadrigaUserDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<ConceptCollectionCollaboratorDTO> conceptcollectionsCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectowner")
@@ -85,12 +81,12 @@ public class QuadrigaUserDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<NetworksDTO> networkDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
-    private List<NetworkAssignedDTO> networkAssignedList; 
+    private List<NetworkAssignedDTO> networkAssignedList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<NetworkAnnotationsDTO> networkAnnotaionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<QuadrigaUserprofileDTO> quadrigaUserprofileDTOList;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<QuadrigaUserDeniedDTO> quadrigaUserDeniedDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<QuadrigaUserRoleDTO> quadrigaUserRoleDTOList;
@@ -98,7 +94,8 @@ public class QuadrigaUserDTO implements Serializable {
     public QuadrigaUserDTO() {
     }
 
-	public QuadrigaUserDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public QuadrigaUserDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby,
+            Date createddate) {
         this.username = username;
         this.quadrigarole = quadrigarole;
         this.updatedby = updatedby;
@@ -106,66 +103,56 @@ public class QuadrigaUserDTO implements Serializable {
         this.createdby = createdby;
         this.createddate = createddate;
     }
-	
-	   @XmlTransient
-	   public List<NetworkAnnotationsDTO> getNetworkAnnotaionList() {
-			return networkAnnotaionList;
-		}
 
-		public void setNetworkAnnotaionList(
-				List<NetworkAnnotationsDTO> networkAnnotaionList) {
-			this.networkAnnotaionList = networkAnnotaionList;
-		}
+    public List<NetworkAnnotationsDTO> getNetworkAnnotaionList() {
+        return networkAnnotaionList;
+    }
 
-		@XmlTransient
-		public List<QuadrigaUserprofileDTO> getQuadrigaUserprofileDTOList() {
-			return quadrigaUserprofileDTOList;
-		}
+    public void setNetworkAnnotaionList(List<NetworkAnnotationsDTO> networkAnnotaionList) {
+        this.networkAnnotaionList = networkAnnotaionList;
+    }
 
-		public void setQuadrigaUserprofileDTOList(
-				List<QuadrigaUserprofileDTO> quadrigaUserprofileDTOList) {
-			this.quadrigaUserprofileDTOList = quadrigaUserprofileDTOList;
-		}
+    public List<QuadrigaUserprofileDTO> getQuadrigaUserprofileDTOList() {
+        return quadrigaUserprofileDTOList;
+    }
 
-		@XmlTransient
-		public List<QuadrigaUserDeniedDTO> getQuadrigaUserDeniedDTOList() {
-			return quadrigaUserDeniedDTOList;
-		}
+    public void setQuadrigaUserprofileDTOList(List<QuadrigaUserprofileDTO> quadrigaUserprofileDTOList) {
+        this.quadrigaUserprofileDTOList = quadrigaUserprofileDTOList;
+    }
 
-		public void setQuadrigaUserDeniedDTOList(
-				List<QuadrigaUserDeniedDTO> quadrigaUserDeniedDTOList) {
-			this.quadrigaUserDeniedDTOList = quadrigaUserDeniedDTOList;
-		}
+    public List<QuadrigaUserDeniedDTO> getQuadrigaUserDeniedDTOList() {
+        return quadrigaUserDeniedDTOList;
+    }
 
-		@XmlTransient
-		public List<QuadrigaUserRoleDTO> getQuadrigaUserRoleDTOList() {
-			return quadrigaUserRoleDTOList;
-		}
+    public void setQuadrigaUserDeniedDTOList(List<QuadrigaUserDeniedDTO> quadrigaUserDeniedDTOList) {
+        this.quadrigaUserDeniedDTOList = quadrigaUserDeniedDTOList;
+    }
 
-		public void setQuadrigaUserRoleDTOList(
-				List<QuadrigaUserRoleDTO> quadrigaUserRoleDTOList) {
-			this.quadrigaUserRoleDTOList = quadrigaUserRoleDTOList;
-		}
+    public List<QuadrigaUserRoleDTO> getQuadrigaUserRoleDTOList() {
+        return quadrigaUserRoleDTOList;
+    }
 
-		@XmlTransient
+    public void setQuadrigaUserRoleDTOList(List<QuadrigaUserRoleDTO> quadrigaUserRoleDTOList) {
+        this.quadrigaUserRoleDTOList = quadrigaUserRoleDTOList;
+    }
+
     public List<NetworkAssignedDTO> getNetworkAssignedList() {
-		return networkAssignedList;
-	}
+        return networkAssignedList;
+    }
 
-	public void setNetworkAssignedList(List<NetworkAssignedDTO> networkAssignedList) {
-		this.networkAssignedList = networkAssignedList;
-	}
+    public void setNetworkAssignedList(List<NetworkAssignedDTO> networkAssignedList) {
+        this.networkAssignedList = networkAssignedList;
+    }
 
-	@XmlTransient
     public List<NetworksDTO> getNetworkDTOList() {
-		return networkDTOList;
-	}
+        return networkDTOList;
+    }
 
-	public void setNetworkDTOList(List<NetworksDTO> networkDTOList) {
-		this.networkDTOList = networkDTOList;
-	}
+    public void setNetworkDTOList(List<NetworksDTO> networkDTOList) {
+        this.networkDTOList = networkDTOList;
+    }
 
-	public String getFullname() {
+    public String getFullname() {
         return fullname;
     }
 
@@ -237,16 +224,15 @@ public class QuadrigaUserDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    @XmlTransient
     public List<ConceptCollectionCollaboratorDTO> getConceptcollectionsCollaboratorDTOList() {
         return conceptcollectionsCollaboratorDTOList;
     }
 
-    public void setConceptcollectionsCollaboratorDTOList(List<ConceptCollectionCollaboratorDTO> conceptcollectionsCollaboratorDTOList) {
+    public void setConceptcollectionsCollaboratorDTOList(
+            List<ConceptCollectionCollaboratorDTO> conceptcollectionsCollaboratorDTOList) {
         this.conceptcollectionsCollaboratorDTOList = conceptcollectionsCollaboratorDTOList;
     }
 
-    @XmlTransient
     public List<ProjectDTO> getProjectDTOList() {
         return projectDTOList;
     }
@@ -255,7 +241,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.projectDTOList = projectDTOList;
     }
 
-    @XmlTransient
     public List<WorkspaceDTO> getWorkspaceDTOList() {
         return workspaceDTOList;
     }
@@ -264,7 +249,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.workspaceDTOList = workspaceDTOList;
     }
 
-    @XmlTransient
     public List<WorkspaceCollaboratorDTO> getWorkspaceCollaboratorDTOList() {
         return workspaceCollaboratorDTOList;
     }
@@ -273,7 +257,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.workspaceCollaboratorDTOList = workspaceCollaboratorDTOList;
     }
 
-    @XmlTransient
     public List<ProjectCollaboratorDTO> getProjectCollaboratorDTOList() {
         return projectCollaboratorDTOList;
     }
@@ -282,7 +265,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.projectCollaboratorDTOList = projectCollaboratorDTOList;
     }
 
-    @XmlTransient
     public List<ConceptCollectionDTO> getConceptcollectionsDTOList() {
         return conceptcollectionsDTOList;
     }
@@ -291,7 +273,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.conceptcollectionsDTOList = conceptcollectionsDTOList;
     }
 
-    @XmlTransient
     public List<DictionaryCollaboratorDTO> getDictionaryCollaboratorDTOList() {
         return dictionaryCollaboratorDTOList;
     }
@@ -300,7 +281,6 @@ public class QuadrigaUserDTO implements Serializable {
         this.dictionaryCollaboratorDTOList = dictionaryCollaboratorDTOList;
     }
 
-    @XmlTransient
     public List<DictionaryDTO> getDictionaryDTOList() {
         return dictionaryDTOList;
     }
@@ -322,7 +302,8 @@ public class QuadrigaUserDTO implements Serializable {
             return false;
         }
         QuadrigaUserDTO other = (QuadrigaUserDTO) object;
-        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+        if ((this.username == null && other.username != null)
+                || (this.username != null && !this.username.equals(other.username))) {
             return false;
         }
         return true;

@@ -11,11 +11,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "tbl_publicpage")
-@XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "PublicPageDTO.findAll", query = "SELECT pp FROM PublicPageDTO pp"),
         @NamedQuery(name = "PublicPageDTO.findByProjectId", query = "SELECT p FROM PublicPageDTO p WHERE p.projectid = :projectId"), })

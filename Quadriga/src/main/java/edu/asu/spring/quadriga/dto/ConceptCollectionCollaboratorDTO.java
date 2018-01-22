@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This is mapping class for concept collection collaborator table
@@ -20,7 +19,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_conceptcollection_collaborator")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConceptCollectionCollaboratorDTO.findAll", query = "SELECT c FROM ConceptCollectionCollaboratorDTO c"),
     @NamedQuery(name = "ConceptCollectionCollaboratorDTO.findByCollectionid", query = "SELECT c FROM ConceptCollectionCollaboratorDTO c WHERE c.collaboratorDTOPK.conceptcollectionid = :conceptcollectionid"),

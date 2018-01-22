@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.conceptpower.db.impl;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -19,34 +20,40 @@ import edu.asu.spring.quadriga.conceptpower.impl.ConceptType;
 @Component
 @Transactional
 public class ConceptDatabaseConnection implements IConceptDatabaseConnection {
-    
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     protected SessionFactory sessionFactory;
 
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.conceptpower.db.impl.IConceptDatabaseConnection#getConcept(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.conceptpower.db.impl.IConceptDatabaseConnection#
+     * getConcept(java.lang.String)
      */
     @Override
     public IConcept getConcept(String uri) {
         Object objConcept = sessionFactory.getCurrentSession().get(Concept.class, uri);
-        
+
         // let's check if concept uses a different main id
         if (objConcept == null) {
-            Query query = sessionFactory.getCurrentSession().createQuery("SELECT c from Concept c WHERE :uri in elements(c.alternativeUris)");
+            Query query = sessionFactory.getCurrentSession()
+                    .createQuery("SELECT c from Concept c WHERE :uri in elements(c.alternativeUris)");
             query.setParameter("uri", uri);
             List<?> results = query.list();
             if (results != null && !results.isEmpty()) {
-                // there shouldn't be more than one, but if there is just take the first one
+                // there shouldn't be more than one, but if there is just take
+                // the first one
                 objConcept = results.get(0);
             }
         }
-        
+
         if (objConcept == null) {
             return null;
         }
-        
+
         IConcept concept = (IConcept) objConcept;
         if (concept.getTypeId() != null) {
             Object objType = sessionFactory.getCurrentSession().get(ConceptType.class, concept.getTypeId());
@@ -54,37 +61,47 @@ public class ConceptDatabaseConnection implements IConceptDatabaseConnection {
                 concept.setType((IConceptType) objType);
             }
         }
-        
+
         return concept;
     }
-    
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.conceptpower.db.impl.IConceptDatabaseConnection#createOrUpdate(edu.asu.spring.quadriga.conceptpower.db.IConcept)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.conceptpower.db.impl.IConceptDatabaseConnection#
+     * createOrUpdate(edu.asu.spring.quadriga.conceptpower.db.IConcept)
      */
     @Override
     public void createOrUpdate(IConcept concept) {
         Object objConcept = sessionFactory.getCurrentSession().get(Concept.class, concept.getUri());
-        
-        // if concept exists, let's update it
-        if (objConcept == null || isDifferent(concept, (IConcept)objConcept)) {
+
+        // if concept has not been stored or exists and has changed
+        if (objConcept == null
+                || (isDifferent(concept, (IConcept) objConcept))) {
+
             logger.debug((objConcept == null ? "Adding " : "Updating: ") + concept.getUri());
+            concept.setLastUpdated(OffsetDateTime.now());
             if (objConcept != null) {
                 sessionFactory.getCurrentSession().evict(objConcept);
             }
             sessionFactory.getCurrentSession().saveOrUpdate(concept);
+
         }
-        
+
         // update type if there is one
-        if (concept.getTypeId() != null && !concept.getTypeId().trim().isEmpty()) {
+        if (concept.getTypeId() != null && !concept.getTypeId().trim().isEmpty())
+
+        {
             IConceptType type = getType(concept.getTypeId());
-            if (type == null || isDifferent(concept.getType(), type)) {
+            if (type == null || (isDifferent(concept.getType(), type))) {
                 if (type != null) {
                     sessionFactory.getCurrentSession().evict(type);
                 }
                 sessionFactory.getCurrentSession().saveOrUpdate(concept.getType());
             }
         }
-        
+
         // delete concepts that are represented by this one
         List<String> alternativeUris = concept.getAlternativeUris();
         for (String altUri : alternativeUris) {
@@ -93,9 +110,13 @@ public class ConceptDatabaseConnection implements IConceptDatabaseConnection {
             }
         }
     }
-    
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.conceptpower.db.impl.IConceptDatabaseConnection#deleteConcept(java.lang.String)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.conceptpower.db.impl.IConceptDatabaseConnection#
+     * deleteConcept(java.lang.String)
      */
     @Override
     public void deleteConcept(String uri) {
@@ -104,9 +125,13 @@ public class ConceptDatabaseConnection implements IConceptDatabaseConnection {
             sessionFactory.getCurrentSession().delete(concept);
         }
     }
-    
-    /* (non-Javadoc)
-     * @see edu.asu.spring.quadriga.conceptpower.db.impl.IConceptDatabaseConnection#getType(java.lang.String)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * edu.asu.spring.quadriga.conceptpower.db.impl.IConceptDatabaseConnection#
+     * getType(java.lang.String)
      */
     @Override
     public IConceptType getType(String uri) {
@@ -116,7 +141,7 @@ public class ConceptDatabaseConnection implements IConceptDatabaseConnection {
         }
         return null;
     }
-    
+
     private boolean isDifferent(IConcept concept1, IConcept concept2) {
         if (!concept1.getAlternativeUris().equals(concept2.getAlternativeUris())) {
             return true;
@@ -153,7 +178,7 @@ public class ConceptDatabaseConnection implements IConceptDatabaseConnection {
         }
         return false;
     }
-    
+
     private boolean isDifferent(IConceptType type1, IConceptType type2) {
         if (type1 == null && type2 == null) {
             return false;

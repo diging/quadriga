@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents the column mappings for project editor table.
@@ -26,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_project_editor")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProjectEditorDTO.findAll", query = "SELECT p FROM ProjectEditorDTO p"),
     @NamedQuery(name = "ProjectEditorDTO.findByProjectid", query = "SELECT p FROM ProjectEditorDTO p WHERE p.projectEditorDTOPK.projectid = :projectid"),

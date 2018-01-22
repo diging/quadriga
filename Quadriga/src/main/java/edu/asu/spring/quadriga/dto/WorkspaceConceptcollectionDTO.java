@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *This class represents the column mappings for workspace 
@@ -27,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "tbl_workspace_conceptcollection")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkspaceConceptcollectionDTO.findAll", query = "SELECT w FROM WorkspaceConceptcollectionDTO w"),
     @NamedQuery(name = "WorkspaceConceptcollectionDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceConceptcollectionDTO w WHERE w.workspaceConceptcollectionDTOPK.workspaceid = :workspaceid"),

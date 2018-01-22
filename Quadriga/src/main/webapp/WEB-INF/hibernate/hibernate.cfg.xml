@@ -5,7 +5,7 @@
   
    	<import resource="../spring/spring-dbconnectionmanager.xml"/>
   
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
     	<property name="dataSource">
     		<ref bean="dataSource"/>
     	</property>

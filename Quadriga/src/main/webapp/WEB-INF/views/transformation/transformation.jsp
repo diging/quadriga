@@ -172,7 +172,7 @@
                                                                             </div>
                                                                         </summary>
                                                                         <li>Workspace: <c:out
-                                                                                value="${network.networkWorkspace.workspace.workspaceName}"></c:out></li>
+                                                                                value="${network.workspace.workspaceName}"></c:out></li>
                                                                         <li>Submitted by: <c:out
                                                                                 value="${network.creator.userName}"></c:out>
                                                                         </li> <br>

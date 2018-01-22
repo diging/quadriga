@@ -19,8 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *This class represents the column mappings for dictionary table.
@@ -28,7 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_dictionary")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DictionaryDTO.findAll", query = "SELECT d FROM DictionaryDTO d"),
     @NamedQuery(name = "DictionaryDTO.findByUsername", query = "SELECT d FROM DictionaryDTO d WHERE d.dictionaryowner.username = :username"),
@@ -77,7 +74,6 @@ public class DictionaryDTO extends CollaboratingDTO<DictionaryCollaboratorDTOPK,
         this.createddate = createddate;
     }
 
-    @XmlTransient
 	public List<ProjectDictionaryDTO> getProjectDictionaryDTOList() {
 		return projectDictionaryDTOList;
 	}
@@ -87,7 +83,6 @@ public class DictionaryDTO extends CollaboratingDTO<DictionaryCollaboratorDTOPK,
 		this.projectDictionaryDTOList = projectDictionaryDTOList;
 	}
 	
-	@XmlTransient
     public List<WorkspaceDictionaryDTO> getWsDictionaryDTOList() {
  		return wsDictionaryDTOList;
  	}
@@ -129,7 +124,6 @@ public class DictionaryDTO extends CollaboratingDTO<DictionaryCollaboratorDTOPK,
         this.accessibility = accessibility;
     }
 
-    @XmlTransient
     public List<DictionaryItemsDTO> getDictionaryItemsDTOList() {
         return dictionaryItemsDTOList;
     }
@@ -138,7 +132,6 @@ public class DictionaryDTO extends CollaboratingDTO<DictionaryCollaboratorDTOPK,
         this.dictionaryItemsDTOList = dictionaryItemsDTOList;
     }
 
-    @XmlTransient
     public List<DictionaryCollaboratorDTO> getDictionaryCollaboratorDTOList() {
         return dictionaryCollaboratorDTOList;
     }

@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.conceptpower;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface IConcept {
@@ -55,5 +56,9 @@ public interface IConcept {
     void setType(IConceptType type);
 
     IConceptType getType();
+
+    void setLastUpdated(OffsetDateTime lastUpdated);
+
+    OffsetDateTime getLastUpdated();
 
 }

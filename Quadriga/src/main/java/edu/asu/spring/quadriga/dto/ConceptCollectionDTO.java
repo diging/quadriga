@@ -20,8 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class represents the column mapping for concept collection table.
@@ -29,7 +27,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tbl_conceptcollection")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConceptCollectionDTO.findAll", query = "SELECT c FROM ConceptCollectionDTO c"),
     @NamedQuery(name = "ConceptCollectionDTO.findByCollectionname", query = "SELECT c FROM ConceptCollectionDTO c WHERE c.collectionname = :collectionname"),
@@ -77,7 +74,6 @@ public class ConceptCollectionDTO extends CollaboratingDTO<ConceptCollectionColl
         this.createddate = createddate;
     }
     
-	@XmlTransient
     public List<ProjectConceptCollectionDTO> getProjConceptCollectionDTOList() {
 		return projConceptCollectionDTOList;
 	}
@@ -87,7 +83,6 @@ public class ConceptCollectionDTO extends CollaboratingDTO<ConceptCollectionColl
 		this.projConceptCollectionDTOList = projConceptCollectionDTOList;
 	}
 
-	@XmlTransient
 	public List<WorkspaceConceptcollectionDTO> getWsConceptCollectionDTOList() {
  		return wsConceptCollectionDTOList;
  	}
@@ -130,7 +125,6 @@ public class ConceptCollectionDTO extends CollaboratingDTO<ConceptCollectionColl
     }
 
 
-    @XmlTransient
     public List<ConceptCollectionCollaboratorDTO> getConceptCollectionCollaboratorDTOList() {
 		return conceptCollectionCollaboratorDTOList;
 	}
@@ -140,7 +134,6 @@ public class ConceptCollectionDTO extends CollaboratingDTO<ConceptCollectionColl
 		this.conceptCollectionCollaboratorDTOList = conceptCollectionCollaboratorDTOList;
 	}
 
-	@XmlTransient
 	public List<ConceptCollectionItemsDTO> getConceptCollectionItemsDTOList() {
 		return conceptCollectionItemsDTOList;
 	}
