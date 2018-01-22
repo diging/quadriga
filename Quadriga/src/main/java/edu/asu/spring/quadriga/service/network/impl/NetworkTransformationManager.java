@@ -183,6 +183,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         if (alternativeIdsForConcept == null) {
             alternativeIdsForConcept = new ArrayList<String>();
         }
+
         return alternativeIdsForConcept;
     }
 
@@ -204,8 +205,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @author suraj nilapwar
      */
     @Override
-    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, List<String> conceptIds,
-            String status) throws QuadrigaStorageException {
+    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds,
+            List<String> conceptIds, String status) throws QuadrigaStorageException {
         // get the transformed network and search for the concept id
         List<INetwork> networkList = new ArrayList<>();
         for (String projectId : projectIds) {
@@ -224,13 +225,13 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
         List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
         List<String> alternativeIdsForConcepts;
-        
-        for(String conceptId : conceptIds){
+
+        for (String conceptId : conceptIds) {
             alternativeIdsForConcepts = new ArrayList<String>();
             alternativeIdsForConcepts.addAll(getAlternativeIdsForConcept(conceptId));
             alternativeIdsForConceptsList.add(alternativeIdsForConcepts);
         }
-        
+
         // create final network using alternativeIdsForConcept
         return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
     }
@@ -246,14 +247,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 networkNodeInfoList.addAll(localNetworkNodeInfoList);
             }
         }
-        
+
         ITransformedNetwork transformedNetwork = transformer.transformNetwork(networkNodeInfoList);
 
         // combine all the nodes except predicate nodes
 
         Map<String, Node> nodes = transformedNetwork.getNodes();
         List<Link> links = transformedNetwork.getLinks();
-       
+
         Map<String, Node> updatedNodes = new HashMap<String, Node>();
         for (Map.Entry<String, Node> entry : nodes.entrySet()) {
             Node node = entry.getValue();
@@ -265,7 +266,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 updatedNodes.put(entry.getKey(), node);
                 continue;
             }
-            
+
             // node is subject or object
             // If the concept id is already present in the
             // updated nodes map - dont add it
@@ -273,7 +274,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 updatedNodes.put(node.getConceptId(), node);
             }
         }
-        
+
         // update the links to point to the new updatedNodes
         for (Link link : links) {
             Node subjectNode = link.getSubject();
@@ -309,33 +310,31 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         List<Set<String>> statementIdSearchSetList = new ArrayList<Set<String>>();
         Set<String> statementIdSet = new HashSet<String>();
         List<Node> searchedNodes = new ArrayList<Node>();
-      
-        for(int i = 0; i < alternativeIdsForConceptList.size(); i++){
+
+        for (int i = 0; i < alternativeIdsForConceptList.size(); i++) {
             statementIdSearchSetList.add(new HashSet<String>());
         }
-        
-        
+
         for (Node node : transformedNetwork.getNodes().values()) {
             // Check if the node's concept id is present in the alternative id
             // list of the concept.
             int index = 0;
-            for(List<String> alternativeIdsForConcept : alternativeIdsForConceptList){
-                    if(alternativeIdsForConcept.contains(node.getConceptId())){
-                        searchedNodes.add(node);
-                        statementIdSearchSetList.get(index).addAll(node.getStatementIds());
-                        break;
-                    }
-                    index += 1;
+            for (List<String> alternativeIdsForConcept : alternativeIdsForConceptList) {
+                if (alternativeIdsForConcept.contains(node.getConceptId())) {
+                    searchedNodes.add(node);
+                    statementIdSearchSetList.get(index).addAll(node.getStatementIds());
+                    break;
+                }
+                index += 1;
             }
         }
         // Find the common statement ids among hte searched concepts
-        if(statementIdSearchSetList.size() >= 1){
+        if (statementIdSearchSetList.size() >= 1) {
             statementIdSet = statementIdSearchSetList.get(0);
-            for(int i = 1; i < statementIdSearchSetList.size() ; i++){
+            for (int i = 1; i < statementIdSearchSetList.size(); i++) {
                 statementIdSet = Sets.intersection(statementIdSet, statementIdSearchSetList.get(i));
             }
-        } 
-
+        }
         // Include only those links which have statement ids in the search set.
         List<Link> finalLinks = new ArrayList<Link>();
         Set<Link> finalLinksSet = new HashSet<Link>();
@@ -344,10 +343,10 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // To store already added nodes to the final nodes map this would avoid
         // duplicate nodes.
         Set<Node> addedNodes = new HashSet<Node>();
-        for (Link link : transformedNetwork.getLinks()) { 
+        for (Link link : transformedNetwork.getLinks()) {
             if (statementIdSet.contains(link.getStatementId())) {
                 // Statement id match, add to the final link list.
-                //finalLinks.add(link);
+                // finalLinks.add(link);
                 finalLinksSet.add(link);
                 Node subjectNode = link.getSubject();
                 Node objectNode = link.getObject();

@@ -1,11 +1,8 @@
 package edu.asu.spring.quadriga.web.search;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.google.common.collect.Sets;
-
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
@@ -63,47 +57,44 @@ public class TextConceptSearchController {
 
         List<String> conceptUriSearchList = new ArrayList<String>();
         List<IConcept> concepts = new ArrayList<IConcept>();
-        List<String> referencesList = new ArrayList<String>();
-
         List<ITextFile> texts = new ArrayList<ITextFile>();
         List<String> handles = new ArrayList<String>();
-        
+
         for (String conceptUri : conceptIds) {
             if (!conceptUri.isEmpty()) {
                 IConcept concept = cpCache.getConceptByUri(conceptUri);
                 if (concept != null) {
                     concept.setId(conceptUri);
                 }
-               
+
                 concepts.add(concept);
                 conceptUriSearchList.add(conceptUri);
 
             }
         }
         String results = null;
-        if(conceptUriSearchList.size() == 1){
+        if (conceptUriSearchList.size() == 1) {
             String conceptId = null;
             if (conceptUriSearchList.get(0).startsWith("http://")) {
                 int lastIdx = conceptUriSearchList.get(0).lastIndexOf("/");
                 conceptId = conceptUriSearchList.get(0).substring(lastIdx + 1);
             }
             results = qStoreConnector.searchNodesByConcept(conceptId);
+        } else if (conceptUriSearchList.size() == 2) {
+            results = qStoreConnector.loadNetworkWithConceptsBelongingToSameStatements(conceptUriSearchList);
         }
-        else if(conceptUriSearchList.size() == 2){
-            results =  qStoreConnector.loadNetworkWithConceptsBelongingToSameStatements(conceptUriSearchList);
-        }
+
+        Set<String> references = new HashSet<String>();
         if (results != null && !results.isEmpty()) {
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
-            Set<String> references = new HashSet<String>();
             for (CreationEvent event : eventList) {
                 String sourceRef = event.getSourceReference();
                 references.add(sourceRef);
             }
-            referencesList.addAll(references);
         }
-      
-        for(String sourceRef : referencesList){
+
+        for (String sourceRef : references) {
             ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
             if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
                 handles.add(sourceRef);
@@ -118,10 +109,11 @@ public class TextConceptSearchController {
 
         List<String> projectIds = new ArrayList<String>();
         ITransformedNetwork transformedNetwork = null;
-        if(conceptUriSearchList.size() >= 1){
+        if (conceptUriSearchList.size() >= 1) {
             List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
             projects.forEach(p -> projectIds.add(p.getProjectId()));
-            transformedNetwork= transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds, conceptUriSearchList, INetworkStatus.APPROVED);
+            transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds,
+                    conceptUriSearchList, INetworkStatus.APPROVED);
         }
 
         String json = null;
