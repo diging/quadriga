@@ -16,8 +16,6 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
-
-import edu.asu.spring.quadriga.dao.impl.UserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
@@ -25,8 +23,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
+import edu.asu.spring.quadriga.web.config.social.SocialSignInStatus;
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
 /**
@@ -61,7 +59,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        String messageType = null;
+        SocialSignInStatus messageType = null;
         IUser user = (IUser) userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(),
                 connection.getKey().getProviderId());
         // if user details is not present in the database, create a database
@@ -75,15 +73,15 @@ public final class SimpleSignInAdapter implements SignInAdapter {
             accountRequest.setSocialSignIn(true);
             accountRequest.setProvider(user.getProvider());
             accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
-            messageType = "1";
+            messageType = SocialSignInStatus.REGISTRATION_SUCCESS;
             try {
                 userManager.addNewUser(accountRequest);
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
-                messageType = "2";
+                messageType = SocialSignInStatus.REGISTRATION_FAILED;
             } catch (UsernameExistsException e) {
                 logger.error("Username already in use or user account needs to be approved by the admin.", e);
-                messageType = "3";
+                messageType = SocialSignInStatus.ACCOUNT_APPROVAL_PENDING;
             } catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
             }
@@ -104,9 +102,8 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         if (messageType == null) {
             userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null,
                     user.getEmail());
-        }
-        else{
-            return "/sociallogin?type="+messageType;
+        } else {
+            return "/sociallogin?type=" + messageType.getSocialSignInStatusType();
         }
 
         SecurityContextHolder.getContext()
@@ -114,11 +111,11 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(
                 request.getNativeRequest(HttpServletRequest.class),
                 request.getNativeResponse(HttpServletResponse.class));
-        
+
         if (savedRequest != null) {
             return savedRequest.getRedirectUrl();
         }
-        
+
         return "/login";
     }
 
