@@ -29,7 +29,7 @@
 				</c:if>
 				<c:if test="${not empty social_signin_message}">
 					<div
-						class="alert alert-dismissible ${social_signin_completion_status == 'success' ? 'alert-success' : 'alert-danger'}"
+						class="alert alert-dismissible alert-${social_signin_completion_status}"
 						role="alert">
 						<button type="button" class="close" data-dismiss="alert"
 							aria-label="Close">

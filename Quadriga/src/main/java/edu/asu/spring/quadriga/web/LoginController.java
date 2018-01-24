@@ -92,34 +92,34 @@ public class LoginController {
      */
     @NoAuthorizationCheck
     @RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
-    public String loginerror(@RequestParam(value = "socialsignin", required = false) String socialSignInError,
-            ModelMap model) {
+    public String loginError(ModelMap model) {
         model.addAttribute("error", "true");
         return "login";
     }
-
+    /**
+     * User attempts to register/login using the Social SignIn button
+     * @param type Status of the Social SignIn attempt 
+     * @return Redirected to login page
+     */
     @NoAuthorizationCheck
     @RequestMapping(value = "/sociallogin", method = RequestMethod.GET)
-    public String socialloginerror(@RequestParam(value = "type", required = false) String type, ModelMap model,
+    public String socialLogin(@RequestParam(value = "type", required = false) String type, ModelMap model,
             Locale locale) {
         String socialSignInErrorMessage = messageSource.getMessage("social.signin.failed", new String[] {}, locale);
         SocialSignInStatus socialSignInStatus = SocialSignInStatus.getSocialSignInStatus(type);
-        String socialSignInCompletionStatus = "failed";
+        String socialSignInCompletionStatus = "danger";
         if (type != null) {
 
             switch (socialSignInStatus) {
             case REGISTRATION_SUCCESS:
-                socialSignInErrorMessage = messageSource.getMessage("social.registration.success", new String[] {},
-                        locale);
+                socialSignInErrorMessage = messageSource.getMessage("social.registration.success", new String[] {}, locale);
                 socialSignInCompletionStatus = "success";
                 break;
             case REGISTRATION_FAILED:
-                socialSignInErrorMessage = messageSource.getMessage("social.registration.failed", new String[] {},
-                        locale);
+                socialSignInErrorMessage = messageSource.getMessage("social.registration.failed", new String[] {}, locale);
                 break;
             case ACCOUNT_APPROVAL_PENDING:
-                socialSignInErrorMessage = messageSource.getMessage("social.account.approval.pending", new String[] {},
-                        locale);
+                socialSignInErrorMessage = messageSource.getMessage("social.account.approval.pending", new String[] {}, locale);
                 break;
             }
         }
