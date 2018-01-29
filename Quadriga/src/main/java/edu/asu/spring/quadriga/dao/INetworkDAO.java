@@ -116,5 +116,7 @@ public interface INetworkDAO {
 
 	List<NetworksDTO> getNetworkDTOList(String projectid)
 			throws QuadrigaStorageException;
+	
+	public abstract NetworksDTO getNetworkWithStatement(String statementId) throws QuadrigaStorageException;
 
 }

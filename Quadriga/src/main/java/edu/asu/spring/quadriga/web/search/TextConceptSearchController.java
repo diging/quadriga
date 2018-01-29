@@ -14,6 +14,7 @@ import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
+import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -21,6 +22,7 @@ import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
@@ -49,6 +51,9 @@ public class TextConceptSearchController {
     private INetworkTransformationManager transformationManager;
 
     @Autowired
+    private INetworkManager networkManager;
+    
+    @Autowired
     private IJsonCreator jsonCreator;
 
     @RequestMapping(value = "search/texts")
@@ -72,28 +77,20 @@ public class TextConceptSearchController {
 
             }
         }
-        String results = null;
-        if (conceptUriSearchList.size() == 1) {
-            String conceptId = null;
-            if (conceptUriSearchList.get(0).startsWith("http://")) {
-                int lastIdx = conceptUriSearchList.get(0).lastIndexOf("/");
-                conceptId = conceptUriSearchList.get(0).substring(lastIdx + 1);
-            }
-            results = qStoreConnector.searchNodesByConcept(conceptId);
-        } else if (conceptUriSearchList.size() == 2) {
-            results = qStoreConnector.loadNetworkWithConceptsBelongingToSameStatements(conceptUriSearchList);
-        }
-
+        
+    
+        String results = qStoreConnector.findStatementsWithConcepts(conceptUriSearchList);
         Set<String> references = new HashSet<String>();
         if (results != null && !results.isEmpty()) {
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
             for (CreationEvent event : eventList) {
-                String sourceRef = event.getSourceReference();
-                references.add(sourceRef);
+                references.add(event.getSourceReference());
+                System.out.println(event.getId());
+               
             }
         }
-
+        
         for (String sourceRef : references) {
             ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
             if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {
@@ -107,6 +104,9 @@ public class TextConceptSearchController {
             }
         }
 
+        List<INetwork> networkList = networkManager.getNetworksWithStatements(new ArrayList<String>(references));
+     
+                
         List<String> projectIds = new ArrayList<String>();
         ITransformedNetwork transformedNetwork = null;
         if (conceptUriSearchList.size() >= 1) {

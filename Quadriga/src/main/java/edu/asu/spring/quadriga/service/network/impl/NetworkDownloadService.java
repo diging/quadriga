@@ -63,8 +63,9 @@ public class NetworkDownloadService {
                         "Unable to execute a qstore asynchronosly for relation event id: " + ids,
                         e);
             } finally {
-                if(elementEventsType != null)
-                elementEventsTypeList.add(elementEventsType);
+                if(elementEventsType != null){
+                    elementEventsTypeList.add(elementEventsType);
+                }
             }
         }
         return elementEventsTypeList;

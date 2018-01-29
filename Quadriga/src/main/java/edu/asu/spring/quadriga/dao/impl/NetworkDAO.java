@@ -254,7 +254,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
         try {
             Query query = sessionFactory.getCurrentSession()
                     .createSQLQuery(
-                            "select n.* from tbl_project p, tbl_project_workspace pw, tbl_network_workspace nw, tbl_networks n where p.projectid = pw.projectid and pw.workspaceid = nw.workspaceid and nw.networkid = n.networkid and p.accessibility = 'PUBLIC' and n.status = 'APPROVED'")
+                            "select n.* from tbl_IR p, tbl_project_workspace pw, tbl_network_workspace nw, tbl_networks n where p.projectid = pw.projectid and pw.workspaceid = nw.workspaceid and nw.networkid = n.networkid and p.accessibility = 'PUBLIC' and n.status = 'APPROVED'")
                     .setResultTransformer(Transformers.aliasToBean(NetworksDTO.class));
             ;
 
@@ -303,6 +303,19 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
              * }
              */
             return listNetworkStatementsDTO;
+        } catch (HibernateException e) {
+            throw new QuadrigaStorageException(e);
+        }
+    }
+  
+    @Override
+    public NetworksDTO getNetworkWithStatement(String statementId) throws QuadrigaStorageException{
+        try {
+            Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworkStatementsDTO.findById");
+            query.setParameter("statementid", statementId);
+
+            NetworkStatementsDTO networkStatementsDTO = (NetworkStatementsDTO) query.uniqueResult();
+            return networkStatementsDTO.getNetworkDTO();
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }

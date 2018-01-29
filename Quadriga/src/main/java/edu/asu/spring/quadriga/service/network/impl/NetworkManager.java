@@ -276,6 +276,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return networkmapper.getListOfNetworksForUser(user);
     }
 
+    
     /**
      * 
      * {@inheritDoc}
@@ -316,6 +317,36 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         }
 
         return networksList;
+    }
+    
+    @Override
+    @Transactional
+    public List<INetwork> getNetworksWithStatements(List<String> statementIds) throws QuadrigaStorageException{
+        List<INetwork> networksList = new ArrayList<INetwork>();
+        List<NetworksDTO> approvedNetworksList = dbConnect.getApprovedNetworkList();
+        List<NetworksDTO> networksWithStatementsList = new ArrayList<NetworksDTO>();
+        Set<String> networkIdsWithStatement = new HashSet<String>();
+        NetworksDTO networkDTO = null;
+        for(String statementId : statementIds){
+            networkDTO = dbConnect.getNetworkWithStatement(statementId);
+            
+            if(networkIdsWithStatement.add(networkDTO.getNetworkid())){
+                networksWithStatementsList.add(networkDTO);
+            }
+            
+            for(NetworksDTO canditateNetwork : networksWithStatementsList) {
+                for(NetworksDTO approvedNetwork : approvedNetworksList){
+                    if(canditateNetwork.getNetworkid().equals(approvedNetwork.getNetworkid())){
+                        networksList.add(networkmapper.getNetworkShallowDetails(canditateNetwork));
+                        break;
+                    }
+                }
+            }
+            
+            
+        }
+        
+        return networksList;    
     }
 
     @Override
