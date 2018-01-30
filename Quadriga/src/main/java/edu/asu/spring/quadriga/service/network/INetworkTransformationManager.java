@@ -41,6 +41,9 @@ public interface INetworkTransformationManager {
     ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList)
             throws QuadrigaStorageException;
 
+    ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList, List<String> conceptIds)
+            throws QuadrigaStorageException;
+    
     ITransformedNetwork getTransformedApprovedNetworks(List<INetwork> networkList) throws QuadrigaStorageException;
 
     ITransformedNetwork getAllTransformedNetworks(String xml)

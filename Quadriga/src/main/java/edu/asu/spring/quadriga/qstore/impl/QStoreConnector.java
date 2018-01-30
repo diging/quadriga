@@ -281,12 +281,26 @@ public class QStoreConnector implements IQStoreConnector {
     }
     
     @Override
-    public String loadNetworkWithConceptsBelongingToSameStatements(List<String> conceptUriSearchList) throws AsyncExecutionException {
+    public String findStatementsWithConcepts(List<String> conceptUris) throws AsyncExecutionException {
         Map<String, String> parameters = null;
         parameters =  new HashMap<String, String>();
-        for(int i = 0; i < conceptUriSearchList.size(); i++){
-                parameters.put("ti"+(i+1), conceptUriSearchList.get(i));
-        }       
+       
+        if(conceptUris.size() == 0)
+            return null;
+        
+        StringBuffer termsBelongingToSameRelation = new StringBuffer("");
+        StringBuffer termInterpretations = new StringBuffer("");
+        int numberOfSearchedConcepts = conceptUris.size();
+        for(int i = 0; i < numberOfSearchedConcepts; i++){
+            termsBelongingToSameRelation.append("(r:Relation)-[*]->(t"+i+":Term)");
+            termInterpretations.append("t"+i+".interpretation = '"+conceptUris.get(i)+"'");
+            if(i != (numberOfSearchedConcepts-1)){
+                termsBelongingToSameRelation.append(",");
+                termInterpretations.append(" and ");
+            }
+        }
+        parameters.put("terms_belonging_to_same_relation", termsBelongingToSameRelation.toString());
+        parameters.put("term_interpretations", termInterpretations.toString());
         return executeNeo4jQuery("concepts.belonging.to.same.statement", parameters, RELATION_EVENT);
     }
     
@@ -296,7 +310,7 @@ public class QStoreConnector implements IQStoreConnector {
         
         if (parameters != null) {
             for (String paraName : parameters.keySet()) {
-                query = query.replace("{" + paraName + "}", "'"+parameters.get(paraName)+"'");
+                query = query.replace("{" + paraName + "}", parameters.get(paraName));
             }
         }
         logger.debug("Running query: " + query);

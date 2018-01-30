@@ -322,6 +322,10 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
     @Override
     @Transactional
     public List<INetwork> getNetworksWithStatements(List<String> statementIds) throws QuadrigaStorageException{
+        
+        if(statementIds.size() == 0){
+            return null;
+        }
         List<INetwork> networksList = new ArrayList<INetwork>();
         List<NetworksDTO> approvedNetworksList = dbConnect.getApprovedNetworkList();
         List<NetworksDTO> networksWithStatementsList = new ArrayList<NetworksDTO>();
@@ -329,21 +333,21 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         NetworksDTO networkDTO = null;
         for(String statementId : statementIds){
             networkDTO = dbConnect.getNetworkWithStatement(statementId);
-            
-            if(networkIdsWithStatement.add(networkDTO.getNetworkid())){
+            System.out.println("StatementId: "+statementId+" , networkDTO: "+networkDTO);
+            if(networkDTO != null && networkIdsWithStatement.add(networkDTO.getNetworkid())){
                 networksWithStatementsList.add(networkDTO);
+                System.out.println("NetworkId: "+networkDTO.getNetworkid());
             }
-            
-            for(NetworksDTO canditateNetwork : networksWithStatementsList) {
-                for(NetworksDTO approvedNetwork : approvedNetworksList){
-                    if(canditateNetwork.getNetworkid().equals(approvedNetwork.getNetworkid())){
-                        networksList.add(networkmapper.getNetworkShallowDetails(canditateNetwork));
-                        break;
-                    }
+  
+        }
+        
+        for(NetworksDTO canditateNetwork : networksWithStatementsList) {
+            for(NetworksDTO approvedNetwork : approvedNetworksList){
+                if(canditateNetwork.getNetworkid().equals(approvedNetwork.getNetworkid())){
+                    networksList.add(networkmapper.getNetworkShallowDetails(canditateNetwork));
+                    break;
                 }
             }
-            
-            
         }
         
         return networksList;    

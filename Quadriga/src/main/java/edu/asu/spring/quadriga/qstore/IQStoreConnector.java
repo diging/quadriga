@@ -48,7 +48,7 @@ public interface IQStoreConnector {
      */
     Future<String> loadNetworkWithPopularTerms() throws AsyncExecutionException;
     
-    String loadNetworkWithConceptsBelongingToSameStatements(List<String> conceptUriSearchList) throws AsyncExecutionException;
+    String findStatementsWithConcepts(List<String> conceptUriSearchList) throws AsyncExecutionException;
 
     String getCreationEvents(List<String> ids) throws QuadrigaException;
 

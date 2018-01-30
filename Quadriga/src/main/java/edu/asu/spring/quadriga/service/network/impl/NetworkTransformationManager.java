@@ -291,6 +291,31 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // return new network with updated nodes and links
         return new TransformedNetwork(updatedNodes, links);
     }
+    
+    @Override
+    public ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList, List<String> conceptIds)
+            throws QuadrigaStorageException{
+        /*System.out.println("conceptId");
+        for(String conceptId : conceptIds){
+            System.out.println(conceptId);
+        }*/
+        ITransformedNetwork transformedNetwork =  getTransformedNetworkusingNetworkList(networkList);
+        List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
+        List<String> alternativeIdsForConcept = new ArrayList<String>();
+        for(String conceptId : conceptIds){
+            System.out.println("conceptId: "+conceptId);
+            alternativeIdsForConcept = getAlternativeIdsForConcept(conceptId);
+            System.out.println("alternativeIds:");
+            for(String alternativeIds : alternativeIdsForConcept){
+                System.out.println(alternativeIds);
+            }
+            alternativeIdsForConceptsList.add(alternativeIdsForConcept);
+        }
+        
+       // conceptIds.forEach(conceptId -> alternativeIdsForConceptsList.add(getAlternativeIdsForConcept(conceptId)));
+                
+        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
+    }
 
     /**
      * Filter the nodes in the network using the concept id and the alternative
@@ -308,33 +333,32 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // The alternative id list if not empty, is sure to contain the concept
         // id corresponding to the searched concept.
         List<Set<String>> statementIdSearchSetList = new ArrayList<Set<String>>();
-        Set<String> statementIdSet = new HashSet<String>();
         List<Node> searchedNodes = new ArrayList<Node>();
-
-        for (int i = 0; i < alternativeIdsForConceptList.size(); i++) {
-            statementIdSearchSetList.add(new HashSet<String>());
-        }
-
+        
+        
+       
         for (Node node : transformedNetwork.getNodes().values()) {
             // Check if the node's concept id is present in the alternative id
             // list of the concept.
-            int index = 0;
+            System.out.println("Node ConceptId: "+node.getConceptId());
             for (List<String> alternativeIdsForConcept : alternativeIdsForConceptList) {
                 if (alternativeIdsForConcept.contains(node.getConceptId())) {
                     searchedNodes.add(node);
-                    statementIdSearchSetList.get(index).addAll(node.getStatementIds());
+                    statementIdSearchSetList.add(new HashSet<String>(node.getStatementIds()));
+                    System.out.println("Node StatementId: ");
+                    for(String statementId : node.getStatementIds()){
+                        System.out.println(statementId);
+                    }
+                    
+
                     break;
                 }
-                index += 1;
             }
         }
-        // Find the common statement ids among hte searched concepts
-        if (statementIdSearchSetList.size() >= 1) {
-            statementIdSet = statementIdSearchSetList.get(0);
-            for (int i = 1; i < statementIdSearchSetList.size(); i++) {
-                statementIdSet = Sets.intersection(statementIdSet, statementIdSearchSetList.get(i));
-            }
-        }
+        
+     
+        Set<String> statementIdSet = statementIdSearchSetList.isEmpty() ? new HashSet<String>() :  statementIdSearchSetList.get(0); 
+        statementIdSearchSetList.forEach(statementSet -> statementIdSet.retainAll(statementSet));
         // Include only those links which have statement ids in the search set.
         List<Link> finalLinks = new ArrayList<Link>();
         Set<Link> finalLinksSet = new HashSet<Link>();

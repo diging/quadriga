@@ -81,12 +81,14 @@ public class TextConceptSearchController {
     
         String results = qStoreConnector.findStatementsWithConcepts(conceptUriSearchList);
         Set<String> references = new HashSet<String>();
+        List<String> eventIds = new ArrayList<String>();
         if (results != null && !results.isEmpty()) {
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
             for (CreationEvent event : eventList) {
                 references.add(event.getSourceReference());
                 System.out.println(event.getId());
+                eventIds.add(event.getId());
                
             }
         }
@@ -104,9 +106,9 @@ public class TextConceptSearchController {
             }
         }
 
-        List<INetwork> networkList = networkManager.getNetworksWithStatements(new ArrayList<String>(references));
+        List<INetwork> networkList = networkManager.getNetworksWithStatements(eventIds);
      
-                
+        /*        
         List<String> projectIds = new ArrayList<String>();
         ITransformedNetwork transformedNetwork = null;
         if (conceptUriSearchList.size() >= 1) {
@@ -114,6 +116,11 @@ public class TextConceptSearchController {
             projects.forEach(p -> projectIds.add(p.getProjectId()));
             transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds,
                     conceptUriSearchList, INetworkStatus.APPROVED);
+        }
+        */
+        ITransformedNetwork transformedNetwork = null;
+        if (conceptUriSearchList.size() >= 1) {
+            transformedNetwork = transformationManager.getTransformedNetworkusingNetworkList(networkList, conceptUriSearchList);
         }
 
         String json = null;
