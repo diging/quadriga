@@ -295,10 +295,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
     @Override
     public ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList, List<String> conceptIds)
             throws QuadrigaStorageException{
-        /*System.out.println("conceptId");
-        for(String conceptId : conceptIds){
-            System.out.println(conceptId);
-        }*/
+      
         ITransformedNetwork transformedNetwork =  getTransformedNetworkusingNetworkList(networkList);
         List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
         List<String> alternativeIdsForConcept = new ArrayList<String>();
@@ -340,15 +337,19 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         for (Node node : transformedNetwork.getNodes().values()) {
             // Check if the node's concept id is present in the alternative id
             // list of the concept.
-            System.out.println("Node ConceptId: "+node.getConceptId());
+            System.out.println("Node ConceptId: "+node.getConceptId()+" , Node Id: "+node.getId());
+            System.out.println("Node StatementId: ");
+            for(String statementId : node.getStatementIds()){
+                System.out.println(statementId);
+            }
             for (List<String> alternativeIdsForConcept : alternativeIdsForConceptList) {
                 if (alternativeIdsForConcept.contains(node.getConceptId())) {
                     searchedNodes.add(node);
                     statementIdSearchSetList.add(new HashSet<String>(node.getStatementIds()));
-                    System.out.println("Node StatementId: ");
+                    /* System.out.println("Node StatementId: ");
                     for(String statementId : node.getStatementIds()){
                         System.out.println(statementId);
-                    }
+                    }*/
                     
 
                     break;

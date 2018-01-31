@@ -62,6 +62,7 @@ public class NetworkTransformer implements INetworkTransformer {
         for (ElementEventsType type : elementEventsTypeList) {
             List<CreationEvent> events = type.getRelationEventOrAppellationEvent();
             for (CreationEvent event : events) {
+                System.out.println("Event Id: "+event.getId());
                 if (eventsById.get(event.getId()) == null) {
                     eventsById.put(event.getId(), new ArrayList<>());
                 }

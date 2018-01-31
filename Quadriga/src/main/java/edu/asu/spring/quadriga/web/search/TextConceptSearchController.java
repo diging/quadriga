@@ -108,16 +108,6 @@ public class TextConceptSearchController {
 
         List<INetwork> networkList = networkManager.getNetworksWithStatements(eventIds);
      
-        /*        
-        List<String> projectIds = new ArrayList<String>();
-        ITransformedNetwork transformedNetwork = null;
-        if (conceptUriSearchList.size() >= 1) {
-            List<IProject> projects = projectManager.getProjectListByAccessibility(EProjectAccessibility.PUBLIC);
-            projects.forEach(p -> projectIds.add(p.getProjectId()));
-            transformedNetwork = transformationManager.getSearchTransformedNetworkMultipleProjects(projectIds,
-                    conceptUriSearchList, INetworkStatus.APPROVED);
-        }
-        */
         ITransformedNetwork transformedNetwork = null;
         if (conceptUriSearchList.size() >= 1) {
             transformedNetwork = transformationManager.getTransformedNetworkusingNetworkList(networkList, conceptUriSearchList);

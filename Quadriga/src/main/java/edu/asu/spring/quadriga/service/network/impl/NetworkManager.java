@@ -46,6 +46,7 @@ import edu.asu.spring.quadriga.domain.network.impl.TermPartType;
 import edu.asu.spring.quadriga.domain.network.impl.TermType;
 import edu.asu.spring.quadriga.domain.network.json.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
+import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -326,7 +327,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         if(statementIds.size() == 0){
             return null;
         }
-        List<INetwork> networksList = new ArrayList<INetwork>();
+      /*  List<INetwork> networksList = new ArrayList<INetwork>();
         List<NetworksDTO> approvedNetworksList = dbConnect.getApprovedNetworkList();
         List<NetworksDTO> networksWithStatementsList = new ArrayList<NetworksDTO>();
         Set<String> networkIdsWithStatement = new HashSet<String>();
@@ -348,8 +349,21 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
                     break;
                 }
             }
+        }*/
+        
+        List<NetworksDTO> networksDTOList = dbConnect.getNetworkWithStatement(statementIds);
+        List<INetwork> networksList = new ArrayList<INetwork>();
+        Set<String> networkIdsWithStatement = new HashSet<String>();
+        System.out.println("NetworkDTOs");
+        if(networksDTOList != null){
+            for(NetworksDTO networksDTO : networksDTOList){
+                if(networksDTO != null && networkIdsWithStatement.add(networksDTO.getNetworkid())){
+                    networksList.add(networkmapper.getNetworkShallowDetails(networksDTO));
+                }
+            }
         }
         
+        System.out.println("NetworkList Size: "+ networksList.size());
         return networksList;    
     }
 
