@@ -78,7 +78,7 @@ public class LoginControllerTest {
 	 */
 	@Test
 	public void testLoginerror() {
-		assertEquals(loginController.loginerror(model),"login");
+		assertEquals(loginController.loginError(model),"login");
 	}
 
 }

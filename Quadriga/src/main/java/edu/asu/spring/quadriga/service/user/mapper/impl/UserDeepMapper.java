@@ -38,9 +38,8 @@ public class UserDeepMapper implements IUserDeepMapper {
     @Override
     @Transactional
     public IUser getUser(String userName) throws QuadrigaStorageException {
-        IUser user = null;
         QuadrigaUserDTO userDTO = dbConnect.getUserDTO(userName);
-        user = constructUserWithRoles(userDTO);
+        IUser user  = constructUserWithRoles(userDTO);
         if (user == null) {
             user = userFactory.createUserObject();
             IQuadrigaRole quadrigaRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES,
