@@ -247,7 +247,10 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 networkNodeInfoList.addAll(localNetworkNodeInfoList);
             }
         }
-
+        return getTransformedNetworkUsingNetworkNodes(networkNodeInfoList);
+    }    
+    
+    private ITransformedNetwork getTransformedNetworkUsingNetworkNodes(List<INetworkNodeInfo> networkNodeInfoList){
         ITransformedNetwork transformedNetwork = transformer.transformNetwork(networkNodeInfoList);
 
         // combine all the nodes except predicate nodes
@@ -313,7 +316,26 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 
         return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
     }
-
+    
+    @Override
+    public ITransformedNetwork getTransformedNetworkUsingNetworkNodesAndConcepts(List<INetworkNodeInfo> networkNodeInfoList, List<String> conceptIds){
+        ITransformedNetwork transformedNetwork = getTransformedNetworkUsingNetworkNodes(networkNodeInfoList);
+        List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
+        List<String> alternativeIdsForConcept = new ArrayList<String>();
+        for(String conceptId : conceptIds){
+            System.out.println("conceptId: "+conceptId);
+            alternativeIdsForConcept = getAlternativeIdsForConcept(conceptId);
+            System.out.println("alternativeIds:");
+            for(String alternativeIds : alternativeIdsForConcept){
+                System.out.println(alternativeIds);
+            }
+            alternativeIdsForConceptsList.add(alternativeIdsForConcept);
+        }
+        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
+    }
+    
+    
+    
     /**
      * Filter the nodes in the network using the concept id and the alternative
      * ids of the concept.

@@ -320,6 +320,8 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return networksList;
     }
     
+    
+    // to be removed
     @Override
     @Transactional
     public List<INetwork> getNetworksWithStatements(List<String> statementIds) throws QuadrigaStorageException{
@@ -327,29 +329,6 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         if(statementIds.size() == 0){
             return null;
         }
-      /*  List<INetwork> networksList = new ArrayList<INetwork>();
-        List<NetworksDTO> approvedNetworksList = dbConnect.getApprovedNetworkList();
-        List<NetworksDTO> networksWithStatementsList = new ArrayList<NetworksDTO>();
-        Set<String> networkIdsWithStatement = new HashSet<String>();
-        NetworksDTO networkDTO = null;
-        for(String statementId : statementIds){
-            networkDTO = dbConnect.getNetworkWithStatement(statementId);
-            System.out.println("StatementId: "+statementId+" , networkDTO: "+networkDTO);
-            if(networkDTO != null && networkIdsWithStatement.add(networkDTO.getNetworkid())){
-                networksWithStatementsList.add(networkDTO);
-                System.out.println("NetworkId: "+networkDTO.getNetworkid());
-            }
-  
-        }
-        
-        for(NetworksDTO canditateNetwork : networksWithStatementsList) {
-            for(NetworksDTO approvedNetwork : approvedNetworksList){
-                if(canditateNetwork.getNetworkid().equals(approvedNetwork.getNetworkid())){
-                    networksList.add(networkmapper.getNetworkShallowDetails(canditateNetwork));
-                    break;
-                }
-            }
-        }*/
         
         List<NetworksDTO> networksDTOList = dbConnect.getNetworkWithStatement(statementIds);
         List<INetwork> networksList = new ArrayList<INetwork>();
@@ -366,7 +345,12 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         System.out.println("NetworkList Size: "+ networksList.size());
         return networksList;    
     }
-
+    
+    @Override
+    @Transactional
+    public List<INetworkNodeInfo> getNetworkNodes(List<String> statementIds) throws QuadrigaStorageException{
+            return networkmapper.getNetworkNodes(statementIds);
+    }
     @Override
     @Transactional
     public List<INetwork> getAllNetworkVersions(String networkid) throws QuadrigaStorageException {

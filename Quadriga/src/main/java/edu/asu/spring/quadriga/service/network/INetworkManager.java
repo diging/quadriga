@@ -273,4 +273,6 @@ public interface INetworkManager {
 
     List<INetwork> getNetworksWithStatements(List<String> statementIds) throws QuadrigaStorageException;
 
+    List<INetworkNodeInfo> getNetworkNodes(List<String> statementIds) throws QuadrigaStorageException;
+
 }

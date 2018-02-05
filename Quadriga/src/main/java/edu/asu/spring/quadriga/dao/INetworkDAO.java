@@ -119,4 +119,6 @@ public interface INetworkDAO {
 	
 	public abstract List<NetworksDTO> getNetworkWithStatement(List<String> statementIds) throws QuadrigaStorageException;
 
+    public abstract List<NetworkStatementsDTO> getNetworkNodes(List<String> statementIds) throws QuadrigaStorageException;
+
 }

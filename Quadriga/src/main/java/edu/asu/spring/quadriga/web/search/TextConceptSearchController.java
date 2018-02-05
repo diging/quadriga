@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.network.INetwork;
+import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -106,11 +107,14 @@ public class TextConceptSearchController {
             }
         }
 
-        List<INetwork> networkList = networkManager.getNetworksWithStatements(eventIds);
-     
+        //List<INetwork> networkList = networkManager.getNetworksWithStatements(eventIds);
+        //List<INetworkNodeInfo> networkNodeList = networkManager.getNetworkNodes(eventIds);
+
         ITransformedNetwork transformedNetwork = null;
         if (conceptUriSearchList.size() >= 1) {
-            transformedNetwork = transformationManager.getTransformedNetworkusingNetworkList(networkList, conceptUriSearchList);
+            //transformedNetwork = transformationManager.getTransformedNetworkusingNetworkList(networkList, conceptUriSearchList);
+            List<INetworkNodeInfo> networkNodeList = networkManager.getNetworkNodes(eventIds);
+            transformedNetwork = transformationManager.getTransformedNetworkUsingNetworkNodesAndConcepts(networkNodeList, conceptUriSearchList);
         }
 
         String json = null;
