@@ -271,8 +271,6 @@ public interface INetworkManager {
      */
     List<CreationEvent> getTopElementEvents(String xml, Stream<String> topNodeIDStream) throws JAXBException;
 
-    List<INetwork> getNetworksWithStatements(List<String> statementIds) throws QuadrigaStorageException;
-
     List<INetworkNodeInfo> getNetworkNodes(List<String> statementIds) throws QuadrigaStorageException;
 
 }

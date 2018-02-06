@@ -35,16 +35,7 @@ public class NetworkDownloadService {
     public List<ElementEventsType> getElementEventTypes(final List<INetworkNodeInfo> networkNodeInfoList) {
         List<Future<ElementEventsType>> futureEvents = new ArrayList<>();
         List<String> ids = new ArrayList<>();
-        System.out.println("getElementEventTypes: NetworkNodeInfo");
         networkNodeInfoList.forEach(networkNodeInfo -> {
-
-            // adding future tasks to a list
-            // this is asynchronous
-            // Future<ElementEventsType> future =
-            // elementEventTypeDownloadService
-            // .getElementEventTypeAsync(networkNodeInfo.getId());
-            // futureEvents.add(future);
-            System.out.println(networkNodeInfo.getId());
             ids.add(networkNodeInfo.getId());
         });
         try {

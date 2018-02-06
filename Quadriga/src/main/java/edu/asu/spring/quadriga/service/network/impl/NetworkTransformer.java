@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.ldap.authentication.SpringSecurityAuthenticationSource;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
@@ -62,7 +61,6 @@ public class NetworkTransformer implements INetworkTransformer {
         for (ElementEventsType type : elementEventsTypeList) {
             List<CreationEvent> events = type.getRelationEventOrAppellationEvent();
             for (CreationEvent event : events) {
-                System.out.println("Event Id: "+event.getId());
                 if (eventsById.get(event.getId()) == null) {
                     eventsById.put(event.getId(), new ArrayList<>());
                 }

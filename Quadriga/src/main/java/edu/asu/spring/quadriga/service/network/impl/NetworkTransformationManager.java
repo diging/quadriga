@@ -12,9 +12,6 @@ import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.google.common.collect.Sets;
-
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -29,6 +26,7 @@ import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
+
 
 @Service
 public class NetworkTransformationManager implements INetworkTransformationManager {
@@ -157,14 +155,12 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         if (networkList == null) {
             return null;
         }
-        List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
-        List<String> alternativeIdsForConcept = getAlternativeIdsForConcept(conceptId);
-        alternativeIdsForConceptsList.add(alternativeIdsForConcept);
+
         // Get the transformed network of all the networks in a project.
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
 
         // Create final network using alternativeIdsForConcept.
-        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
+        return getFinalTransformedNetwork(transformedNetwork, getAlternativeIdsForConcept(conceptId));
     }
 
     /**
@@ -205,8 +201,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @author suraj nilapwar
      */
     @Override
-    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds,
-            List<String> conceptIds, String status) throws QuadrigaStorageException {
+    public ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId,
+            String status) throws QuadrigaStorageException {
         // get the transformed network and search for the concept id
         List<INetwork> networkList = new ArrayList<>();
         for (String projectId : projectIds) {
@@ -223,17 +219,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // get the transformed network of all the networks in projects
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
 
-        List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
-        List<String> alternativeIdsForConcepts;
-
-        for (String conceptId : conceptIds) {
-            alternativeIdsForConcepts = new ArrayList<String>();
-            alternativeIdsForConcepts.addAll(getAlternativeIdsForConcept(conceptId));
-            alternativeIdsForConceptsList.add(alternativeIdsForConcepts);
-        }
-
         // create final network using alternativeIdsForConcept
-        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
+        return getFinalTransformedNetwork(transformedNetwork, getAlternativeIdsForConcept(conceptId));
     }
 
     @Override
@@ -248,9 +235,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
             }
         }
         return getTransformedNetworkUsingNetworkNodes(networkNodeInfoList);
-    }    
-    
-    private ITransformedNetwork getTransformedNetworkUsingNetworkNodes(List<INetworkNodeInfo> networkNodeInfoList){
+    }
+
+    /**
+     * Generate the transformed network using specific network nodes
+     * @param networkNodeInfoList
+     * @return ITransformedNetwork
+     */
+    private ITransformedNetwork getTransformedNetworkUsingNetworkNodes(List<INetworkNodeInfo> networkNodeInfoList) {
         ITransformedNetwork transformedNetwork = transformer.transformNetwork(networkNodeInfoList);
 
         // combine all the nodes except predicate nodes
@@ -294,48 +286,28 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         // return new network with updated nodes and links
         return new TransformedNetwork(updatedNodes, links);
     }
-    
+
+    /**
+     * Generate the transformed network using specific network nodes and the id of concepts.
+     * 
+     * @param networkNodeInfoList
+     * @param conceptIds
+     * @return ITransformedNetwork
+     */
     @Override
-    public ITransformedNetwork getTransformedNetworkusingNetworkList(List<INetwork> networkList, List<String> conceptIds)
-            throws QuadrigaStorageException{
-      
-        ITransformedNetwork transformedNetwork =  getTransformedNetworkusingNetworkList(networkList);
-        List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
-        List<String> alternativeIdsForConcept = new ArrayList<String>();
-        for(String conceptId : conceptIds){
-            System.out.println("conceptId: "+conceptId);
-            alternativeIdsForConcept = getAlternativeIdsForConcept(conceptId);
-            System.out.println("alternativeIds:");
-            for(String alternativeIds : alternativeIdsForConcept){
-                System.out.println(alternativeIds);
-            }
-            alternativeIdsForConceptsList.add(alternativeIdsForConcept);
+    public ITransformedNetwork getTransformedNetworkUsingNetworkNodesAndConcepts(
+            List<INetworkNodeInfo> networkNodeInfoList, List<String> conceptIds) {
+
+        if (networkNodeInfoList.size() == 0) {
+            return null;
         }
-        
-       // conceptIds.forEach(conceptId -> alternativeIdsForConceptsList.add(getAlternativeIdsForConcept(conceptId)));
-                
-        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
-    }
-    
-    @Override
-    public ITransformedNetwork getTransformedNetworkUsingNetworkNodesAndConcepts(List<INetworkNodeInfo> networkNodeInfoList, List<String> conceptIds){
+
         ITransformedNetwork transformedNetwork = getTransformedNetworkUsingNetworkNodes(networkNodeInfoList);
-        List<List<String>> alternativeIdsForConceptsList = new ArrayList<List<String>>();
-        List<String> alternativeIdsForConcept = new ArrayList<String>();
-        for(String conceptId : conceptIds){
-            System.out.println("conceptId: "+conceptId);
-            alternativeIdsForConcept = getAlternativeIdsForConcept(conceptId);
-            System.out.println("alternativeIds:");
-            for(String alternativeIds : alternativeIdsForConcept){
-                System.out.println(alternativeIds);
-            }
-            alternativeIdsForConceptsList.add(alternativeIdsForConcept);
-        }
+        List<String> alternativeIdsForConceptsList = new ArrayList<String>();
+        conceptIds.forEach(conceptId -> alternativeIdsForConceptsList.addAll(getAlternativeIdsForConcept(conceptId)));
         return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
     }
-    
-    
-    
+
     /**
      * Filter the nodes in the network using the concept id and the alternative
      * ids of the concept.
@@ -345,43 +317,28 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @return ITransformedNetwork
      */
     private ITransformedNetwork getFinalTransformedNetwork(ITransformedNetwork transformedNetwork,
-            List<List<String>> alternativeIdsForConceptList) {
+            List<String> alternativeIdsForConceptList) {
         // Select the nodes with the concept id that is present in the list of
         // alternative id for a concept.
         // Add all the statement id of the selected node to a set.
         // The alternative id list if not empty, is sure to contain the concept
         // id corresponding to the searched concept.
-        List<Set<String>> statementIdSearchSetList = new ArrayList<Set<String>>();
         List<Node> searchedNodes = new ArrayList<Node>();
-        
-        
-       
+        Set<String> statementIdSet = new HashSet<String>();
+
         for (Node node : transformedNetwork.getNodes().values()) {
             // Check if the node's concept id is present in the alternative id
             // list of the concept.
-            System.out.println("Node ConceptId: "+node.getConceptId()+" , Node Id: "+node.getId());
-            System.out.println("Node StatementId: ");
-            for(String statementId : node.getStatementIds()){
-                System.out.println(statementId);
-            }
-            for (List<String> alternativeIdsForConcept : alternativeIdsForConceptList) {
-                if (alternativeIdsForConcept.contains(node.getConceptId())) {
-                    searchedNodes.add(node);
-                    statementIdSearchSetList.add(new HashSet<String>(node.getStatementIds()));
-                    /* System.out.println("Node StatementId: ");
-                    for(String statementId : node.getStatementIds()){
-                        System.out.println(statementId);
-                    }*/
-                    
 
+            for (String alternativeIdsForConcept : alternativeIdsForConceptList) {
+                if (alternativeIdsForConcept.equals(node.getConceptId())) {
+                    searchedNodes.add(node);
+                    statementIdSet.addAll(node.getStatementIds());
                     break;
                 }
             }
         }
-        
-     
-        Set<String> statementIdSet = statementIdSearchSetList.isEmpty() ? new HashSet<String>() :  statementIdSearchSetList.get(0); 
-        statementIdSearchSetList.forEach(statementSet -> statementIdSet.retainAll(statementSet));
+
         // Include only those links which have statement ids in the search set.
         List<Link> finalLinks = new ArrayList<Link>();
         Set<Link> finalLinksSet = new HashSet<Link>();
@@ -392,11 +349,11 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         Set<Node> addedNodes = new HashSet<Node>();
         for (Link link : transformedNetwork.getLinks()) {
             if (statementIdSet.contains(link.getStatementId())) {
-                // Statement id match, add to the final link list.
-                // finalLinks.add(link);
+                // Statement id match, add to the final link set.
                 finalLinksSet.add(link);
                 Node subjectNode = link.getSubject();
                 Node objectNode = link.getObject();
+
                 // If node already added then do not add it.
                 // If nodes are added twice - it would produce many nodes and
                 // less links => disconnected graph.

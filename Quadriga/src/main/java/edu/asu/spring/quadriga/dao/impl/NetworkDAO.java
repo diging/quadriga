@@ -317,12 +317,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
             query.setParameterList("statementids", statementIds) ;  
             @SuppressWarnings("unchecked")
             List<NetworkStatementsDTO> listNetworkStatementsDTO = query.list();
-            System.out.println("listNetworkStatementsDTO size: "+listNetworkStatementsDTO.size());
-            /*
-             * if (listNetworkStatementsDTO != null) { networkNodeList =
-             * networkMapper.getListOfNetworkNodeInfo(listNetworkStatementsDTO);
-             * }
-             */
             return listNetworkStatementsDTO;
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
@@ -330,45 +324,6 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
     }
     
     
-    // to be removed
-    @Override
-    public List<NetworksDTO> getNetworkWithStatement(List<String> statementIds) throws QuadrigaStorageException{
-       /* try {
-           Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworkStatementsDTO.findById");
-           query.setParameter("statementid", statementId);
-
-            NetworkStatementsDTO networkStatementsDTO = (NetworkStatementsDTO) query.uniqueResult();
-            if(networkStatementsDTO == null){
-                return null;
-            }
-            return networkStatementsDTO.getNetworkDTO();
-        } catch (HibernateException e) {
-            throw new QuadrigaStorageException(e);
-        }
-        */
-        
-        try {
-            Query query = sessionFactory.getCurrentSession()
-                    .createSQLQuery(
-                            "select n.* from tbl_project p, tbl_project_workspace pw, tbl_network_workspace nw, tbl_networks n, tbl_network_statements ns where p.projectid = pw.projectid and pw.workspaceid = nw.workspaceid and nw.networkid = n.networkid and ns.networkid = n.networkid and p.accessibility = 'PUBLIC' and n.status = 'APPROVED' and ns.statementid in (:statementids)")
-                    .setResultTransformer(Transformers.aliasToBean(NetworksDTO.class));
-            //String statementIdString = String.join("','", statementIds);
-           // statementIdString = "'" + statementIdString +"'";
-            query.setParameterList("statementids", statementIds) ;  
-            
-            //System.out.println("String: "+statementIdString);
-            @SuppressWarnings("unchecked")
-            List<NetworksDTO> listNetworksDTO = query.list();
-            System.out.println("listNetworksDTO size: "+listNetworksDTO.size());
-            
-            getNetworkNodes(statementIds);
-
-            return listNetworksDTO;
-        } catch (HibernateException e) {
-            throw new QuadrigaStorageException(e);
-        }
-    }
-
     
     
     /**

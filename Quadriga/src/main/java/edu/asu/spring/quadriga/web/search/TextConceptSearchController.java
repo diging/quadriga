@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
-import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
@@ -27,8 +24,6 @@ import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.service.textfile.ITextFileManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Controller
 public class TextConceptSearchController {
@@ -44,9 +39,6 @@ public class TextConceptSearchController {
 
     @Autowired
     private ITextFileManager textFileManager;
-
-    @Autowired
-    private IRetrieveProjectManager projectManager;
 
     @Autowired
     private INetworkTransformationManager transformationManager;
@@ -88,7 +80,6 @@ public class TextConceptSearchController {
             List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
             for (CreationEvent event : eventList) {
                 references.add(event.getSourceReference());
-                System.out.println(event.getId());
                 eventIds.add(event.getId());
                
             }
@@ -107,12 +98,8 @@ public class TextConceptSearchController {
             }
         }
 
-        //List<INetwork> networkList = networkManager.getNetworksWithStatements(eventIds);
-        //List<INetworkNodeInfo> networkNodeList = networkManager.getNetworkNodes(eventIds);
-
         ITransformedNetwork transformedNetwork = null;
-        if (conceptUriSearchList.size() >= 1) {
-            //transformedNetwork = transformationManager.getTransformedNetworkusingNetworkList(networkList, conceptUriSearchList);
+        if (conceptUriSearchList.size() >= 1 && eventIds.size() >= 1) {
             List<INetworkNodeInfo> networkNodeList = networkManager.getNetworkNodes(eventIds);
             transformedNetwork = transformationManager.getTransformedNetworkUsingNetworkNodesAndConcepts(networkNodeList, conceptUriSearchList);
         }
