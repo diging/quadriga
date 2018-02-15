@@ -54,7 +54,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  */
 @Controller
 public class NetworkSearchController {
- 
+
     @Autowired
     private IConceptpowerConnector connector;
 
@@ -71,12 +71,10 @@ public class NetworkSearchController {
             + " \"message\": \"Unable to get the search terms\"}";
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkSearchController.class);
-    
+
     private static ExecutorService executorService = Executors.newFixedThreadPool(10);
-    
-   // private static Map<Integer, Future<String>> searchResultMap = new HashMap<Integer, Future<String>>();
+
     private static Map<Integer, Future<PublicSearchObject>> searchResultMap = new HashMap<Integer, Future<PublicSearchObject>>();
-    
 
     /**
      * This method will return a search page
@@ -104,22 +102,24 @@ public class NetworkSearchController {
     @ResponseBody
     @InjectProjectByName
     public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm,
-            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, @CheckAccess @InjectProject IProject project) {
-        
-        // FIXME once the new Conceptpower is release, this should be replace with
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
+            @CheckAccess @InjectProject IProject project) {
+
+        // FIXME once the new Conceptpower is release, this should be replace
+        // with
         // one call to the search api
         ConceptpowerReply reply = connector.search(searchTerm, POS.NOUN);
         List<ConceptEntry> conceptList = reply.getConceptEntry();
-        
+
         reply = connector.search(searchTerm, POS.VERB);
         conceptList.addAll(reply.getConceptEntry());
-        
+
         reply = connector.search(searchTerm, POS.ADJECTIVE);
         conceptList.addAll(reply.getConceptEntry());
-        
+
         reply = connector.search(searchTerm, POS.ADVERB);
         conceptList.addAll(reply.getConceptEntry());
-        
+
         List<JSONObject> jsonResults = new ArrayList<JSONObject>();
         try {
             if (conceptList != null) {
@@ -146,133 +146,114 @@ public class NetworkSearchController {
     }
 
     /**
-     * This method returns a display of the network that consists of all the statements in the
-     * given projects that contain the provided concept id.
-     * @param projectUnixName Unix name of the project whose networks will be searched for the concept
-     * @param conceptId Id of the concept
+     * This method returns a display of the network that consists of all the
+     * statements in the given projects that contain the provided concept id.
+     * 
+     * @param projectUnixName
+     *            Unix name of the project whose networks will be searched for
+     *            the concept
+     * @param conceptId
+     *            Id of the concept
      * @param project
      * @param model
      * @return relative path to the web-page that displays the network
      * @throws QuadrigaStorageException
      */
-   /* @CheckPublicAccess
-    @InjectProjectByName
-    @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
-    public String getSearchTransformedNetwork(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
-            @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project, Model model)
-                    throws QuadrigaStorageException {
-        
-        String lemma = "";
-        String searchNodeLabel = "";
-        
-        // Fetch ConceptPower entries related to the conceptId
-        IConcept concept = cpCache.getConceptByUri(conceptId);
-   
-        if (concept != null) {
-            searchNodeLabel = concept.getWord();
-            lemma = concept.getDescription();
-           
-        }
-     
-        ITransformedNetwork transformedNetwork = transformationManager
-                .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
-
-        String json = null;
-        if (transformedNetwork != null) {
-            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-        }
-
-        if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-            model.addAttribute("isNetworkEmpty", true);
-        }
-
-        model.addAttribute("jsonstring", json);
-       // model.addAttribute("networkid", "\"\"");
-        //model.addAttribute("project", project);
-        model.addAttribute("searchNodeLabel", searchNodeLabel);
-        model.addAttribute("description", lemma);
-        model.addAttribute("unixName", projectUnixName);
-
-        return "sites/networks/searchednetwork";
-    }*/
-   @CheckPublicAccess
+    /*
+     * @CheckPublicAccess
+     * 
+     * @InjectProjectByName
+     * 
+     * @RequestMapping(value = "sites/{projectUnixName}/networks/search", method
+     * = RequestMethod.GET) public String
+     * getSearchTransformedNetwork(@ProjectIdentifier @PathVariable(
+     * "projectUnixName") String projectUnixName,
+     * 
+     * @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject
+     * IProject project, Model model) throws QuadrigaStorageException {
+     * 
+     * String lemma = ""; String searchNodeLabel = "";
+     * 
+     * // Fetch ConceptPower entries related to the conceptId IConcept concept =
+     * cpCache.getConceptByUri(conceptId);
+     * 
+     * if (concept != null) { searchNodeLabel = concept.getWord(); lemma =
+     * concept.getDescription();
+     * 
+     * }
+     * 
+     * ITransformedNetwork transformedNetwork = transformationManager
+     * .getSearchTransformedNetwork(project.getProjectId(), conceptId,
+     * INetworkStatus.APPROVED);
+     * 
+     * String json = null; if (transformedNetwork != null) { json =
+     * jsonCreator.getJson(transformedNetwork.getNodes(),
+     * transformedNetwork.getLinks()); }
+     * 
+     * if (transformedNetwork == null || transformedNetwork.getNodes().size() ==
+     * 0) { model.addAttribute("isNetworkEmpty", true); }
+     * 
+     * model.addAttribute("jsonstring", json); //
+     * model.addAttribute("networkid", "\"\""); //model.addAttribute("project",
+     * project); model.addAttribute("searchNodeLabel", searchNodeLabel);
+     * model.addAttribute("description", lemma); model.addAttribute("unixName",
+     * projectUnixName);
+     * 
+     * return "sites/networks/searchednetwork"; }
+     */
+    /**
+     * This method accepts a request to fetch network corresponding to the searched token. 
+     * The task of generating the network is delegated to separate thread and a token (which identifies the submitted request) is returned.
+     * @param projectUnixName
+     * @param conceptId
+     * @param project
+     * @return JSON containing the token
+     * @throws QuadrigaStorageException
+     */
+    @CheckPublicAccess
     @InjectProjectByName
     @ResponseBody
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> submitSearchTransformedNetworkRequest(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
+    public ResponseEntity<String> submitSearchTransformedNetworkRequest(
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
             @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project)
-                    throws QuadrigaStorageException {
-                    
-                    
-           Callable<PublicSearchObject> callable = () -> {
-                 String lemma = "";
-                 String searchNodeLabel = "";
-        
-                 // Fetch ConceptPower entries related to the conceptId
-                 IConcept concept = cpCache.getConceptByUri(conceptId);
-                 System.out.println("Here");
-                 if (concept != null) {
-                        searchNodeLabel = concept.getWord();
-                        lemma = concept.getDescription();
-                 }
-     
-                ITransformedNetwork transformedNetwork = transformationManager
-                .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
+            throws QuadrigaStorageException {
 
-                String json = null;
-                if (transformedNetwork != null) {
-                    json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-                    System.out.println("JSON String: "+json);
-                }
-        
-                JSONObject jsonResult = new JSONObject();
-                HashMap<String, Object> jsonMap = new HashMap<String, Object>();
-                PublicSearchObject publicSearchObject = new PublicSearchObject();
-                try {
-                    if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-                        jsonResult.put("isNetworkEmpty", true);
-                        publicSearchObject.setNetworkEmpty(true);
-                    }
+        Callable<PublicSearchObject> callable = () -> {
+            String lemma = "";
+            String searchNodeLabel = "";
+            PublicSearchObject publicSearchObject = new PublicSearchObject();
+            // Fetch ConceptPower entries related to the conceptId
+            IConcept concept = cpCache.getConceptByUri(conceptId);
+            System.out.println("Here");
+            if (concept != null) {
+                searchNodeLabel = concept.getWord();
+                lemma = concept.getDescription();
+            }
 
-                    jsonResult.put("jsonstring", json);
-                    // jsonMap.put("jsonstring", json);
-                    publicSearchObject.setJsonString(json);
-                    
-                    jsonResult.put("networkid", "\"\"");
-                    //jsonMap.put("networkid", "\"\"");
-                   
-                    
-                    jsonResult.put("project", project);
-                    //jsonMap.put("project", project);
-                    
-                    jsonResult.put("searchNodeLabel", searchNodeLabel);
-                    //jsonMap.put("searchNodeLabel", searchNodeLabel);
-                    publicSearchObject.setSearchNodeLabel(searchNodeLabel);
-                    
-                    jsonResult.put("description", lemma);
-                    //jsonMap.put("description", lemma);
-                    publicSearchObject.setDescription(lemma);
-                    
-                    jsonResult.put("unixName", projectUnixName);
-                    //jsonMap.put("unixName", projectUnixName);
-                    publicSearchObject.setUnixName(projectUnixName);
-                    
-                    publicSearchObject.setStatus(1);
-                }
-                catch(JSONException e){
-                     logger.error("Json exception while adding the results", e);
-                }
-                System.out.println("JSON Result String: "+jsonResult.toString());
-               // System.out.println("JSON Map String: "+jsonMap.toString());
-                System.out.println("Public Search Object String: "+publicSearchObject.getJsonString());
-                //return jsonResult.toString();
-                return publicSearchObject;
-                
-        };            
+            ITransformedNetwork transformedNetwork = transformationManager
+                    .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
+
+            if (transformedNetwork != null) {
+                publicSearchObject.setNodes(jsonCreator.getNodes(transformedNetwork.getNodes()));
+                publicSearchObject.setLinks(jsonCreator.getLinks(transformedNetwork.getLinks()));
+            }
+
+            if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+                publicSearchObject.setNetworkEmpty(true);
+            }
+            publicSearchObject.setSearchNodeLabel(searchNodeLabel);
+            publicSearchObject.setDescription(lemma);
+
+            publicSearchObject.setUnixName(projectUnixName);
+
+            return publicSearchObject;
+
+        };
         Future<PublicSearchObject> future = executorService.submit(callable);
         Random randomTokenGenerator = new Random();
         Integer randomToken = randomTokenGenerator.nextInt(100);
-        while(searchResultMap.containsKey(randomToken)){
+        while (searchResultMap.containsKey(randomToken)) {
             randomToken = randomTokenGenerator.nextInt(100);
         }
         searchResultMap.put(randomToken, future);
@@ -284,43 +265,38 @@ public class NetworkSearchController {
         }
         return new ResponseEntity<String>(resultToken.toString(), HttpStatus.OK);
     }
-   
-   
 
-   @ResponseBody
-   @RequestMapping(value = "sites/{projectUnixName}/networks/search/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-   public PublicSearchObject getSearchTransformedNetwork(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, @RequestParam("tokenId") Integer tokenId){
-       JSONObject result = new JSONObject();
-       PublicSearchObject publicSearchObject = new PublicSearchObject();
-       if(!searchResultMap.containsKey(tokenId)){
-           try {
-            result.put("message", "The request doesn't exist");
-        } catch (JSONException e) {
-            logger.error("Json exception while adding the message", e);
+    /**
+     * This method checks if the request (corresponding to the tokenId) is processed. 
+     * It returns a JSON containing the transformed network(if available) and sets the appropriate status: 1: Complete, 2: Invalid, 3: In progress
+     * @param projectUnixName
+     * @param tokenId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "sites/{projectUnixName}/networks/search/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public PublicSearchObject getSearchTransformedNetwork(
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
+            @RequestParam("tokenId") Integer tokenId) {
+        PublicSearchObject publicSearchObject = new PublicSearchObject();
+        if (!searchResultMap.containsKey(tokenId)) {
+            publicSearchObject.setStatus(2);
+            return publicSearchObject;
         }
-          // return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
-           publicSearchObject.setStatus(2);
-           return publicSearchObject;
-       }
-       
-       Future<PublicSearchObject> futureResult = searchResultMap.get(tokenId);
-       if (futureResult != null && futureResult.isDone()) {
-           try {
-            return futureResult.get();
-        } catch (InterruptedException | ExecutionException e) {
-            logger.error("Exception while retrieving the result", e);
+
+        Future<PublicSearchObject> futureResult = searchResultMap.get(tokenId);
+        if (futureResult != null && futureResult.isDone()) {
+            try {
+                publicSearchObject = futureResult.get();
+                publicSearchObject.setStatus(1);
+                searchResultMap.remove(tokenId);
+            } catch (InterruptedException | ExecutionException e) {
+                logger.error("Exception while retrieving the result", e);
+            }
+        } else {
+            publicSearchObject.setStatus(3);
         }
-       }
-       else{
-           try {
-               result.put("message", "The request is being processed");
-           } catch (JSONException e) {
-               logger.error("Json exception while adding the message", e);
-           }
-           
-       }
-       //return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
-       publicSearchObject.setStatus(3);
-       return  publicSearchObject;
-   }
+
+        return publicSearchObject;
+    }
 }

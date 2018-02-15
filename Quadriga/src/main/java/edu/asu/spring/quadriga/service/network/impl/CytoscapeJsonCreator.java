@@ -6,6 +6,10 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.network.json.CytoscapeLinkDataObject;
+import edu.asu.spring.quadriga.domain.network.json.CytoscapeLinkObject;
+import edu.asu.spring.quadriga.domain.network.json.CytoscapeNodeDataObject;
+import edu.asu.spring.quadriga.domain.network.json.CytoscapeNodeObject;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
@@ -88,5 +92,54 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         sb.append("]");
 
         return sb.toString();
+    }
+    
+    @Override
+    public List<CytoscapeNodeObject> getNodes(Map<String, Node> nodes){
+        List<CytoscapeNodeObject> cytoscapeNodeList = new ArrayList<CytoscapeNodeObject>();
+        List<Node> nodeList = new ArrayList<Node>(nodes.values());
+        for (int i = 0; i < nodeList.size(); i++) {
+            
+            CytoscapeNodeDataObject dataObj= new CytoscapeNodeDataObject();
+            dataObj.setId(nodeList.get(i).getId());    
+            dataObj.setConceptName(nodeList.get(i).getLabel());
+            dataObj.setConceptUri(nodeList.get(i).getConceptId());
+            dataObj.setId(nodeList.get(i).getConceptIdShort());
+            if (nodeList.get(i) instanceof PredicateNode) {
+                dataObj.setGroup("0");
+            } else {
+                dataObj.setGroup("1");
+            }
+            dataObj.setSourceReference(nodeList.get(i).getSourceReference());
+            dataObj.setStatementIds(new ArrayList<String>());
+            for (int j = 0; j < nodeList.get(i).getStatementIds().size(); j++) {
+                dataObj.getStatementIds().add(nodeList.get(i).getStatementIds().get(j)); 
+            }
+            
+            CytoscapeNodeObject obj = new CytoscapeNodeObject();
+            obj.setData(dataObj);
+            cytoscapeNodeList.add(obj);
+        } 
+        
+        return cytoscapeNodeList;
+    }
+    
+    @Override
+    public List<CytoscapeLinkObject> getLinks(List<Link> links){
+        List<CytoscapeLinkObject> cytoscapeLinkList = new ArrayList<CytoscapeLinkObject>();
+        for (int i = 0; i < links.size(); i++) {
+            CytoscapeLinkDataObject dataObj = new CytoscapeLinkDataObject();
+            dataObj.setId(""+i);
+            dataObj.setSource(links.get(i).getSubject().getId());
+            dataObj.setTarget(links.get(i).getObject().getId()); 
+            dataObj.setLabel(links.get(i).getLabel());
+            dataObj.setSourceReference(links.get(i).getSourceReference());
+            dataObj.setStatementIds(new ArrayList<String>());
+            dataObj.getStatementIds().add(links.get(i).getStatementId()) ;
+            CytoscapeLinkObject obj = new CytoscapeLinkObject();
+            obj.setData(dataObj);
+            cytoscapeLinkList.add(obj);
+        }
+        return cytoscapeLinkList;
     }
 }

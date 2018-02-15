@@ -1,20 +1,16 @@
 package edu.asu.spring.quadriga.domain.network.json;
 
+import java.util.List;
+
 public class PublicSearchObject {
-    String jsonString;
+
     String searchNodeLabel;
     String description;
     String unixName;
     boolean isNetworkEmpty;
+    List<CytoscapeNodeObject> nodes;
+    List<CytoscapeLinkObject> links;
     int status;
-
-    public String getJsonString() {
-        return jsonString;
-    }
-
-    public void setJsonString(String jsonString) {
-        this.jsonString = jsonString;
-    }
 
     public String getSearchNodeLabel() {
         return searchNodeLabel;
@@ -56,5 +52,20 @@ public class PublicSearchObject {
         this.status = status;
     }
 
-    
+    public List<CytoscapeNodeObject> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(List<CytoscapeNodeObject> nodes) {
+        this.nodes = nodes;
+    }
+
+    public List<CytoscapeLinkObject> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<CytoscapeLinkObject> links) {
+        this.links = links;
+    }
+
 }
