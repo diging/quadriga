@@ -24,7 +24,7 @@
 
 
 <!-- <div id="dspace_metadata"></div>  -->
-
+<!-- 
 <c:if test="${isNetworkEmpty}">
 	<div class="row">
 		<div class="alert alert-info">Could not find any nodes for the
@@ -49,7 +49,30 @@
 			<table id="annotationsTable"></table>
 		</div>
 	</div>
-</c:if>
+</c:if> -->
+
+  <div class = "row">
+  	<div class="alert alert-info" id= "loading"> Searching for network with nodes for the search term in the project...</div>	
+  	<div class="alert alert-info" id= "network-empty" style="display:none;'">Could not find any nodes for the
+			search term in the project</div>
+  	<div id = "network-available" style="display:none;">
+  		<a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
+        	<i class="fa fa-arrows-alt"></i>
+    	</a>
+    
+		<div class="row">
+			<div id="networkBox" class="col-sm-12"
+				style="min-height: 500px; height: 100%; text-align: left;"></div>
+		</div>
+
+		<div id="inner-details" class="row"></div>
+		<div id="allannot_details" class="row">
+			<div class="row">
+				<table id="annotationsTable"></table>
+			</div>
+		</div>
+  	</div>
+ </div>
 
 
 <div id="log" class="row"></div>
@@ -115,11 +138,11 @@ function exitHandler()
 //# sourceURL=test.js
 
 var container = document.getElementById('networkBox');
-
+var jsonstring = '[]';
 var cy = cytoscape({
     container: container, // container to render in
 
-    elements: ${jsonstring},
+    elements: jsonstring,
     layout: {
         name: 'cose',
         idealEdgeLength: 5
@@ -169,4 +192,48 @@ $( document ).ready(function() {
     });
 });
 
+function initializeCytoscape(){
+	
+}
+
+function renderGraph(graphData){
+	var graphObj = [];
+	graphData.nodes.forEach(function (node){
+		graphObj.push(node);
+	});
+	graphData.links.forEach(function (link){
+		graphObj.push(link);
+	});
+	initializeCytoscape(JSON.stringify(graphObj);
+}
+
+function fail(){
+	console.log("Fail");
+}
+var searchComplete = false;
+function searchNetwork(){
+	$xhr = $.ajax({
+		dataType: 'json',
+		url: 'search/result',
+		data: {
+			tokenId: ${token}
+		   //${_csrf.parameterName}: '${_csrf.token}',
+		}
+	}).done(function (data, status){
+		console.log("Done");
+		console.log("Status: "+status);
+		console.log(data);
+		if(data.status == 1){
+			clearTimeout(timeout);
+			renderGraph(data);
+		}
+	}).fail(function(xhr, status, error){
+		console.log("Fail: ");
+		console.log("Status: "+status);
+		console.log("Error: "+error);
+		clearTimeout(timeout);
+	});
+	var timeout = setTimeout(searchNetwork, 10000);
+}
+window.onload = searchNetwork;
 </script>

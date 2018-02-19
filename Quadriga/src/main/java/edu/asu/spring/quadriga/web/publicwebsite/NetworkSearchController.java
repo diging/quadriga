@@ -160,47 +160,53 @@ public class NetworkSearchController {
      * @throws QuadrigaStorageException
      */
     /*
-     * @CheckPublicAccess
-     * 
-     * @InjectProjectByName
-     * 
-     * @RequestMapping(value = "sites/{projectUnixName}/networks/search", method
-     * = RequestMethod.GET) public String
-     * getSearchTransformedNetwork(@ProjectIdentifier @PathVariable(
-     * "projectUnixName") String projectUnixName,
-     * 
-     * @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject
-     * IProject project, Model model) throws QuadrigaStorageException {
-     * 
-     * String lemma = ""; String searchNodeLabel = "";
-     * 
-     * // Fetch ConceptPower entries related to the conceptId IConcept concept =
-     * cpCache.getConceptByUri(conceptId);
-     * 
-     * if (concept != null) { searchNodeLabel = concept.getWord(); lemma =
-     * concept.getDescription();
-     * 
-     * }
-     * 
-     * ITransformedNetwork transformedNetwork = transformationManager
-     * .getSearchTransformedNetwork(project.getProjectId(), conceptId,
-     * INetworkStatus.APPROVED);
-     * 
-     * String json = null; if (transformedNetwork != null) { json =
-     * jsonCreator.getJson(transformedNetwork.getNodes(),
-     * transformedNetwork.getLinks()); }
-     * 
-     * if (transformedNetwork == null || transformedNetwork.getNodes().size() ==
-     * 0) { model.addAttribute("isNetworkEmpty", true); }
-     * 
-     * model.addAttribute("jsonstring", json); //
-     * model.addAttribute("networkid", "\"\""); //model.addAttribute("project",
-     * project); model.addAttribute("searchNodeLabel", searchNodeLabel);
-     * model.addAttribute("description", lemma); model.addAttribute("unixName",
-     * projectUnixName);
-     * 
-     * return "sites/networks/searchednetwork"; }
-     */
+     @CheckPublicAccess
+      
+     @InjectProjectByName
+     
+     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method
+     = RequestMethod.GET) public String
+     getSearchTransformedNetwork(@ProjectIdentifier @PathVariable(
+     "projectUnixName") String projectUnixName,
+     
+     @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject
+     IProject project, Model model) throws QuadrigaStorageException {
+     
+     String lemma = ""; String searchNodeLabel = "";
+     
+     // Fetch ConceptPower entries related to the conceptId 
+     IConcept concept = cpCache.getConceptByUri(conceptId);
+     
+     if (concept != null) { searchNodeLabel = concept.getWord(); lemma =
+     concept.getDescription();
+     
+     }
+    
+     ITransformedNetwork transformedNetwork = transformationManager
+     .getSearchTransformedNetwork(project.getProjectId(), conceptId,
+     INetworkStatus.APPROVED);
+     
+     String json = null; if (transformedNetwork != null) { json =
+     jsonCreator.getJson(transformedNetwork.getNodes(),
+     transformedNetwork.getLinks()); }
+     
+     if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) { 
+         model.addAttribute("isNetworkEmpty", true); 
+     }
+     
+     model.addAttribute("jsonstring", json); 
+     model.addAttribute("networkid", "\"\""); 
+     //model.addAttribute("project",project); 
+     model.addAttribute("searchNodeLabel", searchNodeLabel);
+     model.addAttribute("description", lemma); 
+     model.addAttribute("unixName", projectUnixName);
+     
+     return "sites/networks/searchednetwork"; }
+     
+    */
+    
+    //New
+    
     /**
      * This method accepts a request to fetch network corresponding to the searched token. 
      * The task of generating the network is delegated to separate thread and a token (which identifies the submitted request) is returned.
@@ -210,13 +216,12 @@ public class NetworkSearchController {
      * @return JSON containing the token
      * @throws QuadrigaStorageException
      */
-    @CheckPublicAccess
+  @CheckPublicAccess
     @InjectProjectByName
-    @ResponseBody
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> submitSearchTransformedNetworkRequest(
+    public String submitSearchTransformedNetworkRequest(
             @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
-            @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project)
+            @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project, Model model)
             throws QuadrigaStorageException {
 
         Callable<PublicSearchObject> callable = () -> {
@@ -257,15 +262,13 @@ public class NetworkSearchController {
             randomToken = randomTokenGenerator.nextInt(100);
         }
         searchResultMap.put(randomToken, future);
-        JSONObject resultToken = new JSONObject();
-        try {
-            resultToken.put("token", randomToken);
-        } catch (JSONException e) {
-            logger.error("Json exception while adding the token", e);
-        }
-        return new ResponseEntity<String>(resultToken.toString(), HttpStatus.OK);
+        model.addAttribute("token", randomToken);
+        return "sites/networks/searchednetwork";
     }
-
+  
+    
+    
+    
     /**
      * This method checks if the request (corresponding to the tokenId) is processed. 
      * It returns a JSON containing the transformed network(if available) and sets the appropriate status: 1: Complete, 2: Invalid, 3: In progress
@@ -273,11 +276,12 @@ public class NetworkSearchController {
      * @param tokenId
      * @return
      */
+   
     @ResponseBody
     @RequestMapping(value = "sites/{projectUnixName}/networks/search/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public PublicSearchObject getSearchTransformedNetwork(
-            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
-            @RequestParam("tokenId") Integer tokenId) {
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,  @RequestParam("tokenId") Integer tokenId) {
+        System.out.println("Inside getSearchTransformedNetwork");
         PublicSearchObject publicSearchObject = new PublicSearchObject();
         if (!searchResultMap.containsKey(tokenId)) {
             publicSearchObject.setStatus(2);
@@ -299,4 +303,5 @@ public class NetworkSearchController {
 
         return publicSearchObject;
     }
+    
 }
