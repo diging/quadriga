@@ -146,77 +146,18 @@ public class NetworkSearchController {
     }
 
     /**
-     * This method returns a display of the network that consists of all the
-     * statements in the given projects that contain the provided concept id.
+     * This method accepts a request to fetch network corresponding to the
+     * searched term. The task of generating the network is delegated to a
+     * separate thread and a token (which identifies the submitted request) is
+     * generated.
      * 
      * @param projectUnixName
-     *            Unix name of the project whose networks will be searched for
-     *            the concept
      * @param conceptId
-     *            Id of the concept
      * @param project
-     * @param model
      * @return relative path to the web-page that displays the network
      * @throws QuadrigaStorageException
      */
-    /*
-     @CheckPublicAccess
-      
-     @InjectProjectByName
-     
-     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method
-     = RequestMethod.GET) public String
-     getSearchTransformedNetwork(@ProjectIdentifier @PathVariable(
-     "projectUnixName") String projectUnixName,
-     
-     @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject
-     IProject project, Model model) throws QuadrigaStorageException {
-     
-     String lemma = ""; String searchNodeLabel = "";
-     
-     // Fetch ConceptPower entries related to the conceptId 
-     IConcept concept = cpCache.getConceptByUri(conceptId);
-     
-     if (concept != null) { searchNodeLabel = concept.getWord(); lemma =
-     concept.getDescription();
-     
-     }
-    
-     ITransformedNetwork transformedNetwork = transformationManager
-     .getSearchTransformedNetwork(project.getProjectId(), conceptId,
-     INetworkStatus.APPROVED);
-     
-     String json = null; if (transformedNetwork != null) { json =
-     jsonCreator.getJson(transformedNetwork.getNodes(),
-     transformedNetwork.getLinks()); }
-     
-     if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) { 
-         model.addAttribute("isNetworkEmpty", true); 
-     }
-     
-     model.addAttribute("jsonstring", json); 
-     model.addAttribute("networkid", "\"\""); 
-     //model.addAttribute("project",project); 
-     model.addAttribute("searchNodeLabel", searchNodeLabel);
-     model.addAttribute("description", lemma); 
-     model.addAttribute("unixName", projectUnixName);
-     
-     return "sites/networks/searchednetwork"; }
-     
-    */
-    
-    //New
-    
-    /**
-     * This method accepts a request to fetch network corresponding to the searched token. 
-     * The task of generating the network is delegated to separate thread and a token (which identifies the submitted request) is returned.
-     * @param projectUnixName
-     * @param conceptId
-     * @param project
-     * @return JSON containing the token
-     * @throws QuadrigaStorageException
-     */
-  @CheckPublicAccess
+    @CheckPublicAccess
     @InjectProjectByName
     @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String submitSearchTransformedNetworkRequest(
@@ -224,37 +165,31 @@ public class NetworkSearchController {
             @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project, Model model)
             throws QuadrigaStorageException {
 
-        Callable<PublicSearchObject> callable = () -> {
-            String lemma = "";
-            String searchNodeLabel = "";
-            PublicSearchObject publicSearchObject = new PublicSearchObject();
-            // Fetch ConceptPower entries related to the conceptId
-            IConcept concept = cpCache.getConceptByUri(conceptId);
-            System.out.println("Here");
-            if (concept != null) {
-                searchNodeLabel = concept.getWord();
-                lemma = concept.getDescription();
-            }
+        String lemma = "";
+        String searchNodeLabel = "";
+        // Fetch ConceptPower entries related to the conceptId
+        IConcept concept = cpCache.getConceptByUri(conceptId);
 
+        if (concept != null) {
+            searchNodeLabel = concept.getWord();
+            lemma = concept.getDescription();
+        }
+
+        Callable<PublicSearchObject> callable = () -> {
+
+            PublicSearchObject publicSearchObject = new PublicSearchObject();
             ITransformedNetwork transformedNetwork = transformationManager
                     .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
-
             if (transformedNetwork != null) {
                 publicSearchObject.setNodes(jsonCreator.getNodes(transformedNetwork.getNodes()));
                 publicSearchObject.setLinks(jsonCreator.getLinks(transformedNetwork.getLinks()));
             }
-
             if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
                 publicSearchObject.setNetworkEmpty(true);
             }
-            publicSearchObject.setSearchNodeLabel(searchNodeLabel);
-            publicSearchObject.setDescription(lemma);
-
-            publicSearchObject.setUnixName(projectUnixName);
-
             return publicSearchObject;
-
         };
+
         Future<PublicSearchObject> future = executorService.submit(callable);
         Random randomTokenGenerator = new Random();
         Integer randomToken = randomTokenGenerator.nextInt(100);
@@ -263,25 +198,30 @@ public class NetworkSearchController {
         }
         searchResultMap.put(randomToken, future);
         model.addAttribute("token", randomToken);
+        model.addAttribute("unixName", projectUnixName);
+        model.addAttribute("searchNodeLabel", searchNodeLabel);
+        model.addAttribute("description", lemma);
+
         return "sites/networks/searchednetwork";
     }
-  
-    
-    
-    
+
     /**
-     * This method checks if the request (corresponding to the tokenId) is processed. 
-     * It returns a JSON containing the transformed network(if available) and sets the appropriate status: 1: Complete, 2: Invalid, 3: In progress
+     * This method checks if the request (corresponding to the tokenId) is
+     * processed. It returns a JSON containing the transformed network(if
+     * available) and sets the appropriate status: 1: Complete, 2:
+     * Invalid/Error, 3: In progress
+     * 
      * @param projectUnixName
      * @param tokenId
-     * @return
+     * @return JSON response with status and network details if availale
      */
-   
+
     @ResponseBody
     @RequestMapping(value = "sites/{projectUnixName}/networks/search/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public PublicSearchObject getSearchTransformedNetwork(
-            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,  @RequestParam("tokenId") Integer tokenId) {
-        System.out.println("Inside getSearchTransformedNetwork");
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
+            @RequestParam("tokenId") Integer tokenId) {
+
         PublicSearchObject publicSearchObject = new PublicSearchObject();
         if (!searchResultMap.containsKey(tokenId)) {
             publicSearchObject.setStatus(2);
@@ -296,6 +236,7 @@ public class NetworkSearchController {
                 searchResultMap.remove(tokenId);
             } catch (InterruptedException | ExecutionException e) {
                 logger.error("Exception while retrieving the result", e);
+                publicSearchObject.setStatus(2);
             }
         } else {
             publicSearchObject.setStatus(3);
@@ -303,5 +244,5 @@ public class NetworkSearchController {
 
         return publicSearchObject;
     }
-    
+
 }

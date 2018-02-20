@@ -104,7 +104,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
             dataObj.setId(nodeList.get(i).getId());    
             dataObj.setConceptName(nodeList.get(i).getLabel());
             dataObj.setConceptUri(nodeList.get(i).getConceptId());
-            dataObj.setId(nodeList.get(i).getConceptIdShort());
+            dataObj.setConceptId(nodeList.get(i).getConceptIdShort());
             if (nodeList.get(i) instanceof PredicateNode) {
                 dataObj.setGroup("0");
             } else {
