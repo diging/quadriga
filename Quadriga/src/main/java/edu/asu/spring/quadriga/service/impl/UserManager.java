@@ -481,7 +481,6 @@ public class UserManager implements IUserManager {
      * @param userId  user's id in the social provider e.g. username in github.
      * @param provider social provider used for user authentication (e.g. github, facebook etc.)
      * @return user information
-     * @throws QuadrigaStorageException
      * @author chiraag subramanian
      */
    public IUser findUserByProviderUserId(String userId, String provider)  {
