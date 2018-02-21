@@ -82,10 +82,7 @@ function exitHandler()
 {
     if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null)
     {
-    	if(window.innerWidth == screen.width && window.innerHeight == screen.height) {
-    	}
-    	else
-    	{
+    	if(!(window.innerWidth == screen.width && window.innerHeight == screen.height)) {
     		clear();
     	}
     }
@@ -201,6 +198,10 @@ function searchNetwork(){
 				success();
 			}
 			renderGraph(json);
+		}
+		else if (data.status == 2){
+			clearTimeout(timeout);
+			fail();
 		}
 		
 	}).fail(function(xhr, status, error){
