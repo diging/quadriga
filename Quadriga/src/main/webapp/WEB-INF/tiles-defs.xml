@@ -949,7 +949,7 @@
 		<put-attribute name="right-navigation"
 			value="/WEB-INF/views/public/nav/nav-networkrightsearchplane.jsp" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/public/network.jsp" />
+			value="/WEB-INF/views/public/searchednetwork.jsp" />
 	</definition>
 
 	<definition name="base.definition.public.sites"

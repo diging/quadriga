@@ -20,36 +20,41 @@
 
 <!--  onload="d3visualizepublic(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force', '${unixName}');" />-->
 
+
+
+
 <!-- <div id="dspace_metadata"></div>  -->
 
-  <div class = "row">
-  	<div class="alert alert-info" id= "loading"> Searching for network containing the term ${searchNodeLabel}...</div>	
-  	<div class="alert alert-info" id= "network-empty" style="display:none;">Could not find network containing the term ${searchNodeLabel}</div>
-	<div class="alert alert-info" id= "network-error" style="display:none;">Server could not generate a response...Try again later.</div>		
-  	<div id = "network-available" style="display:none;">
-  		<a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
-        	<i class="fa fa-arrows-alt"></i>
-    	</a>
-    
-		<div class="row">
-			<div id="networkBox" class="col-sm-12"
-				style="min-height: 500px; height: 100%; text-align: left;"></div>
-		</div>
+<c:if test="${isNetworkEmpty}">
+	<div class="row">
+		<div class="alert alert-info">Could not find any nodes for the
+			search term in the project</div>
+	</div>
+</c:if>
 
-		<div id="inner-details" class="row"></div>
-		<div id="allannot_details" class="row">
-			<div class="row">
-				<table id="annotationsTable"></table>
-			</div>
+<c:if test="${!isNetworkEmpty}">
+    <div class="row">
+    <a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
+        <i class="fa fa-arrows-alt"></i>
+    </a>
+    </div>	
+	<div class="row">
+		<div id="networkBox" class="col-sm-12"
+			style="min-height: 500px; height: 100%; text-align: left;"></div>
+	</div>
+
+	<div id="inner-details" class="row"></div>
+	<div id="allannot_details" class="row">
+		<div class="row">
+			<table id="annotationsTable"></table>
 		</div>
-  	</div>
- </div>
+	</div>
+</c:if>
 
 
 <div id="log" class="row"></div>
 <script type="text/javascript">
 //# sourceURL=dynamicScript.js 
-
   function goFullscreen(id) {
 	var element = document.getElementById(id);
     if (element.mozRequestFullScreen) {
@@ -62,7 +67,6 @@
       element.webkitRequestFullScreen();
     }
   }
-
 </script>
 
 <script type="text/javascript">
@@ -76,7 +80,6 @@ function clear()
 	element.style.right=null;
 	element.style.left=null;
 }
-
 </script>
 
 <script>
@@ -87,7 +90,6 @@ if (document.addEventListener)
     document.addEventListener('fullscreenchange', exitHandler, false);
     document.addEventListener('MSFullscreenChange', exitHandler, false);
 }
-
 function exitHandler()
 {
     if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null)
@@ -102,121 +104,58 @@ function exitHandler()
 }
 </script>
 
-<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.2/cytoscape-cose-bilkent.js"></script>
+<script
+	src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.2/cytoscape-cose-bilkent.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/publicNetwork.js" ></script>
 <script type="text/javascript">
 //# sourceURL=test.js
-
 var container = document.getElementById('networkBox');
-var cy = {};
-function renderGraph(jsonstring){
-	cy = cytoscape({
-	    container: container, // container to render in
-
-	    elements: jsonstring,
-	    layout: {
-	        name: 'cose',
-	        idealEdgeLength: 5
-	      },
-	    style: [ // the stylesheet for the graph
-	             {
-	               selector: 'node',
-	               style: {
-	                 'background-color': 'mapData(group, 0, 1, #E1CE7A, #FDD692)',
-	                 'border-color' : '#B98F88',
-	                 'border-width' : 1,
-	                 'font-family': 'Open Sans',
-	                 'font-size': '12px',
-	                 'font-weight' : 'bold',
-	                 'color': 'mapData(group, 0, 1, #666, #333)',
-	                 'label': 'data(conceptName)',
-	                 'width':'mapData(group, 0, 1, 40, 55)',
-	                 "height":"mapData(group, 0, 1, 40, 55)",
-	                 'text-valign' : 'center',
-	               }
-	             },
-
-	             {
-	               selector: 'edge',
-	               style: {
-	                 'width': 1,
-	                 'line-color': '#754F44',
-	                 'target-arrow-shape': 'none'
-	               }
-	             }
-	           ]
+var cy = cytoscape({
+    container: container, // container to render in
+    elements: ${jsonstring},
+    layout: {
+        name: 'cose',
+        idealEdgeLength: 5
+      },
+    style: [ // the stylesheet for the graph
+             {
+               selector: 'node',
+               style: {
+                 'background-color': 'mapData(group, 0, 1, #E1CE7A, #FDD692)',
+                 'border-color' : '#B98F88',
+                 'border-width' : 1,
+                 'font-family': 'Open Sans',
+                 'font-size': '12px',
+                 'font-weight' : 'bold',
+                 'color': 'mapData(group, 0, 1, #666, #333)',
+                 'label': 'data(conceptName)',
+                 'width':'mapData(group, 0, 1, 40, 55)',
+                 "height":"mapData(group, 0, 1, 40, 55)",
+                 'text-valign' : 'center',
+               }
+             },
+             {
+               selector: 'edge',
+               style: {
+                 'width': 1,
+                 'line-color': '#754F44',
+                 'target-arrow-shape': 'none'
+               }
+             }
+           ]
+});
+defineListeners(cy, '${pageContext.servletContext.contextPath}', '${unixName}');
+$( document ).ready(function() {
+	$('#exportJson').on('click', function() {
+		var json = cy.json();
+		window.open('data:application/json,' +
+        encodeURIComponent(JSON.stringify(json), '_blank'));
 	});
-	defineListeners(cy, '${pageContext.servletContext.contextPath}', '${unixName}');
-
-	$( document ).ready(function() {
-		$('#exportJson').on('click', function() {
-			var json = cy.json();
-			window.open('data:application/json,' +
-	        encodeURIComponent(JSON.stringify(json), '_blank'));
-		});
-	});
-
-	$( document ).ready(function() {
-	    $('#exportPng').on('click', function() {
-	        var png = cy.png({'scale' : 5});
-	        window.open(png, '_blank');
-	    });
-	});
-}
-
-function constructGraphData(graphData){
-	var graphObj = [];
-	graphData.nodes.forEach(function (node){
-		graphObj.push(node);
-	});
-	graphData.links.forEach(function (link){
-		graphObj.push(link);
-	});
-	return graphObj;
-}
-
-
-function success(){
-	$('#loading').css('display','none');
-	$('#network-available').css('display','block');
-}
-
-function empty(){
-	$('#loading').css('display','none');
-	$('#network-empty').css('display','block');
-}
-
-function fail(){
-	$('#loading').css('display','none');
-	$('#network-error').css('display','block');
-}
-var searchComplete = false;
-function searchNetwork(){
-	$xhr = $.ajax({
-		dataType: 'json',
-		url: 'search/result',
-		data: {
-			tokenId: ${token}
-		}
-	}).done(function (data, status){
-		if(data.status == 1){
-			clearTimeout(timeout);
-			json = constructGraphData(data)
-			if(json.length == 0){
-				empty();
-			}
-			else{
-				success();
-			}
-			renderGraph(json);
-		}
-		
-	}).fail(function(xhr, status, error){
-		clearTimeout(timeout);
-		fail();
-	});
-	var timeout = setTimeout(searchNetwork, 10000);
-}
-
-window.onload = searchNetwork;
+});
+$( document ).ready(function() {
+    $('#exportPng').on('click', function() {
+        var png = cy.png({'scale' : 5});
+        window.open(png, '_blank');
+    });
+});
 </script>
