@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,8 +58,9 @@ public class TextConceptSearchController {
         List<IConcept> concepts = new ArrayList<IConcept>();
         List<ITextFile> texts = new ArrayList<ITextFile>();
         List<String> handles = new ArrayList<String>();
-
+        System.out.println("ConceptURIs:");
         for (String conceptUri : conceptIds) {
+            System.out.println(conceptUri);
             if (!conceptUri.isEmpty()) {
                 IConcept concept = cpCache.getConceptByUri(conceptUri);
                 if (concept != null) {
@@ -73,16 +75,26 @@ public class TextConceptSearchController {
         
     
         String results = qStoreConnector.findStatementsWithConcepts(conceptUriSearchList);
+        System.out.println("Results:");
+        System.out.println(results);
+        
         Set<String> references = new HashSet<String>();
         List<String> eventIds = new ArrayList<String>();
+        List<CreationEvent> eventList = null;
         if (results != null && !results.isEmpty()) {
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
-            List<CreationEvent> eventList = events.getRelationEventOrAppellationEvent();
+            eventList = events.getRelationEventOrAppellationEvent();
+            System.out.println("EventList Size: "+eventList.size());
             for (CreationEvent event : eventList) {
                 references.add(event.getSourceReference());
                 eventIds.add(event.getId());
                
             }
+        }
+        
+        System.out.println("Event Ids:");
+        for(String eventId: eventIds){
+            System.out.println(eventId);
         }
         
         for (String sourceRef : references) {
@@ -99,9 +111,22 @@ public class TextConceptSearchController {
         }
 
         ITransformedNetwork transformedNetwork = null;
+        
         if (conceptUriSearchList.size() >= 1 && eventIds.size() >= 1) {
             List<INetworkNodeInfo> networkNodeList = networkManager.getNetworkNodes(eventIds);
-            transformedNetwork = transformationManager.getTransformedNetworkUsingNetworkNodesAndConcepts(networkNodeList, conceptUriSearchList);
+            List<String> finalEventIdList = new ArrayList<String>();
+            networkNodeList.forEach(networkNode -> finalEventIdList.add(networkNode.getId()));
+            System.out.println("Network Node Info Ids:");
+            for(INetworkNodeInfo networkNode : networkNodeList){
+                System.out.println(networkNode.getId());
+            }
+            List<CreationEvent> finalEventlist = eventList.stream().filter(e -> finalEventIdList.contains(e.getId())).collect(Collectors.toList());
+            System.out.println("Creation Event Ids:");
+            for(CreationEvent event : finalEventlist){
+                System.out.println(event.getId());
+            }
+            //transformedNetwork = transformationManager.getTransformedNetworkUsingNetworkNodesAndConcepts(networkNodeList, conceptUriSearchList);
+            transformedNetwork = transformationManager.getTransformedNetworkUsingCreationEventsAndConcepts(finalEventlist, conceptUriSearchList);
         }
 
         String json = null;

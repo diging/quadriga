@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBException;
 
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
@@ -47,6 +48,6 @@ public interface INetworkTransformationManager {
     ITransformedNetwork getAllTransformedNetworks(String xml)
             throws QStoreStorageException, JAXBException, QuadrigaStorageException;
 
-    ITransformedNetwork getTransformedNetworkUsingNetworkNodesAndConcepts(List<INetworkNodeInfo> networkNodeInfoList,
+    ITransformedNetwork getTransformedNetworkUsingCreationEventsAndConcepts(List<CreationEvent> eventList,
             List<String> conceptIds);
 }

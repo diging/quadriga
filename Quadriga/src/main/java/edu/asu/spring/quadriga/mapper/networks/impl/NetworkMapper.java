@@ -148,29 +148,17 @@ public class NetworkMapper implements INetworkMapper {
 
     @Override
     public List<INetworkNodeInfo> getNetworkNodes(String networkId, int versionId) throws QuadrigaStorageException {
-
-        List<INetworkNodeInfo> networkNodeList = null;
-        List<NetworkStatementsDTO> networkStatementsDTOList = dbconnect.getNetworkNodes(networkId, versionId);
-        if (networkStatementsDTOList != null) {
-            networkNodeList = new ArrayList<INetworkNodeInfo>();
-            INetworkNodeInfo networkNodeInfo = null;
-            for (NetworkStatementsDTO networkStatementsDTO : networkStatementsDTOList) {
-                networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
-                networkNodeInfo.setId(networkStatementsDTO.getStatementid());
-                networkNodeInfo.setStatementType(networkStatementsDTO.getStatementtype());
-                networkNodeInfo.setVersion(networkStatementsDTO.getVersion());
-                networkNodeInfo.setIsTop(networkStatementsDTO.getIstop());
-                networkNodeList.add(networkNodeInfo);
-            }
-        }
-
-        return networkNodeList;
+        return getNetworkNodeInfoList(dbconnect.getNetworkNodes(networkId, versionId));
     }
 
     @Override
     public List<INetworkNodeInfo> getNetworkNodes(List<String> statementIds) throws QuadrigaStorageException{
+        return getNetworkNodeInfoList(dbconnect.getNetworkNodes(statementIds));
+    }
+    
+    
+    private List<INetworkNodeInfo> getNetworkNodeInfoList(List<NetworkStatementsDTO> networkStatementsDTOList){
         List<INetworkNodeInfo> networkNodeList = null;
-        List<NetworkStatementsDTO> networkStatementsDTOList = dbconnect.getNetworkNodes(statementIds);
         if (networkStatementsDTOList != null) {
             networkNodeList = new ArrayList<INetworkNodeInfo>();
             INetworkNodeInfo networkNodeInfo = null;
@@ -183,9 +171,9 @@ public class NetworkMapper implements INetworkMapper {
                 networkNodeList.add(networkNodeInfo);
             }
         }
-
         return networkNodeList;
     }
+    
     
     @Override
     public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException {

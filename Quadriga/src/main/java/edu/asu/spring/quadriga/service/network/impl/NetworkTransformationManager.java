@@ -287,22 +287,10 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         return new TransformedNetwork(updatedNodes, links);
     }
 
-    /**
-     * Generate the transformed network using specific network nodes and the id of concepts.
-     * 
-     * @param networkNodeInfoList
-     * @param conceptIds
-     * @return ITransformedNetwork
-     */
+    
     @Override
-    public ITransformedNetwork getTransformedNetworkUsingNetworkNodesAndConcepts(
-            List<INetworkNodeInfo> networkNodeInfoList, List<String> conceptIds) {
-
-        if (networkNodeInfoList.size() == 0) {
-            return null;
-        }
-
-        ITransformedNetwork transformedNetwork = getTransformedNetworkUsingNetworkNodes(networkNodeInfoList);
+    public ITransformedNetwork getTransformedNetworkUsingCreationEventsAndConcepts(List<CreationEvent> eventList, List<String> conceptIds){
+        ITransformedNetwork transformedNetwork = transformer.transformNetworkUsingCreationList(eventList.stream());
         List<String> alternativeIdsForConceptsList = new ArrayList<String>();
         conceptIds.forEach(conceptId -> alternativeIdsForConceptsList.addAll(getAlternativeIdsForConcept(conceptId)));
         return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);
@@ -340,7 +328,6 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         // Include only those links which have statement ids in the search set.
-        List<Link> finalLinks = new ArrayList<Link>();
         Set<Link> finalLinksSet = new HashSet<Link>();
         // Final nodes.
         Map<String, Node> finalNodes = new HashMap<String, Node>();
@@ -375,7 +362,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 finalNodes.put(node.getId(), node);
             }
         }
-        finalLinks.addAll(finalLinksSet);
+        List<Link> finalLinks = new ArrayList<Link>(finalLinksSet);
         return new TransformedNetwork(finalNodes, finalLinks);
     }
 }

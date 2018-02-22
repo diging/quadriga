@@ -58,17 +58,20 @@ public class NetworkTransformer implements INetworkTransformer {
                 .getElementEventTypes(networkNodeInfoList);
         
         Map<String, List<CreationEvent>> eventsById = new HashMap<>();
+        System.out.println("Event Ids Transform Network:");
         for (ElementEventsType type : elementEventsTypeList) {
             List<CreationEvent> events = type.getRelationEventOrAppellationEvent();
             for (CreationEvent event : events) {
+                System.out.println(event.getId());
                 if (eventsById.get(event.getId()) == null) {
                     eventsById.put(event.getId(), new ArrayList<>());
                 }
                 eventsById.get(event.getId()).add(event);
             }
         }
-
+        System.out.println("Network Node Info Id Transform Network:");
         for (INetworkNodeInfo networkNodeInfo : networkNodeInfoList) {
+            System.out.println(networkNodeInfo.getId());
             List<CreationEvent> events = eventsById.get(networkNodeInfo.getId());
             // Do not proceed if there are no events
             // null implies there is some exception while retrieving the dataj
@@ -94,7 +97,8 @@ public class NetworkTransformer implements INetworkTransformer {
 
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
         parser.parseEvents(creationEventStream, nodes, links);
-
+        System.out.println("Node size: "+transformedNetwork.getNodes().size());
+        System.out.println("Links size: "+transformedNetwork.getLinks().size());
         return transformedNetwork;
     }
 }
