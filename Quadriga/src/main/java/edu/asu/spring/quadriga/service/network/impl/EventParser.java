@@ -85,7 +85,6 @@ public class EventParser {
         if (event == null) {
             return null;
         }
-
         if (event instanceof AppellationEventType) {
             TermType term = ((AppellationEventType) event).getTermType();
             if (term != null) {

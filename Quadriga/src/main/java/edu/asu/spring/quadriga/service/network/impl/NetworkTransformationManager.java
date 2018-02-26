@@ -287,7 +287,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         return new TransformedNetwork(updatedNodes, links);
     }
 
-    
+    /**
+     * Generate the transformed network using creation events and the id of concepts.
+     * 
+     * @param eventList
+     * @param conceptIds
+     * @return ITransformedNetwork
+     */
+   
     @Override
     public ITransformedNetwork getTransformedNetworkUsingCreationEventsAndConcepts(List<CreationEvent> eventList, List<String> conceptIds){
         ITransformedNetwork transformedNetwork = transformer.transformNetworkUsingCreationList(eventList.stream());

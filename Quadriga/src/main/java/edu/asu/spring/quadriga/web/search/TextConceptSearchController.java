@@ -58,15 +58,12 @@ public class TextConceptSearchController {
         List<IConcept> concepts = new ArrayList<IConcept>();
         List<ITextFile> texts = new ArrayList<ITextFile>();
         List<String> handles = new ArrayList<String>();
-        System.out.println("ConceptURIs:");
         for (String conceptUri : conceptIds) {
-            System.out.println(conceptUri);
             if (!conceptUri.isEmpty()) {
                 IConcept concept = cpCache.getConceptByUri(conceptUri);
                 if (concept != null) {
                     concept.setId(conceptUri);
                 }
-
                 concepts.add(concept);
                 conceptUriSearchList.add(conceptUri);
 
@@ -75,26 +72,17 @@ public class TextConceptSearchController {
         
     
         String results = qStoreConnector.findStatementsWithConcepts(conceptUriSearchList);
-        System.out.println("Results:");
-        System.out.println(results);
-        
         Set<String> references = new HashSet<String>();
         List<String> eventIds = new ArrayList<String>();
         List<CreationEvent> eventList = null;
         if (results != null && !results.isEmpty()) {
             ElementEventsType events = marshallingService.unMarshalXmlToElementEventsType(results);
             eventList = events.getRelationEventOrAppellationEvent();
-            System.out.println("EventList Size: "+eventList.size());
             for (CreationEvent event : eventList) {
                 references.add(event.getSourceReference());
                 eventIds.add(event.getId());
                
             }
-        }
-        
-        System.out.println("Event Ids:");
-        for(String eventId: eventIds){
-            System.out.println(eventId);
         }
         
         for (String sourceRef : references) {
@@ -116,16 +104,8 @@ public class TextConceptSearchController {
             List<INetworkNodeInfo> networkNodeList = networkManager.getNetworkNodes(eventIds);
             List<String> finalEventIdList = new ArrayList<String>();
             networkNodeList.forEach(networkNode -> finalEventIdList.add(networkNode.getId()));
-            System.out.println("Network Node Info Ids:");
-            for(INetworkNodeInfo networkNode : networkNodeList){
-                System.out.println(networkNode.getId());
-            }
             List<CreationEvent> finalEventlist = eventList.stream().filter(e -> finalEventIdList.contains(e.getId())).collect(Collectors.toList());
-            System.out.println("Creation Event Ids:");
-            for(CreationEvent event : finalEventlist){
-                System.out.println(event.getId());
-            }
-            //transformedNetwork = transformationManager.getTransformedNetworkUsingNetworkNodesAndConcepts(networkNodeList, conceptUriSearchList);
+    
             transformedNetwork = transformationManager.getTransformedNetworkUsingCreationEventsAndConcepts(finalEventlist, conceptUriSearchList);
         }
 
