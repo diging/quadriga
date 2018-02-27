@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -38,13 +35,11 @@ import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
 import edu.asu.spring.quadriga.conceptpower.POS;
 import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
-import edu.asu.spring.quadriga.domain.network.json.PublicSearchObject;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
-import edu.asu.spring.quadriga.web.network.INetworkStatus;
+import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.PublicSearchObject;
 
 /**
  * This controller searches for concept terms and returns json as response and
@@ -174,29 +169,7 @@ public class NetworkSearchController {
             searchNodeLabel = concept.getWord();
             lemma = concept.getDescription();
         }
-
-        Callable<PublicSearchObject> callable = () -> {
-
-            PublicSearchObject publicSearchObject = new PublicSearchObject();
-            ITransformedNetwork transformedNetwork = transformationManager
-                    .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
-            if (transformedNetwork != null) {
-                publicSearchObject.setNodes(jsonCreator.getNodes(transformedNetwork.getNodes()));
-                publicSearchObject.setLinks(jsonCreator.getLinks(transformedNetwork.getLinks()));
-            }
-            if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-                publicSearchObject.setNetworkEmpty(true);
-            }
-            return publicSearchObject;
-        };
-
-        Future<PublicSearchObject> future = executorService.submit(callable);
-        Random randomTokenGenerator = new Random();
-        Integer randomToken = randomTokenGenerator.nextInt(100);
-        while (searchResultMap.containsKey(randomToken)) {
-            randomToken = randomTokenGenerator.nextInt(100);
-        }
-        searchResultMap.put(randomToken, future);
+        Integer randomToken = jsonCreator.submitTransformationRequest(conceptId, project);
         model.addAttribute("token", randomToken);
         model.addAttribute("unixName", projectUnixName);
         model.addAttribute("searchNodeLabel", searchNodeLabel);
@@ -222,28 +195,8 @@ public class NetworkSearchController {
     public PublicSearchObject getSearchTransformedNetwork(
             @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
             @RequestParam("tokenId") Integer tokenId) {
-
-        PublicSearchObject publicSearchObject = new PublicSearchObject();
-        if (!searchResultMap.containsKey(tokenId)) {
-            publicSearchObject.setStatus(2);
-            return publicSearchObject;
-        }
-
-        Future<PublicSearchObject> futureResult = searchResultMap.get(tokenId);
-        if (futureResult != null && futureResult.isDone()) {
-            try {
-                publicSearchObject = futureResult.get();
-                publicSearchObject.setStatus(1);
-                searchResultMap.remove(tokenId);
-            } catch (InterruptedException | ExecutionException e) {
-                logger.error("Exception while retrieving the result", e);
-                publicSearchObject.setStatus(2);
-            }
-        } else {
-            publicSearchObject.setStatus(3);
-        }
-
-        return publicSearchObject;
+        
+        return jsonCreator.getSearchTransformedNetwork(tokenId);
     }
 
 }

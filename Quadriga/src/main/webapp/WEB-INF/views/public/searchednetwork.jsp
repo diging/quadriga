@@ -10,12 +10,9 @@
 
 
 <div class="row">
-	<div class="alert alert-info" id="load">Searching for network
-		containing the term ${searchNodeLabel}...</div>
-	<div class="alert alert-info" id="network-empty" style="display: none;">Could
-		not find network containing the term ${searchNodeLabel}</div>
-	<div class="alert alert-info" id="network-error" style="display: none;">Server
-		could not generate a response...Try again later.</div>
+	<div class="alert alert-info" id="load">Searching for ${searchNodeLabel}. This might take a little while, please wait...</div>
+	<div class="alert alert-info" id="network-empty" style="display: none;">Could not find any statements containing ${searchNodeLabel}.</div>
+	<div class="alert alert-info" id="network-error" style="display: none;">Sorry, there was a server error. Please try again later.</div>
 	<div id="network-available" style="display: none;">
 		<a onclick="goFullscreen('networkBox')" style="float: left"
 			title="Switch to fullscreen"> <i class="fa fa-arrows-alt"></i>

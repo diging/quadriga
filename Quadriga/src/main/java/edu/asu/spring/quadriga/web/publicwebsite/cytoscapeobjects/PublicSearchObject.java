@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.network.json;
+package edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects;
 
 import java.util.List;
 
