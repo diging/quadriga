@@ -15,7 +15,7 @@ public interface IJsonCreator {
     public abstract String getJson(Map<String, Node> nodes, List<Link> links);
     public abstract List<CytoscapeNodeObject> getNodes(List<Node> nodeList);
     public abstract List<CytoscapeLinkObject> getLinks(List<Link> links);
-    public abstract Integer submitTransformationRequest(String conceptId, IProject project);
-    public abstract PublicSearchObject getSearchTransformedNetwork(Integer tokenId);
+    public abstract int submitTransformationRequest(String conceptId, IProject project);
+    public abstract PublicSearchObject getSearchTransformedNetwork(String conceptId);
 
 }

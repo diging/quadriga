@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -29,6 +31,9 @@ import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeLinkO
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeNodeDataObject;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeNodeObject;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.PublicSearchObject;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 @Service
 public class CytoscapeJsonCreator implements IJsonCreator {
@@ -38,7 +43,18 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     
     @Autowired
     private INetworkTransformationManager transformationManager;
-     
+    
+    @Autowired
+    @Qualifier("ehcache")
+    private CacheManager cacheManager;
+    
+    private Cache cache;
+    
+    @PostConstruct
+    public void init() {
+        cache = cacheManager.getCache("cytoscapeTransformedNetworks");
+    }
+    
     @Override
     public String getJson(Map<String, Node> nodes, List<Link> links) {
         StringBuffer sb = new StringBuffer();
@@ -164,7 +180,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     }
     
     @Override
-    public Integer submitTransformationRequest(String conceptId, IProject project){
+    public int submitTransformationRequest(String conceptId, IProject project){
         
         Callable<PublicSearchObject> callable = () -> {
 
@@ -182,31 +198,29 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         };
         
         Future<PublicSearchObject> future = executorService.submit(callable);
-        Random randomTokenGenerator = new Random();
-        Integer randomToken = randomTokenGenerator.nextInt(100);
-        while (searchResultMap.containsKey(randomToken)) {
-            randomToken = randomTokenGenerator.nextInt(100);
+        if(cache.get(conceptId) == null){
+            cache.put(new Element(conceptId, future));
+            return 0;
         }
-        searchResultMap.put(randomToken, future);
-        
-        return randomToken;
+        else{
+            return 1;
+        }
     }
     
     @Override
-    public PublicSearchObject getSearchTransformedNetwork(Integer tokenId){
+    public PublicSearchObject getSearchTransformedNetwork(String conceptId){
         
         PublicSearchObject publicSearchObject = new PublicSearchObject();
-        if (!searchResultMap.containsKey(tokenId)) {
+        if(cache.get(conceptId) == null){
             publicSearchObject.setStatus(2);
             return publicSearchObject;
         }
-
-        Future<PublicSearchObject> futureResult = searchResultMap.get(tokenId);
+        Future<PublicSearchObject> futureResult = (Future<PublicSearchObject>) cache.get(conceptId).getObjectValue();
+        
         if (futureResult != null && futureResult.isDone()) {
             try {
                 publicSearchObject = futureResult.get();
                 publicSearchObject.setStatus(1);
-                searchResultMap.remove(tokenId);
             } catch (InterruptedException | ExecutionException e) {
                 logger.error("Exception while retrieving the result", e);
                 publicSearchObject.setStatus(2);
