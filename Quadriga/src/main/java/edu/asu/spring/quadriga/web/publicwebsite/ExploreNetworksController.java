@@ -3,11 +3,13 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
 import edu.asu.spring.quadriga.aspects.annotations.CheckPublicAccess;
@@ -20,6 +22,7 @@ import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
+import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.PublicSearchObject;
 
 @Controller
 public class ExploreNetworksController {
@@ -48,20 +51,21 @@ public class ExploreNetworksController {
     public String visualizeAllNetworks(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, Model model,
             @CheckAccess @InjectProject IProject project) throws JAXBException, QuadrigaStorageException {
 
-        ITransformedNetwork transformedNetwork = transformationManager
-                .getTransformedNetworkOfProject(project.getProjectId(), INetworkStatus.APPROVED);
-
-        String json = null;
-        if (transformedNetwork != null) {
-            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-        }
-
-        model.addAttribute("jsonstring", json);
+        String projectId = jsonCreator.submitTransformationRequest(project);
         model.addAttribute("networkid", "\"\"");
         model.addAttribute("project", project);
+        model.addAttribute("projectId", projectId);
         model.addAttribute("unixName", projectUnixName);
         
         return "sites/networks/explore";
 
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "sites/{projectUnixName}/network/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public PublicSearchObject getSearchTransformedNetwork(
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String projectId
+            ) {
+        return jsonCreator.getSearchTransformedNetworkOfProject(projectId);
     }
 }

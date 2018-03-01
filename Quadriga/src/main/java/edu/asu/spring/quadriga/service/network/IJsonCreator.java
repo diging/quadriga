@@ -17,5 +17,7 @@ public interface IJsonCreator {
     public abstract List<CytoscapeLinkObject> getLinks(List<Link> links);
     public abstract String submitTransformationRequest(String conceptId, IProject project);
     public abstract PublicSearchObject getSearchTransformedNetwork(String conceptIdToken);
+    public abstract String submitTransformationRequest(IProject project);
+    public abstract PublicSearchObject getSearchTransformedNetworkOfProject(String projectId);
 
 }

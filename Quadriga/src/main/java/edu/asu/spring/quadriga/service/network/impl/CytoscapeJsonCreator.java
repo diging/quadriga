@@ -202,6 +202,31 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     }
     
     @Override
+    public String submitTransformationRequest(IProject project){
+        if(cache.get(project.getProjectId()) == null){
+            Callable<PublicSearchObject> callable = () -> {
+
+                PublicSearchObject publicSearchObject = new PublicSearchObject();
+                ITransformedNetwork transformedNetwork = transformationManager
+                  .getTransformedNetworkOfProject(project.getProjectId(), INetworkStatus.APPROVED);
+                if (transformedNetwork != null) {
+                    publicSearchObject.setNodes(getNodes(new ArrayList<Node>(transformedNetwork.getNodes().values())));
+                    publicSearchObject.setLinks(getLinks(transformedNetwork.getLinks()));
+                }
+                if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+                    publicSearchObject.setNetworkEmpty(true);
+                }
+                return publicSearchObject;
+            };
+           Future<PublicSearchObject> future = executorService.submit(callable);
+           cache.put(new Element(project.getProjectId(), future));
+            
+        }
+        System.out.println("Project Id1: "+project.getProjectId());
+        return project.getProjectId();
+    }
+    
+    @Override
     public PublicSearchObject getSearchTransformedNetwork(String conceptIdToken){
         
         PublicSearchObject publicSearchObject = new PublicSearchObject();
@@ -224,5 +249,31 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         }
         
         return publicSearchObject;
+    }
+    
+    @Override
+    public PublicSearchObject getSearchTransformedNetworkOfProject(String projectId){
+        System.out.println("Project Id2: "+projectId);
+        PublicSearchObject publicSearchObject = new PublicSearchObject();
+        if(cache.get(projectId) == null){
+            publicSearchObject.setStatus(2);
+            return publicSearchObject;
+        }
+        Future<PublicSearchObject> futureResult = (Future<PublicSearchObject>) cache.get(projectId).getObjectValue();
+        
+        if (futureResult != null && futureResult.isDone()) {
+            try {
+                publicSearchObject = futureResult.get();
+                publicSearchObject.setStatus(1);
+            } catch (InterruptedException | ExecutionException e) {
+                logger.error("Exception while retrieving the result", e);
+                publicSearchObject.setStatus(2);
+            }
+        } else {
+            publicSearchObject.setStatus(3);
+        }
+        
+        return publicSearchObject;
+        
     }
 }

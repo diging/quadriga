@@ -24,33 +24,27 @@
 
 
 <!-- <div id="dspace_metadata"></div>  -->
+<div class="row">
+	<div class="alert alert-info" id="load">Loading the network. This might take a little while, please wait...</div>
+	<div class="alert alert-info" id="network-empty" style="display: none;">Could not find any nodes for the search term in the project</div>
+	<div class="alert alert-info" id="network-error" style="display: none;">Sorry, there was a server error. Please try again later.</div>
+	<div id="network-available" style="display: none;">
+		<a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
+       	 	<i class="fa fa-arrows-alt"></i>
+    	</a>
 
-<c:if test="${isNetworkEmpty}">
-	<div class="row">
-		<div class="alert alert-info">Could not find any nodes for the
-			search term in the project</div>
-	</div>
-</c:if>
-
-<c:if test="${!isNetworkEmpty}">
-    <div class="row">
-    <a onclick="goFullscreen('networkBox')" style="float: left" title="Switch to fullscreen">
-        <i class="fa fa-arrows-alt"></i>
-    </a>
-    </div>	
-	<div class="row">
-		<div id="networkBox" class="col-sm-12"
-			style="min-height: 500px; height: 100%; text-align: left;"></div>
-	</div>
-
-	<div id="inner-details" class="row"></div>
-	<div id="allannot_details" class="row">
 		<div class="row">
-			<table id="annotationsTable"></table>
+			<div id="networkBox" class="col-sm-12"
+				style="min-height: 500px; height: 100%; text-align: left;"></div>
+    	</div>
+		<div id="inner-details" class="row"></div>
+		<div id="allannot_details" class="row">
+			<div class="row">
+				<table id="annotationsTable"></table>
+			</div>
 		</div>
 	</div>
-</c:if>
-
+</div>
 
 <div id="log" class="row"></div>
 <script type="text/javascript">
@@ -110,9 +104,11 @@ function exitHandler()
 <script type="text/javascript">
 //# sourceURL=test.js
 var container = document.getElementById('networkBox');
-var cy = cytoscape({
+var cy = {};
+function renderGraph(jsonstring){	
+	cytoscape({
     container: container, // container to render in
-    elements: ${jsonstring},
+    elements: jsonstring,
     layout: {
         name: 'cose',
         idealEdgeLength: 5
@@ -143,19 +139,79 @@ var cy = cytoscape({
                }
              }
            ]
-});
-defineListeners(cy, '${pageContext.servletContext.contextPath}', '${unixName}');
-$( document ).ready(function() {
-	$('#exportJson').on('click', function() {
-		var json = cy.json();
-		window.open('data:application/json,' +
-        encodeURIComponent(JSON.stringify(json), '_blank'));
 	});
-});
-$( document ).ready(function() {
-    $('#exportPng').on('click', function() {
-        var png = cy.png({'scale' : 5});
-        window.open(png, '_blank');
-    });
-});
+	defineListeners(cy, '${pageContext.servletContext.contextPath}', '${unixName}');	
+	$( document ).ready(function() {
+		$('#exportJson').on('click', function() {
+			var json = cy.json();
+			window.open('data:application/json,' +
+        	encodeURIComponent(JSON.stringify(json), '_blank'));
+		});
+	});
+	$( document ).ready(function() {
+    	$('#exportPng').on('click', function() {
+        	var png = cy.png({'scale' : 5});
+        	window.open(png, '_blank');
+    	});
+	});
+}
+function constructGraphData(graphData){
+	var graphObj = [];
+	graphData.nodes.forEach(function (node){
+		graphObj.push(node);
+	});
+	graphData.links.forEach(function (link){
+		graphObj.push(link);
+	});
+	return graphObj;
+}
+
+
+function success(){
+	$('#load').css('display','none');
+	$('#network-available').css('display','block');
+}
+
+function empty(){
+	$('#load').css('display','none');
+	$('#network-empty').css('display','block');
+}
+
+function fail(){
+	$('#load').css('display','none');
+	$('#network-error').css('display','block');
+}
+var searchComplete = false;
+function searchNetwork(){
+	$xhr = $.ajax({
+		dataType: 'json',
+		url: '/result',
+		data: {
+			projectId:'${projectId}'
+		}
+	}).done(function (data, status){
+		if(data.status == 1){
+			clearTimeout(timeout);
+			json = constructGraphData(data)
+			if(json.length == 0){
+				empty();
+			}
+			else{
+				success();
+			}
+			renderGraph(json);
+		}
+		else if (data.status == 2){
+			clearTimeout(timeout);
+			fail();
+		}
+		
+	}).fail(function(xhr, status, error){
+		clearTimeout(timeout);
+		fail();
+	});
+	var timeout = setTimeout(searchNetwork, 10000);
+}
+
+window.onload = searchNetwork;
 </script>
