@@ -182,7 +182,7 @@ function searchNetwork(){
 		dataType: 'json',
 		url: 'search/result',
 		data: {
-			tokenId: ${token}
+			conceptIdToken:'${conceptIdToken}'
 		}
 	}).done(function (data, status){
 		if(data.status == 1){

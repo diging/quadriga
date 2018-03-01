@@ -169,12 +169,12 @@ public class NetworkSearchController {
             searchNodeLabel = concept.getWord();
             lemma = concept.getDescription();
         }
-        Integer randomToken = jsonCreator.submitTransformationRequest(conceptId, project);
+        String conceptIdToken = jsonCreator.submitTransformationRequest(conceptId, project);
         model.addAttribute("unixName", projectUnixName);
         model.addAttribute("searchNodeLabel", searchNodeLabel);
         model.addAttribute("description", lemma);
         model.addAttribute("project",project); 
-        model.addAttribute("conceptId", conceptId);
+        model.addAttribute("conceptIdToken", conceptIdToken);
         return "sites/networks/searchednetwork";
     }
 
@@ -192,11 +192,9 @@ public class NetworkSearchController {
     @ResponseBody
     @RequestMapping(value = "sites/{projectUnixName}/networks/search/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public PublicSearchObject getSearchTransformedNetwork(
-            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String conceptId
-           // @RequestParam("tokenId") Integer tokenId
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String conceptIdToken
             ) {
-        
-        return jsonCreator.getSearchTransformedNetwork(conceptId);
+        return jsonCreator.getSearchTransformedNetwork(conceptIdToken);
     }
 
 }

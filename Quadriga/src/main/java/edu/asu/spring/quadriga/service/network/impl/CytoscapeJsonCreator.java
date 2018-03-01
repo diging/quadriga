@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.network.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -38,7 +37,6 @@ import net.sf.ehcache.Element;
 @Service
 public class CytoscapeJsonCreator implements IJsonCreator {
     private ExecutorService executorService = Executors.newFixedThreadPool(10);
-    private Map<Integer, Future<PublicSearchObject>> searchResultMap = new HashMap<Integer, Future<PublicSearchObject>>();
     private static final Logger logger = LoggerFactory.getLogger(CytoscapeJsonCreator.class);
     
     @Autowired
@@ -180,42 +178,38 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     }
     
     @Override
-    public int submitTransformationRequest(String conceptId, IProject project){
-        
-        Callable<PublicSearchObject> callable = () -> {
+    public String submitTransformationRequest(String conceptId, IProject project){
+        String conceptIdToken = conceptId.substring(conceptId.lastIndexOf('/') + 1);
+        if(cache.get(conceptIdToken) == null){
+              Callable<PublicSearchObject> callable = () -> {
 
-            PublicSearchObject publicSearchObject = new PublicSearchObject();
-            ITransformedNetwork transformedNetwork = transformationManager
+                  PublicSearchObject publicSearchObject = new PublicSearchObject();
+                  ITransformedNetwork transformedNetwork = transformationManager
                     .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
-            if (transformedNetwork != null) {
-                publicSearchObject.setNodes(getNodes(new ArrayList<Node>(transformedNetwork.getNodes().values())));
-                publicSearchObject.setLinks(getLinks(transformedNetwork.getLinks()));
-            }
-            if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-                publicSearchObject.setNetworkEmpty(true);
-            }
-            return publicSearchObject;
-        };
-        
-        Future<PublicSearchObject> future = executorService.submit(callable);
-        if(cache.get(conceptId) == null){
-            cache.put(new Element(conceptId, future));
-            return 0;
+                  if (transformedNetwork != null) {
+                      publicSearchObject.setNodes(getNodes(new ArrayList<Node>(transformedNetwork.getNodes().values())));
+                      publicSearchObject.setLinks(getLinks(transformedNetwork.getLinks()));
+                  }
+                  if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+                      publicSearchObject.setNetworkEmpty(true);
+                  }
+                  return publicSearchObject;
+              };
+             Future<PublicSearchObject> future = executorService.submit(callable);
+             cache.put(new Element(conceptIdToken, future));
         }
-        else{
-            return 1;
-        }
+        return conceptIdToken;
     }
     
     @Override
-    public PublicSearchObject getSearchTransformedNetwork(String conceptId){
+    public PublicSearchObject getSearchTransformedNetwork(String conceptIdToken){
         
         PublicSearchObject publicSearchObject = new PublicSearchObject();
-        if(cache.get(conceptId) == null){
+        if(cache.get(conceptIdToken) == null){
             publicSearchObject.setStatus(2);
             return publicSearchObject;
         }
-        Future<PublicSearchObject> futureResult = (Future<PublicSearchObject>) cache.get(conceptId).getObjectValue();
+        Future<PublicSearchObject> futureResult = (Future<PublicSearchObject>) cache.get(conceptIdToken).getObjectValue();
         
         if (futureResult != null && futureResult.isDone()) {
             try {
