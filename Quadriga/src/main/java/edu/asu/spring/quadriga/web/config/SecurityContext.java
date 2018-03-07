@@ -19,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
@@ -50,14 +51,14 @@ public class SecurityContext {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             HeadersConfigurer<HttpSecurity> config = http.antMatcher("**").headers().frameOptions().sameOrigin();
-            config.and().exceptionHandling().accessDeniedPage("/403")
+            config.and().exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                     // Configures url based authorization
                     .and().formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/auth/welcome")
                     .successHandler(authSuccessHandler).failureUrl("/loginfailed").and().authorizeRequests()
                     // Anyone can access the urls
                     .antMatchers("/auth/**", "/signin/**", "/", "/connect/**", "/signup/**", "/user/register/**",
                             "/resources/**", "/register*", "/login*", "/logout*", "/createaccount*", "/sites/**",
-                            "/public/**", "/search/**", "/home/**", "/sociallogin*")
+                            "/public/**", "/search/**", "/home/**", "/sociallogin*", "/forbidden")
                     .permitAll()
                     // The rest of the our application is protected.
                     .antMatchers("/users/**", "/admin/**").hasRole("QUADRIGA_USER_ADMIN")
@@ -115,6 +116,11 @@ public class SecurityContext {
             provider.setPasswordEncoder(passwordEncoder());
             provider.setUserDetailsService(userDetailsService());
             return provider;
+        }
+        
+        @Bean
+        public AccessDeniedHandler accessDeniedHandler(){
+            return new QuadrigaAccessDeniedHandler();
         }
 
     }
