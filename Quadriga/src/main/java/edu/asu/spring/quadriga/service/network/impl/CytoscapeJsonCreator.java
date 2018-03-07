@@ -222,7 +222,6 @@ public class CytoscapeJsonCreator implements IJsonCreator {
            cache.put(new Element(project.getProjectId(), future));
             
         }
-        System.out.println("Project Id1: "+project.getProjectId());
         return project.getProjectId();
     }
     
@@ -253,7 +252,6 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     
     @Override
     public PublicSearchObject getSearchTransformedNetworkOfProject(String projectId){
-        System.out.println("Project Id2: "+projectId);
         PublicSearchObject publicSearchObject = new PublicSearchObject();
         if(cache.get(projectId) == null){
             publicSearchObject.setStatus(2);

@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckAccess;
@@ -54,7 +55,7 @@ public class ExploreNetworksController {
         String projectId = jsonCreator.submitTransformationRequest(project);
         model.addAttribute("networkid", "\"\"");
         model.addAttribute("project", project);
-        model.addAttribute("projectId", projectId);
+        model.addAttribute("pId", projectId);
         model.addAttribute("unixName", projectUnixName);
         
         return "sites/networks/explore";
@@ -64,8 +65,8 @@ public class ExploreNetworksController {
     @ResponseBody
     @RequestMapping(value = "sites/{projectUnixName}/network/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public PublicSearchObject getSearchTransformedNetwork(
-            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String projectId
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String pId
             ) {
-        return jsonCreator.getSearchTransformedNetworkOfProject(projectId);
+        return jsonCreator.getSearchTransformedNetworkOfProject(pId);
     }
 }
