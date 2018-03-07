@@ -56,7 +56,7 @@ public class SecurityContext {
                     .and().formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/auth/welcome")
                     .successHandler(authSuccessHandler).failureUrl("/loginfailed").and().authorizeRequests()
                     // Anyone can access the urls
-                    .antMatchers("/auth/**", "/signin/**", "/", "/connect/**", "/signup/**", "/user/register/**",
+                    .antMatchers("/signin/**", "/connect/**", "/signup/**", "/user/register/**",
                             "/resources/**", "/register*", "/login*", "/logout*", "/createaccount*", "/sites/**",
                             "/public/**", "/search/**", "/home/**", "/sociallogin*", "/forbidden")
                     .permitAll()
