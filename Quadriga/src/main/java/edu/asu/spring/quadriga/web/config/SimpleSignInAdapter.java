@@ -20,7 +20,6 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
 import edu.asu.spring.quadriga.web.config.social.SocialSignInStatus;
@@ -73,15 +72,12 @@ public final class SimpleSignInAdapter implements SignInAdapter {
             accountRequest.setSocialSignIn(true);
             accountRequest.setProvider(user.getProvider());
             accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
-            messageType = SocialSignInStatus.REGISTRATION_SUCCESS;
+            
             try {
-                userManager.addNewUser(accountRequest);
+                messageType = userManager.addNewUser(accountRequest) ? SocialSignInStatus.REGISTRATION_SUCCESS : SocialSignInStatus.ACCOUNT_APPROVAL_PENDING;
             } catch (QuadrigaStorageException e) {
                 logger.error("Could not add user.", e);
                 messageType = SocialSignInStatus.REGISTRATION_FAILED;
-            } catch (UsernameExistsException e) {
-                logger.error("Username already in use or user account needs to be approved by the admin.", e);
-                messageType = SocialSignInStatus.ACCOUNT_APPROVAL_PENDING;
             } catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
             }
@@ -116,7 +112,7 @@ public final class SimpleSignInAdapter implements SignInAdapter {
             return savedRequest.getRedirectUrl();
         }
 
-        return "/login";
+        return "/auth/home";
     }
 
 }

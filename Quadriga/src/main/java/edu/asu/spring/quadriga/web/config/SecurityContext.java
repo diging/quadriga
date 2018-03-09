@@ -25,6 +25,14 @@ import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
 import edu.asu.spring.quadriga.web.config.social.SimpleSocialUserDetailsService;
 
+/**
+ * 
+ * Security configurations to manage authentication and authorization.
+ * 
+ * @author Chiraag Subramanian
+ *
+ */
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityContext {
@@ -42,10 +50,8 @@ public class SecurityContext {
 
         @Override
         public void configure(WebSecurity web) throws Exception {
-            web
-                    // Spring Security ignores request to static resources such
-                    // as CSS or JS files.
-                    .ignoring().antMatchers("/static/**");
+         // Spring Security ignores request to static resources such  as CSS or JS files.
+            web.ignoring().antMatchers("/static/**");
         }
 
         @Override
@@ -63,7 +69,7 @@ public class SecurityContext {
                     // The rest of the our application is protected.
                     .antMatchers("/users/**", "/admin/**").hasRole("QUADRIGA_USER_ADMIN")
                     .antMatchers("/", "/auth/welcome**", "/auth/home**", "/auth/about**", "/auth/profile/**",
-                            "/rest/**")
+                            "/rest/**", "/forbidden")
                     .hasAnyRole("QUADRIGA_USER_ADMIN", "QUADRIGA_USER_STANDARD", "QUADRIGA_USER_COLLABORATOR")
                     .antMatchers("/auth/workbench/**", "/auth/rest/**", "/auth/conceptcollections/**",
                             "/auth/conceptdetails/**", "/auth/transformation/**", "/auth/searchitems/**",

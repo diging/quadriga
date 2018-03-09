@@ -35,7 +35,6 @@ public class AccessForbiddenController {
 	public String getInactiveUserPage(ModelMap model, Principal principal) {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 
 		for (GrantedAuthority ga : authorities) {

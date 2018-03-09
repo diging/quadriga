@@ -6,7 +6,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
-import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
 /**
@@ -125,7 +124,7 @@ public interface IUserManager {
 
 
     public abstract boolean addNewUser(AccountRequest request)
-            throws QuadrigaStorageException, UsernameExistsException, QuadrigaNotificationException;
+            throws QuadrigaStorageException, QuadrigaNotificationException;
 
     /**
      * This method generates a unique user name. It is used by the system when the user name chosen by a new user already exists in the database.

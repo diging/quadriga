@@ -20,7 +20,6 @@ import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
-import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
@@ -297,22 +296,24 @@ public class UserManager implements IUserManager {
      * @return true if request was successfully added; otherwise false
      * @author jdamerow
      * @throws QuadrigaStorageException
-     * @throws UsernameExistsException
      * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException {
+    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException{
         QuadrigaUserDTO userDTO = usermanagerDAO.getUserDTO(request.getUsername());
 
         // Check if username is already in use
-        if (userDTO != null)
-            throw new UsernameExistsException("Username already in use.");
-
+        if (userDTO != null){
+            logger.warn("Username already in use or user account needs to be approved by the admin.");
+            return false;
+        }
         QuadrigaUserRequestsDTO userRequest = usermanagerDAO.getUserRequestDTO(request.getUsername());
-        if (userRequest != null)
-            throw new UsernameExistsException("Username already in use.");
-
+        
+        if (userRequest != null){
+            logger.warn("Username already in use or user account needs to be approved by the admin.");
+            return false;
+        }
         String password = (request.getPassword() != null) ? encryptPassword(request.getPassword()) : null ;
         
         boolean success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), password, request.getName(), request.getEmail(), request.getProvider() , request.getUserIdOfProvider());
