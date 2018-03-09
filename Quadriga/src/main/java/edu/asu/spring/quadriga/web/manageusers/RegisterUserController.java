@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 import edu.asu.spring.quadriga.web.manageusers.beans.NewUserAccountValidator;
@@ -50,9 +49,8 @@ public class RegisterUserController {
         try {
             request.setUsername(username.toLowerCase());
             success = usermanager.addNewUser(request);
-        } catch (UsernameExistsException e) {
-            model.addAttribute("errormsg_username_in_use", "Username already in use.");
-            request.setUsername(username);
+        } catch (QuadrigaStorageException  e) {
+            model.addAttribute("errormsg_failure", "Sorry, user could not be added.");
             request.setPassword("");
             request.setRepeatedPassword("");
             model.addAttribute("request", request);
@@ -60,7 +58,8 @@ public class RegisterUserController {
         }
 
         if (!success) {
-            model.addAttribute("errormsg_failure", "Sorry, user could not be added.");
+            model.addAttribute("errormsg_username_in_use", "Username already in use.");
+            request.setUsername(username);
             request.setPassword("");
             request.setRepeatedPassword("");
             model.addAttribute("request", request);

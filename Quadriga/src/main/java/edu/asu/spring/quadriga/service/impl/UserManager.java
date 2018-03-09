@@ -293,7 +293,7 @@ public class UserManager implements IUserManager {
      * 
      * @param request
      *            The {@link AccountRequest} encapsulating the user's data.
-     * @return true if request was successfully added; otherwise false
+     * @return true if request was successfully added; false if username exists or the account needs to be approved by the admin.
      * @author jdamerow
      * @throws QuadrigaStorageException
      * @throws QuadrigaNotificationException 
