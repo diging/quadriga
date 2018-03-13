@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
+import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
@@ -105,8 +106,7 @@ public class TextConceptSearchController {
             List<String> finalEventIdList = new ArrayList<String>();
             networkNodeList.forEach(networkNode -> finalEventIdList.add(networkNode.getId()));
             List<CreationEvent> finalEventlist = eventList.stream().filter(e -> finalEventIdList.contains(e.getId())).collect(Collectors.toList());
-    
-            transformedNetwork = transformationManager.getTransformedNetworkUsingCreationEventsAndConcepts(finalEventlist, conceptUriSearchList);
+            transformedNetwork = transformationManager.getTransformedNetwork(finalEventlist, conceptUriSearchList);
         }
 
         String json = null;
