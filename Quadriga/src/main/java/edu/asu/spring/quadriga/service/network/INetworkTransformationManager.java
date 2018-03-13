@@ -48,6 +48,6 @@ public interface INetworkTransformationManager {
     ITransformedNetwork getAllTransformedNetworks(String xml)
             throws QStoreStorageException, JAXBException, QuadrigaStorageException;
 
-    ITransformedNetwork getTransformedNetworkUsingCreationEventsAndConcepts(List<CreationEvent> eventList,
+    ITransformedNetwork getTransformedNetwork(List<CreationEvent> eventList,
             List<String> conceptIds);
 }

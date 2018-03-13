@@ -102,7 +102,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         Stream<CreationEvent> creationEventStream = networkManager.getTopElementEvents(xml.trim(), topNodeIDStream)
                 .stream();
 
-        return transformer.transformNetworkUsingCreationList(creationEventStream);
+        return transformer.transformNetwork(creationEventStream);
     }
 
     @Override
@@ -234,7 +234,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
                 networkNodeInfoList.addAll(localNetworkNodeInfoList);
             }
         }
-        return getTransformedNetworkUsingNetworkNodes(networkNodeInfoList);
+        return getTransformedNetwork(networkNodeInfoList);
     }
 
     /**
@@ -242,7 +242,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @param networkNodeInfoList
      * @return ITransformedNetwork
      */
-    private ITransformedNetwork getTransformedNetworkUsingNetworkNodes(List<INetworkNodeInfo> networkNodeInfoList) {
+    private ITransformedNetwork getTransformedNetwork(List<INetworkNodeInfo> networkNodeInfoList) {
         ITransformedNetwork transformedNetwork = transformer.transformNetwork(networkNodeInfoList);
 
         // combine all the nodes except predicate nodes
@@ -296,8 +296,8 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      */
    
     @Override
-    public ITransformedNetwork getTransformedNetworkUsingCreationEventsAndConcepts(List<CreationEvent> eventList, List<String> conceptIds){
-        ITransformedNetwork transformedNetwork = transformer.transformNetworkUsingCreationList(eventList.stream());
+    public ITransformedNetwork getTransformedNetwork(List<CreationEvent> eventList, List<String> conceptIds){
+        ITransformedNetwork transformedNetwork = transformer.transformNetwork(eventList.stream());
         List<String> alternativeIdsForConceptsList = new ArrayList<String>();
         conceptIds.forEach(conceptId -> alternativeIdsForConceptsList.addAll(getAlternativeIdsForConcept(conceptId)));
         return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConceptsList);

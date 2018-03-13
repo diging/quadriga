@@ -235,6 +235,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 
 <script>
 //# sourceURL=loader.js
+	var myId; 
     $('.list-group').on("click",".list-group-item",function(){
         var title = $(this).find('.search-name strong').text();
         var pos  = $(this).find('.search-pos').text();
@@ -252,7 +253,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 		});
     function clickedevent(selected) {
         // ajax loader
-        var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId1=';
+        var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId=';
         var $searchInput = $("#"+selected.id);
         var $resWrapper = $('#search-results-wrapper');
         var $items = $('#search-results-items');
@@ -260,7 +261,6 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
         var $loader = $('#ajax-loader');
         myId = selected.id;
         var loader = (function() {
-            // var isVisible = false;
             var timeout;
             var interval = 400;
             var fn = function() {
@@ -388,8 +388,6 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
         $searchInput.on('keyup', triggerChange)
                 .on('textChange', onChange);
     }
-    //window.onload = init;
-    
     
 // text modal
 $(document)

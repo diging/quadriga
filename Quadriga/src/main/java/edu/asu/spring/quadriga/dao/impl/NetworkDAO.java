@@ -315,9 +315,7 @@ public class NetworkDAO extends BaseDAO<NetworksDTO> implements INetworkDAO, IEd
                     .createSQLQuery("select ns.* from tbl_project p, tbl_project_workspace pw, tbl_network_workspace nw, tbl_networks n, tbl_network_statements ns where p.projectid = pw.projectid and pw.workspaceid = nw.workspaceid and nw.networkid = n.networkid and ns.networkid = n.networkid and p.accessibility = 'PUBLIC' and n.status = 'APPROVED' and ns.statementid in (:statementids)")
                     .setResultTransformer(Transformers.aliasToBean(NetworkStatementsDTO.class));
             query.setParameterList("statementids", statementIds) ;  
-            @SuppressWarnings("unchecked")
-            List<NetworkStatementsDTO> listNetworkStatementsDTO = query.list();
-            return listNetworkStatementsDTO;
+            return (List<NetworkStatementsDTO>)query.list();
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }

@@ -86,7 +86,7 @@ public class NetworkTransformer implements INetworkTransformer {
      * {@inheritDoc}
      */
     @Override
-    public ITransformedNetwork transformNetworkUsingCreationList(Stream<CreationEvent> creationEventStream) {
+    public ITransformedNetwork transformNetwork(Stream<CreationEvent> creationEventStream) {
         Map<String, Node> nodes = new HashMap<>();
         List<Link> links = new ArrayList<>();
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
