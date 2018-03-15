@@ -187,7 +187,7 @@ function searchNetwork(){
 	}).done(function (data, status){
 		if(data.status == 1){
 			clearTimeout(timeout);
-			json = constructGraphData(data)
+			json = constructGraphData(data);
 			if(json.length == 0){
 				empty();
 			}

@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
-import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;

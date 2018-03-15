@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -36,7 +35,11 @@ import net.sf.ehcache.Element;
 
 @Service
 public class CytoscapeJsonCreator implements IJsonCreator {
-    private ExecutorService executorService = Executors.newFixedThreadPool(10);
+    //private ExecutorService executorService = Executors.newFixedThreadPool(10);
+    //@Autowired
+    //private ExecutorService executorService;
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
     private static final Logger logger = LoggerFactory.getLogger(CytoscapeJsonCreator.class);
     
     @Autowired
@@ -180,22 +183,22 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     @Override
     public String submitTransformationRequest(String conceptId, IProject project){
         String conceptIdToken = conceptId.substring(conceptId.lastIndexOf('/') + 1);
-        if(cache.get(conceptIdToken) == null){
+        if(!cache.isKeyInCache(conceptIdToken)){
               Callable<PublicSearchObject> callable = () -> {
 
                   PublicSearchObject publicSearchObject = new PublicSearchObject();
                   ITransformedNetwork transformedNetwork = transformationManager
                     .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
-                  if (transformedNetwork != null) {
+                  if (transformedNetwork != null && transformedNetwork.getNodes().size() > 0) {
                       publicSearchObject.setNodes(getNodes(new ArrayList<Node>(transformedNetwork.getNodes().values())));
                       publicSearchObject.setLinks(getLinks(transformedNetwork.getLinks()));
                   }
-                  if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
+                  else{
                       publicSearchObject.setNetworkEmpty(true);
                   }
                   return publicSearchObject;
               };
-             Future<PublicSearchObject> future = executorService.submit(callable);
+             Future<PublicSearchObject> future = taskExecutor.submit(callable);
              cache.put(new Element(conceptIdToken, future));
         }
         return conceptIdToken;
@@ -205,7 +208,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     public PublicSearchObject getSearchTransformedNetwork(String conceptIdToken){
         
         PublicSearchObject publicSearchObject = new PublicSearchObject();
-        if(cache.get(conceptIdToken) == null){
+        if(!cache.isKeyInCache(conceptIdToken)){
             publicSearchObject.setStatus(2);
             return publicSearchObject;
         }

@@ -1,12 +1,8 @@
+
 package edu.asu.spring.quadriga.web.publicwebsite;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -38,7 +34,6 @@ import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
-import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.PublicSearchObject;
 
 /**
@@ -55,10 +50,7 @@ public class NetworkSearchController {
 
     @Autowired
     private IJsonCreator jsonCreator;
-
-    @Autowired
-    private INetworkTransformationManager transformationManager;
-
+    
     @Autowired
     private IConceptpowerCache cpCache;
 
@@ -66,10 +58,6 @@ public class NetworkSearchController {
             + " \"message\": \"Unable to get the search terms\"}";
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkSearchController.class);
-
-    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-    private static Map<Integer, Future<PublicSearchObject>> searchResultMap = new HashMap<Integer, Future<PublicSearchObject>>();
 
     /**
      * This method will return a search page
