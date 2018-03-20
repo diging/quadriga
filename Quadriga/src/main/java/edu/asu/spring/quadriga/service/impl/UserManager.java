@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
+import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
@@ -116,6 +117,9 @@ public class UserManager implements IUserManager {
         return listUsers;
     }
 
+    
+    
+    
     /**
      * Deactivate a user account so that the particular user cannot access
      * quadriga anymore.
@@ -296,22 +300,22 @@ public class UserManager implements IUserManager {
      * @return true if request was successfully added; false if username exists or the account needs to be approved by the admin.
      * @author jdamerow
      * @throws QuadrigaStorageException
+     * @throws UsernameExistsException 
      * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException{
-        QuadrigaUserDTO userDTO = usermanagerDAO.getUserDTO(request.getUsername());
+    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException{
 
         // Check if username is already in use
-        if (userDTO != null){
-            logger.warn("Username already in use or user account needs to be approved by the admin.");
-            return false;
+        if (usermanagerDAO.getUserDTO(request.getUsername()) != null){
+            logger.debug("Username already in use.");
+            throw new UsernameExistsException();
         }
         QuadrigaUserRequestsDTO userRequest = usermanagerDAO.getUserRequestDTO(request.getUsername());
         
         if (userRequest != null){
-            logger.warn("Username already in use or user account needs to be approved by the admin.");
+            logger.debug("User account needs to be approved by the admin.");
             return false;
         }
         String password = (request.getPassword() != null) ? encryptPassword(request.getPassword()) : null ;
@@ -334,7 +338,14 @@ public class UserManager implements IUserManager {
         return success;
     }
     
-    
+    @Override
+    public boolean checkUserRequestExists(String username) throws QuadrigaStorageException{
+        QuadrigaUserRequestsDTO userRequest =  usermanagerDAO.getUserRequestDTO(username);
+        if(userRequest != null){
+            return true;
+        }
+        return false;
+    }
 
     private String encryptPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());

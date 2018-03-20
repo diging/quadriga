@@ -8,6 +8,7 @@ import org.springframework.social.connect.ConnectionSignUp;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
@@ -25,6 +26,7 @@ public class QuadrigaConnectionSignUp implements ConnectionSignUp{
     }
  
     public String execute(Connection<?> connection) {
+        
         User user = userHelper.createUser(connection);
         AccountRequest accountRequest = new AccountRequest();
         accountRequest.setUsername(user.getUserName());
@@ -35,7 +37,7 @@ public class QuadrigaConnectionSignUp implements ConnectionSignUp{
         accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
         try {
              userManager.addNewUser(accountRequest);
-        } catch (QuadrigaStorageException | QuadrigaNotificationException e) {
+        } catch (QuadrigaStorageException | QuadrigaNotificationException | UsernameExistsException e) {
             logger.error("Could not store user.", e);
             return null;
         }

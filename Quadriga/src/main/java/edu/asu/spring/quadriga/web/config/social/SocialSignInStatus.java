@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum SocialSignInStatus {
-    REGISTRATION_SUCCESS("1"), REGISTRATION_FAILED("2"), ACCOUNT_APPROVAL_PENDING("3");
+    REGISTRATION_SUCCESS("1"), REGISTRATION_FAILED("2");
     
     private String socialSignInStatusType;
     private static final Map<String, SocialSignInStatus> map = new HashMap<>(values().length, 1);

@@ -69,7 +69,7 @@ public class SecurityContext {
                     // The rest of the our application is protected.
                     .antMatchers("/users/**", "/admin/**").hasRole("QUADRIGA_USER_ADMIN")
                     .antMatchers("/", "/auth/welcome**", "/auth/home**", "/auth/about**", "/auth/profile/**",
-                            "/rest/**", "/forbidden")
+                            "/rest/**")
                     .hasAnyRole("QUADRIGA_USER_ADMIN", "QUADRIGA_USER_STANDARD", "QUADRIGA_USER_COLLABORATOR")
                     .antMatchers("/auth/workbench/**", "/auth/rest/**", "/auth/conceptcollections/**",
                             "/auth/conceptdetails/**", "/auth/transformation/**", "/auth/searchitems/**",

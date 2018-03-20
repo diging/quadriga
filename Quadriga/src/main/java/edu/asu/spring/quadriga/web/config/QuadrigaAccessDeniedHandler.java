@@ -26,7 +26,6 @@ public class QuadrigaAccessDeniedHandler implements AccessDeniedHandler {
     
     @Override
     public void handle( HttpServletRequest request, HttpServletResponse response, AccessDeniedException exc) throws IOException, ServletException {
-         
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             logger.warn("User: " + auth.getName() + " attempted to access the protected URL: " + request.getRequestURI());

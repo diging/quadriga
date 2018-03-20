@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
 import edu.asu.spring.quadriga.web.config.social.SocialSignInStatus;
@@ -65,22 +66,30 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         // record for the user.
         if (user == null) {
             user = userHelper.createUser(connection);
-            AccountRequest accountRequest = new AccountRequest();
-            accountRequest.setUsername(user.getUserName());
-            accountRequest.setName(user.getName());
-            accountRequest.setEmail(user.getEmail());
-            accountRequest.setSocialSignIn(true);
-            accountRequest.setProvider(user.getProvider());
-            accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
-            
             try {
-                messageType = userManager.addNewUser(accountRequest) ? SocialSignInStatus.REGISTRATION_SUCCESS : SocialSignInStatus.ACCOUNT_APPROVAL_PENDING;
-            } catch (QuadrigaStorageException e) {
+                
+                if(userManager.checkUserRequestExists(user.getUserName())){
+                    messageType = SocialSignInStatus.REGISTRATION_SUCCESS;
+                }
+                else{
+                    AccountRequest accountRequest = new AccountRequest();
+                    accountRequest.setUsername(user.getUserName());
+                    accountRequest.setName(user.getName());
+                    accountRequest.setEmail(user.getEmail());
+                    accountRequest.setSocialSignIn(true);
+                    accountRequest.setProvider(user.getProvider());
+                    accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
+            
+                    if(userManager.addNewUser(accountRequest) ){
+                        messageType = SocialSignInStatus.REGISTRATION_SUCCESS;
+                    }
+                }
+            } catch (QuadrigaStorageException | UsernameExistsException e) {
                 logger.error("Could not add user.", e);
                 messageType = SocialSignInStatus.REGISTRATION_FAILED;
             } catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
-            }
+            } 
         }
         // if user details is present in the database, assign appropriate roles
         // to the user.

@@ -118,9 +118,6 @@ public class LoginController {
             case REGISTRATION_FAILED:
                 socialSignInErrorMessage = messageSource.getMessage("social.registration.failed", new String[] {}, locale);
                 break;
-            case ACCOUNT_APPROVAL_PENDING:
-                socialSignInErrorMessage = messageSource.getMessage("social.account.approval.pending", new String[] {}, locale);
-                break;
             }
         }
 

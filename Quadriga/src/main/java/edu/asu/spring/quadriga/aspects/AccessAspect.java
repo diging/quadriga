@@ -54,7 +54,6 @@ public class AccessAspect {
     @Around("within(edu.asu.spring.quadriga.web..*) && @annotation(checks)")
     public Object chkAuthorization(ProceedingJoinPoint pjp, AccessPolicies checks) throws Throwable {
         boolean haveAccess = true;
-
         // retrieve the logged in User name
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName().toLowerCase();

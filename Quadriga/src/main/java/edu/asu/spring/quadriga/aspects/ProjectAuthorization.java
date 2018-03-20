@@ -43,7 +43,6 @@ public class ProjectAuthorization implements IAuthorization {
     @Override
     public boolean chkAuthorization(String userName, Object accessObj, String[] userRoles)
             throws QuadrigaStorageException, QuadrigaAccessException {
-
         IProject project;
         // fetch the details of the concept collection
 

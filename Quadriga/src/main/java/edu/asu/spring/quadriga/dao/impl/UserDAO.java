@@ -142,7 +142,7 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
             throw new QuadrigaStorageException(e);
         }
     }
-
+  
     public QuadrigaUserDTO findUser(String username) throws QuadrigaStorageException {
         try {
             Object userObj = sessionFactory.getCurrentSession().load(QuadrigaUserDTO.class, username);
