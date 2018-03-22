@@ -108,7 +108,6 @@ public class HomeController {
         String formattedDate = dateFormat.format(date);
 
         String sUserId = principal.getName();
-
         // inserting a record for admin in the database
         if (sUserId.trim().equalsIgnoreCase("admin")) {
             // call the database layer to insert a record

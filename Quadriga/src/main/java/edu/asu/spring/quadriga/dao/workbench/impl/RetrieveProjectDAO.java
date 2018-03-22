@@ -40,6 +40,19 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
         return projectDTOList;
     }
 
+    @Override
+    public List<ProjectDTO> getAllProjectsDTO() throws QuadrigaStorageException{
+        List<ProjectDTO> projectDTOList = null;
+        try{
+            Query query = sessionFactory.getCurrentSession().createQuery("from ProjectDTO");
+            projectDTOList = query.list();
+        }catch(HibernateException e){
+            logger.info("getProjectDTOList method :" + e.getMessage());
+            throw new QuadrigaStorageException(e);
+        }
+        return projectDTOList;
+    }
+    
     /**
      * 
      * {@inheritDoc}

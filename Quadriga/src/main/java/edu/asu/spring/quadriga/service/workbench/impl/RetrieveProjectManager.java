@@ -85,7 +85,26 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
         
         return projectList;
     }
-
+    
+    /**
+     * This method returns the list of all the projects.
+     * 
+     * @return List - list of projects.
+     * @throws QuadrigaStorageException
+     */
+    @Override
+    @Transactional
+    public List<IProject> getProjectList() throws QuadrigaStorageException {
+        List<ProjectDTO> projectDTOList = projectDao.getAllProjectsDTO();
+        List<IProject> projectList = new ArrayList<IProject>();
+        for (ProjectDTO projectDto : projectDTOList) {
+            projectList.add(projectShallowMapper.getProject(projectDto));
+        }
+        
+        return projectList;
+    }
+    
+    
     /**
      * This method retrieves the list of projects associated with the logged in
      * user as a collaborator. It uses the Project shallow mapper to give a

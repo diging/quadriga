@@ -83,6 +83,9 @@
 	<li ${currentPage == "admin" ? "class=\"active\"" : ""}><a
 		href="${pageContext.servletContext.contextPath}/auth/users/manage">User
 			Management</a></li>
+    <li ${currentPage == "manageprojects" ? "class=\"active\"" : ""}><a
+		href="${pageContext.servletContext.contextPath}/auth/users/manageprojects">Project
+			Management</a></li>
 </sec:authorize>
 
 <sec:authorize access="hasRole('ROLE_QUADRIGA_USER_STANDARD')">

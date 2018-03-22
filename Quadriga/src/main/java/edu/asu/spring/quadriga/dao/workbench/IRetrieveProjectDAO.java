@@ -30,5 +30,7 @@ public interface IRetrieveProjectDAO extends IBaseDAO<ProjectDTO> {
     
     List<ProjectDTO> getAllProjectsDTOBySearchTermAndAccessiblity(String searchTerm, String accessibility)
             throws QuadrigaStorageException;
+
+    List<ProjectDTO> getAllProjectsDTO() throws QuadrigaStorageException;
 }
 
