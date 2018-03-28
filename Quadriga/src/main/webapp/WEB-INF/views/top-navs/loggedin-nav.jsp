@@ -79,6 +79,11 @@
 		</ul></li>
 </sec:authorize>
 
+<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_STANDARD')">
+    <li ${currentPage == "resolvers" ? "class=\"active\"" : ""}><a
+        href="${pageContext.servletContext.contextPath}/auth/resolvers">Resolvers</a></li>
+</sec:authorize>
+
 <sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
 	<li ${currentPage == "admin" ? "class=\"active\"" : ""}><a
 		href="${pageContext.servletContext.contextPath}/auth/users/manage">User
@@ -88,7 +93,4 @@
 			Management</a></li>
 </sec:authorize>
 
-<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_STANDARD')">
-    <li ${currentPage == "resolvers" ? "class=\"active\"" : ""}><a
-        href="${pageContext.servletContext.contextPath}/auth/resolvers">Resolvers</a></li>
-</sec:authorize>
+

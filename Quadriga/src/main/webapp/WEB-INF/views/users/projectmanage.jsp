@@ -17,8 +17,8 @@
 	});
 </script>
 
-
-<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN')">
+<form method="POST" action="${pageContext.servletContext.contextPath}/auth/users/manageprojects/addprojectadmin">
+<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
 	
 	<c:if test="${not empty projectList}">
 		<h3>Projects</h3>
@@ -33,6 +33,9 @@
 					<th>Created Date</th>
 					<th>Updated By</th>
 					<th>Updated Date</th>
+					<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
+						<th>Add as Admin</th>
+					</sec:authorize>
 				</tr>
 			</thead>
 			<tbody>
@@ -45,10 +48,12 @@
 						<td>${project.createdDate}</td>
 						<td>${project.updatedBy}</td>
 						<td>${project.updatedDate}</td>
-						<td class="center"><font size="1"> <input
-								type="submit" class="btn btn-primary btn-sm"
-								onclick="location.href='${pageContext.servletContext.contextPath}/auth/users/project/addadmin/${project.projectId}"
-								value="Add as Admin"></font></td>
+						<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
+							<td class="center"><input
+								type="checkbox" 
+								value="${project.projectId}"
+								name="projectIds"></td>
+						</sec:authorize>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -61,10 +66,17 @@
 					<th>Created Date</th>
 					<th>Updated By</th>
 					<th>Updated Date</th>
+					<sec:authorize	access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
+						<th>Add as Admin</th>
+					</sec:authorize>
 				</tr>
 			</tfoot>
 		</table>
 	</c:if>
 </sec:authorize>
-
+<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
+<input type="submit" class="btn btn-primary btn-sm" value="Add as Admin"/>
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</sec:authorize>
+</form>
 <!-- /Content -->
