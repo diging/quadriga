@@ -2,20 +2,19 @@ package edu.asu.spring.quadriga.service.network;
 
 import java.util.List;
 import java.util.Map;
-
-import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeLinkObject;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeNodeObject;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.PublicSearchObject;
+import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeSearchObject;
 
 public interface IJsonCreator {
 
     public abstract String getJson(Map<String, Node> nodes, List<Link> links);
     public abstract List<CytoscapeNodeObject> getNodes(List<Node> nodeList);
     public abstract List<CytoscapeLinkObject> getLinks(List<Link> links);
-    public abstract String submitTransformationRequest(String conceptId, IProject project);
-    public abstract PublicSearchObject getSearchTransformedNetwork(String conceptIdToken);
+    public abstract CytoscapeSearchObject getCytoscapeSearchObject(ITransformedNetwork transformedNetwork, TransformationRequestStatus transformationRequestStatus);
+   
 
 }

@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects;
 
 public class CytoscapeLinkObject {
-    CytoscapeLinkDataObject data;
+    private CytoscapeLinkDataObject data;
 
     public CytoscapeLinkDataObject getData() {
         return data;

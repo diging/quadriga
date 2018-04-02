@@ -33,8 +33,9 @@ import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.IAsyncNetworkTransformationService;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.PublicSearchObject;
+import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeSearchObject;
 
 /**
  * This controller searches for concept terms and returns json as response and
@@ -50,6 +51,9 @@ public class NetworkSearchController {
 
     @Autowired
     private IJsonCreator jsonCreator;
+    
+    @Autowired
+    private IAsyncNetworkTransformationService asynNetworkTransformationService;
     
     @Autowired
     private IConceptpowerCache cpCache;
@@ -157,7 +161,7 @@ public class NetworkSearchController {
             searchNodeLabel = concept.getWord();
             lemma = concept.getDescription();
         }
-        String conceptIdToken = jsonCreator.submitTransformationRequest(conceptId, project);
+        String conceptIdToken = asynNetworkTransformationService.submitNetworkTransformationRequest(conceptId, project);
         model.addAttribute("unixName", projectUnixName);
         model.addAttribute("searchNodeLabel", searchNodeLabel);
         model.addAttribute("description", lemma);
@@ -179,10 +183,10 @@ public class NetworkSearchController {
 
     @ResponseBody
     @RequestMapping(value = "sites/{projectUnixName}/networks/search/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public PublicSearchObject getSearchTransformedNetwork(
+    public CytoscapeSearchObject getSearchTransformedNetwork(
             @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String conceptIdToken
             ) {
-        return jsonCreator.getSearchTransformedNetwork(conceptIdToken);
+        return jsonCreator.getCytoscapeSearchObject(asynNetworkTransformationService.getTransformedNetwork(conceptIdToken), asynNetworkTransformationService.getTransformationRequestStatus(conceptIdToken));
     }
 
 }

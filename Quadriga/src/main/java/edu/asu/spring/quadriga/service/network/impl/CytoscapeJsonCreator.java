@@ -3,59 +3,27 @@ package edu.asu.spring.quadriga.service.network.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
-
-import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
-import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
+import edu.asu.spring.quadriga.service.network.TransformationRequestStatus;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
-import edu.asu.spring.quadriga.web.network.INetworkStatus;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeLinkDataObject;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeLinkObject;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeNodeDataObject;
 import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeNodeObject;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.PublicSearchObject;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
+import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeSearchObject;
+
 
 @Service
 public class CytoscapeJsonCreator implements IJsonCreator {
-    //private ExecutorService executorService = Executors.newFixedThreadPool(10);
-    //@Autowired
-    //private ExecutorService executorService;
-    @Autowired
-    private ThreadPoolTaskExecutor taskExecutor;
-    private static final Logger logger = LoggerFactory.getLogger(CytoscapeJsonCreator.class);
-    
-    @Autowired
-    private INetworkTransformationManager transformationManager;
-    
-    @Autowired
-    @Qualifier("ehcache")
-    private CacheManager cacheManager;
-    
-    private Cache cache;
-    
-    @PostConstruct
-    public void init() {
-        cache = cacheManager.getCache("cytoscapeTransformedNetworks");
-    }
-    
+
+    private final Logger logger = LoggerFactory.getLogger(CytoscapeJsonCreator.class);
+
     @Override
     public String getJson(Map<String, Node> nodes, List<Link> links) {
         StringBuffer sb = new StringBuffer();
@@ -130,20 +98,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         
         List<CytoscapeNodeObject> cytoscapeNodeList = new ArrayList<CytoscapeNodeObject>();
         for(Node node : nodeList){
-            CytoscapeNodeDataObject dataObj= new CytoscapeNodeDataObject();
-            dataObj.setId(node.getId());
-            dataObj.setConceptName(node.getLabel());
-            dataObj.setConceptUri(node.getConceptId());
-            dataObj.setConceptId(node.getConceptIdShort());
-            if(node instanceof PredicateNode){
-                dataObj.setGroup("0");
-            }
-            else{
-                dataObj.setGroup("1");
-            }
-            dataObj.setSourceReference(node.getSourceReference());
-            dataObj.setStatementIds(node.getStatementIds());
-            cytoscapeNodeList.add(createCytoscapeNodeObject(dataObj));
+            cytoscapeNodeList.add(createCytoscapeNodeObject(node));
         }
         return cytoscapeNodeList;
     }
@@ -154,78 +109,62 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         List<CytoscapeLinkObject> cytoscapeLinkList = new ArrayList<CytoscapeLinkObject>();
         int i = 0;
         for(Link link : links){
-            CytoscapeLinkDataObject dataObj = new CytoscapeLinkDataObject();
-            dataObj.setId(""+i);
-            dataObj.setSource(link.getSubject().getId());
-            dataObj.setTarget(link.getObject().getId());
-            dataObj.setLabel(link.getLabel());
-            dataObj.setSourceReference(link.getSourceReference());
-            dataObj.setStatementIds(new ArrayList<String>());
-            dataObj.getStatementIds().add(link.getStatementId());
-            cytoscapeLinkList.add(createCytoscapeLinkObject(dataObj));
+            cytoscapeLinkList.add(createCytoscapeLinkObject(link));
+            cytoscapeLinkList.get(i).getData().setId(""+i);
             i++;
         }
         return cytoscapeLinkList;
     }
     
-    private CytoscapeNodeObject createCytoscapeNodeObject(CytoscapeNodeDataObject dataObj){
+    private CytoscapeNodeObject createCytoscapeNodeObject(Node node){
+        
+        CytoscapeNodeDataObject dataObj= new CytoscapeNodeDataObject();
+        dataObj.setId(node.getId());
+        dataObj.setConceptName(node.getLabel());
+        dataObj.setConceptUri(node.getConceptId());
+        dataObj.setConceptId(node.getConceptIdShort());
+        if(node instanceof PredicateNode){
+            dataObj.setGroup("0");
+        }
+        else{
+            dataObj.setGroup("1");
+        }
+        dataObj.setSourceReference(node.getSourceReference());
+        dataObj.setStatementIds(node.getStatementIds());
+        
         CytoscapeNodeObject obj = new CytoscapeNodeObject();
         obj.setData(dataObj);
         return obj;
     }
     
-    private CytoscapeLinkObject createCytoscapeLinkObject(CytoscapeLinkDataObject dataObj){
+    private CytoscapeLinkObject createCytoscapeLinkObject(Link link){
+        
+        CytoscapeLinkDataObject dataObj = new CytoscapeLinkDataObject();
+        dataObj.setSource(link.getSubject().getId());
+        dataObj.setTarget(link.getObject().getId());
+        dataObj.setLabel(link.getLabel());
+        dataObj.setSourceReference(link.getSourceReference());
+        dataObj.setStatementIds(new ArrayList<String>());
+        dataObj.getStatementIds().add(link.getStatementId());
+
         CytoscapeLinkObject obj = new CytoscapeLinkObject();
         obj.setData(dataObj);
         return obj;
     }
     
-    @Override
-    public String submitTransformationRequest(String conceptId, IProject project){
-        String conceptIdToken = conceptId.substring(conceptId.lastIndexOf('/') + 1);
-        if(!cache.isKeyInCache(conceptIdToken)){
-              Callable<PublicSearchObject> callable = () -> {
 
-                  PublicSearchObject publicSearchObject = new PublicSearchObject();
-                  ITransformedNetwork transformedNetwork = transformationManager
-                    .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
-                  if (transformedNetwork != null && transformedNetwork.getNodes().size() > 0) {
-                      publicSearchObject.setNodes(getNodes(new ArrayList<Node>(transformedNetwork.getNodes().values())));
-                      publicSearchObject.setLinks(getLinks(transformedNetwork.getLinks()));
-                  }
-                  else{
-                      publicSearchObject.setNetworkEmpty(true);
-                  }
-                  return publicSearchObject;
-              };
-             Future<PublicSearchObject> future = taskExecutor.submit(callable);
-             cache.put(new Element(conceptIdToken, future));
-        }
-        return conceptIdToken;
-    }
-    
     @Override
-    public PublicSearchObject getSearchTransformedNetwork(String conceptIdToken){
-        
-        PublicSearchObject publicSearchObject = new PublicSearchObject();
-        if(!cache.isKeyInCache(conceptIdToken)){
-            publicSearchObject.setStatus(2);
-            return publicSearchObject;
+    public CytoscapeSearchObject getCytoscapeSearchObject(ITransformedNetwork transformedNetwork, TransformationRequestStatus transformationRequestStatus) {
+        CytoscapeSearchObject cytoscapeSearchObject = new CytoscapeSearchObject();
+        if (transformedNetwork != null && transformedNetwork.getNodes().size() > 0) {
+            cytoscapeSearchObject.setNodes(getNodes(new ArrayList<Node>(transformedNetwork.getNodes().values())));
+            cytoscapeSearchObject.setLinks(getLinks(transformedNetwork.getLinks()));
         }
-        Future<PublicSearchObject> futureResult = (Future<PublicSearchObject>) cache.get(conceptIdToken).getObjectValue();
-        
-        if (futureResult != null && futureResult.isDone()) {
-            try {
-                publicSearchObject = futureResult.get();
-                publicSearchObject.setStatus(1);
-            } catch (InterruptedException | ExecutionException e) {
-                logger.error("Exception while retrieving the result", e);
-                publicSearchObject.setStatus(2);
-            }
-        } else {
-            publicSearchObject.setStatus(3);
+        else{
+            cytoscapeSearchObject.setNetworkEmpty(true);
         }
+        cytoscapeSearchObject.setStatus(transformationRequestStatus.getStatusCode());
         
-        return publicSearchObject;
+        return cytoscapeSearchObject;
     }
 }

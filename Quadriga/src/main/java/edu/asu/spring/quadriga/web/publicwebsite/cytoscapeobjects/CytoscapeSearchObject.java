@@ -2,12 +2,12 @@ package edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects;
 
 import java.util.List;
 
-public class PublicSearchObject {
+public class CytoscapeSearchObject {
 
-    boolean isNetworkEmpty;
-    List<CytoscapeNodeObject> nodes;
-    List<CytoscapeLinkObject> links;
-    int status;
+    private boolean isNetworkEmpty;
+    private List<CytoscapeNodeObject> nodes;
+    private List<CytoscapeLinkObject> links;
+    private String status;
 
     public boolean isNetworkEmpty() {
         return isNetworkEmpty;
@@ -17,11 +17,11 @@ public class PublicSearchObject {
         this.isNetworkEmpty = isNetworkEmpty;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
