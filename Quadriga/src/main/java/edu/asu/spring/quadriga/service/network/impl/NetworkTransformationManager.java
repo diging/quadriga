@@ -6,17 +6,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.conceptpower.IConcept;
 import edu.asu.spring.quadriga.conceptpower.IConceptpowerCache;
-import edu.asu.spring.quadriga.conceptpower.IConceptpowerConnector;
-import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
@@ -29,6 +30,7 @@ import edu.asu.spring.quadriga.service.network.domain.impl.TransformedNetwork;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Service
 public class NetworkTransformationManager implements INetworkTransformationManager {
@@ -41,6 +43,9 @@ public class NetworkTransformationManager implements INetworkTransformationManag
 
     @Autowired
     private IConceptpowerCache cpCache;
+    
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
 
     /**
      * This method returns the transformed network based on networkId and
@@ -350,5 +355,22 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         return new TransformedNetwork(finalNodes, finalLinks);
+    }
+    
+    /**
+     * This method initiates an asynchronous transformation of the network.
+     * @param projectId
+     * @param conceptId
+     * @param status
+     * @return Future<ITransformedNetwork>
+     * @author Chiraag Subramanian
+     */
+    @Override
+    public Future<ITransformedNetwork> getTransformedNetwork(String projectId, String conceptId, String status){
+        Callable<ITransformedNetwork> callable = () -> {
+            return getSearchTransformedNetwork(projectId, conceptId, status);
+        };
+        
+        return taskExecutor.submit(callable);
     }
 }

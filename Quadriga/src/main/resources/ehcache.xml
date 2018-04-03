@@ -41,5 +41,9 @@
     <cache name="statementConcepts" eternal="false" maxElementsInMemory="2000"
         overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
         timeToLiveSeconds="43200" memoryStoreEvictionPolicy="LRU" /><!-- live 12 hours -->
+        
+    <cache name="asyncTransformedNetworks" eternal="false" maxElementsInMemory="50"
+        overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+        timeToLiveSeconds="3600" memoryStoreEvictionPolicy="LRU" />
 
 </ehcache>

@@ -1,3 +1,4 @@
+
 package edu.asu.spring.quadriga.web.publicwebsite;
 
 import java.util.ArrayList;
@@ -32,10 +33,9 @@ import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.IAsyncNetworkTransformationService;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
-import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
-import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
-import edu.asu.spring.quadriga.web.network.INetworkStatus;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeSearchObject;
 
 /**
  * This controller searches for concept terms and returns json as response and
@@ -45,16 +45,16 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  */
 @Controller
 public class NetworkSearchController {
- 
+
     @Autowired
     private IConceptpowerConnector connector;
 
     @Autowired
     private IJsonCreator jsonCreator;
-
+    
     @Autowired
-    private INetworkTransformationManager transformationManager;
-
+    private IAsyncNetworkTransformationService asyncNetworkTransformationService;
+    
     @Autowired
     private IConceptpowerCache cpCache;
 
@@ -89,22 +89,24 @@ public class NetworkSearchController {
     @ResponseBody
     @InjectProjectByName
     public ResponseEntity<String> getSearchTerms(@RequestParam("searchTerm") String searchTerm,
-            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, @CheckAccess @InjectProject IProject project) {
-        
-        // FIXME once the new Conceptpower is release, this should be replace with
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
+            @CheckAccess @InjectProject IProject project) {
+
+        // FIXME once the new Conceptpower is release, this should be replace
+        // with
         // one call to the search api
         ConceptpowerReply reply = connector.search(searchTerm, POS.NOUN);
         List<ConceptEntry> conceptList = reply.getConceptEntry();
-        
+
         reply = connector.search(searchTerm, POS.VERB);
         conceptList.addAll(reply.getConceptEntry());
-        
+
         reply = connector.search(searchTerm, POS.ADJECTIVE);
         conceptList.addAll(reply.getConceptEntry());
-        
+
         reply = connector.search(searchTerm, POS.ADVERB);
         conceptList.addAll(reply.getConceptEntry());
-        
+
         List<JSONObject> jsonResults = new ArrayList<JSONObject>();
         try {
             if (conceptList != null) {
@@ -131,53 +133,61 @@ public class NetworkSearchController {
     }
 
     /**
-     * This method returns a display of the network that consists of all the statements in the
-     * given projects that contain the provided concept id.
-     * @param projectUnixName Unix name of the project whose networks will be searched for the concept
-     * @param conceptId Id of the concept
+     * This method accepts a request to fetch network corresponding to the
+     * searched term. The task of generating the network is delegated to a
+     * separate thread and a token (which identifies the submitted request) is
+     * generated.
+     * 
+     * @param projectUnixName
+     * @param conceptId
      * @param project
-     * @param model
      * @return relative path to the web-page that displays the network
      * @throws QuadrigaStorageException
+     * @author Chiraag Subramanian
      */
     @CheckPublicAccess
     @InjectProjectByName
-    @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET)
-    public String getSearchTransformedNetwork(@ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
+    @RequestMapping(value = "sites/{projectUnixName}/networks/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String submitSearchTransformedNetworkRequest(
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName,
             @RequestParam("conceptId") String conceptId, @CheckAccess @InjectProject IProject project, Model model)
-                    throws QuadrigaStorageException {
-        
+            throws QuadrigaStorageException {
+
         String lemma = "";
         String searchNodeLabel = "";
-        
         // Fetch ConceptPower entries related to the conceptId
         IConcept concept = cpCache.getConceptByUri(conceptId);
-   
+
         if (concept != null) {
             searchNodeLabel = concept.getWord();
             lemma = concept.getDescription();
-           
         }
-     
-        ITransformedNetwork transformedNetwork = transformationManager
-                .getSearchTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED);
-
-        String json = null;
-        if (transformedNetwork != null) {
-            json = jsonCreator.getJson(transformedNetwork.getNodes(), transformedNetwork.getLinks());
-        }
-
-        if (transformedNetwork == null || transformedNetwork.getNodes().size() == 0) {
-            model.addAttribute("isNetworkEmpty", true);
-        }
-
-        model.addAttribute("jsonstring", json);
-        model.addAttribute("networkid", "\"\"");
-        model.addAttribute("project", project);
+        String conceptIdToken = asyncNetworkTransformationService.submitNetworkTransformationRequest(conceptId, project);
+        model.addAttribute("unixName", projectUnixName);
         model.addAttribute("searchNodeLabel", searchNodeLabel);
         model.addAttribute("description", lemma);
-        model.addAttribute("unixName", projectUnixName);
-
+        model.addAttribute("project",project); 
+        model.addAttribute("conceptIdToken", conceptIdToken);
         return "sites/networks/searchednetwork";
     }
+
+    /**
+     * This method checks if the request (corresponding to the tokenId) is
+     * processed. It returns a JSON containing the transformed network(if
+     * available) and sets the processing status: complete, failed, running 
+     * 
+     * @param projectUnixName
+     * @param tokenId
+     * @return JSON response with status and network details if available
+     * @author Chiraag Subramanian
+     */
+
+    @ResponseBody
+    @RequestMapping(value = "sites/{projectUnixName}/networks/search/result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public CytoscapeSearchObject getSearchTransformedNetwork(
+            @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String conceptIdToken
+            ) {
+        return jsonCreator.getCytoscapeSearchObject(asyncNetworkTransformationService.getTransformedNetwork(conceptIdToken), asyncNetworkTransformationService.getTransformationRequestStatus(conceptIdToken));
+    }
+
 }

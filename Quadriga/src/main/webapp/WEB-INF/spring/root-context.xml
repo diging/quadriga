@@ -47,7 +47,13 @@
 	
 	<task:executor id="executor" pool-size="5"/>
     <task:annotation-driven executor="executor" />
-	
+    
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" />
+        <property name="maxPoolSize" value="10" />
+        <property name="queueCapacity" value="25" />
+    </bean>
+    
 	<cache:annotation-driven />
     <beans:bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
         <beans:property name="cacheManager"><beans:ref bean="ehcache"/></beans:property>

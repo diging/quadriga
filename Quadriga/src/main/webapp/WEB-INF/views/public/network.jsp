@@ -55,7 +55,6 @@
 <div id="log" class="row"></div>
 <script type="text/javascript">
 //# sourceURL=dynamicScript.js 
-
   function goFullscreen(id) {
 	var element = document.getElementById(id);
     if (element.mozRequestFullScreen) {
@@ -68,7 +67,6 @@
       element.webkitRequestFullScreen();
     }
   }
-
 </script>
 
 <script type="text/javascript">
@@ -82,7 +80,6 @@ function clear()
 	element.style.right=null;
 	element.style.left=null;
 }
-
 </script>
 
 <script>
@@ -93,7 +90,6 @@ if (document.addEventListener)
     document.addEventListener('fullscreenchange', exitHandler, false);
     document.addEventListener('MSFullscreenChange', exitHandler, false);
 }
-
 function exitHandler()
 {
     if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null)
@@ -113,12 +109,9 @@ function exitHandler()
 <script src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/publicNetwork.js" ></script>
 <script type="text/javascript">
 //# sourceURL=test.js
-
 var container = document.getElementById('networkBox');
-
 var cy = cytoscape({
     container: container, // container to render in
-
     elements: ${jsonstring},
     layout: {
         name: 'cose',
@@ -141,7 +134,6 @@ var cy = cytoscape({
                  'text-valign' : 'center',
                }
              },
-
              {
                selector: 'edge',
                style: {
@@ -153,7 +145,6 @@ var cy = cytoscape({
            ]
 });
 defineListeners(cy, '${pageContext.servletContext.contextPath}', '${unixName}');
-
 $( document ).ready(function() {
 	$('#exportJson').on('click', function() {
 		var json = cy.json();
@@ -161,12 +152,10 @@ $( document ).ready(function() {
         encodeURIComponent(JSON.stringify(json), '_blank'));
 	});
 });
-
 $( document ).ready(function() {
     $('#exportPng').on('click', function() {
         var png = cy.png({'scale' : 5});
         window.open(png, '_blank');
     });
 });
-
 </script>

@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.network;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 import javax.xml.bind.JAXBException;
 
@@ -45,4 +46,6 @@ public interface INetworkTransformationManager {
 
     ITransformedNetwork getAllTransformedNetworks(String xml)
             throws QStoreStorageException, JAXBException, QuadrigaStorageException;
+
+    Future<ITransformedNetwork> getTransformedNetwork(String projectId, String conceptId, String status);
 }
