@@ -8,7 +8,11 @@
 <script
 	src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/dist/cytoscape.js"></script>
 
-
+<script
+	src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.2/cytoscape-cose-bilkent.js"></script>
+<script
+	src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/publicNetwork.js"></script>
+	
 <div class="row">
 	<div class="alert alert-info" id="load">Searching for ${searchNodeLabel}. This might take a little while, please wait...</div>
 	<div class="alert alert-info" id="network-empty" style="display: none;">Could not find any statements containing ${searchNodeLabel}.</div>
@@ -34,8 +38,8 @@
 
 
 <div id="log" class="row"></div>
+
 <script type="text/javascript">
-//# sourceURL=dynamicScript.js 
 
   function goFullscreen(id) {
 	var element = document.getElementById(id);
@@ -50,10 +54,6 @@
     }
   }
 
-</script>
-
-<script type="text/javascript">
-//# sourceURL=dynamicScript2.js 
 function clear()
 {
 	var element=document.getElementById('networkBox');
@@ -64,9 +64,6 @@ function clear()
 	element.style.left=null;
 }
 
-</script>
-
-<script>
 if (document.addEventListener)
 {
     document.addEventListener('webkitfullscreenchange', exitHandler, false);
@@ -84,14 +81,7 @@ function exitHandler()
     	}
     }
 }
-</script>
 
-<script
-	src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.2/cytoscape-cose-bilkent.js"></script>
-<script
-	src="${pageContext.servletContext.contextPath}/resources/js/cytoscape/publicNetwork.js"></script>
-<script type="text/javascript">
-//# sourceURL=test.js
 
 var container = document.getElementById('networkBox');
 var cy = {};
@@ -185,7 +175,7 @@ function searchNetwork(){
 			conceptIdToken:'${conceptIdToken}'
 		}
 	}).done(function (data, status){
-		if(data.status == 1){
+		if(data.status == "complete"){
 			clearTimeout(timeout);
 			json = constructGraphData(data);
 			if(json.length == 0){
@@ -196,7 +186,7 @@ function searchNetwork(){
 			}
 			renderGraph(json);
 		}
-		else if (data.status == 2){
+		else if (data.status == "failed"){
 			clearTimeout(timeout);
 			fail();
 		}

@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.service.network;
-
+/**
+ * This enum defines status for asynchronous network transformation processing. 
+ * @author Chiraag Subramanian
+ *
+ */
 public enum TransformationRequestStatus {
     COMPLETE("complete"), FAILED("failed"), RUNNING("running");
    

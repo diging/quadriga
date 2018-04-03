@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects;
+package edu.asu.spring.quadriga.web.publicwebsite.graph;
 
 public class CytoscapeLinkObject {
     private CytoscapeLinkDataObject data;

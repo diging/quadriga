@@ -35,7 +35,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.IAsyncNetworkTransformationService;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeSearchObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeSearchObject;
 
 /**
  * This controller searches for concept terms and returns json as response and
@@ -53,7 +53,7 @@ public class NetworkSearchController {
     private IJsonCreator jsonCreator;
     
     @Autowired
-    private IAsyncNetworkTransformationService asynNetworkTransformationService;
+    private IAsyncNetworkTransformationService asyncNetworkTransformationService;
     
     @Autowired
     private IConceptpowerCache cpCache;
@@ -143,6 +143,7 @@ public class NetworkSearchController {
      * @param project
      * @return relative path to the web-page that displays the network
      * @throws QuadrigaStorageException
+     * @author Chiraag Subramanian
      */
     @CheckPublicAccess
     @InjectProjectByName
@@ -161,7 +162,7 @@ public class NetworkSearchController {
             searchNodeLabel = concept.getWord();
             lemma = concept.getDescription();
         }
-        String conceptIdToken = asynNetworkTransformationService.submitNetworkTransformationRequest(conceptId, project);
+        String conceptIdToken = asyncNetworkTransformationService.submitNetworkTransformationRequest(conceptId, project);
         model.addAttribute("unixName", projectUnixName);
         model.addAttribute("searchNodeLabel", searchNodeLabel);
         model.addAttribute("description", lemma);
@@ -173,12 +174,12 @@ public class NetworkSearchController {
     /**
      * This method checks if the request (corresponding to the tokenId) is
      * processed. It returns a JSON containing the transformed network(if
-     * available) and sets the appropriate status: 1: Complete, 2:
-     * Invalid/Error, 3: In progress
+     * available) and sets the processing status: complete, failed, running 
      * 
      * @param projectUnixName
      * @param tokenId
-     * @return JSON response with status and network details if availale
+     * @return JSON response with status and network details if available
+     * @author Chiraag Subramanian
      */
 
     @ResponseBody
@@ -186,7 +187,7 @@ public class NetworkSearchController {
     public CytoscapeSearchObject getSearchTransformedNetwork(
             @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String conceptIdToken
             ) {
-        return jsonCreator.getCytoscapeSearchObject(asynNetworkTransformationService.getTransformedNetwork(conceptIdToken), asynNetworkTransformationService.getTransformationRequestStatus(conceptIdToken));
+        return jsonCreator.getCytoscapeSearchObject(asyncNetworkTransformationService.getTransformedNetwork(conceptIdToken), asyncNetworkTransformationService.getTransformationRequestStatus(conceptIdToken));
     }
 
 }

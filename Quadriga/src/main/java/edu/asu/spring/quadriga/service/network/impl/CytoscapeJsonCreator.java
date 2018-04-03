@@ -12,11 +12,11 @@ import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
 import edu.asu.spring.quadriga.transform.PredicateNode;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeLinkDataObject;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeLinkObject;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeNodeDataObject;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeNodeObject;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeSearchObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeLinkDataObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeLinkObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeNodeDataObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeNodeObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeSearchObject;
 
 
 @Service
@@ -93,16 +93,28 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         return sb.toString();
     }
     
+    /**
+     * This method constructs a cytoscape nodes using network nodes.
+     * @param  nodes
+     * @return cytoscape nodes
+     * @author Chiraag Subramanian
+     */
     @Override
-    public List<CytoscapeNodeObject> getNodes(List<Node> nodeList){
+    public List<CytoscapeNodeObject> getNodes(List<Node> nodes){
         
         List<CytoscapeNodeObject> cytoscapeNodeList = new ArrayList<CytoscapeNodeObject>();
-        for(Node node : nodeList){
+        for(Node node : nodes){
             cytoscapeNodeList.add(createCytoscapeNodeObject(node));
         }
         return cytoscapeNodeList;
     }
     
+    /**
+     * This method constructs a cytoscape links using network nodes.
+     * @param  links
+     * @return cytoscape links
+     * @author Chiraag Subramanian
+     */
     @Override
     public List<CytoscapeLinkObject> getLinks(List<Link> links){
 
@@ -152,7 +164,13 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         return obj;
     }
     
-
+    /**
+     * This method constructs the response object consisting of the transformed network and the status of the async network transformation.
+     * @param  transformedNetwork
+     * @param  transformationRequestStatus
+     * @return CytoscapeSearchObject 
+     * @author Chiraag Subramanian
+     */
     @Override
     public CytoscapeSearchObject getCytoscapeSearchObject(ITransformedNetwork transformedNetwork, TransformationRequestStatus transformationRequestStatus) {
         CytoscapeSearchObject cytoscapeSearchObject = new CytoscapeSearchObject();

@@ -357,6 +357,14 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         return new TransformedNetwork(finalNodes, finalLinks);
     }
     
+    /**
+     * This method initiates an asynchronous transformation of the network.
+     * @param projectId
+     * @param conceptId
+     * @param status
+     * @return Future<ITransformedNetwork>
+     * @author Chiraag Subramanian
+     */
     @Override
     public Future<ITransformedNetwork> getTransformedNetwork(String projectId, String conceptId, String status){
         Callable<ITransformedNetwork> callable = () -> {

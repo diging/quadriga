@@ -5,9 +5,9 @@ import java.util.Map;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.transform.Link;
 import edu.asu.spring.quadriga.transform.Node;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeLinkObject;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeNodeObject;
-import edu.asu.spring.quadriga.web.publicwebsite.cytoscapeobjects.CytoscapeSearchObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeLinkObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeNodeObject;
+import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeSearchObject;
 
 public interface IJsonCreator {
 
