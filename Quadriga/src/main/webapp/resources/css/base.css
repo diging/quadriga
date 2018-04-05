@@ -123,6 +123,7 @@ span.highlight {
 /* Search Page Customizations*/
 .search-control {
     display: inline-block;
+    width: 90%;
 }
 
 #search-term, #search-term2 {
@@ -140,7 +141,7 @@ span.highlight {
 }
 
 #search-results-wrapper {
-    width: 97%;
+    width: 93%;
     float: right;
 }
 

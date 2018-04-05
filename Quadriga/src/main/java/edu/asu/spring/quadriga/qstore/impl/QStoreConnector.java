@@ -282,11 +282,10 @@ public class QStoreConnector implements IQStoreConnector {
     
     @Override
     public String findStatementsWithConcepts(List<String> conceptUris) throws AsyncExecutionException {
-        Map<String, String> parameters = new HashMap<String, String>();
-       
         if(conceptUris.size() == 0){
             return null;
         }
+        Map<String, String> parameters = new HashMap<String, String>();
         StringBuffer termsBelongingToSameRelation = new StringBuffer();
         StringBuffer termInterpretations = new StringBuffer();
         int numberOfSearchedConcepts = conceptUris.size();

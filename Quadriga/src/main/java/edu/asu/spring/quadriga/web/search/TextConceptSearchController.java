@@ -17,7 +17,6 @@ import edu.asu.spring.quadriga.domain.enums.ETextAccessibility;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.impl.CreationEvent;
 import edu.asu.spring.quadriga.domain.network.impl.ElementEventsType;
-import edu.asu.spring.quadriga.domain.network.impl.RelationEventType;
 import edu.asu.spring.quadriga.domain.workspace.ITextFile;
 import edu.asu.spring.quadriga.qstore.IMarshallingService;
 import edu.asu.spring.quadriga.qstore.IQStoreConnector;
@@ -57,8 +56,6 @@ public class TextConceptSearchController {
 
         List<String> conceptUriSearchList = new ArrayList<String>();
         List<IConcept> concepts = new ArrayList<IConcept>();
-        List<ITextFile> texts = new ArrayList<ITextFile>();
-        List<String> handles = new ArrayList<String>();
         for (String conceptUri : conceptIds) {
             if (!conceptUri.isEmpty()) {
                 IConcept concept = cpCache.getConceptByUri(conceptUri);
@@ -71,7 +68,6 @@ public class TextConceptSearchController {
             }
         }
         
-    
         String results = qStoreConnector.findStatementsWithConcepts(conceptUriSearchList);
         Set<String> references = new HashSet<String>();
         List<String> eventIds = new ArrayList<String>();
@@ -86,6 +82,8 @@ public class TextConceptSearchController {
             }
         }
         
+        List<String> handles = new ArrayList<String>();
+        List<ITextFile> texts = new ArrayList<ITextFile>();
         for (String sourceRef : references) {
             ITextFile txtFile = textFileManager.getTextFileByUri(sourceRef);
             if (txtFile == null || txtFile.getAccessibility() == ETextAccessibility.PRIVATE) {

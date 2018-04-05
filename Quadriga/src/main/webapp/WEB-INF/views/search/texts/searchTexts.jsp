@@ -21,30 +21,30 @@
 						<div class="form-group search-input" style="width: 100%;">
 							<label for="search-term">What concept are you looking
 								for?</label>
-							<div class="input-group row" style="width: 100%;">
+							<div class="input-group" style="width: 100%;">
 								<button type="button" class="btn btn-default"
 									onclick="addSearchBox()">
 									<span class="glyphicon glyphicon-plus"></span>
 								</button>
 								<input placeholder="Enter search term" type="text"
 									onkeyup="clickedevent(this)"
-									class="form-control search-control width90" id="search-term"
-									autocomplete="off"> <input
+									class="form-control search-control" id="search-term"
+									autocomplete="off" style="width:90%;"> <input
 									placeholder="Enter search term" type="text"
 									onkeyup="clickedevent(this)" style="display: none"
 									class="form-control search-control width90" id="search-term2"
 									autocomplete="off">
-								<div class="input-group-addon" style="width: 40px;">
+								<div class="input-group-btn">
 									<div
 										style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
 										id="ajax-loader" class="search-loader"></div>
-									<button type="button" class="btn btn-submit"
+									<button type="button" class="btn btn-primary"
 										onclick="loadResults()">Submit</button>
 								</div>
 							</div>
 						</div>
 						<div id="search-results-wrapper" style="display: none;">
-							<div class="col-sm-12 search-results">
+							<div class="search-results">
 								<div class="list-group"
 									style="border: 1px solid #dddddd; max-height: 300px; overflow-y: scroll;"
 									id="search-results-items"></div>
@@ -64,7 +64,7 @@
 					</div>
 				</div>
 
-				<div class="row">
+				<div>
 					<div class="col-sm-12">
 						<c:if test="${not empty concepts}"> 
 						<h3 style="margin-bottom: 0px;">Results for:</h3>
@@ -179,7 +179,7 @@
 
 <script>
 function addSearchBox(){
-	$("#search-term2").css('display','block');
+	$("#search-term2").css({'display':'block','width':'90%'});
 }
 </script>
 <script>
