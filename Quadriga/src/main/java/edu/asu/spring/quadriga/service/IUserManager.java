@@ -124,7 +124,7 @@ public interface IUserManager {
 			throws QuadrigaStorageException;
 
 
-    public abstract boolean addNewUser(AccountRequest request)
+    public abstract void addNewUser(AccountRequest request)
             throws QuadrigaStorageException, QuadrigaNotificationException, UsernameExistsException;
 
     /**
@@ -145,9 +145,6 @@ public interface IUserManager {
      */
     public abstract IUser findUserByProviderUserId(String userId, String provider);
 
-
-    public abstract boolean checkUserRequestExists(String username) throws QuadrigaStorageException;
-    
 }
 
 

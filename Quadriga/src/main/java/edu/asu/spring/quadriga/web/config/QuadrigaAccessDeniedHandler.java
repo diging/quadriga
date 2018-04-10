@@ -22,7 +22,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  */
 
 public class QuadrigaAccessDeniedHandler implements AccessDeniedHandler {
-    private static final Logger logger = LoggerFactory.getLogger(QuadrigaAccessDeniedHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(QuadrigaAccessDeniedHandler.class);
     
     @Override
     public void handle( HttpServletRequest request, HttpServletResponse response, AccessDeniedException exc) throws IOException, ServletException {

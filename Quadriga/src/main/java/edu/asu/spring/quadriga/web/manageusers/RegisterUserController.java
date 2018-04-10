@@ -30,7 +30,7 @@ public class RegisterUserController {
         binder.setValidator(new NewUserAccountValidator());
     }
 
-    @RequestMapping(value = "register")
+    @RequestMapping(value = {"register","signup"})
     public String initRegisterPage(ModelMap model) {
         model.addAttribute("request", new AccountRequest());
         return "register";

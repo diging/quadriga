@@ -71,7 +71,7 @@ public class SocialContext implements SocialConfigurer  {
             ConnectionFactoryLocator connectionFactoryLocator) {
         JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(
                 dataSource, connectionFactoryLocator, Encryptors.noOpText());
-        repository.setConnectionSignUp(new QuadrigaConnectionSignUp(userManager, userHelper));
+        repository.setConnectionSignUp(new QuadrigaConnectionSignUp(userHelper));
         return repository;
     }
 

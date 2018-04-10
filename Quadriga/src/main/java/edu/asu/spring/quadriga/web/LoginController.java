@@ -107,22 +107,27 @@ public class LoginController {
             Locale locale) {
         String socialSignInErrorMessage = messageSource.getMessage("social.signin.failed", new String[] {}, locale);
         SocialSignInStatus socialSignInStatus = SocialSignInStatus.getSocialSignInStatus(type);
-        String socialSignInCompletionStatus = "danger";
+        String messageType = "danger";
         if (type != null) {
 
             switch (socialSignInStatus) {
-            case REGISTRATION_SUCCESS:
-                socialSignInErrorMessage = messageSource.getMessage("social.registration.success", new String[] {}, locale);
-                socialSignInCompletionStatus = "success";
-                break;
-            case REGISTRATION_FAILED:
-                socialSignInErrorMessage = messageSource.getMessage("social.registration.failed", new String[] {}, locale);
-                break;
+                case REGISTRATION_SUCCESS:
+                    socialSignInErrorMessage = messageSource.getMessage("social.registration.success", new String[] {}, locale);
+                    messageType = "success";
+                    break;
+                case REGISTRATION_FAILED:
+                    socialSignInErrorMessage = messageSource.getMessage("social.registration.failed", new String[] {}, locale);
+                    break;
+                case ACCOUNT_APPROVAL_PENDING:
+                    socialSignInErrorMessage = messageSource.getMessage("social.account.approval.pending", new String[] {}, locale);
+                    messageType = "info";
+                    break;
+                    
             }
         }
 
         model.addAttribute("social_signin_message", socialSignInErrorMessage);
-        model.addAttribute("social_signin_completion_status", socialSignInCompletionStatus);
+        model.addAttribute("message_type", messageType);
         return "login";
     }
 }

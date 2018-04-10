@@ -11,7 +11,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.web.LoginController;
 import edu.asu.spring.quadriga.web.config.IUserHelper;
 
 @Service
@@ -20,28 +19,38 @@ public class UserHelper implements IUserHelper{
     @Autowired
     private IUserManager userManager;
     private final Logger logger = LoggerFactory.getLogger(UserHelper.class);
+    
+    /**
+     * This method creates a unique username using the username and providerid derived from the user connection.
+     * @param connection : user connection
+     * @return unique username           
+     */
     @Override
-    public User createUser(Connection<?> connection) {
+    public String createUserName(Connection<?> connection) throws QuadrigaStorageException{
         
         UserProfile profile = connection.fetchUserProfile();
-        
         String username = profile.getUsername() + "_" + connection.getKey().getProviderId();
         
-        User user = new User();
-        
         // make sure someone else didn't change their username to this one
-        IUser userWithUsername = null;
-        try {
-            userWithUsername = userManager.getUser(username);
-        } catch (QuadrigaStorageException e) {
-            logger.error("Error while fetching user details", e);
-        }
+        IUser userWithUsername = userManager.getUser(username);;
+  
         if (userWithUsername.getUserName() == null) {
-            user.setUserName(username);
-        } else {
-            user.setUserName(userManager.getUniqueUsername(connection.getKey().getProviderId()));
-        }
-
+            return username;
+           
+        } 
+        return userManager.getUniqueUsername(connection.getKey().getProviderId());
+    }
+    /**
+     * This method creates a user object using the username and the user connection
+     * @param userName : username
+     * @param connection : user connection
+     * @return user object 
+     */
+    @Override
+    public User createUser(String userName, Connection<?> connection) {
+        UserProfile profile = connection.fetchUserProfile();
+        User user = new User();
+        user.setUserName(userName);
         user.setName(profile.getName());
         user.setEmail(profile.getEmail());
         user.setProvider(connection.getKey().getProviderId());

@@ -305,18 +305,16 @@ public class UserManager implements IUserManager {
      */
     @Override
     @Transactional
-    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException{
+    public void addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException{
 
         // Check if username is already in use
         if (usermanagerDAO.getUserDTO(request.getUsername()) != null){
-            logger.debug("Username already in use.");
-            throw new UsernameExistsException();
+            throw new UsernameExistsException("Username already in use.");
         }
         QuadrigaUserRequestsDTO userRequest = usermanagerDAO.getUserRequestDTO(request.getUsername());
         
         if (userRequest != null){
-            logger.debug("User account needs to be approved by the admin.");
-            return false;
+            throw new UsernameExistsException("Username already in use.");
         }
         String password = (request.getPassword() != null) ? encryptPassword(request.getPassword()) : null ;
         
@@ -334,17 +332,6 @@ public class UserManager implements IUserManager {
                 }
             }
         }
-        
-        return success;
-    }
-    
-    @Override
-    public boolean checkUserRequestExists(String username) throws QuadrigaStorageException{
-        QuadrigaUserRequestsDTO userRequest =  usermanagerDAO.getUserRequestDTO(username);
-        if(userRequest != null){
-            return true;
-        }
-        return false;
     }
 
     private String encryptPassword(String password) {

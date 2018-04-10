@@ -53,25 +53,22 @@ public final class SimpleSignInAdapter implements SignInAdapter {
      * by Github. If the user details are present (which indicates the user is
      * an authorized user), appropriate roles are assigned, Else if the user
      * details are not present (which indicates the user is an unregistered /
-     * not approved user, restricted access is assigned)
+     * not approved user), restricted access is assigned.
      */
 
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
+
         List<GrantedAuthority> authorities = new ArrayList<>();
         SocialSignInStatus messageType = null;
         IUser user = (IUser) userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(),
                 connection.getKey().getProviderId());
         // if user details is not present in the database, create a database
-        // record for the user.
+        // record for the user.  
         if (user == null) {
-            user = userHelper.createUser(connection);
+            
             try {
-                
-                if(userManager.checkUserRequestExists(user.getUserName())){
-                    messageType = SocialSignInStatus.REGISTRATION_SUCCESS;
-                }
-                else{
+                    user = userHelper.createUser(userId, connection);
                     AccountRequest accountRequest = new AccountRequest();
                     accountRequest.setUsername(user.getUserName());
                     accountRequest.setName(user.getName());
@@ -79,15 +76,15 @@ public final class SimpleSignInAdapter implements SignInAdapter {
                     accountRequest.setSocialSignIn(true);
                     accountRequest.setProvider(user.getProvider());
                     accountRequest.setUserIdOfProvider(user.getUserIdOfProvider());
-            
-                    if(userManager.addNewUser(accountRequest) ){
-                        messageType = SocialSignInStatus.REGISTRATION_SUCCESS;
-                    }
-                }
-            } catch (QuadrigaStorageException | UsernameExistsException e) {
+                    userManager.addNewUser(accountRequest);
+                    messageType = SocialSignInStatus.REGISTRATION_SUCCESS;
+            } catch (QuadrigaStorageException e){
                 logger.error("Could not add user.", e);
                 messageType = SocialSignInStatus.REGISTRATION_FAILED;
-            } catch (QuadrigaNotificationException e) {
+            } catch(UsernameExistsException e){ 
+                logger.error("User request exists.", e);
+                messageType = SocialSignInStatus.ACCOUNT_APPROVAL_PENDING;
+            }catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
             } 
         }
@@ -104,13 +101,12 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         }
 
         QuadrigaUserDetails userDetails = null;
-        if (messageType == null) {
-            userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null,
-                    user.getEmail());
-        } else {
+        
+        if (messageType != null) {
             return "/sociallogin?type=" + messageType.getSocialSignInStatusType();
-        }
-
+        } 
+        userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null,
+                user.getEmail());
         SecurityContextHolder.getContext()
                 .setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, authorities));
         SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(
