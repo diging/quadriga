@@ -7,7 +7,7 @@ import org.springframework.social.connect.ConnectionSignUp;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
- * This class is implicitly when users try to signup using their social account. 
+ * This class is implicitly used, when users try to signup using their social account. 
  * 
  * @author Chiraag Subramanian
  */
@@ -21,7 +21,8 @@ public class QuadrigaConnectionSignUp implements ConnectionSignUp{
     }
  
     /**
-     * This method returns a unique username for the user or null to indicate that implicit sign up is not possible.
+     * This method returns a unique username for the user or null to indicate that implicit sign up is not possible 
+     * at the moment due to system error.
      */
     public String execute(Connection<?> connection) {
         try {
