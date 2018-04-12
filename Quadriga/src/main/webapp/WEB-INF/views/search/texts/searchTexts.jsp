@@ -12,7 +12,7 @@
 
 		<div class="col-md-8">
 			<div class="row">
-				<div class="col-sm-12 search-wrapper" style="position: relative">
+				<div class="col-sm-12 search-wrapper" style="position: relative; z-index:1;">
 					<h2>Text Search</h2>
 					<input type="hidden" id="concept1" value="" style="display: none" />
 					<input type="hidden" id="concept2" value="" style="display: none" />
@@ -24,7 +24,7 @@
 							<div class="input-group" style="width: 100%;">
 								<button type="button" class="btn btn-default"
 									onclick="addSearchBox()">
-									<span class="glyphicon glyphicon-plus"></span>
+									<span id="symbol" class="glyphicon glyphicon-plus"></span>
 								</button>
 								<input placeholder="Enter search term" type="text"
 									onkeyup="clickedevent(this)"
@@ -179,7 +179,15 @@
 
 <script>
 function addSearchBox(){
-	$("#search-term2").css({'display':'block','width':'90%'});
+	if($("#search-term2").is(":visible")){
+		$("#search-term2").css({'display':'none'});
+		$("#search-term2").val('');
+		$("#concept2").val('');
+	}else{
+		$("#search-term2").css({'display':'block','width':'90%'});
+	}
+	
+	$('#symbol').toggleClass("glyphicon-plus glyphicon-minus");
 }
 </script>
 <script>
@@ -232,11 +240,10 @@ defineFadeListenersSearch(cy, '${pageContext.servletContext.contextPath}');
 defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
 </script>
 
-
 <script>
 //# sourceURL=loader.js
-	var myId; 
-    $('.list-group').on("click",".list-group-item",function(){
+var myId; 
+$('.list-group').on("click",".list-group-item",function(){
         var title = $(this).find('.search-name strong').text();
         var pos  = $(this).find('.search-pos').text();
         	if(myId === "search-term"){
@@ -250,8 +257,8 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
         	
 			$('#search-results-wrapper').hide();
 			
-		});
-    function clickedevent(selected) {
+ });
+ function clickedevent(selected) {
         // ajax loader
         var networkURL = '${pageContext.servletContext.contextPath}/search/texts?conceptId=';
         var $searchInput = $("#"+selected.id);
@@ -278,7 +285,7 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
                     timeout = setTimeout(fn, interval);
                 }
             };
-        })();
+ 		})();
         // ajax loader
         
         //------------
@@ -286,11 +293,11 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
         
         //----------------------   end- vin
         
-        $(document).on({
+ 		$(document).on({
             ajaxStart: loader.show,
             ajaxStop: loader.hide
-        });
-         var triggerChange = (function() {
+ 		});
+ 		var triggerChange = (function() {
             var timeout;
             var timeoutInt = 400;
             var prevVal = '';
@@ -307,21 +314,21 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
                 prevVal = val;
                 // clear this interval
                 clearTimeout(timeout);
-                timeout = setTimeout(change, timeoutInt);
+                //timeout = setTimeout(/*change,*/ timeoutInt);
             }
-        })();
-        var reqSuccess = function(data) {
+		})();
+		var reqSuccess = function(data) {
             var terms = data.terms || [];
             addTerms(terms);
-        };
-        var reqFail = function(err) {
+		};
+		var reqFail = function(err) {
             // triggered even when abort is called
             console.log(err);
-        };
-        var reqAlways = function(obj) {
+		};
+		var reqAlways = function(obj) {
             // this triggered always
-        };
-        var addTerms = (function() {
+		};
+		var addTerms = (function() {
             // clear all the terms
             var $a = $('#search-item-template');
             var maxResults = 15;
@@ -346,8 +353,8 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
                 }
                 $resWrapper.show();
             };
-        })();
-        var onChange = (function(ev) {
+		})();
+		var onChange = (function(ev) {
             // cancel the original request
             // and make a new request
             var $xhr;
@@ -382,65 +389,51 @@ defineDoubleClickSearch(cy, '${pageContext.servletContext.contextPath}');
                     }         
                     }).done(done).fail(fail).always(always);
             };
-        })();
+  		})();
         // custom event for value change
         // check if change works for input
         $searchInput.on('keyup', triggerChange)
-                .on('textChange', onChange);
+                .on('textChange', onChange());
     }
     
 // text modal
-$(document)
-            .ready(
-                    function() {
-                        $('#txtModal')
-                                .on(
-                                        'show.bs.modal',
-                                        function(event) {
-                                            var link = $(event.relatedTarget);
-                                            var txtid = link.data('txtid');
-                                            var txtname = link.data('txtname');
-                                            var title = link.data('txttitle');
-                                            var author = link.data('txtauthor');
-                                            var date = link.data('txtdate');
-                                            
-                                            var header = "No author and title information provided."
-                                            if (title != '' || author != '' || date != '') {
-                                                header = '';
-                                                if (author != null) {
-                                                    header += author + ", ";
-                                                }
-                                                if (title != null) {
-                                                    header += "<em>" + title + "</em> ";
-                                                }
-                                                if (date != null) {
-                                                    header += "(" + date + ")";
-                                                }
-                                            }
-                                            header += "<br><small>" + txtname + "</small>";
-                                            $
-                                                    .ajax({
-                                                        type : "GET",
-                                                        url : "${pageContext.servletContext.contextPath}/public/text/view?conceptUri=${concept.id}&txtid="
-                                                                + txtid,
-                                                        contentType : "text/plain",
-                                                        success : function(
-                                                                details) {
-                                                            $('.modal-title')
-                                                                    .html(header);
-                                                            $('.modal-body')
-                                                                    .html(details);
-                                                        },
-                                                        error : function(xhr,
-                                                                ajaxOptions) {
-                                                            if (xhr.status == 404) {
-                                                                $('.modal-body')
-                                                                        .text(
-                                                                                "Error while retrieving the text content.");
-                                                            }
-                                                        }
-                                                    });
-                                        });
-                    });
+$(document).ready(function() {
+    $('#txtModal').on('show.bs.modal',function(event) {
+       var link = $(event.relatedTarget);
+       var txtid = link.data('txtid');
+       var txtname = link.data('txtname');
+       var title = link.data('txttitle');
+       var author = link.data('txtauthor');
+       var date = link.data('txtdate');
+       var header = "No author and title information provided."
+       if (title != '' || author != '' || date != '') {
+            header = '';
+            if (author != null) {
+                header += author + ", ";
+            }
+            if (title != null) {
+                header += "<em>" + title + "</em> ";
+            }
+            if (date != null) {
+                header += "(" + date + ")";
+            }
+       }
+       header += "<br><small>" + txtname + "</small>";
+       $.ajax({
+            type : "GET",
+            url : "${pageContext.servletContext.contextPath}/public/text/view?conceptUri=${concept.id}&txtid="+ txtid,
+            contentType : "text/plain",
+            success : function(details) {
+                   $('.modal-title').html(header);
+                   $('.modal-body').html(details);
+            },
+            error : function(xhr, ajaxOptions) {
+                   if (xhr.status == 404) {
+                        $('.modal-body').text("Error while retrieving the text content.");
+                   }
+            }
+       });
+    });
+ });
                     
 </script>
