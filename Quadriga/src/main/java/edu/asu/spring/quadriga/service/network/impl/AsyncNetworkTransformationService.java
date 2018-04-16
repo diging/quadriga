@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.service.network.INetworkTransformationManager;
 import edu.asu.spring.quadriga.service.network.TransformationRequestStatus;
+import edu.asu.spring.quadriga.service.network.AsyncTransformationResult;
 import edu.asu.spring.quadriga.service.network.IAsyncNetworkTransformationService;
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -23,7 +24,6 @@ import net.sf.ehcache.Element;
 
 /**
  * This class is responsible for initiating and managing async transformation requests.
- * It uses LRU cache to maintain the results for an hour.
  * 
  * @author Chiraag Subramanian
  *
@@ -50,46 +50,53 @@ public class AsyncNetworkTransformationService implements IAsyncNetworkTransform
     }
     
     
-    private String generateToken(String conceptId){
-        return conceptId.substring(conceptId.lastIndexOf('/') + 1);
+    private String generateToken(String conceptURI){
+        return conceptURI.substring(conceptURI.lastIndexOf('/') + 1);
     }
     
     
     @Override
     public String submitNetworkTransformationRequest(String conceptId, IProject project){
         String token = generateToken(conceptId);
-        if(!cache.isKeyInCache(token)){
+        // Submit transformation request if (i) token is not in cache or (ii) token (key) is in cache, but the element (value) has expired
+        if(!cache.isKeyInCache(token) || cache.get(token) == null || cache.isExpired(cache.get(token))){
              cache.put(new Element(token, transformationManager.getTransformedNetwork(project.getProjectId(), conceptId, INetworkStatus.APPROVED)));
         }
         return token;
     }
     
-    @Override
-    public TransformationRequestStatus getTransformationRequestStatus(String token){
-        if(!cache.isKeyInCache(token)){
-             return TransformationRequestStatus.FAILED;
-        }
-        Future<ITransformedNetwork> futureResult = (Future<ITransformedNetwork>) cache.get(token).getObjectValue();
-        
-        if(futureResult != null && !futureResult.isDone()){
-             return TransformationRequestStatus.RUNNING;
-        }
-        
-        return TransformationRequestStatus.COMPLETE;
-    }
     
     @Override
-    public ITransformedNetwork getTransformedNetwork(String token){
-        if(getTransformationRequestStatus(token).equals(TransformationRequestStatus.COMPLETE)){
-            try {
-                    Future<ITransformedNetwork> futureResult = (Future<ITransformedNetwork>) cache.get(token).getObjectValue();
-                    return futureResult.get();
-            } catch (InterruptedException | ExecutionException e) {
-                logger.error("Exception while retrieving the result", e);
-                cache.remove(token);
-                return null;
-            }
+    public AsyncTransformationResult getTransformationResult(String token){
+        AsyncTransformationResult result = new AsyncTransformationResult();
+        TransformationRequestStatus transformationStatus = null;
+        ITransformedNetwork transformedNetwork = null;
+        if(!cache.isKeyInCache(token) || cache.get(token) == null || cache.isExpired(cache.get(token))){
+            transformationStatus = TransformationRequestStatus.INVALID;
         }
-        return null;
+        else{
+                Future<ITransformedNetwork> futureResult = (Future<ITransformedNetwork>) cache.get(token).getObjectValue();
+                if(futureResult == null){
+                     transformationStatus = TransformationRequestStatus.INVALID;
+                }
+                else if(!futureResult.isDone()){
+                     transformationStatus = TransformationRequestStatus.RUNNING;
+                }
+                else{
+                    try {
+                        transformedNetwork = futureResult.get();
+                        transformationStatus = TransformationRequestStatus.COMPLETE;
+                    }catch (InterruptedException | ExecutionException e) {
+                        logger.error("Exception while retrieving the result", e);
+                        transformationStatus = TransformationRequestStatus.FAILED;
+                        cache.remove(token);
+                    }
+                }
+        }
+        
+        result.setNetwork(transformedNetwork);
+        result.setStatus(transformationStatus);
+        
+        return result;
     }
 }

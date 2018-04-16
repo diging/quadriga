@@ -33,6 +33,7 @@ import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply;
 import edu.asu.spring.quadriga.conceptpower.model.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.AsyncTransformationResult;
 import edu.asu.spring.quadriga.service.network.IAsyncNetworkTransformationService;
 import edu.asu.spring.quadriga.service.network.IJsonCreator;
 import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeSearchObject;
@@ -187,7 +188,8 @@ public class NetworkSearchController {
     public CytoscapeSearchObject getSearchTransformedNetwork(
             @ProjectIdentifier @PathVariable("projectUnixName") String projectUnixName, String conceptIdToken
             ) {
-        return jsonCreator.getCytoscapeSearchObject(asyncNetworkTransformationService.getTransformedNetwork(conceptIdToken), asyncNetworkTransformationService.getTransformationRequestStatus(conceptIdToken));
+        AsyncTransformationResult result = asyncNetworkTransformationService.getTransformationResult(conceptIdToken);
+        return jsonCreator.getCytoscapeSearchObject(result.getNetwork(), result.getStatus());
     }
 
 }

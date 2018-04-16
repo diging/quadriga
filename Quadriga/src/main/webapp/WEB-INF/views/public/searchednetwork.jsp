@@ -166,6 +166,8 @@ function fail(){
 	$('#load').css('display','none');
 	$('#network-error').css('display','block');
 }
+
+
 var searchComplete = false;
 function searchNetwork(){
 	$xhr = $.ajax({
@@ -189,6 +191,10 @@ function searchNetwork(){
 		else if (data.status == "failed"){
 			clearTimeout(timeout);
 			fail();
+		}
+		else if(data.status == "invalid"){
+			clearTimeout(timeout);
+			empty();
 		}
 		
 	}).fail(function(xhr, status, error){

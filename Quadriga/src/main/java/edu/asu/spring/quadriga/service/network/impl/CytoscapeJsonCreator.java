@@ -121,8 +121,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         List<CytoscapeLinkObject> cytoscapeLinkList = new ArrayList<CytoscapeLinkObject>();
         int i = 0;
         for(Link link : links){
-            cytoscapeLinkList.add(createCytoscapeLinkObject(link));
-            cytoscapeLinkList.get(i).getData().setId(""+i);
+            cytoscapeLinkList.add(createCytoscapeLinkObject(link, i));
             i++;
         }
         return cytoscapeLinkList;
@@ -149,9 +148,10 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         return obj;
     }
     
-    private CytoscapeLinkObject createCytoscapeLinkObject(Link link){
+    private CytoscapeLinkObject createCytoscapeLinkObject(Link link, int id){
         
         CytoscapeLinkDataObject dataObj = new CytoscapeLinkDataObject();
+        dataObj.setId(""+id);
         dataObj.setSource(link.getSubject().getId());
         dataObj.setTarget(link.getObject().getId());
         dataObj.setLabel(link.getLabel());
@@ -177,8 +177,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
         if (transformedNetwork != null && transformedNetwork.getNodes().size() > 0) {
             cytoscapeSearchObject.setNodes(getNodes(new ArrayList<Node>(transformedNetwork.getNodes().values())));
             cytoscapeSearchObject.setLinks(getLinks(transformedNetwork.getLinks()));
-        }
-        else{
+        } else{
             cytoscapeSearchObject.setNetworkEmpty(true);
         }
         cytoscapeSearchObject.setStatus(transformationRequestStatus.getStatusCode());

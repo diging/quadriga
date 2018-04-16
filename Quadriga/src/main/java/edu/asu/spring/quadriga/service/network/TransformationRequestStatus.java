@@ -5,7 +5,7 @@ package edu.asu.spring.quadriga.service.network;
  *
  */
 public enum TransformationRequestStatus {
-    COMPLETE("complete"), FAILED("failed"), RUNNING("running");
+    COMPLETE("complete"), INVALID("invalid"), FAILED("failed"), RUNNING("running");
    
     private String statusCode;
     
