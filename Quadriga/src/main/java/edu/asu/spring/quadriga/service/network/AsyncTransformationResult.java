@@ -1,7 +1,14 @@
 package edu.asu.spring.quadriga.service.network;
 
 import edu.asu.spring.quadriga.service.network.domain.ITransformedNetwork;
-
+/**
+ * This represents the result of the asynchronous network transformation.
+ * (i) network: the transformed network if available or null.
+ * (ii) status: the current status of the transformation.
+ * 
+ * @author Chiraag Subramanian
+ *
+ */
 public class AsyncTransformationResult {
     
     private ITransformedNetwork network;

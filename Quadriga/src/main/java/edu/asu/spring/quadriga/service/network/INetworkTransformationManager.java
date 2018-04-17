@@ -33,7 +33,7 @@ public interface INetworkTransformationManager {
      */
     ITransformedNetwork getTransformedNetworkOfProject(String projectId, String status) throws QuadrigaStorageException;
 
-    ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId, String status)
+    Future<ITransformedNetwork> getSearchTransformedNetwork(String projectId, String conceptId, String status)
             throws QuadrigaStorageException;
 
     ITransformedNetwork getSearchTransformedNetworkMultipleProjects(List<String> projectIds, String conceptId,
@@ -46,6 +46,4 @@ public interface INetworkTransformationManager {
 
     ITransformedNetwork getAllTransformedNetworks(String xml)
             throws QStoreStorageException, JAXBException, QuadrigaStorageException;
-
-    Future<ITransformedNetwork> getTransformedNetwork(String projectId, String conceptId, String status);
 }

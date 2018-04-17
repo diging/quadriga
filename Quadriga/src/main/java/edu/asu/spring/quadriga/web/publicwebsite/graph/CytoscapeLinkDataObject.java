@@ -2,6 +2,12 @@ package edu.asu.spring.quadriga.web.publicwebsite.graph;
 
 import java.util.List;
 
+/**
+ * This represents the information associated with the network graph links.
+ * 
+ * @author Chiraag Subramanian
+ *
+ */
 public class CytoscapeLinkDataObject {
 
     private String id;

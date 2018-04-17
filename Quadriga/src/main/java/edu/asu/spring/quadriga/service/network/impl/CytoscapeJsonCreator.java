@@ -95,7 +95,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     
     /**
      * This method constructs a cytoscape nodes using network nodes.
-     * @param  nodes
+     * @param  nodes : network nodes
      * @return cytoscape nodes
      * @author Chiraag Subramanian
      */
@@ -111,7 +111,7 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     
     /**
      * This method constructs a cytoscape links using network nodes.
-     * @param  links
+     * @param  links : network links
      * @return cytoscape links
      * @author Chiraag Subramanian
      */
@@ -166,9 +166,9 @@ public class CytoscapeJsonCreator implements IJsonCreator {
     
     /**
      * This method constructs the response object consisting of the transformed network and the status of the async network transformation.
-     * @param  transformedNetwork
-     * @param  transformationRequestStatus
-     * @return CytoscapeSearchObject 
+     * @param  transformedNetwork : transformed network
+     * @param  transformationRequestStatus : status of the network transformation request
+     * @return CytoscapeSearchObject : object comprising of nodes, links and the status of the network transformation request
      * @author Chiraag Subramanian
      */
     @Override

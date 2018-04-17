@@ -170,6 +170,12 @@ function fail(){
 
 var searchComplete = false;
 function searchNetwork(){
+	
+	if(${conceptIdToken} == null){
+		fail();
+		return;
+	}
+	
 	$xhr = $.ajax({
 		dataType: 'json',
 		url: 'search/result',

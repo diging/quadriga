@@ -1,7 +1,13 @@
 package edu.asu.spring.quadriga.web.publicwebsite.graph;
 
 import java.util.List;
-
+/**
+ * This represents the asynchronous network transformation result comprising of:
+ * (i) processing status, (ii) graph nodes, (iii) graph links.
+ * The format of the nodes and links is as per the requirements of cytoscapejs network graph visualization library. 
+ * @author Chiraag Subramanian
+ *
+ */
 public class CytoscapeSearchObject {
 
     private boolean isNetworkEmpty;

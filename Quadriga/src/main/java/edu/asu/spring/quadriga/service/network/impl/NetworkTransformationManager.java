@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -152,10 +154,11 @@ public class NetworkTransformationManager implements INetworkTransformationManag
      * @param conceptId
      * @return ITransformedNetwork
      * @throws QuadrigaStorageException
-     * @author suraj nilapwar
+     * @author suraj nilapwar, chiraag subramanian
      */
+    @Async
     @Override
-    public ITransformedNetwork getSearchTransformedNetwork(String projectId, String conceptId, String status)
+    public Future<ITransformedNetwork> getSearchTransformedNetwork(String projectId, String conceptId, String status)
             throws QuadrigaStorageException {
         // Get the transformed network and search for the concept id.
         List<INetwork> networkList = getNetworkList(projectId, status);
@@ -168,7 +171,7 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         ITransformedNetwork transformedNetwork = getTransformedNetworkusingNetworkList(networkList);
 
         // Create final network using alternativeIdsForConcept.
-        return getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConcept);
+        return new AsyncResult<ITransformedNetwork>(getFinalTransformedNetwork(transformedNetwork, alternativeIdsForConcept));
     }
 
     /**
@@ -355,22 +358,5 @@ public class NetworkTransformationManager implements INetworkTransformationManag
         }
 
         return new TransformedNetwork(finalNodes, finalLinks);
-    }
-    
-    /**
-     * This method initiates an asynchronous transformation of the network.
-     * @param projectId
-     * @param conceptId
-     * @param status
-     * @return Future<ITransformedNetwork>
-     * @author Chiraag Subramanian
-     */
-    @Override
-    public Future<ITransformedNetwork> getTransformedNetwork(String projectId, String conceptId, String status){
-        Callable<ITransformedNetwork> callable = () -> {
-            return getSearchTransformedNetwork(projectId, conceptId, status);
-        };
-        
-        return taskExecutor.submit(callable);
     }
 }

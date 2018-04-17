@@ -2,6 +2,12 @@ package edu.asu.spring.quadriga.web.publicwebsite.graph;
 
 import java.util.List;
 
+/**
+ * This represents the information associated with the network graph nodes.
+ * 
+ * @author Chiraag Subramanian
+ *
+ */
 public class CytoscapeNodeDataObject {
     private String id;
     private String conceptName;

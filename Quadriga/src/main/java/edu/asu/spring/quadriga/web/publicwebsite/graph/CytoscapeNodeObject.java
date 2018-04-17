@@ -1,5 +1,10 @@
 package edu.asu.spring.quadriga.web.publicwebsite.graph;
-
+/**
+ * This represents the cytsocapejs node object.
+ *  
+ * @author Chiraag Subramanian
+ *
+ */
 public class CytoscapeNodeObject {
     private CytoscapeNodeDataObject data;
 
