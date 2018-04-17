@@ -39,7 +39,7 @@
 										style="background: url('${pageContext.servletContext.contextPath}/resources/txt-layout/images/throbber.gif');"
 										id="ajax-loader" class="search-loader"></div>
 									<button type="button" class="btn btn-primary"
-										onclick="loadResults()">Submit</button>
+										onclick="loadResults()" style="border-radius:4px;">Submit</button>
 								</div>
 							</div>
 						</div>
