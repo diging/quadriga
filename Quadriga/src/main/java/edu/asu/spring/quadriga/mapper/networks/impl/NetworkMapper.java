@@ -148,9 +148,17 @@ public class NetworkMapper implements INetworkMapper {
 
     @Override
     public List<INetworkNodeInfo> getNetworkNodes(String networkId, int versionId) throws QuadrigaStorageException {
+        return getNetworkNodeInfoList(dbconnect.getNetworkNodes(networkId, versionId));
+    }
 
+    @Override
+    public List<INetworkNodeInfo> getNetworkNodes(List<String> statementIds) throws QuadrigaStorageException{
+        return getNetworkNodeInfoList(dbconnect.getNetworkNodes(statementIds));
+    }
+    
+    
+    private List<INetworkNodeInfo> getNetworkNodeInfoList(List<NetworkStatementsDTO> networkStatementsDTOList){
         List<INetworkNodeInfo> networkNodeList = null;
-        List<NetworkStatementsDTO> networkStatementsDTOList = dbconnect.getNetworkNodes(networkId, versionId);
         if (networkStatementsDTOList != null) {
             networkNodeList = new ArrayList<INetworkNodeInfo>();
             INetworkNodeInfo networkNodeInfo = null;
@@ -163,10 +171,10 @@ public class NetworkMapper implements INetworkMapper {
                 networkNodeList.add(networkNodeInfo);
             }
         }
-
         return networkNodeList;
     }
-
+    
+    
     @Override
     public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException {
         List<INetwork> networkList = null;

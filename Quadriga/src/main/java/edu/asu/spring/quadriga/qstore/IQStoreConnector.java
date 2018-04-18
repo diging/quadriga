@@ -13,7 +13,7 @@ public interface IQStoreConnector {
 
     public static String RELATION_EVENT = "relationevent";
     public static String APPELLATION_EVENT = "appellationevent";
-
+    public static String ELEMENT = "element";
     public abstract String getQStoreAddURL();
 
     public abstract String getQStoreGetURL();
@@ -47,6 +47,8 @@ public interface IQStoreConnector {
      * @throws AsyncExecutionException
      */
     Future<String> loadNetworkWithPopularTerms() throws AsyncExecutionException;
+    
+    String findStatementsWithConcepts(List<String> conceptUriSearchList) throws AsyncExecutionException;
 
     String getCreationEvents(List<String> ids) throws QuadrigaException;
 
