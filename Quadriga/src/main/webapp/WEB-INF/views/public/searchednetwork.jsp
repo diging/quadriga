@@ -170,12 +170,12 @@ function fail(){
 
 var searchComplete = false;
 function searchNetwork(){
-	
-	if(${conceptIdToken} == null){
+
+	if('${conceptIdToken}' == ''){
 		fail();
 		return;
 	}
-	
+
 	$xhr = $.ajax({
 		dataType: 'json',
 		url: 'search/result',
@@ -207,7 +207,7 @@ function searchNetwork(){
 		clearTimeout(timeout);
 		fail();
 	});
-	var timeout = setTimeout(searchNetwork, 10000);
+	var timeout; = setTimeout(searchNetwork, 10000);
 }
 
 window.onload = searchNetwork;

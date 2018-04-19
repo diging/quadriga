@@ -56,7 +56,13 @@ public class AsyncNetworkTransformationService implements IAsyncNetworkTransform
         return conceptURI.substring(conceptURI.lastIndexOf('/') + 1);
     }
     
-    
+    /**
+     * This method submits a request for network transformation which is handled asynchronously.
+     * 
+     * @param conceptId: the conceptId to be searched in the project's network
+     * @param project : the project whose network will be searched and transformed
+     * @return token : a token corresponding to the network transformation request or null to indicate error
+     */
     @Override
     public String submitNetworkTransformationRequest(String conceptId, IProject project){
         String token = generateToken(conceptId);
@@ -72,13 +78,18 @@ public class AsyncNetworkTransformationService implements IAsyncNetworkTransform
         return token;
     }
     
-    
+    /**
+     * This method returns the result of the asynchronous network transformation request.
+     * 
+     * @param token : the token corresponding to the network transformation request
+     * @return result : asynchronous network transformation result comprising of transformed network and transformation status
+     */
     @Override
     public AsyncTransformationResult getTransformationResult(String token){
         AsyncTransformationResult result = new AsyncTransformationResult();
         TransformationRequestStatus transformationStatus = TransformationRequestStatus.INVALID;
         ITransformedNetwork transformedNetwork = null;
-        if(!cache.isKeyInCache(token) || cache.get(token) == null || cache.isExpired(cache.get(token))){
+        if(token == null || !cache.isKeyInCache(token) || cache.get(token) == null || cache.isExpired(cache.get(token))){
             transformationStatus = TransformationRequestStatus.INVALID;
         }else{
             Future<ITransformedNetwork> futureResult = (Future<ITransformedNetwork>) cache.get(token).getObjectValue();
