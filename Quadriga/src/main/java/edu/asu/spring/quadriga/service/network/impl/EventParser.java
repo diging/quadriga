@@ -81,11 +81,10 @@ public class EventParser {
     }
 
     private Node parseSubjectOrObjectEvent(CreationEvent event, String statementId, Map<String, Node> leafNodes,
-            List<Link> links) {
+            List<Link> links) {       
         if (event == null) {
             return null;
         }
-
         if (event instanceof AppellationEventType) {
             TermType term = ((AppellationEventType) event).getTermType();
             if (term != null) {
@@ -109,10 +108,8 @@ public class EventParser {
             return null;
         } else if (event instanceof RelationEventType) {
             RelationType relation = ((RelationEventType) event).getRelation();
-
             // create node for predicate
             if (relation != null) {
-
                 PredicateType pred = relation.getPredicateType();
                 PredicateNode predNode = parsePredicateEvent(pred.getAppellationEvent(), statementId);
                 leafNodes.put(predNode.getId(), predNode);

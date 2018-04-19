@@ -207,7 +207,7 @@ function searchNetwork(){
 		clearTimeout(timeout);
 		fail();
 	});
-	var timeout; = setTimeout(searchNetwork, 10000);
+	var timeout = setTimeout(searchNetwork, 10000);
 }
 
 window.onload = searchNetwork;

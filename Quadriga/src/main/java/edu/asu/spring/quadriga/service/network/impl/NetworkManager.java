@@ -276,6 +276,7 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
         return networkmapper.getListOfNetworksForUser(user);
     }
 
+    
     /**
      * 
      * {@inheritDoc}
@@ -317,7 +318,17 @@ public class NetworkManager extends BaseDAO<NetworksDTO> implements INetworkMana
 
         return networksList;
     }
-
+    
+    
+    
+    @Override
+    @Transactional
+    public List<INetworkNodeInfo> getNetworkNodes(List<String> statementIds) throws QuadrigaStorageException{
+            if(statementIds.size() == 0){
+                return null;
+            }
+            return networkmapper.getNetworkNodes(statementIds);
+    }
     @Override
     @Transactional
     public List<INetwork> getAllNetworkVersions(String networkid) throws QuadrigaStorageException {

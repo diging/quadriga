@@ -50,13 +50,12 @@ public class NetworkTransformer implements INetworkTransformer {
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
 
         if (networkNodeInfoList == null || networkNodeInfoList.size() == 0) {
-            // return the trasnformed network
+            // return the transformed network
             return transformedNetwork;
         }
 
         List<ElementEventsType> elementEventsTypeList = networkDownloadService
                 .getElementEventTypes(networkNodeInfoList);
-        
         
         Map<String, List<CreationEvent>> eventsById = new HashMap<>();
         for (ElementEventsType type : elementEventsTypeList) {
@@ -68,7 +67,6 @@ public class NetworkTransformer implements INetworkTransformer {
                 eventsById.get(event.getId()).add(event);
             }
         }
-
         for (INetworkNodeInfo networkNodeInfo : networkNodeInfoList) {
             List<CreationEvent> events = eventsById.get(networkNodeInfo.getId());
             // Do not proceed if there are no events
@@ -88,14 +86,11 @@ public class NetworkTransformer implements INetworkTransformer {
      * {@inheritDoc}
      */
     @Override
-    public ITransformedNetwork transformNetworkUsingCreationList(Stream<CreationEvent> creationEventStream) {
-
+    public ITransformedNetwork transformNetwork(Stream<CreationEvent> creationEventStream) {
         Map<String, Node> nodes = new HashMap<>();
         List<Link> links = new ArrayList<>();
-
         ITransformedNetwork transformedNetwork = new TransformedNetwork(nodes, links);
         parser.parseEvents(creationEventStream, nodes, links);
-
         return transformedNetwork;
     }
 }
