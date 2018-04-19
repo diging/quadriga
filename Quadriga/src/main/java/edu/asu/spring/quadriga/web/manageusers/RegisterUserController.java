@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UserRequestExistsException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
@@ -55,7 +56,7 @@ public class RegisterUserController {
             request.setRepeatedPassword("");
             model.addAttribute("request", request);
             return "register";
-        } catch (UsernameExistsException e) {
+        } catch (UsernameExistsException | UserRequestExistsException e) {
             model.addAttribute("errormsg_username_in_use", "Username already in use.");
             request.setUsername(username);
             request.setPassword("");
@@ -63,8 +64,6 @@ public class RegisterUserController {
             model.addAttribute("request", request);
             return "register";
         }
-
-   
         redirectAttrs.addFlashAttribute("successmsg", "Your account has been created! An administrator will review the account and approve it. You will get an email once your account has been reviewed.");
         return "redirect:/login";
     }

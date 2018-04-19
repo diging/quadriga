@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UserRequestExistsException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
@@ -58,7 +59,6 @@ public final class SimpleSignInAdapter implements SignInAdapter {
 
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
-
         List<GrantedAuthority> authorities = new ArrayList<>();
         SocialSignInStatus messageType = null;
         IUser user = (IUser) userManager.findUserByProviderUserId(connection.getKey().getProviderUserId(),
@@ -82,9 +82,12 @@ public final class SimpleSignInAdapter implements SignInAdapter {
                 logger.error("Could not add user.", e);
                 messageType = SocialSignInStatus.REGISTRATION_FAILED;
             } catch(UsernameExistsException e){ 
+                logger.error("Username exists.", e);
+                messageType = SocialSignInStatus.ACCOUNT_APPROVAL_PENDING;
+            } catch(UserRequestExistsException e){ 
                 logger.error("User request exists.", e);
                 messageType = SocialSignInStatus.ACCOUNT_APPROVAL_PENDING;
-            }catch (QuadrigaNotificationException e) {
+            } catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
             } 
         }
@@ -100,12 +103,11 @@ public final class SimpleSignInAdapter implements SignInAdapter {
             }
         }
 
-        QuadrigaUserDetails userDetails = null;
-        
         if (messageType != null) {
             return "/sociallogin?type=" + messageType.getSocialSignInStatusType();
         } 
-        userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null,
+        
+        QuadrigaUserDetails userDetails = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), null,
                 user.getEmail());
         SecurityContextHolder.getContext()
                 .setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, authorities));

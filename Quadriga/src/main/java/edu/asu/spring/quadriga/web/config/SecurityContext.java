@@ -23,6 +23,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
+
+import edu.asu.spring.quadriga.utilities.IPropertiesManager;
 import edu.asu.spring.quadriga.web.config.social.SimpleSocialUserDetailsService;
 
 /**
@@ -47,6 +49,9 @@ public class SecurityContext {
         @Autowired
         @Qualifier("authSuccessHandler")
         private SavedRequestAwareAuthenticationSuccessHandler authSuccessHandler;
+        
+        @Autowired
+        private IPropertiesManager propertyManager;
 
         @Override
         public void configure(WebSecurity web) throws Exception {
@@ -90,9 +95,9 @@ public class SecurityContext {
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.authenticationProvider(daoAuthProvider());
             auth.eraseCredentials(false);
-            auth.inMemoryAuthentication().withUser("admin").password("admin").roles("QUADRIGA_USER_ADMIN");
+            auth.inMemoryAuthentication().withUser(propertyManager.getProperty("admin_username")).password(propertyManager.getProperty("admin_password")).roles("QUADRIGA_USER_ADMIN");
             super.configure(auth);
-
+            
         }
 
         @Bean(name = BeanIds.AUTHENTICATION_MANAGER)

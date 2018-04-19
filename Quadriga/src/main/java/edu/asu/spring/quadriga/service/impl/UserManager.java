@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
+import edu.asu.spring.quadriga.exceptions.UserRequestExistsException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -301,11 +302,12 @@ public class UserManager implements IUserManager {
      * @author jdamerow
      * @throws QuadrigaStorageException
      * @throws UsernameExistsException 
+     * @throws UserRequestExistsException 
      * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public void addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException{
+    public void addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException, UserRequestExistsException{
 
         // Check if username is already in use
         if (usermanagerDAO.getUserDTO(request.getUsername()) != null){
@@ -314,7 +316,7 @@ public class UserManager implements IUserManager {
         QuadrigaUserRequestsDTO userRequest = usermanagerDAO.getUserRequestDTO(request.getUsername());
         
         if (userRequest != null){
-            throw new UsernameExistsException("Username already in use.");
+            throw new UserRequestExistsException("User request already exists.");
         }
         String password = (request.getPassword() != null) ? encryptPassword(request.getPassword()) : null ;
         

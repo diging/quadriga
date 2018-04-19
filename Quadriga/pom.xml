@@ -38,6 +38,9 @@
 
         <github.clientId></github.clientId>
         <github.secret></github.secret>
+        
+        <admin.username></admin.username>
+        <admin.password></admin.password>
 
         <textfiles.location></textfiles.location>
         <transformationfiles.location></transformationfiles.location>
