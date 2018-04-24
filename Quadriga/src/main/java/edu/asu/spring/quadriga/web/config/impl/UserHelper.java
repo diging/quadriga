@@ -12,7 +12,12 @@ import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.config.IUserHelper;
-
+/**
+ * This is a utility class to create unique username and user object using the connection details.
+ * 
+ * @author Chiraag Subramanian
+ *
+ */
 @Service
 public class UserHelper implements IUserHelper{
     
@@ -30,11 +35,9 @@ public class UserHelper implements IUserHelper{
         
         UserProfile profile = connection.fetchUserProfile();
         String username = profile.getUsername() + "_" + connection.getKey().getProviderId();
-        
         // make sure someone else didn't change their username to this one
-        IUser userWithUsername = userManager.getUser(username);;
-  
-        if (userWithUsername.getUserName() == null) {
+        IUser userWithUsername = userManager.getUser(username);
+        if (userWithUsername == null || userWithUsername.getUserName() == null) {
             return username;
            
         } 
