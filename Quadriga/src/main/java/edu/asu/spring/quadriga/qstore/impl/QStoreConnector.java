@@ -138,6 +138,7 @@ public class QStoreConnector implements IQStoreConnector {
         return qStoreURL + qStoreURL_Get_POST;
     }
 
+
     /*
      * (non-Javadoc)
      * 
@@ -195,6 +196,7 @@ public class QStoreConnector implements IQStoreConnector {
 
         return response.getBody().toString();
     }
+
     
     @Override
     @Cacheable(value = "creationEvents")
@@ -276,6 +278,28 @@ public class QStoreConnector implements IQStoreConnector {
     @Override
     public Future<String> loadNetworkWithPopularTerms() throws AsyncExecutionException {
         return new AsyncResult<String>(executeNeo4jQuery("allNetworks", null, RELATION_EVENT));
+    }
+    
+    @Override
+    public String findStatementsWithConcepts(List<String> conceptUris) throws AsyncExecutionException {
+        if(conceptUris.size() == 0){
+            return null;
+        }
+        Map<String, String> parameters = new HashMap<String, String>();
+        StringBuffer termsBelongingToSameRelation = new StringBuffer();
+        StringBuffer termInterpretations = new StringBuffer();
+        int numberOfSearchedConcepts = conceptUris.size();
+        for(int i = 0; i < numberOfSearchedConcepts; i++){
+            termsBelongingToSameRelation.append("(r:Relation)-[*]->(t"+i+":Term)");
+            termInterpretations.append("t"+i+".interpretation = '"+conceptUris.get(i)+"'");
+            if(i != (numberOfSearchedConcepts-1)){
+                termsBelongingToSameRelation.append(",");
+                termInterpretations.append(" and ");
+            }
+        }
+        parameters.put("terms_belonging_to_same_relation", termsBelongingToSameRelation.toString());
+        parameters.put("term_interpretations", termInterpretations.toString());
+        return executeNeo4jQuery("concepts.belonging.to.same.statement", parameters, RELATION_EVENT);
     }
     
     @Override
@@ -494,4 +518,6 @@ public class QStoreConnector implements IQStoreConnector {
         byte[] encodedAuth = Base64.encodeBase64(auth.getBytes());
         return "Basic " + new String(encodedAuth);
     }
+
+ 
 }

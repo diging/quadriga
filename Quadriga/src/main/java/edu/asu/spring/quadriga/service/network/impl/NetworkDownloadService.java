@@ -36,13 +36,6 @@ public class NetworkDownloadService {
         List<Future<ElementEventsType>> futureEvents = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         networkNodeInfoList.forEach(networkNodeInfo -> {
-
-            // adding future tasks to a list
-            // this is asynchronous
-            // Future<ElementEventsType> future =
-            // elementEventTypeDownloadService
-            // .getElementEventTypeAsync(networkNodeInfo.getId());
-            // futureEvents.add(future);
             ids.add(networkNodeInfo.getId());
         });
         try {
@@ -63,11 +56,11 @@ public class NetworkDownloadService {
                         "Unable to execute a qstore asynchronosly for relation event id: " + ids,
                         e);
             } finally {
-                // add element event type in the list even if it is null
-                elementEventsTypeList.add(elementEventsType);
+                if(elementEventsType != null){
+                    elementEventsTypeList.add(elementEventsType);
+                }
             }
         }
-
         return elementEventsTypeList;
     }
 }

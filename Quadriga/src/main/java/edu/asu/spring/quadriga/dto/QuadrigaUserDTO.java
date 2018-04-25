@@ -87,7 +87,7 @@ public class QuadrigaUserDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<NetworkAssignedDTO> networkAssignedList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
-    private List<NetworkAnnotationsDTO> networkAnnotaionList;
+    private List<NetworkAnnotationsDTO> networkAnnotationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<QuadrigaUserprofileDTO> quadrigaUserprofileDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
@@ -108,12 +108,12 @@ public class QuadrigaUserDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public List<NetworkAnnotationsDTO> getNetworkAnnotaionList() {
-        return networkAnnotaionList;
+    public List<NetworkAnnotationsDTO> getNetworkAnnotationList() {
+        return networkAnnotationList;
     }
 
-    public void setNetworkAnnotaionList(List<NetworkAnnotationsDTO> networkAnnotaionList) {
-        this.networkAnnotaionList = networkAnnotaionList;
+    public void setNetworkAnnotationList(List<NetworkAnnotationsDTO> networkAnnotationList) {
+        this.networkAnnotationList = networkAnnotationList;
     }
 
     public List<QuadrigaUserprofileDTO> getQuadrigaUserprofileDTOList() {

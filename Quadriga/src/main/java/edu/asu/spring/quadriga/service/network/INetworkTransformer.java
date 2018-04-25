@@ -34,6 +34,6 @@ public interface INetworkTransformer {
      * @param creationEventStream
      * @return
      */
-    ITransformedNetwork transformNetworkUsingCreationList(Stream<CreationEvent> creationEventStream);
+    ITransformedNetwork transformNetwork(Stream<CreationEvent> creationEventStream);
 
 }
