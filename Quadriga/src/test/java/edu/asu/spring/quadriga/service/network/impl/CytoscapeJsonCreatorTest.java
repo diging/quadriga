@@ -35,7 +35,7 @@ import edu.asu.spring.quadriga.web.publicwebsite.graph.CytoscapeSearchObject;
 public class CytoscapeJsonCreatorTest {
     
     @Mock
-    private ITransformedNetwork transformedNetwork = Mockito.mock(TransformedNetwork.class);
+    private ITransformedNetwork transformedNetwork;
     
     @InjectMocks
     private CytoscapeJsonCreator cytoscapeJsonCreator;
@@ -133,7 +133,7 @@ public class CytoscapeJsonCreatorTest {
     
     
     @Test
-    public void testGetJson(){
+    public void test_getJson_success(){
 
         String json ="[{ \"data\": { \"id\": \"eeca81e6-ab2a-468c-8910-f958db9e4071\", \"conceptName\": \"be\", \"conceptUri\": \"http://www.digitalhps.org/concepts/CON3fbc4870-6028-4255-9998-14acf028a316\", \"conceptId\": \"CON3fbc4870-6028-4255-9998-14acf028a316\", \"group\": 0, \"sourceReference\": \"http://hdl.handle.net/10776/2326\", \"statementIds\": [\"REL_EVN-7470806594494772646\"]  } },\n"
                       +"{ \"data\": { \"id\": \"APP_EVN6552216626031446394\", \"conceptName\": \"Andrew Zachary Fire\", \"conceptUri\": \"http://www.digitalhps.org/concepts/CON72aa3b79-2964-47a9-97c5-437ae60e6086\", \"conceptId\": \"CON72aa3b79-2964-47a9-97c5-437ae60e6086\", \"group\": 1, \"sourceReference\": \"http://hdl.handle.net/10776/2326\", \"statementIds\": [\"REL_EVN-7470806594494772646\"]  } },\n"
@@ -149,7 +149,7 @@ public class CytoscapeJsonCreatorTest {
     }
     
     @Test
-    public void testGetNodes(){
+    public void test_getNodes_success(){
 
         List<CytoscapeNodeObject> cytoscapeNodeObjectsUnderTest = cytoscapeJsonCreator.getNodes(new ArrayList<Node>(nodes.values()));
         assertEquals(5, cytoscapeNodeObjectsUnderTest.size() );
@@ -171,7 +171,7 @@ public class CytoscapeJsonCreatorTest {
     
 
     @Test
-    public void testGetLinks(){
+    public void test_getLinks_success(){
         
         List<CytoscapeLinkObject> cytoscapeLinkObjectsUnderTest =  cytoscapeJsonCreator.getLinks(links);
         assertEquals(4, cytoscapeLinkObjectsUnderTest.size() );
@@ -191,7 +191,7 @@ public class CytoscapeJsonCreatorTest {
     }
     
     @Test
-    public void testGetCytoscapeSearchObject(){
+    public void test_getCytoscapeSearchObject_success(){
         Mockito.when(transformedNetwork.getNodes()).thenReturn(nodes);
         Mockito.when(transformedNetwork.getLinks()).thenReturn(links);
         

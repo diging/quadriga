@@ -82,7 +82,11 @@ public class AsyncNetworkTransformationService implements IAsyncNetworkTransform
      * This method returns the result of the asynchronous network transformation request.
      * 
      * @param token : the token corresponding to the network transformation request
-     * @return result : asynchronous network transformation result comprising of transformed network and transformation status
+     * @return result : asynchronous network transformation result comprising of transformed network and transformation status.
+     *         transformation status- i) invalid - when request token does not exist in cache or the cache entry for the token has expired
+     *                                ii) failed - when processing fails due to server error
+     *                                iii) running - when transformation request is in progress
+     *                                iv) complete - when transformation result is available    
      */
     @Override
     public AsyncTransformationResult getTransformationResult(String token){
