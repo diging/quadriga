@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
@@ -25,34 +24,28 @@ import edu.asu.spring.quadriga.service.impl.UserManager;
  *
  */
 public class UserHelperTest {
-    
-    private final Logger logger = LoggerFactory.getLogger(UserHelperTest.class);
-    
-    @Mock
+
     private UserManager userManager = Mockito.mock(UserManager.class);
+    private Connection connection = Mockito.mock(Connection.class);
+    private UserProfile profile = Mockito.mock(UserProfile.class);
+    private IUser user = Mockito.mock(IUser.class);
     
     @InjectMocks
     private UserHelper userHelper;
     
-    @Mock
-    private Connection connection = Mockito.mock(Connection.class);
-    
-    @Mock
-    private UserProfile profile = Mockito.mock(UserProfile.class);
-    
-    @Mock
-    private IUser user = Mockito.mock(IUser.class);
+    private final Logger logger = LoggerFactory.getLogger(UserHelperTest.class);
     
     private ConnectionKey connectionKey;
     
     @Before
     public void init(){
         MockitoAnnotations.initMocks(this); 
+        connectionKey = new ConnectionKey("github", "23473237");
     }
     
     @Test
-    public void testCreateUserName(){
-        connectionKey = new ConnectionKey("github", "23473237");
+    public void test_createUserName_whenUsernameNotUsed(){
+        
         Mockito.when(connection.getKey()).thenReturn(connectionKey);
         Mockito.when(connection.fetchUserProfile()).thenReturn(profile);
         Mockito.when(profile.getUsername()).thenReturn("chiraag-subramanian");
@@ -70,7 +63,17 @@ public class UserHelperTest {
             logger.info("Error while testing userHelper.createUserName", e);
         }
         
+        
+    }
+    
+    @Test
+    public void test_createUserName_whenUsernameUsed(){
+        
+        Mockito.when(connection.getKey()).thenReturn(connectionKey);
+        Mockito.when(connection.fetchUserProfile()).thenReturn(profile);
+        Mockito.when(profile.getUsername()).thenReturn("chiraag-subramanian");
         Mockito.when(user.getUserName()).thenReturn("chiraag-subramanian_github");
+        
         try {
             Mockito.when(userManager.getUser(Mockito.anyString())).thenReturn(user);
         } catch (QuadrigaStorageException e) {
@@ -85,8 +88,8 @@ public class UserHelperTest {
     }
     
     @Test
-    public void testCreateUser(){
-        connectionKey = new ConnectionKey("github", "23473237");
+    public void test_createUser_success(){
+        
         Mockito.when(connection.getKey()).thenReturn(connectionKey);
         Mockito.when(connection.fetchUserProfile()).thenReturn(profile);
         IUser user = userHelper.createUser("chiraag-subramanian_github", connection);

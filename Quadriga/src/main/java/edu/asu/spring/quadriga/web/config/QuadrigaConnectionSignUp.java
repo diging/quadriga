@@ -28,7 +28,7 @@ public class QuadrigaConnectionSignUp implements ConnectionSignUp{
         try {
             return userHelper.createUserName(connection);
         } catch (QuadrigaStorageException e) {
-            logger.error("Error while fetching user details", e);
+            logger.error("Error while creating username", e);
             return null;
         }    
     }
