@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
@@ -24,11 +25,18 @@ import edu.asu.spring.quadriga.service.impl.UserManager;
  *
  */
 public class UserHelperTest {
-
-    private UserManager userManager = Mockito.mock(UserManager.class);
-    private Connection connection = Mockito.mock(Connection.class);
-    private UserProfile profile = Mockito.mock(UserProfile.class);
-    private IUser user = Mockito.mock(IUser.class);
+    
+    @Mock
+    private UserManager userManager;
+    
+    @Mock
+    private Connection connection;
+    
+    @Mock
+    private UserProfile profile;
+    
+    @Mock
+    private IUser user;
     
     @InjectMocks
     private UserHelper userHelper;

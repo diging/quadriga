@@ -90,11 +90,9 @@ public final class SimpleSignInAdapter implements SignInAdapter {
             } catch (QuadrigaNotificationException e) {
                 logger.error("Could not notify admin about the new user.", e);
             } 
-        }
-        // if user details is present in the database, assign appropriate roles
-        // to the user.
-        else {
-
+        }else {
+            // if user details is present in the database, assign appropriate roles
+            // to the user.
             List<IQuadrigaRole> quadrigaRoles = user.getQuadrigaRoles();
             if (quadrigaRoles != null) {
                 for (IQuadrigaRole quadrigaRole : quadrigaRoles) {
