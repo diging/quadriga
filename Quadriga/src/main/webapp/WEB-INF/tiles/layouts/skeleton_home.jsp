@@ -81,7 +81,7 @@
 				</div>
 				<!--/.nav-collapse -->
 				<sec:authorize access="not isAuthenticated()">
-					<form name='f' action="<c:url value='/login' />" method='POST'
+						<form name='f' action="<c:url value='/login' />" method="post"
 						class="navbar-form navbar-right">
 						<div class="form-group">
 							<input type="text" class="form-control input-sm" name="username"
@@ -100,7 +100,14 @@
 						</div>
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					</form>
-
+					<form action="<c:url value="/signin/github" />" class="navbar-form navbar-right" method="POST">
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<div class="form-group">
+								<button class="btn btn-primary btn-sm" type="submit">
+									<i class="fa fa-github" aria-hidden="true"></i> Login with GitHub
+								</button>
+							</div>
+					</form>
 
 				</sec:authorize>
 			</div>
@@ -111,9 +118,9 @@
 	<sec:authorize access="isAuthenticated()">
 		<div class="container">
 			<div class="row" style="padding-top: 15px;">
-				<div class="col-md-10">
+				 <div class="col-md-10">
 					Welcome <i class="fa fa-user"></i><span style="margin-left: 5px;"><sec:authentication
-							property="principal.username" /></span>!
+							property="principal.username" /></span>!	
 				</div>
 				<div class="col-md-2">
 				<form action="<c:url value='/logout' />" method='POST' class="pull-right">

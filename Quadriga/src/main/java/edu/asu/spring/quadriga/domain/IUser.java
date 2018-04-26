@@ -121,4 +121,13 @@ public interface IUser
 	public abstract  void setUpdatedDate(Date updatedDate);
 	
 	public String getQuadrigaRolesAsString();
+	
+	public abstract String getProvider();
+	
+	public abstract void setProvider(String provider);
+	
+	public abstract String getUserIdOfProvider();
+	
+	public abstract void setUserIdOfProvider(String userIdOfProvider);
+	
 }

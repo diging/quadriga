@@ -6,6 +6,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
+import edu.asu.spring.quadriga.exceptions.UserRequestExistsException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
@@ -124,7 +125,27 @@ public interface IUserManager {
 			throws QuadrigaStorageException;
 
 
-    public abstract boolean addNewUser(AccountRequest request)
-            throws QuadrigaStorageException, UsernameExistsException, QuadrigaNotificationException;
+    public abstract void addNewUser(AccountRequest request)
+            throws QuadrigaStorageException, QuadrigaNotificationException, UsernameExistsException, UserRequestExistsException;
+
+    /**
+     * This method generates a unique user name. It is used by the system when the user name chosen by a new user already exists in the database.
+     * @param providerId Id of the social provider
+     * @return String unique user name.
+     */
+    public abstract String getUniqueUsername(String providerId);
+    
+    
+    /**
+     * This method is used to search the user based on the userId and the social provider that authenticates the user (e.g. github, facebook etc.)
+     * @param userId  user's id in the social provider e.g. username in github.
+     * @param provider social provider used for user authentication (e.g. github, facebook etc.)
+     * @return user information
+     * @throws QuadrigaStorageException
+     * @author chiraag subramanian
+     */
+    public abstract IUser findUserByProviderUserId(String userId, String provider);
 
 }
+
+

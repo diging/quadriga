@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UserRequestExistsException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
@@ -30,7 +31,7 @@ public class RegisterUserController {
         binder.setValidator(new NewUserAccountValidator());
     }
 
-    @RequestMapping(value = "register")
+    @RequestMapping(value = {"register","signup"})
     public String initRegisterPage(ModelMap model) {
         model.addAttribute("request", new AccountRequest());
         return "register";
@@ -45,12 +46,17 @@ public class RegisterUserController {
             return "register";
         }
 
-        boolean success = false;
         String username = request.getUsername();
         try {
             request.setUsername(username.toLowerCase());
-            success = usermanager.addNewUser(request);
-        } catch (UsernameExistsException e) {
+            usermanager.addNewUser(request);
+        } catch (QuadrigaStorageException  e) {
+            model.addAttribute("errormsg_failure", "Sorry, user could not be added.");
+            request.setPassword("");
+            request.setRepeatedPassword("");
+            model.addAttribute("request", request);
+            return "register";
+        } catch (UsernameExistsException | UserRequestExistsException e) {
             model.addAttribute("errormsg_username_in_use", "Username already in use.");
             request.setUsername(username);
             request.setPassword("");
@@ -58,15 +64,6 @@ public class RegisterUserController {
             model.addAttribute("request", request);
             return "register";
         }
-
-        if (!success) {
-            model.addAttribute("errormsg_failure", "Sorry, user could not be added.");
-            request.setPassword("");
-            request.setRepeatedPassword("");
-            model.addAttribute("request", request);
-            return "register";
-        }
-
         redirectAttrs.addFlashAttribute("successmsg", "Your account has been created! An administrator will review the account and approve it. You will get an email once your account has been reviewed.");
         return "redirect:/login";
     }

@@ -44,6 +44,10 @@ public class QuadrigaUserDTO implements Serializable {
     private String passwd;
     @Column(name = "email")
     private String email;
+    @Column(name = "provider")
+    private String provider;
+    @Column(name = "provideruserid")
+    private String userIdOfProvider;
     @Basic(optional = false)
     @Column(name = "quadrigarole")
     private String quadrigarole;
@@ -222,6 +226,22 @@ public class QuadrigaUserDTO implements Serializable {
 
     public void setCreateddate(Date createddate) {
         this.createddate = createddate;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getUserIdOfProvider() {
+        return userIdOfProvider;
+    }
+
+    public void setUserIdOfProvider(String userIdOfProvider) {
+        this.userIdOfProvider = userIdOfProvider;
     }
 
     public List<ConceptCollectionCollaboratorDTO> getConceptcollectionsCollaboratorDTOList() {

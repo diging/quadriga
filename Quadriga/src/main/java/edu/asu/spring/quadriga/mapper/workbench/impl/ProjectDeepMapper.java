@@ -31,13 +31,11 @@ public class ProjectDeepMapper extends ProjectDTOMapper implements IProjectDeepM
     @Transactional
     public IProject getProject(ProjectDTO projectDTO) throws QuadrigaStorageException {
         IProject project = super.getProject(projectDTO);
-
         project.setConceptCollections(projectConceptCollectionShallowMapper.getConceptCollections(project,
                 projectDTO.getProjectConceptCollectionDTOList()));
         project.setDictionaries(projectDictionaryShallowMapper.getDictionaries(project, projectDTO));
         project.setWorkspaces(
                 wsShallowMapper.getProjectWorkspaceList(project, projectDTO.getProjectWorkspaceDTOList()));
-
         return project;
     }
 

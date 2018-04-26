@@ -2,27 +2,25 @@ package edu.asu.spring.quadriga.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
-import edu.asu.spring.quadriga.email.impl.EmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaNotificationException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.UserOwnsOrCollaboratesDeletionException;
+import edu.asu.spring.quadriga.exceptions.UserRequestExistsException;
 import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -40,7 +38,7 @@ import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 @Service
 public class UserManager implements IUserManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
+    private final Logger logger = LoggerFactory.getLogger(UserManager.class);
 
     @Autowired
     private IQuadrigaRoleManager rolemanager;
@@ -120,6 +118,9 @@ public class UserManager implements IUserManager {
         return listUsers;
     }
 
+    
+    
+    
     /**
      * Deactivate a user account so that the particular user cannot access
      * quadriga anymore.
@@ -297,29 +298,30 @@ public class UserManager implements IUserManager {
      * 
      * @param request
      *            The {@link AccountRequest} encapsulating the user's data.
-     * @return true if request was successfully added; otherwise false
+     * @return true if request was successfully added; false if username exists or the account needs to be approved by the admin.
      * @author jdamerow
      * @throws QuadrigaStorageException
-     * @throws UsernameExistsException
+     * @throws UsernameExistsException 
+     * @throws UserRequestExistsException 
      * @throws QuadrigaNotificationException 
      */
     @Override
     @Transactional
-    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException {
-        QuadrigaUserDTO userDTO = usermanagerDAO.getUserDTO(request.getUsername());
+    public void addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException, UserRequestExistsException{
 
         // Check if username is already in use
-        if (userDTO != null)
+        if (usermanagerDAO.getUserDTO(request.getUsername()) != null){
             throw new UsernameExistsException("Username already in use.");
-
+        }
         QuadrigaUserRequestsDTO userRequest = usermanagerDAO.getUserRequestDTO(request.getUsername());
-        if (userRequest != null)
-            throw new UsernameExistsException("Username already in use.");
-
-        String plainPassword = request.getPassword();
-        boolean success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword),
-                request.getName(), request.getEmail());
         
+        if (userRequest != null){
+            throw new UserRequestExistsException("User request already exists.");
+        }
+        String password = (request.getPassword() != null) ? encryptPassword(request.getPassword()) : null ;
+        
+        boolean success = usermanagerDAO.addNewUserAccountRequest(request.getUsername(), password, request.getName(), request.getEmail(), request.getProvider() , request.getUserIdOfProvider());
+  
         if (success) {
             IQuadrigaRole role = rolemanager.getQuadrigaRoleById(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_ADMIN);
             List<QuadrigaUserDTO> admins = usermanagerDAO.getUserDTOList(role.getDBid());
@@ -332,8 +334,6 @@ public class UserManager implements IUserManager {
                 }
             }
         }
-        
-        return success;
     }
 
     private String encryptPassword(String password) {
@@ -458,5 +458,58 @@ public class UserManager implements IUserManager {
     public void setUserFactory(IUserFactory userFactory) {
         this.userFactory = userFactory;
     }
+    
+    public String getUniqueUsername(String providerId) {
+        String id = null;
+        while (true) {
+            id = "USR" + generateUniqueId() + "_" + providerId;
+            Object existingUser = null;
+            try {
+                existingUser = getUser(id);
+            } catch (QuadrigaStorageException e) {
+                logger.error("Error while retrieving user details",e);
+                break;
+            }
+            if (existingUser == null) {
+                break;
+            }
+        }
+        return id;
+    }
+    
+    /**
+     * This method is used to search the user based on the userId and the social provider that authenticates the user (e.g. github, facebook etc.)
+     * @param userId  user's id in the social provider e.g. username in github.
+     * @param provider social provider used for user authentication (e.g. github, facebook etc.)
+     * @return user information
+     * @author chiraag subramanian
+     */
+   public IUser findUserByProviderUserId(String userId, String provider)  {
+           return userDeepMapper.findUserByProviderUserId(userId, provider);
+   }
+   
+   
+   /**
+    * This methods generates a new 6 character long id. Note that this method
+    * does not assure that the id isn't in use yet.
+    * 
+    * Adapted from
+    * http://stackoverflow.com/questions/9543715/generating-human-readable
+    * -usable-short-but-unique-ids
+    * 
+    * @return 12 character id
+    */
+   protected String generateUniqueId() {
+       char[] chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+               .toCharArray();
 
+       Random random = new Random();
+       StringBuilder builder = new StringBuilder();
+       for (int i = 0; i < 12; i++) {
+           builder.append(chars[random.nextInt(62)]);
+       }
+
+       return builder.toString();
+   }
+    
 }

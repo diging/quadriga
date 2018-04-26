@@ -196,7 +196,7 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceDAO
             query.setParameter("projectid", projectid);
             query.setParameter("isdeactivated", false);
             query.setParameter("isarchived", true);
-            workspaceDTOList = query.list();
+            workspaceDTOList = query.list();     
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
@@ -219,9 +219,8 @@ public class WorkspaceDAO extends BaseDAO<WorkspaceDTO> implements IWorkspaceDAO
             Query query = sessionFactory.getCurrentSession().createQuery(value);
             query.setParameter("username", username);
             query.setParameter("projectid", projectid);
-            query.setParameter("isdeactivated", true);
-            workspaceDTOList = query.list();
-
+            query.setParameter("isdeactivated", new Boolean(true));
+            workspaceDTOList = query.list();       
         } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }

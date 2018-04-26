@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.persistence.TypedQuery;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.IUserDAO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -29,6 +32,7 @@ import edu.asu.spring.quadriga.mapper.UserDTOMapper;
  * @author Ram Kumar Kumaresan
  *
  */
+@Transactional
 @Repository
 public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
 
@@ -41,7 +45,7 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
     @Resource(name = "database_error_msgs")
     private Properties messages;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
+    private final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
     /**
      * {@inheritDoc}
@@ -51,8 +55,8 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
     public List<QuadrigaUserDTO> getUserDTOList(String userRoleId) throws QuadrigaStorageException {
         List<QuadrigaUserDTO> usersDTOList = null;
         try {
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    " from QuadrigaUserDTO user where user.quadrigarole like :quadrigarole");
+            Query query = sessionFactory.getCurrentSession()
+                    .createQuery(" from QuadrigaUserDTO user where user.quadrigarole like :quadrigarole");
             query.setParameter("quadrigarole", "%" + userRoleId + "%");
 
             usersDTOList = query.list();
@@ -93,26 +97,32 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
      *            Full name of new user.
      * @param email
      *            Email of new user.
+     * @param provider
+     *            Social provider (e.g. github).
+     * @param userIdOfProvider
+     *            User Id in the Social provider e.g.(User Id in Github)
      * @return true if request was stored successfully; otherwise false.
      * @throws QuadrigaStorageException
      *             in case there is a DB error.
      */
     @Override
-    public boolean addNewUserAccountRequest(String username, String password, String fullname, String email)
-            throws QuadrigaStorageException {
+    public boolean addNewUserAccountRequest(String username, String password, String fullname, String email,
+            String provider, String userIdOfProvider) throws QuadrigaStorageException {
         QuadrigaUserRequestsDTO userRequestDTO = new QuadrigaUserRequestsDTO(username, username, new Date(), username,
                 new Date());
         userRequestDTO.setPasswd(password);
         userRequestDTO.setEmail(email);
         userRequestDTO.setFullname(fullname);
-
+        userRequestDTO.setProvider(provider);
+        userRequestDTO.setUserIdOfProvider(userIdOfProvider);
         try {
             sessionFactory.getCurrentSession().save(userRequestDTO);
             sessionFactory.getCurrentSession().flush();
-            return true;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
+
             throw new QuadrigaStorageException(e);
         }
+        return true;
     }
 
     /**
@@ -132,12 +142,13 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
             throw new QuadrigaStorageException(e);
         }
     }
-
+  
     public QuadrigaUserDTO findUser(String username) throws QuadrigaStorageException {
         try {
             Object userObj = sessionFactory.getCurrentSession().load(QuadrigaUserDTO.class, username);
-            if (userObj != null)
+            if (userObj != null) {
                 return (QuadrigaUserDTO) userObj;
+            }
             return null;
         } catch (Exception e) {
             logger.error("Couldn't find user.");
@@ -154,8 +165,8 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
 
         List<QuadrigaUserDTO> usersDTOList = null;
         try {
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    " from QuadrigaUserDTO user where user.quadrigarole not like :quadrigarole");
+            Query query = sessionFactory.getCurrentSession()
+                    .createQuery(" from QuadrigaUserDTO user where user.quadrigarole not like :quadrigarole");
             query.setParameter("quadrigarole", "%" + userRoleId + "%");
             usersDTOList = query.list();
 
@@ -232,8 +243,8 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
     @Override
     public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException {
         try {
-            QuadrigaUserRequestsDTO userRequestDTO = (QuadrigaUserRequestsDTO) sessionFactory.getCurrentSession().get(
-                    QuadrigaUserRequestsDTO.class, sUserId);
+            QuadrigaUserRequestsDTO userRequestDTO = (QuadrigaUserRequestsDTO) sessionFactory.getCurrentSession()
+                    .get(QuadrigaUserRequestsDTO.class, sUserId);
 
             if (userRequestDTO != null) {
                 QuadrigaUserDTO userDTO = new QuadrigaUserDTO();
@@ -246,6 +257,8 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
                 userDTO.setCreateddate(new Date());
                 userDTO.setUpdatedby(sAdminId);
                 userDTO.setUpdateddate(new Date());
+                userDTO.setProvider(userRequestDTO.getProvider());
+                userDTO.setUserIdOfProvider(userRequestDTO.getUserIdOfProvider());
 
                 Session session = sessionFactory.getCurrentSession();
                 session.save(userDTO);
@@ -254,8 +267,7 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
                 return SUCCESS;
             } else
                 return FAILURE;
-        } catch (Exception e) {
-            logger.error("Error in deactivating user account: ", e);
+        } catch (HibernateException e) {
             throw new QuadrigaStorageException(e);
         }
     }
@@ -266,8 +278,8 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
     @Override
     public int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException {
         try {
-            QuadrigaUserRequestsDTO userRequestDTO = (QuadrigaUserRequestsDTO) sessionFactory.getCurrentSession().get(
-                    QuadrigaUserRequestsDTO.class, sUserId);
+            QuadrigaUserRequestsDTO userRequestDTO = (QuadrigaUserRequestsDTO) sessionFactory.getCurrentSession()
+                    .get(QuadrigaUserRequestsDTO.class, sUserId);
 
             if (userRequestDTO != null) {
                 QuadrigaUserDeniedDTO userDeniedDTO = new QuadrigaUserDeniedDTO();
@@ -300,8 +312,8 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
      * {@inheritDoc}
      */
     @Override
-    public int deleteUser(String deleteUser, String deactivatedRole) throws QuadrigaStorageException,
-            UserOwnsOrCollaboratesDeletionException {
+    public int deleteUser(String deleteUser, String deactivatedRole)
+            throws QuadrigaStorageException, UserOwnsOrCollaboratesDeletionException {
 
         QuadrigaUserDTO userDTO = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,
                 deleteUser);
@@ -383,10 +395,25 @@ public class UserDAO extends BaseDAO<QuadrigaUserDTO> implements IUserDAO {
     public QuadrigaUserDTO getDTO(String id) {
         return getDTO(QuadrigaUserDTO.class, id);
     }
-    
+
     @Override
     public QuadrigaUserDeniedDTO getDeniedUser(String id) {
         return (QuadrigaUserDeniedDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDeniedDTO.class, id);
     }
-    
+
+    public QuadrigaUserDTO findUserByProviderUserId(String userId, String provider) {
+
+        Query query = sessionFactory.getCurrentSession().createQuery(
+                " from QuadrigaUserDTO user where user.userIdOfProvider=:userId AND user.provider=:provider");
+        query.setParameter("userId", userId);
+        query.setParameter("provider", provider);
+        List resultList = query.list();
+
+        if (resultList != null && resultList.size() > 0) {
+            return (QuadrigaUserDTO) resultList.get(0);
+        } 
+        return null;
+
+    }
+
 }

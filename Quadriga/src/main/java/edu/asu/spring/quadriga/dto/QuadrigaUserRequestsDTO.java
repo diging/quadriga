@@ -55,6 +55,10 @@ public class QuadrigaUserRequestsDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    @Column(name = "provider")
+    private String provider;
+    @Column(name = "provideruserid")
+    private String userIdOfProvider;
     
 
     public QuadrigaUserRequestsDTO() {
@@ -67,6 +71,7 @@ public class QuadrigaUserRequestsDTO implements Serializable {
         this.createdby = createdby;
         this.createddate = createddate;
     }
+    
 
     public String getFullname() {
         return fullname;
@@ -131,6 +136,23 @@ public class QuadrigaUserRequestsDTO implements Serializable {
     public void setCreateddate(Date createddate) {
         this.createddate = createddate;
     }
+    
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getUserIdOfProvider() {
+        return userIdOfProvider;
+    }
+
+    public void setUserIdOfProvider(String userIdOfProvider) {
+        this.userIdOfProvider = userIdOfProvider;
+    }
+    
 
     @Override
     public int hashCode() {
