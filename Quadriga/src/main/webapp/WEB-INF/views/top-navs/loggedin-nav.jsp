@@ -89,7 +89,7 @@
 		href="${pageContext.servletContext.contextPath}/auth/users/manage">User
 			Management</a></li>
     <li ${currentPage == "manageprojects" ? "class=\"active\"" : ""}><a
-		href="${pageContext.servletContext.contextPath}/auth/users/manageprojects">Project
+		href="${pageContext.servletContext.contextPath}/auth/admin/projects">Project
 			Management</a></li>
 </sec:authorize>
 

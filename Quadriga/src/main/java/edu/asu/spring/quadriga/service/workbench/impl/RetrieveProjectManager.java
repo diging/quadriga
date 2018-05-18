@@ -17,7 +17,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectDAO;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
@@ -30,7 +29,6 @@ import edu.asu.spring.quadriga.mapper.workbench.IPassThroughProjectMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectBaseMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectDeepMapper;
 import edu.asu.spring.quadriga.mapper.workbench.IProjectShallowMapper;
-import edu.asu.spring.quadriga.service.workbench.IProjectCollaboratorManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Service
@@ -63,8 +61,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
     }
     
     /**
-     * This method returns the list of projects associated with the logged in
-     * user. It uses the Project shallow mapper to give a {@link List} of
+     * This method returns the list of projects associated with the given
+     * user. If username is null, returns all projects.
+     * It uses the Project shallow mapper to give a {@link List} of
      * {@link IProject} of domain type {@link ProjectProxy}.
      * 
      * @param sUserName
@@ -78,24 +77,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager {
             throws QuadrigaStorageException {
         List<ProjectDTO> projectDTOList = projectDao.getProjectDTOList(sUserName);
         
-        List<IProject> projectList = new ArrayList<IProject>();
-        for (ProjectDTO projectDto : projectDTOList) {
-            projectList.add(projectShallowMapper.getProject(projectDto));
-        }
-        
-        return projectList;
-    }
-    
-    /**
-     * This method returns the list of all the projects.
-     * 
-     * @return List - list of projects.
-     * @throws QuadrigaStorageException
-     */
-    @Override
-    @Transactional
-    public List<IProject> getProjectList() throws QuadrigaStorageException {
-        List<ProjectDTO> projectDTOList = projectDao.getAllProjectsDTO();
         List<IProject> projectList = new ArrayList<IProject>();
         for (ProjectDTO projectDto : projectDTOList) {
             projectList.add(projectShallowMapper.getProject(projectDto));

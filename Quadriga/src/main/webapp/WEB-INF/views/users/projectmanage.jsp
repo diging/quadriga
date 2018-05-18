@@ -17,7 +17,7 @@
 	});
 </script>
 
-<form method="POST" action="${pageContext.servletContext.contextPath}/auth/users/manageprojects/addprojectadmin">
+<form method="POST" action="${pageContext.servletContext.contextPath}/auth/admin/projects/admin/add">
 <sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
 	
 	<c:if test="${not empty projectList}">

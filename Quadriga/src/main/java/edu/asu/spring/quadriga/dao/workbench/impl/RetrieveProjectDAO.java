@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.dao.workbench.impl;
 
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -27,32 +29,23 @@ public class RetrieveProjectDAO extends BaseDAO<ProjectDTO> implements IRetrieve
     @Override
     @SuppressWarnings("unchecked")
     public List<ProjectDTO> getProjectDTOList(String sUserName) throws QuadrigaStorageException {
+        String queryString = "from ProjectDTO project";
+        if (sUserName != null) {
+            queryString += " where project.projectowner.username =:username";
+        }
         List<ProjectDTO> projectDTOList = null;
         try {
-            Query query = sessionFactory.getCurrentSession().createQuery(
-                    " from ProjectDTO project where project.projectowner.username =:username");
-            query.setParameter("username", sUserName);
-            projectDTOList = query.list();
+            TypedQuery<ProjectDTO> query = sessionFactory.getCurrentSession().createQuery(queryString, ProjectDTO.class);
+            if (sUserName != null) {
+                query.setParameter("username", sUserName);
+            }
+            projectDTOList = query.getResultList();
         } catch (HibernateException e) {
-            logger.info("getProjectList details method :" + e.getMessage());
             throw new QuadrigaStorageException(e);
         }
         return projectDTOList;
     }
-
-    @Override
-    public List<ProjectDTO> getAllProjectsDTO() throws QuadrigaStorageException{
-        List<ProjectDTO> projectDTOList = null;
-        try{
-            Query query = sessionFactory.getCurrentSession().createQuery("from ProjectDTO");
-            projectDTOList = query.list();
-        }catch(HibernateException e){
-            logger.info("getProjectDTOList method :" + e.getMessage());
-            throw new QuadrigaStorageException(e);
-        }
-        return projectDTOList;
-    }
-    
+ 
     /**
      * 
      * {@inheritDoc}
