@@ -43,8 +43,13 @@ public class AddAdminController {
             });
         }
         
-        redirectAttrs.addFlashAttribute("show_error_alert", true);
-        redirectAttrs.addFlashAttribute("error_alert_msg", String.join("<br>", errors));
+        if (!errors.isEmpty()) {
+            redirectAttrs.addFlashAttribute("show_error_alert", true);
+            redirectAttrs.addFlashAttribute("error_alert_msg", String.join("<br>", errors));
+        } else {
+            redirectAttrs.addFlashAttribute("show_success_alert", true);
+            redirectAttrs.addFlashAttribute("success_alert_msg", "Admin(s) successfully added.");
+        }
         return "redirect:/auth/admin/projects";
     }
 }

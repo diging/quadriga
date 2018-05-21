@@ -688,9 +688,9 @@
 
     <!-- User project management pages -->
     <definition name="auth/users/project/manage" extends="base.definition.nonav">
-        <put-attribute name="title" value="Quadriga - Manage User Projects" />
-        <put-attribute name="content" value="/WEB-INF/views/users/projectmanage.jsp" />
-        <put-attribute name="currentPage" value="manageprojects" />
+        <put-attribute name="title" value="Quadriga - Manage Projects" />
+        <put-attribute name="content" value="/WEB-INF/views/admin/projectmanage.jsp" />
+        <put-attribute name="currentPage" value="admin" />
     </definition>
     
     

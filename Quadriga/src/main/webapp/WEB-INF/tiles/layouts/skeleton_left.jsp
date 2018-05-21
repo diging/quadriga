@@ -74,23 +74,9 @@
 			</div>
 			<div>
 				<div class="navbar-collapse collapse navbar-right">
-					<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN') and !hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-						<ul class="nav navbar-nav">
-							<tiles:insertAttribute name="navigation" />
-						</ul>
-				  	</sec:authorize>	
-				 	<sec:authorize access= "hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-				 		<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN') ">
-				 			<ul class="nav navbar-nav" style="font-size:13px;">
-								<tiles:insertAttribute name="navigation" />
-							</ul>
-				 		</sec:authorize>
-				 		<sec:authorize access="!hasRole('ROLE_QUADRIGA_USER_ADMIN') ">
-				 			<ul class="nav navbar-nav">
-								<tiles:insertAttribute name="navigation" />
-							</ul>
-				 		</sec:authorize>
-				 	</sec:authorize>
+					<ul class="nav navbar-nav">
+						<tiles:insertAttribute name="navigation" />
+					</ul>
 				</div>
 				<!--/.nav-collapse -->
 				<sec:authorize access="not isAuthenticated()">

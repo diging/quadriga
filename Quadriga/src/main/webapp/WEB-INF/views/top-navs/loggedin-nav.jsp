@@ -85,12 +85,22 @@
 </sec:authorize>
 
 <sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
-	<li ${currentPage == "admin" ? "class=\"active\"" : ""}><a
-		href="${pageContext.servletContext.contextPath}/auth/users/manage">User
-			Management</a></li>
-    <li ${currentPage == "manageprojects" ? "class=\"active\"" : ""}><a
-		href="${pageContext.servletContext.contextPath}/auth/admin/projects">Project
-			Management</a></li>
+<li ${currentPage == "admin" ? "class=\"active\"" : ""}>
+    <a
+        class="dropdown-caret dropdown-toggle" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false"> 
+            &nbsp; &nbsp; Admin <span class="caret"></span> 
+    </a>
+	<ul class="dropdown-menu">
+	    <li ${currentPage == "admin" ? "class=\"active\"" : ""}><a
+	        href="${pageContext.servletContext.contextPath}/auth/users/manage">User
+	            Management</a></li>
+	    <li ${currentPage == "manageprojects" ? "class=\"active\"" : ""}><a
+	        href="${pageContext.servletContext.contextPath}/auth/admin/projects">Project
+	            Management</a></li>
+	</ul>
+</li>
+	
 </sec:authorize>
 
 
