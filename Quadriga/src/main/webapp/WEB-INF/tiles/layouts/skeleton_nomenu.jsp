@@ -58,7 +58,9 @@
         <div>
         <div class="navbar-collapse collapse navbar-right">
           <ul class="nav navbar-nav">
-            <tiles:insertAttribute name="navigation" />
+         	<ul class="nav navbar-nav">
+				<tiles:insertAttribute name="navigation" />
+			</ul>
           </ul>
         </div>
         <sec:authorize access="not isAuthenticated()">

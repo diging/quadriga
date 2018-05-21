@@ -22,7 +22,6 @@ import edu.asu.spring.quadriga.dao.workbench.IProjectDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectEditorDAO;
 import edu.asu.spring.quadriga.dao.workbench.IProjectWorkspaceDAO;
-import edu.asu.spring.quadriga.domain.resolver.IProjectHandleResolver;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;

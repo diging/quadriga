@@ -59,12 +59,14 @@ public class NetworkTransformer implements INetworkTransformer {
         
         Map<String, List<CreationEvent>> eventsById = new HashMap<>();
         for (ElementEventsType type : elementEventsTypeList) {
-            List<CreationEvent> events = type.getRelationEventOrAppellationEvent();
-            for (CreationEvent event : events) {
-                if (eventsById.get(event.getId()) == null) {
-                    eventsById.put(event.getId(), new ArrayList<>());
+            if (type != null) {
+                List<CreationEvent> events = type.getRelationEventOrAppellationEvent();
+                for (CreationEvent event : events) {
+                    if (eventsById.get(event.getId()) == null) {
+                        eventsById.put(event.getId(), new ArrayList<>());
+                    }
+                    eventsById.get(event.getId()).add(event);
                 }
-                eventsById.get(event.getId()).add(event);
             }
         }
         for (INetworkNodeInfo networkNodeInfo : networkNodeInfoList) {
