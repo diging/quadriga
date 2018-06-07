@@ -8,12 +8,15 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     <bean id="dataSource"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
 
-        <property name="url" value="${db.url}" />
-        <property name="username" value="${db.username}" />
+        <property name="jdbcUrl" value="${db.url}" />
+        <property name="user" value="${db.username}" />
         <property name="password" value="${db.pw}" />
-
+        <property name="maxPoolSize" value="${db.maxPoolSize}" />
+        <property name="minPoolSize" value="${db.minPoolSize}" />
+        <property name="maxStatements" value="${db.maxStatements}" />
+        <property name="testConnectionOnCheckout" value="${db.testConnection}" />
     </bean>
 </beans>
