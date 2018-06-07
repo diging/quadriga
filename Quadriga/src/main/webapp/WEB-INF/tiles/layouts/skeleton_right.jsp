@@ -62,9 +62,9 @@
         </div>
         <div>
         <div class="navbar-collapse collapse navbar-right">
-          <ul class="nav navbar-nav">
-            <tiles:insertAttribute name="navigation" />
-          </ul>
+	      	<ul class="nav navbar-nav">
+				<tiles:insertAttribute name="navigation" />
+			</ul>
         </div><!--/.nav-collapse -->
         <sec:authorize access="not isAuthenticated()">
             <form name='f' action="<c:url value='/login' />" method='POST' class="navbar-form navbar-right">

@@ -44,4 +44,5 @@ public interface IRetrieveProjectManager {
 	
 	public abstract List<IProject> getProjectListBySearchTermAndAccessiblity(String searchTerm, String accessibility) 
 			throws QuadrigaStorageException;
+    
 }
